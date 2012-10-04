@@ -173,4 +173,7 @@
     <string name="folder_imported" msgid="2773581395524747099">"匯入"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"螢幕擷取畫面"</string>
     <string name="help" msgid="7368960711153618354">"說明"</string>
+
+    <string name="no_storage_title">沒有存儲</string>
+    <string name="no_storage_message">沒有可用的外部存儲.</string>
 </resources>
