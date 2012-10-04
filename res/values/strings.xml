@@ -445,4 +445,7 @@
 
     <!-- Web address for gallery help.  DO NOT TRANSLATE -->
     <string name="help_url_gallery_main" translatable="false"></string>
+
+    <string name="no_storage_title">No Storage</string>
+    <string name="no_storage_message">No external storage available.</string>
 </resources>
