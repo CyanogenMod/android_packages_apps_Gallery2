@@ -173,4 +173,6 @@
     <string name="folder_imported" msgid="2773581395524747099">"Importate"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Screenshot"</string>
     <string name="help" msgid="7368960711153618354">"Guida"</string>
+    <string name="no_storage_title">"Nessuna SD"</string>
+    <string name="no_storage_message">"Nessuna memoria esterna è disponibile."</string>
 </resources>
