@@ -13,7 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-
+Csatolja a megosztott tárhelyet a kamera használata előtt.
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="1928079047368929634">"Galéria"</string>
@@ -173,4 +173,6 @@
     <string name="folder_imported" msgid="2773581395524747099">"Importált"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Képernyőkép"</string>
     <string name="help" msgid="7368960711153618354">"Súgó"</string>
+    <string name="no_storage_title">Nincs SD-kártya</string>
+    <string name="no_storage_message">Nem elérhető a külső SD-kártya.</string>
 </resources>
