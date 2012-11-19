@@ -41,11 +41,14 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         mTargetSize = targetSize;
     }
 
+    private String debugTag() {
+        return mPath + "," +
+                ((mType == MediaItem.TYPE_THUMBNAIL) ? "THUMB" :
+                (mType == MediaItem.TYPE_MICROTHUMBNAIL) ? "MICROTHUMB" : "?");
+    }
+
     @Override
     public Bitmap run(JobContext jc) {
-        String debugTag = mPath + "," +
-                 ((mType == MediaItem.TYPE_THUMBNAIL) ? "THUMB" :
-                 (mType == MediaItem.TYPE_MICROTHUMBNAIL) ? "MICROTHUMB" : "?");
         ImageCacheService cacheService = mApplication.getImageCacheService();
 
         BytesBuffer buffer = MediaItem.getBytesBufferPool().get();
@@ -57,14 +60,16 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 Bitmap bitmap;
                 if (mType == MediaItem.TYPE_MICROTHUMBNAIL) {
-                    bitmap = MediaItem.getMicroThumbPool().decode(jc,
-                            buffer.data, buffer.offset, buffer.length, options);
+                    bitmap = DecodeUtils.decode(jc,
+                            buffer.data, buffer.offset, buffer.length, options,
+                            MediaItem.getMicroThumbPool());
                 } else {
-                    bitmap = MediaItem.getThumbPool().decode(jc,
-                            buffer.data, buffer.offset, buffer.length, options);
+                    bitmap = DecodeUtils.decode(jc,
+                            buffer.data, buffer.offset, buffer.length, options,
+                            MediaItem.getThumbPool());
                 }
                 if (bitmap == null && !jc.isCancelled()) {
-                    Log.w(TAG, "decode cached failed " + debugTag);
+                    Log.w(TAG, "decode cached failed " + debugTag());
                 }
                 return bitmap;
             }
@@ -75,7 +80,7 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         if (jc.isCancelled()) return null;
 
         if (bitmap == null) {
-            Log.w(TAG, "decode orig failed " + debugTag);
+            Log.w(TAG, "decode orig failed " + debugTag());
             return null;
         }
 

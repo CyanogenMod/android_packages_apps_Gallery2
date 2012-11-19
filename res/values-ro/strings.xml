@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"OK"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Atingeţi o faţă pentru a începe."</string>
     <string name="saving_image" msgid="7270334453636349407">"Se salvează fotografia..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Se salvează imaginea în <xliff:g id="ALBUM_NAME">%1$s</xliff:g> ..."</string>
     <string name="save_error" msgid="6857408774183654970">"Imaginea decupată nu s-a putut salva."</string>
     <string name="crop_label" msgid="521114301871349328">"Decupaţi fotografia"</string>
+    <string name="trim_label" msgid="274203231381209979">"Decupaţi videoclipul"</string>
     <string name="select_image" msgid="7841406150484742140">"Selectaţi fotografie"</string>
     <string name="select_video" msgid="4859510992798615076">"Selectaţi videoclip"</string>
     <string name="select_item" msgid="2816923896202086390">"Selectaţi un element"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Confirmaţi"</string>
     <string name="cancel" msgid="3637516880917356226">"Anulaţi"</string>
     <string name="share" msgid="3619042788254195341">"Distribuiţi"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Trimiteți panorama"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Trimiteți fotografia"</string>
     <string name="deleted" msgid="6795433049119073871">"Ştearsă"</string>
     <string name="undo" msgid="2930873956446586313">"ANULAŢI"</string>
     <string name="select_all" msgid="3403283025220282175">"Selectaţi-le pe toate"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Se proces. solicit. de stocare în memoria cache"</string>
     <string name="caching_label" msgid="4521059045896269095">"Mem. cache..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Decupaţi"</string>
+    <string name="trim_action" msgid="703098114452883524">"Decupaţi"</string>
     <string name="set_as" msgid="3636764710790507868">"Setaţi ca"</string>
     <string name="video_err" msgid="7003051631792271009">"Nu se poate reda videoclipul."</string>
     <string name="group_by_location" msgid="316641628989023253">"După locaţie"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Auto"</string>
     <string name="flash_on" msgid="7891556231891837284">"Bliţ activat"</string>
     <string name="flash_off" msgid="1445443413822680010">"Fără bliţ"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Original"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Vintage"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Instant"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Albire"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Albastru"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Alb-negru"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Punch"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"Proces. încr."</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litografie"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Se face disponibil offline albumul."</item>
     <item quantity="other" msgid="4948604338155959389">"Se fac disponibile offline albumele"</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Adăugaţi un cont"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Cameră foto"</string>
     <string name="folder_download" msgid="7186215137642323932">"Descărcate"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Fotografii online editate"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Importate"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Captură de ecran"</string>
     <string name="help" msgid="7368960711153618354">"Ajutor"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Nicio stocare"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Nu este disponibilă nicio stocare externă"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Afişare tip bandă de film"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Afişare tip grilă"</string>
+    <string name="trimming" msgid="9122385768369143997">"Se ajustează"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Aşteptaţi"</string>
+    <string name="save_into" msgid="4960537214388766062">"Se salvează videoclipul ajustat în album:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Nu se poate ajusta: videoclipul ţintă este prea scurt"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Se redă panorama"</string>
+    <string name="save" msgid="613976532235060516">"Salvaţi"</string>
 </resources>

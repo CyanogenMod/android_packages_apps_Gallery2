@@ -21,13 +21,15 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.FloatMath;
-import android.util.LongSparseArray;
 
 import com.android.gallery3d.app.GalleryContext;
+import com.android.gallery3d.common.ApiHelper;
+import com.android.gallery3d.common.LongSparseArray;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.BitmapPool;
 import com.android.gallery3d.data.DecodeUtils;
 import com.android.gallery3d.util.Future;
+import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
@@ -42,13 +44,12 @@ public class TileImageView extends GLView {
 
     // TILE_SIZE must be 2^N - 2. We put one pixel border in each side of the
     // texture to avoid seams between tiles.
-    private static final int TILE_SIZE = 254;
+    private static int TILE_SIZE;
     private static final int TILE_BORDER = 1;
-    private static final int BITMAP_SIZE = TILE_SIZE + TILE_BORDER * 2;
+    private static int BITMAP_SIZE;
     private static final int UPLOAD_LIMIT = 1;
 
-    private static final BitmapPool sTilePool =
-            new BitmapPool(BITMAP_SIZE, BITMAP_SIZE, 128);
+    private static BitmapPool sTilePool;
 
     /*
      *  This is the tile state in the CPU side.
@@ -149,6 +150,18 @@ public class TileImageView extends GLView {
     public TileImageView(GalleryContext context) {
         mThreadPool = context.getThreadPool();
         mTileDecoder = mThreadPool.submit(new TileDecoder());
+        if (TILE_SIZE == 0) {
+            if (GalleryUtils.isHighResolution(context.getAndroidContext())) {
+                TILE_SIZE = 510 ;
+            } else {
+                TILE_SIZE = 254;
+            }
+            BITMAP_SIZE = TILE_SIZE + TILE_BORDER * 2;
+            sTilePool =
+                    ApiHelper.HAS_REUSING_BITMAP_IN_BITMAP_REGION_DECODER
+                    ? new BitmapPool(BITMAP_SIZE, BITMAP_SIZE, 128)
+                    : null;
+        }
     }
 
     public void setModel(Model model) {
@@ -267,6 +280,7 @@ public class TileImageView extends GLView {
     protected synchronized void invalidateTiles() {
         mDecodeQueue.clean();
         mUploadQueue.clean();
+
         // TODO disable decoder
         int n = mActiveTiles.size();
         for (int i = 0; i < n; i++) {
@@ -378,7 +392,7 @@ public class TileImageView extends GLView {
             }
         }
         setScreenNail(null);
-        sTilePool.clear();
+        if (sTilePool != null) sTilePool.clear();
     }
 
     public void prepareTextures() {
@@ -448,8 +462,8 @@ public class TileImageView extends GLView {
     }
 
     private boolean isScreenNailAnimating() {
-        return (mScreenNail instanceof BitmapScreenNail)
-                && ((BitmapScreenNail) mScreenNail).isAnimating();
+        return (mScreenNail instanceof TiledScreenNail)
+                && ((TiledScreenNail) mScreenNail).isAnimating();
     }
 
     private void uploadBackgroundTiles(GLCanvas canvas) {
@@ -487,7 +501,7 @@ public class TileImageView extends GLView {
             if (tile.mTileState == STATE_RECYCLING) {
                 tile.mTileState = STATE_RECYCLED;
                 if (tile.mDecodedTile != null) {
-                    sTilePool.recycle(tile.mDecodedTile);
+                    if (sTilePool != null) sTilePool.recycle(tile.mDecodedTile);
                     tile.mDecodedTile = null;
                 }
                 mRecycledQueue.push(tile);
@@ -515,7 +529,7 @@ public class TileImageView extends GLView {
         }
         tile.mTileState = STATE_RECYCLED;
         if (tile.mDecodedTile != null) {
-            sTilePool.recycle(tile.mDecodedTile);
+            if (sTilePool != null) sTilePool.recycle(tile.mDecodedTile);
             tile.mDecodedTile = null;
         }
         mRecycledQueue.push(tile);
@@ -550,21 +564,25 @@ public class TileImageView extends GLView {
 
         @Override
         public boolean onGLIdle(GLCanvas canvas, boolean renderRequested) {
-            if (renderRequested) return false;
+            // Skips uploading if there is a pending rendering request.
+            // Returns true to keep uploading in next rendering loop.
+            if (renderRequested) return true;
             int quota = UPLOAD_LIMIT;
-            Tile tile;
-            while (true) {
+            Tile tile = null;
+            while (quota > 0) {
                 synchronized (TileImageView.this) {
                     tile = mUploadQueue.pop();
                 }
-                if (tile == null || quota <= 0) break;
+                if (tile == null) break;
                 if (!tile.isContentValid()) {
+                    boolean hasBeenLoaded = tile.isLoaded();
                     Utils.assertTrue(tile.mTileState == STATE_DECODED);
                     tile.updateContent(canvas);
+                    if (!hasBeenLoaded) tile.draw(canvas, 0, 0);
                     --quota;
                 }
             }
-            mActive.set(tile != null);
+            if (tile == null) mActive.set(false);
             return tile != null;
         }
     }
@@ -605,7 +623,6 @@ public class TileImageView extends GLView {
         }
     }
 
-    // TODO: avoid drawing the unused part of the textures.
     static boolean drawTile(
             Tile tile, GLCanvas canvas, RectF source, RectF target) {
         while (true) {
@@ -653,7 +670,7 @@ public class TileImageView extends GLView {
 
         @Override
         protected void onFreeBitmap(Bitmap bitmap) {
-            sTilePool.recycle(bitmap);
+            if (sTilePool != null) sTilePool.recycle(bitmap);
         }
 
         boolean decode() {

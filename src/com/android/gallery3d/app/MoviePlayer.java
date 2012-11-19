@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.app;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -37,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.VideoView;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BlobCache;
 import com.android.gallery3d.util.CacheManager;
 import com.android.gallery3d.util.GalleryUtils;
@@ -55,6 +58,10 @@ public class MoviePlayer implements
     private static final String KEY_VIDEO_POSITION = "video-position";
     private static final String KEY_RESUMEABLE_TIME = "resumeable-timeout";
 
+    // These are constants in KeyEvent, appearing on API level 11.
+    private static final int KEYCODE_MEDIA_PLAY = 126;
+    private static final int KEYCODE_MEDIA_PAUSE = 127;
+
     // Copied from MediaPlaybackService in the Music Player app.
     private static final String SERVICECMD = "com.android.music.musicservicecommand";
     private static final String CMDNAME = "command";
@@ -67,8 +74,8 @@ public class MoviePlayer implements
     private static final long RESUMEABLE_TIMEOUT = 3 * 60 * 1000; // 3 mins
 
     private Context mContext;
-    private final VideoView mVideoView;
     private final View mRootView;
+    private final VideoView mVideoView;
     private final Bookmarker mBookmarker;
     private final Uri mUri;
     private final Handler mHandler = new Handler();
@@ -94,13 +101,6 @@ public class MoviePlayer implements
             } else {
                 mHandler.postDelayed(mPlayingChecker, 250);
             }
-        }
-    };
-
-    private final Runnable mRemoveBackground = new Runnable() {
-        @Override
-        public void run() {
-            mRootView.setBackground(null);
         }
     };
 
@@ -148,35 +148,7 @@ public class MoviePlayer implements
             }
         }, BLACK_TIMEOUT);
 
-        // When the user touches the screen or uses some hard key, the framework
-        // will change system ui visibility from invisible to visible. We show
-        // the media control and enable system UI (e.g. ActionBar) to be visible at this point
-        mVideoView.setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                int diff = mLastSystemUiVis ^ visibility;
-                mLastSystemUiVis = visibility;
-                if ((diff & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
-                        && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
-                    mController.show();
-
-                    // We need to set the background to clear ghosting images
-                    // when ActionBar slides in. However, if we keep the background,
-                    // there will be one additional layer in HW composer, which is bad
-                    // to battery. As a solution, we remove the background when we
-                    // hide the action bar
-                    mHandler.removeCallbacks(mRemoveBackground);
-                    mRootView.setBackgroundColor(Color.BLACK);
-                } else {
-                    mHandler.removeCallbacks(mRemoveBackground);
-
-                    // Wait for the slide out animation, one second should be enough
-                    mHandler.postDelayed(mRemoveBackground, 1000);
-                }
-            }
-        });
-
+        setOnSystemUiVisibilityChangeListener();
         // Hide system UI by default
         showSystemUi(false);
 
@@ -203,12 +175,39 @@ public class MoviePlayer implements
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setOnSystemUiVisibilityChangeListener() {
+        if (!ApiHelper.HAS_VIEW_SYSTEM_UI_FLAG_HIDE_NAVIGATION) return;
+
+        // When the user touches the screen or uses some hard key, the framework
+        // will change system ui visibility from invisible to visible. We show
+        // the media control and enable system UI (e.g. ActionBar) to be visible at this point
+        mVideoView.setOnSystemUiVisibilityChangeListener(
+                new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                int diff = mLastSystemUiVis ^ visibility;
+                mLastSystemUiVis = visibility;
+                if ((diff & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
+                        && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+                    mController.show();
+                    mRootView.setBackgroundColor(Color.BLACK);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showSystemUi(boolean visible) {
+        if (!ApiHelper.HAS_VIEW_SYSTEM_UI_FLAG_LAYOUT_STABLE) return;
+
         int flag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         if (!visible) {
-            flag |= View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN
+            // We used the deprecated "STATUS_BAR_HIDDEN" for unbundling
+            flag |= View.STATUS_BAR_HIDDEN | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         }
         mVideoView.setSystemUiVisibility(flag);
@@ -285,7 +284,7 @@ public class MoviePlayer implements
         }
         int position = mVideoView.getCurrentPosition();
         int duration = mVideoView.getDuration();
-        mController.setTimes(position, duration);
+        mController.setTimes(position, duration, 0, 0);
         return position;
     }
 
@@ -357,7 +356,7 @@ public class MoviePlayer implements
     }
 
     @Override
-    public void onSeekEnd(int time) {
+    public void onSeekEnd(int time, int start, int end) {
         mDragging = false;
         mVideoView.seekTo(time);
         setProgress();
@@ -398,12 +397,12 @@ public class MoviePlayer implements
                     playVideo();
                 }
                 return true;
-            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+            case KEYCODE_MEDIA_PAUSE:
                 if (mVideoView.isPlaying()) {
                     pauseVideo();
                 }
                 return true;
-            case KeyEvent.KEYCODE_MEDIA_PLAY:
+            case KEYCODE_MEDIA_PLAY:
                 if (!mVideoView.isPlaying()) {
                     playVideo();
                 }
@@ -496,7 +495,7 @@ class Bookmarker {
             DataInputStream dis = new DataInputStream(
                     new ByteArrayInputStream(data));
 
-            String uriString = dis.readUTF(dis);
+            String uriString = DataInputStream.readUTF(dis);
             int bookmark = dis.readInt();
             int duration = dis.readInt();
 

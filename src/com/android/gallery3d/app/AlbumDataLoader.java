@@ -22,11 +22,10 @@ import android.os.Process;
 
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.ContentListener;
-import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
-import com.android.gallery3d.ui.AlbumSlotRenderer;
+import com.android.gallery3d.data.Path;
 import com.android.gallery3d.ui.SynchronizedHandler;
 
 import java.util.ArrayList;
@@ -73,8 +72,10 @@ public class AlbumDataLoader {
     private LoadingListener mLoadingListener;
 
     private ReloadTask mReloadTask;
+    // the data version on which last loading failed
+    private long mFailedVersion = MediaObject.INVALID_DATA_VERSION;
 
-    public AlbumDataLoader(GalleryActivity context, MediaSet mediaSet) {
+    public AlbumDataLoader(AbstractGalleryActivity context, MediaSet mediaSet) {
         mSource = mediaSet;
 
         mData = new MediaItem[DATA_CACHE_SIZE];
@@ -94,7 +95,11 @@ public class AlbumDataLoader {
                         if (mLoadingListener != null) mLoadingListener.onLoadingStarted();
                         return;
                     case MSG_LOAD_FINISH:
-                        if (mLoadingListener != null) mLoadingListener.onLoadingFinished();
+                        if (mLoadingListener != null) {
+                            boolean loadingFailed =
+                                    (mFailedVersion != MediaObject.INVALID_DATA_VERSION);
+                            mLoadingListener.onLoadingFinished(loadingFailed);
+                        }
                         return;
                 }
             }
@@ -131,6 +136,18 @@ public class AlbumDataLoader {
 
     public int size() {
         return mSize;
+    }
+
+    // Returns the index of the MediaItem with the given path or
+    // -1 if the path is not cached
+    public int findItem(Path id) {
+        for (int i = mContentStart; i < mContentEnd; i++) {
+            MediaItem item = mData[i % DATA_CACHE_SIZE];
+            if (item != null && id == item.getPath()) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void clearSlot(int slotIndex) {
@@ -189,6 +206,7 @@ public class AlbumDataLoader {
     }
 
     private class MySourceListener implements ContentListener {
+        @Override
         public void onContentDirty() {
             if (mReloadTask != null) mReloadTask.notifyDirty();
         }
@@ -231,7 +249,12 @@ public class AlbumDataLoader {
             mVersion = version;
         }
 
+        @Override
         public UpdateInfo call() throws Exception {
+            if (mFailedVersion == mVersion) {
+                // previous loading failed, return null to pause loading
+                return null;
+            }
             UpdateInfo info = new UpdateInfo();
             long version = mVersion;
             info.version = mSourceVersion;
@@ -270,7 +293,14 @@ public class AlbumDataLoader {
 
             ArrayList<MediaItem> items = info.items;
 
-            if (items == null) return null;
+            mFailedVersion = MediaObject.INVALID_DATA_VERSION;
+            if ((items == null) || items.isEmpty()) {
+                if (info.reloadCount > 0) {
+                    mFailedVersion = info.version;
+                    Log.d(TAG, "loading failed: " + mFailedVersion);
+                }
+                return null;
+            }
             int start = Math.max(info.reloadStart, mContentStart);
             int end = Math.min(info.reloadStart + items.size(), mContentEnd);
 
@@ -327,27 +357,28 @@ public class AlbumDataLoader {
                 synchronized (this) {
                     if (mActive && !mDirty && updateComplete) {
                         updateLoading(false);
+                        if (mFailedVersion != MediaObject.INVALID_DATA_VERSION) {
+                            Log.d(TAG, "reload pause");
+                        }
                         Utils.waitWithoutInterrupt(this);
+                        if (mActive && (mFailedVersion != MediaObject.INVALID_DATA_VERSION)) {
+                            Log.d(TAG, "reload resume");
+                        }
                         continue;
                     }
+                    mDirty = false;
                 }
-                mDirty = false;
                 updateLoading(true);
-                long version;
-                synchronized (DataManager.LOCK) {
-                    version = mSource.reload();
-                }
+                long version = mSource.reload();
                 UpdateInfo info = executeAndWait(new GetUpdateInfo(version));
                 updateComplete = info == null;
                 if (updateComplete) continue;
-                synchronized (DataManager.LOCK) {
-                    if (info.version != version) {
-                        info.size = mSource.getMediaItemCount();
-                        info.version = version;
-                    }
-                    if (info.reloadCount > 0) {
-                        info.items = mSource.getMediaItem(info.reloadStart, info.reloadCount);
-                    }
+                if (info.version != version) {
+                    info.size = mSource.getMediaItemCount();
+                    info.version = version;
+                }
+                if (info.reloadCount > 0) {
+                    info.items = mSource.getMediaItem(info.reloadStart, info.reloadCount);
                 }
                 executeAndWait(new UpdateContent(info));
             }

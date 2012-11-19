@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.app.PanoramaMetadataSupport;
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
@@ -54,6 +55,7 @@ public class UriImage extends MediaItem {
     private int mWidth;
     private int mHeight;
     private int mRotation;
+    private PanoramaMetadataSupport mPanoramaMetadata = new PanoramaMetadataSupport(this);
 
     private GalleryApp mApplication;
 
@@ -134,6 +136,7 @@ public class UriImage extends MediaItem {
 
     private boolean prepareInputFile(JobContext jc) {
         jc.setCancelListener(new CancelListener() {
+            @Override
             public void onCancel() {
                 synchronized (this) {
                     notifyAll();
@@ -166,6 +169,7 @@ public class UriImage extends MediaItem {
     }
 
     private class RegionDecoderJob implements Job<BitmapRegionDecoder> {
+        @Override
         public BitmapRegionDecoder run(JobContext jc) {
             if (!prepareInputFile(jc)) return null;
             BitmapRegionDecoder decoder = DecodeUtils.createBitmapRegionDecoder(
@@ -213,6 +217,16 @@ public class UriImage extends MediaItem {
             supported |= SUPPORT_FULL_IMAGE;
         }
         return supported;
+    }
+
+    @Override
+    public void getPanoramaSupport(PanoramaSupportCallback callback) {
+        mPanoramaMetadata.getPanoramaSupport(mApplication, callback);
+    }
+
+    @Override
+    public void clearCachedPanoramaSupport() {
+        mPanoramaMetadata.clearCachedValues();
     }
 
     private boolean isSharable() {

@@ -16,7 +16,6 @@
 
 package com.android.gallery3d.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -31,7 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.app.GalleryActivity;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.MediaDetails;
 import com.android.gallery3d.ui.DetailsAddressResolver.AddressResolvingListener;
@@ -46,7 +45,7 @@ public class DialogDetailsView implements DetailsViewContainer {
     @SuppressWarnings("unused")
     private static final String TAG = "DialogDetailsView";
 
-    private final GalleryActivity mContext;
+    private final AbstractGalleryActivity mActivity;
     private DetailsAdapter mAdapter;
     private MediaDetails mDetails;
     private final DetailsSource mSource;
@@ -54,22 +53,25 @@ public class DialogDetailsView implements DetailsViewContainer {
     private Dialog mDialog;
     private CloseListener mListener;
 
-    public DialogDetailsView(GalleryActivity activity, DetailsSource source) {
-        mContext = activity;
+    public DialogDetailsView(AbstractGalleryActivity activity, DetailsSource source) {
+        mActivity = activity;
         mSource = source;
     }
 
+    @Override
     public void show() {
-        reloadDetails(mSource.getIndex());
+        reloadDetails();
         mDialog.show();
     }
 
+    @Override
     public void hide() {
         mDialog.hide();
     }
 
-    public void reloadDetails(int indexHint) {
-        int index = mSource.findIndex(indexHint);
+    @Override
+    public void reloadDetails() {
+        int index = mSource.setIndex();
         if (index == -1) return;
         MediaDetails details = mSource.getDetails();
         if (details != null) {
@@ -83,15 +85,16 @@ public class DialogDetailsView implements DetailsViewContainer {
     private void setDetails(MediaDetails details) {
         mAdapter = new DetailsAdapter(details);
         String title = String.format(
-                mContext.getAndroidContext().getString(R.string.details_title),
+                mActivity.getAndroidContext().getString(R.string.details_title),
                 mIndex + 1, mSource.size());
-        ListView detailsList = (ListView) LayoutInflater.from(mContext.getAndroidContext()).inflate(
+        ListView detailsList = (ListView) LayoutInflater.from(mActivity.getAndroidContext()).inflate(
                 R.layout.details_list, null, false);
         detailsList.setAdapter(mAdapter);
-        mDialog = new AlertDialog.Builder((Activity) mContext)
+        mDialog = new AlertDialog.Builder(mActivity)
             .setView(detailsList)
             .setTitle(title)
             .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
                     mDialog.dismiss();
                 }
@@ -99,6 +102,7 @@ public class DialogDetailsView implements DetailsViewContainer {
             .create();
 
         mDialog.setOnDismissListener(new OnDismissListener() {
+            @Override
             public void onDismiss(DialogInterface dialog) {
                 if (mListener != null) {
                     mListener.onClose();
@@ -112,7 +116,7 @@ public class DialogDetailsView implements DetailsViewContainer {
         private int mLocationIndex;
 
         public DetailsAdapter(MediaDetails details) {
-            Context context = mContext.getAndroidContext();
+            Context context = mActivity.getAndroidContext();
             mItems = new ArrayList<String>(details.size());
             mLocationIndex = -1;
             setDetails(context, details);
@@ -125,7 +129,7 @@ public class DialogDetailsView implements DetailsViewContainer {
                     case MediaDetails.INDEX_LOCATION: {
                         double[] latlng = (double[]) detail.getValue();
                         mLocationIndex = mItems.size();
-                        value = DetailsHelper.resolveAddress(mContext, latlng, this);
+                        value = DetailsHelper.resolveAddress(mActivity, latlng, this);
                         break;
                     }
                     case MediaDetails.INDEX_SIZE: {
@@ -178,10 +182,10 @@ public class DialogDetailsView implements DetailsViewContainer {
                 }
                 int key = detail.getKey();
                 if (details.hasUnit(key)) {
-                    value = String.format("%s : %s %s", DetailsHelper.getDetailsName(
+                    value = String.format("%s: %s %s", DetailsHelper.getDetailsName(
                             context, key), value, context.getString(details.getUnit(key)));
                 } else {
-                    value = String.format("%s : %s", DetailsHelper.getDetailsName(
+                    value = String.format("%s: %s", DetailsHelper.getDetailsName(
                             context, key), value);
                 }
                 mItems.add(value);
@@ -198,22 +202,26 @@ public class DialogDetailsView implements DetailsViewContainer {
             return false;
         }
 
+        @Override
         public int getCount() {
             return mItems.size();
         }
 
+        @Override
         public Object getItem(int position) {
             return mDetails.getDetail(position);
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tv;
             if (convertView == null) {
-                tv = (TextView) LayoutInflater.from(mContext.getAndroidContext()).inflate(
+                tv = (TextView) LayoutInflater.from(mActivity.getAndroidContext()).inflate(
                         R.layout.details, parent, false);
             } else {
                 tv = (TextView) convertView;
@@ -222,12 +230,14 @@ public class DialogDetailsView implements DetailsViewContainer {
             return tv;
         }
 
+        @Override
         public void onAddressAvailable(String address) {
             mItems.set(mLocationIndex, address);
             notifyDataSetChanged();
         }
     }
 
+    @Override
     public void setCloseListener(CloseListener listener) {
         mListener = listener;
     }

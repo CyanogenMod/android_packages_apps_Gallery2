@@ -36,11 +36,13 @@
     <string name="ok" msgid="5296833083983263293">"OK"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Zum Beginnen auf ein Gesicht tippen"</string>
     <string name="saving_image" msgid="7270334453636349407">"Bild wird gespeichert..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Bild wird in <xliff:g id="ALBUM_NAME">%1$s</xliff:g> gespeichert…"</string>
     <string name="save_error" msgid="6857408774183654970">"Zugeschnittenes Bild nicht gespeichert"</string>
     <string name="crop_label" msgid="521114301871349328">"Bild zuschneiden"</string>
+    <string name="trim_label" msgid="274203231381209979">"Video schneiden"</string>
     <string name="select_image" msgid="7841406150484742140">"Foto auswählen"</string>
     <string name="select_video" msgid="4859510992798615076">"Video auswählen"</string>
-    <string name="select_item" msgid="2816923896202086390">"Element auswählen"</string>
+    <string name="select_item" msgid="2816923896202086390">"Bild auswählen"</string>
     <string name="select_album" msgid="1557063764849434077">"Album auswählen"</string>
     <string name="select_group" msgid="6744208543323307114">"Gruppe auswählen"</string>
     <string name="set_image" msgid="2331476809308010401">"Bild festlegen als"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Bestätigen"</string>
     <string name="cancel" msgid="3637516880917356226">"Abbrechen"</string>
     <string name="share" msgid="3619042788254195341">"Teilen"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Panorama teilen"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Als Foto teilen"</string>
     <string name="deleted" msgid="6795433049119073871">"Gelöscht"</string>
     <string name="undo" msgid="2930873956446586313">"Rückgängig"</string>
     <string name="select_all" msgid="3403283025220282175">"Alle auswählen"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Caching-Anfragen werden verarbeitet."</string>
     <string name="caching_label" msgid="4521059045896269095">"Caching läuft..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Zuschneiden"</string>
+    <string name="trim_action" msgid="703098114452883524">"Zuschneiden"</string>
     <string name="set_as" msgid="3636764710790507868">"Festlegen als"</string>
     <string name="video_err" msgid="7003051631792271009">"Video kann nicht wiedergegeben werden."</string>
     <string name="group_by_location" msgid="316641628989023253">"Nach Standort"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Automatisch"</string>
     <string name="flash_on" msgid="7891556231891837284">"Blitz ausgelöst"</string>
     <string name="flash_off" msgid="1445443413822680010">"Ohne Blitz"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Original"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Vintage"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Sofort"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Bleach"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Blau"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Schwarz-Weiß"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Punch"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X Process"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litho"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Album wird offline bereitgestellt."</item>
     <item quantity="other" msgid="4948604338155959389">"Alben werden offline bereitgestellt."</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Konto hinzufügen"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Kamera"</string>
     <string name="folder_download" msgid="7186215137642323932">"Downloads"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Bearbeitete Online-Fotos"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Importiert"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Screenshots"</string>
     <string name="help" msgid="7368960711153618354">"Hilfe"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Kein Speicher"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Kein externer Speicher verfügbar"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Filmstreifen-Ansicht"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Rasteransicht"</string>
+    <string name="trimming" msgid="9122385768369143997">"Wird zugeschnitten"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Bitte warten"</string>
+    <string name="save_into" msgid="4960537214388766062">"Zugeschnittenes Video wird im Album gespeichert:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Zuschneiden nicht möglich: Ziel-Video zu kurz"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Panorama wird gerendert..."</string>
+    <string name="save" msgid="613976532235060516">"Speichern"</string>
 </resources>

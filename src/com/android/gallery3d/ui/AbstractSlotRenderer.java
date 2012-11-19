@@ -25,7 +25,7 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
 
     private final ResourceTexture mVideoOverlay;
     private final ResourceTexture mVideoPlayIcon;
-    private final NinePatchTexture mPanoramaBorder;
+    private final ResourceTexture mPanoramaIcon;
     private final NinePatchTexture mFramePressed;
     private final NinePatchTexture mFrameSelected;
     private FadeOutTexture mFramePressedUp;
@@ -33,7 +33,7 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
     protected AbstractSlotRenderer(Context context) {
         mVideoOverlay = new ResourceTexture(context, R.drawable.ic_video_thumb);
         mVideoPlayIcon = new ResourceTexture(context, R.drawable.ic_gallery_play);
-        mPanoramaBorder = new NinePatchTexture(context, R.drawable.ic_pan_thumb);
+        mPanoramaIcon = new ResourceTexture(context, R.drawable.ic_360pano_holo_light);
         mFramePressed = new NinePatchTexture(context, R.drawable.grid_pressed);
         mFrameSelected = new NinePatchTexture(context, R.drawable.grid_selected);
     }
@@ -42,15 +42,13 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
             Texture content, int width, int height, int rotation) {
         canvas.save(GLCanvas.SAVE_FLAG_MATRIX);
 
+        // The content is always rendered in to the largest square that fits
+        // inside the slot, aligned to the top of the slot.
+        width = height = Math.min(width, height);
         if (rotation != 0) {
             canvas.translate(width / 2, height / 2);
             canvas.rotate(rotation, 0, 0, 1);
             canvas.translate(-width / 2, -height / 2);
-            if (((rotation % 90) & 1) != 0) {
-                int temp = height;
-                height = width;
-                width = height;
-            }
         }
 
         // Fit the content into the box
@@ -76,14 +74,10 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
         mVideoPlayIcon.draw(canvas, (width - s) / 2, (height - s) / 2, s, s);
     }
 
-    protected void drawPanoramaBorder(GLCanvas canvas, int width, int height) {
-        float scale = (float) width / mPanoramaBorder.getWidth();
-        int w = Math.round(scale * mPanoramaBorder.getWidth());
-        int h = Math.round(scale * mPanoramaBorder.getHeight());
-        // draw at the top
-        mPanoramaBorder.draw(canvas, 0, 0, w, h);
-        // draw at the bottom
-        mPanoramaBorder.draw(canvas, 0, height - h, w, h);
+    protected void drawPanoramaIcon(GLCanvas canvas, int width, int height) {
+        int iconSize = Math.min(width, height) / 6;
+        mPanoramaIcon.draw(canvas, (width - iconSize) / 2, (height - iconSize) / 2,
+                iconSize, iconSize);
     }
 
     protected boolean isPressedUpFrameFinished() {

@@ -16,10 +16,8 @@
 
 package com.android.gallery3d.ui;
 
-import android.content.Context;
-
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumDataLoader;
-import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
 
@@ -31,11 +29,11 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
         public boolean acceptSlot(int index);
     }
 
-    private static final int PLACEHOLDER_COLOR = 0xFF222222;
+    private final int mPlaceholderColor;
     private static final int CACHE_SIZE = 96;
 
     private AlbumSlidingWindow mDataWindow;
-    private final GalleryActivity mActivity;
+    private final AbstractGalleryActivity mActivity;
     private final ColorTexture mWaitLoadingTexture;
     private final SlotView mSlotView;
     private final SelectionManager mSelectionManager;
@@ -47,14 +45,15 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
 
     private SlotFilter mSlotFilter;
 
-    public AlbumSlotRenderer(GalleryActivity activity, SlotView slotView,
-            SelectionManager selectionManager) {
-        super((Context) activity);
+    public AlbumSlotRenderer(AbstractGalleryActivity activity, SlotView slotView,
+            SelectionManager selectionManager, int placeholderColor) {
+        super(activity);
         mActivity = activity;
         mSlotView = slotView;
         mSelectionManager = selectionManager;
+        mPlaceholderColor = placeholderColor;
 
-        mWaitLoadingTexture = new ColorTexture(PLACEHOLDER_COLOR);
+        mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
         mWaitLoadingTexture.setSize(1, 1);
     }
 
@@ -90,8 +89,8 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
     }
 
     private static Texture checkTexture(Texture texture) {
-        return (texture instanceof UploadedTexture)
-                && ((UploadedTexture) texture).isUploading()
+        return (texture instanceof TiledTexture)
+                && !((TiledTexture) texture).isReady()
                 ? null
                 : texture;
     }
@@ -110,7 +109,7 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             entry.isWaitDisplayed = true;
         } else if (entry.isWaitDisplayed) {
             entry.isWaitDisplayed = false;
-            content = new FadeInTexture(PLACEHOLDER_COLOR, entry.bitmapTexture);
+            content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
             entry.content = content;
         }
         drawContent(canvas, content, width, height, entry.rotation);
@@ -124,7 +123,7 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
         }
 
         if (entry.isPanorama) {
-            drawPanoramaBorder(canvas, width, height);
+            drawPanoramaIcon(canvas, width, height);
         }
 
         renderRequestFlags |= renderOverlay(canvas, index, entry, width, height);

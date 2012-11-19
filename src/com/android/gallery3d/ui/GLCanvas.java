@@ -36,6 +36,7 @@ public interface GLCanvas {
 
     // Clear the drawing buffers. This should only be used by GLRoot.
     public void clearBuffer();
+    public void clearBuffer(float[] argb);
 
     // Sets and gets the current alpha, alpha must be in [0, 1].
     public void setAlpha(float alpha);
@@ -97,6 +98,13 @@ public interface GLCanvas {
     // The two textures must have the same size.
     public void drawMixed(BasicTexture from, int toColor,
             float ratio, int x, int y, int w, int h);
+
+    // Draw a region of a texture and a specified color to the specified
+    // rectangle. The actual color used is from * (1 - ratio) + to * ratio.
+    // The region of the texture is defined by parameter "src". The target
+    // rectangle is specified by parameter "target".
+    public void drawMixed(BasicTexture from, int toColor,
+            float ratio, RectF src, RectF target);
 
     // Gets the underlying GL instance. This is used only when direct access to
     // GL is needed.

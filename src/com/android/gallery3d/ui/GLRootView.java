@@ -16,10 +16,12 @@
 
 package com.android.gallery3d.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Process;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -29,8 +31,10 @@ import android.view.View;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.anim.CanvasAnimation;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.MotionEventHelper;
 import com.android.gallery3d.util.Profile;
 
 import java.util.ArrayDeque;
@@ -82,9 +86,6 @@ public class GLRootView extends GLSurfaceView
     private Matrix mCompensationMatrix = new Matrix();
     private int mDisplayRotation;
 
-    // The value which will become mCompensation in next layout.
-    private int mPendingCompensation;
-
     private int mFlags = FLAG_NEED_LAYOUT;
     private volatile boolean mRenderRequested = false;
 
@@ -118,7 +119,11 @@ public class GLRootView extends GLSurfaceView
         setBackgroundDrawable(null);
         setEGLConfigChooser(mEglConfigChooser);
         setRenderer(this);
-        getHolder().setFormat(PixelFormat.RGB_565);
+        if (ApiHelper.USE_888_PIXEL_FORMAT) {
+            getHolder().setFormat(PixelFormat.RGB_888);
+        } else {
+            getHolder().setFormat(PixelFormat.RGB_565);
+        }
 
         // Uncomment this to enable gl error check.
         // setDebugFlags(DEBUG_CHECK_GL_ERROR);
@@ -164,6 +169,11 @@ public class GLRootView extends GLSurfaceView
     }
 
     @Override
+    public void requestRenderForced() {
+        superRequestRender();
+    }
+
+    @Override
     public void requestRender() {
         if (DEBUG_INVALIDATE) {
             StackTraceElement e = Thread.currentThread().getStackTrace()[4];
@@ -172,6 +182,21 @@ public class GLRootView extends GLSurfaceView
         }
         if (mRenderRequested) return;
         mRenderRequested = true;
+        if (ApiHelper.HAS_POST_ON_ANIMATION) {
+            postOnAnimation(mRequestRenderOnAnimationFrame);
+        } else {
+            super.requestRender();
+        }
+    }
+
+    private Runnable mRequestRenderOnAnimationFrame = new Runnable() {
+        @Override
+        public void run() {
+            superRequestRender();
+        }
+    };
+
+    private void superRequestRender() {
         super.requestRender();
     }
 
@@ -331,6 +356,7 @@ public class GLRootView extends GLSurfaceView
         if (mFirstDraw) {
             mFirstDraw = false;
             post(new Runnable() {
+                    @Override
                     public void run() {
                         View root = getRootView();
                         View cover = root.findViewById(R.id.gl_root_cover);
@@ -429,7 +455,7 @@ public class GLRootView extends GLSurfaceView
         }
 
         if (mCompensation != 0) {
-            event.transform(mCompensationMatrix);
+            event = MotionEventHelper.transformEvent(event, mCompensationMatrix);
         }
 
         mRenderLock.lock();
@@ -459,14 +485,15 @@ public class GLRootView extends GLSurfaceView
                 listener = mIdleListeners.removeFirst();
             }
             mRenderLock.lock();
+            boolean keepInQueue;
             try {
-                if (!listener.onGLIdle(mCanvas, mRenderRequested)) return;
+                keepInQueue = listener.onGLIdle(mCanvas, mRenderRequested);
             } finally {
                 mRenderLock.unlock();
             }
             synchronized (mIdleListeners) {
-                mIdleListeners.addLast(listener);
-                if (!mRenderRequested) enable();
+                if (keepInQueue) mIdleListeners.addLast(listener);
+                if (!mRenderRequested && !mIdleListeners.isEmpty()) enable();
             }
         }
 
@@ -536,12 +563,17 @@ public class GLRootView extends GLSurfaceView
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void setLightsOutMode(boolean enabled) {
-        int flags = enabled
-                ? SYSTEM_UI_FLAG_LOW_PROFILE
-                | SYSTEM_UI_FLAG_FULLSCREEN
-                | SYSTEM_UI_FLAG_LAYOUT_STABLE
-                : 0;
+        if (!ApiHelper.HAS_SET_SYSTEM_UI_VISIBILITY) return;
+
+        int flags = 0;
+        if (enabled) {
+            flags = STATUS_BAR_HIDDEN;
+            if (ApiHelper.HAS_VIEW_SYSTEM_UI_FLAG_LAYOUT_STABLE) {
+                flags |= (SYSTEM_UI_FLAG_FULLSCREEN | SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            }
+        }
         setSystemUiVisibility(flags);
     }
 

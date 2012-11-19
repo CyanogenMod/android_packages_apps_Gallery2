@@ -17,14 +17,19 @@
 package com.android.gallery3d.app;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.DownloadCache;
 import com.android.gallery3d.data.ImageCacheService;
 import com.android.gallery3d.gadget.WidgetUtils;
 import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.LightCycleHelper;
 import com.android.gallery3d.util.ThreadPool;
 
 import java.io.File;
@@ -39,20 +44,29 @@ public class GalleryAppImpl extends Application implements GalleryApp {
     private DataManager mDataManager;
     private ThreadPool mThreadPool;
     private DownloadCache mDownloadCache;
+    private StitchingProgressManager mStitchingProgressManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         com.android.camera.Util.initialize(this);
+        initializeAsyncTask();
         GalleryUtils.initialize(this);
         WidgetUtils.initialize(this);
         PicasaSource.initialize(this);
+
+        mStitchingProgressManager = LightCycleHelper.createStitchingManagerInstance(this);
+        if (mStitchingProgressManager != null) {
+            mStitchingProgressManager.addChangeListener(getDataManager());
+        }
     }
 
+    @Override
     public Context getAndroidContext() {
         return this;
     }
 
+    @Override
     public synchronized DataManager getDataManager() {
         if (mDataManager == null) {
             mDataManager = new DataManager(this);
@@ -61,6 +75,12 @@ public class GalleryAppImpl extends Application implements GalleryApp {
         return mDataManager;
     }
 
+    @Override
+    public StitchingProgressManager getStitchingProgressManager() {
+        return mStitchingProgressManager;
+    }
+
+    @Override
     public ImageCacheService getImageCacheService() {
         // This method may block on file I/O so a dedicated lock is needed here.
         synchronized (mLock) {
@@ -71,6 +91,7 @@ public class GalleryAppImpl extends Application implements GalleryApp {
         }
     }
 
+    @Override
     public synchronized ThreadPool getThreadPool() {
         if (mThreadPool == null) {
             mThreadPool = new ThreadPool();
@@ -78,6 +99,7 @@ public class GalleryAppImpl extends Application implements GalleryApp {
         return mThreadPool;
     }
 
+    @Override
     public synchronized DownloadCache getDownloadCache() {
         if (mDownloadCache == null) {
             File cacheDir = new File(getExternalCacheDir(), DOWNLOAD_FOLDER);
@@ -91,5 +113,14 @@ public class GalleryAppImpl extends Application implements GalleryApp {
             mDownloadCache = new DownloadCache(this, cacheDir, DOWNLOAD_CAPACITY);
         }
         return mDownloadCache;
+    }
+
+    private void initializeAsyncTask() {
+        // AsyncTask class needs to be loaded in UI thread.
+        // So we load it here to comply the rule.
+        try {
+            Class.forName(AsyncTask.class.getName());
+        } catch (ClassNotFoundException e) {
+        }
     }
 }

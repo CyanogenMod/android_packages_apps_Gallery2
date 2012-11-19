@@ -23,10 +23,12 @@ import com.android.gallery3d.ui.ScreenNail;
 
 // This is the bridge to connect a PhotoPage to the external environment.
 public abstract class AppBridge implements Parcelable {
+    @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
 
@@ -35,6 +37,7 @@ public abstract class AppBridge implements Parcelable {
     //////////////////////////////////////////////////////////////////////////
 
     public abstract boolean isPanorama();
+    public abstract boolean isStaticCamera();
     public abstract ScreenNail attachScreenNail();
     public abstract void detachScreenNail();
 
@@ -60,6 +63,8 @@ public abstract class AppBridge implements Parcelable {
         public void setSwipingEnabled(boolean enabled);
         // Notify that the ScreenNail is changed.
         public void notifyScreenNailChanged();
+        // Add a new media item to the secure album.
+        public void addSecureAlbumItem(boolean isVideo, int id);
     }
 
     // If server is null, the services are not available.

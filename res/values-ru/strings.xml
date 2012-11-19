@@ -27,7 +27,7 @@
     <string name="resume_playing_title" msgid="8996677350649355013">"Продолжение просмотра видео"</string>
     <string name="resume_playing_message" msgid="5184414518126703481">"Продолжить воспроизведение с %s?"</string>
     <string name="resume_playing_resume" msgid="3847915469173852416">"Продолжить воспроизведение"</string>
-    <string name="loading" msgid="7038208555304563571">"Идет загрузка…"</string>
+    <string name="loading" msgid="7038208555304563571">"Загрузка…"</string>
     <string name="fail_to_load" msgid="8394392853646664505">"Не загружено"</string>
     <string name="fail_to_load_image" msgid="6155388718549782425">"Не удалось загрузить изображение"</string>
     <string name="no_thumbnail" msgid="284723185546429750">"Нет уменьшенного изображения"</string>
@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"ОК"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Нажмите на лицо, чтобы начать."</string>
     <string name="saving_image" msgid="7270334453636349407">"Сохранение картинки..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Сохранение в альбоме \"<xliff:g id="ALBUM_NAME">%1$s</xliff:g>\"…"</string>
     <string name="save_error" msgid="6857408774183654970">"Изображение не сохранено."</string>
     <string name="crop_label" msgid="521114301871349328">"Обрезать фотографию"</string>
+    <string name="trim_label" msgid="274203231381209979">"Вырезать фрагмент"</string>
     <string name="select_image" msgid="7841406150484742140">"Выбрать фото"</string>
     <string name="select_video" msgid="4859510992798615076">"Выбрать видео"</string>
     <string name="select_item" msgid="2816923896202086390">"Выбрать файлы"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Подтвердить"</string>
     <string name="cancel" msgid="3637516880917356226">"Отмена"</string>
     <string name="share" msgid="3619042788254195341">"Отправить"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Отправить панораму"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Отправить фото"</string>
     <string name="deleted" msgid="6795433049119073871">"Удалено"</string>
     <string name="undo" msgid="2930873956446586313">"ОТМЕНИТЬ"</string>
     <string name="select_all" msgid="3403283025220282175">"Выбрать все"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Обработка запросов на кэширование"</string>
     <string name="caching_label" msgid="4521059045896269095">"Кэширование..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Кадрировать"</string>
+    <string name="trim_action" msgid="703098114452883524">"Обрезка"</string>
     <string name="set_as" msgid="3636764710790507868">"Установить как"</string>
     <string name="video_err" msgid="7003051631792271009">"Не удалось воспроизвести видео."</string>
     <string name="group_by_location" msgid="316641628989023253">"По месту съемки"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Авто"</string>
     <string name="flash_on" msgid="7891556231891837284">"Со вспышкой"</string>
     <string name="flash_off" msgid="1445443413822680010">"Без вспышки"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Оригинал"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Винтаж"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Полароид"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Отбеливание"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Синева"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Ч/Б"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Сжатие"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X-процесс"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Латте"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Литография"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Загрузка альбома для офлайн-доступа"</item>
     <item quantity="other" msgid="4948604338155959389">"Загрузка альбомов для офлайн-доступа."</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Добавить аккаунт"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Камера"</string>
     <string name="folder_download" msgid="7186215137642323932">"Загруженные"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Отредактированные онлайн"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Импортированные"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Скриншоты"</string>
     <string name="help" msgid="7368960711153618354">"Справка"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Накопитель не найден"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Нет внешних накопителей"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Кинолента"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Сетка"</string>
+    <string name="trimming" msgid="9122385768369143997">"Обрезка"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Подождите…"</string>
+    <string name="save_into" msgid="4960537214388766062">"Сохраните видео в альбом:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Нельзя обрезать видео: оно слишком короткое"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Создание панорамы…"</string>
+    <string name="save" msgid="613976532235060516">"Сохранить"</string>
 </resources>

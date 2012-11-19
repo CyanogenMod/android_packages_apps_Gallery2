@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.view.MotionEvent;
 
 import com.android.gallery3d.anim.CanvasAnimation;
+import com.android.gallery3d.anim.StateTransitionAnimation;
 import com.android.gallery3d.common.Utils;
 
 import java.util.ArrayList;
@@ -76,6 +77,9 @@ public class GLView {
     protected int mScrollX = 0;
     protected int mScrollHeight = 0;
     protected int mScrollWidth = 0;
+
+    private float [] mBackgroundColor;
+    private StateTransitionAnimation mTransition;
 
     public void startAnimation(CanvasAnimation animation) {
         GLRoot root = getGLRoot();
@@ -217,13 +221,46 @@ public class GLView {
     }
 
     protected void render(GLCanvas canvas) {
+        boolean transitionActive = false;
+        if (mTransition != null && mTransition.calculate(AnimationTime.get())) {
+            invalidate();
+            transitionActive = mTransition.isActive();
+        }
         renderBackground(canvas);
+        canvas.save();
+        if (transitionActive) {
+            mTransition.applyContentTransform(this, canvas);
+        }
         for (int i = 0, n = getComponentCount(); i < n; ++i) {
             renderChild(canvas, getComponent(i));
         }
+        canvas.restore();
+        if (transitionActive) {
+            mTransition.applyOverlay(this, canvas);
+        }
+    }
+
+    public void setIntroAnimation(StateTransitionAnimation intro) {
+        mTransition = intro;
+        if (mTransition != null) mTransition.start();
+    }
+
+    public float [] getBackgroundColor() {
+        return mBackgroundColor;
+    }
+
+    public void setBackgroundColor(float [] color) {
+        mBackgroundColor = color;
     }
 
     protected void renderBackground(GLCanvas view) {
+        if (mBackgroundColor != null) {
+            view.clearBuffer(mBackgroundColor);
+        }
+        if (mTransition != null && mTransition.isActive()) {
+            mTransition.applyBackground(this, view);
+            return;
+        }
     }
 
     protected void renderChild(GLCanvas canvas, GLView component) {

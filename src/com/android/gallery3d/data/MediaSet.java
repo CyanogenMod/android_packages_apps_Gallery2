@@ -32,6 +32,7 @@ import java.util.WeakHashMap;
 // getTotalMediaItemCount() returns the number of all MediaItems, including
 // those in sub-MediaSets.
 public abstract class MediaSet extends MediaObject {
+    @SuppressWarnings("unused")
     private static final String TAG = "MediaSet";
 
     public static final int MEDIAITEM_BATCH_FETCH_COUNT = 500;
@@ -94,6 +95,10 @@ public abstract class MediaSet extends MediaObject {
         return false;
     }
 
+    public boolean isCameraRoll() {
+        return false;
+    }
+
     /**
      * Method {@link #reload()} may process the loading task in background, this method tells
      * its client whether the loading is still in process or not.
@@ -135,7 +140,9 @@ public abstract class MediaSet extends MediaObject {
 
     protected int getIndexOf(Path path, ArrayList<MediaItem> list) {
         for (int i = 0, n = list.size(); i < n; ++i) {
-            if (list.get(i).mPath == path) return i;
+            // item could be null only in ClusterAlbum
+            MediaObject item = list.get(i);
+            if (item != null && item.mPath == path) return i;
         }
         return INDEX_NOT_FOUND;
     }
@@ -270,6 +277,7 @@ public abstract class MediaSet extends MediaObject {
     }
 
     private class MultiSetSyncFuture implements Future<Integer>, SyncListener {
+        @SuppressWarnings("hiding")
         private static final String TAG = "Gallery.MultiSetSync";
 
         private final SyncListener mListener;

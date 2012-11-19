@@ -26,8 +26,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.view.Menu;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
@@ -37,7 +37,6 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.picasasource.PicasaSource;
-import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.util.GalleryUtils;
 
 public final class Gallery extends AbstractGalleryActivity implements OnCancelListener {
@@ -50,6 +49,7 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
     public static final String KEY_GET_ALBUM = "get-album";
     public static final String KEY_TYPE_BITS = "type-bits";
     public static final String KEY_MEDIA_TYPES = "mediaTypes";
+    public static final String KEY_DISMISS_KEYGUARD = "dismiss-keyguard";
 
     private static final String TAG = "Gallery";
     private Dialog mVersionCheckDialog;
@@ -59,6 +59,11 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+
+        if (getIntent().getBooleanExtra(KEY_DISMISS_KEYGUARD, false)) {
+            getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        }
 
         setContentView(R.layout.main);
 
@@ -120,7 +125,10 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
 
     private String getContentType(Intent intent) {
         String type = intent.getType();
-        if (type != null) return type;
+        if (type != null) {
+            return GalleryUtils.MIME_TYPE_PANORAMA360.equals(type)
+                ? MediaItem.MIME_TYPE_JPEG : type;
+        }
 
         Uri uri = intent.getData();
         try {
@@ -194,47 +202,29 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
                     startDefaultPage();
                 }
             } else {
-                Path itemPath = dm.findPathByUri(uri, intent.getType());
+                Path itemPath = dm.findPathByUri(uri, contentType);
                 Path albumPath = dm.getDefaultSetOf(itemPath);
-                // TODO: Make this parameter public so other activities can reference it.
-                boolean singleItemOnly = intent.getBooleanExtra("SingleItemOnly", false);
-                if (!singleItemOnly && (albumPath != null)) {
-                    data.putString(PhotoPage.KEY_MEDIA_SET_PATH, albumPath.toString());
-                }
+
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, itemPath.toString());
-                if (intent.getBooleanExtra(PhotoPage.KEY_TREAT_BACK_AS_UP, false)) {
-                    data.putBoolean(PhotoPage.KEY_TREAT_BACK_AS_UP, true);
-                }
 
-                // Displays the filename as title, reading the filename from the interface:
-                // {@link android.provider.OpenableColumns#DISPLAY_NAME}.
-                AsyncQueryHandler queryHandler = new AsyncQueryHandler(getContentResolver()) {
-                    @Override
-                    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                        try {
-                            if ((cursor != null) && cursor.moveToFirst()) {
-                                String displayName = cursor.getString(0);
-
-                                // Just show empty title if other apps don't set DISPLAY_NAME
-                                setTitle((displayName == null) ? "" : displayName);
-                            }
-                        } finally {
-                            Utils.closeSilently(cursor);
-                        }
+                // TODO: Make the parameter "SingleItemOnly" public so other
+                //       activities can reference it.
+                boolean singleItemOnly = (albumPath == null)
+                        || intent.getBooleanExtra("SingleItemOnly", false);
+                if (!singleItemOnly) {
+                    data.putString(PhotoPage.KEY_MEDIA_SET_PATH, albumPath.toString());
+                    // when FLAG_ACTIVITY_NEW_TASK is set, (e.g. when intent is fired
+                    // from notification), back button should behave the same as up button
+                    // rather than taking users back to the home screen
+                    if (intent.getBooleanExtra(PhotoPage.KEY_TREAT_BACK_AS_UP, false)
+                            || ((intent.getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0)) {
+                        data.putBoolean(PhotoPage.KEY_TREAT_BACK_AS_UP, true);
                     }
-                };
-                queryHandler.startQuery(0, null, uri, new String[] {OpenableColumns.DISPLAY_NAME},
-                        null, null, null);
+                }
 
                 getStateManager().startState(PhotoPage.class, data);
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        return getStateManager().createOptionsMenu(menu);
     }
 
     @Override

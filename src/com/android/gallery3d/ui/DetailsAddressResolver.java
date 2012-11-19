@@ -21,7 +21,7 @@ import android.location.Address;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.android.gallery3d.app.GalleryActivity;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.data.MediaDetails;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.FutureListener;
@@ -32,7 +32,7 @@ import com.android.gallery3d.util.ThreadPool.JobContext;
 
 public class DetailsAddressResolver {
     private AddressResolvingListener mListener;
-    private final GalleryActivity mContext;
+    private final AbstractGalleryActivity mContext;
     private Future<Address> mAddressLookupJob;
     private final Handler mHandler;
 
@@ -43,6 +43,7 @@ public class DetailsAddressResolver {
             mLatlng = latlng;
         }
 
+        @Override
         public Address run(JobContext jc) {
             ReverseGeocoder geocoder = new ReverseGeocoder(mContext.getAndroidContext());
             return geocoder.lookupAddress(mLatlng[0], mLatlng[1], true);
@@ -53,7 +54,7 @@ public class DetailsAddressResolver {
         public void onAddressAvailable(String address);
     }
 
-    public DetailsAddressResolver(GalleryActivity context) {
+    public DetailsAddressResolver(AbstractGalleryActivity context) {
         mContext = context;
         mHandler = new Handler(Looper.getMainLooper());
     }
@@ -63,10 +64,12 @@ public class DetailsAddressResolver {
         mAddressLookupJob = mContext.getThreadPool().submit(
                 new AddressLookupJob(latlng),
                 new FutureListener<Address>() {
+                    @Override
                     public void onFutureDone(final Future<Address> future) {
                         mAddressLookupJob = null;
                         if (!future.isCancelled()) {
                             mHandler.post(new Runnable() {
+                                @Override
                                 public void run() {
                                     updateLocation(future.get());
                                 }

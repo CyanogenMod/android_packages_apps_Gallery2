@@ -20,19 +20,20 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumPage;
-import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.util.MediaSetUtils;
 
-public class ImportCompleteListener implements MenuExecutor.ProgressListener {
-    private GalleryActivity mActivity;
+public class ImportCompleteListener extends WakeLockHoldingProgressListener {
+    private static final String WAKE_LOCK_LABEL = "Gallery Album Import";
 
-    public ImportCompleteListener(GalleryActivity galleryActivity) {
-        mActivity = galleryActivity;
+    public ImportCompleteListener(AbstractGalleryActivity galleryActivity) {
+        super(galleryActivity, WAKE_LOCK_LABEL);
     }
 
     @Override
     public void onProgressComplete(int result) {
+        super.onProgressComplete(result);
         int message;
         if (result == MenuExecutor.EXECUTION_RESULT_SUCCESS) {
             message = R.string.import_complete;
@@ -40,25 +41,13 @@ public class ImportCompleteListener implements MenuExecutor.ProgressListener {
         } else {
             message = R.string.import_fail;
         }
-        Toast.makeText(mActivity.getAndroidContext(), message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onProgressUpdate(int index) {
+        Toast.makeText(getActivity().getAndroidContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private void goToImportedAlbum() {
         String pathOfImportedAlbum = "/local/all/" + MediaSetUtils.IMPORTED_BUCKET_ID;
         Bundle data = new Bundle();
         data.putString(AlbumPage.KEY_MEDIA_PATH, pathOfImportedAlbum);
-        mActivity.getStateManager().startState(AlbumPage.class, data);
-    }
-
-    @Override
-    public void onConfirmDialogDismissed(boolean confirmed) {
-    }
-
-    @Override
-    public void onConfirmDialogShown() {
+        getActivity().getStateManager().startState(AlbumPage.class, data);
     }
 }

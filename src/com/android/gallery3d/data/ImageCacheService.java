@@ -35,7 +35,7 @@ public class ImageCacheService {
     private static final String IMAGE_CACHE_FILE = "imgcache";
     private static final int IMAGE_CACHE_MAX_ENTRIES = 5000;
     private static final int IMAGE_CACHE_MAX_BYTES = 200 * 1024 * 1024;
-    private static final int IMAGE_CACHE_VERSION = 4;
+    private static final int IMAGE_CACHE_VERSION = 7;
 
     private BlobCache mCache;
 
@@ -85,6 +85,18 @@ public class ImageCacheService {
         synchronized (mCache) {
             try {
                 mCache.insert(cacheKey, buffer.array());
+            } catch (IOException ex) {
+                // ignore.
+            }
+        }
+    }
+
+    public void clearImageData(Path path, int type) {
+        byte[] key = makeKey(path, type);
+        long cacheKey = Utils.crc64Long(key);
+        synchronized (mCache) {
+            try {
+                mCache.clearEntry(cacheKey);
             } catch (IOException ex) {
                 // ignore.
             }

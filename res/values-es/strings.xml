@@ -36,14 +36,16 @@
     <string name="ok" msgid="5296833083983263293">"Aceptar"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Toca una cara para comenzar."</string>
     <string name="saving_image" msgid="7270334453636349407">"Guardando imagen..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Guardando imagen en <xliff:g id="ALBUM_NAME">%1$s</xliff:g> …"</string>
     <string name="save_error" msgid="6857408774183654970">"Error al guardar la imagen recortada"</string>
     <string name="crop_label" msgid="521114301871349328">"Recortar"</string>
+    <string name="trim_label" msgid="274203231381209979">"Recortar vídeo"</string>
     <string name="select_image" msgid="7841406150484742140">"Seleccionar foto"</string>
     <string name="select_video" msgid="4859510992798615076">"Seleccionar vídeo"</string>
     <string name="select_item" msgid="2816923896202086390">"Seleccionar elemento"</string>
     <string name="select_album" msgid="1557063764849434077">"Seleccionar álbum"</string>
     <string name="select_group" msgid="6744208543323307114">"Seleccionar grupo"</string>
-    <string name="set_image" msgid="2331476809308010401">"Establecer imagen como"</string>
+    <string name="set_image" msgid="2331476809308010401">"Establecer como..."</string>
     <string name="set_wallpaper" msgid="8491121226190175017">"Establecer fondo de pantalla"</string>
     <string name="wallpaper" msgid="140165383777262070">"Estableciendo fondo de pantalla..."</string>
     <string name="camera_setas_wallpaper" msgid="797463183863414289">"Fondo de pantalla"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Confirmar"</string>
     <string name="cancel" msgid="3637516880917356226">"Cancelar"</string>
     <string name="share" msgid="3619042788254195341">"Compartir"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Compartir panorámica"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Compartir como foto"</string>
     <string name="deleted" msgid="6795433049119073871">"Eliminada"</string>
     <string name="undo" msgid="2930873956446586313">"DESHACER"</string>
     <string name="select_all" msgid="3403283025220282175">"Seleccionar todo"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Procesando solicitudes de almacenamiento en caché"</string>
     <string name="caching_label" msgid="4521059045896269095">"Almacenando en caché..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Recortar"</string>
+    <string name="trim_action" msgid="703098114452883524">"Recortar"</string>
     <string name="set_as" msgid="3636764710790507868">"Establecer como"</string>
     <string name="video_err" msgid="7003051631792271009">"No se puede reproducir el vídeo."</string>
     <string name="group_by_location" msgid="316641628989023253">"Por ubicación"</string>
@@ -108,7 +113,7 @@
     <string name="no_albums_alert" msgid="4111744447491690896">"No hay álbumes disponibles."</string>
     <string name="empty_album" msgid="4542880442593595494">"No hay imágenes ni vídeos disponibles."</string>
     <string name="picasa_posts" msgid="1497721615718760613">"Publicaciones"</string>
-    <string name="make_available_offline" msgid="5157950985488297112">"Disponible sin conexión"</string>
+    <string name="make_available_offline" msgid="5157950985488297112">"Disponible sin conex."</string>
     <string name="sync_picasa_albums" msgid="8522572542111169872">"Actualizar"</string>
     <string name="done" msgid="217672440064436595">"Listo"</string>
     <string name="sequence_in_set" msgid="7235465319919457488">"Elemento: %1$d de %2$d"</string>
@@ -133,9 +138,19 @@
     <string name="iso" msgid="5028296664327335940">"ISO"</string>
     <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
     <string name="manual" msgid="6608905477477607865">"Manual"</string>
-    <string name="auto" msgid="4296941368722892821">"Automát"</string>
+    <string name="auto" msgid="4296941368722892821">"Automático"</string>
     <string name="flash_on" msgid="7891556231891837284">"Flash activado"</string>
     <string name="flash_off" msgid="1445443413822680010">"Sin flash"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Original"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Vintage"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Instantánea"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Decolorar"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Azul"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Blanco y negro"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Punch"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"Procesamiento X"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litho"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Haciendo que el álbum pueda verse sin conexión"</item>
     <item quantity="other" msgid="4948604338155959389">"Haciendo que los álbumes puedan verse sin conexión..."</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Añadir cuenta"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Cámara"</string>
     <string name="folder_download" msgid="7186215137642323932">"Descargadas"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Fotos online editadas"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Importadas"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Capturas de pantalla"</string>
     <string name="help" msgid="7368960711153618354">"Ayuda"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Sin almacenamiento"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"No hay almacenamiento externo disponible."</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Vista de tira de película"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Vista de cuadrícula"</string>
+    <string name="trimming" msgid="9122385768369143997">"Recortando..."</string>
+    <string name="please_wait" msgid="7296066089146487366">"Espera..."</string>
+    <string name="save_into" msgid="4960537214388766062">"Guardando el vídeo recortado en el álbum:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"No se puede recortar: el vídeo de destino es demasiado corto."</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Creando panorámica..."</string>
+    <string name="save" msgid="613976532235060516">"Guardar"</string>
 </resources>

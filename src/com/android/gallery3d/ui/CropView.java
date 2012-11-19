@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.anim.Animation;
-import com.android.gallery3d.app.GalleryActivity;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
 
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import javax.microedition.khronos.opengles.GL11;
  * The activity can crop specific region of interest from an image.
  */
 public class CropView extends GLView {
+    @SuppressWarnings("unused")
     private static final String TAG = "CropView";
 
     private static final int FACE_PIXEL_COUNT = 120000; // around 400x300
@@ -91,14 +92,14 @@ public class CropView extends GLView {
     private int mImageWidth = SIZE_UNKNOWN;
     private int mImageHeight = SIZE_UNKNOWN;
 
-    private GalleryActivity mActivity;
+    private AbstractGalleryActivity mActivity;
 
     private GLPaint mPaint = new GLPaint();
     private GLPaint mFacePaint = new GLPaint();
 
     private int mImageRotation;
 
-    public CropView(GalleryActivity activity) {
+    public CropView(AbstractGalleryActivity activity) {
         mActivity = activity;
         mImageView = new TileImageView(activity);
         mFaceDetectionView = new FaceHighlightView();

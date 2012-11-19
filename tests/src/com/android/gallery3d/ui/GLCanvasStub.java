@@ -23,6 +23,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class GLCanvasStub implements GLCanvas {
     public void setSize(int width, int height) {}
     public void clearBuffer() {}
+    public void clearBuffer(float[] argb) {}
     public void setCurrentAnimationTimeMillis(long time) {}
     public long currentAnimationTimeMillis() {
         throw new UnsupportedOperationException();
@@ -82,4 +83,6 @@ public class GLCanvasStub implements GLCanvas {
     public void dumpStatisticsAndClear() {}
     public void beginRenderTarget(RawTexture texture) {}
     public void endRenderTarget() {}
+    public void drawMixed(BasicTexture from, int toColor,
+            float ratio, RectF src, RectF target) {}
 }

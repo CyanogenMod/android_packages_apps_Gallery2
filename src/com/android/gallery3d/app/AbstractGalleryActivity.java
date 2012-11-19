@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -27,18 +28,22 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.common.ApiHelper;
+import com.android.gallery3d.data.BitmapPool;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLRootView;
 import com.android.gallery3d.util.ThreadPool;
+import com.android.gallery3d.util.LightCycleHelper.PanoramaViewHelper;
 
-public class AbstractGalleryActivity extends Activity implements GalleryActivity {
+public class AbstractGalleryActivity extends Activity implements GalleryContext {
     @SuppressWarnings("unused")
     private static final String TAG = "AbstractGalleryActivity";
     private GLRootView mGLRootView;
@@ -47,6 +52,7 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
     private OrientationManager mOrientationManager;
     private TransitionStore mTransitionStore = new TransitionStore();
     private boolean mDisableToggleStatusBar;
+    private PanoramaViewHelper mPanoramaViewHelper;
 
     private AlertDialog mAlertDialog = null;
     private BroadcastReceiver mMountReceiver = new BroadcastReceiver() {
@@ -63,6 +69,8 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
         mOrientationManager = new OrientationManager(this);
         toggleStatusBarByOrientation();
         getWindow().setBackgroundDrawable(null);
+        mPanoramaViewHelper = new PanoramaViewHelper(this);
+        mPanoramaViewHelper.onCreate();
     }
 
     @Override
@@ -80,18 +88,28 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
         mStateManager.onConfigurationChange(config);
+        getGalleryActionBar().onConfigurationChanged();
         invalidateOptionsMenu();
         toggleStatusBarByOrientation();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return getStateManager().createOptionsMenu(menu);
+    }
+
+    @Override
     public Context getAndroidContext() {
         return this;
     }
 
+    @Override
     public DataManager getDataManager() {
         return ((GalleryApp) getApplication()).getDataManager();
     }
 
+    @Override
     public ThreadPool getThreadPool() {
         return ((GalleryApp) getApplication()).getThreadPool();
     }
@@ -141,15 +159,26 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
                     dialog.cancel();
                 }
             };
-            mAlertDialog = new AlertDialog.Builder(this)
-                    .setIconAttribute(android.R.attr.alertDialogIcon)
-                    .setTitle(R.string.no_storage_title)
-                    .setMessage(R.string.no_storage_message)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle(R.string.no_external_storage_title)
+                    .setMessage(R.string.no_external_storage)
                     .setNegativeButton(android.R.string.cancel, onClick)
-                    .setOnCancelListener(onCancel)
-                    .show();
+                    .setOnCancelListener(onCancel);
+            if (ApiHelper.HAS_SET_ICON_ATTRIBUTE) {
+                setAlertDialogIconAttribute(builder);
+            } else {
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+            }
+            mAlertDialog = builder.show();
             registerReceiver(mMountReceiver, mMountFilter);
         }
+        mPanoramaViewHelper.onStart();
+    }
+
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
+    private static void setAlertDialogIconAttribute(
+            AlertDialog.Builder builder) {
+        builder.setIconAttribute(android.R.attr.alertDialogIcon);
     }
 
     @Override
@@ -160,6 +189,7 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
             mAlertDialog.dismiss();
             mAlertDialog = null;
         }
+        mPanoramaViewHelper.onStop();
     }
 
     @Override
@@ -188,9 +218,14 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
         } finally {
             mGLRootView.unlockRenderThread();
         }
-        MediaItem.getMicroThumbPool().clear();
-        MediaItem.getThumbPool().clear();
+        clearBitmapPool(MediaItem.getMicroThumbPool());
+        clearBitmapPool(MediaItem.getThumbPool());
+
         MediaItem.getBytesBufferPool().clear();
+    }
+
+    private static void clearBitmapPool(BitmapPool pool) {
+        if (pool != null) pool.clear();
     }
 
     @Override
@@ -227,7 +262,6 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
         }
     }
 
-    @Override
     public GalleryActionBar getGalleryActionBar() {
         if (mActionBar == null) {
             mActionBar = new GalleryActionBar(this);
@@ -262,8 +296,16 @@ public class AbstractGalleryActivity extends Activity implements GalleryActivity
         }
     }
 
-    @Override
     public TransitionStore getTransitionStore() {
         return mTransitionStore;
+    }
+
+    public PanoramaViewHelper getPanoramaViewHelper() {
+        return mPanoramaViewHelper;
+    }
+
+    protected boolean isFullscreen() {
+        return (getWindow().getAttributes().flags
+                & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
     }
 }

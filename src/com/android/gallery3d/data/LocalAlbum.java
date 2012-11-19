@@ -86,8 +86,13 @@ public class LocalAlbum extends MediaSet {
     public LocalAlbum(Path path, GalleryApp application, int bucketId,
             boolean isImage) {
         this(path, application, bucketId, isImage,
-                LocalAlbumSet.getBucketName(application.getContentResolver(),
-                bucketId));
+                BucketHelper.getBucketName(
+                application.getContentResolver(), bucketId));
+    }
+
+    @Override
+    public boolean isCameraRoll() {
+        return mBucketId == MediaSetUtils.CAMERA_BUCKET_ID;
     }
 
     @Override
@@ -135,17 +140,19 @@ public class LocalAlbum extends MediaSet {
 
     private static MediaItem loadOrUpdateItem(Path path, Cursor cursor,
             DataManager dataManager, GalleryApp app, boolean isImage) {
-        LocalMediaItem item = (LocalMediaItem) dataManager.peekMediaObject(path);
-        if (item == null) {
-            if (isImage) {
-                item = new LocalImage(path, app, cursor);
+        synchronized (DataManager.LOCK) {
+            LocalMediaItem item = (LocalMediaItem) dataManager.peekMediaObject(path);
+            if (item == null) {
+                if (isImage) {
+                    item = new LocalImage(path, app, cursor);
+                } else {
+                    item = new LocalVideo(path, app, cursor);
+                }
             } else {
-                item = new LocalVideo(path, app, cursor);
+                item.updateContent(cursor);
             }
-        } else {
-            item.updateContent(cursor);
+            return item;
         }
-        return item;
     }
 
     // The pids array are sorted by the (path) id.
@@ -260,7 +267,6 @@ public class LocalAlbum extends MediaSet {
         GalleryUtils.assertNotInRenderThread();
         mResolver.delete(mBaseUri, mWhereClause,
                 new String[]{String.valueOf(mBucketId)});
-        mApplication.getDataManager().broadcastLocalDeletion();
     }
 
     @Override
@@ -268,7 +274,7 @@ public class LocalAlbum extends MediaSet {
         return true;
     }
 
-    private static String getLocalizedName(Resources res, int bucketId,
+    public static String getLocalizedName(Resources res, int bucketId,
             String name) {
         if (bucketId == MediaSetUtils.CAMERA_BUCKET_ID) {
             return res.getString(R.string.folder_camera);
@@ -278,6 +284,8 @@ public class LocalAlbum extends MediaSet {
             return res.getString(R.string.folder_imported);
         } else if (bucketId == MediaSetUtils.SNAPSHOT_BUCKET_ID) {
             return res.getString(R.string.folder_screenshot);
+        } else if (bucketId == MediaSetUtils.EDITED_ONLINE_PHOTOS_BUCKET_ID) {
+            return res.getString(R.string.folder_edited_online_photos);
         } else {
             return name;
         }

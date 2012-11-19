@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"OK"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Alustamiseks näo puudutamine."</string>
     <string name="saving_image" msgid="7270334453636349407">"Pildi salvestamine ..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Pildi salvestamine albumisse <xliff:g id="ALBUM_NAME">%1$s</xliff:g> …"</string>
     <string name="save_error" msgid="6857408774183654970">"Kärbitud kujutist ei saanud salvestada."</string>
     <string name="crop_label" msgid="521114301871349328">"Kärbi pilti"</string>
+    <string name="trim_label" msgid="274203231381209979">"Kärbi videot"</string>
     <string name="select_image" msgid="7841406150484742140">"Valige foto"</string>
     <string name="select_video" msgid="4859510992798615076">"Vali video"</string>
     <string name="select_item" msgid="2816923896202086390">"Valige üksus"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Kinnitamine"</string>
     <string name="cancel" msgid="3637516880917356226">"Tühista"</string>
     <string name="share" msgid="3619042788254195341">"Jaga"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Panoraami jagamine"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Fotona jagamine"</string>
     <string name="deleted" msgid="6795433049119073871">"Kustutatud"</string>
     <string name="undo" msgid="2930873956446586313">"VÕTA TAGASI"</string>
     <string name="select_all" msgid="3403283025220282175">"Vali kõik"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Vahemällu lisamise taotluste töötlemine"</string>
     <string name="caching_label" msgid="4521059045896269095">"Vahemällu ..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Kärbi"</string>
+    <string name="trim_action" msgid="703098114452883524">"Kärbi"</string>
     <string name="set_as" msgid="3636764710790507868">"Seadista kui"</string>
     <string name="video_err" msgid="7003051631792271009">"Videot ei saa esitada."</string>
     <string name="group_by_location" msgid="316641628989023253">"Asukoha järgi"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Autom."</string>
     <string name="flash_on" msgid="7891556231891837284">"Välk sees"</string>
     <string name="flash_off" msgid="1445443413822680010">"Välguta"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Originaal"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Vintage"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Instant"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Pleekimine"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Sinine"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Mustvalge"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Punch"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X-töötlus"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litorgaafia"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Tegime albumi võrguühenduseta kättesaadavaks."</item>
     <item quantity="other" msgid="4948604338155959389">"Tegime albumid võrguühenduseta kättesaadavaks."</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Lisa konto"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Kaamera"</string>
     <string name="folder_download" msgid="7186215137642323932">"Alla laaditud"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Muudetud fotod võrgus"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Imporditud"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Ekraanipilt"</string>
     <string name="help" msgid="7368960711153618354">"Abi"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Mäluseade puudub"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Ükski välismäluseade ei ole saadaval"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Filmiribakuva"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Ruudustiku kuva"</string>
+    <string name="trimming" msgid="9122385768369143997">"Kärpimine"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Palun oodake"</string>
+    <string name="save_into" msgid="4960537214388766062">"Kärbitud video salvestamine albumisse:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Ei saa kärpida: lõppvideo on liiga lühike"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Panoraami renderdamine"</string>
+    <string name="save" msgid="613976532235060516">"Salvesta"</string>
 </resources>

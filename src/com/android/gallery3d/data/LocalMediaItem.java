@@ -85,7 +85,10 @@ public abstract class LocalMediaItem extends MediaItem {
         details.addDetail(MediaDetails.INDEX_PATH, filePath);
         details.addDetail(MediaDetails.INDEX_TITLE, caption);
         DateFormat formater = DateFormat.getDateTimeInstance();
-        details.addDetail(MediaDetails.INDEX_DATETIME, formater.format(new Date(dateTakenInMs)));
+        details.addDetail(MediaDetails.INDEX_DATETIME,
+                formater.format(new Date(dateModifiedInSec * 1000)));
+        details.addDetail(MediaDetails.INDEX_WIDTH, width);
+        details.addDetail(MediaDetails.INDEX_HEIGHT, height);
 
         if (GalleryUtils.isValidLocation(latitude, longitude)) {
             details.addDetail(MediaDetails.INDEX_LOCATION, new double[] {latitude, longitude});
@@ -99,6 +102,7 @@ public abstract class LocalMediaItem extends MediaItem {
         return mimeType;
     }
 
+    @Override
     public long getSize() {
         return fileSize;
     }

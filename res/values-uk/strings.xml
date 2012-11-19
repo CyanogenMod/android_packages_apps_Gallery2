@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"ОК"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Торкніться обличчя, щоб почати."</string>
     <string name="saving_image" msgid="7270334453636349407">"Зберіг-ня фото…"</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Зображення зберігається в альбом <xliff:g id="ALBUM_NAME">%1$s</xliff:g>..."</string>
     <string name="save_error" msgid="6857408774183654970">"Не вдалося зберегти обрізане зображення."</string>
     <string name="crop_label" msgid="521114301871349328">"Обрізати фото"</string>
+    <string name="trim_label" msgid="274203231381209979">"Обрізати відео"</string>
     <string name="select_image" msgid="7841406150484742140">"Виберіть фото"</string>
     <string name="select_video" msgid="4859510992798615076">"Виберіть відео"</string>
     <string name="select_item" msgid="2816923896202086390">"Виберіть елемент"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Підтвердити"</string>
     <string name="cancel" msgid="3637516880917356226">"Скасувати"</string>
     <string name="share" msgid="3619042788254195341">"Надісл."</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Поділитися панорамою"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Поділитися як фотографією"</string>
     <string name="deleted" msgid="6795433049119073871">"Видалено"</string>
     <string name="undo" msgid="2930873956446586313">"ВІДМІНИТИ"</string>
     <string name="select_all" msgid="3403283025220282175">"Вибрати всі"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Виконується обробка запитів кешування"</string>
     <string name="caching_label" msgid="4521059045896269095">"Кешування..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Обрізати"</string>
+    <string name="trim_action" msgid="703098114452883524">"Обрізати"</string>
     <string name="set_as" msgid="3636764710790507868">"Устан. як"</string>
     <string name="video_err" msgid="7003051631792271009">"Неможливо відтворити відео."</string>
     <string name="group_by_location" msgid="316641628989023253">"За місцезнаходженням"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Автомат."</string>
     <string name="flash_on" msgid="7891556231891837284">"Викор. спалах"</string>
     <string name="flash_off" msgid="1445443413822680010">"Без спалаху"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Оригінал"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Ретро"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Миттєво"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Вибілення"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Синява"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Чорно-біле"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Стиснути"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X-процес"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Латте"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Літографія"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Надання доступу до альбому в режимі офлайн."</item>
     <item quantity="other" msgid="4948604338155959389">"Надання доступу до альбомів у режимі офлайн."</item>
@@ -170,7 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Додати обліковий запис"</string>
     <string name="folder_camera" msgid="4714658994809533480">"З камери"</string>
     <string name="folder_download" msgid="7186215137642323932">"Звантаження"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Фото, відредаговані онлайн"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Імпортовані"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Знімки екрана"</string>
     <string name="help" msgid="7368960711153618354">"Довідка"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Немає пам’яті"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Доступної зовнішньої пам’яті немає"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Діафільм"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Ескізи"</string>
+    <string name="trimming" msgid="9122385768369143997">"Обрізання"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Зачекайте"</string>
+    <string name="save_into" msgid="4960537214388766062">"Збереження обрізаного відео в альбомі:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Неможливо обрізати: цільове відео закоротке"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Обробка панорами"</string>
+    <string name="save" msgid="613976532235060516">"Зберегти"</string>
 </resources>

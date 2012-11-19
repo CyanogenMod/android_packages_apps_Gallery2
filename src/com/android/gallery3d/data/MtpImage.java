@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.data;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapRegionDecoder;
@@ -25,14 +26,15 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.provider.GalleryProvider;
-import com.android.gallery3d.util.ThreadPool;
 import com.android.gallery3d.util.ThreadPool.Job;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
 import java.text.DateFormat;
 import java.util.Date;
 
+@TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB_MR1)
 public class MtpImage extends MediaItem {
     private static final String TAG = "MtpImage";
 
@@ -41,7 +43,6 @@ public class MtpImage extends MediaItem {
     private int mObjectSize;
     private long mDateTaken;
     private String mFileName;
-    private final ThreadPool mThreadPool;
     private final MtpContext mMtpContext;
     private final MtpObjectInfo mObjInfo;
     private final int mImageWidth;
@@ -60,7 +61,6 @@ public class MtpImage extends MediaItem {
         mFileName = objInfo.getName();
         mImageWidth = objInfo.getImagePixWidth();
         mImageHeight = objInfo.getImagePixHeight();
-        mThreadPool = application.getThreadPool();
         mMtpContext = mtpContext;
     }
 
@@ -77,6 +77,7 @@ public class MtpImage extends MediaItem {
     @Override
     public Job<Bitmap> requestImage(int type) {
         return new Job<Bitmap>() {
+            @Override
             public Bitmap run(JobContext jc) {
                 byte[] thumbnail = mMtpContext.getMtpClient().getThumbnail(
                         UsbDevice.getDeviceName(mDeviceId), mObjectId);
@@ -92,6 +93,7 @@ public class MtpImage extends MediaItem {
     @Override
     public Job<BitmapRegionDecoder> requestLargeImage() {
         return new Job<BitmapRegionDecoder>() {
+            @Override
             public BitmapRegionDecoder run(JobContext jc) {
                 byte[] bytes = mMtpContext.getMtpClient().getObject(
                         UsbDevice.getDeviceName(mDeviceId), mObjectId, mObjectSize);

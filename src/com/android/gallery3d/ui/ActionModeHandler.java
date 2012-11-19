@@ -16,31 +16,30 @@
 
 package com.android.gallery3d.ui;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Handler;
 import android.view.ActionMode;
+import android.view.ActionMode.Callback;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.app.GalleryActionBar;
-import com.android.gallery3d.app.GalleryActivity;
+import com.android.gallery3d.app.AbstractGalleryActivity;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaObject;
+import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.ui.CustomMenu.DropDownMenu;
 import com.android.gallery3d.ui.MenuExecutor.ProgressListener;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
@@ -49,8 +48,11 @@ import com.android.gallery3d.util.ThreadPool.JobContext;
 
 import java.util.ArrayList;
 
-public class ActionModeHandler implements ActionMode.Callback {
+public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickListener {
+
+    @SuppressWarnings("unused")
     private static final String TAG = "ActionModeHandler";
+
     private static final int SUPPORT_MULTIPLE_MASK = MediaObject.SUPPORT_DELETE
             | MediaObject.SUPPORT_ROTATE | MediaObject.SUPPORT_SHARE
             | MediaObject.SUPPORT_CACHE | MediaObject.SUPPORT_IMPORT;
@@ -59,19 +61,66 @@ public class ActionModeHandler implements ActionMode.Callback {
         public boolean onActionItemClicked(MenuItem item);
     }
 
-    private final GalleryActivity mActivity;
+    private final AbstractGalleryActivity mActivity;
     private final MenuExecutor mMenuExecutor;
     private final SelectionManager mSelectionManager;
     private final NfcAdapter mNfcAdapter;
     private Menu mMenu;
-    private DropDownMenu mSelectionMenu;
+    private MenuItem mSharePanoramaMenuItem;
+    private MenuItem mShareMenuItem;
+    private ShareActionProvider mSharePanoramaActionProvider;
+    private ShareActionProvider mShareActionProvider;
+    private SelectionMenu mSelectionMenu;
     private ActionModeListener mListener;
     private Future<?> mMenuTask;
     private final Handler mMainHandler;
-    private ShareActionProvider mShareActionProvider;
+    private ActionMode mActionMode;
+
+    private static class GetAllPanoramaSupports implements PanoramaSupportCallback {
+        private int mNumInfoRequired;
+        private JobContext mJobContext;
+        public boolean mAllPanoramas = true;
+        public boolean mAllPanorama360 = true;
+        public boolean mHasPanorama360 = false;
+        private Object mLock = new Object();
+
+        public GetAllPanoramaSupports(ArrayList<MediaObject> mediaObjects, JobContext jc) {
+            mJobContext = jc;
+            mNumInfoRequired = mediaObjects.size();
+            for (MediaObject mediaObject : mediaObjects) {
+                mediaObject.getPanoramaSupport(this);
+            }
+        }
+
+        @Override
+        public void panoramaInfoAvailable(MediaObject mediaObject, boolean isPanorama,
+                boolean isPanorama360) {
+            synchronized (mLock) {
+                mNumInfoRequired--;
+                mAllPanoramas = isPanorama && mAllPanoramas;
+                mAllPanorama360 = isPanorama360 && mAllPanorama360;
+                mHasPanorama360 = mHasPanorama360 || isPanorama360;
+                if (mNumInfoRequired == 0 || mJobContext.isCancelled()) {
+                    mLock.notifyAll();
+                }
+            }
+        }
+
+        public void waitForPanoramaSupport() {
+            synchronized (mLock) {
+                while (mNumInfoRequired != 0 && !mJobContext.isCancelled()) {
+                    try {
+                        mLock.wait();
+                    } catch (InterruptedException e) {
+                        // May be a cancelled job context
+                    }
+                }
+            }
+        }
+    }
 
     public ActionModeHandler(
-            GalleryActivity activity, SelectionManager selectionManager) {
+            AbstractGalleryActivity activity, SelectionManager selectionManager) {
         mActivity = Utils.checkNotNull(activity);
         mSelectionManager = Utils.checkNotNull(selectionManager);
         mMenuExecutor = new MenuExecutor(activity, selectionManager);
@@ -79,24 +128,19 @@ public class ActionModeHandler implements ActionMode.Callback {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(mActivity.getAndroidContext());
     }
 
-    public ActionMode startActionMode() {
-        Activity a = (Activity) mActivity;
-        final ActionMode actionMode = a.startActionMode(this);
-        CustomMenu customMenu = new CustomMenu(a);
+    public void startActionMode() {
+        Activity a = mActivity;
+        mActionMode = a.startActionMode(this);
         View customView = LayoutInflater.from(a).inflate(
                 R.layout.action_mode, null);
-        actionMode.setCustomView(customView);
-        mSelectionMenu = customMenu.addDropDownMenu(
-                (Button) customView.findViewById(R.id.selection_menu),
-                R.menu.selection);
+        mActionMode.setCustomView(customView);
+        mSelectionMenu = new SelectionMenu(a,
+                (Button) customView.findViewById(R.id.selection_menu), this);
         updateSelectionMenu();
-        customMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return onActionItemClicked(actionMode, item);
-            }
-        });
-        return actionMode;
+    }
+
+    public void finishActionMode() {
+        mActionMode.finish();
     }
 
     public void setTitle(String title) {
@@ -106,6 +150,8 @@ public class ActionModeHandler implements ActionMode.Callback {
     public void setActionModeListener(ActionModeListener listener) {
         mListener = listener;
     }
+
+    private WakeLockHoldingProgressListener mDeleteProgressListener;
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -129,19 +175,35 @@ public class ActionModeHandler implements ActionMode.Callback {
             int action = item.getItemId();
             if (action == R.id.action_import) {
                 listener = new ImportCompleteListener(mActivity);
-            } else if (item.getItemId() == R.id.action_delete) {
+            } else if (action == R.id.action_delete) {
                 confirmMsg = mActivity.getResources().getQuantityString(
                         R.plurals.delete_selection, mSelectionManager.getSelectedCount());
+                if (mDeleteProgressListener == null) {
+                    mDeleteProgressListener = new WakeLockHoldingProgressListener(mActivity,
+                            "Gallery Delete Progress Listener");
+                }
+                listener = mDeleteProgressListener;
             }
             mMenuExecutor.onMenuClicked(item, confirmMsg, listener);
-            if (action == R.id.action_select_all) {
-                updateSupportedOperation();
-                updateSelectionMenu();
-            }
         } finally {
             root.unlockRenderThread();
         }
         return true;
+    }
+
+    @Override
+    public boolean onPopupItemClick(int itemId) {
+        GLRoot root = mActivity.getGLRoot();
+        root.lockRenderThread();
+        try {
+            if (itemId == R.id.action_select_all) {
+                updateSupportedOperation();
+                mMenuExecutor.onMenuClicked(itemId, null, false, true);
+            }
+            return true;
+        } finally {
+            root.unlockRenderThread();
+        }
     }
 
     private void updateSelectionMenu() {
@@ -150,70 +212,90 @@ public class ActionModeHandler implements ActionMode.Callback {
         String format = mActivity.getResources().getQuantityString(
                 R.plurals.number_of_items_selected, count);
         setTitle(String.format(format, count));
+
         // For clients who call SelectionManager.selectAll() directly, we need to ensure the
         // menu status is consistent with selection manager.
-        MenuItem item = mSelectionMenu.findItem(R.id.action_select_all);
-        if (item != null) {
-            if (mSelectionManager.inSelectAllMode()) {
-                item.setChecked(true);
-                item.setTitle(R.string.deselect_all);
-            } else {
-                item.setChecked(false);
-                item.setTitle(R.string.select_all);
-            }
-        }
+        mSelectionMenu.updateSelectAllMode(mSelectionManager.inSelectAllMode());
     }
 
+    private final OnShareTargetSelectedListener mShareTargetSelectedListener =
+            new OnShareTargetSelectedListener() {
+        @Override
+        public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+            mSelectionManager.leaveSelectionMode();
+            return false;
+        }
+    };
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.operation, menu);
+        mode.getMenuInflater().inflate(R.menu.operation, menu);
 
-        mShareActionProvider = GalleryActionBar.initializeShareActionProvider(menu);
-        OnShareTargetSelectedListener listener = new OnShareTargetSelectedListener() {
-            public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-                mSelectionManager.leaveSelectionMode();
-                return false;
-            }
-        };
-
-        mShareActionProvider.setOnShareTargetSelectedListener(listener);
         mMenu = menu;
+        mSharePanoramaMenuItem = menu.findItem(R.id.action_share_panorama);
+        if (mSharePanoramaMenuItem != null) {
+            mSharePanoramaActionProvider = (ShareActionProvider) mSharePanoramaMenuItem
+                .getActionProvider();
+            mSharePanoramaActionProvider.setOnShareTargetSelectedListener(
+                    mShareTargetSelectedListener);
+            mSharePanoramaActionProvider.setShareHistoryFileName("panorama_share_history.xml");
+        }
+        mShareMenuItem = menu.findItem(R.id.action_share);
+        if (mShareMenuItem != null) {
+            mShareActionProvider = (ShareActionProvider) mShareMenuItem
+                .getActionProvider();
+            mShareActionProvider.setOnShareTargetSelectedListener(
+                    mShareTargetSelectedListener);
+            mShareActionProvider.setShareHistoryFileName("share_history.xml");
+        }
         return true;
     }
 
+    @Override
     public void onDestroyActionMode(ActionMode mode) {
         mSelectionManager.leaveSelectionMode();
     }
 
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return true;
-    }
-
-    // Menu options are determined by selection set itself.
-    // We cannot expand it because MenuExecuter executes it based on
-    // the selection set instead of the expanded result.
-    // e.g. LocalImage can be rotated but collections of them (LocalAlbum) can't.
-    private int computeMenuOptions(JobContext jc) {
+    private ArrayList<MediaObject> getSelectedMediaObjects(JobContext jc) {
         ArrayList<Path> unexpandedPaths = mSelectionManager.getSelected(false);
         if (unexpandedPaths.isEmpty()) {
             // This happens when starting selection mode from overflow menu
             // (instead of long press a media object)
-            return 0;
+            return null;
         }
-        int operation = MediaObject.SUPPORT_ALL;
+        ArrayList<MediaObject> selected = new ArrayList<MediaObject>();
         DataManager manager = mActivity.getDataManager();
-        int type = 0;
         for (Path path : unexpandedPaths) {
-            if (jc.isCancelled()) return 0;
-            int support = manager.getSupportedOperations(path);
-            type |= manager.getMediaType(path);
+            if (jc.isCancelled()) {
+                return null;
+            }
+            selected.add(manager.getMediaObject(path));
+        }
+
+        return selected;
+    }
+    // Menu options are determined by selection set itself.
+    // We cannot expand it because MenuExecuter executes it based on
+    // the selection set instead of the expanded result.
+    // e.g. LocalImage can be rotated but collections of them (LocalAlbum) can't.
+    private int computeMenuOptions(ArrayList<MediaObject> selected) {
+        int operation = MediaObject.SUPPORT_ALL;
+        int type = 0;
+        for (MediaObject mediaObject: selected) {
+            int support = mediaObject.getSupportedOperations();
+            type |= mediaObject.getMediaType();
             operation &= support;
         }
 
-        switch (unexpandedPaths.size()) {
+        switch (selected.size()) {
             case 1:
                 final String mimeType = MenuExecutor.getMimeType(type);
-                if (!GalleryUtils.isEditorAvailable((Context) mActivity, mimeType)) {
+                if (!GalleryUtils.isEditorAvailable(mActivity, mimeType)) {
                     operation &= ~MediaObject.SUPPORT_EDIT;
                 }
                 break;
@@ -224,14 +306,50 @@ public class ActionModeHandler implements ActionMode.Callback {
         return operation;
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)
+    private void setNfcBeamPushUris(Uri[] uris) {
+        if (mNfcAdapter != null && ApiHelper.HAS_SET_BEAM_PUSH_URIS) {
+            mNfcAdapter.setBeamPushUrisCallback(null, mActivity);
+            mNfcAdapter.setBeamPushUris(uris, mActivity);
+        }
+    }
+
     // Share intent needs to expand the selection set so we can get URI of
     // each media item
+    private Intent computePanoramaSharingIntent(JobContext jc) {
+        ArrayList<Path> expandedPaths = mSelectionManager.getSelected(true);
+        if (expandedPaths.size() == 0) {
+            return null;
+        }
+        final ArrayList<Uri> uris = new ArrayList<Uri>();
+        DataManager manager = mActivity.getDataManager();
+        final Intent intent = new Intent();
+        for (Path path : expandedPaths) {
+            if (jc.isCancelled()) return null;
+            uris.add(manager.getContentUri(path));
+        }
+
+        final int size = uris.size();
+        if (size > 0) {
+            if (size > 1) {
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.setType(GalleryUtils.MIME_TYPE_PANORAMA360);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+            } else {
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType(GalleryUtils.MIME_TYPE_PANORAMA360);
+                intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
+        return intent;
+    }
+
     private Intent computeSharingIntent(JobContext jc) {
         ArrayList<Path> expandedPaths = mSelectionManager.getSelected(true);
         if (expandedPaths.size() == 0) {
-            if (mNfcAdapter != null) {
-                mNfcAdapter.setBeamPushUris(null, (Activity)mActivity);
-            }
+            setNfcBeamPushUris(null);
             return null;
         }
         final ArrayList<Uri> uris = new ArrayList<Uri>();
@@ -258,15 +376,10 @@ public class ActionModeHandler implements ActionMode.Callback {
                 intent.setAction(Intent.ACTION_SEND).setType(mimeType);
                 intent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
             }
-            intent.setType(mimeType);
-            if (mNfcAdapter != null) {
-                mNfcAdapter.setBeamPushUris(uris.toArray(new Uri[uris.size()]),
-                        (Activity)mActivity);
-            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            setNfcBeamPushUris(uris.toArray(new Uri[uris.size()]));
         } else {
-            if (mNfcAdapter != null) {
-                mNfcAdapter.setBeamPushUris(null, (Activity)mActivity);
-            }
+            setNfcBeamPushUris(null);
         }
 
         return intent;
@@ -279,36 +392,64 @@ public class ActionModeHandler implements ActionMode.Callback {
 
     public void updateSupportedOperation() {
         // Interrupt previous unfinished task, mMenuTask is only accessed in main thread
-        if (mMenuTask != null) {
-            mMenuTask.cancel();
-        }
+        if (mMenuTask != null) mMenuTask.cancel();
 
         updateSelectionMenu();
 
-        // Disable share action until share intent is in good shape
-        final MenuItem item = mShareActionProvider != null ?
-                mMenu.findItem(R.id.action_share) : null;
-        final boolean supportShare = item != null;
-        if (supportShare) item.setEnabled(false);
+        // Disable share actions until share intent is in good shape
+        if (mSharePanoramaMenuItem != null) mSharePanoramaMenuItem.setEnabled(false);
+        if (mShareMenuItem != null) mShareMenuItem.setEnabled(false);
 
         // Generate sharing intent and update supported operations in the background
         // The task can take a long time and be canceled in the mean time.
         mMenuTask = mActivity.getThreadPool().submit(new Job<Void>() {
+            @Override
             public Void run(final JobContext jc) {
                 // Pass1: Deal with unexpanded media object list for menu operation.
-                final int operation = computeMenuOptions(jc);
+                ArrayList<MediaObject> selected = getSelectedMediaObjects(jc);
+                if (selected == null) {
+                    return null;
+                }
+                final int operation = computeMenuOptions(selected);
+                if (jc.isCancelled()) {
+                    return null;
+                }
+                final GetAllPanoramaSupports supportCallback = new GetAllPanoramaSupports(selected,
+                        jc);
 
                 // Pass2: Deal with expanded media object list for sharing operation.
-                final Intent intent = supportShare ? computeSharingIntent(jc) : null;
+                final Intent share_panorama_intent = computePanoramaSharingIntent(jc);
+                final Intent share_intent = computeSharingIntent(jc);
+
+                supportCallback.waitForPanoramaSupport();
+                if (jc.isCancelled()) {
+                    return null;
+                }
                 mMainHandler.post(new Runnable() {
+                    @Override
                     public void run() {
                         mMenuTask = null;
-                        if (!jc.isCancelled()) {
-                            MenuExecutor.updateMenuOperation(mMenu, operation);
-                            if (supportShare) {
-                                item.setEnabled(true);
-                                mShareActionProvider.setShareIntent(intent);
+                        if (jc.isCancelled()) return;
+                        MenuExecutor.updateMenuOperation(mMenu, operation);
+                        MenuExecutor.updateMenuForPanorama(mMenu, supportCallback.mAllPanorama360,
+                                supportCallback.mHasPanorama360);
+                        if (mSharePanoramaMenuItem != null) {
+                            mSharePanoramaMenuItem.setEnabled(true);
+                            if (supportCallback.mAllPanorama360) {
+                                mShareMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                                mShareMenuItem.setTitle(
+                                    mActivity.getResources().getString(R.string.share_as_photo));
+                            } else {
+                                mSharePanoramaMenuItem.setVisible(false);
+                                mShareMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                                mShareMenuItem.setTitle(
+                                    mActivity.getResources().getString(R.string.share));
                             }
+                            mSharePanoramaActionProvider.setShareIntent(share_panorama_intent);
+                        }
+                        if (mShareMenuItem != null) {
+                            mShareMenuItem.setEnabled(true);
+                            mShareActionProvider.setShareIntent(share_intent);
                         }
                     }
                 });

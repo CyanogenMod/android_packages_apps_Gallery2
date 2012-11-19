@@ -19,14 +19,16 @@ package com.android.gallery3d.ui;
 import android.graphics.Bitmap;
 import android.os.Message;
 
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumDataLoader;
-import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.BitmapPool;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.FutureListener;
-import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.JobLimiter;
 
 public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
@@ -48,16 +50,17 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         public int rotation;
         public int mediaType;
         public boolean isWaitDisplayed;
-        public BitmapTexture bitmapTexture;
+        public TiledTexture bitmapTexture;
         public Texture content;
         private BitmapLoader contentLoader;
+        private PanoSupportListener mPanoSupportListener;
     }
 
     private final AlbumDataLoader mSource;
     private final AlbumEntry mData[];
     private final SynchronizedHandler mHandler;
     private final JobLimiter mThreadPool;
-    private final TextureUploader mTextureUploader;
+    private final TiledTexture.Uploader mTileUploader;
 
     private int mSize;
 
@@ -72,7 +75,19 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
     private int mActiveRequestCount = 0;
     private boolean mIsActive = false;
 
-    public AlbumSlidingWindow(GalleryActivity activity,
+    private class PanoSupportListener implements PanoramaSupportCallback {
+        public final AlbumEntry mEntry;
+        public PanoSupportListener (AlbumEntry entry) {
+            mEntry = entry;
+        }
+        @Override
+        public void panoramaInfoAvailable(MediaObject mediaObject, boolean isPanorama,
+                boolean isPanorama360) {
+            if (mEntry != null) mEntry.isPanorama = isPanorama;
+        }
+    }
+
+    public AlbumSlidingWindow(AbstractGalleryActivity activity,
             AlbumDataLoader source, int cacheSize) {
         source.setDataListener(this);
         mSource = source;
@@ -88,7 +103,7 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         };
 
         mThreadPool = new JobLimiter(activity.getThreadPool(), JOB_LIMIT);
-        mTextureUploader = new TextureUploader(activity.getGLRoot());
+        mTileUploader = new TiledTexture.Uploader(activity.getGLRoot());
     }
 
     public void setListener(Listener listener) {
@@ -166,20 +181,20 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         if (index < mContentEnd && index >= mContentStart) {
             AlbumEntry entry = mData[index % mData.length];
             if (entry.bitmapTexture != null) {
-                mTextureUploader.addBgTexture(entry.bitmapTexture);
+                mTileUploader.addTexture(entry.bitmapTexture);
             }
         }
     }
 
     private void updateTextureUploadQueue() {
         if (!mIsActive) return;
-        mTextureUploader.clear();
+        mTileUploader.clear();
 
         // add foreground textures
         for (int i = mActiveStart, n = mActiveEnd; i < n; ++i) {
             AlbumEntry entry = mData[i % mData.length];
             if (entry.bitmapTexture != null) {
-                mTextureUploader.addFgTexture(entry.bitmapTexture);
+                mTileUploader.addTexture(entry.bitmapTexture);
             }
         }
 
@@ -211,6 +226,10 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         if (slotIndex < mContentStart || slotIndex >= mContentEnd) return false;
         AlbumEntry entry = mData[slotIndex % mData.length];
         if (entry.content != null || entry.item == null) return false;
+
+        // Set up the panorama callback
+        entry.mPanoSupportListener = new PanoSupportListener(entry);
+        entry.item.getPanoramaSupport(entry.mPanoSupportListener);
 
         entry.contentLoader.startLoad();
         return entry.contentLoader.isRequestInProgress();
@@ -244,7 +263,6 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         AlbumEntry entry = new AlbumEntry();
         MediaItem item = mSource.get(slotIndex); // item could be null;
         entry.item = item;
-        entry.isPanorama = GalleryUtils.isPanorama(entry.item);
         entry.mediaType = (item == null)
                 ? MediaItem.MEDIA_TYPE_UNKNOWN
                 : entry.item.getMediaType();
@@ -277,7 +295,8 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
 
         @Override
         protected void recycleBitmap(Bitmap bitmap) {
-            MediaItem.getMicroThumbPool().recycle(bitmap);
+            BitmapPool pool = MediaItem.getMicroThumbPool();
+            if (pool != null) pool.recycle(bitmap);
         }
 
         @Override
@@ -294,18 +313,17 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         public void updateEntry() {
             Bitmap bitmap = getBitmap();
             if (bitmap == null) return; // error or recycled
-
             AlbumEntry entry = mData[mSlotIndex % mData.length];
-            entry.bitmapTexture = new BitmapTexture(bitmap);
+            entry.bitmapTexture = new TiledTexture(bitmap);
             entry.content = entry.bitmapTexture;
 
             if (isActiveSlot(mSlotIndex)) {
-                mTextureUploader.addFgTexture(entry.bitmapTexture);
+                mTileUploader.addTexture(entry.bitmapTexture);
                 --mActiveRequestCount;
                 if (mActiveRequestCount == 0) requestNonactiveImages();
                 if (mListener != null) mListener.onContentChanged();
             } else {
-                mTextureUploader.addBgTexture(entry.bitmapTexture);
+                mTileUploader.addTexture(entry.bitmapTexture);
             }
         }
     }
@@ -334,6 +352,7 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
 
     public void resume() {
         mIsActive = true;
+        TiledTexture.prepareResources();
         for (int i = mContentStart, n = mContentEnd; i < n; ++i) {
             prepareSlotContent(i);
         }
@@ -342,7 +361,8 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
 
     public void pause() {
         mIsActive = false;
-        mTextureUploader.clear();
+        mTileUploader.clear();
+        TiledTexture.freeResources();
         for (int i = mContentStart, n = mContentEnd; i < n; ++i) {
             freeSlotContent(i);
         }

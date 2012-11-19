@@ -105,6 +105,8 @@ public class LocalVideo extends LocalMediaItem {
         latitude = cursor.getDouble(INDEX_LATITUDE);
         longitude = cursor.getDouble(INDEX_LONGITUDE);
         dateTakenInMs = cursor.getLong(INDEX_DATE_TAKEN);
+        dateAddedInSec = cursor.getLong(INDEX_DATE_ADDED);
+        dateModifiedInSec = cursor.getLong(INDEX_DATE_MODIFIED);
         filePath = cursor.getString(INDEX_DATA);
         durationInSec = cursor.getInt(INDEX_DURATION) / 1000;
         bucketId = cursor.getInt(INDEX_BUCKET_ID);
@@ -178,7 +180,7 @@ public class LocalVideo extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
-        return SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_PLAY | SUPPORT_INFO;
+        return SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_PLAY | SUPPORT_INFO | SUPPORT_TRIM;
     }
 
     @Override
@@ -187,7 +189,6 @@ public class LocalVideo extends LocalMediaItem {
         Uri baseUri = Video.Media.EXTERNAL_CONTENT_URI;
         mApplication.getContentResolver().delete(baseUri, "_id=?",
                 new String[]{String.valueOf(id)});
-        mApplication.getDataManager().broadcastLocalDeletion();
     }
 
     @Override
@@ -230,5 +231,10 @@ public class LocalVideo extends LocalMediaItem {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public String getFilePath() {
+        return filePath;
     }
 }

@@ -16,12 +16,15 @@
 
 package com.android.gallery3d.ui;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.BitmapPool;
 
@@ -37,49 +40,23 @@ public class TileImageViewAdapter implements TileImageView.Model {
     public TileImageViewAdapter() {
     }
 
-    public TileImageViewAdapter(
-            Bitmap bitmap, BitmapRegionDecoder regionDecoder) {
-        Utils.checkNotNull(bitmap);
-        updateScreenNail(new BitmapScreenNail(bitmap), true);
-        mRegionDecoder = regionDecoder;
-        mImageWidth = regionDecoder.getWidth();
-        mImageHeight = regionDecoder.getHeight();
-        mLevelCount = calculateLevelCount();
-    }
-
     public synchronized void clear() {
-        updateScreenNail(null, false);
+        mScreenNail = null;
         mImageWidth = 0;
         mImageHeight = 0;
         mLevelCount = 0;
         mRegionDecoder = null;
     }
 
-    public synchronized void setScreenNail(Bitmap bitmap, int width, int height) {
-        Utils.checkNotNull(bitmap);
-        updateScreenNail(new BitmapScreenNail(bitmap), true);
-        mImageWidth = width;
-        mImageHeight = height;
-        mRegionDecoder = null;
-        mLevelCount = 0;
-    }
-
+    // Caller is responsible to recycle the ScreenNail
     public synchronized void setScreenNail(
             ScreenNail screenNail, int width, int height) {
         Utils.checkNotNull(screenNail);
-        updateScreenNail(screenNail, false);
+        mScreenNail = screenNail;
         mImageWidth = width;
         mImageHeight = height;
         mRegionDecoder = null;
         mLevelCount = 0;
-    }
-
-    private void updateScreenNail(ScreenNail screenNail, boolean own) {
-        if (mScreenNail != null && mOwnScreenNail) {
-            mScreenNail.recycle();
-        }
-        mScreenNail = screenNail;
-        mOwnScreenNail = own;
     }
 
     public synchronized void setRegionDecoder(BitmapRegionDecoder decoder) {
@@ -105,9 +82,14 @@ public class TileImageViewAdapter implements TileImageView.Model {
     //
     // As a result, we should decode region (50-6, 50-6, 250+6, 250+6) or
     // (44, 44, 256, 256) from the original photo and down sample it to 106.
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     @Override
     public Bitmap getTile(int level, int x, int y, int tileSize,
             int borderSize, BitmapPool pool) {
+        if (!ApiHelper.HAS_REUSING_BITMAP_IN_BITMAP_REGION_DECODER) {
+            return getTileWithoutReusingBitmap(level, x, y, tileSize, borderSize);
+        }
+
         int b = borderSize << level;
         int t = tileSize << level;
 
@@ -157,6 +139,49 @@ public class TileImageViewAdapter implements TileImageView.Model {
         }
         return bitmap;
     }
+
+    private Bitmap getTileWithoutReusingBitmap(
+            int level, int x, int y, int tileSize, int borderSize) {
+        int b = borderSize << level;
+        int t = tileSize << level;
+        Rect wantRegion = new Rect(x - b, y - b, x + t + b, y + t + b);
+
+        BitmapRegionDecoder regionDecoder;
+        Rect overlapRegion;
+
+        synchronized (this) {
+            regionDecoder = mRegionDecoder;
+            if (regionDecoder == null) return null;
+            overlapRegion = new Rect(0, 0, mImageWidth, mImageHeight);
+            Utils.assertTrue(overlapRegion.intersect(wantRegion));
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Config.ARGB_8888;
+        options.inPreferQualityOverSpeed = true;
+        options.inSampleSize =  (1 << level);
+        Bitmap bitmap = null;
+
+        // In CropImage, we may call the decodeRegion() concurrently.
+        synchronized (regionDecoder) {
+            bitmap = regionDecoder.decodeRegion(overlapRegion, options);
+        }
+
+        if (bitmap == null) {
+            Log.w(TAG, "fail in decoding region");
+        }
+
+        if (wantRegion.equals(overlapRegion)) return bitmap;
+
+        int s = tileSize + 2 * borderSize;
+        Bitmap result = Bitmap.createBitmap(s, s, Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(bitmap,
+                (overlapRegion.left - wantRegion.left) >> level,
+                (overlapRegion.top - wantRegion.top) >> level, null);
+        return result;
+    }
+
 
     @Override
     public ScreenNail getScreenNail() {

@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"Sawa"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Gusa sura ili kuanza."</string>
     <string name="saving_image" msgid="7270334453636349407">"Inahifadhi picha…"</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Inahifadhi picha kwenye <xliff:g id="ALBUM_NAME">%1$s</xliff:g> …"</string>
     <string name="save_error" msgid="6857408774183654970">"Haiwezi kuhifadhi picha iliyopogolewa."</string>
     <string name="crop_label" msgid="521114301871349328">"Kata picha"</string>
+    <string name="trim_label" msgid="274203231381209979">"Punguza video"</string>
     <string name="select_image" msgid="7841406150484742140">"Chagua picha"</string>
     <string name="select_video" msgid="4859510992798615076">"Chagua video"</string>
     <string name="select_item" msgid="2816923896202086390">"Chagua kipengee"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Thibitisha"</string>
     <string name="cancel" msgid="3637516880917356226">"Ghairi"</string>
     <string name="share" msgid="3619042788254195341">"Shiriki"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Shiriki panorama"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Shiriki kama picha"</string>
     <string name="deleted" msgid="6795433049119073871">"Imefutwa"</string>
     <string name="undo" msgid="2930873956446586313">"TENDUA"</string>
     <string name="select_all" msgid="3403283025220282175">"Chagua zote"</string>
@@ -90,6 +94,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Maombi ya kuakibisha michakato"</string>
     <string name="caching_label" msgid="4521059045896269095">"Inaakibisha..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Punguza"</string>
+    <string name="trim_action" msgid="703098114452883524">"Punguza"</string>
     <string name="set_as" msgid="3636764710790507868">"Weka kama"</string>
     <string name="video_err" msgid="7003051631792271009">"Video haiwezi kuchezwa."</string>
     <string name="group_by_location" msgid="316641628989023253">"Kwa mahali"</string>
@@ -139,6 +144,16 @@
     <string name="auto" msgid="4296941368722892821">"Kiotomatiki"</string>
     <string name="flash_on" msgid="7891556231891837284">"Mmweko umeanzishwa"</string>
     <string name="flash_off" msgid="1445443413822680010">"Hakuna flash"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Asili"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Ukale"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Papo hapo"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Pausha"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Samawati"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Nyeusi na Nyeupe"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Panchi"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"Mchakato X"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Lati"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litho"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Albamu inafanywa ipatikane nje ya mtandao"</item>
     <item quantity="other" msgid="4948604338155959389">"Albamu zinafanywa zipatikane nje ya mtandao"</item>
@@ -153,7 +168,7 @@
     <string name="size_above" msgid="5324398253474104087">"<xliff:g id="SIZE">%1$s</xliff:g> au juu"</string>
     <string name="size_between" msgid="8779660840898917208">"<xliff:g id="MIN_SIZE">%1$s</xliff:g> kwa <xliff:g id="MAX_SIZE">%2$s</xliff:g>"</string>
     <string name="Import" msgid="3985447518557474672">"Leta"</string>
-    <string name="import_complete" msgid="3875040287486199999">"Kuleta Kumekamilika"</string>
+    <string name="import_complete" msgid="3875040287486199999">"Kuingiza Kumekamilika"</string>
     <string name="import_fail" msgid="8497942380703298808">"Haijafaulu kuleta"</string>
     <string name="camera_connected" msgid="916021826223448591">"Kamera imeunganishwa."</string>
     <string name="camera_disconnected" msgid="2100559901676329496">"Kamera imetenganishwa."</string>
@@ -173,7 +188,18 @@
     <string name="add_account" msgid="4271217504968243974">"Ongeza akaunti"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Kamera"</string>
     <string name="folder_download" msgid="7186215137642323932">"Pakua"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Picha Zilizohaririwa Mtandaoni"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Zilizoletwa"</string>
-    <string name="folder_screenshot" msgid="7200396565864213450">"Picha kiwamba"</string>
-    <string name="help" msgid="7368960711153618354">"Msaada"</string>
+    <string name="folder_screenshot" msgid="7200396565864213450">"Picha ya skrini"</string>
+    <string name="help" msgid="7368960711153618354">"Usaidizi"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Hakuna Hifadhi"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Hakuna hifadhi ya nje inayopatikana"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Mwonekano wa utepe wa filamu"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Mwonekano wa gridi"</string>
+    <string name="trimming" msgid="9122385768369143997">"Inapunguza"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Tafadhali subiri"</string>
+    <string name="save_into" msgid="4960537214388766062">"Inahifadhi video zilizopunguzwa kwenye albamu:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Haiwezi kupunguza : video iliyolengwa ni fupi sana"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Inaonyesha panorama"</string>
+    <string name="save" msgid="613976532235060516">"Hifadhi"</string>
 </resources>

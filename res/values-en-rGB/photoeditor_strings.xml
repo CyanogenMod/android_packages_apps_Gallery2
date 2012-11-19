@@ -36,6 +36,7 @@
     <string name="flip" msgid="2357692401826287480">"Flip"</string>
     <string name="grain" msgid="7487585304579789098">"Film Grain"</string>
     <string name="grayscale" msgid="7641563843060945228">"B&amp;W"</string>
+    <string name="accessibility_black_and_white" msgid="1156382046161392389">"Black and white"</string>
     <string name="highlight" msgid="3902653944386623972">"Highlights"</string>
     <string name="lomoish" msgid="1270032154357186736">"Lomo"</string>
     <string name="negative" msgid="1985508917342811252">"Negative"</string>
@@ -56,4 +57,10 @@
     <string name="redeye_tooltip" msgid="4183695928490874014">"Tap on red eyes to remove them"</string>
     <string name="rotate_tooltip" msgid="7008602969130734229">"Drag photo to rotate it"</string>
     <string name="straighten_tooltip" msgid="4846317027139212339">"Drag photo to straighten it"</string>
+    <string name="photoeditor_exposure" msgid="560535856805042987">"Exposure effects"</string>
+    <string name="photoeditor_color" msgid="834210916165605468">"Colour effects"</string>
+    <string name="photoeditor_artistic" msgid="2810641816416597464">"Artistic effects"</string>
+    <string name="photoeditor_fix" msgid="6441595584425037477">"Fix up"</string>
+    <string name="photoeditor_undo" msgid="4831462549862253564">"Undo"</string>
+    <string name="photoeditor_redo" msgid="5999984591376273768">"Redo"</string>
 </resources>

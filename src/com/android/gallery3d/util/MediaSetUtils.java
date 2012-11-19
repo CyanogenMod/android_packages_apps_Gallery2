@@ -18,6 +18,8 @@ package com.android.gallery3d.util;
 
 import android.os.Environment;
 
+import com.android.gallery3d.data.LocalAlbum;
+import com.android.gallery3d.data.LocalMergeAlbum;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 
@@ -31,6 +33,9 @@ public class MediaSetUtils {
     public static final int DOWNLOAD_BUCKET_ID = GalleryUtils.getBucketId(
             Environment.getExternalStorageDirectory().toString() + "/"
             + BucketNames.DOWNLOAD);
+    public static final int EDITED_ONLINE_PHOTOS_BUCKET_ID = GalleryUtils.getBucketId(
+            Environment.getExternalStorageDirectory().toString() + "/"
+            + BucketNames.EDITED_ONLINE_PHOTOS);
     public static final int IMPORTED_BUCKET_ID = GalleryUtils.getBucketId(
             Environment.getExternalStorageDirectory().toString() + "/"
             + BucketNames.IMPORTED);
@@ -50,6 +55,7 @@ public class MediaSetUtils {
 
     // Sort MediaSets by name
     public static class NameComparator implements Comparator<MediaSet> {
+        @Override
         public int compare(MediaSet set1, MediaSet set2) {
             int result = set1.getName().compareToIgnoreCase(set2.getName());
             if (result != 0) return result;

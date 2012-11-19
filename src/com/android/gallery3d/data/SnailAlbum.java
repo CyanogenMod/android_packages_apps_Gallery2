@@ -16,51 +16,22 @@
 
 package com.android.gallery3d.data;
 
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 // This is a simple MediaSet which contains only one MediaItem -- a SnailItem.
-public class SnailAlbum extends MediaSet {
+public class SnailAlbum extends SingleItemAlbum {
+    @SuppressWarnings("unused")
     private static final String TAG = "SnailAlbum";
-    private SnailItem mItem;
     private AtomicBoolean mDirty = new AtomicBoolean(false);
 
-    public SnailAlbum(Path path, MediaItem item) {
-        super(path, nextVersionNumber());
-        mItem = (SnailItem) item;
-    }
-
-    @Override
-    public int getMediaItemCount() {
-        return 1;
-    }
-
-    @Override
-    public ArrayList<MediaItem> getMediaItem(int start, int count) {
-        ArrayList<MediaItem> result = new ArrayList<MediaItem>();
-
-        // If [start, start+count) contains the index 0, return the item.
-        if (start <= 0 && start + count > 0) {
-            result.add(mItem);
-        }
-
-        return result;
-    }
-
-    @Override
-    public boolean isLeafAlbum() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "SnailAlbum";
+    public SnailAlbum(Path path, SnailItem item) {
+        super(path, item);
     }
 
     @Override
     public long reload() {
         if (mDirty.compareAndSet(true, false)) {
-            mItem.updateVersion();
+            ((SnailItem) getItem()).updateVersion();
             mDataVersion = nextVersionNumber();
         }
         return mDataVersion;

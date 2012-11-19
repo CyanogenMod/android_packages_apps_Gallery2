@@ -29,6 +29,9 @@ final class Config {
 
         public SlotView.Spec slotViewSpec;
         public AlbumSetSlotRenderer.LabelSpec labelSpec;
+        public int paddingTop;
+        public int paddingBottom;
+        public int placeholderColor;
 
         public static synchronized AlbumSetPage get(Context context) {
             if (sInstance == null) {
@@ -40,10 +43,16 @@ final class Config {
         private AlbumSetPage(Context context) {
             Resources r = context.getResources();
 
+            placeholderColor = r.getColor(R.color.albumset_placeholder);
+
             slotViewSpec = new SlotView.Spec();
             slotViewSpec.rowsLand = r.getInteger(R.integer.albumset_rows_land);
             slotViewSpec.rowsPort = r.getInteger(R.integer.albumset_rows_port);
             slotViewSpec.slotGap = r.getDimensionPixelSize(R.dimen.albumset_slot_gap);
+            slotViewSpec.slotHeightAdditional = 0;
+
+            paddingTop = r.getDimensionPixelSize(R.dimen.albumset_padding_top);
+            paddingBottom = r.getDimensionPixelSize(R.dimen.albumset_padding_bottom);
 
             labelSpec = new AlbumSetSlotRenderer.LabelSpec();
             labelSpec.labelBackgroundHeight = r.getDimensionPixelSize(
@@ -58,8 +67,14 @@ final class Config {
                     R.dimen.albumset_count_font_size);
             labelSpec.leftMargin = r.getDimensionPixelSize(
                     R.dimen.albumset_left_margin);
+            labelSpec.titleRightMargin = r.getDimensionPixelSize(
+                    R.dimen.albumset_title_right_margin);
             labelSpec.iconSize = r.getDimensionPixelSize(
                     R.dimen.albumset_icon_size);
+            labelSpec.backgroundColor = r.getColor(
+                    R.color.albumset_label_background);
+            labelSpec.titleColor = r.getColor(R.color.albumset_label_title);
+            labelSpec.countColor = r.getColor(R.color.albumset_label_count);
         }
     }
 
@@ -67,6 +82,7 @@ final class Config {
         private static AlbumPage sInstance;
 
         public SlotView.Spec slotViewSpec;
+        public int placeholderColor;
 
         public static synchronized AlbumPage get(Context context) {
             if (sInstance == null) {
@@ -77,6 +93,8 @@ final class Config {
 
         private AlbumPage(Context context) {
             Resources r = context.getResources();
+
+            placeholderColor = r.getColor(R.color.album_placeholder);
 
             slotViewSpec = new SlotView.Spec();
             slotViewSpec.rowsLand = r.getInteger(R.integer.album_rows_land);

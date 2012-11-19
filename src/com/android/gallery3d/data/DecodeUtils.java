@@ -16,15 +16,19 @@
 
 package com.android.gallery3d.data;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapRegionDecoder;
+import android.os.Build;
 import android.util.FloatMath;
 
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.ui.Log;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
@@ -33,7 +37,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 public class DecodeUtils {
-    private static final String TAG = "DecodeService";
+    private static final String TAG = "DecodeUtils";
 
     private static class DecodeCanceller implements CancelListener {
         Options mOptions;
@@ -48,9 +52,15 @@ public class DecodeUtils {
         }
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
+    public static void setOptionsMutable(Options options) {
+        if (ApiHelper.HAS_OPTIONS_IN_MUTABLE) options.inMutable = true;
+    }
+
     public static Bitmap decode(JobContext jc, FileDescriptor fd, Options options) {
         if (options == null) options = new Options();
         jc.setCancelListener(new DecodeCanceller(options));
+        setOptionsMutable(options);
         return ensureGLCompatibleBitmap(
                 BitmapFactory.decodeFileDescriptor(fd, null, options));
     }
@@ -72,6 +82,7 @@ public class DecodeUtils {
             int length, Options options) {
         if (options == null) options = new Options();
         jc.setCancelListener(new DecodeCanceller(options));
+        setOptionsMutable(options);
         return ensureGLCompatibleBitmap(
                 BitmapFactory.decodeByteArray(bytes, offset, length, options));
     }
@@ -132,6 +143,7 @@ public class DecodeUtils {
         }
 
         options.inJustDecodeBounds = false;
+        setOptionsMutable(options);
 
         Bitmap result = BitmapFactory.decodeFileDescriptor(fd, null, options);
         if (result == null) return null;
@@ -167,6 +179,8 @@ public class DecodeUtils {
         options.inSampleSize = BitmapUtils.computeSampleSizeLarger(
                 options.outWidth, options.outHeight, targetSize);
         options.inJustDecodeBounds = false;
+        setOptionsMutable(options);
+
         return ensureGLCompatibleBitmap(
                 BitmapFactory.decodeByteArray(data, 0, data.length, options));
     }
@@ -229,5 +243,79 @@ public class DecodeUtils {
             Log.w(TAG, "requestCreateBitmapRegionDecoder: " + t);
             return null;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static Bitmap decode(JobContext jc, byte[] data, int offset,
+            int length, BitmapFactory.Options options, BitmapPool pool) {
+        if (pool == null) {
+            return decode(jc, data, offset, length, options);
+        }
+
+        if (options == null) options = new BitmapFactory.Options();
+        if (options.inSampleSize < 1) options.inSampleSize = 1;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inBitmap = (options.inSampleSize == 1)
+                ? findCachedBitmap(pool, jc, data, offset, length, options) : null;
+        try {
+            Bitmap bitmap = decode(jc, data, offset, length, options);
+            if (options.inBitmap != null && options.inBitmap != bitmap) {
+                pool.recycle(options.inBitmap);
+                options.inBitmap = null;
+            }
+            return bitmap;
+        } catch (IllegalArgumentException e) {
+            if (options.inBitmap == null) throw e;
+
+            Log.w(TAG, "decode fail with a given bitmap, try decode to a new bitmap");
+            pool.recycle(options.inBitmap);
+            options.inBitmap = null;
+            return decode(jc, data, offset, length, options);
+        }
+    }
+
+    // This is the same as the method above except the source data comes
+    // from a file descriptor instead of a byte array.
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static Bitmap decode(JobContext jc,
+            FileDescriptor fileDescriptor, Options options, BitmapPool pool) {
+        if (pool == null) {
+            return decode(jc, fileDescriptor, options);
+        }
+
+        if (options == null) options = new BitmapFactory.Options();
+        if (options.inSampleSize < 1) options.inSampleSize = 1;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inBitmap = (options.inSampleSize == 1)
+                ? findCachedBitmap(pool, jc, fileDescriptor, options) : null;
+        try {
+            Bitmap bitmap = DecodeUtils.decode(jc, fileDescriptor, options);
+            if (options.inBitmap != null && options.inBitmap != bitmap) {
+                pool.recycle(options.inBitmap);
+                options.inBitmap = null;
+            }
+            return bitmap;
+        } catch (IllegalArgumentException e) {
+            if (options.inBitmap == null) throw e;
+
+            Log.w(TAG, "decode fail with a given bitmap, try decode to a new bitmap");
+            pool.recycle(options.inBitmap);
+            options.inBitmap = null;
+            return decode(jc, fileDescriptor, options);
+        }
+    }
+
+    private static Bitmap findCachedBitmap(BitmapPool pool, JobContext jc,
+            byte[] data, int offset, int length, Options options) {
+        if (pool.isOneSize()) return pool.getBitmap();
+        decodeBounds(jc, data, offset, length, options);
+        return pool.getBitmap(options.outWidth, options.outHeight);
+    }
+
+    private static Bitmap findCachedBitmap(BitmapPool pool, JobContext jc,
+            FileDescriptor fileDescriptor, Options options) {
+        if (pool.isOneSize()) return pool.getBitmap();
+        decodeBounds(jc, fileDescriptor, options);
+        return pool.getBitmap(options.outWidth, options.outHeight);
     }
 }

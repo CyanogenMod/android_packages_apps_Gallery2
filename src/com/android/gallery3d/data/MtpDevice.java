@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.data;
 
+import android.annotation.TargetApi;
 import android.hardware.usb.UsbDevice;
 import android.mtp.MtpConstants;
 import android.mtp.MtpObjectInfo;
@@ -24,17 +25,18 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.common.ApiHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB_MR1)
 public class MtpDevice extends MediaSet {
     private static final String TAG = "MtpDevice";
 
     private final GalleryApp mApplication;
     private final int mDeviceId;
     private final String mDeviceName;
-    private final DataManager mDataManager;
     private final MtpContext mMtpContext;
     private final String mName;
     private final ChangeNotifier mNotifier;
@@ -47,7 +49,6 @@ public class MtpDevice extends MediaSet {
         mApplication = application;
         mDeviceId = deviceId;
         mDeviceName = UsbDevice.getDeviceName(deviceId);
-        mDataManager = application.getDataManager();
         mMtpContext = mtpContext;
         mName = name;
         mNotifier = new ChangeNotifier(this, Uri.parse("mtp://"), application);
@@ -126,14 +127,16 @@ public class MtpDevice extends MediaSet {
         for (int i = begin; i < end; i++) {
             MtpObjectInfo child = mJpegChildren.get(i);
             Path childPath = mItemPath.getChild(child.getObjectHandle());
-            MtpImage image = (MtpImage) dataManager.peekMediaObject(childPath);
-            if (image == null) {
-                image = new MtpImage(
-                        childPath, mApplication, mDeviceId, child, mMtpContext);
-            } else {
-                image.updateContent(child);
+            synchronized (DataManager.LOCK) {
+                MtpImage image = (MtpImage) dataManager.peekMediaObject(childPath);
+                if (image == null) {
+                    image = new MtpImage(
+                            childPath, mApplication, mDeviceId, child, mMtpContext);
+                } else {
+                    image.updateContent(child);
+                }
+                result.add(image);
             }
-            result.add(image);
         }
         return result;
     }

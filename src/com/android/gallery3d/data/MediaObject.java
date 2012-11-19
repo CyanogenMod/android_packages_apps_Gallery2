@@ -36,6 +36,11 @@ public abstract class MediaObject {
     public static final int SUPPORT_EDIT = 1 << 9;
     public static final int SUPPORT_INFO = 1 << 10;
     public static final int SUPPORT_IMPORT = 1 << 11;
+    public static final int SUPPORT_TRIM = 1 << 12;
+    public static final int SUPPORT_UNLOCK = 1 << 13;
+    public static final int SUPPORT_BACK = 1 << 14;
+    public static final int SUPPORT_ACTION = 1 << 15;
+    public static final int SUPPORT_CAMERA_SHORTCUT = 1 << 16;
     public static final int SUPPORT_ALL = 0xffffffff;
 
     // These are the bits returned from getMediaType():
@@ -65,6 +70,11 @@ public abstract class MediaObject {
 
     protected final Path mPath;
 
+    public interface PanoramaSupportCallback {
+        void panoramaInfoAvailable(MediaObject mediaObject, boolean isPanorama,
+                boolean isPanorama360);
+    }
+
     public MediaObject(Path path, long version) {
         path.setObject(this);
         mPath = path;
@@ -79,6 +89,13 @@ public abstract class MediaObject {
         return 0;
     }
 
+    public void getPanoramaSupport(PanoramaSupportCallback callback) {
+        callback.panoramaInfoAvailable(this, false, false);
+    }
+
+    public void clearCachedPanoramaSupport() {
+    }
+
     public void delete() {
         throw new UnsupportedOperationException();
     }
@@ -88,6 +105,9 @@ public abstract class MediaObject {
     }
 
     public Uri getContentUri() {
+        String className = getClass().getName();
+        Log.e(TAG, "Class " + className + "should implement getContentUri.");
+        Log.e(TAG, "The object was created from path: " + getPath());
         throw new UnsupportedOperationException();
     }
 

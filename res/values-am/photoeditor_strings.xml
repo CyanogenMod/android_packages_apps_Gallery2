@@ -36,6 +36,7 @@
     <string name="flip" msgid="2357692401826287480">"በፍጥነት ግለጥ"</string>
     <string name="grain" msgid="7487585304579789098">"የፊልም ግሬይን"</string>
     <string name="grayscale" msgid="7641563843060945228">"B&amp;W"</string>
+    <string name="accessibility_black_and_white" msgid="1156382046161392389">"ጥቁር እና ነጭ"</string>
     <string name="highlight" msgid="3902653944386623972">"የተመረጡ"</string>
     <string name="lomoish" msgid="1270032154357186736">"Lomo"</string>
     <string name="negative" msgid="1985508917342811252">"ኔጌቲቭ"</string>
@@ -56,4 +57,10 @@
     <string name="redeye_tooltip" msgid="4183695928490874014">"ቀይ አይኖችን ለማስወገድ እነሱ ላይ መታ አድርግ"</string>
     <string name="rotate_tooltip" msgid="7008602969130734229">"ፎቶውንለማሽከርከር ጎትት"</string>
     <string name="straighten_tooltip" msgid="4846317027139212339">"ፎቶውንቀጥ ለማደረግ ጎትት"</string>
+    <string name="photoeditor_exposure" msgid="560535856805042987">"የተጋላጭነት ተፅዕኖዎች"</string>
+    <string name="photoeditor_color" msgid="834210916165605468">"የቀለም ተፅዕኖዎች"</string>
+    <string name="photoeditor_artistic" msgid="2810641816416597464">"ስነ-ጥበባዊ ተፅዕኖዎች"</string>
+    <string name="photoeditor_fix" msgid="6441595584425037477">"ጠግን"</string>
+    <string name="photoeditor_undo" msgid="4831462549862253564">"ቀልብስ"</string>
+    <string name="photoeditor_redo" msgid="5999984591376273768">"ዳግም አድርግ"</string>
 </resources>

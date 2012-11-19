@@ -92,6 +92,7 @@ public class GLCanvasImpl implements GLCanvas {
         initialize();
     }
 
+    @Override
     public void setSize(int width, int height) {
         Utils.assertTrue(width >= 0 && height >= 0);
 
@@ -119,15 +120,18 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void setAlpha(float alpha) {
         Utils.assertTrue(alpha >= 0 && alpha <= 1);
         mAlpha = alpha;
     }
 
+    @Override
     public float getAlpha() {
         return mAlpha;
     }
 
+    @Override
     public void multiplyAlpha(float alpha) {
         Utils.assertTrue(alpha >= 0 && alpha <= 1);
         mAlpha *= alpha;
@@ -166,6 +170,7 @@ public class GLCanvasImpl implements GLCanvas {
         // mMatrixValues and mAlpha will be initialized in setSize()
     }
 
+    @Override
     public void drawRect(float x, float y, float width, float height, GLPaint paint) {
         GL11 gl = mGL;
 
@@ -183,6 +188,7 @@ public class GLCanvasImpl implements GLCanvas {
         mCountDrawLine++;
     }
 
+    @Override
     public void drawLine(float x1, float y1, float x2, float y2, GLPaint paint) {
         GL11 gl = mGL;
 
@@ -200,6 +206,7 @@ public class GLCanvasImpl implements GLCanvas {
         mCountDrawLine++;
     }
 
+    @Override
     public void fillRect(float x, float y, float width, float height, int color) {
         mGLState.setColorMode(color, mAlpha);
         GL11 gl = mGL;
@@ -215,6 +222,7 @@ public class GLCanvasImpl implements GLCanvas {
         mCountFillRect++;
     }
 
+    @Override
     public void translate(float x, float y, float z) {
         Matrix.translateM(mMatrixValues, 0, x, y, z);
     }
@@ -222,6 +230,7 @@ public class GLCanvasImpl implements GLCanvas {
     // This is a faster version of translate(x, y, z) because
     // (1) we knows z = 0, (2) we inline the Matrix.translateM call,
     // (3) we unroll the loop
+    @Override
     public void translate(float x, float y) {
         float[] m = mMatrixValues;
         m[12] += m[0] * x + m[4] * y;
@@ -230,10 +239,12 @@ public class GLCanvasImpl implements GLCanvas {
         m[15] += m[3] * x + m[7] * y;
     }
 
+    @Override
     public void scale(float sx, float sy, float sz) {
         Matrix.scaleM(mMatrixValues, 0, sx, sy, sz);
     }
 
+    @Override
     public void rotate(float angle, float x, float y, float z) {
         if (angle == 0) return;
         float[] temp = mTempMatrix;
@@ -242,6 +253,7 @@ public class GLCanvasImpl implements GLCanvas {
         System.arraycopy(temp, 16, mMatrixValues, 0, 16);
     }
 
+    @Override
     public void multiplyMatrix(float matrix[], int offset) {
         float[] temp = mTempMatrix;
         Matrix.multiplyMM(temp, 0, mMatrixValues, 0, matrix, offset);
@@ -262,6 +274,7 @@ public class GLCanvasImpl implements GLCanvas {
         mCountTextureRect++;
     }
 
+    @Override
     public void drawMesh(BasicTexture tex, int x, int y, int xyBuffer,
             int uvBuffer, int indexBuffer, int indexCount) {
         float alpha = mAlpha;
@@ -352,6 +365,7 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void drawTexture(
             BasicTexture texture, int x, int y, int width, int height) {
         drawTexture(texture, x, y, width, height, mAlpha);
@@ -368,6 +382,7 @@ public class GLCanvasImpl implements GLCanvas {
         drawBoundTexture(texture, x, y, width, height);
     }
 
+    @Override
     public void drawTexture(BasicTexture texture, RectF source, RectF target) {
         if (target.width() <= 0 || target.height() <= 0) return;
 
@@ -386,6 +401,7 @@ public class GLCanvasImpl implements GLCanvas {
         textureRect(target.left, target.top, target.width(), target.height());
     }
 
+    @Override
     public void drawTexture(BasicTexture texture, float[] mTextureTransform,
             int x, int y, int w, int h) {
         mGLState.setBlendEnabled(mBlendEnabled
@@ -399,7 +415,7 @@ public class GLCanvasImpl implements GLCanvas {
     // This function changes the source coordinate to the texture coordinates.
     // It also clips the source and target coordinates if it is beyond the
     // bound of the texture.
-    private void convertCoordinate(RectF source, RectF target,
+    private static void convertCoordinate(RectF source, RectF target,
             BasicTexture texture) {
 
         int width = texture.getWidth();
@@ -427,6 +443,7 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void drawMixed(BasicTexture from,
             int toColor, float ratio, int x, int y, int w, int h) {
         drawMixed(from, toColor, ratio, x, y, w, h, mAlpha);
@@ -448,6 +465,82 @@ public class GLCanvasImpl implements GLCanvas {
         color[3] = alpha;
     }
 
+    private void setMixedColor(int toColor, float ratio, float alpha) {
+        //
+        // The formula we want:
+        //     alpha * ((1 - ratio) * from + ratio * to)
+        //
+        // The formula that GL supports is in the form of:
+        //     combo * from + (1 - combo) * to * scale
+        //
+        // So, we have combo = alpha * (1 - ratio)
+        //     and     scale = alpha * ratio / (1 - combo)
+        //
+        float combo = alpha * (1 - ratio);
+        float scale = alpha * ratio / (1 - combo);
+
+        // Specify the interpolation factor via the alpha component of
+        // GL_TEXTURE_ENV_COLORs.
+        // RGB component are get from toColor and will used as SRC1
+        float colorScale = scale * (toColor >>> 24) / (0xff * 0xff);
+        setTextureColor(((toColor >>> 16) & 0xff) * colorScale,
+                ((toColor >>> 8) & 0xff) * colorScale,
+                (toColor & 0xff) * colorScale, combo);
+        GL11 gl = mGL;
+        gl.glTexEnvfv(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_COLOR, mTextureColor, 0);
+
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_COMBINE_RGB, GL11.GL_INTERPOLATE);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_COMBINE_ALPHA, GL11.GL_INTERPOLATE);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC1_RGB, GL11.GL_CONSTANT);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND1_RGB, GL11.GL_SRC_COLOR);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC1_ALPHA, GL11.GL_CONSTANT);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND1_ALPHA, GL11.GL_SRC_ALPHA);
+
+        // Wire up the interpolation factor for RGB.
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC2_RGB, GL11.GL_CONSTANT);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND2_RGB, GL11.GL_SRC_ALPHA);
+
+        // Wire up the interpolation factor for alpha.
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC2_ALPHA, GL11.GL_CONSTANT);
+        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND2_ALPHA, GL11.GL_SRC_ALPHA);
+
+    }
+
+    @Override
+    public void drawMixed(BasicTexture from, int toColor, float ratio,
+            RectF source, RectF target) {
+        if (target.width() <= 0 || target.height() <= 0) return;
+
+        if (ratio <= 0.01f) {
+            drawTexture(from, source, target);
+            return;
+        } else if (ratio >= 1) {
+            fillRect(target.left, target.top, target.width(), target.height(), toColor);
+            return;
+        }
+
+        float alpha = mAlpha;
+
+        // Copy the input to avoid changing it.
+        mDrawTextureSourceRect.set(source);
+        mDrawTextureTargetRect.set(target);
+        source = mDrawTextureSourceRect;
+        target = mDrawTextureTargetRect;
+
+        mGLState.setBlendEnabled(mBlendEnabled && (!from.isOpaque()
+                || !Utils.isOpaque(toColor) || alpha < OPAQUE_ALPHA));
+
+        if (!bindTexture(from)) return;
+
+        // Interpolate the RGB and alpha values between both textures.
+        mGLState.setTexEnvMode(GL11.GL_COMBINE);
+        setMixedColor(toColor, ratio, alpha);
+        convertCoordinate(source, target, from);
+        setTextureCoords(source);
+        textureRect(target.left, target.top, target.width(), target.height());
+        mGLState.setTexEnvMode(GL11.GL_REPLACE);
+    }
+
     private void drawMixed(BasicTexture from, int toColor,
             float ratio, int x, int y, int width, int height, float alpha) {
         // change from 0 to 0.01f to prevent getting divided by zero below
@@ -465,45 +558,9 @@ public class GLCanvasImpl implements GLCanvas {
         final GL11 gl = mGL;
         if (!bindTexture(from)) return;
 
-        //
-        // The formula we want:
-        //     alpha * ((1 - ratio) * from + ratio * to)
-        //
-        // The formula that GL supports is in the form of:
-        //     combo * from + (1 - combo) * to * scale
-        //
-        // So, we have combo = alpha * (1 - ratio)
-        //     and     scale = alpha * ratio / (1 - combo)
-        //
-        float combo = alpha * (1 - ratio);
-        float scale = alpha * ratio / (1 - combo);
-
         // Interpolate the RGB and alpha values between both textures.
         mGLState.setTexEnvMode(GL11.GL_COMBINE);
-
-        // Specify the interpolation factor via the alpha component of
-        // GL_TEXTURE_ENV_COLORs.
-        // RGB component are get from toColor and will used as SRC1
-        float colorScale = scale * (toColor >>> 24) / (0xff * 0xff);
-        setTextureColor(((toColor >>> 16) & 0xff) * colorScale,
-                ((toColor >>> 8) & 0xff) * colorScale,
-                (toColor & 0xff) * colorScale, combo);
-        gl.glTexEnvfv(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_COLOR, mTextureColor, 0);
-
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_COMBINE_RGB, GL11.GL_INTERPOLATE);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_COMBINE_ALPHA, GL11.GL_INTERPOLATE);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC1_RGB, GL11.GL_CONSTANT);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND1_RGB, GL11.GL_SRC_COLOR);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC1_ALPHA, GL11.GL_CONSTANT);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND1_ALPHA, GL11.GL_SRC_ALPHA);
-
-        // Wire up the interpolation factor for RGB.
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC2_RGB, GL11.GL_CONSTANT);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND2_RGB, GL11.GL_SRC_ALPHA);
-
-        // Wire up the interpolation factor for alpha.
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_SRC2_ALPHA, GL11.GL_CONSTANT);
-        gl.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_OPERAND2_ALPHA, GL11.GL_SRC_ALPHA);
+        setMixedColor(toColor, ratio, alpha);
 
         drawBoundTexture(from, x, y, width, height);
         mGLState.setTexEnvMode(GL11.GL_REPLACE);
@@ -626,12 +683,24 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public GL11 getGLInstance() {
         return mGL;
     }
 
-    public void clearBuffer() {
+    @Override
+    public void clearBuffer(float[] argb) {
+        if(argb != null && argb.length == 4) {
+            mGL.glClearColor(argb[1], argb[2], argb[3], argb[0]);
+        } else {
+            mGL.glClearColor(0, 0, 0, 1);
+        }
         mGL.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    }
+
+    @Override
+    public void clearBuffer() {
+        clearBuffer(null);
     }
 
     private void setTextureCoords(RectF source) {
@@ -659,6 +728,7 @@ public class GLCanvasImpl implements GLCanvas {
 
     // unloadTexture and deleteBuffer can be called from the finalizer thread,
     // so we synchronized on the mUnboundTextures object.
+    @Override
     public boolean unloadTexture(BasicTexture t) {
         synchronized (mUnboundTextures) {
             if (!t.isLoaded()) return false;
@@ -667,12 +737,14 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void deleteBuffer(int bufferId) {
         synchronized (mUnboundTextures) {
             mDeleteBuffers.add(bufferId);
         }
     }
 
+    @Override
     public void deleteRecycledResources() {
         synchronized (mUnboundTextures) {
             IntArray ids = mUnboundTextures;
@@ -689,10 +761,12 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void save() {
         save(SAVE_FLAG_ALL);
     }
 
+    @Override
     public void save(int saveFlags) {
         ConfigState config = obtainRestoreConfig();
 
@@ -712,6 +786,7 @@ public class GLCanvasImpl implements GLCanvas {
         mRestoreStack.add(config);
     }
 
+    @Override
     public void restore() {
         if (mRestoreStack.isEmpty()) throw new IllegalStateException();
         ConfigState config = mRestoreStack.remove(mRestoreStack.size() - 1);
@@ -746,6 +821,7 @@ public class GLCanvasImpl implements GLCanvas {
         }
     }
 
+    @Override
     public void dumpStatisticsAndClear() {
         String line = String.format(
                 "MESH:%d, TEX_OES:%d, TEX_RECT:%d, FILL_RECT:%d, LINE:%d",

@@ -27,6 +27,7 @@ import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.ui.BitmapScreenNail;
 import com.android.gallery3d.ui.PhotoView;
 import com.android.gallery3d.ui.ScreenNail;
 import com.android.gallery3d.ui.SynchronizedHandler;
@@ -50,9 +51,10 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
     private PhotoView mPhotoView;
     private ThreadPool mThreadPool;
     private int mLoadingState = LOADING_INIT;
+    private BitmapScreenNail mBitmapScreenNail;
 
     public SinglePhotoDataAdapter(
-            GalleryActivity activity, PhotoView view, MediaItem item) {
+            AbstractGalleryActivity activity, PhotoView view, MediaItem item) {
         mItem = Utils.checkNotNull(item);
         mHasFullImage = (item.getSupportedOperations() &
                 MediaItem.SUPPORT_FULL_IMAGE) != 0;
@@ -84,6 +86,7 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
 
     private FutureListener<BitmapRegionDecoder> mLargeListener =
             new FutureListener<BitmapRegionDecoder>() {
+        @Override
         public void onFutureDone(Future<BitmapRegionDecoder> future) {
             BitmapRegionDecoder decoder = future.get();
             if (decoder == null) return;
@@ -100,14 +103,21 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
 
     private FutureListener<Bitmap> mThumbListener =
             new FutureListener<Bitmap>() {
+        @Override
         public void onFutureDone(Future<Bitmap> future) {
             mHandler.sendMessage(
                     mHandler.obtainMessage(MSG_UPDATE_IMAGE, future));
         }
     };
 
+    @Override
     public boolean isEmpty() {
         return false;
+    }
+
+    private void setScreenNail(Bitmap bitmap, int width, int height) {
+        mBitmapScreenNail = new BitmapScreenNail(bitmap);
+        setScreenNail(mBitmapScreenNail, width, height);
     }
 
     private void onDecodeLargeComplete(ImageBundle bundle) {
@@ -137,6 +147,7 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
         }
     }
 
+    @Override
     public void resume() {
         if (mTask == null) {
             if (mHasFullImage) {
@@ -150,12 +161,17 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
         }
     }
 
+    @Override
     public void pause() {
         Future<?> task = mTask;
         task.cancel();
         task.waitDone();
         if (task.get() == null) {
             mTask = null;
+        }
+        if (mBitmapScreenNail != null) {
+            mBitmapScreenNail.recycle();
+            mBitmapScreenNail = null;
         }
     }
 
@@ -197,6 +213,11 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
 
     @Override
     public boolean isPanorama(int offset) {
+        return false;
+    }
+
+    @Override
+    public boolean isStaticCamera(int offset) {
         return false;
     }
 

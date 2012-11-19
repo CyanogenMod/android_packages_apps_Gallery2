@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.app;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
@@ -27,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -39,6 +41,7 @@ import android.view.WindowManager;
 import android.widget.ShareActionProvider;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 
 /**
@@ -59,6 +62,15 @@ public class MovieActivity extends Activity {
     private Uri mUri;
     private boolean mTreatUpAsBack;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setSystemUiVisibility(View rootView) {
+        if (ApiHelper.HAS_VIEW_SYSTEM_UI_FLAG_LAYOUT_STABLE) {
+            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +80,9 @@ public class MovieActivity extends Activity {
 
         setContentView(R.layout.movie_view);
         View rootView = findViewById(R.id.movie_view_root);
-        rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
+        setSystemUiVisibility(rootView);
+
         Intent intent = getIntent();
         initializeActionBar(intent);
         mFinishOnCompletion = intent.getBooleanExtra(
@@ -104,14 +116,20 @@ public class MovieActivity extends Activity {
         win.setBackgroundDrawable(null);
     }
 
+    private void setActionBarLogoFromIntent(Intent intent) {
+        Bitmap logo = intent.getParcelableExtra(KEY_LOGO_BITMAP);
+        if (logo != null) {
+            getActionBar().setLogo(
+                    new BitmapDrawable(getResources(), logo));
+        }
+    }
+
     private void initializeActionBar(Intent intent) {
         mUri = intent.getData();
         final ActionBar actionBar = getActionBar();
-        Bitmap logo = intent.getParcelableExtra(KEY_LOGO_BITMAP);
-        if (logo != null) {
-            actionBar.setLogo(new BitmapDrawable(getResources(), logo));
-        }
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP,
+        setActionBarLogoFromIntent(intent);
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_HOME_AS_UP,
                 ActionBar.DISPLAY_HOME_AS_UP);
 
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
@@ -148,32 +166,42 @@ public class MovieActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.movie, menu);
-        ShareActionProvider provider = GalleryActionBar.initializeShareActionProvider(menu);
 
         // Document says EXTRA_STREAM should be a content: Uri
         // So, we only share the video if it's "content:".
-        if (provider != null && ContentResolver.SCHEME_CONTENT
-                .equals(mUri.getScheme())) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("video/*");
-            intent.putExtra(Intent.EXTRA_STREAM, mUri);
-            provider.setShareIntent(intent);
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        if (ContentResolver.SCHEME_CONTENT.equals(mUri.getScheme())) {
+            shareItem.setVisible(true);
+            ((ShareActionProvider) shareItem.getActionProvider())
+                    .setShareIntent(createShareIntent());
+        } else {
+            shareItem.setVisible(false);
         }
-
         return true;
+    }
+
+    private Intent createShareIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("video/*");
+        intent.putExtra(Intent.EXTRA_STREAM, mUri);
+        return intent;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
             if (mTreatUpAsBack) {
                 finish();
             } else {
                 startActivity(new Intent(this, Gallery.class));
                 finish();
             }
+            return true;
+        } else if (id == R.id.action_share) {
+            startActivity(Intent.createChooser(createShareIntent(),
+                    getString(R.string.share)));
             return true;
         }
         return false;

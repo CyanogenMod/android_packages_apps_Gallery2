@@ -24,7 +24,6 @@ import android.content.res.Configuration;
 import android.provider.Settings;
 import android.view.OrientationEventListener;
 import android.view.Surface;
-import android.view.ViewConfiguration;
 
 import com.android.gallery3d.ui.OrientationSource;
 
@@ -99,13 +98,27 @@ public class OrientationManager implements OrientationSource {
     public void lockOrientation() {
         if (mOrientationLocked) return;
         mOrientationLocked = true;
+        int displayRotation = getDisplayRotation();
+        // Display rotation >= 180 means we need to use the REVERSE landscape/portrait
+        boolean standard = displayRotation < 180;
         if (mActivity.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d(TAG, "lock orientation to landscape");
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            mActivity.setRequestedOrientation(standard
+                    ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    : ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
         } else {
+            if (displayRotation == 90 || displayRotation == 270) {
+                // If displayRotation = 90 or 270 then we are on a landscape
+                // device. On landscape devices, portrait is a 90 degree
+                // clockwise rotation from landscape, so we need
+                // to flip which portrait we pick as display rotation is counter clockwise
+                standard = !standard;
+            }
             Log.d(TAG, "lock orientation to portrait");
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            mActivity.setRequestedOrientation(standard
+                    ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    : ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         }
         updateCompensation();
     }

@@ -70,11 +70,18 @@
     <string name="multiface_crop_help">Touch a face to begin.</string>
     <!-- Toast/alert that the image is being saved to the SD card -->
     <string name="saving_image">Saving picture\u2026</string>
+
+    <!-- Toast/alert that the image is being saved after editing in filtershow [CHAR LIMIT=40]-->
+    <string name="filtershow_saving_image">Saving picture to <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+
     <!-- Eorror toast message that the image cannot be saved [CHAR LIMIT=40]-->
     <string name="save_error">Couldn\'t save cropped image.</string>
 
-    <!-- menu pick: crop the currently selected image -->
+    <!-- menu pick: crop the currently selected image [CHAR LIMIT=30]-->
     <string name="crop_label">Crop picture</string>
+    <!-- menu pick: trim the currently selected video [CHAR LIMIT=30]-->
+    <string name="trim_label">Trim video</string>
+
     <!-- Toast/alert that the face detection is being run -->
 
     <!-- Title prompted for user to choose a photo item [CHAR LIMIT=20] -->
@@ -107,6 +114,8 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="share">Share</string>
+    <string name="share_panorama">Share panorama</string>
+    <string name="share_as_photo">Share as photo</string>
 
     <!-- The label shown after an image is deleted [CHAR LIMIT=16] -->
     <string name="deleted">Deleted</string>
@@ -175,6 +184,7 @@
     <string name="caching_label">Caching\u2026</string>
 
     <string name="crop_action">Crop</string>
+    <string name="trim_action">Trim</string>
     <string name="set_as">Set as</string>
 
     <!-- String indicating an approximate location eg. Around Palo Alto, CA -->
@@ -317,6 +327,26 @@
     <!-- String indicating camera flash is not used. [CHAR LIMIT=14] -->
     <string name="flash_off">No flash</string>
 
+    <!-- String for the empty not filtered image[CHAR LIMIT=14] -->
+    <string name="ffx_original">Original</string>
+   <!-- String for filter filtershow_fx_0000_vintage [CHAR LIMIT=14] -->
+    <string name="ffx_vintage">Vintage</string>
+    <!-- String for filter filtershow_fx_0001_instant [CHAR LIMIT=14] -->
+    <string name="ffx_instant">Instant</string>
+    <!-- String for filter filtershow_fx_0002_bleach [CHAR LIMIT=14] -->
+    <string name="ffx_bleach">Bleach</string>
+    <!-- String for filter filtershow_fx_0003_blue_crush [CHAR LIMIT=14] -->
+    <string name="ffx_blue_crush">Blue</string>
+    <!-- String for filter filtershow_fx_0004_bw_contrast [CHAR LIMIT=14] -->
+    <string name="ffx_bw_contrast">B/W</string>
+    <!-- String for filter filtershow_fx_0005_punch [CHAR LIMIT=14] -->
+    <string name="ffx_punch">Punch</string>
+    <!-- String for filter filtershow_fx_0006_x_process [CHAR LIMIT=14] -->
+    <string name="ffx_x_process">X Process</string>
+    <!-- String for filter filtershow_fx_0007_washout [CHAR LIMIT=14] -->
+    <string name="ffx_washout">Latte</string>
+    <!-- String for filter filtershow_fx_0008_washout_color [CHAR LIMIT=14] -->
+    <string name="ffx_washout_color">Litho</string>
 
     <!-- Toast message shown after we make some album(s) available offline [CHAR LIMIT=50] -->
     <plurals name="make_albums_available_offline">
@@ -433,6 +463,9 @@
     <!-- The label for the folder contains downloaded pictures. [CHAR LIMIT=20]-->
     <string name="folder_download">Download</string>
 
+    <!-- The label for the folder contains edited online pictures. [CHAR LIMIT=40]-->
+    <string name="folder_edited_online_photos">Edited Online Photos</string>
+
     <!-- The label for the folder contains pictures that was imported from an
          external camera. [CHAR LIMIT=20]-->
     <string name="folder_imported">Imported</string>
@@ -446,6 +479,34 @@
     <!-- Web address for gallery help.  DO NOT TRANSLATE -->
     <string name="help_url_gallery_main" translatable="false"></string>
 
-    <string name="no_storage_title">No Storage</string>
-    <string name="no_storage_message">No external storage available.</string>
+    <!-- The tilte of a dialog showing there is no external storage. [CHAR LIMIT=20] -->
+    <string name="no_external_storage_title">No Storage</string>
+
+    <!-- The message of a dialog showing there is no external storage. [CHAR LIMIT=none] -->
+    <string name="no_external_storage">No external storage available</string>
+
+    <!-- Label for album filmstrip button -->
+    <string name="switch_photo_filmstrip">Filmstrip view</string>
+
+    <!-- Label for album grid button -->
+    <string name="switch_photo_grid">Grid view</string>
+
+    <!-- The tilte of a dialog showing trimming in progress. [CHAR LIMIT=20] -->
+    <string name="trimming">Trimming</string>
+
+    <!-- The content of a dialog showing trimming in progress. [CHAR LIMIT=30] -->
+    <string name="please_wait">Please wait</string>
+
+    <!-- Toast after the trimming is done. [CHAR LIMIT=50] -->
+    <!-- TODO: this should be a format string!-->
+    <string name="save_into">Saving trimmed video into album :</string>
+
+    <!-- Toast if the trimmed video is too short to trim. [CHAR LIMIT=80] -->
+    <string name="trim_too_short">Can not trim : target video is too short</string>
+
+    <!-- Text to show with progress bar while stitching in Gallery -->
+    <string name="pano_progress_text">Rendering panorama</string>
+
+    <!-- The label on the button that will save an edited image -->
+    <string name="save" msgid="8140440041190264400">Save</string>
 </resources>

@@ -24,9 +24,10 @@ import java.util.ArrayList;
 // from the input albums.
 // This only handles SubMediaSets, not MediaItems. (That's all we need now)
 public class ComboAlbum extends MediaSet implements ContentListener {
+    @SuppressWarnings("unused")
     private static final String TAG = "ComboAlbum";
     private final MediaSet[] mSets;
-    private final String mName;
+    private String mName;
 
     public ComboAlbum(Path path, MediaSet[] mediaSets, String name) {
         super(path, nextVersionNumber());
@@ -75,6 +76,10 @@ public class ComboAlbum extends MediaSet implements ContentListener {
         return mName;
     }
 
+    public void useNameOfChild(int i) {
+        if (i < mSets.length) mName = mSets[i].getName();
+    }
+
     @Override
     public long reload() {
         boolean changed = false;
@@ -86,6 +91,7 @@ public class ComboAlbum extends MediaSet implements ContentListener {
         return mDataVersion;
     }
 
+    @Override
     public void onContentDirty() {
         notifyContentChanged();
     }

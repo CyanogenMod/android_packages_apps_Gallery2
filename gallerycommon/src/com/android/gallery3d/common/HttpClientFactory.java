@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-import android.util.Log;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -122,7 +121,7 @@ public final class HttpClientFactory {
                     Build.DEVICE,
                     Build.MODEL,
                     Build.ID,
-                    Build.VERSION.SDK,
+                    Build.VERSION.SDK_INT,
                     Build.VERSION.RELEASE,
                     Build.VERSION.INCREMENTAL);
         }

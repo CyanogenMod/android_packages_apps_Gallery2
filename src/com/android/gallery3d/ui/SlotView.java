@@ -16,7 +16,6 @@
 
 package com.android.gallery3d.ui;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.view.GestureDetector;
@@ -24,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
 
 import com.android.gallery3d.anim.Animation;
-import com.android.gallery3d.app.GalleryActivity;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
 
 public class SlotView extends GLView {
@@ -88,10 +87,9 @@ public class SlotView extends GLView {
     // to prevent allocating memory
     private final Rect mTempRect = new Rect();
 
-    public SlotView(GalleryActivity activity, Spec spec) {
-        mGestureDetector = new GestureDetector(
-                (Context) activity, new MyGestureListener());
-        mScroller = new ScrollerHelper((Context) activity);
+    public SlotView(AbstractGalleryActivity activity, Spec spec) {
+        mGestureDetector = new GestureDetector(activity, new MyGestureListener());
+        mScroller = new ScrollerHelper(activity);
         mHandler = new SynchronizedHandler(activity.getGLRoot());
         setSlotSpec(spec);
     }
@@ -386,6 +384,7 @@ public class SlotView extends GLView {
     public static class Spec {
         public int slotWidth = -1;
         public int slotHeight = -1;
+        public int slotHeightAdditional = 0;
 
         public int rowsLand = -1;
         public int rowsPort = -1;
@@ -501,7 +500,7 @@ public class SlotView extends GLView {
                 int rows = (mWidth > mHeight) ? mSpec.rowsLand : mSpec.rowsPort;
                 mSlotGap = mSpec.slotGap;
                 mSlotHeight = Math.max(1, (mHeight - (rows - 1) * mSlotGap) / rows);
-                mSlotWidth = mSlotHeight;
+                mSlotWidth = mSlotHeight - mSpec.slotHeightAdditional;
             }
 
             if (mRenderer != null) {
@@ -736,6 +735,16 @@ public class SlotView extends GLView {
 
     public int getScrollY() {
         return mScrollY;
+    }
+
+    public Rect getSlotRect(int slotIndex, GLView rootPane) {
+        // Get slot rectangle relative to this root pane.
+        Rect offset = new Rect();
+        rootPane.getBoundsOf(this, offset);
+        Rect r = getSlotRect(slotIndex);
+        r.offset(offset.left - getScrollX(),
+                offset.top - getScrollY());
+        return r;
     }
 
     private static class IntegerAnimation extends Animation {

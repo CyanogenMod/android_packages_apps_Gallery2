@@ -19,8 +19,17 @@
   public android.content.Intent getResultData();
 }
 
--keep class com.android.camera.VideoCamera {
+-keep class com.android.camera.CameraActivity {
   public boolean isRecording();
+  public long getAutoFocusTime();
+  public long getShutterLag();
+  public long getShutterToPictureDisplayedTime();
+  public long getPictureDisplayedToJpegCallbackTime();
+  public long getJpegCallbackFinishTime();
+  public long getCaptureStartTime();
+}
+
+-keep class com.android.camera.VideoModule {
   public void onCancelBgTraining(...);
   public void onProtectiveCurtainClick(...);
 }
@@ -32,3 +41,17 @@
 -keep class com.android.camera.CameraHolder {
   public static void injectMockCamera(...);
 }
+
+# Disable the warnings of using dynamic method calls in EffectsRecorder
+-dontnote com.android.camera.EffectsRecorder
+
+# Required for ActionBarSherlock
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }
+-keepattributes *Annotation*
+
+# Required for mp4parser
+-keep public class * implements com.coremedia.iso.boxes.Box
+

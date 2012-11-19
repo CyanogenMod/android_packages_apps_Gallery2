@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.data;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -24,11 +25,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.app.PanoramaMetadataSupport;
+import com.android.gallery3d.app.StitchingProgressManager;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.ThreadPool.Job;
@@ -74,13 +80,27 @@ public class LocalImage extends LocalMediaItem {
             ImageColumns.ORIENTATION,   // 9
             ImageColumns.BUCKET_ID,     // 10
             ImageColumns.SIZE,          // 11
-            ImageColumns.WIDTH,         // 12
-            ImageColumns.HEIGHT         // 13
+            "0",                        // 12
+            "0"                         // 13
     };
+
+    static {
+        updateWidthAndHeightProjection();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private static void updateWidthAndHeightProjection() {
+        if (ApiHelper.HAS_MEDIA_COLUMNS_WIDTH_AND_HEIGHT) {
+            PROJECTION[INDEX_WIDTH] = MediaColumns.WIDTH;
+            PROJECTION[INDEX_HEIGHT] = MediaColumns.HEIGHT;
+        }
+    }
 
     private final GalleryApp mApplication;
 
     public int rotation;
+
+    private PanoramaMetadataSupport mPanoramaMetadata = new PanoramaMetadataSupport(this);
 
     public LocalImage(Path path, GalleryApp application, Cursor cursor) {
         super(path, nextVersionNumber());
@@ -115,6 +135,8 @@ public class LocalImage extends LocalMediaItem {
         latitude = cursor.getDouble(INDEX_LATITUDE);
         longitude = cursor.getDouble(INDEX_LONGITUDE);
         dateTakenInMs = cursor.getLong(INDEX_DATE_TAKEN);
+        dateAddedInSec = cursor.getLong(INDEX_DATE_ADDED);
+        dateModifiedInSec = cursor.getLong(INDEX_DATE_MODIFIED);
         filePath = cursor.getString(INDEX_DATA);
         rotation = cursor.getInt(INDEX_ORIENTATION);
         bucketId = cursor.getInt(INDEX_BUCKET_ID);
@@ -202,6 +224,7 @@ public class LocalImage extends LocalMediaItem {
             mLocalFilePath = localFilePath;
         }
 
+        @Override
         public BitmapRegionDecoder run(JobContext jc) {
             return DecodeUtils.createBitmapRegionDecoder(jc, mLocalFilePath, false);
         }
@@ -209,6 +232,10 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
+        StitchingProgressManager progressManager = mApplication.getStitchingProgressManager();
+        if (progressManager != null && progressManager.getProgress(getContentUri()) != null) {
+            return 0; // doesn't support anything while stitching!
+        }
         int operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
                 | SUPPORT_SETAS | SUPPORT_EDIT | SUPPORT_INFO;
         if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
@@ -226,12 +253,21 @@ public class LocalImage extends LocalMediaItem {
     }
 
     @Override
+    public void getPanoramaSupport(PanoramaSupportCallback callback) {
+        mPanoramaMetadata.getPanoramaSupport(mApplication, callback);
+    }
+
+    @Override
+    public void clearCachedPanoramaSupport() {
+        mPanoramaMetadata.clearCachedValues();
+    }
+
+    @Override
     public void delete() {
         GalleryUtils.assertNotInRenderThread();
         Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
         mApplication.getContentResolver().delete(baseUri, "_id=?",
                 new String[]{String.valueOf(id)});
-        mApplication.getDataManager().broadcastLocalDeletion();
     }
 
     private static String getExifOrientation(int orientation) {
@@ -292,7 +328,11 @@ public class LocalImage extends LocalMediaItem {
     public MediaDetails getDetails() {
         MediaDetails details = super.getDetails();
         details.addDetail(MediaDetails.INDEX_ORIENTATION, Integer.valueOf(rotation));
-        MediaDetails.extractExifInfo(details, filePath);
+        if (MIME_TYPE_JPEG.equals(mimeType)) {
+            // ExifInterface returns incorrect values for photos in other format.
+            // For example, the width and height of an webp images is always '0'.
+            MediaDetails.extractExifInfo(details, filePath);
+        }
         return details;
     }
 
@@ -309,5 +349,10 @@ public class LocalImage extends LocalMediaItem {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public String getFilePath() {
+        return filePath;
     }
 }

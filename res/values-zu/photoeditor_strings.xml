@@ -36,6 +36,7 @@
     <string name="flip" msgid="2357692401826287480">"Phendula"</string>
     <string name="grain" msgid="7487585304579789098">"Inhlamvu Yefilimu"</string>
     <string name="grayscale" msgid="7641563843060945228">"i-B&amp;W"</string>
+    <string name="accessibility_black_and_white" msgid="1156382046161392389">"Okumnyama nokumhlophe"</string>
     <string name="highlight" msgid="3902653944386623972">"Amazwibela"</string>
     <string name="lomoish" msgid="1270032154357186736">"i-Lomo"</string>
     <string name="negative" msgid="1985508917342811252">"Akulungile"</string>
@@ -56,4 +57,10 @@
     <string name="redeye_tooltip" msgid="4183695928490874014">"Thinta emehlweni abomvu ukuze uwasuse"</string>
     <string name="rotate_tooltip" msgid="7008602969130734229">"Hudula isithombe ukuze usijikeleze"</string>
     <string name="straighten_tooltip" msgid="4846317027139212339">"Hudula isithombe ukuze usiqondise"</string>
+    <string name="photoeditor_exposure" msgid="560535856805042987">"Imiphumela yokuvela"</string>
+    <string name="photoeditor_color" msgid="834210916165605468">"Imiphumela yombala"</string>
+    <string name="photoeditor_artistic" msgid="2810641816416597464">"Imiphumela yobuciko"</string>
+    <string name="photoeditor_fix" msgid="6441595584425037477">"Lungisa"</string>
+    <string name="photoeditor_undo" msgid="4831462549862253564">"Hlehlisa"</string>
+    <string name="photoeditor_redo" msgid="5999984591376273768">"Yenza kabusha"</string>
 </resources>

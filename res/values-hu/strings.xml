@@ -36,8 +36,10 @@
     <string name="ok" msgid="5296833083983263293">"OK"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"Érintsen meg egy arcot a kezdéshez."</string>
     <string name="saving_image" msgid="7270334453636349407">"Kép mentése..."</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"Kép mentése ide: <xliff:g id="ALBUM_NAME">%1$s</xliff:g> …"</string>
     <string name="save_error" msgid="6857408774183654970">"Nem lehet menteni a vágott képet."</string>
     <string name="crop_label" msgid="521114301871349328">"Kép levágása"</string>
+    <string name="trim_label" msgid="274203231381209979">"Videó vágása"</string>
     <string name="select_image" msgid="7841406150484742140">"Fénykép kiválasztása"</string>
     <string name="select_video" msgid="4859510992798615076">"Videó kiválasztása"</string>
     <string name="select_item" msgid="2816923896202086390">"Elem kiválasztása"</string>
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"Megerősítés"</string>
     <string name="cancel" msgid="3637516880917356226">"Mégse"</string>
     <string name="share" msgid="3619042788254195341">"Megosztás"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"Panorámakép megosztása"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"Megosztás fényképként"</string>
     <string name="deleted" msgid="6795433049119073871">"Törölve"</string>
     <string name="undo" msgid="2930873956446586313">"VISSZAVONÁS"</string>
     <string name="select_all" msgid="3403283025220282175">"Az összes kijelölése"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"Tárolási kérelmek feldolgozása"</string>
     <string name="caching_label" msgid="4521059045896269095">"Gyorsítótárazás..."</string>
     <string name="crop_action" msgid="3427470284074377001">"Körbevágás"</string>
+    <string name="trim_action" msgid="703098114452883524">"Vágás"</string>
     <string name="set_as" msgid="3636764710790507868">"Beállítás, mint"</string>
     <string name="video_err" msgid="7003051631792271009">"Nem lehet lejátszani a videót."</string>
     <string name="group_by_location" msgid="316641628989023253">"Helyszín szerint"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"Automata"</string>
     <string name="flash_on" msgid="7891556231891837284">"Vakuvillanás"</string>
     <string name="flash_off" msgid="1445443413822680010">"Vaku nélkül"</string>
+    <string name="ffx_original" msgid="372686331501281474">"Eredeti"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"Szépia"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"Azonnali"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"Fehérítő"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"Kék"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"Fekete-fehér"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"Kivágás"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X folyamat"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"Litho"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"Az album elérhető lesz offline módban is."</item>
     <item quantity="other" msgid="4948604338155959389">"Albumok letöltése offline hallgatáshoz."</item>
@@ -170,9 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"Fiók hozzáadása"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Kamera"</string>
     <string name="folder_download" msgid="7186215137642323932">"Letöltés"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"Szerkesztett online fotók"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Importált"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Képernyőkép"</string>
     <string name="help" msgid="7368960711153618354">"Súgó"</string>
-    <string name="no_storage_title">Nincs SD-kártya</string>
-    <string name="no_storage_message">Nem elérhető a külső SD-kártya.</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Nincs tárhely"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Nincs elérhető külső tárhely"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"Filmszalag nézet"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"Rácsnézet"</string>
+    <string name="trimming" msgid="9122385768369143997">"Vágás"</string>
+    <string name="please_wait" msgid="7296066089146487366">"Kérjük, várjon."</string>
+    <string name="save_into" msgid="4960537214388766062">"Megvágott videó mentése az albumba:"</string>
+    <string name="trim_too_short" msgid="751593965620665326">"Nem lehet megvágni: a célvideó túl rövid."</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"Panorámakép megjelenítése"</string>
+    <string name="save" msgid="613976532235060516">"Mentés"</string>
 </resources>

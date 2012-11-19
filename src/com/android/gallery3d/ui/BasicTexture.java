@@ -33,7 +33,8 @@ abstract class BasicTexture implements Texture {
     protected static final int STATE_LOADED = 1;
     protected static final int STATE_ERROR = -1;
 
-    private static final int MAX_TEXTURE_SIZE = 2048;
+    // Log a warning if a texture is larger along a dimension
+    private static final int MAX_TEXTURE_SIZE = 4096;
 
     protected int mId;
     protected int mState;
@@ -41,8 +42,8 @@ abstract class BasicTexture implements Texture {
     protected int mWidth = UNSPECIFIED;
     protected int mHeight = UNSPECIFIED;
 
-    private int mTextureWidth;
-    private int mTextureHeight;
+    protected int mTextureWidth;
+    protected int mTextureHeight;
 
     private boolean mHasBorder;
 
@@ -87,10 +88,12 @@ abstract class BasicTexture implements Texture {
         return mId;
     }
 
+    @Override
     public int getWidth() {
         return mWidth;
     }
 
+    @Override
     public int getHeight() {
         return mHeight;
     }
@@ -124,10 +127,12 @@ abstract class BasicTexture implements Texture {
         mHasBorder = hasBorder;
     }
 
+    @Override
     public void draw(GLCanvas canvas, int x, int y) {
         canvas.drawTexture(this, x, y, getWidth(), getHeight());
     }
 
+    @Override
     public void draw(GLCanvas canvas, int x, int y, int w, int h) {
         canvas.drawTexture(this, x, y, w, h);
     }

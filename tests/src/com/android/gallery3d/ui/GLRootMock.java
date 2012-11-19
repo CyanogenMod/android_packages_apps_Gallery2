@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.ui;
 
+import android.content.Context;
 import android.graphics.Matrix;
 import com.android.gallery3d.anim.CanvasAnimation;
 
@@ -25,6 +26,9 @@ public class GLRootMock implements GLRoot {
 
     public void addOnGLIdleListener(OnGLIdleListener listener) {}
     public void registerLaunchedAnimation(CanvasAnimation animation) {}
+    public void requestRenderForced() {
+        mRequestRenderCalled++;
+    }
     public void requestRender() {
         mRequestRenderCalled++;
     }
@@ -42,4 +46,5 @@ public class GLRootMock implements GLRoot {
     public void freeze() {}
     public void unfreeze() {}
     public void setLightsOutMode(boolean enabled) {}
+    public Context getContext() { return null; }
 }

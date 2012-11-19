@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.gallery3d.anim.StateTransitionAnimation;
 import com.android.gallery3d.common.Utils;
 
 import java.util.Stack;
@@ -38,12 +39,12 @@ public class StateManager {
     private static final String KEY_STATE = "bundle";
     private static final String KEY_CLASS = "class";
 
-    private GalleryActivity mContext;
+    private AbstractGalleryActivity mActivity;
     private Stack<StateEntry> mStack = new Stack<StateEntry>();
     private ActivityState.ResultEntry mResult;
 
-    public StateManager(GalleryActivity context) {
-        mContext = context;
+    public StateManager(AbstractGalleryActivity activity) {
+        mActivity = activity;
     }
 
     public void startState(Class<? extends ActivityState> klass,
@@ -57,9 +58,11 @@ public class StateManager {
         }
         if (!mStack.isEmpty()) {
             ActivityState top = getTopState();
+            top.transitionOnNextPause(top.getClass(), klass,
+                    StateTransitionAnimation.Transition.Incoming);
             if (mIsResumed) top.onPause();
         }
-        state.initialize(mContext, data);
+        state.initialize(mActivity, data);
 
         mStack.push(new StateEntry(data, state));
         state.onCreate(data, null);
@@ -75,12 +78,14 @@ public class StateManager {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
-        state.initialize(mContext, data);
+        state.initialize(mActivity, data);
         state.mResult = new ActivityState.ResultEntry();
         state.mResult.requestCode = requestCode;
 
         if (!mStack.isEmpty()) {
             ActivityState as = getTopState();
+            as.transitionOnNextPause(as.getClass(), klass,
+                    StateTransitionAnimation.Transition.Incoming);
             as.mReceivedResults = state.mResult;
             if (mIsResumed) as.onPause();
         } else {
@@ -122,6 +127,12 @@ public class StateManager {
         getTopState().onStateResult(requestCode, resultCode, data);
     }
 
+    public void clearActivityResult() {
+        if (!mStack.isEmpty()) {
+            getTopState().clearStateResult();
+        }
+    }
+
     public int getStateCount() {
         return mStack.size();
     }
@@ -146,10 +157,21 @@ public class StateManager {
     }
 
     void finishState(ActivityState state) {
+        finishState(state, true);
+    }
+
+    public void clearTasks() {
+        // Remove all the states that are on top of the bottom PhotoPage state
+        while (mStack.size() > 1) {
+            mStack.pop().activityState.onDestroy();
+        }
+    }
+
+    void finishState(ActivityState state, boolean fireOnPause) {
         // The finish() request could be rejected (only happens under Monkey),
         // If it is rejected, we won't close the last page.
         if (mStack.size() == 1) {
-            Activity activity = (Activity) mContext.getAndroidContext();
+            Activity activity = (Activity) mActivity.getAndroidContext();
             if (mResult != null) {
                 activity.setResult(mResult.resultCode, mResult.resultData);
             }
@@ -176,18 +198,21 @@ public class StateManager {
         // Remove the top state.
         mStack.pop();
         state.mIsFinishing = true;
-        if (mIsResumed) state.onPause();
-        mContext.getGLRoot().setContentPane(null);
+        ActivityState top = !mStack.isEmpty() ? mStack.peek().activityState : null;
+        if (mIsResumed && fireOnPause) {
+            if (top != null) {
+                state.transitionOnNextPause(state.getClass(), top.getClass(),
+                        StateTransitionAnimation.Transition.Outgoing);
+            }
+            state.onPause();
+        }
+        mActivity.getGLRoot().setContentPane(null);
         state.onDestroy();
 
-        if (!mStack.isEmpty()) {
-            // Restore the immediately previous state
-            ActivityState top = mStack.peek().activityState;
-            if (mIsResumed) top.resume();
-        }
+        if (top != null && mIsResumed) top.resume();
     }
 
-    void switchState(ActivityState oldState,
+    public void switchState(ActivityState oldState,
             Class<? extends ActivityState> klass, Bundle data) {
         Log.v(TAG, "switchState " + oldState + ", " + klass);
         if (oldState != mStack.peek().activityState) {
@@ -197,6 +222,11 @@ public class StateManager {
         }
         // Remove the top state.
         mStack.pop();
+        if (!data.containsKey(PhotoPage.KEY_APP_BRIDGE)) {
+            // Do not do the fade out stuff when we are switching camera modes
+            oldState.transitionOnNextPause(oldState.getClass(), klass,
+                    StateTransitionAnimation.Transition.Incoming);
+        }
         if (mIsResumed) oldState.onPause();
         oldState.onDestroy();
 
@@ -207,7 +237,7 @@ public class StateManager {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
-        state.initialize(mContext, data);
+        state.initialize(mActivity, data);
         mStack.push(new StateEntry(data, state));
         state.onCreate(data, null);
         if (mIsResumed) state.resume();
@@ -240,7 +270,7 @@ public class StateManager {
             } catch (Exception e) {
                 throw new AssertionError(e);
             }
-            activityState.initialize(mContext, data);
+            activityState.initialize(mActivity, data);
             activityState.onCreate(data, state);
             mStack.push(new StateEntry(data, activityState));
         }

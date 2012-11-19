@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 
+import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.ContentListener;
 import com.android.gallery3d.data.MediaItem;
@@ -83,6 +84,11 @@ public class SlideshowPage extends ActivityState {
     private boolean mIsActive = false;
     private final Intent mResultIntent = new Intent();
 
+    @Override
+    protected int getBackgroundColorId() {
+        return R.color.slideshow_background;
+    }
+
     private final GLView mRootPane = new GLView() {
         @Override
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -99,13 +105,15 @@ public class SlideshowPage extends ActivityState {
 
         @Override
         protected void renderBackground(GLCanvas canvas) {
-            canvas.clearBuffer();
+            canvas.clearBuffer(getBackgroundColor());
         }
     };
 
     @Override
     public void onCreate(Bundle data, Bundle restoreState) {
-        mFlags |= (FLAG_HIDE_ACTION_BAR | FLAG_HIDE_STATUS_BAR);
+        super.onCreate(data, restoreState);
+        mFlags |= (FLAG_HIDE_ACTION_BAR | FLAG_HIDE_STATUS_BAR
+                | FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED);
         if (data.getBoolean(KEY_DREAM)) {
             // Dream screensaver only keeps screen on for plugged devices.
             mFlags |= FLAG_SCREEN_ON_WHEN_PLUGGED;
@@ -134,6 +142,7 @@ public class SlideshowPage extends ActivityState {
 
     private void loadNextBitmap() {
         mModel.nextSlide(new FutureListener<Slide>() {
+            @Override
             public void onFutureDone(Future<Slide> future) {
                 mPendingSlide = future.get();
                 mHandler.sendEmptyMessage(MSG_SHOW_PENDING_BITMAP);
@@ -242,10 +251,12 @@ public class SlideshowPage extends ActivityState {
             mRepeat = repeat;
         }
 
+        @Override
         public int findItemIndex(Path path, int hint) {
             return hint;
         }
 
+        @Override
         public MediaItem getMediaItem(int index) {
             if (!mRepeat && index >= mOrder.length) return null;
             if (mOrder.length == 0) return null;
@@ -259,6 +270,7 @@ public class SlideshowPage extends ActivityState {
             return item;
         }
 
+        @Override
         public long reload() {
             long version = mMediaSet.reload();
             if (version != mSourceVersion) {
@@ -284,10 +296,12 @@ public class SlideshowPage extends ActivityState {
             }
         }
 
+        @Override
         public void addContentListener(ContentListener listener) {
             mMediaSet.addContentListener(listener);
         }
 
+        @Override
         public void removeContentListener(ContentListener listener) {
             mMediaSet.removeContentListener(listener);
         }
@@ -307,10 +321,12 @@ public class SlideshowPage extends ActivityState {
             mRepeat = repeat;
         }
 
+        @Override
         public int findItemIndex(Path path, int hint) {
             return mMediaSet.getIndexOfItem(path, hint);
         }
 
+        @Override
         public MediaItem getMediaItem(int index) {
             int dataEnd = mDataStart + mData.size();
 
@@ -328,6 +344,7 @@ public class SlideshowPage extends ActivityState {
             return (index < mDataStart || index >= dataEnd) ? null : mData.get(index - mDataStart);
         }
 
+        @Override
         public long reload() {
             long version = mMediaSet.reload();
             if (version != mDataVersion) {
@@ -337,10 +354,12 @@ public class SlideshowPage extends ActivityState {
             return mDataVersion;
         }
 
+        @Override
         public void addContentListener(ContentListener listener) {
             mMediaSet.addContentListener(listener);
         }
 
+        @Override
         public void removeContentListener(ContentListener listener) {
             mMediaSet.removeContentListener(listener);
         }

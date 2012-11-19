@@ -19,18 +19,26 @@
             android:icon="@drawable/ic_menu_ptp_holo_light"
             android:showAsAction="always|withText"
             android:visible="false" />
+    <!-- Ideally, showAsAction for share_panorama and share should be reversed.
+         But, if share_panorama is set to never, it doesn't seem to get promoted
+         to the action bar and stays on the overflow menu. -->
+    <item android:id="@+id/action_share_panorama"
+            android:icon="@drawable/ic_menu_share_holo_light"
+            android:title="@string/share_panorama"
+            android:visible="false"
+            android:actionProviderClass="android.widget.ShareActionProvider"
+            android:showAsAction="ifRoom" />
     <item android:id="@+id/action_share"
             android:icon="@drawable/ic_menu_share_holo_light"
             android:title="@string/share"
-            android:enabled="true"
-            android:actionProviderClass="android.widget.ShareActionProvider"
             android:visible="false"
-            android:showAsAction="ifRoom" />
+            android:actionProviderClass="android.widget.ShareActionProvider"
+            android:showAsAction="never" />
     <item android:id="@+id/action_delete"
             android:icon="@drawable/ic_menu_trash_holo_light"
             android:title="@string/delete"
             android:visible="false"
-            android:showAsAction="ifRoom" />
+            android:showAsAction="never" />
     <item android:id="@+id/action_slideshow"
             android:icon="@drawable/ic_menu_slideshow_holo_light"
             android:title="@string/slideshow"
@@ -47,6 +55,9 @@
             android:title="@string/rotate_right" />
     <item android:id="@+id/action_crop"
             android:title="@string/crop_action"
+            android:showAsAction="never" />
+    <item android:id="@+id/action_trim"
+            android:title="@string/trim_action"
             android:showAsAction="never" />
     <item android:id="@+id/action_setas"
             android:title="@string/set_image"

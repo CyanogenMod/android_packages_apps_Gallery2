@@ -18,6 +18,7 @@ package com.android.gallery3d.data;
 import com.android.gallery3d.app.GalleryApp;
 
 public class SnailSource extends MediaSource {
+    @SuppressWarnings("unused")
     private static final String TAG = "SnailSource";
     private static final int SNAIL_ALBUM = 0;
     private static final int SNAIL_ITEM = 1;
@@ -41,8 +42,8 @@ public class SnailSource extends MediaSource {
         switch (mMatcher.match(path)) {
             case SNAIL_ALBUM:
                 String itemPath = "/snail/item/" + mMatcher.getVar(0);
-                MediaItem item =
-                        (MediaItem) dataManager.getMediaObject(itemPath);
+                SnailItem item =
+                        (SnailItem) dataManager.getMediaObject(itemPath);
                 return new SnailAlbum(path, item);
             case SNAIL_ITEM: {
                 int id = mMatcher.getIntVar(0);

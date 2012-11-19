@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.gadget;
 
+import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,11 +26,13 @@ import android.widget.RemoteViewsService;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.ContentListener;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 
+@TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
 public class WidgetService extends RemoteViewsService {
 
     @SuppressWarnings("unused")
@@ -117,22 +120,27 @@ public class WidgetService extends RemoteViewsService {
             mSource = null;
         }
 
+        @Override
         public int getCount() {
             return mSource.size();
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public int getViewTypeCount() {
             return 1;
         }
 
+        @Override
         public boolean hasStableIds() {
             return true;
         }
 
+        @Override
         public RemoteViews getLoadingView() {
             RemoteViews rv = new RemoteViews(
                     mApp.getAndroidContext().getPackageName(),
@@ -141,6 +149,7 @@ public class WidgetService extends RemoteViewsService {
             return rv;
         }
 
+        @Override
         public RemoteViews getViewAt(int position) {
             Bitmap bitmap = mSource.getImage(position);
             if (bitmap == null) return getLoadingView();

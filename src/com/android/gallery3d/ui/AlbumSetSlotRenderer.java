@@ -16,10 +16,9 @@
 
 package com.android.gallery3d.ui;
 
-import android.content.Context;
-
+import com.android.gallery3d.R;
+import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumSetDataLoader;
-import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.ui.AlbumSetSlidingWindow.AlbumSetEntry;
@@ -28,10 +27,11 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
     @SuppressWarnings("unused")
     private static final String TAG = "AlbumSetView";
     private static final int CACHE_SIZE = 96;
-    private static final int PLACEHOLDER_COLOR = 0xFF222222;
+    private final int mPlaceholderColor;
 
     private final ColorTexture mWaitLoadingTexture;
-    private final GalleryActivity mActivity;
+    private final ResourceTexture mCameraOverlay;
+    private final AbstractGalleryActivity mActivity;
     private final SelectionManager mSelectionManager;
     protected final LabelSpec mLabelSpec;
 
@@ -51,20 +51,27 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
         public int countFontSize;
         public int leftMargin;
         public int iconSize;
+        public int titleRightMargin;
+        public int backgroundColor;
+        public int titleColor;
+        public int countColor;
+        public int borderSize;
     }
 
-    public AlbumSetSlotRenderer(GalleryActivity activity, SelectionManager selectionManager,
-            SlotView slotView, LabelSpec labelSpec) {
-        super ((Context) activity);
+    public AlbumSetSlotRenderer(AbstractGalleryActivity activity,
+            SelectionManager selectionManager,
+            SlotView slotView, LabelSpec labelSpec, int placeholderColor) {
+        super (activity);
         mActivity = activity;
         mSelectionManager = selectionManager;
         mSlotView = slotView;
         mLabelSpec = labelSpec;
+        mPlaceholderColor = placeholderColor;
 
-        mWaitLoadingTexture = new ColorTexture(PLACEHOLDER_COLOR);
+        mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
         mWaitLoadingTexture.setSize(1, 1);
-
-        Context context = activity.getAndroidContext();
+        mCameraOverlay = new ResourceTexture(activity,
+                R.drawable.ic_cameraalbum_overlay);
     }
 
     public void setPressedIndex(int index) {
@@ -99,9 +106,16 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
         }
     }
 
-    private static Texture checkTexture(Texture texture) {
+    private static Texture checkLabelTexture(Texture texture) {
         return ((texture instanceof UploadedTexture)
                 && ((UploadedTexture) texture).isUploading())
+                ? null
+                : texture;
+    }
+
+    private static Texture checkContentTexture(Texture texture) {
+        return ((texture instanceof TiledTexture)
+                && !((TiledTexture) texture).isReady())
                 ? null
                 : texture;
     }
@@ -119,6 +133,12 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
     protected int renderOverlay(
             GLCanvas canvas, int index, AlbumSetEntry entry, int width, int height) {
         int renderRequestFlags = 0;
+        if (entry.album != null && entry.album.isCameraRoll()) {
+            int uncoveredHeight = height - mLabelSpec.labelBackgroundHeight;
+            int dim = uncoveredHeight / 2;
+            mCameraOverlay.draw(canvas, (width - dim) / 2,
+                    (uncoveredHeight - dim) / 2, dim, dim);
+        }
         if (mPressedIndex == index) {
             if (mAnimatePressedUp) {
                 drawPressedUpFrame(canvas, width, height);
@@ -142,13 +162,13 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
             GLCanvas canvas, AlbumSetEntry entry, int width, int height) {
         int renderRequestFlags = 0;
 
-        Texture content = checkTexture(entry.content);
+        Texture content = checkContentTexture(entry.content);
         if (content == null) {
             content = mWaitLoadingTexture;
             entry.isWaitLoadingDisplayed = true;
         } else if (entry.isWaitLoadingDisplayed) {
             entry.isWaitLoadingDisplayed = false;
-            content = new FadeInTexture(PLACEHOLDER_COLOR, entry.bitmapTexture);
+            content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
             entry.content = content;
         }
         drawContent(canvas, content, width, height, entry.rotation);
@@ -157,25 +177,19 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
             renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
         }
 
-        if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
-            drawVideoOverlay(canvas, width, height);
-        }
-
-        if (entry.isPanorama) {
-            drawPanoramaBorder(canvas, width, height);
-        }
-
         return renderRequestFlags;
     }
 
     protected int renderLabel(
             GLCanvas canvas, AlbumSetEntry entry, int width, int height) {
-        Texture content = checkTexture(entry.labelTexture);
-        if (content != null) {
-            int b = AlbumLabelMaker.getBorderSize();
-            int h = content.getHeight();
-            content.draw(canvas, -b, height - h + b, width + b + b, h);
+        Texture content = checkLabelTexture(entry.labelTexture);
+        if (content == null) {
+            content = mWaitLoadingTexture;
         }
+        int b = AlbumLabelMaker.getBorderSize();
+        int h = mLabelSpec.labelBackgroundHeight;
+        content.draw(canvas, -b, height - h + b, width + b + b, h);
+
         return 0;
     }
 

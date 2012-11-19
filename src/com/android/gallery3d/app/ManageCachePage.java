@@ -56,6 +56,7 @@ public class ManageCachePage extends ActivityState implements
         EyePosition.EyePositionListener, OnClickListener {
     public static final String KEY_MEDIA_PATH = "media-path";
 
+    @SuppressWarnings("unused")
     private static final String TAG = "ManageCachePage";
 
     private static final int DATA_CACHE_SIZE = 256;
@@ -85,12 +86,17 @@ public class ManageCachePage extends ActivityState implements
     private Handler mHandler;
     private boolean mLayoutReady = false;
 
+    @Override
+    protected int getBackgroundColorId() {
+        return R.color.cache_background;
+    }
+
     private GLView mRootPane = new GLView() {
         private float mMatrix[] = new float[16];
 
         @Override
         protected void renderBackground(GLCanvas view) {
-            view.clearBuffer();
+            view.clearBuffer(getBackgroundColor());
         }
 
         @Override
@@ -106,11 +112,10 @@ public class ManageCachePage extends ActivityState implements
             mLayoutReady = false;
 
             mEyePosition.resetPosition();
-            Activity activity = (Activity) mActivity;
             int slotViewTop = mActivity.getGalleryActionBar().getHeight();
             int slotViewBottom = bottom - top;
 
-            View footer = activity.findViewById(R.id.footer);
+            View footer = mActivity.findViewById(R.id.footer);
             if (footer != null) {
                 int location[] = {0, 0};
                 footer.getLocationOnScreen(location);
@@ -187,6 +192,7 @@ public class ManageCachePage extends ActivityState implements
 
     @Override
     public void onCreate(Bundle data, Bundle restoreState) {
+        super.onCreate(data, restoreState);
         mCacheStorageInfo = new CacheStorageUsageInfo(mActivity);
         initializeViews();
         initializeData(data);
@@ -277,7 +283,7 @@ public class ManageCachePage extends ActivityState implements
     }
 
     private void initializeViews() {
-        Activity activity = (Activity) mActivity;
+        Activity activity = mActivity;
 
         mSelectionManager = new SelectionManager(mActivity, true);
         mSelectionManager.setSelectionListener(this);
@@ -308,7 +314,7 @@ public class ManageCachePage extends ActivityState implements
     }
 
     private void initializeFooterViews() {
-        Activity activity = (Activity) mActivity;
+        Activity activity = mActivity;
 
         LayoutInflater inflater = activity.getLayoutInflater();
         mFooterContent = inflater.inflate(R.layout.manage_offline_bar, null);
@@ -340,7 +346,7 @@ public class ManageCachePage extends ActivityState implements
 
     private void showToast() {
         if (mAlbumCountToMakeAvailableOffline > 0) {
-            Activity activity = (Activity) mActivity;
+            Activity activity = mActivity;
             Toast.makeText(activity, activity.getResources().getQuantityString(
                     R.plurals.make_albums_available_offline,
                     mAlbumCountToMakeAvailableOffline),
@@ -349,7 +355,7 @@ public class ManageCachePage extends ActivityState implements
     }
 
     private void showToastForLocalAlbum() {
-        Activity activity = (Activity) mActivity;
+        Activity activity = mActivity;
         Toast.makeText(activity, activity.getResources().getString(
             R.string.try_to_set_local_album_available_offline),
             Toast.LENGTH_SHORT).show();
@@ -364,7 +370,7 @@ public class ManageCachePage extends ActivityState implements
         long expectedBytes = mCacheStorageInfo.getExpectedUsedBytes();
         long freeBytes = mCacheStorageInfo.getFreeBytes();
 
-        Activity activity = (Activity) mActivity;
+        Activity activity = mActivity;
         if (totalBytes == 0) {
             progressBar.setProgress(0);
             progressBar.setSecondaryProgress(0);
@@ -405,5 +411,9 @@ public class ManageCachePage extends ActivityState implements
 
     @Override
     public void onConfirmDialogShown() {
+    }
+
+    @Override
+    public void onProgressStart() {
     }
 }

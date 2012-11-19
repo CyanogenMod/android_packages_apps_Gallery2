@@ -16,14 +16,15 @@
 
 package com.android.gallery3d.data;
 
-import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.android.gallery3d.app.GalleryApp;
+import com.android.gallery3d.app.StitchingChangeListener;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.data.MediaSet.ItemConsumer;
 import com.android.gallery3d.data.MediaSource.PathId;
 import com.android.gallery3d.picasasource.PicasaSource;
@@ -48,7 +49,7 @@ import java.util.WeakHashMap;
 // path. And it's used to identify a specific media set even if the process is
 // killed and re-created, so child keys should be stable identifiers.
 
-public class DataManager {
+public class DataManager implements StitchingChangeListener {
     public static final int INCLUDE_IMAGE = 1;
     public static final int INCLUDE_VIDEO = 2;
     public static final int INCLUDE_ALL = INCLUDE_IMAGE | INCLUDE_VIDEO;
@@ -67,26 +68,28 @@ public class DataManager {
     private static final String TAG = "DataManager";
 
     // This is the path for the media set seen by the user at top level.
-    private static final String TOP_SET_PATH =
-            "/combo/{/mtp,/local/all,/picasa/all}";
-    private static final String TOP_IMAGE_SET_PATH =
-            "/combo/{/mtp,/local/image,/picasa/image}";
+    private static final String TOP_SET_PATH = ApiHelper.HAS_MTP
+            ? "/combo/{/mtp,/local/all,/picasa/all}"
+            : "/combo/{/local/all,/picasa/all}";
+
+    private static final String TOP_IMAGE_SET_PATH = ApiHelper.HAS_MTP
+            ? "/combo/{/mtp,/local/image,/picasa/image}"
+            : "/combo/{/local/image,/picasa/image}";
+
     private static final String TOP_VIDEO_SET_PATH =
             "/combo/{/local/video,/picasa/video}";
-    private static final String TOP_LOCAL_SET_PATH =
-            "/local/all";
-    private static final String TOP_LOCAL_IMAGE_SET_PATH =
-            "/local/image";
-    private static final String TOP_LOCAL_VIDEO_SET_PATH =
-            "/local/video";
 
-    private static final String ACTION_DELETE_PICTURE =
-            "com.android.gallery3d.action.DELETE_PICTURE";
+    private static final String TOP_LOCAL_SET_PATH = "/local/all";
+
+    private static final String TOP_LOCAL_IMAGE_SET_PATH = "/local/image";
+
+    private static final String TOP_LOCAL_VIDEO_SET_PATH = "/local/video";
 
     public static final Comparator<MediaItem> sDateTakenComparator =
             new DateTakenComparator();
 
     private static class DateTakenComparator implements Comparator<MediaItem> {
+        @Override
         public int compare(MediaItem item1, MediaItem item2) {
             return -Utils.compare(item1.getDateInMs(), item2.getDateInMs());
         }
@@ -115,10 +118,13 @@ public class DataManager {
         // the order matters, the UriSource must come last
         addSource(new LocalSource(mApplication));
         addSource(new PicasaSource(mApplication));
-        addSource(new MtpSource(mApplication));
+        if (ApiHelper.HAS_MTP) {
+            addSource(new MtpSource(mApplication));
+        }
         addSource(new ComboSource(mApplication));
         addSource(new ClusterSource(mApplication));
         addSource(new FilterSource(mApplication));
+        addSource(new SecureSource(mApplication));
         addSource(new UriSource(mApplication));
         addSource(new SnailSource(mApplication));
 
@@ -144,32 +150,42 @@ public class DataManager {
 
     // open for debug
     void addSource(MediaSource source) {
+        if (source == null) return;
         mSourceMap.put(source.getPrefix(), source);
     }
 
+    // A common usage of this method is:
+    // synchronized (DataManager.LOCK) {
+    //     MediaObject object = peekMediaObject(path);
+    //     if (object == null) {
+    //         object = createMediaObject(...);
+    //     }
+    // }
     public MediaObject peekMediaObject(Path path) {
         return path.getObject();
     }
 
     public MediaObject getMediaObject(Path path) {
-        MediaObject obj = path.getObject();
-        if (obj != null) return obj;
+        synchronized (LOCK) {
+            MediaObject obj = path.getObject();
+            if (obj != null) return obj;
 
-        MediaSource source = mSourceMap.get(path.getPrefix());
-        if (source == null) {
-            Log.w(TAG, "cannot find media source for path: " + path);
-            return null;
-        }
-
-        try {
-            MediaObject object = source.createMediaObject(path);
-            if (object == null) {
-                Log.w(TAG, "cannot create media object: " + path);
+            MediaSource source = mSourceMap.get(path.getPrefix());
+            if (source == null) {
+                Log.w(TAG, "cannot find media source for path: " + path);
+                return null;
             }
-            return object;
-        } catch (Throwable t) {
-            Log.w(TAG, "exception in creating media object: " + path, t);
-            return null;
+
+            try {
+                MediaObject object = source.createMediaObject(path);
+                if (object == null) {
+                    Log.w(TAG, "cannot create media object: " + path);
+                }
+                return object;
+            } catch (Throwable t) {
+                Log.w(TAG, "exception in creating media object: " + path, t);
+                return null;
+            }
         }
     }
 
@@ -229,6 +245,10 @@ public class DataManager {
     // The following methods forward the request to the proper object.
     public int getSupportedOperations(Path path) {
         return getMediaObject(path).getSupportedOperations();
+    }
+
+    public void getPanoramaSupport(Path path, PanoramaSupportCallback callback) {
+        getMediaObject(path).getPanoramaSupport(callback);
     }
 
     public void delete(Path path) {
@@ -310,15 +330,6 @@ public class DataManager {
         }
     }
 
-    // Sends a local broadcast if a local image or video is deleted. This is
-    // used to update the thumbnail shown in the camera app.
-    public void broadcastLocalDeletion() {
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(
-                mApplication.getAndroidContext());
-        Intent intent = new Intent(ACTION_DELETE_PICTURE);
-        manager.sendBroadcast(intent);
-    }
-
     private static class NotifyBroker extends ContentObserver {
         private WeakHashMap<ChangeNotifier, Object> mNotifiers =
                 new WeakHashMap<ChangeNotifier, Object>();
@@ -337,5 +348,26 @@ public class DataManager {
                 notifier.onChange(selfChange);
             }
         }
+    }
+
+    @Override
+    public void onStitchingQueued(Uri uri) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onStitchingResult(Uri uri) {
+        Path path = findPathByUri(uri, null);
+        if (path != null) {
+            MediaObject mediaObject = getMediaObject(path);
+            if (mediaObject != null) {
+                mediaObject.clearCachedPanoramaSupport();
+            }
+        }
+    }
+
+    @Override
+    public void onStitchingProgress(Uri uri, int progress) {
+        // Do nothing.
     }
 }

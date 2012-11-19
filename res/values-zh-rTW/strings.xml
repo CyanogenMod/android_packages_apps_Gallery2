@@ -22,12 +22,12 @@
     <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
     <string name="movie_view_label" msgid="3526526872644898229">"影片播放器"</string>
     <string name="loading_video" msgid="4013492720121891585">"正在載入影片…"</string>
-    <string name="loading_image" msgid="1200894415793838191">"正在載入圖片..."</string>
-    <string name="loading_account" msgid="928195413034552034">"正在載入帳戶..."</string>
+    <string name="loading_image" msgid="1200894415793838191">"正在載入圖片…"</string>
+    <string name="loading_account" msgid="928195413034552034">"正在載入帳戶…"</string>
     <string name="resume_playing_title" msgid="8996677350649355013">"繼續播放影片"</string>
     <string name="resume_playing_message" msgid="5184414518126703481">"要從 %s 繼續播放嗎？"</string>
     <string name="resume_playing_resume" msgid="3847915469173852416">"繼續播放"</string>
-    <string name="loading" msgid="7038208555304563571">"載入中..."</string>
+    <string name="loading" msgid="7038208555304563571">"載入中…"</string>
     <string name="fail_to_load" msgid="8394392853646664505">"無法載入"</string>
     <string name="fail_to_load_image" msgid="6155388718549782425">"無法載入圖片"</string>
     <string name="no_thumbnail" msgid="284723185546429750">"無縮圖"</string>
@@ -35,9 +35,11 @@
     <string name="crop_save_text" msgid="152200178986698300">"確定"</string>
     <string name="ok" msgid="5296833083983263293">"確定"</string>
     <string name="multiface_crop_help" msgid="2554690102655855657">"輕觸臉孔即可開始。"</string>
-    <string name="saving_image" msgid="7270334453636349407">"正在儲存相片..."</string>
+    <string name="saving_image" msgid="7270334453636349407">"正在儲存相片…"</string>
+    <string name="filtershow_saving_image" msgid="6659463980581993016">"正在將圖片儲存至「<xliff:g id="ALBUM_NAME">%1$s</xliff:g>」…"</string>
     <string name="save_error" msgid="6857408774183654970">"無法儲存裁剪的圖片。"</string>
     <string name="crop_label" msgid="521114301871349328">"裁剪相片"</string>
+    <string name="trim_label" msgid="274203231381209979">"修剪影片"</string>
     <string name="select_image" msgid="7841406150484742140">"選取相片"</string>
     <string name="select_video" msgid="4859510992798615076">"選取影片"</string>
     <string name="select_item" msgid="2816923896202086390">"選取項目"</string>
@@ -45,7 +47,7 @@
     <string name="select_group" msgid="6744208543323307114">"選取群組"</string>
     <string name="set_image" msgid="2331476809308010401">"將相片設為"</string>
     <string name="set_wallpaper" msgid="8491121226190175017">"設定桌布"</string>
-    <string name="wallpaper" msgid="140165383777262070">"正在設定桌布..."</string>
+    <string name="wallpaper" msgid="140165383777262070">"正在設定桌布…"</string>
     <string name="camera_setas_wallpaper" msgid="797463183863414289">"桌布"</string>
     <string name="delete" msgid="2839695998251824487">"刪除"</string>
   <plurals name="delete_selection">
@@ -55,6 +57,8 @@
     <string name="confirm" msgid="8646870096527848520">"確認"</string>
     <string name="cancel" msgid="3637516880917356226">"取消"</string>
     <string name="share" msgid="3619042788254195341">"分享"</string>
+    <string name="share_panorama" msgid="2569029972820978718">"分享全景"</string>
+    <string name="share_as_photo" msgid="8959225188897026149">"以相片形式分享"</string>
     <string name="deleted" msgid="6795433049119073871">"已刪除"</string>
     <string name="undo" msgid="2930873956446586313">"復原"</string>
     <string name="select_all" msgid="3403283025220282175">"全選"</string>
@@ -87,6 +91,7 @@
     <string name="process_caching_requests" msgid="8722939570307386071">"正在處理快取要求"</string>
     <string name="caching_label" msgid="4521059045896269095">"快取中…"</string>
     <string name="crop_action" msgid="3427470284074377001">"裁剪"</string>
+    <string name="trim_action" msgid="703098114452883524">"修剪"</string>
     <string name="set_as" msgid="3636764710790507868">"設為"</string>
     <string name="video_err" msgid="7003051631792271009">"無法播放影片。"</string>
     <string name="group_by_location" msgid="316641628989023253">"依位置"</string>
@@ -136,6 +141,16 @@
     <string name="auto" msgid="4296941368722892821">"自動"</string>
     <string name="flash_on" msgid="7891556231891837284">"使用閃光燈"</string>
     <string name="flash_off" msgid="1445443413822680010">"未使用閃光燈"</string>
+    <string name="ffx_original" msgid="372686331501281474">"原始"</string>
+    <string name="ffx_vintage" msgid="8348759951363844780">"復古"</string>
+    <string name="ffx_instant" msgid="726968618715691987">"即時"</string>
+    <string name="ffx_bleach" msgid="8946700451603478453">"漂白"</string>
+    <string name="ffx_blue_crush" msgid="6034283412305561226">"藍色"</string>
+    <string name="ffx_bw_contrast" msgid="517988490066217206">"黑白"</string>
+    <string name="ffx_punch" msgid="1343475517872562639">"打孔"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"X 光處理"</string>
+    <string name="ffx_washout" msgid="4594160692176642735">"褐色"</string>
+    <string name="ffx_washout_color" msgid="8034075742195795219">"石版"</string>
   <plurals name="make_albums_available_offline">
     <item quantity="one" msgid="2171596356101611086">"正在將相簿設為可離線瀏覽。"</item>
     <item quantity="other" msgid="4948604338155959389">"正在將相簿設為可離線瀏覽。"</item>
@@ -170,10 +185,18 @@
     <string name="add_account" msgid="4271217504968243974">"新增帳戶"</string>
     <string name="folder_camera" msgid="4714658994809533480">"相機"</string>
     <string name="folder_download" msgid="7186215137642323932">"下載"</string>
+    <string name="folder_edited_online_photos" msgid="6278215510236800181">"已編輯的線上相片"</string>
     <string name="folder_imported" msgid="2773581395524747099">"匯入"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"螢幕擷取畫面"</string>
     <string name="help" msgid="7368960711153618354">"說明"</string>
-
-    <string name="no_storage_title">沒有存儲</string>
-    <string name="no_storage_message">沒有可用的外部存儲.</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"沒有儲存裝置"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"沒有可用的外部儲存裝置"</string>
+    <string name="switch_photo_filmstrip" msgid="8227883354281661548">"幻燈片檢視"</string>
+    <string name="switch_photo_grid" msgid="3681299459107925725">"格狀檢視"</string>
+    <string name="trimming" msgid="9122385768369143997">"修剪中"</string>
+    <string name="please_wait" msgid="7296066089146487366">"請稍候"</string>
+    <string name="save_into" msgid="4960537214388766062">"正在將修剪後的影片儲存至相簿："</string>
+    <string name="trim_too_short" msgid="751593965620665326">"無法修剪：目標影片長度過短"</string>
+    <string name="pano_progress_text" msgid="1586851614586678464">"正在進行全景成像作業"</string>
+    <string name="save" msgid="613976532235060516">"儲存"</string>
 </resources>

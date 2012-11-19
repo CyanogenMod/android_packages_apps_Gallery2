@@ -19,13 +19,14 @@ package com.android.gallery3d.ui;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.Log;
-import android.widget.OverScroller;
+import android.widget.Scroller;
 
+import com.android.gallery3d.app.PhotoPage;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.ui.PhotoView.Size;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.RangeArray;
 import com.android.gallery3d.util.RangeIntArray;
-import com.android.gallery3d.ui.PhotoView.Size;
 
 class PositionController {
     private static final String TAG = "PositionController";
@@ -66,7 +67,7 @@ class PositionController {
         SNAPBACK_ANIMATION_TIME,  // ANIM_KIND_SNAPBACK
         400,  // ANIM_KIND_SLIDE
         300,  // ANIM_KIND_ZOOM
-        400,  // ANIM_KIND_OPENING
+        300,  // ANIM_KIND_OPENING
         0,    // ANIM_KIND_FLING (the duration is calculated dynamically)
         0,    // ANIM_KIND_FLING_X (see the comment above)
         0,    // ANIM_KIND_DELETE (the duration is calculated dynamically)
@@ -110,11 +111,11 @@ class PositionController {
     private Listener mListener;
     private volatile Rect mOpenAnimationRect;
 
-    // Use a large enough value, so we won't see the gray shadown in the beginning.
+    // Use a large enough value, so we won't see the gray shadow in the beginning.
     private int mViewW = 1200;
     private int mViewH = 1200;
 
-    // A scaling guesture is in progress.
+    // A scaling gesture is in progress.
     private boolean mInScale;
     // The focus point of the scaling gesture, relative to the center of the
     // picture in bitmap pixels.
@@ -127,7 +128,7 @@ class PositionController {
     private FlingScroller mPageScroller;
 
     // This is used by the fling animation (film mode).
-    private OverScroller mFilmScroller;
+    private Scroller mFilmScroller;
 
     // The bound of the stable region that the focused box can stay, see the
     // comments above calculateStableBound() for details.
@@ -178,7 +179,7 @@ class PositionController {
     private RangeArray<Gap> mTempGaps =
         new RangeArray<Gap>(-BOX_MAX, BOX_MAX - 1);
 
-    // The output of the PositionController. Available throught getPosition().
+    // The output of the PositionController. Available through getPosition().
     private RangeArray<Rect> mRects = new RangeArray<Rect>(-BOX_MAX, BOX_MAX);
 
     // The direction of a new picture should appear. New pictures pop from top
@@ -210,8 +211,7 @@ class PositionController {
     public PositionController(Context context, Listener listener) {
         mListener = listener;
         mPageScroller = new FlingScroller();
-        mFilmScroller = new OverScroller(context,
-                null /* default interpolator */, false /* no flywheel */);
+        mFilmScroller = new Scroller(context, null, false);
 
         // Initialize the areas.
         initPlatform();
@@ -319,10 +319,10 @@ class PositionController {
         b.mImageW = width;
         b.mImageH = height;
 
-        // If this is the first time we receive an image size, we change the
-        // scale directly. Otherwise adjust the scales by a ratio, and snapback
-        // will animate the scale into the min/max bounds if necessary.
-        if (wasViewSize && !isViewSize) {
+        // If this is the first time we receive an image size or we are in fullscreen,
+        // we change the scale directly. Otherwise adjust the scales by a ratio,
+        // and snapback will animate the scale into the min/max bounds if necessary.
+        if ((wasViewSize && !isViewSize) || !mFilmMode) {
             b.mCurrentScale = getMinimalScale(b);
             b.mAnimationStartTime = NO_ANIMATION;
         } else {
@@ -519,7 +519,7 @@ class PositionController {
         Platform p = mPlatform;
 
         // We want to keep the focus point (on the bitmap) the same as when we
-        // begin the scale guesture, that is,
+        // begin the scale gesture, that is,
         //
         // (focusX' - currentX') / scale' = (focusX - currentX) / scale
         //
@@ -856,6 +856,7 @@ class PositionController {
         //dumpState();
     }
 
+    @SuppressWarnings("unused")
     private void dumpState() {
         for (int i = -BOX_MAX; i < BOX_MAX; i++) {
             Log.d(TAG, "Gap " + i + ": " + mGaps.get(i).mCurrentGap);
@@ -980,6 +981,7 @@ class PositionController {
         g.mAnimationStartTime = NO_ANIMATION;
     }
 
+    @SuppressWarnings("unused")
     private void debugMoveBox(int fromIndex[]) {
         StringBuilder s = new StringBuilder("moveBox:");
         for (int i = 0; i < fromIndex.length; i++) {
@@ -1005,7 +1007,7 @@ class PositionController {
     // N N N N N N N -- all new boxes
     // -3 -2 -1 0 1 2 3 -- nothing changed
     // -2 -1 0 1 2 3 N -- focus goes to the next box
-    // N -3 -2 -1 0 1 2 -- focuse goes to the previous box
+    // N -3 -2 -1 0 1 2 -- focus goes to the previous box
     // -3 -2 -1 1 2 3 N -- the focused box was deleted.
     //
     // hasPrev/hasNext indicates if there are previous/next boxes for the
@@ -1019,7 +1021,7 @@ class PositionController {
 
         RangeIntArray from = new RangeIntArray(fromIndex, -BOX_MAX, BOX_MAX);
 
-        // 1. Get the absolute X coordiates for the boxes.
+        // 1. Get the absolute X coordinates for the boxes.
         layoutAndSetPosition();
         for (int i = -BOX_MAX; i <= BOX_MAX; i++) {
             Box b = mBoxes.get(i);
@@ -1366,7 +1368,7 @@ class PositionController {
         public int mAnimationKind;
         public int mAnimationDuration;
 
-        // This should be overidden in subclass to change the animation values
+        // This should be overridden in subclass to change the animation values
         // give the progress value in [0, 1].
         protected abstract boolean interpolate(float progress);
         public abstract boolean startSnapback();
@@ -1416,11 +1418,9 @@ class PositionController {
                 case ANIM_KIND_CAPTURE:
                     progress = 1 - f;  // linear
                     break;
+                case ANIM_KIND_OPENING:
                 case ANIM_KIND_SCALE:
                     progress = 1 - f * f;  // quadratic
-                    break;
-                case ANIM_KIND_OPENING:
-                    progress = 1 - f * f * f;  // x^3
                     break;
                 case ANIM_KIND_SNAPBACK:
                 case ANIM_KIND_ZOOM:
@@ -1456,9 +1456,7 @@ class PositionController {
             int x = mCurrentX;
             int y = mDefaultY;
             if (mFilmMode) {
-                int defaultX = mDefaultX;
-                if (!mHasNext) x = Math.max(x, defaultX);
-                if (!mHasPrev) x = Math.min(x, defaultX);
+                x = mDefaultX;
             } else {
                 calculateStableBound(scale, HORIZONTAL_SLACK);
                 // If the picture is zoomed-in, we want to keep the focus point
@@ -1541,8 +1539,9 @@ class PositionController {
                 }
             }
             if (dir != EdgeView.INVALID_DIRECTION) {
-                int v = (int) (mFilmScroller.getCurrVelocity() + 0.5f);
-                mListener.onAbsorb(v, dir);
+                // TODO: restore this onAbsorb call
+                //int v = (int) (mFilmScroller.getCurrVelocity() + 0.5f);
+                //mListener.onAbsorb(v, dir);
                 mFilmScroller.forceFinished(true);
                 mCurrentX = mDefaultX;
             }

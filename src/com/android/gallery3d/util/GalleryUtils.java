@@ -16,7 +16,7 @@
 
 package com.android.gallery3d.util;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.ConditionVariable;
 import android.os.Environment;
@@ -36,9 +37,12 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.app.Gallery;
 import com.android.gallery3d.app.PackagesMonitor;
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.ui.TiledScreenNail;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
@@ -52,9 +56,11 @@ public class GalleryUtils {
     private static final String MAPS_CLASS_NAME = "com.google.android.maps.MapsActivity";
     private static final String CAMERA_LAUNCHER_NAME = "com.android.camera.CameraLauncher";
 
-    private static final String MIME_TYPE_IMAGE = "image/*";
-    private static final String MIME_TYPE_VIDEO = "video/*";
-    private static final String MIME_TYPE_ALL = "*/*";
+    public static final String MIME_TYPE_IMAGE = "image/*";
+    public static final String MIME_TYPE_VIDEO = "video/*";
+    public static final String MIME_TYPE_PANORAMA360 = "application/vnd.google.panorama360+jpg";
+    public static final String MIME_TYPE_ALL = "*/*";
+
     private static final String DIR_TYPE_IMAGE = "vnd.android.cursor.dir/image";
     private static final String DIR_TYPE_VIDEO = "vnd.android.cursor.dir/video";
 
@@ -69,13 +75,40 @@ public class GalleryUtils {
     private static boolean sCameraAvailable;
 
     public static void initialize(Context context) {
-        if (sPixelDensity < 0) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            WindowManager wm = (WindowManager)
-                    context.getSystemService(Context.WINDOW_SERVICE);
-            wm.getDefaultDisplay().getMetrics(metrics);
-            sPixelDensity = metrics.density;
-        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        sPixelDensity = metrics.density;
+        Resources r = context.getResources();
+        TiledScreenNail.setPlaceholderColor(r.getColor(
+                R.color.bitmap_screennail_placeholder));
+        initializeThumbnailSizes(metrics, r);
+    }
+
+    private static void initializeThumbnailSizes(DisplayMetrics metrics, Resources r) {
+        int maxPixels = Math.max(metrics.heightPixels, metrics.widthPixels);
+
+        // For screen-nails, we never need to completely fill the screen
+        MediaItem.setThumbnailSizes(maxPixels / 2, maxPixels / 5);
+        TiledScreenNail.setMaxSide(maxPixels / 2);
+    }
+
+    public static boolean isHighResolution(Context context) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        return metrics.heightPixels > 2048 ||  metrics.widthPixels > 2048;
+    }
+
+    public static float[] intColorToFloatARGBArray(int from) {
+        return new float[] {
+            Color.alpha(from) / 255f,
+            Color.red(from) / 255f,
+            Color.green(from) / 255f,
+            Color.blue(from) / 255f
+        };
     }
 
     public static float dpToPixel(float dp) {
@@ -164,6 +197,7 @@ public class GalleryUtils {
     public static void fakeBusy(JobContext jc, int timeout) {
         final ConditionVariable cv = new ConditionVariable();
         jc.setCancelListener(new CancelListener() {
+            @Override
             public void onCancel() {
                 cv.open();
             }
@@ -221,6 +255,11 @@ public class GalleryUtils {
         Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void startGalleryActivity(Context context) {
+        Intent intent = new Intent(context, Gallery.class);
         context.startActivity(intent);
     }
 
@@ -290,6 +329,7 @@ public class GalleryUtils {
         return durationValue;
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public static int determineTypeBits(Context context, Intent intent) {
         int typeBits = 0;
         String type = intent.resolveType(context);
@@ -306,8 +346,10 @@ public class GalleryUtils {
             typeBits = DataManager.INCLUDE_ALL;
         }
 
-        if (intent.getBooleanExtra(Intent.EXTRA_LOCAL_ONLY, false)) {
-            typeBits |= DataManager.INCLUDE_LOCAL_ONLY;
+        if (ApiHelper.HAS_INTENT_EXTRA_LOCAL_ONLY) {
+            if (intent.getBooleanExtra(Intent.EXTRA_LOCAL_ONLY, false)) {
+                typeBits |= DataManager.INCLUDE_LOCAL_ONLY;
+            }
         }
 
         return typeBits;
