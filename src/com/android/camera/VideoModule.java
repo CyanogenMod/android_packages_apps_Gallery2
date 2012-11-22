@@ -453,7 +453,8 @@ public class VideoModule implements CameraModule,
         }
 
         MediaSaveService s = mActivity.getMediaSaveService();
-        if (mPaused || mSnapshotInProgress || effectsActive() || s == null || s.isQueueFull()) {
+        if (mPaused || mSnapshotInProgress || effectsActive() || s == null || s.isQueueFull()
+            || !Util.isVideoSnapshotSupported(mParameters)) {
             return;
         }
 
