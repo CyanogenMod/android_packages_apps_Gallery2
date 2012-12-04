@@ -67,7 +67,8 @@ public class VideoMenu extends PieController
                 CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
-                CameraSettings.KEY_STORAGE
+                CameraSettings.KEY_STORAGE,
+                CameraSettings.KEY_POWER_SHUTTER
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(mActivity.getResources().getString(R.string.camera_menu_settings_label));
