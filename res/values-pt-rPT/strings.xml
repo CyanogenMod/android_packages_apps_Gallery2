@@ -41,23 +41,23 @@
     <string name="select_image" msgid="7841406150484742140">"Seleccionar fotog."</string>
     <string name="select_video" msgid="4859510992798615076">"Seleccionar vídeo"</string>
     <string name="select_item" msgid="2816923896202086390">"Seleccionar item"</string>
-    <string name="select_album" msgid="1557063764849434077">"Selecionar álbum"</string>
-    <string name="select_group" msgid="6744208543323307114">"Selecionar grupo"</string>
+    <string name="select_album" msgid="1557063764849434077">"Seleccionar álbum"</string>
+    <string name="select_group" msgid="6744208543323307114">"Seleccionar grupo"</string>
     <string name="set_image" msgid="2331476809308010401">"Definir imagem como"</string>
     <string name="set_wallpaper" msgid="8491121226190175017">"Definir imagem fundo"</string>
     <string name="wallpaper" msgid="140165383777262070">"A definir imagem de fundo…"</string>
     <string name="camera_setas_wallpaper" msgid="797463183863414289">"Imagem de fundo"</string>
     <string name="delete" msgid="2839695998251824487">"Eliminar"</string>
   <plurals name="delete_selection">
-    <item quantity="one" msgid="6453379735401083732">"Eliminar item selecionado?"</item>
-    <item quantity="other" msgid="5874316486520635333">"Eliminar itens selecionados?"</item>
+    <item quantity="one" msgid="6453379735401083732">"Eliminar item seleccionado?"</item>
+    <item quantity="other" msgid="5874316486520635333">"Eliminar itens seleccionados?"</item>
   </plurals>
     <string name="confirm" msgid="8646870096527848520">"Confirmar"</string>
     <string name="cancel" msgid="3637516880917356226">"Cancelar"</string>
     <string name="share" msgid="3619042788254195341">"Partilhar"</string>
     <string name="deleted" msgid="6795433049119073871">"Eliminada"</string>
     <string name="undo" msgid="2930873956446586313">"ANULAR"</string>
-    <string name="select_all" msgid="3403283025220282175">"Selecionar tudo"</string>
+    <string name="select_all" msgid="3403283025220282175">"Seleccionar tudo"</string>
     <string name="deselect_all" msgid="5758897506061723684">"Desmarcar tudo"</string>
     <string name="slideshow" msgid="4355906903247112975">"Apresentação de diapositivos"</string>
     <string name="details" msgid="8415120088556445230">"Detalhes"</string>
@@ -65,19 +65,19 @@
     <string name="close" msgid="5585646033158453043">"Fechar"</string>
     <string name="switch_to_camera" msgid="7280111806675169992">"Mudar para Câmara"</string>
   <plurals name="number_of_items_selected">
-    <item quantity="zero" msgid="2142579311530586258">"%1$d selecionado(s)"</item>
-    <item quantity="one" msgid="2478365152745637768">"%1$d selecionado(s)"</item>
-    <item quantity="other" msgid="754722656147810487">"%1$d selecionado(s)"</item>
+    <item quantity="zero" msgid="2142579311530586258">"%1$d seleccionado(s)"</item>
+    <item quantity="one" msgid="2478365152745637768">"%1$d seleccionado(s)"</item>
+    <item quantity="other" msgid="754722656147810487">"%1$d seleccionado(s)"</item>
   </plurals>
   <plurals name="number_of_albums_selected">
-    <item quantity="zero" msgid="749292746814788132">"%1$d selecionado(s)"</item>
-    <item quantity="one" msgid="6184377003099987825">"%1$d selecionado(s)"</item>
-    <item quantity="other" msgid="53105607141906130">"%1$d selecionado(s)"</item>
+    <item quantity="zero" msgid="749292746814788132">"%1$d seleccionado(s)"</item>
+    <item quantity="one" msgid="6184377003099987825">"%1$d seleccionado(s)"</item>
+    <item quantity="other" msgid="53105607141906130">"%1$d seleccionado(s)"</item>
   </plurals>
   <plurals name="number_of_groups_selected">
-    <item quantity="zero" msgid="3466388370310869238">"%1$d selecionado(s)"</item>
-    <item quantity="one" msgid="5030162638216034260">"%1$d selecionado(s)"</item>
-    <item quantity="other" msgid="3512041363942842738">"%1$d selecionado(s)"</item>
+    <item quantity="zero" msgid="3466388370310869238">"%1$d seleccionado(s)"</item>
+    <item quantity="one" msgid="5030162638216034260">"%1$d seleccionado(s)"</item>
+    <item quantity="other" msgid="3512041363942842738">"%1$d seleccionado(s)"</item>
   </plurals>
     <string name="show_on_map" msgid="6157544221201750980">"Mostrar no mapa"</string>
     <string name="rotate_left" msgid="5888273317282539839">"Rodar para a esquerda"</string>
@@ -109,7 +109,7 @@
     <string name="empty_album" msgid="4542880442593595494">"0 imagens/vídeos disponíveis."</string>
     <string name="picasa_posts" msgid="1497721615718760613">"Mensagens"</string>
     <string name="make_available_offline" msgid="5157950985488297112">"Disponibilizar off-line"</string>
-    <string name="sync_picasa_albums" msgid="8522572542111169872">"Atualizar"</string>
+    <string name="sync_picasa_albums" msgid="8522572542111169872">"Actualizar"</string>
     <string name="done" msgid="217672440064436595">"Concluído"</string>
     <string name="sequence_in_set" msgid="7235465319919457488">"%1$d de %2$d itens:"</string>
     <string name="title" msgid="7622928349908052569">"Título"</string>
