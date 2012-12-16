@@ -72,6 +72,12 @@ public class CameraSettings {
     public static final String KEY_STORAGE = "pref_camera_storage_key";
     public static final String KEY_VIDEO_HDR = "pref_camera_video_hdr_key";
     public static final String KEY_POWER_SHUTTER = "pref_power_shutter";
+    public static final String KEY_ISO_MODE = "pref_camera_iso_key";
+    public static final String KEY_JPEG = "pref_camera_jpeg_key";
+    public static final String KEY_VIDEOCAMERA_JPEG = "pref_camera_video_jpeg_key";
+    public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
+    public static final String KEY_VIDEOCAMERA_COLOR_EFFECT = "pref_camera_video_coloreffect_key";
+    public static final String KEY_BURST_MODE = "pref_camera_burst_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
@@ -185,6 +191,9 @@ public class CameraSettings {
         ListPreference cameraHdr = group.findPreference(KEY_CAMERA_HDR);
         ListPreference storage = group.findPreference(KEY_STORAGE);
         ListPreference videoHdr = group.findPreference(KEY_VIDEO_HDR);
+        ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
+        ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
+        ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -248,6 +257,18 @@ public class CameraSettings {
                 removePreference(group, videoHdr.getKey());
             }
             filterUnsupportedOptions(group, videoHdr, mParameters.getSupportedVideoHDRModes());
+        }
+        if (isoMode != null) {
+            filterUnsupportedOptions(group,
+                    isoMode, mParameters.getSupportedIsoValues());
+        }
+        if (colorEffect != null) {
+            filterUnsupportedOptions(group,
+                    colorEffect, mParameters.getSupportedColorEffects());
+        }
+        if (videoColorEffect != null) {
+            filterUnsupportedOptions(group,
+                    videoColorEffect, mParameters.getSupportedColorEffects());
         }
         if (storage != null) {
             buildStorage(group, storage);
