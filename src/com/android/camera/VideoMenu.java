@@ -67,6 +67,11 @@ public class VideoMenu extends PieController
             item = makeItem(CameraSettings.KEY_WHITE_BALANCE);
             mRenderer.addItem(item);
         }
+        // exposure compensation
+        if (group.findPreference(CameraSettings.KEY_EXPOSURE) != null) {
+            item = makeItem(CameraSettings.KEY_EXPOSURE);
+            mRenderer.addItem(item);
+        }
         // settings popup
         mOtherKeys = new String[] {
                 CameraSettings.KEY_VIDEO_EFFECT,
@@ -74,7 +79,9 @@ public class VideoMenu extends PieController
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_STORAGE,
-                CameraSettings.KEY_POWER_SHUTTER
+                CameraSettings.KEY_POWER_SHUTTER,
+                CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
+                CameraSettings.KEY_VIDEOCAMERA_JPEG
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(mActivity.getResources().getString(R.string.camera_menu_settings_label));

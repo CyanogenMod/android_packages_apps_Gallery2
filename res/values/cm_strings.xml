@@ -145,4 +145,85 @@
     <!-- More Settings screen, power button title -->
     <string name="pref_camera_power_shutter_title">Power shutter</string>
     <string name="pref_camera_power_shutter_default" translatable="false">off</string>
+
+    <!-- Settings screen, ISO -->
+    <string name="pref_camera_iso_title" translatable="false">ISO</string>
+    <string name="pref_camera_iso_default" translatable="false">auto</string>
+
+    <!-- Settings screen, ISO dialog choices -->
+    <string name="pref_camera_iso_entry_auto">Auto</string>
+    <string name="pref_camera_iso_entry_isodeblur">Auto (HJR)</string>
+    <string name="pref_camera_iso_entry_isosports">Sports</string>
+    <string name="pref_camera_iso_entry_isonight">Night</string>
+    <string name="pref_camera_iso_entry_isomovie">Movie</string>
+    <string name="pref_camera_iso_entry_iso6400" translatable="false">6400</string>
+    <string name="pref_camera_iso_entry_iso3200" translatable="false">3200</string>
+    <string name="pref_camera_iso_entry_iso2500" translatable="false">2500</string>
+    <string name="pref_camera_iso_entry_iso2000" translatable="false">2000</string>
+    <string name="pref_camera_iso_entry_iso1600" translatable="false">1600</string>
+    <string name="pref_camera_iso_entry_iso1250" translatable="false">1250</string>
+    <string name="pref_camera_iso_entry_iso1200" translatable="false">1200</string>
+    <string name="pref_camera_iso_entry_iso1000" translatable="false">1000</string>
+    <string name="pref_camera_iso_entry_iso800" translatable="false">800</string>
+    <string name="pref_camera_iso_entry_iso640" translatable="false">640</string>
+    <string name="pref_camera_iso_entry_iso500" translatable="false">500</string>
+    <string name="pref_camera_iso_entry_iso400" translatable="false">400</string>
+    <string name="pref_camera_iso_entry_iso320" translatable="false">320</string>
+    <string name="pref_camera_iso_entry_iso250" translatable="false">250</string>
+    <string name="pref_camera_iso_entry_iso200" translatable="false">200</string>
+    <string name="pref_camera_iso_entry_iso160" translatable="false">160</string>
+    <string name="pref_camera_iso_entry_iso125" translatable="false">125</string>
+    <string name="pref_camera_iso_entry_iso100" translatable="false">100</string>
+    <string name="pref_camera_iso_entry_iso50" translatable="false">50</string>
+
+    <!-- Settings screen, JPEG Quality -->
+    <string name="pref_camera_jpeg_title">JPEG quality</string>
+    <string name="pref_video_jpeg_title">Encoding quality</string>
+    <string name="pref_camera_jpeg_default" translatable="false">90</string>
+
+    <!-- Settings screen, JPEG dialog choices -->
+    <string name="pref_camera_jpeg_entry_super">Super</string>
+    <string name="pref_camera_jpeg_entry_high">High</string>
+    <string name="pref_camera_jpeg_entry_medium">Medium</string>
+    <string name="pref_camera_jpeg_entry_low">Low</string>
+
+    <!-- Settings screen, Select Color effect title -->
+    <string name="pref_camera_coloreffect_title">Color effect</string>
+    <string name="pref_camera_coloreffect_default" translatable="false">none</string>
+
+    <!-- Settings screen, Color effect dialog choices -->
+    <string name="pref_camera_coloreffect_entry_none">None</string>
+    <string name="pref_camera_coloreffect_entry_mono">Mono</string>
+    <string name="pref_camera_coloreffect_entry_sepia">Sepia</string>
+    <string name="pref_camera_coloreffect_entry_negative">Negative</string>
+    <string name="pref_camera_coloreffect_entry_solarize">Solarize</string>
+    <string name="pref_camera_coloreffect_entry_posterize">Posterize</string>
+    <string name="pref_camera_coloreffect_entry_aqua">Aqua</string>
+    <string name="pref_camera_coloreffect_entry_emboss">Emboss</string>
+    <string name="pref_camera_coloreffect_entry_sketch">Sketch</string>
+    <string name="pref_camera_coloreffect_entry_neon">Neon</string>
+    <string name="pref_camera_coloreffect_entry_pastel">Pastel</string>
+    <string name="pref_camera_coloreffect_entry_mosaic">Mosaic</string>
+    <string name="pref_camera_coloreffect_entry_redtint">Red tint</string>
+    <string name="pref_camera_coloreffect_entry_bluetint">Blue tint</string>
+    <string name="pref_camera_coloreffect_entry_greentint">Green tint</string>
+    <string name="pref_camera_coloreffect_entry_washed">Washed</string>
+    <string name="pref_camera_coloreffect_entry_vintage_warm">Vintage warm</string>
+    <string name="pref_camera_coloreffect_entry_vintage_cold">Vintage cold</string>
+    <string name="pref_camera_coloreffect_entry_point_blue">Point blue</string>
+    <string name="pref_camera_coloreffect_entry_point_green">Point green</string>
+    <string name="pref_camera_coloreffect_entry_point_red_yellow">Point red-yellow</string>
+    <string name="pref_camera_coloreffect_entry_cartoonize">Cartoonize</string>
+
+    <!-- Settings screen, Burst mode title -->
+    <string name="pref_camera_burst_title">Burst mode</string>
+    <string name="pref_camera_burst_default" translatable="false">1</string>
+
+    <!-- Settings screen, Burst mode entries -->
+    <string name="pref_camera_burst_entry_off">Off</string>
+    <string name="pref_camera_burst_entry_5">5 shots</string>
+    <string name="pref_camera_burst_entry_10">10 shots</string>
+    <string name="pref_camera_burst_entry_15">15 shots</string>
+    <string name="pref_camera_burst_entry_20">20 shots</string>
+
 </resources>
