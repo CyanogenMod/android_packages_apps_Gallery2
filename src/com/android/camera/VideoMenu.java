@@ -16,6 +16,7 @@
 
 package com.android.camera;
 
+import android.content.res.Resources;
 import android.content.Context;
 import android.view.LayoutInflater;
 
@@ -56,9 +57,17 @@ public class VideoMenu extends PieController
         mPopup = null;
         mPopupStatus = POPUP_NONE;
         PieItem item = null;
+        final Resources res = mActivity.getResources();
         // white balance
         if (group.findPreference(CameraSettings.KEY_WHITE_BALANCE) != null) {
             item = makeItem(CameraSettings.KEY_WHITE_BALANCE);
+            item.setLabel(res.getString(R.string.pref_camera_whitebalance_label));
+            mRenderer.addItem(item);
+        }
+        // exposure compensation
+        if (group.findPreference(CameraSettings.KEY_EXPOSURE) != null) {
+            item = makeItem(CameraSettings.KEY_EXPOSURE);
+            item.setLabel(res.getString(R.string.pref_exposure_label));
             mRenderer.addItem(item);
         }
         // settings popup
@@ -68,7 +77,9 @@ public class VideoMenu extends PieController
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_STORAGE,
-                CameraSettings.KEY_POWER_SHUTTER
+                CameraSettings.KEY_POWER_SHUTTER,
+                CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
+                CameraSettings.KEY_VIDEOCAMERA_JPEG
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(mActivity.getResources().getString(R.string.camera_menu_settings_label));
