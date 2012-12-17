@@ -56,13 +56,12 @@ public class LinkedNode {
         }
 
         public T nextOf(T node) {
-            return (T) (node.mNext == mHead ? null : node.mNext);
+            return (T) (((LinkedNode)node).mNext == mHead ? null : ((LinkedNode)node).mNext);
         }
 
         public T previousOf(T node) {
-            return (T) (node.mPrev == mHead ? null : node.mPrev);
+            return (T) (((LinkedNode)node).mPrev == mHead ? null : ((LinkedNode)node).mPrev);
         }
-
     }
 
     public static <T extends LinkedNode> List<T> newList() {
