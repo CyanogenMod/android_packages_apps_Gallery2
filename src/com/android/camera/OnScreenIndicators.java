@@ -181,7 +181,7 @@ public class OnScreenIndicators {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_slowshutter);
         } else if (Parameters.SCENE_MODE_AUTO.equals(value)) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
-        } else if (Parameters.SCENE_MODE_HDR.equals(value)) {
+        } else if ((Parameters.SCENE_MODE_HDR.equals(value)) || Util.getDoSoftwareHDRShot()) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_hdr);
         } else {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_on);

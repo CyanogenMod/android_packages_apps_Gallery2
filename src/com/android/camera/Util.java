@@ -114,7 +114,9 @@ public class Util {
 
     public static boolean isCameraHdrSupported(Parameters params) {
         List<String> supported = params.getSupportedSceneModes();
-        return (supported != null) && supported.contains(SCENE_MODE_HDR);
+        boolean ret = (supported != null) && supported.contains(SCENE_MODE_HDR);
+        if (ret && sEnableSoftwareHDR) { sEnableSoftwareHDR = false; }
+        return ret;
     }
 
     public static boolean hasCameraKey() {
@@ -174,6 +176,11 @@ public class Util {
     // Get available hardware keys
     private static int sDeviceKeysPresent;
 
+    // Software HDR based on manual shots with multiple exposure
+    private static boolean sEnableSoftwareHDR;
+    private static boolean sDoSoftwareHDRShot;
+    private static int sSoftwareHDRExposureSettleTime;
+
     private Util() {
     }
 
@@ -205,6 +212,11 @@ public class Util {
 
         sDeviceKeysPresent = context.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
+
+        sEnableSoftwareHDR = !context.getResources().getBoolean(R.bool.disableSoftwareHDR);
+        sSoftwareHDRExposureSettleTime = context.getResources().getInteger(
+                R.integer.softwareHDRExposureSettleTime);
+        sDoSoftwareHDRShot = false;
 
     }
 
@@ -241,6 +253,22 @@ public class Util {
 
     public static boolean noFocusModeChangeForTouch() {
         return sNoFocusModeChangeForTouch;
+    }
+
+    public static boolean useSoftwareHDR() {
+        return sEnableSoftwareHDR;
+    }
+
+    public static void setDoSoftwareHDRShot(boolean enable) {
+        sDoSoftwareHDRShot = enable;
+    }
+
+    public static boolean getDoSoftwareHDRShot() {
+        return sDoSoftwareHDRShot;
+    }
+
+    public static int getSoftwareHDRExposureSettleTime() {
+        return sSoftwareHDRExposureSettleTime;
     }
 
     // Rotates the bitmap by the specified degree.

@@ -54,4 +54,8 @@
     <bool name="enableVideoHDR">false</bool>
     <!-- Panorama focus mode.  Use FOCUS_MODE_INFINITY by default -->
     <bool name="useInfinityFocus">true</bool>
+    <!-- Disable software HDR on non-hw HDR devices -->
+    <bool name="disableSoftwareHDR">false</bool>
+    <!-- Time needed for exposure change to be effective for Software HDR (ms) -->
+    <integer name="softwareHDRExposureSettleTime">800</integer>
 </resources>
