@@ -27,9 +27,16 @@
     <item android:id="@+id/action_sync_picasa_albums"
             android:title="@string/sync_picasa_albums"
             android:showAsAction="never" />
+
+<!-- Comment out to enable Settings in menu. This should be done when
+     GallerySettings.java has content, as it is currently empty.
+     Also comment out the settings case at AlbumSetPage.onItemSelected method.
+
     <item android:id="@+id/action_settings"
             android:title="@string/settings"
             android:showAsAction="never" />
+-->
+
     <item android:id="@+id/action_general_help"
             android:title="@string/help"
             android:visible="false"
