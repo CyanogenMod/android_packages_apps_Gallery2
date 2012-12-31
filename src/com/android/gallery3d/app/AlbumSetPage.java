@@ -618,10 +618,15 @@ public class AlbumSetPage extends ActivityState implements
                 PicasaSource.requestSync(activity);
                 return true;
             }
+/*   Comment out to enable Settings in menu. This should be done when
+     GallerySettings.java has content, as it is currently empty.
+     Also comment out the settings item at albumset.xml menu.
+
             case R.id.action_settings: {
                 activity.startActivity(new Intent(activity, GallerySettings.class));
                 return true;
             }
+*/
             default:
                 return false;
         }
