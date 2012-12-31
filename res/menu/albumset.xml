@@ -30,6 +30,7 @@
 
 <!-- Comment out to enable Settings in menu. This should be done when
      GallerySettings.java has content, as it is currently empty.
+     Also comment out the settings case at AlbumSetPage.onItemSelected method.
 
     <item android:id="@+id/action_settings"
             android:title="@string/settings"
