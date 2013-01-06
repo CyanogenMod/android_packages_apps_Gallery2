@@ -103,7 +103,120 @@
     <!-- Toast/alert after saving wallpaper -->
     <string name="wallpaper">Setting wallpaper\u2026</string>
     <string name="camera_setas_wallpaper">Wallpaper</string>
+    <!-- Preference title for whether the user should be prompted form confirmation when deleting images  -->
+    <string name="pref_gallery_confirm_delete_title">Confirm deletions</string>
 
+    <!-- Preference summary for whether the user should be prompted form confirmation when deleting images  -->
+    <string name="pref_gallery_confirm_delete_summary">Show confirmation before deleting a picture or video</string>
+    <!-- Settings screen, section heading  -->
+    <string name="pref_gallery_category">General settings</string>
+
+    <!-- Settings screen, section heading  -->
+    <string name="pref_slideshow_category">Slideshow settings</string>
+
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_size_title">Display size</string>
+
+    <!-- Settings screen, title for preference for image size to be used in the im -->
+    <string name="pref_gallery_size_summary">Choose the display size of pictures and videos</string>
+    <!-- Title of dialog that appears after selecting Picture size setting option -->
+    <string name="pref_gallery_size_dialogtitle">Picture size</string>
+    <!-- Options in dialog that appears after selecting Picture size setting option -->
+    <string-array name="pref_gallery_size_choices">
+        <!-- size choice of "large" -->
+        <item>Large</item>
+        <!-- size choice of "small" -->
+        <item>Small</item>
+    </string-array>
+    <!-- Option values in dialog that appears after selecting Picture size setting option -->
+    <string-array name="pref_gallery_size_values" translatable="false">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <!-- Default option value in dialog that appears after selecting Picture size setting option -->
+    <string name="default_value_pref_gallery_size" translatable="false">1</string>
+    <!-- Settings screen, setting option name -->
+    <string name="pref_gallery_sort_title">Sort order</string>
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_sort_summary">Choose the sort order of pictures and videos</string>
+    <!-- Title of dialog that appears after selecting Picture sort setting option -->
+    <string name="pref_gallery_sort_dialogtitle">Picture sort</string>
+    <!-- Options in dialog that appears after selecting Picture sort setting option -->
+    <string-array name="pref_gallery_sort_choices">
+        <!-- Preference choice to show "newest first" -->
+        <item>Newest first</item>
+        <!-- Preference choice to show "newest last" -->
+        <item>Newest last</item>
+    </string-array>
+    <!-- Option values in dialog that appears after selecting Picture sort setting option -->
+    <string-array name="pref_gallery_sort_values" translatable="false">
+        <item>descending</item>
+        <item>ascending</item>
+    </string-array>
+    <!-- Default option value in dialog that appears after selecting Picture sort setting option -->
+    <string name="default_value_pref_gallery_sort" translatable="false">descending</string>
+    <!-- Settings screen, setting option name -->
+    <string name="pref_gallery_slideshow_interval_title">Slideshow interval</string>
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_slideshow_interval_summary">Choose how long each slide displays in the show</string>
+    <!-- Title of dialog that appears after selecting Slideshow interval setting option -->
+    <string name="pref_gallery_slideshow_interval_dialogtitle">Slideshow interval</string>
+    <!-- Options in dialog that appears after selecting Slideshow interval setting option -->
+    <string-array name="pref_gallery_slideshow_interval_choices">
+        <!-- slide show interval "N seconds" where N is 2 -->
+        <item>2 seconds</item>
+        <!-- slide show interval "N seconds" where N is 3 -->
+        <item>3 seconds</item>
+        <!-- slide show interval "N seconds" where N is 4 -->
+        <item>4 seconds</item>
+    </string-array>
+    <!-- Option values in dialog that appears after selecting Slideshow interval setting option -->
+    <string-array name="pref_gallery_slideshow_interval_values" translatable="false">
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+    </string-array>
+    <!-- Default option value in dialog that appears after selecting Slideshow interval setting option -->
+    <string name="default_value_pref_gallery_slideshow_interval" translatable="false">"2"</string>
+    <!-- Settings screen, setting option name -->
+    <string name="pref_gallery_slideshow_transition_title">Slideshow transition</string>
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_slideshow_transition_summary">Choose the effect used when moving from one slide to the next</string>
+    <!-- Title of dialog that appears after selecting Slideshow transition setting option -->
+    <string name="pref_gallery_slideshow_transition_dialogtitle">Slideshow transition</string>
+    <!-- Options in dialog that appears after selecting Slideshow transition
+     setting option -->
+    <string-array name="pref_gallery_slideshow_transition_choices">
+        <!-- Slide show transition to fade in and fade out -->
+        <item>Fade in &amp; out</item>
+        <!-- Slide show transition to slide in and out from the left and right -->
+        <item>Slide left - right</item>
+        <!-- Slide show transition to slide in and out from the top and bottom -->
+        <item>Slide up - down</item>
+        <!-- Slide show transition to be chosen randomly -->
+        <item>Random selection</item>
+    </string-array>
+    <!-- Option values in dialog that appears after selecting Slideshow transition setting option -->
+    <string-array name="pref_gallery_slideshow_transition_values" translatable="false">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"-1"</item>
+    </string-array>
+    <!-- Default option value in dialog that appears after selecting Slideshow transition setting option -->
+    <string name="default_value_pref_gallery_slideshow_transition" translatable="false">"0"</string>
+
+    <!-- Settings screen, setting check box name -->
+    <string name="pref_gallery_slideshow_repeat_title">Repeat slideshow</string>
+
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_slideshow_repeat_summary">Play slideshow more than once</string>
+
+    <!-- Settings screen, setting check box name -->
+    <string name="pref_gallery_slideshow_shuffle_title">Shuffle slides</string>
+
+    <!-- Settings screen, setting summary text -->
+    <string name="pref_gallery_slideshow_shuffle_summary">Show pictures in random order</string>
     <!-- Details dialog "OK" button. Dismisses dialog. -->
     <string name="delete">Delete</string>
     <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->

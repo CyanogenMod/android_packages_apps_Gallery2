@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.gallery3d.settings;
 
+import com.android.gallery3d.R;
+
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 public class GallerySettings extends PreferenceActivity {
     private static final String TAG = "GallerySettings";
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        addPreferencesFromResource(R.xml.gallery_preferences);
+    }
 }
