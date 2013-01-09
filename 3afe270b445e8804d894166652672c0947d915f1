@@ -1,0 +1,9 @@
+Change-Id: I3afe270b445e8804d894166652672c0947d915f1
+Code-Review+2: Danny Baumann <dannybaumann@web.de>
+Verified+1: Danny Baumann <dannybaumann@web.de>
+Code-Review+1: David van Tonder <david.vantonder@gmail.com>
+Submitted-by: Danny Baumann <dannybaumann@web.de>
+Submitted-at: Wed, 09 Jan 2013 12:11:52 -0800
+Reviewed-on: http://review.cyanogenmod.org/29972
+Project: CyanogenMod/android_packages_apps_Gallery2
+Branch: refs/heads/cm-10.1
