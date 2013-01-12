@@ -58,7 +58,6 @@ public class FocusOverlayManager {
     private static final String TAG = "CAM_FocusManager";
 
     private static final int RESET_TOUCH_FOCUS = 0;
-    private static final int RESET_TOUCH_FOCUS_DELAY = 3000;
 
     private int mState = STATE_IDLE;
     private static final int STATE_IDLE = 0; // Focus is not active.
@@ -103,6 +102,8 @@ public class FocusOverlayManager {
         public void pauseFaceDetection();
         public void resumeFaceDetection();
     }
+
+    private int mFocusTime; // time after touch-to-focus
 
     public interface Listener {
         public void autoFocus();
@@ -255,6 +256,11 @@ public class FocusOverlayManager {
         }
     }
 
+    // set touch-to-focus duration
+    public void setFocusTime(int time) {
+        mFocusTime = time;
+    }
+
     public void onAutoFocus(boolean focused, boolean shutterButtonPressed) {
         if (mState == STATE_FOCUSING_SNAP_ON_FINISH) {
             // Take the picture no matter focus succeeds or fails. No need
@@ -279,8 +285,8 @@ public class FocusOverlayManager {
             updateFocusUI();
             // If this is triggered by touch focus, cancel focus after a
             // while.
-            if (!mFocusDefault) {
-                mHandler.sendEmptyMessageDelayed(RESET_TOUCH_FOCUS, RESET_TOUCH_FOCUS_DELAY);
+            if ((!mFocusDefault) && (mFocusTime != 0)) {
+                mHandler.sendEmptyMessageDelayed(RESET_TOUCH_FOCUS, mFocusTime);
             }
             if (shutterButtonPressed) {
                 // Lock AE & AWB so users can half-press shutter and recompose.
@@ -370,9 +376,10 @@ public class FocusOverlayManager {
             autoFocus();
         } else {  // Just show the indicator in all other cases.
             updateFocusUI();
-            // Reset the metering area in 3 seconds.
             mHandler.removeMessages(RESET_TOUCH_FOCUS);
-            mHandler.sendEmptyMessageDelayed(RESET_TOUCH_FOCUS, RESET_TOUCH_FOCUS_DELAY);
+            if (mFocusTime != 0) {
+                mHandler.sendEmptyMessageDelayed(RESET_TOUCH_FOCUS, mFocusTime);
+            }
         }
     }
 
