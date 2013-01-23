@@ -27,9 +27,15 @@
     <item android:id="@+id/action_sync_picasa_albums"
             android:title="@string/sync_picasa_albums"
             android:showAsAction="never" />
+
+ <!-- Settings visibility in menu set to false because they are empty.
+      This should be set to true when GallerySettings.java has content.
+ -->
     <item android:id="@+id/action_settings"
             android:title="@string/settings"
+            android:visible="false"
             android:showAsAction="never" />
+
     <item android:id="@+id/action_general_help"
             android:title="@string/help"
             android:visible="false"
