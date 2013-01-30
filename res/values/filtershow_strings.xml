@@ -39,6 +39,10 @@
     <string name="filtershow_undo">Undo</string>
     <!--  Text for redo menu item [CHAR LIMIT=20] -->
     <string name="filtershow_redo">Redo</string>
+    <!--  Text for undo toast message -->
+    <string name="filtershow_undo_toast">Undo</string>
+    <!--  Text for redo toast message -->
+    <string name="filtershow_redo_toast">Redo</string>
     <!--  Text for the history panel menu item [CHAR LIMIT=20] -->
     <string name="show_history_panel">Show History</string>
     <!--  Text for the history panel menu item [CHAR LIMIT=20] -->
