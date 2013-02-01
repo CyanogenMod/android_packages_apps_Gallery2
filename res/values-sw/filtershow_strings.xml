@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Umekamilisha"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Tendua"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Rudia"</string>
+    <string name="filtershow_undo_toast">Tendua</string>
+    <string name="filtershow_redo_toast">Rudia</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Onyesha Historia"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Ficha Historia"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Onyesha Hali ya Picha"</string>

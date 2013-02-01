@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Hotovo"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Späť"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Znova"</string>
+    <string name="filtershow_undo_toast">Späť</string>
+    <string name="filtershow_redo_toast">Znova</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Zobraziť históriu"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Skryť históriu"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Zobraz. stav obrázka"</string>

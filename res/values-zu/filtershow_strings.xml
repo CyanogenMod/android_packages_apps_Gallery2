@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Kwenziwe"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Hlehlisa"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Yenza kabusha"</string>
+    <string name="filtershow_undo_toast">Hlehlisa</string>
+    <string name="filtershow_redo_toast">Yenza kabusha</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Bonisa umlando"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Fihla umlando"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Bonisa isimo sesithombe"</string>

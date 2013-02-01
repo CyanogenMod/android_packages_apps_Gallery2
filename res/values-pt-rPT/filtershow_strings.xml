@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Concluído"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Anular"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Refazer"</string>
+    <string name="filtershow_undo_toast">Anular</string>
+    <string name="filtershow_redo_toast">Refazer</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Mostrar Histórico"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Ocultar Histórico"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Ver Estado da Imagem"</string>

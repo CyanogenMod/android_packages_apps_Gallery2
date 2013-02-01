@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Gatavs"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Atsaukt"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Atcelt atsaukšanu"</string>
+    <string name="filtershow_undo_toast">Atsaukt</string>
+    <string name="filtershow_redo_toast">Atcelt atsaukšanu</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Rādīt vēsturi"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Slēpt vēsturi"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Rādīt attēla statusu"</string>
