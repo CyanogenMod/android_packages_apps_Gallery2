@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"เสร็จสิ้น"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"เลิกทำ"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"ทำซ้ำ"</string>
+    <string name="filtershow_undo_toast">เลิกทำ</string>
+    <string name="filtershow_redo_toast">ทำซ้ำ</string>
     <string name="show_history_panel" msgid="7785810372502120090">"แสดงประวัติ"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"ซ่อนประวัติ"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"สถานะแสดงภาพ"</string>

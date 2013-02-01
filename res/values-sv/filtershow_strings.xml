@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Klar"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Ångra"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Gör om"</string>
+    <string name="filtershow_undo_toast">Ångra</string>
+    <string name="filtershow_redo_toast">Gör om</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Visa historik"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Dölj historik"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Visa bildläge"</string>

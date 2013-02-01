@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Готово"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Отмена"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Повторить"</string>
+    <string name="filtershow_undo_toast">Отмена</string>
+    <string name="filtershow_redo_toast">Повторить</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Показать историю"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Скрыть историю"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Показать состояние"</string>

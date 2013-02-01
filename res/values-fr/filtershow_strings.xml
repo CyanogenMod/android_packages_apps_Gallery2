@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"OK"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Annuler"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Rétablir"</string>
+    <string name="filtershow_undo_toast">Annuler</string>
+    <string name="filtershow_redo_toast">Rétablir</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Afficher historique"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Masquer l\'historique"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Afficher état image"</string>

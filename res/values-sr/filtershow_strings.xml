@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"Готово"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Опозови"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Понови"</string>
+    <string name="filtershow_undo_toast">Опозови</string>
+    <string name="filtershow_redo_toast">Понови</string>
     <string name="show_history_panel" msgid="7785810372502120090">"Прикажи историју"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"Сакриј историју"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"Прикажи статус слике"</string>

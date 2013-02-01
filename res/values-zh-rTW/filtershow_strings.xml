@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"完成"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"復原"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"重做"</string>
+    <string name="filtershow_undo_toast">復原</string>
+    <string name="filtershow_redo_toast">重做</string>
     <string name="show_history_panel" msgid="7785810372502120090">"顯示紀錄"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"隱藏紀錄"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"顯示圖片狀態"</string>

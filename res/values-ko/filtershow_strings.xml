@@ -25,6 +25,8 @@
     <string name="done" msgid="3112344807927554662">"완료"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"실행취소"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"다시실행"</string>
+    <string name="filtershow_undo_toast">실행취소</string>
+    <string name="filtershow_redo_toast">다시실행</string>
     <string name="show_history_panel" msgid="7785810372502120090">"기록 표시"</string>
     <string name="hide_history_panel" msgid="2082672248771133871">"기록 숨기기"</string>
     <string name="show_imagestate_panel" msgid="7132294085840948243">"이미지 상태 표시"</string>
