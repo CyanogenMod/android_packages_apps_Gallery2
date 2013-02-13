@@ -18,8 +18,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainView"
-    android:background="@color/background_screen" >
+    android:id="@+id/mainView">
 
     <LinearLayout
         android:id="@+id/imageStatePanel"
@@ -149,7 +148,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminate="true"
-                android:indeterminateOnly="true" />
+                android:indeterminateOnly="true"
+                android:background="@color/background_screen" />
 
         </FrameLayout>
 
@@ -187,7 +187,7 @@
                         android:background="@drawable/filtershow_button_background"
                         android:scaleType="centerInside"
                         android:visibility="gone"
-                        android:text="@string/aspectOriginal_effect" />
+                        android:text="@string/aspectNone_effect" />
 
                     <com.android.gallery3d.filtershow.ui.FramedTextButton
                         android:id="@+id/pickCurvesChannel"

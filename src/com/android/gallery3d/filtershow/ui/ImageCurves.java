@@ -43,6 +43,7 @@ public class ImageCurves extends ImageSlave {
     private boolean mDidAddPoint = false;
     private boolean mDidDelete = false;
     private ControlPoint mCurrentControlPoint = null;
+    private int mCurrentPick = -1;
     private ImagePreset mLastPreset = null;
     int[] redHistogram = new int[256];
     int[] greenHistogram = new int[256];
@@ -186,6 +187,7 @@ public class ImageCurves extends ImageSlave {
 
         if (e.getActionMasked() == MotionEvent.ACTION_UP) {
             mCurrentControlPoint = null;
+            mCurrentPick = -1;
             updateCachedImage();
             mDidAddPoint = false;
             if (mDidDelete) {
@@ -205,8 +207,9 @@ public class ImageCurves extends ImageSlave {
         }
 
         Spline spline = getSpline(mCurrentCurveIndex);
-        int pick = pickControlPoint(posX, posY);
+        int pick = mCurrentPick;
         if (mCurrentControlPoint == null) {
+            pick = pickControlPoint(posX, posY);
             if (pick == -1) {
                 mCurrentControlPoint = new ControlPoint(posX, posY);
                 pick = spline.addPoint(mCurrentControlPoint);
@@ -214,10 +217,10 @@ public class ImageCurves extends ImageSlave {
             } else {
                 mCurrentControlPoint = spline.getPoint(pick);
             }
+            mCurrentPick = pick;
         }
 
         if (spline.isPointContained(posX, pick)) {
-            spline.didMovePoint(mCurrentControlPoint);
             spline.movePoint(pick, posX, posY);
         } else if (pick != -1 && spline.getNbPoints() > 2) {
             spline.deletePoint(pick);
@@ -275,8 +278,9 @@ public class ImageCurves extends ImageSlave {
                 max = histogram[i];
             }
         }
-        float w = getWidth();
-        float h = getHeight();
+        float w = getWidth() - Spline.curveHandleSize();
+        float h = getHeight() - Spline.curveHandleSize() / 2.0f;
+        float dx = Spline.curveHandleSize() / 2.0f;
         float wl = w / histogram.length;
         float wh = (0.3f * h) / max;
         Paint paint = new Paint();
@@ -288,12 +292,12 @@ public class ImageCurves extends ImageSlave {
         paint2.setStrokeWidth(6);
         paint2.setXfermode(new PorterDuffXfermode(mode));
         gHistoPath.reset();
-        gHistoPath.moveTo(0, h);
+        gHistoPath.moveTo(dx, h);
         boolean firstPointEncountered = false;
         float prev = 0;
         float last = 0;
         for (int i = 0; i < histogram.length; i++) {
-            float x = i * wl;
+            float x = i * wl + dx;
             float l = histogram[i] * wh;
             if (l != 0) {
                 float v = h - (l + prev) / 2.0f;

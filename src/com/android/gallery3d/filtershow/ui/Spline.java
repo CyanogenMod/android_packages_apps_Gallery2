@@ -49,7 +49,11 @@ public class Spline {
         mPoints = new Vector<ControlPoint>();
         for (int i = 0; i < spline.mPoints.size(); i++) {
             ControlPoint p = spline.mPoints.elementAt(i);
-            mPoints.add(new ControlPoint(p));
+            ControlPoint newPoint = new ControlPoint(p);
+            mPoints.add(newPoint);
+            if (spline.mCurrentControlPoint == p) {
+                mCurrentControlPoint = newPoint;
+            }
         }
         Collections.sort(mPoints);
     }
@@ -79,7 +83,7 @@ public class Spline {
         return Color.WHITE;
     }
 
-    public void didMovePoint(ControlPoint point) {
+    private void didMovePoint(ControlPoint point) {
         mCurrentControlPoint = point;
     }
 
@@ -90,6 +94,7 @@ public class Spline {
         ControlPoint point = mPoints.elementAt(pick);
         point.x = x;
         point.y = y;
+        didMovePoint(point);
     }
 
     public boolean isOriginal() {
@@ -121,13 +126,20 @@ public class Spline {
         }
         double[] derivatives = solveSystem(points);
         int start = 0;
+        int end = 256;
         if (points[0].x != 0) {
             start = (int) (points[0].x * 256);
+        }
+        if (points[points.length - 1].x != 1) {
+            end = (int) (points[points.length - 1].x * 256);
         }
         for (int i = 0; i < start; i++) {
             curve[i] = 1.0f - points[0].y;
         }
-        for (int i = start; i < 256; i++) {
+        for (int i = end; i < 256; i++) {
+            curve[i] = 1.0f - points[points.length - 1].y;
+        }
+        for (int i = start; i < end; i++) {
             ControlPoint cur = null;
             ControlPoint next = null;
             double x = i / 256.0;

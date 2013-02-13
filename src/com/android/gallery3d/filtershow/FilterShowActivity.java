@@ -159,6 +159,8 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         // TODO: get those values from XML.
         ImageZoom.setZoomedSize(getPixelsFromDip(256));
         FramedTextButton.setTextSize((int) getPixelsFromDip(14));
+        FramedTextButton.setTrianglePadding((int) getPixelsFromDip(4));
+        FramedTextButton.setTriangleSize((int) getPixelsFromDip(10));
         ImageShow.setTextSize((int) getPixelsFromDip(12));
         ImageShow.setTextPadding((int) getPixelsFromDip(10));
         ImageShow.setOriginalTextMargin((int) getPixelsFromDip(4));
@@ -201,6 +203,7 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         mImageFlip = (ImageFlip) findViewById(R.id.imageFlip);
         mImageTinyPlanet = (ImageTinyPlanet) findViewById(R.id.imageTinyPlanet);
 
+        mImageCrop.setAspectTextSize((int) getPixelsFromDip(18));
         ImageCrop.setTouchTolerance((int) getPixelsFromDip(25));
         mImageViews.add(mImageShow);
         mImageViews.add(mImageCurves);
@@ -227,6 +230,11 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         mBorderButton = (ImageButton) findViewById(R.id.borderButton);
         mGeometryButton = (ImageButton) findViewById(R.id.geometryButton);
         mColorsButton = (ImageButton) findViewById(R.id.colorsButton);
+
+        mBottomPanelButtons.add(mFxButton);
+        mBottomPanelButtons.add(mBorderButton);
+        mBottomPanelButtons.add(mGeometryButton);
+        mBottomPanelButtons.add(mColorsButton);
 
         mImageShow.setImageLoader(mImageLoader);
         mImageCurves.setImageLoader(mImageLoader);
@@ -462,6 +470,10 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         int mainPanelWidth = mImageShow.getDisplayedImageBounds().width();
         if (mainPanelWidth == 0) {
             mainPanelWidth = mainViewWidth;
+        }
+        int filtersPanelWidth = findViewById(R.id.filtersPanel).getWidth();
+        if (mainPanelWidth < filtersPanelWidth) {
+            mainPanelWidth = filtersPanelWidth;
         }
         int leftOver = mainViewWidth - mainPanelWidth - accessoryPanelWidth;
         if (leftOver < 0) {
@@ -704,18 +716,28 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         // TODO: use listview
         // TODO: load the borders straight from the filesystem
         int p = 0;
-        ImageFilter[] borders = new ImageFilter[7];
+        ImageFilter[] borders = new ImageFilter[12];
         borders[p++] = new ImageFilterBorder(null);
 
         Drawable npd1 = getResources().getDrawable(R.drawable.filtershow_border_4x5);
         borders[p++] = new ImageFilterBorder(npd1);
         Drawable npd2 = getResources().getDrawable(R.drawable.filtershow_border_brush);
         borders[p++] = new ImageFilterBorder(npd2);
+        Drawable npd3 = getResources().getDrawable(R.drawable.filtershow_border_grunge);
+        borders[p++] = new ImageFilterBorder(npd3);
+        Drawable npd4 = getResources().getDrawable(R.drawable.filtershow_border_sumi_e);
+        borders[p++] = new ImageFilterBorder(npd4);
+        Drawable npd5 = getResources().getDrawable(R.drawable.filtershow_border_tape);
+        borders[p++] = new ImageFilterBorder(npd5);
         borders[p++] = new ImageFilterParametricBorder(Color.BLACK, mImageBorderSize, 0);
         borders[p++] = new ImageFilterParametricBorder(Color.BLACK, mImageBorderSize,
                 mImageBorderSize);
         borders[p++] = new ImageFilterParametricBorder(Color.WHITE, mImageBorderSize, 0);
         borders[p++] = new ImageFilterParametricBorder(Color.WHITE, mImageBorderSize,
+                mImageBorderSize);
+        int creamColor = Color.argb(255, 237, 237, 227);
+        borders[p++] = new ImageFilterParametricBorder(creamColor, mImageBorderSize, 0);
+        borders[p++] = new ImageFilterParametricBorder(creamColor, mImageBorderSize,
                 mImageBorderSize);
 
         ImageSmallFilter previousFilter = null;
@@ -776,6 +798,22 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
     public void unselectPanelButtons(Vector<ImageButton> buttons) {
         for (ImageButton button : buttons) {
             button.setSelected(false);
+        }
+    }
+
+    public void disableFilterButtons() {
+        for (ImageButton b : mBottomPanelButtons) {
+            b.setEnabled(false);
+            b.setClickable(false);
+            b.setAlpha(0.4f);
+        }
+    }
+
+    public void enableFilterButtons() {
+        for (ImageButton b : mBottomPanelButtons) {
+            b.setEnabled(true);
+            b.setClickable(true);
+            b.setAlpha(1.0f);
         }
     }
 
@@ -860,7 +898,7 @@ public class FilterShowActivity extends Activity implements OnItemClickListener,
         invalidateOptionsMenu();
     }
 
-    private void resetHistory() {
+    void resetHistory() {
         mNullFxFilter.onClick(mNullFxFilter);
         mNullBorderFilter.onClick(mNullBorderFilter);
 
