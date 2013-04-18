@@ -157,6 +157,9 @@ public class Util {
     // HTC camcorder mode
     private static boolean sHTCCamMode;
 
+    // Do not change the focus mode when TTF is used
+    private static boolean sNoFocusModeChangeForTouch;
+
     private Util() {
     }
 
@@ -182,6 +185,10 @@ public class Util {
         sEarlyVideoSize = context.getResources().getBoolean(R.bool.needsEarlyVideoSize);
         sSamsungCamMode = context.getResources().getBoolean(R.bool.needsSamsungCamMode);
         sHTCCamMode = context.getResources().getBoolean(R.bool.needsHTCCamMode);
+
+        sNoFocusModeChangeForTouch = context.getResources().getBoolean(
+                R.bool.useContinuosFocusForTouch);
+
     }
 
     public static int dpToPixel(int dp) {
@@ -213,6 +220,10 @@ public class Util {
 
     public static boolean useSamsungCamMode() {
         return sSamsungCamMode;
+    }
+
+    public static boolean noFocusModeChangeForTouch() {
+        return sNoFocusModeChangeForTouch;
     }
 
     // Rotates the bitmap by the specified degree.
