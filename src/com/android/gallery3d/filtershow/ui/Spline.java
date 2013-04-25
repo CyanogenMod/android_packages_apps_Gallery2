@@ -127,10 +127,10 @@ public class Spline {
         double[] derivatives = solveSystem(points);
         int start = 0;
         int end = 256;
-        if (points[0].x != 0) {
+        if (points[0].x >= 0) {
             start = (int) (points[0].x * 256);
         }
-        if (points[points.length - 1].x != 1) {
+        if (points[points.length - 1].x <= 1) {
             end = (int) (points[points.length - 1].x * 256);
         }
         for (int i = 0; i < start; i++) {

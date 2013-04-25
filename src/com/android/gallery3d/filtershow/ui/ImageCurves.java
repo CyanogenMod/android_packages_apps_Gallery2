@@ -174,9 +174,16 @@ public class ImageCurves extends ImageSlave {
 
     @Override
     public synchronized boolean onTouchEvent(MotionEvent e) {
-        float posX = e.getX() / getWidth();
+        float posX = e.getX();
         float posY = e.getY();
         float margin = Spline.curveHandleSize() / 2;
+        if (posX < margin) {
+            posX = margin;
+        }
+        if (posX > getWidth() - margin) {
+            posX = getWidth() - margin;
+        }
+        posX = (posX - margin) / (getWidth() - 2 * margin);
         if (posY < margin) {
             posY = margin;
         }
