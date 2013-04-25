@@ -92,8 +92,9 @@ public class Spline {
             return;
         }
         ControlPoint point = mPoints.elementAt(pick);
-        point.x = x;
-        point.y = y;
+        // clip to the allowed range
+        point.x = Math.min(Math.max(x, 0.0f), 1.0f);
+        point.y = Math.min(Math.max(y, 0.0f), 1.0f);
         didMovePoint(point);
     }
 
