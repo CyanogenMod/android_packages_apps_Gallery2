@@ -84,6 +84,10 @@ public class StateManager {
         }
         state.initialize(mActivity, data);
 
+        if (!mStack.isEmpty()) {
+            mStack.pop();
+        }
+
         mStack.push(new StateEntry(data, state));
         state.onCreate(data, null);
         if (mIsResumed) state.resume();
