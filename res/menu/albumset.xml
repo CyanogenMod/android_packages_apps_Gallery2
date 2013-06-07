@@ -21,12 +21,18 @@
     <item android:id="@+id/action_select"
             android:title="@string/select_album"
             android:showAsAction="never" />
+
+<!-- These items do not serve a purpose due to the lack of built in
+     picasa support.
+     Also comment out the settings case at AlbumSetPage.onItemSelected method.
+
     <item android:id="@+id/action_manage_offline"
             android:title="@string/make_available_offline"
             android:showAsAction="never" />
     <item android:id="@+id/action_sync_picasa_albums"
             android:title="@string/sync_picasa_albums"
             android:showAsAction="never" />
+-->
 
 <!-- Comment out to enable Settings in menu. This should be done when
      GallerySettings.java has content, as it is currently empty.
