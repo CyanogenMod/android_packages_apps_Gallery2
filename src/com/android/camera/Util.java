@@ -114,6 +114,10 @@ public class Util {
         return (supported != null) && supported.contains(SCENE_MODE_HDR);
     }
 
+    public static boolean isShutterSpeedSupported(Parameters params) {
+         return TRUE.equals(params.get("shutter-speed"));
+    }
+
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static boolean isMeteringAreaSupported(Parameters params) {
         if (ApiHelper.HAS_CAMERA_METERING_AREA) {
