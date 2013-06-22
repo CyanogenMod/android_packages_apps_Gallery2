@@ -217,7 +217,8 @@ public class PhotoMenu extends PieController
                 CameraSettings.KEY_ISO_MODE,
                 CameraSettings.KEY_JPEG,
                 CameraSettings.KEY_COLOR_EFFECT,
-                CameraSettings.KEY_BURST_MODE
+                CameraSettings.KEY_BURST_MODE,
+                CameraSettings.KEY_SHUTTER_SPEED
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(res.getString(R.string.camera_menu_more_label).toUpperCase(locale));

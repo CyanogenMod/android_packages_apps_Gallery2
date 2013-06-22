@@ -79,6 +79,7 @@ public class CameraSettings {
     public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
     public static final String KEY_VIDEOCAMERA_COLOR_EFFECT = "pref_camera_video_coloreffect_key";
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
+    public static final String KEY_SHUTTER_SPEED = "pref_shutter_speed_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
@@ -195,6 +196,7 @@ public class CameraSettings {
         ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
         ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
+        ListPreference shutterSpeed = group.findPreference(KEY_SHUTTER_SPEED);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -273,6 +275,9 @@ public class CameraSettings {
         }
         if (storage != null) {
             buildStorage(group, storage);
+        }
+        if (shutterSpeed != null && !Util.isShutterSpeedSupported(mParameters)) {
+            removePreference(group, shutterSpeed.getKey());
         }
     }
 
