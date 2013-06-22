@@ -265,4 +265,23 @@
     <string name="camera_menu_beauty_mode_label">BEAUTIFY</string>
     <string name="camera_menu_colorize_label">COLORIZE</string>
     <string name="camera_menu_effects_label">EFFECTS</string>
+
+    <!-- Shutter speed -->
+    <string name="pref_camera_shutter_speed_title">Shutter speed</string>
+    <string name="pref_camera_shutter_speed_default" translatable="false">auto</string>
+    <string name="pref_camera_shutter_speed_entry_auto">Auto</string>
+    <string name="pref_camera_shutter_speed_entry_0">1 second</string>
+    <string name="pref_camera_shutter_speed_entry_1">1/2 second</string>
+    <string name="pref_camera_shutter_speed_entry_2">1/4 second</string>
+    <string name="pref_camera_shutter_speed_entry_3">1/8 second</string>
+    <string name="pref_camera_shutter_speed_entry_4">1/16 second</string>
+    <string name="pref_camera_shutter_speed_entry_5">1/32 second</string>
+    <string name="pref_camera_shutter_speed_entry_6">1/100 second</string>
+    <string name="pref_camera_shutter_speed_entry_7">1/125 second</string>
+    <string name="pref_camera_shutter_speed_entry_8">1/250 second</string>
+    <string name="pref_camera_shutter_speed_entry_9">1/500 second</string>
+    <string name="pref_camera_shutter_speed_entry_10">1/1000 second</string>
+    <string name="pref_camera_shutter_speed_entry_11">1/2000 second</string>
+    <string name="pref_camera_shutter_speed_entry_12">1/3333 second</string>
+
 </resources>

@@ -92,6 +92,29 @@ public class PhotoMenu extends PieController
             item = makeSwitchItem(CameraSettings.KEY_SLOW_SHUTTER, true);
             enhance.addItem(item);
         }
+        // shutter speed
+        final ListPreference shutterSpeedPref =
+                group.findPreference(CameraSettings.KEY_SHUTTER_SPEED);
+        if (shutterSpeedPref != null) {
+            item = makeItem(R.drawable.ic_turtle);
+            item.setLabel(res.getString(
+                    R.string.pref_camera_shutter_speed_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup =
+                            (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(shutterSpeedPref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mPopupStatus = POPUP_SECOND_LEVEL;
+                    mUI.showPopup(mPopup);
+                }
+            });
+            enhance.addItem(item);
+        }
         // color effect
         final ListPreference colorPref = group.findPreference(CameraSettings.KEY_COLOR_EFFECT);
         if (colorPref != null) {
