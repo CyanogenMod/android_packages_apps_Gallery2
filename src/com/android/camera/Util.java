@@ -114,6 +114,10 @@ public class Util {
         return (supported != null) && supported.contains(SCENE_MODE_HDR);
     }
 
+    public static boolean isShutterSpeedSupported(Parameters params) {
+         return sShutterSpeed;
+    }
+
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static boolean isMeteringAreaSupported(Parameters params) {
         if (ApiHelper.HAS_CAMERA_METERING_AREA) {
@@ -164,6 +168,8 @@ public class Util {
     // Do not change the focus mode when TTF is used
     private static boolean sNoFocusModeChangeForTouch;
 
+    private static boolean sShutterSpeed;
+
     private Util() {
     }
 
@@ -192,6 +198,9 @@ public class Util {
 
         sNoFocusModeChangeForTouch = context.getResources().getBoolean(
                 R.bool.useContinuosFocusForTouch);
+
+        sShutterSpeed = context.getResources().getBoolean(
+                R.bool.enableShutterSpeed);
 
     }
 
