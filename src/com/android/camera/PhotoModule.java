@@ -2028,6 +2028,12 @@ public class PhotoModule
         CameraSettings.setSlowShutter(mParameters, mPreferences.getString(CameraSettings.KEY_SLOW_SHUTTER,
                 mActivity.getString(R.string.pref_camera_slow_shutter_default)));
 
+        // Set shutter speed
+        String shutterSpeed = mPreferences.getString(
+                CameraSettings.KEY_SHUTTER_SPEED,
+                mActivity.getString(R.string.pref_camera_shutter_speed_default));
+        mParameters.set("shutter-speed", shutterSpeed);
+
         // Set exposure compensation
         int value = CameraSettings.readExposure(mPreferences);
         int max = mParameters.getMaxExposureCompensation();

@@ -121,6 +121,10 @@ public class Util {
         return (sDeviceKeysPresent & KEY_MASK_CAMERA) != 0;
     }
 
+    public static boolean isShutterSpeedSupported(Parameters params) {
+         return TRUE.equals(params.get("shutter-speed"));
+    }
+
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static boolean isMeteringAreaSupported(Parameters params) {
         if (ApiHelper.HAS_CAMERA_METERING_AREA) {
