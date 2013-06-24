@@ -104,7 +104,6 @@ public class PhotoModule
     private static final int START_PREVIEW_DONE = 10;
     private static final int OPEN_CAMERA_FAIL = 11;
     private static final int CAMERA_DISABLED = 12;
-    private static final int CAPTURE_ANIMATION_DONE = 13;
 
     // The subset of parameters we need to update in setCameraParameters().
     private static final int UPDATE_PARAM_INITIALIZE = 1;
@@ -168,13 +167,6 @@ public class PhotoModule
         @Override
         public void run() {
             onShutterButtonClick();
-        }
-    };
-
-    private Runnable mFlashRunnable = new Runnable() {
-        @Override
-        public void run() {
-            animateFlash();
         }
     };
 
@@ -393,10 +385,6 @@ public class PhotoModule
                     mCameraDisabled = true;
                     Util.showErrorAndFinish(mActivity,
                             R.string.camera_disabled);
-                    break;
-                }
-                case CAPTURE_ANIMATION_DONE: {
-                    mUI.enablePreviewThumb(false);
                     break;
                 }
             }
@@ -685,10 +673,10 @@ public class PhotoModule
     private final class ShutterCallback
             implements CameraShutterCallback {
 
-        private boolean mAnimateFlash;
+        private boolean mNeedsAnimation;
 
-        public ShutterCallback(boolean animateFlash) {
-            mAnimateFlash = animateFlash;
+        public ShutterCallback(boolean needsAnimation) {
+            mNeedsAnimation = needsAnimation;
         }
 
         @Override
@@ -696,8 +684,13 @@ public class PhotoModule
             mShutterCallbackTime = System.currentTimeMillis();
             mShutterLag = mShutterCallbackTime - mCaptureStartTime;
             Log.v(TAG, "mShutterLag = " + mShutterLag + "ms");
-            if (mAnimateFlash) {
-                mActivity.runOnUiThread(mFlashRunnable);
+            if (mNeedsAnimation) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        animateAfterShutter();
+                    }
+                });
             }
         }
     }
@@ -736,9 +729,11 @@ public class PhotoModule
             if (mPaused) {
                 return;
             }
-            //TODO: We should show the picture taken rather than frozen preview here
             if (mIsImageCaptureIntent) {
                 stopPreview();
+            } else {
+                // Animate capture with real jpeg data instead of a preview frame.
+                mUI.animateCapture(jpegData);
             }
             if (mSceneMode == Util.SCENE_MODE_HDR) {
                 mUI.showSwitcher();
@@ -763,18 +758,6 @@ public class PhotoModule
             Log.v(TAG, "mPictureDisplayedToJpegCallbackTime = "
                     + mPictureDisplayedToJpegCallbackTime + "ms");
 
-             /*TODO:
-            // Only animate when in full screen capture mode
-            // i.e. If monkey/a user swipes to the gallery during picture taking,
-            // don't show animation
-            if (ApiHelper.HAS_SURFACE_TEXTURE && !mIsImageCaptureIntent
-                    && mActivity.mShowCameraAppView) {
-                // Finish capture animation
-                mHandler.removeMessages(CAPTURE_ANIMATION_DONE);
-                ((CameraScreenNail) mActivity.mCameraScreenNail).animateSlide();
-                mHandler.sendEmptyMessageDelayed(CAPTURE_ANIMATION_DONE,
-                        CaptureAnimManager.getAnimationDuration());
-            } */
             mFocusManager.updateFocusUI(); // Ensure focus indicator is hidden.
             if (!mIsImageCaptureIntent) {
                 if (ApiHelper.CAN_START_PREVIEW_IN_JPEG_CALLBACK) {
@@ -920,16 +903,12 @@ public class PhotoModule
         }
     }
 
-    private void animateFlash() {
+    private void animateAfterShutter() {
         // Only animate when in full screen capture mode
         // i.e. If monkey/a user swipes to the gallery during picture taking,
         // don't show animation
         if (!mIsImageCaptureIntent) {
             mUI.animateFlash();
-
-            // TODO: mUI.enablePreviewThumb(true);
-            // mHandler.sendEmptyMessageDelayed(CAPTURE_ANIMATION_DONE,
-            //        CaptureAnimManager.getAnimationDuration());
         }
     }
 
@@ -949,7 +928,7 @@ public class PhotoModule
         final boolean animateBefore = (mSceneMode == Util.SCENE_MODE_HDR);
 
         if (animateBefore) {
-            animateFlash();
+            animateAfterShutter();
         }
 
         // Set rotation and gps data.
