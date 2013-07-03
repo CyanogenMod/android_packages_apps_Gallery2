@@ -97,6 +97,9 @@ public class PhotoModule
     private boolean mRestartPreview = false;
     private boolean mAspectRatioChanged = false;
 
+    private int mBurstSnapNum = 1;
+    private int mReceivedSnapNum = 0;
+
     // We number the request code from 1000 to avoid collision with Gallery.
     private static final int REQUEST_CROP = 1000;
 
@@ -805,7 +808,15 @@ public class PhotoModule
                 mActivity.setSwipingEnabled(true);
             }
 
+            mReceivedSnapNum = mReceivedSnapNum + 1;
             mJpegPictureCallbackTime = System.currentTimeMillis();
+            if(Util.isZSLEnabled()) {
+                Log.v(TAG, "JpegPictureCallback : in zslmode");
+                mParameters = mCameraDevice.getParameters();
+                mBurstSnapNum = mParameters.getInt("num-snaps-per-shutter");
+            }
+            Log.v(TAG, "JpegPictureCallback: Received = " + mReceivedSnapNum +
+                      "Burst count = " + mBurstSnapNum);
             // If postview callback has arrived, the captured image is displayed
             // in postview callback. If not, the captured image is displayed in
             // raw picture callback.
@@ -839,7 +850,9 @@ public class PhotoModule
             boolean isSamsungHDR =
                     (mSceneMode == Util.SCENE_MODE_HDR && Util.needSamsungHDRFormat());
 
-            if (!mIsImageCaptureIntent && (!Util.isZSLEnabled() || isSamsungHDR)) {
+            if (!mIsImageCaptureIntent && (!Util.isZSLEnabled() || isSamsungHDR)
+                      && (mReceivedSnapNum == mBurstSnapNum)) {
+
                 if (ApiHelper.CAN_START_PREVIEW_IN_JPEG_CALLBACK) {
                     setupPreview();
                 } else {
@@ -859,9 +872,16 @@ public class PhotoModule
                     mFocusManager.resetTouchFocus();
                     setCameraState(IDLE);
                 }
+            } else if (mReceivedSnapNum == mBurstSnapNum){
+                mFocusManager.resetTouchFocus();
+                setCameraState(IDLE);
             }
 
             if (!mIsImageCaptureIntent) {
+                // Burst snapshot. Generate new image name.
+                if (mReceivedSnapNum > 1)
+                    mNamedImages.nameNewImage(mContentResolver, mCaptureStartTime);
+
                 // Calculate the width and the height of the jpeg.
                 Size s = mParameters.getPictureSize();
                 final ExifInterface exif = Exif.getExif(jpegData);
@@ -950,7 +970,9 @@ public class PhotoModule
             mJpegCallbackFinishTime = now - mJpegPictureCallbackTime;
             Log.v(TAG, "mJpegCallbackFinishTime = "
                     + mJpegCallbackFinishTime + "ms");
-            mJpegPictureCallbackTime = 0;
+
+            if (mReceivedSnapNum == mBurstSnapNum)
+                mJpegPictureCallbackTime = 0;
 
         }
     }
@@ -1082,6 +1104,10 @@ public class PhotoModule
         Location loc = mLocationManager.getCurrentLocation();
         Util.setGpsParameters(mParameters, loc);
         mCameraDevice.setParameters(mParameters);
+        mParameters = mCameraDevice.getParameters();
+
+        mBurstSnapNum = mParameters.getInt("num-snaps-per-shutter");
+        mReceivedSnapNum = 0;
 
         mCameraDevice.takePicture2(new ShutterCallback(!animateBefore),
                 mRawPictureCallback, mPostViewPictureCallback,

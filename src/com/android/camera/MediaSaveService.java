@@ -36,7 +36,7 @@ import java.io.File;
  * Service for saving images in the background thread.
  */
 public class MediaSaveService extends Service {
-    private static final int SAVE_TASK_LIMIT = 3;
+    private static final int SAVE_TASK_LIMIT = 100;
     private static final String TAG = MediaSaveService.class.getSimpleName();
 
     private final IBinder mBinder = new LocalBinder();
