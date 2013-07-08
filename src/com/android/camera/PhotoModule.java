@@ -1917,6 +1917,11 @@ public class PhotoModule
             Log.w(TAG, "invalid exposure range: " + value);
         }
 
+        if (hdr.equals(mActivity.getString(R.string.setting_on_value)))
+            mParameters.set("num-snaps-per-shutter", "2");
+        else
+            mParameters.set("num-snaps-per-shutter", "1");
+
         if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
             // Set flash mode.
             String flashMode = mPreferences.getString(
