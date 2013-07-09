@@ -784,12 +784,17 @@ public class PanoramaModule implements CameraModule,
         // device orientation at capture and the camera orientation respective to
         // the natural orientation of the device.
         int orientation;
+        int cameraOrientation = mCameraOrientation;
+        if(mDeviceOrientationAtCapture == 270 || mDeviceOrientationAtCapture == 90) {
+            if(mCameraOrientation == 0)
+                cameraOrientation = 180;
+        }
         if (mUsingFrontCamera) {
             // mCameraOrientation is negative with respect to the front facing camera.
             // See document of android.hardware.Camera.Parameters.setRotation.
-            orientation = (mDeviceOrientationAtCapture - mCameraOrientation + 360) % 360;
+            orientation = (mDeviceOrientationAtCapture - cameraOrientation + 360) % 360;
         } else {
-            orientation = (mDeviceOrientationAtCapture + mCameraOrientation) % 360;
+            orientation = (mDeviceOrientationAtCapture + cameraOrientation) % 360;
         }
         return orientation;
     }
@@ -1158,9 +1163,12 @@ public class PanoramaModule implements CameraModule,
             // Set the display orientation to 0, so that the underlying mosaic
             // library can always get undistorted mPreviewWidth x mPreviewHeight
             // image data from SurfaceTexture.
-            mCameraDevice.setDisplayOrientation(0);
+            if (mCameraOrientation == 0)
+              mCameraDevice.setDisplayOrientation(270);
+            else
+              mCameraDevice.setDisplayOrientation(0);
 
-            mCameraTexture.setOnFrameAvailableListener(this);
+            if (mCameraTexture != null) mCameraTexture.setOnFrameAvailableListener(this);
             mCameraDevice.setPreviewTextureAsync(mCameraTexture);
         }
         mCameraDevice.startPreviewAsync();
