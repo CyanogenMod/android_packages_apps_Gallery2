@@ -210,6 +210,9 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
         @Override
         public void onSizeChanged(int size) {
             mSlotView.setSlotCount(size);
+            if (mSelectionManager.inSelectionMode()) {
+                mSelectionManager.onSizeChanged();
+            }
         }
 
         @Override
