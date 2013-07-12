@@ -149,6 +149,12 @@ public class SelectionManager {
         }
     }
 
+    public void onSizeChanged() {
+        if (mListener != null && inSelectAllMode()) {
+            mListener.onSelectionChange(null, true);
+        }
+    }
+
     private static boolean expandMediaSet(ArrayList<Path> items, MediaSet set, int maxSelection) {
         int subCount = set.getSubMediaSetCount();
         for (int i = 0; i < subCount; i++) {
