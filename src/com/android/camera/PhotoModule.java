@@ -861,6 +861,12 @@ public class PhotoModule
                     // time before starting the preview.
                     mHandler.sendEmptyMessageDelayed(SETUP_PREVIEW, 300);
                 }
+            } else if (mIsImageCaptureIntent && Util.isZSLEnabled()) {
+                // In ZSL mode, the preview is not stopped, due to which the
+                // review mode (ImageCapture) doesn't show the captured frame.
+                // Hence stop the preview if ZSL mode is active so that the
+                // preview can be restarted using the onReviewRetakeClicked().
+                stopPreview();
             } else {
                 mFocusManager.resetTouchFocus();
                 setCameraState(IDLE);
