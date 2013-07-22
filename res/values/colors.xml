@@ -70,4 +70,8 @@
     <color name="face_detect_fail">#80d05060</color>
     <color name="gray">#FFAAAAAA</color>
 
+    <color name="highlight">#00a8ff</color>
+    <color name="lowlight">#00527c</color>
+    <color name="grey">#999999</color>
+    <color name="disabled_knob">#505050</color>
 </resources>
