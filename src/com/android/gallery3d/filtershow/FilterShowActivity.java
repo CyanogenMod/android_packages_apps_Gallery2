@@ -160,6 +160,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             /*
              * This is called when the connection with the service has been
@@ -173,6 +174,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mBoundService.onStart();
         }
 
+        @Override
         public void onServiceDisconnected(ComponentName className) {
             /*
              * This is called when the connection with the service has been
@@ -598,6 +600,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             if (!result) {
                 cannotLoadImage();
+                // TODO: We should figure out the best way preventing this from
+                // happening, e.g: early checking.
+                return;
             }
 
             if (null == CachingPipeline.getRenderScriptContext()){
@@ -669,7 +674,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private int getScreenImageSize() {
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-        return (int) Math.max(outMetrics.heightPixels, outMetrics.widthPixels);
+        return Math.max(outMetrics.heightPixels, outMetrics.widthPixels);
     }
 
     private void showSavingProgress(String albumName) {
