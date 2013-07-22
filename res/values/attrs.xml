@@ -42,5 +42,9 @@
         <attr name="largeIcons" format="reference" />
         <attr name="images" format="reference" />
     </declare-styleable>
-
+    <declare-styleable name="Knob">
+        <attr name="label" format="string" />
+        <attr name="background" format="integer" />
+        <attr name="foreground" format="integer" />
+    </declare-styleable>
 </resources>
