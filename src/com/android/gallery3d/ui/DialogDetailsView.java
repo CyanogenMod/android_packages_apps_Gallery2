@@ -50,7 +50,7 @@ public class DialogDetailsView implements DetailsViewContainer {
     private DetailsAdapter mAdapter;
     private MediaDetails mDetails;
     private final DetailsSource mSource;
-    private int mIndex;
+    private int mIndex = 0;
     private Dialog mDialog;
     private CloseListener mListener;
 
@@ -87,7 +87,7 @@ public class DialogDetailsView implements DetailsViewContainer {
         mAdapter = new DetailsAdapter(details);
         String title = String.format(
                 mActivity.getAndroidContext().getString(R.string.details_title),
-                mIndex + 1, mSource.size());
+                mIndex, mSource.size()-1);
         ListView detailsList = (ListView) LayoutInflater.from(mActivity.getAndroidContext()).inflate(
                 R.layout.details_list, null, false);
         detailsList.setAdapter(mAdapter);
