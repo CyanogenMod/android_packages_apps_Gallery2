@@ -436,4 +436,8 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d 張相片"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d 張相片"</item>
   </plurals>
+
+    <string name="bass_boost_strength">"低音加強"</string>
+    <string name="virtualizer_strength">"3D 效果"</string>
+    <string name="audio_effects">"音效"</string>
 </resources>
