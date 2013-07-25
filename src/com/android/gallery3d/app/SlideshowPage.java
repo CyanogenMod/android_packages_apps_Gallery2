@@ -31,7 +31,7 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.ui.GLCanvas;
+import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.SlideshowView;
 import com.android.gallery3d.ui.SynchronizedHandler;
@@ -112,11 +112,10 @@ public class SlideshowPage extends ActivityState {
     @Override
     public void onCreate(Bundle data, Bundle restoreState) {
         super.onCreate(data, restoreState);
-        mFlags |= (FLAG_HIDE_ACTION_BAR | FLAG_HIDE_STATUS_BAR
-                | FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED);
+        mFlags |= (FLAG_HIDE_ACTION_BAR | FLAG_HIDE_STATUS_BAR);
         if (data.getBoolean(KEY_DREAM)) {
             // Dream screensaver only keeps screen on for plugged devices.
-            mFlags |= FLAG_SCREEN_ON_WHEN_PLUGGED;
+            mFlags |= FLAG_SCREEN_ON_WHEN_PLUGGED | FLAG_SHOW_WHEN_LOCKED;
         } else {
             // User-initiated slideshow would always keep screen on.
             mFlags |= FLAG_SCREEN_ON_ALWAYS;

@@ -16,28 +16,41 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import com.android.gallery3d.R;
+
 import android.graphics.Bitmap;
 
-public class ImageFilterShadows extends ImageFilter {
+public class ImageFilterShadows extends SimpleImageFilter {
 
     public ImageFilterShadows() {
         mName = "Shadows";
 
     }
 
-    @Override
-    public ImageFilter clone() throws CloneNotSupportedException {
-        ImageFilterShadows filter = (ImageFilterShadows) super.clone();
-        return filter;
+    public FilterRepresentation getDefaultRepresentation() {
+        FilterBasicRepresentation representation =
+                (FilterBasicRepresentation) super.getDefaultRepresentation();
+        representation.setName("Shadows");
+        representation.setFilterClass(ImageFilterShadows.class);
+        representation.setTextId(R.string.shadow_recovery);
+        representation.setButtonId(R.id.shadowRecoveryButton);
+        representation.setMinimum(-100);
+        representation.setMaximum(100);
+        representation.setDefaultValue(0);
+        representation.setSupportsPartialRendering(true);
+        return representation;
     }
 
     native protected void nativeApplyFilter(Bitmap bitmap, int w, int h, float  factor);
 
     @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
+        if (getParameters() == null) {
+            return bitmap;
+        }
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-        float p = mParameter;
+        float p = getParameters().getValue();
 
         nativeApplyFilter(bitmap, w, h, p);
         return bitmap;

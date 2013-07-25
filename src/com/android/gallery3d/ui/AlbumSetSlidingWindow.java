@@ -23,12 +23,15 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumSetDataLoader;
 import com.android.gallery3d.common.Utils;
-import com.android.gallery3d.data.BitmapPool;
 import com.android.gallery3d.data.DataSourceType;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.glrenderer.BitmapTexture;
+import com.android.gallery3d.glrenderer.Texture;
+import com.android.gallery3d.glrenderer.TextureUploader;
+import com.android.gallery3d.glrenderer.TiledTexture;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.FutureListener;
 import com.android.gallery3d.util.ThreadPool;
@@ -399,7 +402,6 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
         for (int i = mContentStart, n = mContentEnd; i < n; ++i) {
             freeSlotContent(i);
         }
-        mLabelMaker.clearRecycledLabels();
     }
 
     public void resume() {
@@ -422,12 +424,6 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
         public AlbumCoverLoader(int slotIndex, MediaItem item) {
             mSlotIndex = slotIndex;
             mMediaItem = item;
-        }
-
-        @Override
-        protected void recycleBitmap(Bitmap bitmap) {
-            BitmapPool pool = MediaItem.getMicroThumbPool();
-            if (pool != null) pool.recycle(bitmap);
         }
 
         @Override
@@ -498,11 +494,6 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
         protected Future<Bitmap> submitBitmapTask(FutureListener<Bitmap> l) {
             return mThreadPool.submit(mLabelMaker.requestLabel(
                     mTitle, String.valueOf(mTotalCount), mSourceType), l);
-        }
-
-        @Override
-        protected void recycleBitmap(Bitmap bitmap) {
-            mLabelMaker.recycleLabel(bitmap);
         }
 
         @Override

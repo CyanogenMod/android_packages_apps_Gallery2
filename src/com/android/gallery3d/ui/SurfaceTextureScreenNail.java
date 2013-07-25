@@ -21,6 +21,8 @@ import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 
 import com.android.gallery3d.common.ApiHelper;
+import com.android.gallery3d.glrenderer.ExtTexture;
+import com.android.gallery3d.glrenderer.GLCanvas;
 
 @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
 public abstract class SurfaceTextureScreenNail implements ScreenNail,
@@ -40,8 +42,8 @@ public abstract class SurfaceTextureScreenNail implements ScreenNail,
     public SurfaceTextureScreenNail() {
     }
 
-    public void acquireSurfaceTexture() {
-        mExtTexture = new ExtTexture(GL_TEXTURE_EXTERNAL_OES);
+    public void acquireSurfaceTexture(GLCanvas canvas) {
+        mExtTexture = new ExtTexture(canvas, GL_TEXTURE_EXTERNAL_OES);
         mExtTexture.setSize(mWidth, mHeight);
         mSurfaceTexture = new SurfaceTexture(mExtTexture.getId());
         setDefaultBufferSize(mSurfaceTexture, mWidth, mHeight);

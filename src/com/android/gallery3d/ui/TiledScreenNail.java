@@ -20,8 +20,9 @@ import android.graphics.Bitmap;
 import android.graphics.RectF;
 
 import com.android.gallery3d.common.Utils;
-import com.android.gallery3d.data.BitmapPool;
-import com.android.gallery3d.data.MediaItem;
+import com.android.photos.data.GalleryBitmapPool;
+import com.android.gallery3d.glrenderer.GLCanvas;
+import com.android.gallery3d.glrenderer.TiledTexture;
 
 // This is a ScreenNail wraps a Bitmap. There are some extra functions:
 //
@@ -81,11 +82,6 @@ public class TiledScreenNail implements ScreenNail {
         mHeight = Math.round(scale * height);
     }
 
-    private static void recycleBitmap(BitmapPool pool, Bitmap bitmap) {
-        if (pool == null || bitmap == null) return;
-        pool.recycle(bitmap);
-    }
-
     // Combines the two ScreenNails.
     // Returns the used one and recycle the unused one.
     public ScreenNail combine(ScreenNail other) {
@@ -104,7 +100,7 @@ public class TiledScreenNail implements ScreenNail {
         mWidth = newer.mWidth;
         mHeight = newer.mHeight;
         if (newer.mTexture != null) {
-            recycleBitmap(MediaItem.getThumbPool(), mBitmap);
+            if (mBitmap != null) GalleryBitmapPool.getInstance().put(mBitmap);
             if (mTexture != null) mTexture.recycle();
             mBitmap = newer.mBitmap;
             mTexture = newer.mTexture;
@@ -141,8 +137,10 @@ public class TiledScreenNail implements ScreenNail {
             mTexture.recycle();
             mTexture = null;
         }
-        recycleBitmap(MediaItem.getThumbPool(), mBitmap);
-        mBitmap = null;
+        if (mBitmap != null) {
+            GalleryBitmapPool.getInstance().put(mBitmap);
+            mBitmap = null;
+        }
     }
 
     public static void disableDrawPlaceholder() {

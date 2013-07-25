@@ -16,13 +16,13 @@
 
 package com.android.gallery3d.data;
 
+import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.app.StitchingChangeListener;
-import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.data.MediaSet.ItemConsumer;
@@ -65,16 +65,17 @@ public class DataManager implements StitchingChangeListener {
     // to prevent concurrency issue.
     public static final Object LOCK = new Object();
 
+    public static DataManager from(Context context) {
+        GalleryApp app = (GalleryApp) context.getApplicationContext();
+        return app.getDataManager();
+    }
+
     private static final String TAG = "DataManager";
 
     // This is the path for the media set seen by the user at top level.
-    private static final String TOP_SET_PATH = ApiHelper.HAS_MTP
-            ? "/combo/{/mtp,/local/all,/picasa/all}"
-            : "/combo/{/local/all,/picasa/all}";
+    private static final String TOP_SET_PATH = "/combo/{/local/all,/picasa/all}";
 
-    private static final String TOP_IMAGE_SET_PATH = ApiHelper.HAS_MTP
-            ? "/combo/{/mtp,/local/image,/picasa/image}"
-            : "/combo/{/local/image,/picasa/image}";
+    private static final String TOP_IMAGE_SET_PATH = "/combo/{/local/image,/picasa/image}";
 
     private static final String TOP_VIDEO_SET_PATH =
             "/combo/{/local/video,/picasa/video}";
@@ -118,9 +119,6 @@ public class DataManager implements StitchingChangeListener {
         // the order matters, the UriSource must come last
         addSource(new LocalSource(mApplication));
         addSource(new PicasaSource(mApplication));
-        if (ApiHelper.HAS_MTP) {
-            addSource(new MtpSource(mApplication));
-        }
         addSource(new ComboSource(mApplication));
         addSource(new ClusterSource(mApplication));
         addSource(new FilterSource(mApplication));

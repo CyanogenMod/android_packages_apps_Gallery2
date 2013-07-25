@@ -28,6 +28,8 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Virtualizer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +69,7 @@ public class MoviePlayer implements
     private static final String CMDNAME = "command";
     private static final String CMDPAUSE = "pause";
 
+    private static final String VIRTUALIZE_EXTRA = "virtualize";
     private static final long BLACK_TIMEOUT = 500;
 
     // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
@@ -74,8 +77,8 @@ public class MoviePlayer implements
     private static final long RESUMEABLE_TIMEOUT = 3 * 60 * 1000; // 3 mins
 
     private Context mContext;
-    private final View mRootView;
     private final VideoView mVideoView;
+    private final View mRootView;
     private final Bookmarker mBookmarker;
     private final Uri mUri;
     private final Handler mHandler = new Handler();
@@ -92,6 +95,8 @@ public class MoviePlayer implements
 
     // If the time bar is visible.
     private boolean mShowing;
+
+    private Virtualizer mVirtualizer;
 
     private final Runnable mPlayingChecker = new Runnable() {
         @Override
@@ -128,6 +133,31 @@ public class MoviePlayer implements
         mVideoView.setOnErrorListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setVideoURI(mUri);
+        if (mVirtualizer != null) {
+            mVirtualizer.release();
+            mVirtualizer = null;
+        }
+
+        Intent ai = movieActivity.getIntent();
+        boolean virtualize = ai.getBooleanExtra(VIRTUALIZE_EXTRA, false);
+        if (virtualize) {
+            int session = mVideoView.getAudioSessionId();
+            if (session != 0) {
+                Virtualizer virt = new Virtualizer(0, session);
+                AudioEffect.Descriptor descriptor = virt.getDescriptor();
+                String uuid = descriptor.uuid.toString();
+                if (uuid.equals("36103c52-8514-11e2-9e96-0800200c9a66") ||
+                        uuid.equals("36103c50-8514-11e2-9e96-0800200c9a66")) {
+                    mVirtualizer = virt;
+                    mVirtualizer.setEnabled(true);
+                } else {
+                    // This is not the audio virtualizer we're looking for
+                    virt.release();
+                }
+            } else {
+                Log.w(TAG, "no session");
+            }
+        }
         mVideoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -191,7 +221,6 @@ public class MoviePlayer implements
                 if ((diff & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
                         && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
                     mController.show();
-                    mRootView.setBackgroundColor(Color.BLACK);
                 }
             }
         });
@@ -271,6 +300,10 @@ public class MoviePlayer implements
     }
 
     public void onDestroy() {
+        if (mVirtualizer != null) {
+            mVirtualizer.release();
+            mVirtualizer = null;
+        }
         mVideoView.stopPlayback();
         mAudioBecomingNoisyReceiver.unregister();
     }

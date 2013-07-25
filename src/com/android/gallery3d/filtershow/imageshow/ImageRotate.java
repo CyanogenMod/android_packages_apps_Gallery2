@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.EditorRotate;
 
 public class ImageRotate extends ImageGeometry {
 
@@ -30,6 +31,7 @@ public class ImageRotate extends ImageGeometry {
     private float mAngle = 0;
 
     private final boolean mSnapToNinety = true;
+    private EditorRotate mEditorRotate;
     private static final String LOGTAG = "ImageRotate";
 
     public ImageRotate(Context context, AttributeSet attrs) {
@@ -50,6 +52,13 @@ public class ImageRotate extends ImageGeometry {
     private void computeValue() {
         float angle = getCurrentTouchAngle();
         mAngle = (mBaseAngle - angle) % 360;
+    }
+
+    public void rotate() {
+        mAngle += 90;
+        mAngle = snappedAngle(mAngle);
+        mAngle %= 360;
+        setLocalRotation(mAngle);
     }
 
     @Override
@@ -74,16 +83,18 @@ public class ImageRotate extends ImageGeometry {
     }
 
     @Override
-    protected int getLocalValue() {
+    public int getLocalValue() {
         return constrainedRotation(snappedAngle(getLocalRotation()));
     }
 
     @Override
     protected void drawShape(Canvas canvas, Bitmap image) {
         gPaint.setAntiAlias(true);
-        gPaint.setFilterBitmap(true);
-        gPaint.setDither(true);
         gPaint.setARGB(255, 255, 255, 255);
         drawTransformedCropped(canvas, image, gPaint);
+    }
+
+    public void setEditor(EditorRotate editorRotate) {
+        mEditorRotate = editorRotate;
     }
 }

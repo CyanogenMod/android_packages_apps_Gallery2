@@ -19,4 +19,11 @@
         <item name="listPreferredItemHeightSmall">?android:attr/listPreferredItemHeightSmall</item>
         <item name="switchStyle">@android:style/Widget.CompoundButton</item>
     </style>
+    <style name="ActionBarTwoLineItem">
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+    </style>
+    <style name="Theme.Photos.Gallery" parent="android:Theme.Holo.Light">
+    </style>
+    <style name="Theme.Photos.Fullscreen" parent="android:Theme.Holo">
+    </style>
 </resources>

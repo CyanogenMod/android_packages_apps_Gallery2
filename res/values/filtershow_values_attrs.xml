@@ -19,4 +19,14 @@
         <attr name="android:text"/>
         <attr name="android:textColor"/>
     </declare-styleable>
+    <declare-styleable name="CenteredLinearLayout">
+        <attr name="max_width" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="StatePanelTrack">
+        <attr name="elemSize" format="dimension" />
+        <attr name="elemEndSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="CategoryTrack">
+        <attr name="iconSize" format="dimension" />
+    </declare-styleable>
 </resources>

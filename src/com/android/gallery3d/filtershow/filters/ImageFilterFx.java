@@ -16,46 +16,75 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import com.android.gallery3d.app.Log;
 
 public class ImageFilterFx extends ImageFilter {
-    private static final String TAG = "ImageFilterFx";
-    Bitmap fxBitmap;
-    public ImageFilterFx(Bitmap fxBitmap,String name) {
-        setFilterType(TYPE_FX);
-        mName = name;
-        this.fxBitmap = fxBitmap;
+    private static final String LOGTAG = "ImageFilterFx";
+    private FilterFxRepresentation mParameters = null;
+    private Bitmap mFxBitmap = null;
+    private Resources mResources = null;
+    private int mFxBitmapId = 0;
+
+    public ImageFilterFx() {
     }
 
     @Override
-    public ImageFilter clone() throws CloneNotSupportedException {
-        ImageFilterFx filter = (ImageFilterFx) super.clone();
-        filter.fxBitmap = this.fxBitmap;
-        return filter;
+    public void freeResources() {
+        if (mFxBitmap != null) mFxBitmap.recycle();
+        mFxBitmap = null;
     }
 
-    @Override
-    public boolean isNil() {
-        if (fxBitmap != null) {
-            return false;
-        }
-        return true;
+    public void useRepresentation(FilterRepresentation representation) {
+        FilterFxRepresentation parameters = (FilterFxRepresentation) representation;
+        mParameters = parameters;
+    }
+
+    public FilterFxRepresentation getParameters() {
+        return mParameters;
     }
 
     native protected void nativeApplyFilter(Bitmap bitmap, int w, int h,Bitmap  fxBitmap, int fxw, int fxh);
 
     @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
-        if (fxBitmap==null)
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
+        if (getParameters() == null || mResources == null) {
             return bitmap;
+        }
 
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
 
-        int fxw = fxBitmap.getWidth();
-        int fxh = fxBitmap.getHeight();
+        int bitmapResourceId = getParameters().getBitmapResource();
+        if (bitmapResourceId == 0) { // null filter fx
+            return bitmap;
+        }
 
-        nativeApplyFilter(bitmap, w, h,   fxBitmap,  fxw,  fxh);
+        if (mFxBitmap == null || mFxBitmapId != bitmapResourceId) {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inScaled = false;
+            mFxBitmapId = bitmapResourceId;
+            if (mFxBitmapId != 0) {
+                mFxBitmap = BitmapFactory.decodeResource(mResources, mFxBitmapId, o);
+            } else {
+                Log.w(LOGTAG, "bad resource for filter: " + mName);
+            }
+        }
+
+        if (mFxBitmap == null) {
+            return bitmap;
+        }
+
+        int fxw = mFxBitmap.getWidth();
+        int fxh = mFxBitmap.getHeight();
+
+        nativeApplyFilter(bitmap, w, h, mFxBitmap, fxw, fxh);
         return bitmap;
+    }
+
+    public void setResources(Resources resources) {
+        mResources = resources;
     }
 }

@@ -16,12 +16,16 @@
 
 package com.android.gallery3d.data;
 
-import android.media.ExifInterface;
-
 import com.android.gallery3d.R;
-import com.android.gallery3d.common.ExifTags;
+import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.exif.ExifInterface;
+import com.android.gallery3d.exif.ExifTag;
+import com.android.gallery3d.exif.Rational;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -105,10 +109,18 @@ public class MediaDetails implements Iterable<Entry<Integer, Object>> {
         return mUnits.get(index);
     }
 
-    private static void setExifData(MediaDetails details, ExifInterface exif, String tag,
+    private static void setExifData(MediaDetails details, ExifTag tag,
             int key) {
-        String value = exif.getAttribute(tag);
-        if (value != null) {
+        if (tag != null) {
+            String value = null;
+            int type = tag.getDataType();
+            if (type == ExifTag.TYPE_UNSIGNED_RATIONAL || type == ExifTag.TYPE_RATIONAL) {
+                value = String.valueOf(tag.getValueAsRational(0).toDouble());
+            } else if (type == ExifTag.TYPE_ASCII) {
+                value = tag.getValueAsString();
+            } else {
+                value = String.valueOf(tag.forceGetValueAsLong(0));
+            }
             if (key == MediaDetails.INDEX_FLASH) {
                 MediaDetails.FlashState state = new MediaDetails.FlashState(
                         Integer.valueOf(value.toString()));
@@ -120,29 +132,39 @@ public class MediaDetails implements Iterable<Entry<Integer, Object>> {
     }
 
     public static void extractExifInfo(MediaDetails details, String filePath) {
-        try {
-            ExifInterface exif = new ExifInterface(filePath);
-            setExifData(details, exif, ExifInterface.TAG_FLASH, MediaDetails.INDEX_FLASH);
-            setExifData(details, exif, ExifInterface.TAG_IMAGE_WIDTH, MediaDetails.INDEX_WIDTH);
-            setExifData(details, exif, ExifInterface.TAG_IMAGE_LENGTH,
-                    MediaDetails.INDEX_HEIGHT);
-            setExifData(details, exif, ExifInterface.TAG_MAKE, MediaDetails.INDEX_MAKE);
-            setExifData(details, exif, ExifInterface.TAG_MODEL, MediaDetails.INDEX_MODEL);
-            setExifData(details, exif, ExifTags.TAG_APERTURE, MediaDetails.INDEX_APERTURE);
-            setExifData(details, exif, ExifTags.TAG_ISO, MediaDetails.INDEX_ISO);
-            setExifData(details, exif, ExifInterface.TAG_WHITE_BALANCE,
-                    MediaDetails.INDEX_WHITE_BALANCE);
-            setExifData(details, exif, ExifTags.TAG_EXPOSURE_TIME,
-                    MediaDetails.INDEX_EXPOSURE_TIME);
 
-            double data = exif.getAttributeDouble(ExifInterface.TAG_FOCAL_LENGTH, 0);
-            if (data != 0f) {
-                details.addDetail(MediaDetails.INDEX_FOCAL_LENGTH, data);
-                details.setUnit(MediaDetails.INDEX_FOCAL_LENGTH, R.string.unit_mm);
-            }
-        } catch (IOException ex) {
-            // ignore it.
-            Log.w(TAG, "", ex);
+        ExifInterface exif = new ExifInterface();
+        try {
+            exif.readExif(filePath);
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, "Could not find file to read exif: " + filePath, e);
+        } catch (IOException e) {
+            Log.w(TAG, "Could not read exif from file: " + filePath, e);
+        }
+
+        setExifData(details, exif.getTag(ExifInterface.TAG_FLASH),
+                MediaDetails.INDEX_FLASH);
+        setExifData(details, exif.getTag(ExifInterface.TAG_IMAGE_WIDTH),
+                MediaDetails.INDEX_WIDTH);
+        setExifData(details, exif.getTag(ExifInterface.TAG_IMAGE_LENGTH),
+                MediaDetails.INDEX_HEIGHT);
+        setExifData(details, exif.getTag(ExifInterface.TAG_MAKE),
+                MediaDetails.INDEX_MAKE);
+        setExifData(details, exif.getTag(ExifInterface.TAG_MODEL),
+                MediaDetails.INDEX_MODEL);
+        setExifData(details, exif.getTag(ExifInterface.TAG_APERTURE_VALUE),
+                MediaDetails.INDEX_APERTURE);
+        setExifData(details, exif.getTag(ExifInterface.TAG_ISO_SPEED_RATINGS),
+                MediaDetails.INDEX_ISO);
+        setExifData(details, exif.getTag(ExifInterface.TAG_WHITE_BALANCE),
+                MediaDetails.INDEX_WHITE_BALANCE);
+        setExifData(details, exif.getTag(ExifInterface.TAG_EXPOSURE_TIME),
+                MediaDetails.INDEX_EXPOSURE_TIME);
+        ExifTag focalTag = exif.getTag(ExifInterface.TAG_FOCAL_LENGTH);
+        if (focalTag != null) {
+            details.addDetail(MediaDetails.INDEX_FOCAL_LENGTH,
+                    focalTag.getValueAsRational(0).toDouble());
+            details.setUnit(MediaDetails.INDEX_FOCAL_LENGTH, R.string.unit_mm);
         }
     }
 }

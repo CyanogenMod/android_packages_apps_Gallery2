@@ -17,41 +17,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dip"
+    android:gravity="center_horizontal"
     android:orientation="horizontal"
-    android:background="@drawable/filtershow_button_background">
+    android:padding="0dip"
+    android:background="@color/background_main_toolbar">
 
     <ImageView
-        android:id="@+id/selectedMark"
-        android:src="@drawable/camera_crop"
-        android:background="@android:color/transparent"
-        android:layout_width="32dip"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:visibility="invisible"
-        >
-    </ImageView>
+            android:id="@+id/preview"
+            android:layout_width="180dip"
+            android:layout_height="120dip"
+            android:scaleType="centerCrop"
+            android:cropToPadding="true"
+            android:visibility="visible"
+            />
 
     <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rowTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="10dip"
-        android:textSize="16dip" >
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rowTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="bottom|right"
+            android:padding="10dip"
+            android:textSize="16dip"
+            android:textStyle="bold">
     </TextView>
-
-    <ImageView
-        android:id="@+id/typeMark"
-        android:src="@drawable/filtershow_button_origin"
-        android:background="@android:color/transparent"
-        android:layout_width="32dip"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:paddingRight="4dip"
-        android:visibility="visible"
-        >
-    </ImageView>
 
 </LinearLayout>

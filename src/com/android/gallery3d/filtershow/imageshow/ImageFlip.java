@@ -24,6 +24,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.EditorFlip;
 import com.android.gallery3d.filtershow.imageshow.GeometryMetadata.FLIP;
 
 public class ImageFlip extends ImageGeometry {
@@ -32,6 +33,7 @@ public class ImageFlip extends ImageGeometry {
     private static final float MIN_FLICK_DIST_FOR_FLIP = 0.1f;
     private static final String LOGTAG = "ImageFlip";
     private FLIP mNextFlip = FLIP.NONE;
+    private EditorFlip mEditorFlip;
 
     public ImageFlip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,6 +56,22 @@ public class ImageFlip extends ImageGeometry {
     boolean hasRotated90(){
         int rot = constrainedRotation(getLocalRotation());
         return (rot / 90) % 2 != 0;
+    }
+
+    public void flip() {
+        FLIP flip = getLocalFlip();
+        boolean next = true;
+        // Picks next flip in order from enum FLIP (wrapping)
+        for (FLIP f : FLIP.values()) {
+            if (next) {
+                mNextFlip = f;
+                next = false;
+            }
+            if (f.equals(flip)) {
+                next = true;
+            }
+        }
+        setLocalFlip(mNextFlip);
     }
 
     @Override
@@ -136,10 +154,12 @@ public class ImageFlip extends ImageGeometry {
     @Override
     protected void drawShape(Canvas canvas, Bitmap image) {
         gPaint.setAntiAlias(true);
-        gPaint.setFilterBitmap(true);
-        gPaint.setDither(true);
         gPaint.setARGB(255, 255, 255, 255);
         drawTransformedCropped(canvas, image, gPaint);
+    }
+
+    public void setEditor(EditorFlip editorFlip) {
+        mEditorFlip = editorFlip;
     }
 
 }

@@ -46,6 +46,7 @@ import com.android.gallery3d.ui.TiledScreenNail;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -92,14 +93,6 @@ public class GalleryUtils {
         // For screen-nails, we never need to completely fill the screen
         MediaItem.setThumbnailSizes(maxPixels / 2, maxPixels / 5);
         TiledScreenNail.setMaxSide(maxPixels / 2);
-    }
-
-    public static boolean isHighResolution(Context context) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager)
-                context.getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(metrics);
-        return metrics.heightPixels > 2048 ||  metrics.widthPixels > 2048;
     }
 
     public static float[] intColorToFloatARGBArray(int from) {
@@ -259,7 +252,9 @@ public class GalleryUtils {
     }
 
     public static void startGalleryActivity(Context context) {
-        Intent intent = new Intent(context, Gallery.class);
+        Intent intent = new Intent(context, Gallery.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -313,6 +308,26 @@ public class GalleryUtils {
 
     public static int getBucketId(String path) {
         return path.toLowerCase().hashCode();
+    }
+
+    // Return the local path that matches the given bucketId. If no match is
+    // found, return null
+    public static String searchDirForPath(File dir, int bucketId) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    String path = file.getAbsolutePath();
+                    if (GalleryUtils.getBucketId(path) == bucketId) {
+                        return path;
+                    } else {
+                        path = searchDirForPath(file, bucketId);
+                        if (path != null) return path;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // Returns a (localized) string for the given duration (in seconds).

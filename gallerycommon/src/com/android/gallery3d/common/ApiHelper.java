@@ -22,6 +22,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.provider.MediaStore.MediaColumns;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 
@@ -36,7 +37,10 @@ public class ApiHelper {
         public static final int ICE_CREAM_SANDWICH_MR1 = 15;
         public static final int JELLY_BEAN = 16;
         public static final int JELLY_BEAN_MR1 = 17;
+        public static final int JELLY_BEAN_MR2 = 18;
     }
+
+    public static final boolean AT_LEAST_16 = Build.VERSION.SDK_INT >= 16;
 
     public static final boolean USE_888_PIXEL_FORMAT =
             Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
@@ -169,6 +173,30 @@ public class ApiHelper {
 
     public static final boolean HAS_POST_ON_ANIMATION =
             Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
+
+    public static final boolean HAS_ANNOUNCE_FOR_ACCESSIBILITY =
+            Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
+
+    public static final boolean HAS_OBJECT_ANIMATION =
+            Build.VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB;
+
+    public static final boolean HAS_GLES20_REQUIRED =
+            Build.VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB;
+
+    public static final boolean HAS_ROTATION_ANIMATION =
+            hasField(WindowManager.LayoutParams.class, "rotationAnimation");
+
+    public static final boolean HAS_ORIENTATION_LOCK =
+            Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2;
+
+    public static final boolean HAS_CANCELLATION_SIGNAL =
+            Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
+
+    public static final boolean HAS_MEDIA_MUXER =
+                    Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2;
+
+    public static final boolean HAS_DISPLAY_LISTENER =
+            Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1;
 
     public static int getIntFieldIfExists(Class<?> klass, String fieldName,
             Class<?> obj, int defaultVal) {

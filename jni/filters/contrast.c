@@ -27,6 +27,15 @@ unsigned char clamp(int c)
     return  (unsigned char) c;
 }
 
+int clampMax(int c,int max)
+{
+    c &= ~(c >> 31);
+    c -= max;
+    c &= (c >> 31);
+    c += max;
+    return  c;
+}
+
 void JNIFUNCF(ImageFilterContrast, nativeApplyFilter, jobject bitmap, jint width, jint height, jfloat bright)
 {
     char* destination = 0;

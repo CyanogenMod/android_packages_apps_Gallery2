@@ -32,6 +32,7 @@ public class ImageFilterStraighten extends ImageFilter {
 
     @Override
     public ImageFilter clone() throws CloneNotSupportedException {
+        // FIXME: clone() should not be needed. Remove when we fix geometry.
         ImageFilterStraighten filter = (ImageFilterStraighten) super.clone();
         filter.mRotation = mRotation;
         filter.mZoomFactor = mZoomFactor;
@@ -52,7 +53,12 @@ public class ImageFilterStraighten extends ImageFilter {
     }
 
     @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
+    public void useRepresentation(FilterRepresentation representation) {
+
+    }
+
+    @Override
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
         // TODO: implement bilinear or bicubic here... for now, just use
         // canvas to do a simple implementation...
         // TODO: and be more memory efficient! (do it in native?)

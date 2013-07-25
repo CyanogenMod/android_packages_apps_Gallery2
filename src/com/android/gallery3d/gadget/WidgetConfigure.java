@@ -23,13 +23,20 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.AlbumPicker;
-import com.android.gallery3d.app.CropImage;
 import com.android.gallery3d.app.DialogPicker;
+import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.common.ApiHelper;
+import com.android.gallery3d.data.DataManager;
+import com.android.gallery3d.data.LocalAlbum;
+import com.android.gallery3d.data.MediaSet;
+import com.android.gallery3d.data.Path;
+import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.crop.CropExtras;
 
 public class WidgetConfigure extends Activity {
     @SuppressWarnings("unused")
@@ -142,14 +149,14 @@ public class WidgetConfigure extends Activity {
         int widgetHeight = Math.round(height * scale);
 
         mPickedItem = data.getData();
-        Intent request = new Intent(CropImage.ACTION_CROP, mPickedItem)
-                .putExtra(CropImage.KEY_OUTPUT_X, widgetWidth)
-                .putExtra(CropImage.KEY_OUTPUT_Y, widgetHeight)
-                .putExtra(CropImage.KEY_ASPECT_X, widgetWidth)
-                .putExtra(CropImage.KEY_ASPECT_Y, widgetHeight)
-                .putExtra(CropImage.KEY_SCALE_UP_IF_NEEDED, true)
-                .putExtra(CropImage.KEY_SCALE, true)
-                .putExtra(CropImage.KEY_RETURN_DATA, true);
+        Intent request = new Intent(FilterShowActivity.CROP_ACTION, mPickedItem)
+                .putExtra(CropExtras.KEY_OUTPUT_X, widgetWidth)
+                .putExtra(CropExtras.KEY_OUTPUT_Y, widgetHeight)
+                .putExtra(CropExtras.KEY_ASPECT_X, widgetWidth)
+                .putExtra(CropExtras.KEY_ASPECT_Y, widgetHeight)
+                .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
+                .putExtra(CropExtras.KEY_SCALE, true)
+                .putExtra(CropExtras.KEY_RETURN_DATA, true);
         startActivityForResult(request, REQUEST_CROP_IMAGE);
     }
 
@@ -157,8 +164,21 @@ public class WidgetConfigure extends Activity {
         String albumPath = data.getStringExtra(AlbumPicker.KEY_ALBUM_PATH);
         WidgetDatabaseHelper helper = new WidgetDatabaseHelper(this);
         try {
+            String relativePath = null;
+            GalleryApp galleryApp = (GalleryApp) getApplicationContext();
+            DataManager manager = galleryApp.getDataManager();
+            Path path = Path.fromString(albumPath);
+            MediaSet mediaSet = (MediaSet) manager.getMediaObject(path);
+            if (mediaSet instanceof LocalAlbum) {
+                int bucketId = Integer.parseInt(path.getSuffix());
+                // If the chosen album is a local album, find relative path
+                // Otherwise, leave the relative path field empty
+                relativePath = LocalAlbum.getRelativePath(bucketId);
+                Log.i(TAG, "Setting widget, album path: " + albumPath
+                        + ", relative path: " + relativePath);
+            }
             helper.setWidget(mAppWidgetId,
-                    WidgetDatabaseHelper.TYPE_ALBUM, albumPath);
+                    WidgetDatabaseHelper.TYPE_ALBUM, albumPath, relativePath);
             updateWidgetAndFinish(helper.getEntry(mAppWidgetId));
         } finally {
             helper.close();
@@ -173,7 +193,7 @@ public class WidgetConfigure extends Activity {
         } else if (widgetType == R.id.widget_type_shuffle) {
             WidgetDatabaseHelper helper = new WidgetDatabaseHelper(this);
             try {
-                helper.setWidget(mAppWidgetId, WidgetDatabaseHelper.TYPE_SHUFFLE, null);
+                helper.setWidget(mAppWidgetId, WidgetDatabaseHelper.TYPE_SHUFFLE, null, null);
                 updateWidgetAndFinish(helper.getEntry(mAppWidgetId));
             } finally {
                 helper.close();

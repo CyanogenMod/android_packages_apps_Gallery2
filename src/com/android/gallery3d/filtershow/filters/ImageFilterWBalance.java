@@ -16,23 +16,44 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+
 import android.graphics.Bitmap;
 
 public class ImageFilterWBalance extends ImageFilter {
     private static final String TAG = "ImageFilterWBalance";
 
     public ImageFilterWBalance() {
-        setFilterType(TYPE_WBALANCE);
         mName = "WBalance";
+    }
+
+    public FilterRepresentation getDefaultRepresentation() {
+        FilterRepresentation representation = new FilterDirectRepresentation("WBalance");
+        representation.setFilterClass(ImageFilterWBalance.class);
+        representation.setPriority(FilterRepresentation.TYPE_WBALANCE);
+        representation.setTextId(R.string.wbalance);
+        representation.setButtonId(R.id.wbalanceButton);
+        representation.setShowEditingControls(false);
+        representation.setShowParameterValue(false);
+        representation.setEditorId(ImageOnlyEditor.ID);
+        representation.setSupportsPartialRendering(true);
+        return representation;
+    }
+
+    @Override
+    public void useRepresentation(FilterRepresentation representation) {
+
     }
 
     native protected void nativeApplyFilter(Bitmap bitmap, int w, int h, int locX, int locY);
 
     @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-        nativeApplyFilter(bitmap, w, h, -1,-1);
+        nativeApplyFilter(bitmap, w, h, -1, -1);
         return bitmap;
     }
+
 }

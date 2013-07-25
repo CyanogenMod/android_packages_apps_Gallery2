@@ -23,7 +23,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,6 +41,8 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.glrenderer.FadeTexture;
+import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.settings.GallerySettings;
 import com.android.gallery3d.ui.ActionModeHandler;
@@ -48,8 +50,6 @@ import com.android.gallery3d.ui.ActionModeHandler.ActionModeListener;
 import com.android.gallery3d.ui.AlbumSetSlotRenderer;
 import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
-import com.android.gallery3d.ui.FadeTexture;
-import com.android.gallery3d.ui.GLCanvas;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.SelectionManager;
@@ -92,7 +92,6 @@ public class AlbumSetPage extends ActivityState implements
     private boolean mShowClusterMenu;
     private GalleryActionBar mActionBar;
     private int mSelectedAction;
-    private Vibrator mVibrator;
 
     protected SelectionManager mSelectionManager;
     private AlbumSetDataLoader mAlbumSetDataAdapter;
@@ -263,10 +262,7 @@ public class AlbumSetPage extends ActivityState implements
             mActivity.getStateManager().startStateForResult(
                     AlbumSetPage.class, REQUEST_DO_ANIMATION, data);
         } else {
-            if (!mGetContent && (targetSet.getSupportedOperations()
-                    & MediaObject.SUPPORT_IMPORT) != 0) {
-                data.putBoolean(AlbumPage.KEY_AUTO_SELECT_ALL, true);
-            } else if (!mGetContent && albumShouldOpenInFilmstrip(targetSet)) {
+            if (!mGetContent && albumShouldOpenInFilmstrip(targetSet)) {
                 data.putParcelable(PhotoPage.KEY_OPEN_ANIMATION_RECT,
                         mSlotView.getSlotRect(slotIndex, mRootPane));
                 data.putInt(PhotoPage.KEY_INDEX_HINT, 0);
@@ -275,7 +271,7 @@ public class AlbumSetPage extends ActivityState implements
                 data.putBoolean(PhotoPage.KEY_START_IN_FILMSTRIP, true);
                 data.putBoolean(PhotoPage.KEY_IN_CAMERA_ROLL, targetSet.isCameraRoll());
                 mActivity.getStateManager().startStateForResult(
-                        PhotoPage.class, AlbumPage.REQUEST_PHOTO, data);
+                        FilmstripPage.class, AlbumPage.REQUEST_PHOTO, data);
                 return;
             }
             data.putString(AlbumPage.KEY_MEDIA_PATH, mediaPath);
@@ -332,7 +328,6 @@ public class AlbumSetPage extends ActivityState implements
         mSubtitle = data.getString(AlbumSetPage.KEY_SET_SUBTITLE);
         mEyePosition = new EyePosition(context, this);
         mDetailsSource = new MyDetailsSource();
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mActionBar = mActivity.getGalleryActionBar();
         mSelectedAction = data.getInt(AlbumSetPage.KEY_SELECTED_CLUSTER_TYPE,
                 FilterUtils.CLUSTER_BY_ALBUM);
@@ -353,8 +348,9 @@ public class AlbumSetPage extends ActivityState implements
 
     @Override
     public void onDestroy() {
-        cleanupCameraButton();
         super.onDestroy();
+        cleanupCameraButton();
+        mActionModeHandler.destroy();
     }
 
     private boolean setupCameraButton() {
@@ -439,9 +435,9 @@ public class AlbumSetPage extends ActivityState implements
     public void onPause() {
         super.onPause();
         mIsActive = false;
-        mActionModeHandler.pause();
         mAlbumSetDataAdapter.pause();
         mAlbumSetView.pause();
+        mActionModeHandler.pause();
         mEyePosition.pause();
         DetailsHelper.pause();
         // Call disableClusterMenu to avoid receiving callback after paused.
@@ -664,7 +660,7 @@ public class AlbumSetPage extends ActivityState implements
             case SelectionManager.ENTER_SELECTION_MODE: {
                 mActionBar.disableClusterMenu(true);
                 mActionModeHandler.startActionMode();
-                if (mHapticsEnabled) mVibrator.vibrate(100);
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 break;
             }
             case SelectionManager.LEAVE_SELECTION_MODE: {

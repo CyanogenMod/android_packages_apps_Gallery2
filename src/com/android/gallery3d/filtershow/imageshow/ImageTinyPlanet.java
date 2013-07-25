@@ -17,12 +17,20 @@
 package com.android.gallery3d.filtershow.imageshow;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 
-import com.android.gallery3d.filtershow.filters.ImageFilterTinyPlanet;
+import com.android.gallery3d.filtershow.editors.BasicEditor;
+import com.android.gallery3d.filtershow.editors.EditorTinyPlanet;
+import com.android.gallery3d.filtershow.filters.FilterTinyPlanetRepresentation;
 
-public class ImageTinyPlanet extends ImageSlave {
+public class ImageTinyPlanet extends ImageShow {
+    private static final String LOGTAG = "ImageTinyPlanet";
 
     private float mTouchCenterX = 0;
     private float mTouchCenterY = 0;
@@ -31,13 +39,49 @@ public class ImageTinyPlanet extends ImageSlave {
     private float mCenterX = 0;
     private float mCenterY = 0;
     private float mStartAngle = 0;
+    private FilterTinyPlanetRepresentation mTinyPlanetRep;
+    private EditorTinyPlanet mEditorTinyPlanet;
+    private ScaleGestureDetector mScaleGestureDetector = null;
+    boolean mInScale = false;
+    RectF mDestRect = new RectF();
+
+    OnScaleGestureListener mScaleGestureListener = new OnScaleGestureListener() {
+        private float mScale = 100;
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            mInScale = false;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            mInScale = true;
+            mScale = mTinyPlanetRep.getValue();
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            int value = mTinyPlanetRep.getValue();
+            mScale *= detector.getScaleFactor();
+            value = (int) (mScale);
+            value = Math.min(mTinyPlanetRep.getMaximum(), value);
+            value = Math.max(mTinyPlanetRep.getMinimum(), value);
+            mTinyPlanetRep.setValue(value);
+            invalidate();
+            mEditorTinyPlanet.commitLocalRepresentation();
+            mEditorTinyPlanet.updateUI();
+            return true;
+        }
+    };
 
     public ImageTinyPlanet(Context context) {
         super(context);
+        mScaleGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
     }
 
     public ImageTinyPlanet(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mScaleGestureDetector = new ScaleGestureDetector(context,mScaleGestureListener );
     }
 
     protected static float angleFor(float dx, float dy) {
@@ -60,26 +104,71 @@ public class ImageTinyPlanet extends ImageSlave {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ImageFilterTinyPlanet filter = (ImageFilterTinyPlanet) getCurrentFilter();
         float x = event.getX();
         float y = event.getY();
         mCurrentX = x;
         mCurrentY = y;
         mCenterX = getWidth() / 2;
         mCenterY = getHeight() / 2;
+        mScaleGestureDetector.onTouchEvent(event);
+        if (mInScale) {
+            return true;
+        }
         switch (event.getActionMasked()) {
             case (MotionEvent.ACTION_DOWN):
                 mTouchCenterX = x;
                 mTouchCenterY = y;
-                mStartAngle = filter.getAngle();
+                mStartAngle = mTinyPlanetRep.getAngle();
                 break;
-            case (MotionEvent.ACTION_UP):
+
             case (MotionEvent.ACTION_MOVE):
-                filter.setAngle(mStartAngle + getCurrentTouchAngle());
+                mTinyPlanetRep.setAngle(mStartAngle + getCurrentTouchAngle());
                 break;
         }
-        resetImageCaches(this);
         invalidate();
+        mEditorTinyPlanet.commitLocalRepresentation();
         return true;
+    }
+
+    public void setRepresentation(FilterTinyPlanetRepresentation tinyPlanetRep) {
+        mTinyPlanetRep = tinyPlanetRep;
+    }
+
+    public void setEditor(BasicEditor editorTinyPlanet) {
+        mEditorTinyPlanet = (EditorTinyPlanet) editorTinyPlanet;
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        Bitmap bitmap = MasterImage.getImage().getHighresImage();
+        if (bitmap == null) {
+            bitmap = MasterImage.getImage().getFilteredImage();
+        }
+
+        if (bitmap != null) {
+            display(canvas, bitmap);
+        }
+    }
+
+    private void display(Canvas canvas, Bitmap bitmap) {
+        float sw = canvas.getWidth();
+        float sh = canvas.getHeight();
+        float iw = bitmap.getWidth();
+        float ih = bitmap.getHeight();
+        float nsw = sw;
+        float nsh = sh;
+
+        if (sw * ih > sh * iw) {
+            nsw = sh * iw / ih;
+        } else {
+            nsh = sw * ih / iw;
+        }
+
+        mDestRect.left = (sw - nsw) / 2;
+        mDestRect.top = (sh - nsh) / 2;
+        mDestRect.right = sw - mDestRect.left;
+        mDestRect.bottom = sh - mDestRect.top;
+
+        canvas.drawBitmap(bitmap, null, mDestRect, mPaint);
     }
 }

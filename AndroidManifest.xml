@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<manifest android:versionCode="40001"
-        android:versionName="1.1.40001"
+<manifest android:versionCode="40012"
+        android:versionName="1.1.40012"
         xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.android.gallery3d">
 
     <original-package android:name="com.android.gallery3d" />
 
-    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17" />
 
     <permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER"
             android:protectionLevel="signatureOrSystem" />
@@ -20,7 +20,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -32,6 +31,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.PREVENT_POWER_KEY" />
+    <uses-permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER" />
 
     <supports-screens android:smallScreens="false"
             android:normalScreens="true" android:largeScreens="true"
@@ -42,8 +42,12 @@
             android:theme="@style/Theme.Gallery"
             android:logo="@mipmap/ic_launcher_gallery"
             android:hardwareAccelerated="true"
-            android:largeHeap="true">
+            android:largeHeap="true"
+            android:backupAgent="com.android.camera.CameraBackupAgent"
+            android:restoreAnyVersion="true">
         <uses-library android:name="com.google.android.media.effects" android:required="false" />
+        <meta-data android:name="com.google.android.backup.api_key"
+                android:value="AEdPqrEAAAAIRIXquXawbz6duuuCIUAZ_YJv1zbFMMcjZ0NoVw" />
         <activity android:name="com.android.gallery3d.app.MovieActivity"
                 android:label="@string/movie_view_label"
                 android:configChanges="orientation|keyboardHidden|screenSize">
@@ -104,6 +108,20 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
             </intent-filter>
+            <!-- We do NOT support the PICK intent, we add these intent-filter for
+                 backward compatibility. Handle it as GET_CONTENT. -->
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/image" />
+                <data android:mimeType="vnd.android.cursor.dir/video" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -124,6 +142,7 @@
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/gif" />
                 <data android:mimeType="image/png" />
+                <data android:mimeType="image/webp" />
                 <data android:mimeType="image/x-ms-bmp" />
                 <data android:mimeType="image/vnd.wap.wbmp" />
                 <data android:mimeType="application/vnd.google.panorama360+jpg" />
@@ -143,20 +162,6 @@
                 <data android:mimeType="video/3gpp2" />
                 <data android:mimeType="application/sdp" />
             </intent-filter>
-            <!-- We do NOT support the PICK intent, we add these intent-filter for
-                 backward compatibility. Handle it as GET_CONTENT. -->
-            <intent-filter>
-                <action android:name="android.intent.action.PICK" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-                <data android:mimeType="video/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PICK" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/image" />
-                <data android:mimeType="vnd.android.cursor.dir/video" />
-            </intent-filter>
         </activity>
 
         <!-- we add this activity-alias for shortcut backward compatibility -->
@@ -170,16 +175,19 @@
             </intent-filter>
         </activity-alias>
 
-        <!-- This activity receives USB_DEVICE_ATTACHED Intents and springboards to main Gallery activity. -->
-        <activity android:name="com.android.gallery3d.app.UsbDeviceActivity" android:label="@string/app_name"
-                android:taskAffinity=""
-                android:launchMode="singleInstance">
+         <!-- This activity receives USB_DEVICE_ATTACHED intents and allows importing
+         media from attached MTP devices, like cameras and camera phones -->
+        <activity android:launchMode="singleInstance"
+            android:taskAffinity="" android:name="com.android.gallery3d.ingest.IngestActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
             <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
+        <service android:name="com.android.gallery3d.ingest.IngestService" />
 
         <activity android:name="com.android.gallery3d.app.Wallpaper"
                 android:configChanges="keyboardHidden|orientation|screenSize"
@@ -195,23 +203,6 @@
             </intent-filter>
             <meta-data android:name="android.wallpaper.preview"
                     android:resource="@xml/wallpaper_picker_preview" />
-        </activity>
-        <activity android:name="com.android.gallery3d.app.CropImage"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:label="@string/crop_label"
-                android:process=":crop">
-            <intent-filter android:label="@string/crop_label">
-                <action android:name="com.android.camera.action.CROP" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="content" />
-                <data android:scheme="file" />
-                <data android:scheme="" />
-                <data android:mimeType="image/*" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.ALTERNATIVE" />
-                <category android:name="android.intent.category.SELECTED_ALTERNATIVE" />
-            </intent-filter>
         </activity>
         <activity android:name="com.android.gallery3d.app.TrimVideo"
                 android:label="@string/trim_label">
@@ -244,8 +235,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter android:label="@string/crop_label">
-                <action android:name="com.android.camera.action.EDITOR_CROP" />
+        </activity>
+
+        <activity
+            android:name="com.android.gallery3d.filtershow.crop.CropActivity"
+            android:label="@string/crop"
+            android:theme="@style/Theme.FilterShow"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+           <intent-filter android:label="@string/crop_label">
+                <action android:name="com.android.camera.action.CROP" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:scheme="content" />
@@ -271,6 +269,11 @@
                 android:exported="true"
                 android:permission="com.android.gallery3d.permission.GALLERY_PROVIDER"
                 android:authorities="com.android.gallery3d.provider" />
+        <provider
+                android:name="com.android.photos.data.PhotoProvider"
+                android:authorities="com.android.gallery3d.photoprovider"
+                android:syncable="false"
+                android:exported="false"/>
         <activity android:name="com.android.gallery3d.gadget.WidgetClickHandler" />
         <activity android:name="com.android.gallery3d.app.DialogPicker"
                 android:configChanges="keyboardHidden|orientation|screenSize"
@@ -306,7 +309,7 @@
                 android:taskAffinity="com.android.camera.SecureCameraActivity"
                 android:excludeFromRecents="true"
                 android:label="@string/camera_label"
-                android:theme="@style/Theme.CameraSecure"
+                android:theme="@style/Theme.Camera"
                 android:icon="@mipmap/ic_launcher_camera"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:clearTaskOnLaunch="true"
@@ -397,5 +400,7 @@
         <activity android:name="com.android.camera.ProxyLauncher"
                 android:theme="@style/Theme.ProxyLauncher">
         </activity>
+        <service android:name="com.android.gallery3d.app.BatchService" />
+        <service android:name="com.android.camera.MediaSaveService" />
     </application>
 </manifest>

@@ -26,18 +26,32 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.Editor;
+import com.android.gallery3d.filtershow.editors.EditorCurves;
+import com.android.gallery3d.filtershow.filters.FilterCurvesRepresentation;
+import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilterCurves;
-import com.android.gallery3d.filtershow.imageshow.ImageSlave;
+import com.android.gallery3d.filtershow.imageshow.ImageShow;
 import com.android.gallery3d.filtershow.presets.ImagePreset;
 
-public class ImageCurves extends ImageSlave {
+import java.util.HashMap;
+
+public class ImageCurves extends ImageShow {
 
     private static final String LOGTAG = "ImageCurves";
     Paint gPaint = new Paint();
     Path gPathSpline = new Path();
+    HashMap<Integer, String> mIdStrLut;
 
     private int mCurrentCurveIndex = Spline.RGB;
     private boolean mDidAddPoint = false;
@@ -51,15 +65,79 @@ public class ImageCurves extends ImageSlave {
     Path gHistoPath = new Path();
 
     boolean mDoingTouchMove = false;
+    private EditorCurves mEditorCurves;
+    private FilterCurvesRepresentation mFilterCurvesRepresentation;
 
     public ImageCurves(Context context) {
         super(context);
+        setLayerType(LAYER_TYPE_SOFTWARE, gPaint);
         resetCurve();
     }
 
     public ImageCurves(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setLayerType(LAYER_TYPE_SOFTWARE, gPaint);
         resetCurve();
+    }
+
+    @Override
+    protected boolean enableComparison() {
+        return false;
+    }
+
+    @Override
+    public boolean useUtilityPanel() {
+        return true;
+    }
+
+    private void showPopupMenu(LinearLayout accessoryViewList) {
+        final Button button = (Button) accessoryViewList.findViewById(
+                R.id.applyEffect);
+        if (button == null) {
+            return;
+        }
+        if (mIdStrLut == null){
+            mIdStrLut = new HashMap<Integer, String>();
+            mIdStrLut.put(R.id.curve_menu_rgb,
+                    getContext().getString(R.string.curves_channel_rgb));
+            mIdStrLut.put(R.id.curve_menu_red,
+                    getContext().getString(R.string.curves_channel_red));
+            mIdStrLut.put(R.id.curve_menu_green,
+                    getContext().getString(R.string.curves_channel_green));
+            mIdStrLut.put(R.id.curve_menu_blue,
+                    getContext().getString(R.string.curves_channel_blue));
+        }
+        PopupMenu popupMenu = new PopupMenu(getActivity(), button);
+        popupMenu.getMenuInflater().inflate(R.menu.filtershow_menu_curves, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                setChannel(item.getItemId());
+                button.setText(mIdStrLut.get(item.getItemId()));
+                return true;
+            }
+        });
+        Editor.hackFixStrings(popupMenu.getMenu());
+        popupMenu.show();
+    }
+
+    @Override
+    public void openUtilityPanel(final LinearLayout accessoryViewList) {
+        Context context = accessoryViewList.getContext();
+        Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
+        view.setText(context.getString(R.string.curves_channel_rgb));
+        view.setVisibility(View.VISIBLE);
+
+        view.setOnClickListener(new OnClickListener() {
+                @Override
+            public void onClick(View arg0) {
+                showPopupMenu(accessoryViewList);
+            }
+        });
+
+        if (view != null) {
+            view.setVisibility(View.VISIBLE);
+        }
     }
 
     public void nextChannel() {
@@ -73,15 +151,16 @@ public class ImageCurves extends ImageSlave {
     }
 
     private ImageFilterCurves curves() {
-        if (getMaster() != null) {
-            String filterName = getFilterName();
-            return (ImageFilterCurves) getImagePreset().getFilter(filterName);
+        String filterName = getFilterName();
+        ImagePreset p = getImagePreset();
+        if (p != null) {
+            return (ImageFilterCurves) FiltersManager.getManager().getFilter(ImageFilterCurves.class);
         }
         return null;
     }
 
     private Spline getSpline(int index) {
-        return curves().getSpline(index);
+        return mFilterCurvesRepresentation.getSpline(index);
     }
 
     @Override
@@ -93,8 +172,8 @@ public class ImageCurves extends ImageSlave {
     }
 
     public void resetCurve() {
-        if (getMaster() != null && curves() != null) {
-            curves().reset();
+        if (mFilterCurvesRepresentation != null) {
+            mFilterCurvesRepresentation.reset();
             updateCachedImage();
         }
     }
@@ -102,6 +181,9 @@ public class ImageCurves extends ImageSlave {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (mFilterCurvesRepresentation == null) {
+            return;
+        }
 
         gPaint.setAntiAlias(true);
 
@@ -174,22 +256,30 @@ public class ImageCurves extends ImageSlave {
 
     @Override
     public synchronized boolean onTouchEvent(MotionEvent e) {
-        float posX = e.getX();
-        float posY = e.getY();
+        if (e.getPointerCount() != 1) {
+            return true;
+        }
+
+        if (didFinishScalingOperation()) {
+            return true;
+        }
+
         float margin = Spline.curveHandleSize() / 2;
+        float posX = e.getX();
         if (posX < margin) {
             posX = margin;
+        }
+        float posY = e.getY();
+        if (posY < margin) {
+            posY = margin;
         }
         if (posX > getWidth() - margin) {
             posX = getWidth() - margin;
         }
-        posX = (posX - margin) / (getWidth() - 2 * margin);
-        if (posY < margin) {
-            posY = margin;
-        }
         if (posY > getHeight() - margin) {
             posY = getHeight() - margin;
         }
+        posX = (posX - margin) / (getWidth() - 2 * margin);
         posY = (posY - margin) / (getHeight() - 2 * margin);
 
         if (e.getActionMasked() == MotionEvent.ACTION_UP) {
@@ -203,7 +293,6 @@ public class ImageCurves extends ImageSlave {
             mDoingTouchMove = false;
             return true;
         }
-        mDoingTouchMove = true;
 
         if (mDidDelete) {
             return true;
@@ -213,35 +302,40 @@ public class ImageCurves extends ImageSlave {
             return true;
         }
 
-        Spline spline = getSpline(mCurrentCurveIndex);
-        int pick = mCurrentPick;
-        if (mCurrentControlPoint == null) {
-            pick = pickControlPoint(posX, posY);
-            if (pick == -1) {
-                mCurrentControlPoint = new ControlPoint(posX, posY);
-                pick = spline.addPoint(mCurrentControlPoint);
-                mDidAddPoint = true;
-            } else {
-                mCurrentControlPoint = spline.getPoint(pick);
+        if (e.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            mDoingTouchMove = true;
+            Spline spline = getSpline(mCurrentCurveIndex);
+            int pick = mCurrentPick;
+            if (mCurrentControlPoint == null) {
+                pick = pickControlPoint(posX, posY);
+                if (pick == -1) {
+                    mCurrentControlPoint = new ControlPoint(posX, posY);
+                    pick = spline.addPoint(mCurrentControlPoint);
+                    mDidAddPoint = true;
+                } else {
+                    mCurrentControlPoint = spline.getPoint(pick);
+                }
+                mCurrentPick = pick;
             }
-            mCurrentPick = pick;
-        }
 
-        if (spline.isPointContained(posX, pick)) {
-            spline.movePoint(pick, posX, posY);
-        } else if (pick != -1 && spline.getNbPoints() > 2) {
-            spline.deletePoint(pick);
-            mDidDelete = true;
+            if (spline.isPointContained(posX, pick)) {
+                spline.movePoint(pick, posX, posY);
+            } else if (pick != -1 && spline.getNbPoints() > 2) {
+                spline.deletePoint(pick);
+                mDidDelete = true;
+            }
+            updateCachedImage();
+            invalidate();
         }
-        updateCachedImage();
-        invalidate();
         return true;
     }
 
     public synchronized void updateCachedImage() {
-        // update image
         if (getImagePreset() != null) {
             resetImageCaches(this);
+            if (mEditorCurves != null) {
+                mEditorCurves.commitLocalRepresentation();
+            }
             invalidate();
         }
     }
@@ -346,6 +440,15 @@ public class ImageCurves extends ImageSlave {
                 break;
             }
         }
+        mEditorCurves.commitLocalRepresentation();
         invalidate();
+    }
+
+    public void setEditor(EditorCurves editorCurves) {
+        mEditorCurves = editorCurves;
+    }
+
+    public void setFilterDrawRepresentation(FilterCurvesRepresentation drawRep) {
+        mFilterCurvesRepresentation = drawRep;
     }
 }

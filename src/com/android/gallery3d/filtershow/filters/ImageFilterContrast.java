@@ -16,22 +16,41 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import com.android.gallery3d.R;
+
 import android.graphics.Bitmap;
 
-public class ImageFilterContrast extends ImageFilter {
+public class ImageFilterContrast extends SimpleImageFilter {
 
     public ImageFilterContrast() {
         mName = "Contrast";
     }
 
+    public FilterRepresentation getDefaultRepresentation() {
+        FilterBasicRepresentation representation =
+                (FilterBasicRepresentation) super.getDefaultRepresentation();
+        representation.setName("Contrast");
+        representation.setFilterClass(ImageFilterContrast.class);
+        representation.setTextId(R.string.contrast);
+        representation.setButtonId(R.id.contrastButton);
+
+        representation.setMinimum(-100);
+        representation.setMaximum(100);
+        representation.setDefaultValue(0);
+        representation.setSupportsPartialRendering(true);
+        return representation;
+    }
+
     native protected void nativeApplyFilter(Bitmap bitmap, int w, int h, float strength);
 
     @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
+        if (getParameters() == null) {
+            return bitmap;
+        }
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-        float p = mParameter;
-        float value = p;
+        float value = getParameters().getValue();
         nativeApplyFilter(bitmap, w, h, value);
         return bitmap;
     }

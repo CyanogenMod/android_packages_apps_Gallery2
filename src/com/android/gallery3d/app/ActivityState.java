@@ -19,15 +19,13 @@ package com.android.gallery3d.app;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,9 +34,9 @@ import android.view.WindowManager;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.anim.StateTransitionAnimation;
+import com.android.gallery3d.glrenderer.RawTexture;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.PreparePageFadeoutTexture;
-import com.android.gallery3d.ui.RawTexture;
 import com.android.gallery3d.util.GalleryUtils;
 
 abstract public class ActivityState {
@@ -61,9 +59,6 @@ abstract public class ActivityState {
         public int resultCode = Activity.RESULT_CANCELED;
         public Intent resultData;
     }
-
-    protected boolean mHapticsEnabled;
-    private ContentResolver mContentResolver;
 
     private boolean mDestroyed = false;
     private boolean mPlugged = false;
@@ -92,7 +87,6 @@ abstract public class ActivityState {
     void initialize(AbstractGalleryActivity activity, Bundle data) {
         mActivity = activity;
         mData = data;
-        mContentResolver = activity.getAndroidContext().getContentResolver();
     }
 
     public Bundle getData() {
@@ -175,13 +169,18 @@ abstract public class ActivityState {
 
     protected void transitionOnNextPause(Class<? extends ActivityState> outgoing,
             Class<? extends ActivityState> incoming, StateTransitionAnimation.Transition hint) {
-        if (outgoing == PhotoPage.class && incoming == AlbumPage.class) {
+        if (outgoing == SinglePhotoPage.class && incoming == AlbumPage.class) {
             mNextTransition = StateTransitionAnimation.Transition.Outgoing;
-        } else if (outgoing == AlbumPage.class && incoming == PhotoPage.class) {
+        } else if (outgoing == AlbumPage.class && incoming == SinglePhotoPage.class) {
             mNextTransition = StateTransitionAnimation.Transition.PhotoIncoming;
         } else {
             mNextTransition = hint;
         }
+    }
+
+    protected void performHapticFeedback(int feedbackConstant) {
+        mActivity.getWindow().getDecorView().performHapticFeedback(feedbackConstant,
+                HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
     }
 
     protected void onPause() {
@@ -229,13 +228,6 @@ abstract public class ActivityState {
             final IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_BATTERY_CHANGED);
             activity.registerReceiver(mPowerIntentReceiver, filter);
-        }
-
-        try {
-            mHapticsEnabled = Settings.System.getInt(mContentResolver,
-                    Settings.System.HAPTIC_FEEDBACK_ENABLED) != 0;
-        } catch (SettingNotFoundException e) {
-            mHapticsEnabled = false;
         }
 
         onResume();

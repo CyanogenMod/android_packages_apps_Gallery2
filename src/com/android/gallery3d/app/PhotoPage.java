@@ -23,6 +23,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -35,6 +36,7 @@ import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.android.camera.CameraActivity;
@@ -51,7 +53,6 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.data.MediaSet;
-import com.android.gallery3d.data.MtpSource;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.data.SecureAlbum;
 import com.android.gallery3d.data.SecureSource;
@@ -59,20 +60,21 @@ import com.android.gallery3d.data.SnailAlbum;
 import com.android.gallery3d.data.SnailItem;
 import com.android.gallery3d.data.SnailSource;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.DetailsHelper.DetailsSource;
 import com.android.gallery3d.ui.GLView;
-import com.android.gallery3d.ui.ImportCompleteListener;
 import com.android.gallery3d.ui.MenuExecutor;
 import com.android.gallery3d.ui.PhotoView;
 import com.android.gallery3d.ui.SelectionManager;
 import com.android.gallery3d.ui.SynchronizedHandler;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.UsageStatistics;
 
-public class PhotoPage extends ActivityState implements
-        PhotoView.Listener, AppBridge.Server,
+public abstract class PhotoPage extends ActivityState implements
+        PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
         PhotoPageBottomControls.Delegate, GalleryActionBar.OnAlbumModeSelectedListener {
     private static final String TAG = "PhotoPage";
 
@@ -119,6 +121,7 @@ public class PhotoPage extends ActivityState implements
     public static final int MSG_ALBUMPAGE_PICKED = 4;
 
     public static final String ACTION_NEXTGEN_EDIT = "action_nextgen_edit";
+    public static final String ACTION_SIMPLE_EDIT = "action_simple_edit";
 
     private GalleryApp mApplication;
     private SelectionManager mSelectionManager;
@@ -345,7 +348,7 @@ public class PhotoPage extends ActivityState implements
                         }
 
                         if (stayedOnCamera) {
-                            if (mAppBridge == null) {
+                            if (mAppBridge == null && mMediaSet.getTotalMediaItemCount() > 1) {
                                 launchCamera();
                                 /* We got here by swiping from photo 1 to the
                                    placeholder, so make it be the thing that
@@ -390,7 +393,7 @@ public class PhotoPage extends ActivityState implements
                             }
                             Intent shareIntent = createShareIntent(mCurrentPhoto);
 
-                            mActionBar.setShareIntents(panoramaIntent, shareIntent);
+                            mActionBar.setShareIntents(panoramaIntent, shareIntent, PhotoPage.this);
                             setNfcBeamPushUri(contentUri);
                         }
                         break;
@@ -514,6 +517,10 @@ public class PhotoPage extends ActivityState implements
                         if (oldIndex == 0 && mCurrentIndex > 0
                                 && !mPhotoView.getFilmMode()) {
                             mPhotoView.setFilmMode(true);
+                            if (mAppBridge != null) {
+                                UsageStatistics.onEvent("CameraToFilmstrip",
+                                        UsageStatistics.TRANSITION_SWIPE, null);
+                            }
                         } else if (oldIndex == 2 && mCurrentIndex == 1) {
                             mCameraSwitchCutoff = SystemClock.uptimeMillis() +
                                     CAMERA_SWITCH_CUTOFF_THRESHOLD_MS;
@@ -671,7 +678,7 @@ public class PhotoPage extends ActivityState implements
     }
 
     private void overrideTransitionToEditor() {
-        ((Activity) mActivity).overridePendingTransition(android.R.anim.slide_in_left,
+        ((Activity) mActivity).overridePendingTransition(android.R.anim.fade_in,
                 android.R.anim.fade_out);
     }
 
@@ -703,6 +710,28 @@ public class PhotoPage extends ActivityState implements
         }
 
         Intent intent = new Intent(ACTION_NEXTGEN_EDIT);
+
+        intent.setDataAndType(current.getContentUri(), current.getMimeType())
+                .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (mActivity.getPackageManager()
+                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+            intent.setAction(Intent.ACTION_EDIT);
+        }
+        intent.putExtra(FilterShowActivity.LAUNCH_FULLSCREEN,
+                mActivity.isFullscreen());
+        ((Activity) mActivity).startActivityForResult(Intent.createChooser(intent, null),
+                REQUEST_EDIT);
+        overrideTransitionToEditor();
+    }
+
+    private void launchSimpleEditor() {
+        MediaItem current = mModel.getMediaItem(0);
+        if (current == null || (current.getSupportedOperations()
+                & MediaObject.SUPPORT_EDIT) == 0) {
+            return;
+        }
+
+        Intent intent = new Intent(ACTION_SIMPLE_EDIT);
 
         intent.setDataAndType(current.getContentUri(), current.getMimeType())
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -786,11 +815,13 @@ public class PhotoPage extends ActivityState implements
         int supportedOperations = mCurrentPhoto.getSupportedOperations();
         if (mSecureAlbum != null) {
             supportedOperations &= MediaObject.SUPPORT_DELETE;
-        } else if (!mHaveImageEditor) {
-            supportedOperations &= ~MediaObject.SUPPORT_EDIT;
+        } else {
+            mCurrentPhoto.getPanoramaSupport(mUpdatePanoramaMenuItemsCallback);
+            if (!mHaveImageEditor) {
+                supportedOperations &= ~MediaObject.SUPPORT_EDIT;
+            }
         }
         MenuExecutor.updateMenuOperation(menu, supportedOperations);
-        mCurrentPhoto.getPanoramaSupport(mUpdatePanoramaMenuItemsCallback);
     }
 
     private boolean canDoSlideShow() {
@@ -798,9 +829,6 @@ public class PhotoPage extends ActivityState implements
             return false;
         }
         if (mCurrentPhoto.getMediaType() != MediaObject.MEDIA_TYPE_IMAGE) {
-            return false;
-        }
-        if (MtpSource.isMtpPath(mOriginalSetPathString)) {
             return false;
         }
         return true;
@@ -843,6 +871,11 @@ public class PhotoPage extends ActivityState implements
 
         // No bars if it's not allowed.
         if (!mActionBarAllowed) return false;
+
+        Configuration config = mActivity.getResources().getConfiguration();
+        if (config.touchscreen == Configuration.TOUCHSCREEN_NOTOUCH) {
+            return false;
+        }
 
         return true;
     }
@@ -1019,11 +1052,16 @@ public class PhotoPage extends ActivityState implements
         refreshHidingMessage();
         MediaItem current = mModel.getMediaItem(0);
 
+        // This is a shield for monkey when it clicks the action bar
+        // menu when transitioning from filmstrip to camera
+        if (current instanceof SnailItem) return true;
+        // TODO: We should check the current photo against the MediaItem
+        // that the menu was initially created for. We need to fix this
+        // after PhotoPage being refactored.
         if (current == null) {
             // item is not ready, ignore
             return true;
         }
-
         int currentIndex = mModel.getCurrentIndex();
         Path path = current.getPath();
 
@@ -1047,8 +1085,8 @@ public class PhotoPage extends ActivityState implements
             }
             case R.id.action_crop: {
                 Activity activity = mActivity;
-                Intent intent = new Intent(FilterShowActivity.CROP_ACTION);
-                intent.setClass(activity, FilterShowActivity.class);
+                Intent intent = new Intent(CropActivity.CROP_ACTION);
+                intent.setClass(activity, CropActivity.class);
                 intent.setDataAndType(manager.getContentUri(path), current.getMimeType())
                     .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 activity.startActivityForResult(intent, PicasaSource.isPicasaImage(current)
@@ -1064,8 +1102,18 @@ public class PhotoPage extends ActivityState implements
                 mActivity.startActivityForResult(intent, REQUEST_TRIM);
                 return true;
             }
+            case R.id.action_mute: {
+                MuteVideo muteVideo = new MuteVideo(current.getFilePath(),
+                        manager.getContentUri(path), mActivity);
+                muteVideo.muteInBackground();
+                return true;
+            }
             case R.id.action_edit: {
                 launchPhotoEditor();
+                return true;
+            }
+            case R.id.action_simple_edit: {
+                launchSimpleEditor();
                 return true;
             }
             case R.id.action_details: {
@@ -1086,12 +1134,6 @@ public class PhotoPage extends ActivityState implements
                 mSelectionManager.deSelectAll();
                 mSelectionManager.toggle(path);
                 mMenuExecutor.onMenuClicked(item, confirmMsg, mConfirmDialogListener);
-                return true;
-            case R.id.action_import:
-                mSelectionManager.deSelectAll();
-                mSelectionManager.toggle(path);
-                mMenuExecutor.onMenuClicked(item, confirmMsg,
-                        new ImportCompleteListener(mActivity));
                 return true;
             default :
                 return false;
@@ -1211,9 +1253,7 @@ public class PhotoPage extends ActivityState implements
     @Override
     public void onCommitDeleteImage() {
         if (mDeletePath == null) return;
-        mSelectionManager.deSelectAll();
-        mSelectionManager.toggle(mDeletePath);
-        mMenuExecutor.onMenuClicked(R.id.action_delete, null, true, false);
+        mMenuExecutor.startSingleItemAction(R.id.action_delete, mDeletePath);
         mDeletePath = null;
     }
 
@@ -1242,7 +1282,7 @@ public class PhotoPage extends ActivityState implements
                 Bundle data = new Bundle(getData());
                 data.putString(KEY_MEDIA_SET_PATH, albumPath.toString());
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, path.toString());
-                mActivity.getStateManager().startState(PhotoPage.class, data);
+                mActivity.getStateManager().startState(SinglePhotoPage.class, data);
                 return;
             }
             mModel.setCurrentPhoto(path, mCurrentIndex);
@@ -1334,8 +1374,17 @@ public class PhotoPage extends ActivityState implements
         }
         if (enabled) {
             mHandler.removeMessages(MSG_HIDE_BARS);
+            UsageStatistics.onContentViewChanged(
+                    UsageStatistics.COMPONENT_GALLERY, "FilmstripPage");
         } else {
             refreshHidingMessage();
+            if (mAppBridge == null || mCurrentIndex > 0) {
+                UsageStatistics.onContentViewChanged(
+                        UsageStatistics.COMPONENT_GALLERY, "SinglePhotoPage");
+            } else {
+                UsageStatistics.onContentViewChanged(
+                        UsageStatistics.COMPONENT_CAMERA, "Unknown"); // TODO
+            }
         }
     }
 
@@ -1495,4 +1544,28 @@ public class PhotoPage extends ActivityState implements
     public void onUndoBarVisibilityChanged(boolean visible) {
         refreshBottomControlsWhenReady();
     }
+
+    @Override
+    public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+        final long timestampMillis = mCurrentPhoto.getDateInMs();
+        final String mediaType = getMediaTypeString(mCurrentPhoto);
+        UsageStatistics.onEvent(UsageStatistics.COMPONENT_GALLERY,
+                UsageStatistics.ACTION_SHARE,
+                mediaType,
+                        timestampMillis > 0
+                        ? System.currentTimeMillis() - timestampMillis
+                        : -1);
+        return false;
+    }
+
+    private static String getMediaTypeString(MediaItem item) {
+        if (item.getMediaType() == MediaObject.MEDIA_TYPE_VIDEO) {
+            return "Video";
+        } else if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+            return "Photo";
+        } else {
+            return "Unknown:" + item.getMediaType();
+        }
+    }
+
 }

@@ -19,18 +19,18 @@ package com.android.gallery3d.filtershow.imageshow;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.EditorStraighten;
 
 public class ImageStraighten extends ImageGeometry {
 
     private float mBaseAngle = 0;
     private float mAngle = 0;
+    private EditorStraighten mEditorStraighten;
 
     private static final String LOGTAG = "ImageStraighten";
     private static final Paint gPaint = new Paint();
@@ -92,9 +92,6 @@ public class ImageStraighten extends ImageGeometry {
     @Override
     public void onNewValue(int value) {
         setLocalStraighten(GeometryMath.clamp(value, MIN_STRAIGHTEN_ANGLE, MAX_STRAIGHTEN_ANGLE));
-        if (getPanelController() != null) {
-            getPanelController().onNewValue((int) getLocalStraighten());
-        }
         invalidate();
     }
 
@@ -105,12 +102,10 @@ public class ImageStraighten extends ImageGeometry {
 
     @Override
     protected void drawShape(Canvas canvas, Bitmap image) {
-        drawTransformed(canvas, image, gPaint);
+        float [] o = {0, 0};
+        RectF bounds = drawTransformed(canvas, image, gPaint, o);
 
         // Draw the grid
-        RectF bounds = straightenBounds();
-        Path path = new Path();
-        path.addRect(bounds, Path.Direction.CCW);
         gPaint.setARGB(255, 255, 255, 255);
         gPaint.setStrokeWidth(3);
         gPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -121,7 +116,7 @@ public class ImageStraighten extends ImageGeometry {
 
         if (mMode == MODES.MOVE) {
             canvas.save();
-            canvas.clipPath(path);
+            canvas.clipRect(bounds);
 
             int n = 16;
             float step = dWidth / n;
@@ -134,6 +129,10 @@ public class ImageStraighten extends ImageGeometry {
             }
             canvas.restore();
         }
+    }
+
+    public void setEditor(EditorStraighten editorStraighten) {
+        mEditorStraighten = editorStraighten;
     }
 
 }

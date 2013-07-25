@@ -22,12 +22,15 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.crop.CropExtras;
+import com.android.gallery3d.filtershow.editors.EditorCrop;
+import com.android.gallery3d.filtershow.editors.EditorFlip;
+import com.android.gallery3d.filtershow.editors.EditorRotate;
+import com.android.gallery3d.filtershow.editors.EditorStraighten;
+import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilterGeometry;
 
-public class GeometryMetadata {
-    // Applied in order: rotate, crop, scale.
-    // Do not scale saved image (presumably?).
-    private static final ImageFilterGeometry mImageFilter = new ImageFilterGeometry();
+public class GeometryMetadata extends FilterRepresentation {
     private static final String LOGTAG = "GeometryMetadata";
     private float mScaleFactor = 1.0f;
     private float mRotation = 0;
@@ -36,16 +39,49 @@ public class GeometryMetadata {
     private final RectF mPhotoBounds = new RectF();
     private FLIP mFlip = FLIP.NONE;
 
-    private RectF mBounds = new RectF();
-
     public enum FLIP {
         NONE, VERTICAL, HORIZONTAL, BOTH
     }
 
+    // Output format data from intent extras
+    private boolean mUseCropExtras = false;
+    private CropExtras mCropExtras = null;
+    public void setUseCropExtrasFlag(boolean f){
+        mUseCropExtras = f;
+    }
+
+    public boolean getUseCropExtrasFlag(){
+        return mUseCropExtras;
+    }
+
+    public void setCropExtras(CropExtras e){
+        mCropExtras = e;
+    }
+
+    public CropExtras getCropExtras(){
+        return mCropExtras;
+    }
+
     public GeometryMetadata() {
+        super("GeometryMetadata");
+        setFilterClass(ImageFilterGeometry.class);
+        setEditorId(EditorCrop.ID);
+        setTextId(0);
+        setShowParameterValue(true);
+    }
+
+    @Override
+    public int[] getEditorIds() {
+        return new int[] {
+                EditorCrop.ID,
+                EditorStraighten.ID,
+                EditorRotate.ID,
+                EditorFlip.ID
+        };
     }
 
     public GeometryMetadata(GeometryMetadata g) {
+        super("GeometryMetadata");
         set(g);
     }
 
@@ -70,15 +106,6 @@ public class GeometryMetadata {
         return false;
     }
 
-    public Bitmap apply(Bitmap original, float scaleFactor, boolean highQuality) {
-        if (!hasModifications()) {
-            return original;
-        }
-        mImageFilter.setGeometryMetadata(this);
-        Bitmap m = mImageFilter.apply(original, scaleFactor, highQuality);
-        return m;
-    }
-
     public void set(GeometryMetadata g) {
         mScaleFactor = g.mScaleFactor;
         mRotation = g.mRotation;
@@ -86,7 +113,11 @@ public class GeometryMetadata {
         mCropBounds.set(g.mCropBounds);
         mPhotoBounds.set(g.mPhotoBounds);
         mFlip = g.mFlip;
-        mBounds = g.mBounds;
+
+        mUseCropExtras = g.mUseCropExtras;
+        if (g.mCropExtras != null){
+            mCropExtras = new CropExtras(g.mCropExtras);
+        }
     }
 
     public float getScaleFactor() {
@@ -109,8 +140,21 @@ public class GeometryMetadata {
         float scale = 1.0f;
         scale = GeometryMath.scale(mPhotoBounds.width(), mPhotoBounds.height(), bitmap.getWidth(),
                 bitmap.getHeight());
-        return new RectF(mCropBounds.left * scale, mCropBounds.top * scale,
+        RectF croppedRegion = new RectF(mCropBounds.left * scale, mCropBounds.top * scale,
                 mCropBounds.right * scale, mCropBounds.bottom * scale);
+
+        // If no crop has been applied, make sure to use the exact size values.
+        // Multiplying using scale will introduce rounding errors that modify
+        // even un-cropped images.
+        if (mCropBounds.left == 0 && mCropBounds.right == mPhotoBounds.right) {
+            croppedRegion.left = 0;
+            croppedRegion.right = bitmap.getWidth();
+        }
+        if (mCropBounds.top == 0 && mCropBounds.bottom == mPhotoBounds.bottom) {
+            croppedRegion.top = 0;
+            croppedRegion.bottom = bitmap.getHeight();
+        }
+        return croppedRegion;
     }
 
     public FLIP getFlipType() {
@@ -149,19 +193,27 @@ public class GeometryMetadata {
         return mPhotoBounds.contains(cropBounds);
     }
 
+    private boolean compareRectF(RectF a, RectF b) {
+        return ((int) a.left == (int) b.left)
+                && ((int) a.right == (int) b.right)
+                && ((int) a.top == (int) b.top)
+                && ((int) a.bottom == (int) b.bottom);
+    }
+
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(FilterRepresentation o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (o == null || !(o instanceof GeometryMetadata))
             return false;
 
         GeometryMetadata d = (GeometryMetadata) o;
-        return (mScaleFactor == d.mScaleFactor &&
-                mRotation == d.mRotation &&
-                mStraightenRotation == d.mStraightenRotation &&
-                mFlip == d.mFlip &&
-                mCropBounds.equals(d.mCropBounds) && mPhotoBounds.equals(d.mPhotoBounds));
+        return (mScaleFactor == d.mScaleFactor
+                && mRotation == d.mRotation
+                && mStraightenRotation == d.mStraightenRotation
+                && mFlip == d.mFlip
+                && compareRectF(mCropBounds, d.mCropBounds)
+                && compareRectF(mPhotoBounds, d.mPhotoBounds));
     }
 
     @Override
@@ -184,25 +236,9 @@ public class GeometryMetadata {
                 + ",photoRect=" + mPhotoBounds.toShortString() + "]";
     }
 
-    // TODO: refactor away
-    protected static Matrix getHorizontalMatrix(float width) {
-        Matrix flipHorizontalMatrix = new Matrix();
-        flipHorizontalMatrix.setScale(-1, 1);
-        flipHorizontalMatrix.postTranslate(width, 0);
-        return flipHorizontalMatrix;
-    }
-
     protected static void concatHorizontalMatrix(Matrix m, float width) {
         m.postScale(-1, 1);
         m.postTranslate(width, 0);
-    }
-
-    // TODO: refactor away
-    protected static Matrix getVerticalMatrix(float height) {
-        Matrix flipVerticalMatrix = new Matrix();
-        flipVerticalMatrix.setScale(1, -1);
-        flipVerticalMatrix.postTranslate(0, height);
-        return flipVerticalMatrix;
     }
 
     protected static void concatVerticalMatrix(Matrix m, float height) {
@@ -210,22 +246,6 @@ public class GeometryMetadata {
         m.postTranslate(0, height);
     }
 
-    // TODO: refactor away
-    public static Matrix getFlipMatrix(float width, float height, FLIP type) {
-        if (type == FLIP.HORIZONTAL) {
-            return getHorizontalMatrix(width);
-        } else if (type == FLIP.VERTICAL) {
-            return getVerticalMatrix(height);
-        } else if (type == FLIP.BOTH) {
-            Matrix flipper = getVerticalMatrix(height);
-            flipper.postConcat(getHorizontalMatrix(width));
-            return flipper;
-        } else {
-            Matrix m = new Matrix();
-            m.reset(); // identity
-            return m;
-        }
-    }
 
     public static void concatMirrorMatrix(Matrix m, float width, float height, FLIP type) {
         if (type == FLIP.HORIZONTAL) {
@@ -331,44 +351,8 @@ public class GeometryMetadata {
         return m1;
     }
 
-    // TODO: refactor away
-    public Matrix getFlipMatrix(float width, float height) {
-        FLIP type = getFlipType();
-        return getFlipMatrix(width, height, type);
-    }
-
     public boolean hasSwitchedWidthHeight() {
         return (((int) (mRotation / 90)) % 2) != 0;
-    }
-
-    // TODO: refactor away
-    public Matrix buildGeometryMatrix(float width, float height, float scaling, float dx, float dy,
-            float rotation) {
-        float dx0 = width / 2;
-        float dy0 = height / 2;
-        Matrix m = getFlipMatrix(width, height);
-        m.postTranslate(-dx0, -dy0);
-        m.postRotate(rotation);
-        m.postScale(scaling, scaling);
-        m.postTranslate(dx, dy);
-        return m;
-    }
-
-    // TODO: refactor away
-    public Matrix buildGeometryMatrix(float width, float height, float scaling, float dx, float dy,
-            boolean onlyRotate) {
-        float rot = mRotation;
-        if (!onlyRotate) {
-            rot += mStraightenRotation;
-        }
-        return buildGeometryMatrix(width, height, scaling, dx, dy, rot);
-    }
-
-    // TODO: refactor away
-    public Matrix buildGeometryUIMatrix(float scaling, float dx, float dy) {
-        float w = mPhotoBounds.width();
-        float h = mPhotoBounds.height();
-        return buildGeometryMatrix(w, h, scaling, dx, dy, false);
     }
 
     public static Matrix buildPhotoMatrix(RectF photo, RectF crop, float rotation,
@@ -404,10 +388,21 @@ public class GeometryMetadata {
     public Matrix buildTotalXform(float bmWidth, float bmHeight, float[] displayCenter) {
         RectF rp = getPhotoBounds();
         RectF rc = getPreviewCropBounds();
-
         float scale = GeometryMath.scale(rp.width(), rp.height(), bmWidth, bmHeight);
         RectF scaledCrop = GeometryMath.scaleRect(rc, scale);
         RectF scaledPhoto = GeometryMath.scaleRect(rp, scale);
+
+        // If no crop has been applied, make sure to use the exact size values.
+        // Multiplying using scale will introduce rounding errors that modify
+        // even un-cropped images.
+        if (rc.left == 0 && rc.right == rp.right) {
+            scaledCrop.left = scaledPhoto.left = 0;
+            scaledCrop.right = scaledPhoto.right = bmWidth;
+        }
+        if (rc.top == 0 && rc.bottom == rp.bottom) {
+            scaledCrop.top = scaledPhoto.top = 0;
+            scaledCrop.bottom = scaledPhoto.bottom = bmHeight;
+        }
 
         Matrix m1 = GeometryMetadata.buildWanderingCropMatrix(scaledPhoto, scaledCrop,
                 getRotation(), getStraightenRotation(),
@@ -483,5 +478,18 @@ public class GeometryMetadata {
         Matrix m = buildCenteredPhotoMatrix(photo, crop, rotation, straighten, type, newCenter);
         m.preRotate(-straighten, photo.centerX(), photo.centerY());
         return m;
+    }
+
+    @Override
+    public void useParametersFrom(FilterRepresentation a) {
+        GeometryMetadata data = (GeometryMetadata) a;
+        set(data);
+    }
+
+    @Override
+    public FilterRepresentation clone() throws CloneNotSupportedException {
+        GeometryMetadata representation = (GeometryMetadata) super.clone();
+        representation.useParametersFrom(this);
+        return representation;
     }
 }

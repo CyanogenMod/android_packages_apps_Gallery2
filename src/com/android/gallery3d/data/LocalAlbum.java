@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
@@ -29,9 +30,11 @@ import android.provider.MediaStore.Video.VideoColumns;
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.util.BucketNames;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.MediaSetUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 // LocalAlbumSet lists all media items in one bucket on local storage.
@@ -61,7 +64,7 @@ public class LocalAlbum extends MediaSet {
         mApplication = application;
         mResolver = application.getContentResolver();
         mBucketId = bucketId;
-        mName = getLocalizedName(application.getResources(), bucketId, name);
+        mName = name;
         mIsImage = isImage;
 
         if (isImage) {
@@ -245,7 +248,7 @@ public class LocalAlbum extends MediaSet {
 
     @Override
     public String getName() {
-        return mName;
+        return getLocalizedName(mApplication.getResources(), mBucketId, mName);
     }
 
     @Override
@@ -290,4 +293,33 @@ public class LocalAlbum extends MediaSet {
             return name;
         }
     }
+
+    // Relative path is the absolute path minus external storage path
+    public static String getRelativePath(int bucketId) {
+        String relativePath = "/";
+        if (bucketId == MediaSetUtils.CAMERA_BUCKET_ID) {
+            relativePath += BucketNames.CAMERA;
+        } else if (bucketId == MediaSetUtils.DOWNLOAD_BUCKET_ID) {
+            relativePath += BucketNames.DOWNLOAD;
+        } else if (bucketId == MediaSetUtils.IMPORTED_BUCKET_ID) {
+            relativePath += BucketNames.IMPORTED;
+        } else if (bucketId == MediaSetUtils.SNAPSHOT_BUCKET_ID) {
+            relativePath += BucketNames.SCREENSHOTS;
+        } else if (bucketId == MediaSetUtils.EDITED_ONLINE_PHOTOS_BUCKET_ID) {
+            relativePath += BucketNames.EDITED_ONLINE_PHOTOS;
+        } else {
+            // If the first few cases didn't hit the matching path, do a
+            // thorough search in the local directories.
+            File extStorage = Environment.getExternalStorageDirectory();
+            String path = GalleryUtils.searchDirForPath(extStorage, bucketId);
+            if (path == null) {
+                Log.w(TAG, "Relative path for bucket id: " + bucketId + " is not found.");
+                relativePath = null;
+            } else {
+                relativePath = path.substring(extStorage.getAbsolutePath().length());
+            }
+        }
+        return relativePath;
+    }
+
 }

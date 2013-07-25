@@ -24,8 +24,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,15 +38,16 @@ import com.android.gallery3d.data.MediaDetails;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
-import com.android.gallery3d.data.MtpDevice;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.crop.CropExtras;
+import com.android.gallery3d.glrenderer.FadeTexture;
+import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.ui.ActionModeHandler;
 import com.android.gallery3d.ui.ActionModeHandler.ActionModeListener;
 import com.android.gallery3d.ui.AlbumSlotRenderer;
 import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
-import com.android.gallery3d.ui.FadeTexture;
-import com.android.gallery3d.ui.GLCanvas;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.PhotoFallbackEffect;
@@ -57,6 +58,7 @@ import com.android.gallery3d.ui.SynchronizedHandler;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.MediaSetUtils;
+
 
 public class AlbumPage extends ActivityState implements GalleryActionBar.ClusterRunner,
         SelectionManager.SelectionListener, MediaSet.SyncListener, GalleryActionBar.OnAlbumModeSelectedListener {
@@ -89,7 +91,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     private AlbumDataLoader mAlbumDataAdapter;
 
     protected SelectionManager mSelectionManager;
-    private Vibrator mVibrator;
 
     private boolean mGetContent;
     private boolean mShowClusterMenu;
@@ -304,10 +305,10 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                     startInFilmstrip);
             data.putBoolean(PhotoPage.KEY_IN_CAMERA_ROLL, mMediaSet.isCameraRoll());
             if (startInFilmstrip) {
-                mActivity.getStateManager().switchState(this, PhotoPage.class, data);
+                mActivity.getStateManager().switchState(this, FilmstripPage.class, data);
             } else {
                 mActivity.getStateManager().startStateForResult(
-                            PhotoPage.class, REQUEST_PHOTO, data);
+                            SinglePhotoPage.class, REQUEST_PHOTO, data);
             }
         }
     }
@@ -316,13 +317,12 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         DataManager dm = mActivity.getDataManager();
         Activity activity = mActivity;
         if (mData.getString(Gallery.EXTRA_CROP) != null) {
-            // TODO: Handle MtpImagew
             Uri uri = dm.getContentUri(item.getPath());
-            Intent intent = new Intent(CropImage.ACTION_CROP, uri)
+            Intent intent = new Intent(FilterShowActivity.CROP_ACTION, uri)
                     .addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                     .putExtras(getData());
             if (mData.getParcelable(MediaStore.EXTRA_OUTPUT) == null) {
-                intent.putExtra(CropImage.KEY_RETURN_DATA, true);
+                intent.putExtra(CropExtras.KEY_RETURN_DATA, true);
             }
             activity.startActivity(intent);
             activity.finish();
@@ -371,15 +371,13 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         mShowClusterMenu = data.getBoolean(KEY_SHOW_CLUSTER_MENU, false);
         mDetailsSource = new MyDetailsSource();
         Context context = mActivity.getAndroidContext();
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
-        // Enable auto-select-all for mtp album
         if (data.getBoolean(KEY_AUTO_SELECT_ALL)) {
             mSelectionManager.selectAll();
         }
 
         mLaunchedFromPhotoPage =
-                mActivity.getStateManager().hasStateClass(PhotoPage.class);
+                mActivity.getStateManager().hasStateClass(FilmstripPage.class);
         mInCameraApp = data.getBoolean(PhotoPage.KEY_APP_BRIDGE, false);
 
         mHandler = new SynchronizedHandler(mActivity.getGLRoot()) {
@@ -443,7 +441,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             mSelectionManager.leaveSelectionMode();
         }
         mAlbumView.setSlotFilter(null);
-
+        mActionModeHandler.pause();
         mAlbumDataAdapter.pause();
         mAlbumView.pause();
         DetailsHelper.pause();
@@ -456,7 +454,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             mSyncTask = null;
             clearLoadingBit(BIT_LOADING_SYNC);
         }
-        mActionModeHandler.pause();
     }
 
     @Override
@@ -465,6 +462,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         if (mAlbumDataAdapter != null) {
             mAlbumDataAdapter.setLoadingListener(null);
         }
+        mActionModeHandler.destroy();
     }
 
     private void initializeViews() {
@@ -552,9 +550,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         } else {
             inflator.inflate(R.menu.album, menu);
             actionBar.setTitle(mMediaSet.getName());
-
-            menu.findItem(R.id.action_slideshow)
-                    .setVisible(!(mMediaSet instanceof MtpDevice));
 
             FilterUtils.setupMenuItems(actionBar, mMediaSetPath, true);
 
@@ -662,7 +657,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         switch (mode) {
             case SelectionManager.ENTER_SELECTION_MODE: {
                 mActionModeHandler.startActionMode();
-                if (mHapticsEnabled) mVibrator.vibrate(100);
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 break;
             }
             case SelectionManager.LEAVE_SELECTION_MODE: {

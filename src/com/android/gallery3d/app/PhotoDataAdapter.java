@@ -23,19 +23,18 @@ import android.os.Message;
 
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.common.Utils;
-import com.android.gallery3d.data.BitmapPool;
 import com.android.gallery3d.data.ContentListener;
 import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.glrenderer.TiledTexture;
 import com.android.gallery3d.ui.PhotoView;
 import com.android.gallery3d.ui.ScreenNail;
 import com.android.gallery3d.ui.SynchronizedHandler;
 import com.android.gallery3d.ui.TileImageViewAdapter;
 import com.android.gallery3d.ui.TiledScreenNail;
-import com.android.gallery3d.ui.TiledTexture;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.FutureListener;
 import com.android.gallery3d.util.MediaSetUtils;
@@ -550,9 +549,8 @@ public class PhotoDataAdapter implements PhotoPage.Model {
     }
 
     @Override
-    public Bitmap getTile(int level, int x, int y, int tileSize,
-            int borderSize, BitmapPool pool) {
-        return mTileProvider.getTile(level, x, y, tileSize, borderSize, pool);
+    public Bitmap getTile(int level, int x, int y, int tileSize) {
+        return mTileProvider.getTile(level, x, y, tileSize);
     }
 
     @Override

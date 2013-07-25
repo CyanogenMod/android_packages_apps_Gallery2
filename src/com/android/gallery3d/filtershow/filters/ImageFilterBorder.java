@@ -16,71 +16,77 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.util.HashMap;
+
 public class ImageFilterBorder extends ImageFilter {
-    Drawable mNinePatch = null;
+    private static final float NINEPATCH_ICON_SCALING = 10;
+    private static final float BITMAP_ICON_SCALING = 1 / 3.0f;
+    private FilterImageBorderRepresentation mParameters = null;
+    private Resources mResources = null;
 
-    @Override
-    public ImageFilter clone() throws CloneNotSupportedException {
-        ImageFilterBorder filter = (ImageFilterBorder) super.clone();
-        filter.setDrawable(mNinePatch);
-        return filter;
-    }
+    private HashMap<Integer, Drawable> mDrawables = new HashMap<Integer, Drawable>();
 
-    public ImageFilterBorder(Drawable ninePatch) {
-        setFilterType(TYPE_BORDER);
+    public ImageFilterBorder() {
         mName = "Border";
-        mNinePatch = ninePatch;
     }
 
-    @Override
-    public boolean isNil() {
-        if (mNinePatch == null) {
-            return  true;
-        }
-        return false;
+    public void useRepresentation(FilterRepresentation representation) {
+        FilterImageBorderRepresentation parameters = (FilterImageBorderRepresentation) representation;
+        mParameters = parameters;
     }
 
-    @Override
-    public boolean same(ImageFilter filter) {
-        boolean isBorderFilter = super.same(filter);
-        if (!isBorderFilter) {
-            return false;
-        }
-        if (!(filter instanceof ImageFilterBorder)) {
-            return false;
-        }
-        ImageFilterBorder borderFilter = (ImageFilterBorder) filter;
-        if (mNinePatch != borderFilter.mNinePatch) {
-            return false;
-        }
-        return true;
+    public FilterImageBorderRepresentation getParameters() {
+        return mParameters;
     }
 
-    public void setDrawable(Drawable ninePatch) {
-        // TODO: for now we only use nine patch
-        mNinePatch = ninePatch;
+    public void freeResources() {
+       mDrawables.clear();
     }
 
-    @Override
-    public Bitmap apply(Bitmap bitmap, float scaleFactor, boolean highQuality) {
-        if (mNinePatch == null) {
-            return bitmap;
-        }
-
+    public Bitmap applyHelper(Bitmap bitmap, float scale1, float scale2 ) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-
-        float scale = scaleFactor * 2.0f;
-        Rect bounds = new Rect(0, 0, (int) (w / scale), (int) (h / scale));
+        Rect bounds = new Rect(0, 0, (int) (w * scale1), (int) (h * scale1));
         Canvas canvas = new Canvas(bitmap);
-        canvas.scale(scale, scale);
-        mNinePatch.setBounds(bounds);
-        mNinePatch.draw(canvas);
+        canvas.scale(scale2, scale2);
+        Drawable drawable = getDrawable(getParameters().getDrawableResource());
+        drawable.setBounds(bounds);
+        drawable.draw(canvas);
         return bitmap;
     }
+
+    @Override
+    public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
+        if (getParameters() == null || getParameters().getDrawableResource() == 0) {
+            return bitmap;
+        }
+        float scale2 = scaleFactor * 2.0f;
+        float scale1 = 1 / scale2;
+        return applyHelper(bitmap, scale1, scale2);
+    }
+
+    public void setResources(Resources resources) {
+        if (mResources != resources) {
+            mResources = resources;
+            mDrawables.clear();
+        }
+    }
+
+    public Drawable getDrawable(int rsc) {
+        Drawable drawable = mDrawables.get(rsc);
+        if (drawable == null && mResources != null && rsc != 0) {
+            drawable = new BitmapDrawable(mResources, BitmapFactory.decodeResource(mResources, rsc));
+            mDrawables.put(rsc, drawable);
+        }
+        return drawable;
+    }
+
 }
