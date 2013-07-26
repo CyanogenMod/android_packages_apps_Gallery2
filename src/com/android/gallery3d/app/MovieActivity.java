@@ -334,7 +334,9 @@ public class MovieActivity extends Activity {
             mBassBoostKnob.setOnKnobChangeListener(new Knob.OnKnobChangeListener() {
                 @Override
                 public void onValueChanged(Knob knob, int value, boolean fromUser) {
-                    mBassBoostEffect.setStrength((short) value);
+                    if(mBassBoostEffect != null) {
+                        mBassBoostEffect.setStrength((short) value);
+                    }
                 }
 
                 @Override
@@ -358,7 +360,9 @@ public class MovieActivity extends Activity {
             mVirtualizerKnob.setOnKnobChangeListener(new Knob.OnKnobChangeListener() {
                 @Override
                 public void onValueChanged(Knob knob, int value, boolean fromUser) {
-                    mVirtualizerEffect.setStrength((short) value);
+                    if(mVirtualizerEffect != null) {
+                        mVirtualizerEffect.setStrength((short) value);
+                    }
                 }
 
                 @Override
@@ -491,10 +495,12 @@ public class MovieActivity extends Activity {
         if (mBassBoostEffect != null) {
             mBassBoostEffect.setEnabled(false);
             mBassBoostEffect.release();
+            mBassBoostEffect = null;
         }
         if (mVirtualizerEffect != null) {
             mVirtualizerEffect.setEnabled(false);
             mVirtualizerEffect.release();
+            mVirtualizerEffect = null;
         }
         super.onDestroy();
     }
