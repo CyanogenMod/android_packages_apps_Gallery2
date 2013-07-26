@@ -491,6 +491,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             if (!result) {
                 cannotLoadImage();
+                return;
             }
 
             final View loading = findViewById(R.id.loading);
