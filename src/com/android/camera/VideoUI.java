@@ -54,7 +54,7 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
     // module fields
     private CameraActivity mActivity;
     private View mRootView;
-    private PreviewFrameLayout mPreviewFrameLayout;
+    protected PreviewFrameLayout mPreviewFrameLayout;
     private boolean mSurfaceViewReady;
     private PreviewSurfaceView mPreviewSurfaceView;
     // An review image having same size as preview. It is displayed when
@@ -69,7 +69,7 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
     private LinearLayout mLabelsLinearLayout;
     private View mTimeLapseLabel;
     private RenderOverlay mRenderOverlay;
-    private PieRenderer mPieRenderer;
+    protected PieRenderer mPieRenderer;
     private VideoMenu mVideoMenu;
     private AbstractSettingPopup mPopup;
     private ZoomRenderer mZoomRenderer;

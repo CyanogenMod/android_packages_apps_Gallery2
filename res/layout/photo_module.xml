@@ -25,15 +25,21 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
     <include layout="@layout/count_down_to_capture"/>
-
-    <ViewStub android:id="@+id/face_view_stub"
-        android:inflatedId="@+id/face_view"
-        android:layout="@layout/face_view"
+    <com.android.camera.PreviewFrameLayout android:id="@+id/frame"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
-    <com.android.camera.ui.RenderOverlay
-        android:id="@+id/render_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_gravity="center_vertical|center_horizontal">
+        <ViewStub android:id="@+id/face_view_stub"
+            android:inflatedId="@+id/face_view"
+            android:layout="@layout/face_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+        <com.android.camera.ui.RenderOverlay
+            android:id="@+id/render_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal" />
+    </com.android.camera.PreviewFrameLayout>
 </merge>

@@ -524,8 +524,10 @@ public class PhotoModule
         View root = mUI.getRootView();
         // These depend on camera parameters.
 
-        int width = root.getWidth();
-        int height = root.getHeight();
+        int width = mUI.mPreviewFrameLayout.getWidth();
+        int height = mUI.mPreviewFrameLayout.getHeight();
+        openCameraCommon();
+        resizeForPreviewAspectRatio();
         mFocusManager.setPreviewSize(width, height);
         // Full-screen screennail
         if (Util.getDisplayRotation(mActivity) % 180 == 0) {
@@ -535,7 +537,6 @@ public class PhotoModule
         }
         // Set touch focus listener.
         mActivity.setSingleTapUpListener(root);
-        openCameraCommon();
         onFullScreenChanged(mActivity.isInCameraApp());
     }
 
@@ -572,6 +573,7 @@ public class PhotoModule
         mFocusManager.setMirror(mirror);
         mFocusManager.setParameters(mInitialParams);
         setupPreview();
+        resizeForPreviewAspectRatio();
 
         openCameraCommon();
 
@@ -1355,6 +1357,24 @@ public class PhotoModule
         }
     }
 
+    void setPreviewFrameLayoutCameraOrientation(){
+       CameraInfo info = CameraHolder.instance().getCameraInfo()[mCameraId];
+       //if camera mount angle is 0 or 180, we want to resize preview
+       if(info.orientation % 180 == 0){
+           mUI.mPreviewFrameLayout.setRenderer(mUI.mPieRenderer);
+           mUI.mPreviewFrameLayout.cameraOrientationPreviewResize(true);
+       } else{
+           mUI.mPreviewFrameLayout.cameraOrientationPreviewResize(false);
+       }
+    }
+
+    private void resizeForPreviewAspectRatio() {
+        setPreviewFrameLayoutCameraOrientation();
+        Size size = mParameters.getPictureSize();
+        Log.e(TAG,"Width = "+ size.width+ "Height = "+size.height);
+        mUI.setAspectRatio((double) size.width / size.height);
+    }
+
     @Override
     public void installIntentFilter() {
     }
@@ -1527,6 +1547,7 @@ public class PhotoModule
         }
 
         setDisplayOrientation();
+        resizeForPreviewAspectRatio();
     }
 
     @Override
@@ -2017,6 +2038,7 @@ public class PhotoModule
         } else if (isCameraIdle()) {
             if (mRestartPreview) {
                 Log.d(TAG, "Restarting preview");
+                resizeForPreviewAspectRatio();
                 startPreview();
                 mRestartPreview = false;
             }
@@ -2074,6 +2096,7 @@ public class PhotoModule
         }
 
         setCameraParametersWhenIdle(UPDATE_PARAM_PREFERENCE);
+        resizeForPreviewAspectRatio();
         mUI.updateOnScreenIndicators(mParameters, mPreferenceGroup, mPreferences);
     }
 
