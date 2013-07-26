@@ -281,7 +281,7 @@ public class MovieActivity extends Activity {
         // Document says EXTRA_STREAM should be a content: Uri
         // So, we only share the video if it's "content:".
         MenuItem shareItem = menu.findItem(R.id.action_share);
-        if (ContentResolver.SCHEME_CONTENT.equals(mUri.getScheme())) {
+        if (isSharable()) {
             shareItem.setVisible(true);
             ((ShareActionProvider) shareItem.getActionProvider())
                     .setShareIntent(createShareIntent());
@@ -509,5 +509,12 @@ public class MovieActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         return mPlayer.onKeyUp(keyCode, event)
                 || super.onKeyUp(keyCode, event);
+    }
+
+    private boolean isSharable() {
+        String scheme = mUri.getScheme();
+        return ContentResolver.SCHEME_FILE.equals(scheme)
+                || (ContentResolver.SCHEME_CONTENT.equals(scheme) && MediaStore.AUTHORITY
+                        .equals(mUri.getAuthority()));
     }
 }
