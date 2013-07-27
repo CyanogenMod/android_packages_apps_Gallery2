@@ -19,7 +19,7 @@ package com.android.photos.data;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 
-import android.util.Pools.Pool;
+import com.android.photos.data.BitmapPools.Pool;
 
 public class SparseArrayBitmapPool {
 

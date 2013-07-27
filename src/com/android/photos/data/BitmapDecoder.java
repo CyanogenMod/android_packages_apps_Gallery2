@@ -19,10 +19,10 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.util.Pools.Pool;
-import android.util.Pools.SynchronizedPool;
 
 import com.android.gallery3d.common.Utils;
+import com.android.photos.data.BitmapPools.Pool;
+import com.android.photos.data.BitmapPools.SynchronizedPool;
 
 import java.io.BufferedInputStream;
 import java.io.File;

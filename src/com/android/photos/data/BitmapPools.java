@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.util;
+package com.android.photos.data;
 
 /**
  * Helper class for crating pools of objects. An example use looks like this:
@@ -40,7 +40,7 @@ package android.util;
  *
  * @hide
  */
-public final class Pools {
+public final class BitmapPools {
 
     /**
      * Interface for managing a pool of objects.
@@ -65,7 +65,7 @@ public final class Pools {
         public boolean release(T instance);
     }
 
-    private Pools() {
+    private BitmapPools() {
         /* do nothing - hiding constructor */
     }
 
