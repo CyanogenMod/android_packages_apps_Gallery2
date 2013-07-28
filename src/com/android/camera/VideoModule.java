@@ -189,6 +189,9 @@ public class VideoModule implements CameraModule,
     private boolean mRestoreFlash;  // This is used to check if we need to restore the flash
                                     // status when going back from gallery.
 
+    private int mVideoWidth;
+    private int mVideoHeight;
+
     private final MediaSaveService.OnMediaSavedListener mOnVideoSavedListener =
             new MediaSaveService.OnMediaSavedListener() {
                 @Override
@@ -849,12 +852,18 @@ public class VideoModule implements CameraModule,
         try {
             if (!effectsActive()) {
                 if (ApiHelper.HAS_SURFACE_TEXTURE) {
-                    SurfaceTexture surfaceTexture = ((CameraScreenNail) mActivity.mCameraScreenNail)
-                            .getSurfaceTexture();
-                    if (surfaceTexture == null) {
+                    SurfaceTexture sT = null;
+
+                    if (Util.mSwitchCamera) {
+                        sT = Util.newSurfaceLayer(mCameraDisplayOrientation, mParameters, mActivity);
+                    } else {
+                        sT = ((CameraScreenNail) mActivity.mCameraScreenNail).getSurfaceTexture();
+                        Util.mUI.setSurfaceTexture(sT);
+                    }
+                    if (Util.mUI.getSurfaceTexture() == null) {
                         return; // The texture has been destroyed (pause, etc)
                     }
-                    mActivity.mCameraDevice.setPreviewTextureAsync(surfaceTexture);
+                    mActivity.mCameraDevice.setPreviewTextureAsync(sT);
                 } else {
                     mActivity.mCameraDevice.setPreviewDisplayAsync(mUI.getSurfaceHolder());
                 }
@@ -1140,6 +1149,9 @@ public class VideoModule implements CameraModule,
 
         Intent intent = mActivity.getIntent();
         Bundle myExtras = intent.getExtras();
+
+        mVideoWidth = mProfile.videoFrameWidth;
+        mVideoHeight = mProfile.videoFrameHeight;
 
         long requestedSizeLimit = 0;
         closeVideoFileDescriptor();
@@ -2029,7 +2041,9 @@ public class VideoModule implements CameraModule,
             // We need to restart the preview if preview size is changed.
             Size size = mParameters.getPreviewSize();
             if (size.width != mDesiredPreviewWidth
-                    || size.height != mDesiredPreviewHeight) {
+                    || size.height != mDesiredPreviewHeight
+                    || mProfile.videoFrameWidth != mVideoWidth
+                    || mProfile.videoFrameHeight != mVideoHeight) {
                 if (!effectsActive()) {
                     stopPreview();
                 } else {
