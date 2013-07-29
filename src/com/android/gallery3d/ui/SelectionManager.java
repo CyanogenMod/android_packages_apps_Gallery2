@@ -110,11 +110,10 @@ public class SelectionManager {
     private int getTotalCount() {
         if (mSourceMediaSet == null) return -1;
 
-        if (mTotal < 0) {
-            mTotal = mIsAlbumSet
-                    ? mSourceMediaSet.getSubMediaSetCount()
-                    : mSourceMediaSet.getMediaItemCount();
-        }
+        // Sometimes mSourceMediaSet is updated for database change, so mTotal should also be updated.
+        mTotal = mIsAlbumSet
+                ? mSourceMediaSet.getSubMediaSetCount()
+                : mSourceMediaSet.getMediaItemCount();
         return mTotal;
     }
 
