@@ -223,6 +223,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                     }
                 }
 
+                data.putBoolean("SingleItemOnly", singleItemOnly);
                 getStateManager().startState(SinglePhotoPage.class, data);
             }
         }
