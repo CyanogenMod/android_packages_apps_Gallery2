@@ -221,7 +221,7 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
                         data.putBoolean(PhotoPage.KEY_TREAT_BACK_AS_UP, true);
                     }
                 }
-
+                data.putBoolean("SingleItemOnly", singleItemOnly);
                 getStateManager().startState(SinglePhotoPage.class, data);
             }
         }
