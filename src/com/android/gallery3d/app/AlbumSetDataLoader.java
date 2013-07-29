@@ -21,6 +21,7 @@ import android.os.Message;
 import android.os.Process;
 
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.ClusterAlbumSet;
 import com.android.gallery3d.data.ContentListener;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
@@ -296,7 +297,7 @@ public class AlbumSetDataLoader {
                 int pos = info.index % mCoverItem.length;
                 mSetVersion[pos] = info.version;
                 long itemVersion = info.item.getDataVersion();
-                if (mItemVersion[pos] == itemVersion) return null;
+                if (!(mSource instanceof ClusterAlbumSet) && mItemVersion[pos] == itemVersion) return null;
                 mItemVersion[pos] = itemVersion;
                 mData[pos] = info.item;
                 mCoverItem[pos] = info.cover;

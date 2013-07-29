@@ -31,6 +31,8 @@ public class TimeClustering extends Clustering {
     @SuppressWarnings("unused")
     private static final String TAG = "TimeClustering";
 
+    private static final String MMDDYYYY_FORMAT = "MMddyyyy";
+
     // If 2 items are greater than 25 miles apart, they will be in different
     // clusters.
     private static final int GEOGRAPHIC_DISTANCE_CUTOFF_IN_MILES = 20;
@@ -116,7 +118,8 @@ public class TimeClustering extends Clustering {
             }
         });
 
-        ArrayList<SmallItem> items = new ArrayList<SmallItem>(total);
+        //ArrayList<SmallItem> items = new ArrayList<SmallItem>(total);
+        ArrayList<SmallItem> items = new ArrayList<SmallItem>();
         for (int i = 0; i < total; i++) {
             if (buf[i] != null) {
                 items.add(buf[i]);
@@ -139,13 +142,15 @@ public class TimeClustering extends Clustering {
             }
         }
 
-        setTimeRange(maxTime - minTime, n);
+        //setTimeRange(maxTime - minTime, n);
 
         for (int i = 0; i < n; i++) {
-            compute(items.get(i));
+            //compute(items.get(i));
+            computeByMonth(items.get(i));
         }
 
-        compute(null);
+        //compute(null);
+        computeByMonth(null);
 
         int m = mClusters.size();
         mNames = new String[m];
@@ -244,6 +249,50 @@ public class TimeClustering extends Clustering {
             }
         }
     }
+
+    // compute by month, items of same year and same month are into same cluster.
+    private void computeByMonth(SmallItem currentItem) {
+        if (currentItem != null) {
+            int numClusters = mClusters.size();
+            int numCurrClusterItems = mCurrCluster.size();
+            boolean itemAddedToCurrentCluster = false;
+
+            // Determine if this item should go in the current cluster or be the
+            // start of a new cluster.
+            if (numCurrClusterItems == 0) {
+                mCurrCluster.addItem(currentItem);
+            } else {
+                SmallItem prevItem = mCurrCluster.getLastItem();
+                String prevDay = DateFormat.format(MMDDYYYY_FORMAT, prevItem.dateInMs)
+                        .toString();
+                String currentDay = DateFormat.format(MMDDYYYY_FORMAT, currentItem.dateInMs)
+                        .toString();
+                if (prevDay.substring(4).equals(currentDay.substring(4)) &&
+                        prevDay.substring(0,2).equals(currentDay.substring(0,2))) {
+                    mCurrCluster.addItem(currentItem);
+                    itemAddedToCurrentCluster = true;
+                } else {
+                    mClusters.add(mCurrCluster);
+                }
+
+                // Creating a new cluster and adding the current item to it.
+                if (!itemAddedToCurrentCluster) {
+                    mCurrCluster = new Cluster();
+                    mCurrCluster.addItem(currentItem);
+                }
+            }
+        } else {
+            if (mCurrCluster.size() > 0) {
+                int numClusters = mClusters.size();
+                int numCurrClusterItems = mCurrCluster.size();
+
+                // The last cluster may potentially be too big or too small.
+                mClusters.add(mCurrCluster);
+                mCurrCluster = new Cluster();
+            }
+        }
+    }
+
 
     private void splitAndAddCurrentCluster() {
         ArrayList<SmallItem> currClusterItems = mCurrCluster.getItems();
@@ -349,6 +398,7 @@ class Cluster {
     @SuppressWarnings("unused")
     private static final String TAG = "Cluster";
     private static final String MMDDYY_FORMAT = "MMddyy";
+    private static final String MMDDYYYY_FORMAT = "MMddyyyy";
 
     // This is for TimeClustering only.
     public boolean mGeographicallySeparatedFromPrevCluster = false;
@@ -375,6 +425,7 @@ class Cluster {
         return mItems;
     }
 
+/*
     public String generateCaption(Context context) {
         int n = mItems.size();
         long minTimestamp = 0;
@@ -433,6 +484,38 @@ class Cluster {
             caption = DateUtils.formatDateRange(context, minTimestamp,
                     maxTimestamp, flags);
         }
+
+        return caption;
+    }
+*/
+
+    // The items are from the same year and month - only show month and year.
+    public String generateCaption(Context context) {
+        int n = mItems.size();
+        long minTimestamp = 0;
+        long maxTimestamp = 0;
+
+        for (int i = 0; i < n; i++) {
+            long t = mItems.get(i).dateInMs;
+            if (t == 0) continue;
+            if (minTimestamp == 0) {
+                minTimestamp = maxTimestamp = t;
+            } else {
+                minTimestamp = Math.min(minTimestamp, t);
+                maxTimestamp = Math.max(maxTimestamp, t);
+            }
+        }
+        if (minTimestamp == 0) return "";
+
+        String caption;
+        String minDay = DateFormat.format(MMDDYYYY_FORMAT, minTimestamp)
+                .toString();
+        String maxDay = DateFormat.format(MMDDYYYY_FORMAT, maxTimestamp)
+                .toString();
+
+        int flags = DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_NO_MONTH_DAY;
+        caption = DateUtils.formatDateRange(context, minTimestamp,
+                      maxTimestamp, flags);
 
         return caption;
     }
