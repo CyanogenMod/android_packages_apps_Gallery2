@@ -69,9 +69,9 @@
     <string name="close" msgid="5585646033158453043">"关闭"</string>
     <string name="switch_to_camera" msgid="7280111806675169992">"切换到相机"</string>
   <plurals name="number_of_items_selected">
-    <item quantity="zero" msgid="2142579311530586258">"选中了 %1$d 项"</item>
-    <item quantity="one" msgid="2478365152745637768">"选中了 %1$d 项"</item>
-    <item quantity="other" msgid="754722656147810487">"选中了 %1$d 项"</item>
+    <item quantity="zero" msgid="2142579311530586258">"%1$d 项选中了"</item>
+    <item quantity="one" msgid="2478365152745637768">"%1$d 项选中了"</item>
+    <item quantity="other" msgid="754722656147810487">"%1$d 项选中了"</item>
   </plurals>
   <plurals name="number_of_albums_selected">
     <item quantity="zero" msgid="749292746814788132">"选中了 %1$d 本相册"</item>
