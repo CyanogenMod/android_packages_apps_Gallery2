@@ -64,7 +64,7 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
                 updateClustersContents();
             } else {
                 updateClusters();
-                mFirstReloadDone = true;
+                //mFirstReloadDone = true;
             }
             mDataVersion = nextVersionNumber();
         }
@@ -77,6 +77,13 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     }
 
     private void updateClusters() {
+        /*
+        for (ClusterAlbum entry : mAlbums) {
+            entry.clear();
+        }
+        */
+        updateEmptyClusters();
+
         mAlbums.clear();
         Clustering clustering;
         Context context = mApplication.getAndroidContext();
@@ -109,6 +116,8 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             } else if (mKind == ClusterSource.CLUSTER_ALBUMSET_SIZE) {
                 long minSize = ((SizeClustering) clustering).getMinSize(i);
                 childPath = mPath.getChild(minSize);
+            } else if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+                childPath = mPath.getChild(childName.toLowerCase().hashCode());
             } else {
                 childPath = mPath.getChild(i);
             }
@@ -156,4 +165,32 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             }
         }
     }
+
+    private void updateEmptyClusters() {
+        final HashSet<Path> existing = new HashSet<Path>();
+        mBaseSet.enumerateTotalMediaItems(new MediaSet.ItemConsumer() {
+            public void consume(int index, MediaItem item) {
+                existing.add(item.getPath());
+            }
+        });
+
+        int n = mAlbums.size();
+
+        // The loop goes backwards because we may set empty to inexistent cluster albums.
+        for (int i = n - 1; i >= 0; i--) {
+            ArrayList<Path> oldPaths = mAlbums.get(i).getMediaItems();
+            ArrayList<Path> newPaths = new ArrayList<Path>();
+            int m = oldPaths.size();
+            for (int j = 0; j < m; j++) {
+                Path p = oldPaths.get(j);
+                if (existing.contains(p)) {
+                    newPaths.add(p);
+                }
+            }
+            if (newPaths.isEmpty()) {
+                mAlbums.get(i).setMediaItems(new ArrayList<Path>());
+            }
+        }
+    }
+
 }
