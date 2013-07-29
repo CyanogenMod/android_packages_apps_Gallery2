@@ -145,6 +145,8 @@ public class SelectionManager {
         if (mListener != null) mListener.onSelectionChange(path, isItemSelected(path));
         if (count == 0 && mAutoLeave) {
             leaveSelectionMode();
+        } else if (count == 0) {
+            deSelectAll();
         }
     }
 
