@@ -33,6 +33,7 @@ public class SelectionManager {
     public static final int ENTER_SELECTION_MODE = 1;
     public static final int LEAVE_SELECTION_MODE = 2;
     public static final int SELECT_ALL_MODE = 3;
+    public static final int DESELECT_ALL_MODE = 4;
 
     private Set<Path> mClickedSet;
     private MediaSet mSourceMediaSet;
@@ -75,9 +76,10 @@ public class SelectionManager {
     }
 
     public void deSelectAll() {
-        leaveSelectionMode();
+        //leaveSelectionMode();
         mInverseSelection = false;
         mClickedSet.clear();
+        if (mListener != null) mListener.onSelectionModeChange(DESELECT_ALL_MODE);
     }
 
     public boolean inSelectAllMode() {
