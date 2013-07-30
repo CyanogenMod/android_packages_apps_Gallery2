@@ -440,4 +440,6 @@
     <string name="bass_boost_strength">"低音加強"</string>
     <string name="virtualizer_strength">"3D 效果"</string>
     <string name="audio_effects">"音效"</string>
+    <string name="headset_plug">此类音效需插入耳機。</string>
+    <string name="audio_effects_dialog_title">驍龍音效+</string>
 </resources>
