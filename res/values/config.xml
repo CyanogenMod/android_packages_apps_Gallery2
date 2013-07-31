@@ -30,5 +30,6 @@
     <bool name="sendMagicSamsungZSLCommand">false</bool>
     <!-- Decode YV16 format on Samsung HDR hardware -->
     <bool name="needsSamsungHDRFormat">false</bool>
-
+    <!-- The camera HAL does its own preview state management during snaps -->
+    <bool name="previewStopsDuringSnapshot">false</bool>
 </resources>
