@@ -62,14 +62,64 @@ public interface LocalData extends FilmStripView.ImageData {
     public static final int ACTION_DELETE = (1 << 1);
 
     View getView(Context c, int width, int height, Drawable placeHolder);
+
+    /**
+     * Gets the date when this data is created. The returned date is also used
+     * for sorting data.
+     *
+     * @return The date when this data is created.
+     * @see {@link NewestFirstComparator}
+     */
     long getDateTaken();
+
+    /**
+     * Gets the date when this data is modified. The returned date is also used
+     * for sorting data.
+     *
+     * @return The date when this data is modified.
+     * @see {@link NewestFirstComparator}
+     */
     long getDateModified();
+
+    /** Gets the title of this data */
     String getTitle();
-    boolean isDataActionSupported(int action);
+
+    /**
+     * Checks if the data actions (delete/play ...) can be applied on this data.
+     *
+     * @param actions The actions to check.
+     * @return Whether all the actions are supported.
+     */
+    boolean isDataActionSupported(int actions);
+
     boolean delete(Context c);
+
     void onFullScreen(boolean fullScreen);
+
+    /** Returns {@code true} if it allows swipe to filmstrip in full screen. */
     boolean canSwipeInFullScreen();
+
+    /**
+     * Returns the path to the data on the storage.
+     *
+     * @return Empty path if there's none.
+     */
     String getPath();
+
+    /**
+     * Returns the content URI of this data item.
+     *
+     * @return {@code Uri.EMPTY} if not valid.
+     */
+    Uri getContentUri();
+
+    /**
+     * Refresh the data content.
+     *
+     * @param resolver {@link ContentResolver} to refresh the data.
+     * @return {@code true} if success, {@code false} otherwise.
+     */
+    boolean refresh(ContentResolver resolver);
 
     static class NewestFirstComparator implements Comparator<LocalData> {
 
@@ -101,16 +151,10 @@ public interface LocalData extends FilmStripView.ImageData {
     // Implementations below.
 
     /**
-<<<<<<< HEAD
      * A base class for all the local media files. The bitmap is loaded in
      * background thread. Subclasses should implement their own background
-     * loading thread by subclassing BitmapLoadTask and overriding
+     * loading thread by sub-classing BitmapLoadTask and overriding
      * doInBackground() to return a bitmap.
-=======
-     * A base class for all the local media files. The bitmap is loaded in background
-     * thread. Subclasses should implement their own background loading thread by
-     * sub-classing BitmapLoadTask and overriding doInBackground() to return a bitmap.
->>>>>>> Add LocalDataAdapter and wrappers.
      */
     abstract static class LocalMediaData implements LocalData {
         protected long id;
@@ -256,14 +300,6 @@ public interface LocalData extends FilmStripView.ImageData {
             }
         }
 
-        /**
-         * Returns the content URI of this data item.
-         */
-        private Uri getContentUri() {
-            Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-            return baseUri.buildUpon().appendPath(String.valueOf(id)).build();
-        }
-
         @Override
         public abstract int getType();
 
@@ -405,6 +441,32 @@ public interface LocalData extends FilmStripView.ImageData {
         }
 
         @Override
+        public Uri getContentUri() {
+            Uri baseUri = CONTENT_URI;
+            return baseUri.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        @Override
+        public boolean refresh(ContentResolver resolver) {
+            Cursor c = resolver.query(
+                    getContentUri(), QUERY_PROJECTION, null, null, null);
+            if (c == null || !c.moveToFirst()) {
+                return false;
+            }
+            Photo newData = buildFromCursor(c);
+            id = newData.id;
+            title = newData.title;
+            mimeType = newData.mimeType;
+            dateTaken = newData.dateTaken;
+            dateModified = newData.dateModified;
+            path = newData.path;
+            orientation = newData.orientation;
+            width = newData.width;
+            height = newData.height;
+            return true;
+        }
+
+        @Override
         protected BitmapLoadTask getBitmapLoadTask(
                 ImageView v, int decodeWidth, int decodeHeight) {
             return new PhotoBitmapLoadTask(v, decodeWidth, decodeHeight);
@@ -498,8 +560,7 @@ public interface LocalData extends FilmStripView.ImageData {
             d.path = c.getString(COL_DATA);
             d.width = c.getInt(COL_WIDTH);
             d.height = c.getInt(COL_HEIGHT);
-            d.mPlayUri = CONTENT_URI.buildUpon()
-                    .appendPath(String.valueOf(d.id)).build();
+            d.mPlayUri = d.getContentUri();
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(d.path);
             String rotation = retriever.extractMetadata(
@@ -546,6 +607,32 @@ public interface LocalData extends FilmStripView.ImageData {
             ContentResolver cr = ctx.getContentResolver();
             cr.delete(CONTENT_URI, VideoColumns._ID + "=" + id, null);
             return super.delete(ctx);
+        }
+
+        @Override
+        public Uri getContentUri() {
+            Uri baseUri = CONTENT_URI;
+            return baseUri.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        @Override
+        public boolean refresh(ContentResolver resolver) {
+            Cursor c = resolver.query(
+                    getContentUri(), QUERY_PROJECTION, null, null, null);
+            if (c == null && !c.moveToFirst()) {
+                return false;
+            }
+            Video newData = buildFromCursor(c);
+            id = newData.id;
+            title = newData.title;
+            mimeType = newData.mimeType;
+            dateTaken = newData.dateTaken;
+            dateModified = newData.dateModified;
+            path = newData.path;
+            width = newData.width;
+            height = newData.height;
+            mPlayUri = newData.mPlayUri;
+            return true;
         }
 
         @Override
@@ -669,6 +756,16 @@ public interface LocalData extends FilmStripView.ImageData {
         @Override
         public String getPath() {
             return "";
+        }
+
+        @Override
+        public Uri getContentUri() {
+            return Uri.EMPTY;
+        }
+
+        @Override
+        public boolean refresh(ContentResolver resolver) {
+            return false;
         }
 
         @Override
