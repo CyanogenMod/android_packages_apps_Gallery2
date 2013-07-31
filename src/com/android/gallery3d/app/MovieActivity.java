@@ -79,7 +79,6 @@ public class MovieActivity extends Activity {
     private MoviePlayer mPlayer;
     private boolean mFinishOnCompletion;
     private Uri mUri;
-    private boolean mTreatUpAsBack;
 
     private static final short BASSBOOST_MAX_STRENGTH = 1000;
     private static final short VIRTUALIZER_MAX_STRENGTH = 1000;
@@ -156,7 +155,6 @@ public class MovieActivity extends Activity {
         initializeActionBar(intent);
         mFinishOnCompletion = intent.getBooleanExtra(
                 MediaStore.EXTRA_FINISH_ON_COMPLETION, true);
-        mTreatUpAsBack = intent.getBooleanExtra(KEY_TREAT_UP_AS_BACK, false);
         mPlayer = new MoviePlayer(rootView, this, intent.getData(), savedInstanceState,
                 !mFinishOnCompletion) {
             @Override
@@ -422,12 +420,8 @@ public class MovieActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (mTreatUpAsBack) {
-                finish();
-            } else {
-                startActivity(new Intent(this, Gallery.class));
-                finish();
-            }
+            // If click back up button, we will always finish current activity and back to previous one.
+            finish();
             return true;
         } else if (id == R.id.action_share) {
             startActivity(Intent.createChooser(createShareIntent(),
