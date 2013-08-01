@@ -31,6 +31,5 @@ public interface VideoController extends OnShutterButtonListener {
     public int onZoomChanged(int index);
 
     public void onSingleTapUp(View view, int x, int y);
-
     public void stopPreview();
 }
