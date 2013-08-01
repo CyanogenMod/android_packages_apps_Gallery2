@@ -25,7 +25,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
@@ -63,6 +65,7 @@ public class CameraActivity extends ActivityBase
     private MotionEvent mDown;
     private boolean mAutoRotateScreen;
     private int mHeightOrWidth = -1;
+    private int mLastTextureCameraId = -1;
 
     private MyOrientationEventListener mOrientationListener;
     // The degrees of the device rotated clockwise from its natural orientation.
@@ -204,6 +207,7 @@ public class CameraActivity extends ActivityBase
         CameraHolder.instance().keep();
         closeModule(mCurrentModule);
         mCurrentModuleIndex = i;
+        mLastTextureCameraId = -1;
         switch (i) {
             case VIDEO_MODULE_INDEX:
                 mCurrentModule = new VideoModule();
@@ -515,6 +519,38 @@ public class CameraActivity extends ActivityBase
     @Override
     public boolean isPanoramaActivity() {
         return (mCurrentModuleIndex == PANORAMA_MODULE_INDEX);
+    }
+
+    public SurfaceTexture getScreenNailTextureForPreviewSize(int cameraId,
+            int displayOrientation, Camera.Parameters parameters) {
+        CameraScreenNail screenNail = getCameraScreenNail();
+        Camera.Size size = parameters.getPreviewSize();
+        int previewWidth, previewHeight;
+
+        if ((displayOrientation % 180) != 0) {
+            previewWidth = size.height;
+            previewHeight = size.width;
+        } else {
+            previewWidth = size.width;
+            previewHeight = size.height;
+        }
+
+        if (screenNail.getSurfaceTexture() == null || mLastTextureCameraId != cameraId) {
+            mLastTextureCameraId = cameraId;
+            screenNail.releaseSurfaceTexture();
+            screenNail.setSize(previewWidth, previewHeight);
+            screenNail.enableAspectRatioClamping();
+            notifyScreenNailChanged();
+            screenNail.acquireSurfaceTexture();
+        } else {
+            if (screenNail.getWidth() != previewWidth || screenNail.getHeight() != previewHeight) {
+                screenNail.setSize(previewWidth, previewHeight);
+            }
+            screenNail.enableAspectRatioClamping();
+            notifyScreenNailChanged();
+        }
+
+        return screenNail.getSurfaceTexture();
     }
 
     // Accessor methods for getting latency times used in performance testing
