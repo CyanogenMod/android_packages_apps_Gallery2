@@ -100,6 +100,7 @@ public class VideoMenu extends PieController
                     ListPreference pref =
                             mPreferenceGroup.findPreference(CameraSettings.KEY_CAMERA_ID);
                     if (pref != null) {
+                        Util.sCameraSwitched = true;
                         int index = pref.findIndexOfValue(pref.getValue());
                         CharSequence[] values = pref.getEntryValues();
                         index = (index + 1) % values.length;
