@@ -19,7 +19,9 @@ package com.android.gallery3d.filtershow.pipeline;
 import android.graphics.Bitmap;
 import android.util.Log;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
+import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class CacheProcessing {
@@ -28,8 +30,85 @@ public class CacheProcessing {
     private Vector<CacheStep> mSteps = new Vector<CacheStep>();
 
     static class CacheStep {
-        FilterRepresentation representation;
+        ArrayList<FilterRepresentation> representations;
         Bitmap cache;
+
+        public CacheStep() {
+            representations = new ArrayList<FilterRepresentation>();
+        }
+
+        public void add(FilterRepresentation representation) {
+            representations.add(representation);
+        }
+
+        public boolean canMergeWith(FilterRepresentation representation) {
+            for (FilterRepresentation rep : representations) {
+                if (!rep.canMergeWith(representation)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(CacheStep step) {
+            if (representations.size() != step.representations.size()) {
+                return false;
+            }
+            for (int i = 0; i < representations.size(); i++) {
+                FilterRepresentation r1 = representations.get(i);
+                FilterRepresentation r2 = step.representations.get(i);
+                if (!r1.equals(r2)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static Vector<CacheStep> buildSteps(Vector<FilterRepresentation> filters) {
+            Vector<CacheStep> steps = new Vector<CacheStep>();
+            CacheStep step = new CacheStep();
+            for (int i = 0; i < filters.size(); i++) {
+                FilterRepresentation representation = filters.elementAt(i);
+                if (step.canMergeWith(representation)) {
+                    step.add(representation.copy());
+                } else {
+                    steps.add(step);
+                    step = new CacheStep();
+                    step.add(representation.copy());
+                }
+            }
+            steps.add(step);
+            return steps;
+        }
+
+        public String getName() {
+            if (representations.size() > 0) {
+                return representations.get(0).getName();
+            }
+            return "EMPTY";
+        }
+
+        public Bitmap apply(FilterEnvironment environment, Bitmap cacheBitmap) {
+            boolean onlyGeometry = true;
+            for (FilterRepresentation representation : representations) {
+                if (representation.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
+                    onlyGeometry = false;
+                    break;
+                }
+            }
+            if (onlyGeometry) {
+                ArrayList<FilterRepresentation> geometry = new ArrayList<FilterRepresentation>();
+                for (FilterRepresentation representation : representations) {
+                    geometry.add(representation);
+                }
+                cacheBitmap = GeometryMathUtils.applyGeometryRepresentations(geometry, cacheBitmap);
+            } else {
+                for (FilterRepresentation representation : representations) {
+                    cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
+                }
+            }
+            return cacheBitmap;
+        }
     }
 
     public Bitmap process(Bitmap originalBitmap,
@@ -40,32 +119,34 @@ public class CacheProcessing {
             return originalBitmap;
         }
 
+        if (DEBUG) {
+            displayFilters(filters);
+        }
+        Vector<CacheStep> steps = CacheStep.buildSteps(filters);
         // New set of filters, let's clear the cache and rebuild it.
-        if (filters.size() != mSteps.size()) {
-            mSteps.clear();
-            for (int i = 0; i < filters.size(); i++) {
-                FilterRepresentation representation = filters.elementAt(i);
-                CacheStep step = new CacheStep();
-                step.representation = representation.copy();
-                mSteps.add(step);
-            }
+        if (steps.size() != mSteps.size()) {
+            mSteps = steps;
         }
 
         if (DEBUG) {
-            displayFilters(filters);
+            displaySteps(mSteps);
         }
 
         // First, let's find how similar we are in our cache
         // compared to the current list of filters
         int similarUpToIndex = -1;
-        for (int i = 0; i < filters.size(); i++) {
-            FilterRepresentation representation = filters.elementAt(i);
-            CacheStep step = mSteps.elementAt(i);
-            boolean similar = step.representation.equals(representation);
+        boolean similar = true;
+        for (int i = 0; i < steps.size(); i++) {
+            CacheStep newStep = steps.elementAt(i);
+            CacheStep cacheStep = mSteps.elementAt(i);
+            if (similar) {
+                similar = newStep.equals(cacheStep);
+            }
             if (similar) {
                 similarUpToIndex = i;
             } else {
-                break;
+                mSteps.remove(i);
+                mSteps.insertElementAt(newStep, i);
             }
         }
         if (DEBUG) {
@@ -82,69 +163,25 @@ public class CacheProcessing {
             }
             cacheBitmap = mSteps.elementAt(findBaseImageIndex).cache;
         }
-        boolean emptyStack = false;
-        if (cacheBitmap == null) {
-            emptyStack = true;
-            // Damn, it's an empty stack, we have to start from scratch
-            // TODO: use a bitmap cache + RS allocation instead of Bitmap.copy()
-            cacheBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            if (findBaseImageIndex > -1) {
-                FilterRepresentation representation = filters.elementAt(findBaseImageIndex);
-                if (representation.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
-                    cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
-                }
-                mSteps.elementAt(findBaseImageIndex).representation = representation.copy();
-                mSteps.elementAt(findBaseImageIndex).cache = cacheBitmap;
-            }
-            if (DEBUG) {
-                Log.v(LOGTAG, "empty stack");
-            }
-        }
-
-        // Ok, so sadly the earliest cached result is before the index we want.
-        // We have to rebuild a new result for this position, and then cache it.
-        if (findBaseImageIndex != similarUpToIndex) {
-            if (DEBUG) {
-                Log.v(LOGTAG, "rebuild cacheBitmap from " + findBaseImageIndex
-                        + " to " + similarUpToIndex);
-            }
-            // rebuild the cache image for this step
-            if (!emptyStack) {
-                cacheBitmap = cacheBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            } else {
-                // if it was an empty stack, we already applied it
-                findBaseImageIndex ++;
-            }
-            for (int i = findBaseImageIndex; i <= similarUpToIndex; i++) {
-                FilterRepresentation representation = filters.elementAt(i);
-                if (representation.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
-                    cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
-                }
-                if (DEBUG) {
-                    Log.v(LOGTAG, " - " + i  + " => apply " + representation.getName());
-                }
-            }
-            // Let's cache it!
-            mSteps.elementAt(similarUpToIndex).cache = cacheBitmap;
-        }
 
         if (DEBUG) {
-            Log.v(LOGTAG, "process pipeline from " + similarUpToIndex
-                    + " to " + (filters.size() - 1));
+            Log.v(LOGTAG, "found baseImageIndex: " + findBaseImageIndex + " max is "
+                    + mSteps.size() + " cacheBitmap: " + cacheBitmap);
         }
 
-        // Now we are good to go, let's use the cacheBitmap as a starting point
-        for (int i = similarUpToIndex + 1; i < filters.size(); i++) {
-            FilterRepresentation representation = filters.elementAt(i);
-            CacheStep currentStep = mSteps.elementAt(i);
-            cacheBitmap = cacheBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            if (representation.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
-                cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
+        for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
+            if (i == -1 || cacheBitmap == null) {
+                cacheBitmap = environment.getBitmapCopy(originalBitmap);
+                if (i == -1) {
+                    continue;
+                }
             }
-            currentStep.representation = representation.copy();
-            currentStep.cache = cacheBitmap;
-            if (DEBUG) {
-                Log.v(LOGTAG, " - " + i  + " => apply " + representation.getName());
+            CacheStep step = mSteps.elementAt(i);
+            if (step.cache == null) {
+                cacheBitmap = environment.getBitmapCopy(cacheBitmap);
+                cacheBitmap = step.apply(environment, cacheBitmap);
+                environment.cache(step.cache);
+                step.cache = cacheBitmap;
             }
         }
 
@@ -156,6 +193,7 @@ public class CacheProcessing {
         // Let's see if we can cleanup the cache for unused bitmaps
         for (int i = 0; i < similarUpToIndex; i++) {
             CacheStep currentStep = mSteps.elementAt(i);
+            environment.cache(currentStep.cache);
             currentStep.cache = null;
         }
 
@@ -167,12 +205,21 @@ public class CacheProcessing {
     }
 
     private void displayFilters(Vector<FilterRepresentation> filters) {
+        Log.v(LOGTAG, "------>>> Filters received");
+        for (int i = 0; i < filters.size(); i++) {
+            FilterRepresentation filter = filters.elementAt(i);
+            Log.v(LOGTAG, "[" + i + "] - " + filter.getName());
+        }
+        Log.v(LOGTAG, "<<<------");
+    }
+
+    private void displaySteps(Vector<CacheStep> filters) {
         Log.v(LOGTAG, "------>>>");
         for (int i = 0; i < filters.size(); i++) {
-            FilterRepresentation representation = filters.elementAt(i);
+            CacheStep newStep = filters.elementAt(i);
             CacheStep step = mSteps.elementAt(i);
-            boolean similar = step.representation.equals(representation);
-            Log.v(LOGTAG, "[" + i + "] - " + representation.getName()
+            boolean similar = step.equals(newStep);
+            Log.v(LOGTAG, "[" + i + "] - " + step.getName()
                     + " similar rep ? " + (similar ? "YES" : "NO")
                     + " -- bitmap: " + step.cache);
         }

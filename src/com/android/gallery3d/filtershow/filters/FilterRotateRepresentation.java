@@ -66,6 +66,7 @@ public class FilterRotateRepresentation extends FilterRepresentation {
         setShowParameterValue(true);
         setFilterClass(FilterRotateRepresentation.class);
         setFilterType(FilterRepresentation.TYPE_GEOMETRY);
+        setSupportsPartialRendering(true);
         setTextId(R.string.rotate);
         setEditorId(EditorRotate.ID);
         setRotation(rotation);

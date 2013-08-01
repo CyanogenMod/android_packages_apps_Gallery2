@@ -28,6 +28,7 @@ public class FilterUserPresetRepresentation extends FilterRepresentation {
         super(name);
         setEditorId(ImageOnlyEditor.ID);
         setFilterType(FilterRepresentation.TYPE_FX);
+        setSupportsPartialRendering(true);
         mPreset = preset;
         mId = id;
     }

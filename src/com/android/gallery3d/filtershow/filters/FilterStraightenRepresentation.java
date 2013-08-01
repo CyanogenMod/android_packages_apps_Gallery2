@@ -40,6 +40,7 @@ public class FilterStraightenRepresentation extends FilterRepresentation {
         setShowParameterValue(true);
         setFilterClass(FilterStraightenRepresentation.class);
         setFilterType(FilterRepresentation.TYPE_GEOMETRY);
+        setSupportsPartialRendering(true);
         setTextId(R.string.straighten);
         setEditorId(EditorStraighten.ID);
         setStraighten(straighten);

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
@@ -55,6 +56,7 @@ public class ProcessingService extends Service {
     private ImageSavingTask mImageSavingTask;
     private UpdatePreviewTask mUpdatePreviewTask;
     private HighresRenderingRequestTask mHighresRenderingRequestTask;
+    private FullresRenderingRequestTask mFullresRenderingRequestTask;
     private RenderingRequestTask mRenderingRequestTask;
 
     private final IBinder mBinder = new LocalBinder();
@@ -73,11 +75,13 @@ public class ProcessingService extends Service {
         }
         mUpdatePreviewTask.setOriginal(originalBitmap);
         mHighresRenderingRequestTask.setOriginal(originalBitmap);
+        mFullresRenderingRequestTask.setOriginal(originalBitmap);
         mRenderingRequestTask.setOriginal(originalBitmap);
     }
 
     public void updatePreviewBuffer() {
         mHighresRenderingRequestTask.stop();
+        mFullresRenderingRequestTask.stop();
         mUpdatePreviewTask.updatePreview();
     }
 
@@ -98,12 +102,29 @@ public class ProcessingService extends Service {
         mHighresRenderingRequestTask.postRenderingRequest(request);
     }
 
+    public void postFullresRenderingRequest(ImagePreset preset, float scaleFactor,
+                                            Rect bounds, Rect destination,
+                                            RenderingRequestCaller caller) {
+        RenderingRequest request = new RenderingRequest();
+        ImagePreset passedPreset = new ImagePreset(preset);
+        request.setOriginalImagePreset(preset);
+        request.setScaleFactor(scaleFactor);
+        request.setImagePreset(passedPreset);
+        request.setType(RenderingRequest.PARTIAL_RENDERING);
+        request.setCaller(caller);
+        request.setBounds(bounds);
+        request.setDestination(destination);
+        passedPreset.setPartialRendering(true, bounds);
+        mFullresRenderingRequestTask.postRenderingRequest(request);
+    }
+
     public void setHighresPreviewScaleFactor(float highResPreviewScale) {
         mHighresRenderingRequestTask.setHighresPreviewScaleFactor(highResPreviewScale);
     }
 
     public void setPreviewScaleFactor(float previewScale) {
         mHighresRenderingRequestTask.setPreviewScaleFactor(previewScale);
+        mFullresRenderingRequestTask.setPreviewScaleFactor(previewScale);
         mRenderingRequestTask.setPreviewScaleFactor(previewScale);
     }
 
@@ -144,10 +165,12 @@ public class ProcessingService extends Service {
         mImageSavingTask = new ImageSavingTask(this);
         mUpdatePreviewTask = new UpdatePreviewTask();
         mHighresRenderingRequestTask = new HighresRenderingRequestTask();
+        mFullresRenderingRequestTask = new FullresRenderingRequestTask();
         mRenderingRequestTask = new RenderingRequestTask();
         mProcessingTaskController.add(mImageSavingTask);
         mProcessingTaskController.add(mUpdatePreviewTask);
         mProcessingTaskController.add(mHighresRenderingRequestTask);
+        mProcessingTaskController.add(mFullresRenderingRequestTask);
         mProcessingTaskController.add(mRenderingRequestTask);
         setupPipeline();
     }

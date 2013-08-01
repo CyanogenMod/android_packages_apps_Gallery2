@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -63,6 +64,10 @@ public class FilterEnvironment {
             return;
         }
         Bitmap bitmap = buffer.getBitmap();
+        cache(bitmap);
+    }
+
+    public void cache(Bitmap bitmap) {
         if (bitmap == null) {
             return;
         }
@@ -81,6 +86,13 @@ public class FilterEnvironment {
             bitmap = Bitmap.createBitmap(
                     w, h, Bitmap.Config.ARGB_8888);
         }
+        return bitmap;
+    }
+
+    public Bitmap getBitmapCopy(Bitmap source) {
+        Bitmap bitmap = getBitmap(source.getWidth(), source.getHeight());
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(source, 0, 0, null);
         return bitmap;
     }
 

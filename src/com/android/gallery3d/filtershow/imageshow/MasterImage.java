@@ -327,29 +327,32 @@ public class MasterImage implements RenderingRequestCaller {
         }
     }
 
-    public void updatePresets(boolean force) {
-        if (force || mGeometryOnlyPreset == null) {
+    public void resetGeometryImages() {
+        if (mGeometryOnlyPreset == null) {
             ImagePreset newPreset = new ImagePreset(mPreset);
             newPreset.setDoApplyFilters(false);
             newPreset.setDoApplyGeometry(true);
-            if (force || mGeometryOnlyPreset == null
+            if (mGeometryOnlyPreset == null
                     || !newPreset.same(mGeometryOnlyPreset)) {
                 mGeometryOnlyPreset = newPreset;
                 RenderingRequest.post(mActivity, getOriginalBitmapLarge(),
                         mGeometryOnlyPreset, RenderingRequest.GEOMETRY_RENDERING, this);
             }
         }
-        if (force || mFiltersOnlyPreset == null) {
+        if (mFiltersOnlyPreset == null) {
             ImagePreset newPreset = new ImagePreset(mPreset);
             newPreset.setDoApplyFilters(true);
             newPreset.setDoApplyGeometry(false);
-            if (force || mFiltersOnlyPreset == null
+            if (mFiltersOnlyPreset == null
                     || !newPreset.same(mFiltersOnlyPreset)) {
                 mFiltersOnlyPreset = newPreset;
                 RenderingRequest.post(mActivity, MasterImage.getImage().getOriginalBitmapLarge(),
                         mFiltersOnlyPreset, RenderingRequest.FILTERS_RENDERING, this);
             }
         }
+    }
+
+    public void updatePresets(boolean force) {
         invalidatePreview();
     }
 
@@ -363,7 +366,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void invalidateFiltersOnly() {
         mFiltersOnlyPreset = null;
-        updatePresets(false);
+        invalidatePreview();
     }
 
     public void invalidatePartialPreview() {
@@ -449,8 +452,9 @@ public class MasterImage implements RenderingRequestCaller {
         m.mapRect(dest, r);
         Rect bounds = new Rect();
         dest.roundOut(bounds);
-        RenderingRequest.post(mActivity, null, mPreset, RenderingRequest.PARTIAL_RENDERING,
-                this, bounds, new Rect(0, 0, mImageShowSize.x, mImageShowSize.y));
+        mActivity.getProcessingService().postFullresRenderingRequest(mPreset,
+                getScaleFactor(), bounds,
+                new Rect(0, 0, mImageShowSize.x, mImageShowSize.y), this);
         invalidatePartialPreview();
     }
 

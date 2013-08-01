@@ -306,8 +306,15 @@ public class ImagePreset {
                     mFilters.remove(i);
                 }
             }
+            int index = 0;
+            for (; index < mFilters.size(); index++) {
+                FilterRepresentation rep = mFilters.elementAt(index);
+                if (rep.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
+                    break;
+                }
+            }
             if (!representation.isNil()) {
-                mFilters.add(representation);
+                mFilters.insertElementAt(representation, index);
             }
         } else if (representation.getFilterType() == FilterRepresentation.TYPE_BORDER) {
             removeFilter(representation);
@@ -524,10 +531,6 @@ public class ImagePreset {
         }
         for (int i = 0; i < mFilters.size(); i++) {
             FilterRepresentation representation = mFilters.elementAt(i);
-            if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY
-                    && !representation.isNil()) {
-                return false;
-            }
             if (!representation.supportsPartialRendering()) {
                 return false;
             }
@@ -541,10 +544,6 @@ public class ImagePreset {
         }
         Vector<State> states = new Vector<State>();
         for (FilterRepresentation filter : mFilters) {
-            if (filter.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
-                // TODO: supports Geometry representations in the state panel.
-                continue;
-            }
             if (filter instanceof FilterUserPresetRepresentation) {
                 // do not show the user preset itself in the state panel
                 continue;

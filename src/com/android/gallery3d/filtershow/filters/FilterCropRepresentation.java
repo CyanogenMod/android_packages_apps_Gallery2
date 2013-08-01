@@ -40,6 +40,7 @@ public class FilterCropRepresentation extends FilterRepresentation {
         setShowParameterValue(true);
         setFilterClass(FilterCropRepresentation.class);
         setFilterType(FilterRepresentation.TYPE_GEOMETRY);
+        setSupportsPartialRendering(true);
         setTextId(R.string.crop);
         setEditorId(EditorCrop.ID);
         setCrop(crop);

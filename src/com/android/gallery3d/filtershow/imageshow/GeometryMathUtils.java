@@ -307,6 +307,40 @@ public final class GeometryMathUtils {
                 bmapDimens.height(), viewWidth, viewHeight);
     }
 
+    public static Matrix getPartialToScreenMatrix(Collection<FilterRepresentation> geometry,
+                                                  Rect originalBounds, float w, float h,
+                                                  float pw, float ph) {
+        GeometryHolder holder = unpackGeometry(geometry);
+        RectF rCrop = new RectF(0, 0, originalBounds.width(), originalBounds.height());
+        float angle = holder.straighten;
+        int rotation = holder.rotation.value();
+
+        ImageStraighten.getUntranslatedStraightenCropBounds(rCrop, angle);
+        float dx = (w - pw) / 2f;
+        float dy = (h - ph) / 2f;
+        Matrix compensation = new Matrix();
+        compensation.postTranslate(dx, dy);
+        float cScale = originalBounds.width() / rCrop.width();
+        if (rCrop.width() < rCrop.height()) {
+            cScale = originalBounds.height() / rCrop.height();
+        }
+        float scale = w / pw;
+        if (w < h) {
+            scale = h / ph;
+        }
+        scale = scale * cScale;
+        float cx = w / 2f;
+        float cy = h / 2f;
+
+        compensation.postScale(scale, scale, cx, cy);
+        compensation.postRotate(angle, cx, cy);
+        compensation.postRotate(rotation, cx, cy);
+        compensation.postTranslate(-cx, -cy);
+        concatMirrorMatrix(compensation, holder.mirror);
+        compensation.postTranslate(cx, cy);
+        return compensation;
+    }
+
     public static Matrix getOriginalToScreen(GeometryHolder holder, boolean rotate,
             float originalWidth,
             float originalHeight, float viewWidth, float viewHeight) {

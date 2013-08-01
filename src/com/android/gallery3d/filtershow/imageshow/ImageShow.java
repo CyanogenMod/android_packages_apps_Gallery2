@@ -37,11 +37,15 @@ import android.widget.LinearLayout;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 public class ImageShow extends View implements OnGestureListener,
         ScaleGestureDetector.OnScaleGestureListener,
@@ -226,9 +230,16 @@ public class ImageShow extends View implements OnGestureListener,
 
         Bitmap partialPreview = MasterImage.getImage().getPartialImage();
         if (partialPreview != null) {
-            Rect src = new Rect(0, 0, partialPreview.getWidth(), partialPreview.getHeight());
-            Rect dest = new Rect(0, 0, getWidth(), getHeight());
-            canvas.drawBitmap(partialPreview, src, dest, mPaint);
+            canvas.save();
+            Rect originalBounds = MasterImage.getImage().getOriginalBounds();
+            Collection<FilterRepresentation> geo = MasterImage.getImage().getPreset()
+                    .getGeometryFilters();
+
+            Matrix compensation = GeometryMathUtils.getPartialToScreenMatrix(geo,
+                    originalBounds, getWidth(), getHeight(),
+                    partialPreview.getWidth(), partialPreview.getHeight());
+            canvas.drawBitmap(partialPreview, compensation, null);
+            canvas.restore();
         }
 
         canvas.save();
@@ -241,7 +252,7 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     public void resetImageCaches(ImageShow caller) {
-        MasterImage.getImage().updatePresets(true);
+        MasterImage.getImage().resetGeometryImages();
     }
 
     public Bitmap getFiltersOnlyImage() {

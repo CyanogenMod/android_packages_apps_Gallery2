@@ -152,7 +152,7 @@ public class ImageStraighten extends ImageShow {
         mAngle = Math.min(MAX_STRAIGHTEN_ANGLE, mAngle);
     }
 
-    private static void getUntranslatedStraightenCropBounds(RectF outRect, float straightenAngle) {
+    public static void getUntranslatedStraightenCropBounds(RectF outRect, float straightenAngle) {
         float deg = straightenAngle;
         if (deg < 0) {
             deg = -deg;

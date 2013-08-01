@@ -127,7 +127,7 @@ public class FilterRepresentation {
     }
 
     public boolean supportsPartialRendering() {
-        return false && mSupportsPartialRendering; // disable for now
+        return mSupportsPartialRendering;
     }
 
     public void setSupportsPartialRendering(boolean value) {
@@ -258,5 +258,12 @@ public class FilterRepresentation {
     // Override this in subclasses
     public int getStyle() {
         return -1;
+    }
+
+    public boolean canMergeWith(FilterRepresentation representation) {
+        if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
+            return true;
+        }
+        return false;
     }
 }
