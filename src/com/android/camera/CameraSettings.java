@@ -201,7 +201,7 @@ public class CameraSettings {
             if (!Util.isFocusAreaSupported(mParameters)) {
                 filterUnsupportedOptions(group,
                         focusMode, mParameters.getSupportedFocusModes());
-            } else {
+            } else if (!mContext.getResources().getBoolean(R.bool.wantsFocusModes)) {
                 // Remove the focus mode if we can use tap-to-focus.
                 removePreference(group, focusMode.getKey());
             }
@@ -562,6 +562,32 @@ public class CameraSettings {
         }
         if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_480P)) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
+        }
+    }
+
+    /**
+     * Set video size for certain cameras.
+     *
+     * @param params
+     * @param profile
+     */
+    public static void setEarlyVideoSize(Parameters params, CamcorderProfile profile) {
+        if (Util.needsEarlyVideoSize()) {
+            params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
+        }
+    }
+     /**
+     * Enable video mode for certain cameras.
+     *
+     * @param params
+     * @param on
+     */
+    public static void setVideoMode(Parameters params, boolean on) {
+        if (Util.useSamsungCamMode()) {
+            params.set("cam_mode", on ? "1" : "0");
+        }
+        if (Util.useHTCCamMode()) {
+            params.set("cam-mode", on ? "1" : "0");
         }
     }
 
