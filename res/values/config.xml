@@ -19,4 +19,30 @@
 <resources>
     <!-- Maximum recording length in milliseconds. 0 means unlimited. -->
     <integer name="max_video_recording_length">0</integer>
+    <!-- The camera removes the focus modes by default when touch-to-focus
+         exists. Use this option to change that behavior -->
+    <bool name="wantsFocusModes">false</bool>
+    <!-- Always use preferred preview size path for effects recording instead
+         of the display resolution -->
+    <bool name="usePreferredPreviewSizeForEffects">false</bool>
+    <!-- Ignore preferred preview size and use best value from supported preview
+         sizesting both this and the above option true will always use values
+         from preview sizes for both -->
+    <bool name="ignorePreferredPreviewSizeForVideo">false</bool>
+    <!-- Disable face detection on the front camera -->
+    <bool name="noFaceDetectOnFrontCamera">false</bool>
+    <!-- Use ZSL mode for Qualcomm cameras -->
+    <bool name="enableZSL">false</bool>
+    <!-- Magic for enabling ZSL on Samsung cameras -->
+    <bool name="sendMagicSamsungZSLCommand">false</bool>
+    <!-- Decode YV16 format on Samsung HDR hardware -->
+    <bool name="needsSamsungHDRFormat">false</bool>
+    <!-- The camera HAL does its own preview state management during snaps -->
+    <bool name="previewStopsDuringSnapshot">false</bool>
+    <!-- Allows setting video size before recording starts -->
+    <bool name="needsEarlyVideoSize">false</bool>
+    <!-- Samsung Camcorder Mode -->
+    <bool name="needsSamsungCamMode">false</bool>
+    <!-- HTC Camcorder Mode -->
+    <bool name="needsHTCCamMode">false</bool>
 </resources>
