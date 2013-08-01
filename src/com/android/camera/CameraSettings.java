@@ -27,6 +27,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.media.CamcorderProfile;
+import android.text.TextUtils;
 import android.util.FloatMath;
 import android.util.Log;
 
@@ -201,7 +202,7 @@ public class CameraSettings {
             if (!Util.isFocusAreaSupported(mParameters)) {
                 filterUnsupportedOptions(group,
                         focusMode, mParameters.getSupportedFocusModes());
-            } else {
+            } else if (!mContext.getResources().getBoolean(R.bool.wantsFocusModes)) {
                 // Remove the focus mode if we can use tap-to-focus.
                 removePreference(group, focusMode.getKey());
             }
@@ -430,6 +431,29 @@ public class CameraSettings {
         }
     }
 
+    public static int getJpegQualityIntValue(SharedPreferences pref) {
+        int version = pref.getInt(KEY_VERSION, 0);
+        String qualityString = pref.getString(KEY_JPEG_QUALITY, null);
+
+        if (version >= 2) {
+            if (TextUtils.equals(qualityString, "normal")) {
+                return 65;
+            } else if (TextUtils.equals(qualityString, "fine")) {
+                return 75;
+            }
+            // otherwise fall down to superfine = 85 as default
+        } else {
+            try {
+                return Integer.parseInt(qualityString);
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Found unexpected quality value " + qualityString
+                        + ", using default.");
+            }
+        }
+
+        return 85;
+    }
+
     public static int readPreferredCameraId(SharedPreferences pref) {
         return Integer.parseInt(pref.getString(KEY_CAMERA_ID, "0"));
     }
@@ -562,6 +586,32 @@ public class CameraSettings {
         }
         if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_480P)) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
+        }
+    }
+
+    /**
+     * Set video size for certain cameras.
+     *
+     * @param params
+     * @param profile
+     */
+    public static void setEarlyVideoSize(Parameters params, CamcorderProfile profile) {
+        if (Util.needsEarlyVideoSize()) {
+            params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
+        }
+    }
+     /**
+     * Enable video mode for certain cameras.
+     *
+     * @param params
+     * @param on
+     */
+    public static void setVideoMode(Parameters params, boolean on) {
+        if (Util.useSamsungCamMode()) {
+            params.set("cam_mode", on ? "1" : "0");
+        }
+        if (Util.useHTCCamMode()) {
+            params.set("cam-mode", on ? "1" : "0");
         }
     }
 
