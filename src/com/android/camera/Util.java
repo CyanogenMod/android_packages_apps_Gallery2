@@ -31,6 +31,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -88,6 +89,7 @@ public class Util {
     public static final String SCENE_MODE_HDR = "hdr";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
+    public static boolean mSwitchCamera = false;
 
     public static boolean isSupported(String value, List<String> supported) {
         return supported == null ? false : supported.indexOf(value) >= 0;
@@ -135,6 +137,30 @@ public class Util {
     private static float sPixelDensity = 1;
     private static ImageFileNamer sImageFileNamer;
 
+
+    // Samsung ZSL mode
+    private static boolean sEnableZSL;
+
+    // Workaround for QC cameras with broken face detection on front camera
+    private static boolean sNoFaceDetectOnFrontCamera;
+
+    // Use samsung HDR format
+    private static boolean sSamsungHDRFormat;
+
+    // Send magic command to hardware for Samsung ZSL
+    private static boolean sSendMagicSamsungZSLCommand;
+
+    public static PhotoUI mUI;
+
+    // For setting video size before recording starts
+    private static boolean sEarlyVideoSize;
+
+    // Samsung camcorder mode
+    private static boolean sSamsungCamMode;
+
+    // HTC camcorder mode
+    private static boolean sHTCCamMode;
+
     private Util() {
     }
 
@@ -146,10 +172,53 @@ public class Util {
         sPixelDensity = metrics.density;
         sImageFileNamer = new ImageFileNamer(
                 context.getString(R.string.image_file_name_format));
+
+        // These come from the config, but are needed before parameters are set.
+        sEnableZSL = context.getResources().getBoolean(R.bool.enableZSL);
+        sNoFaceDetectOnFrontCamera = context.getResources().getBoolean(
+                R.bool.noFaceDetectOnFrontCamera);
+
+        sSamsungHDRFormat = context.getResources().getBoolean(R.bool.needsSamsungHDRFormat);
+
+
+        sSendMagicSamsungZSLCommand = context.getResources().getBoolean(
+                R.bool.sendMagicSamsungZSLCommand);
+
+        sEarlyVideoSize = context.getResources().getBoolean(R.bool.needsEarlyVideoSize);
+        sSamsungCamMode = context.getResources().getBoolean(R.bool.needsSamsungCamMode);
+        sHTCCamMode = context.getResources().getBoolean(R.bool.needsHTCCamMode);
     }
 
     public static int dpToPixel(int dp) {
         return Math.round(sPixelDensity * dp);
+    }
+
+    public static boolean enableZSL() {
+        return sEnableZSL;
+    }
+
+
+    public static boolean needSamsungHDRFormat() {
+        return sSamsungHDRFormat;
+    }
+    public static boolean noFaceDetectOnFrontCamera() {
+        return sNoFaceDetectOnFrontCamera;
+    }
+
+    public static boolean sendMagicSamsungZSLCommand() {
+        return sSendMagicSamsungZSLCommand;
+    }
+
+    public static boolean needsEarlyVideoSize() {
+        return sEarlyVideoSize;
+    }
+
+    public static boolean useHTCCamMode() {
+        return sHTCCamMode;
+    }
+
+    public static boolean useSamsungCamMode() {
+        return sSamsungCamMode;
     }
 
     // Rotates the bitmap by the specified degree.
@@ -280,6 +349,46 @@ public class Util {
             Log.e(TAG, "Got oom exception ", ex);
             return null;
         }
+    }
+
+    public static Bitmap decodeYUV422P(byte[] yuv422p, int width, int height)
+                        throws NullPointerException, IllegalArgumentException {
+        final int frameSize = width * height;
+        int[] rgb = new int[frameSize];
+        for (int j = 0, yp = 0; j < height; j++) {
+            int up = frameSize + (j * (width/2)), u = 0, v = 0;
+            int vp = ((int)(frameSize*1.5) + (j*(width/2)));
+            for (int i = 0; i < width; i++, yp++) {
+                int y = (0xff & ((int) yuv422p[yp])) - 16;
+                if (y < 0)
+                    y = 0;
+                if ((i & 1) == 0) {
+                    u = (0xff & yuv422p[up++]) - 128;
+                    v = (0xff & yuv422p[vp++]) - 128;
+                }
+
+                int y1192 = 1192 * y;
+                int r = (y1192 + 1634 * v);
+                int g = (y1192 - 833 * v - 400 * u);
+                int b = (y1192 + 2066 * u);
+
+                if (r < 0)
+                    r = 0;
+                else if (r > 262143)
+                    r = 262143;
+                if (g < 0)
+                    g = 0;
+                else if (g > 262143)
+                    g = 262143;
+                if (b < 0)
+                    b = 0;
+                else if (b > 262143)
+                    b = 262143;
+
+                rgb[yp] = 0xff000000 | ((r << 6) & 0xff0000) | ((g >> 2) & 0xff00) | ((b >> 10) & 0xff);
+            }
+        }
+        return Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888);
     }
 
     public static void closeSilently(Closeable c) {
@@ -748,6 +857,45 @@ public class Util {
                 loc = null;
             }
         }
+    }
+
+    public static SurfaceTexture newSurfaceLayer(int mCameraDisplayOrientation,
+            Parameters mParameters, CameraActivity mActivity) {
+        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
+
+        if (mUI.getSurfaceTexture()==null|| mSwitchCamera) {
+            mSwitchCamera = false;
+            ((CameraScreenNail) mActivity.mCameraScreenNail).releaseSurfaceTexture();
+            Size size = mParameters.getPreviewSize();
+            if (mCameraDisplayOrientation % 180 == 0) {
+                screenNail.setSize(size.width, size.height);
+            } else {
+                screenNail.setSize(size.height, size.width);
+            }
+            screenNail.enableAspectRatioClamping();
+            mActivity.notifyScreenNailChanged();
+            screenNail.acquireSurfaceTexture();
+            mUI.setSurfaceTexture(screenNail.getSurfaceTexture());
+        } else {
+            Size size = mParameters.getPreviewSize();
+            int w = size.width;
+            int h = size.height;
+            if (mCameraDisplayOrientation % 180 != 0) {
+                w = size.height;
+                h = size.width;
+            }
+            if (screenNail.getWidth() != w || screenNail.getHeight() != h) {
+                screenNail.setSize(w, h);
+            }
+            screenNail.enableAspectRatioClamping();
+            mActivity.notifyScreenNailChanged();
+
+        }
+        Object st = mUI.getSurfaceTexture();
+        if (st != null) {
+            return (SurfaceTexture) st;
+        }
+        return null;
     }
 
     private static class ImageFileNamer {
