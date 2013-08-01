@@ -31,8 +31,6 @@ LOCAL_PACKAGE_NAME := Gallery2
 
 LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
-LOCAL_SDK_VERSION := current
-
 # If this is an unbundled build (to install seprately) then include
 # the libraries in the APK, otherwise just put them in /system/lib and
 # leave them out of the APK
