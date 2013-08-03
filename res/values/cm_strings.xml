@@ -18,4 +18,38 @@
     <string name="filtershow_undo_toast">@string/filtershow_undo</string>
     <!--  Text for redo toast message. Only modify if the string is too long to be displayed -->
     <string name="filtershow_redo_toast">@string/filtershow_redo</string>
+
+    <!-- Settings screen, dialog choice for 12.8 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_12_8mp">12.8M pixels</string>
+    <!-- Settings screen, dialog choice for 11.5 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_11_5mp">11.5M pixels</string>
+    <!-- Settings screen, dialog choice for 9 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_9mp">9M pixels</string>
+    <!-- Settings screen, dialog choice for 6.4 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_6_4mp">6.4M pixels</string>
+    <!-- Settings screen, dialog choice for 6 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_6mp">6M pixels</string>
+    <!-- Settings screen, dialog choice for 4.5 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_4_5mp">4.5M pixels</string>
+    <!-- Settings screen, dialog choice for 3.7 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_3_7mp">3.7M pixels</string>
+    <!-- Settings screen, dialog choice for 2.5 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_2_5mp">2.5M pixels</string>
+    <!-- Settings screen, dialog choice for 2.1 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_2_1mp">2.1M pixels</string>
+    <!-- Settings screen, dialog choice for 1.9 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_1_9mp">1.9M pixels</string>
+    <!-- Settings screen, dialog choice for 1.5 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_1_5mp">1.5M pixels</string>
+    <!-- Settings screen, dialog choice for WXGA picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_wxga">WXGA</string>
+    <!-- Settings screen, dialog choice for XGA picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_xga">XGA</string>
+    <!-- Settings screen, dialog choice for SVGA picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_svga">SVGA</string>
+    <!-- Settings screen, dialog choice for WVGA picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
+    <!-- Settings screen, dialog choice for WQVGA picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+
 </resources>
