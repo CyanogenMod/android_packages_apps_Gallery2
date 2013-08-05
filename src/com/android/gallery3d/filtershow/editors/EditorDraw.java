@@ -92,6 +92,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             mImageDraw.setFilterDrawRepresentation(drawRep);
             drawRep.getParam(FilterDrawRepresentation.PARAM_STYLE).setFilterView(this);
             drawRep.setPramMode(FilterDrawRepresentation.PARAM_HUE);
+            mParameterString = mContext.getString(R.string.draw_hue);
             control(drawRep.getCurrentParam(), mEditControl);
         }
     }
@@ -99,7 +100,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     @Override
     public void openUtilityPanel(final LinearLayout accessoryViewList) {
         Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
-        view.setText(mContext.getString(R.string.draw_style));
+        view.setText(mContext.getString(R.string.draw_hue));
         view.setOnClickListener(new OnClickListener() {
 
             @Override

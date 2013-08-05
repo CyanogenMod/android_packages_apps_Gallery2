@@ -43,9 +43,9 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     public static final int PARAM_STYLE = 5;
     private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
     private BasicParameterInt mParamHue = new ParameterHue(PARAM_HUE, 0);
-    private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 120);
+    private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 220);
     private BasicParameterInt mParamSaturation = new ParameterSaturation(PARAM_SATURATION, 200);
-    private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 120);
+    private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 200);
     private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 3);
     int mParamMode;
     Parameter mCurrentParam = mParamSize;
