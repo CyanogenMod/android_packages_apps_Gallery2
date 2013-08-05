@@ -19,7 +19,7 @@ package com.android.gallery3d.filtershow.controller;
 import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
 
 public interface FilterView {
-    public void computeIcon(int index, RenderingRequestCaller caller);
+    public void computeIcon(int index, BitmapCaller caller);
 
     public void commitLocalRepresentation();
 }

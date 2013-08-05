@@ -16,22 +16,25 @@
 
 package com.android.gallery3d.filtershow.controller;
 
-import android.content.Context;
+public class ParameterHue extends BasicParameterInt {
+    public static String sParameterType = "ParameterHue";
+    float[] mHSVO = new float[4];
 
-import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
+    public ParameterHue(int id, int value) {
+        super(id, value, 0, 360);
+    }
 
-public interface ParameterStyles extends Parameter {
-    public static String sParameterType = "ParameterStyles";
+    @Override
+    public String getParameterType() {
+        return sParameterType;
+    }
 
-    int getNumberOfStyles();
+    public void setColor(float[] hsvo) {
+        mHSVO = hsvo;
+    }
 
-    int getDefaultSelected();
-
-    int getSelected();
-
-    void setSelected(int value);
-
-    void getIcon(int index, BitmapCaller caller);
-
-    String getStyleTitle(int index, Context context);
+    public float[] getColor() {
+        mHSVO[3] = getValue() / (float) getMaximum();
+        return mHSVO;
+    }
 }

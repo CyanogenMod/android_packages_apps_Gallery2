@@ -144,7 +144,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     }
 
-    public void createEditor(Context context,FrameLayout frameLayout) {
+    public void createEditor(Context context, FrameLayout frameLayout) {
         mContext = context;
         mFrameLayout = frameLayout;
         mLocalRepresentation = null;
@@ -211,17 +211,17 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     }
 
     /**
-     *  Call this to update the preset in MasterImage with the current representation
-     *  returned by getLocalRepresentation.  This causes the preview bitmap to be
-     *  regenerated.
+     * Call this to update the preset in MasterImage with the current representation
+     * returned by getLocalRepresentation.  This causes the preview bitmap to be
+     * regenerated.
      */
     public void commitLocalRepresentation() {
         commitLocalRepresentation(getLocalRepresentation());
     }
 
     /**
-     *  Call this to update the preset in MasterImage with a given representation.
-     *  This causes the preview bitmap to be regenerated.
+     * Call this to update the preset in MasterImage with a given representation.
+     * This causes the preview bitmap to be regenerated.
      */
     public void commitLocalRepresentation(FilterRepresentation rep) {
         ArrayList<FilterRepresentation> filter = new ArrayList<FilterRepresentation>(1);
@@ -230,8 +230,8 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     }
 
     /**
-     *  Call this to update the preset in MasterImage with a collection of FilterRepresnations.
-     *  This causes the preview bitmap to be regenerated.
+     * Call this to update the preset in MasterImage with a collection of FilterRepresentations.
+     * This causes the preview bitmap to be regenerated.
      */
     public void commitLocalRepresentation(Collection<FilterRepresentation> reps) {
         ImagePreset preset = MasterImage.getImage().getPreset();
@@ -306,6 +306,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     public Control[] getControls() {
         return null;
     }
+
     @Override
     public void onStartTrackingTouch(SeekBar arg0) {
 

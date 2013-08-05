@@ -54,10 +54,10 @@ public class StyleChooser implements Control {
                 }
             });
             mLinearLayout.addView(button);
-            mParameter.getIcon(i, new RenderingRequestCaller() {
+            mParameter.getIcon(i, new BitmapCaller() {
                 @Override
-                public void available(RenderingRequest request) {
-                    Bitmap bmap = request.getBitmap();
+                public void available(Bitmap bmap) {
+
                     if (bmap == null) {
                         return;
                     }

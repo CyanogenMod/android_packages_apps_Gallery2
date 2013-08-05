@@ -33,8 +33,16 @@ import com.android.gallery3d.filtershow.controller.BasicSlider;
 import com.android.gallery3d.filtershow.controller.Control;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.controller.ParameterActionAndInt;
+import com.android.gallery3d.filtershow.controller.ParameterBrightness;
+import com.android.gallery3d.filtershow.controller.ParameterHue;
 import com.android.gallery3d.filtershow.controller.ParameterInteger;
+import com.android.gallery3d.filtershow.controller.ParameterOpacity;
+import com.android.gallery3d.filtershow.controller.ParameterSaturation;
 import com.android.gallery3d.filtershow.controller.ParameterStyles;
+import com.android.gallery3d.filtershow.controller.SliderBrightness;
+import com.android.gallery3d.filtershow.controller.SliderHue;
+import com.android.gallery3d.filtershow.controller.SliderOpacity;
+import com.android.gallery3d.filtershow.controller.SliderSaturation;
 import com.android.gallery3d.filtershow.controller.StyleChooser;
 import com.android.gallery3d.filtershow.controller.TitledSlider;
 import com.android.gallery3d.filtershow.filters.FilterBasicRepresentation;
@@ -56,6 +64,15 @@ public class ParametricEditor extends Editor {
     static HashMap<String, Class> portraitMap = new HashMap<String, Class>();
     static HashMap<String, Class> landscapeMap = new HashMap<String, Class>();
     static {
+        portraitMap.put(ParameterSaturation.sParameterType, SliderSaturation.class);
+        landscapeMap.put(ParameterSaturation.sParameterType, SliderSaturation.class);
+        portraitMap.put(ParameterHue.sParameterType, SliderHue.class);
+        landscapeMap.put(ParameterHue.sParameterType, SliderHue.class);
+        portraitMap.put(ParameterOpacity.sParameterType, SliderOpacity.class);
+        landscapeMap.put(ParameterOpacity.sParameterType, SliderOpacity.class);
+        portraitMap.put(ParameterBrightness.sParameterType, SliderBrightness.class);
+        landscapeMap.put(ParameterBrightness.sParameterType, SliderBrightness.class);
+
         portraitMap.put(ParameterInteger.sParameterType, BasicSlider.class);
         landscapeMap.put(ParameterInteger.sParameterType, TitledSlider.class);
         portraitMap.put(ParameterActionAndInt.sParameterType, ActionSlider.class);

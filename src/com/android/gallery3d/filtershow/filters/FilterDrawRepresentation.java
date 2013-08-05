@@ -16,10 +16,18 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.graphics.Color;
 import android.graphics.Path;
 import android.util.Log;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.controller.BasicParameterInt;
+import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
+import com.android.gallery3d.filtershow.controller.Parameter;
+import com.android.gallery3d.filtershow.controller.ParameterBrightness;
+import com.android.gallery3d.filtershow.controller.ParameterHue;
+import com.android.gallery3d.filtershow.controller.ParameterOpacity;
+import com.android.gallery3d.filtershow.controller.ParameterSaturation;
 import com.android.gallery3d.filtershow.editors.EditorDraw;
 
 import java.util.Vector;
@@ -27,21 +35,77 @@ import java.util.Vector;
 public class FilterDrawRepresentation extends FilterRepresentation {
     private static final String LOGTAG = "FilterDrawRepresentation";
 
+    public static final int PARAM_SIZE = 0;
+    public static final int PARAM_HUE = 1;
+    public static final int PARAM_BRIGHTNESS = 2;
+    public static final int PARAM_SATURATION = 3;
+    public static final int PARAM_OPACITY = 4;
+    public static final int PARAM_STYLE = 5;
+    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
+    private BasicParameterInt mParamHue = new ParameterHue(PARAM_HUE, 0);
+    private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 120);
+    private BasicParameterInt mParamSaturation = new ParameterSaturation(PARAM_SATURATION, 200);
+    private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 120);
+    private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 3);
+    int mParamMode;
+    Parameter mCurrentParam = mParamSize;
+
+    private Parameter[] mAllParam = {
+            mParamSize,
+            mParamHue,
+            mParamBrightness,
+            mParamSaturation,
+            mParamOpacity,
+            mParamStyle
+    };
+
+    public void setPramMode(int mode) {
+        mParamMode = mode;
+        mCurrentParam = mAllParam[mParamMode];
+    }
+
+    public Parameter getCurrentParam() {
+        return  mAllParam[mParamMode];
+    }
+
+    public Parameter getParam(int type) {
+        return  mAllParam[type];
+    }
+
     public static class StrokeData implements Cloneable {
         public byte mType;
         public Path mPath;
         public float mRadius;
         public int mColor;
         public int noPoints = 0;
+
         @Override
         public String toString() {
             return "stroke(" + mType + ", path(" + (mPath) + "), " + mRadius + " , "
                     + Integer.toHexString(mColor) + ")";
         }
+
         @Override
         public StrokeData clone() throws CloneNotSupportedException {
             return (StrokeData) super.clone();
         }
+    }
+
+    public String getValueString() {
+
+        switch (mParamMode) {
+            case PARAM_SIZE:
+            case PARAM_HUE:
+            case PARAM_BRIGHTNESS:
+            case PARAM_SATURATION:
+            case PARAM_OPACITY:
+                int val = ((BasicParameterInt) mAllParam[mParamMode]).getValue();
+                return ((val > 0) ? " +" : " ") + val;
+            case PARAM_STYLE:
+                return "";
+
+        }
+        return "";
     }
 
     private Vector<StrokeData> mDrawing = new Vector<StrokeData>();
@@ -62,7 +126,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     public String toString() {
         return getName() + " : strokes=" + mDrawing.size()
                 + ((mCurrent == null) ? " no current "
-                        : ("draw=" + mCurrent.mType + " " + mCurrent.noPoints));
+                : ("draw=" + mCurrent.mType + " " + mCurrent.noPoints));
     }
 
     public Vector<StrokeData> getDrawing() {
@@ -124,10 +188,10 @@ public class FilterDrawRepresentation extends FilterRepresentation {
             FilterDrawRepresentation fdRep = (FilterDrawRepresentation) representation;
             if (fdRep.mDrawing.size() != mDrawing.size())
                 return false;
-            if (fdRep.mCurrent == null && mCurrent.mPath == null) {
+            if (fdRep.mCurrent == null && (mCurrent == null || mCurrent.mPath == null)) {
                 return true;
             }
-            if (fdRep.mCurrent != null && mCurrent.mPath != null) {
+            if (fdRep.mCurrent != null && mCurrent != null && mCurrent.mPath != null) {
                 if (fdRep.mCurrent.noPoints == mCurrent.noPoints) {
                     return true;
                 }
@@ -137,7 +201,19 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         return false;
     }
 
-    public void startNewSection(byte type, int color, float size, float x, float y) {
+    private int computeCurrentColor(){
+        float hue = 360 * mParamHue.getValue() / (float) mParamHue.getMaximum();
+        float sat = mParamSaturation.getValue() / (float) mParamSaturation.getMaximum();
+        float val = mParamBrightness.getValue() / (float) mParamBrightness.getMaximum();
+        int op = mParamOpacity.getValue();
+        float[] hsv = new float[]{hue, sat, val};
+        return Color.HSVToColor(op, hsv);
+    }
+
+    public void startNewSection(float x, float y) {
+        byte type = (byte) mParamStyle.getSelected();
+        int color = computeCurrentColor();
+        float size = mParamSize.getValue();
         mCurrent = new StrokeData();
         mCurrent.mColor = color;
         mCurrent.mRadius = size;

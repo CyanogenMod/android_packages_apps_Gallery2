@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package com.android.gallery3d.filtershow.controller;
 
-import android.content.Context;
+package com.android.gallery3d.filtershow.filters;
 
-import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
-
-public interface ParameterStyles extends Parameter {
-    public static String sParameterType = "ParameterStyles";
-
-    int getNumberOfStyles();
-
-    int getDefaultSelected();
-
-    int getSelected();
-
-    void setSelected(int value);
-
-    void getIcon(int index, BitmapCaller caller);
-
-    String getStyleTitle(int index, Context context);
+/**
+ * Class to simplify creating representations that use Parametric controllers
+ */
+public class ParametericFilterRepresentation extends FilterRepresentation {
+    public ParametericFilterRepresentation(String name) {
+        super(name);
+    }
 }
