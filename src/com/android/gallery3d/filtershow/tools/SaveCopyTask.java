@@ -28,6 +28,7 @@ import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
@@ -132,8 +133,17 @@ public class SaveCopyTask extends AsyncTask<ImagePreset, Void, Uri> {
 
     public ExifInterface getExifData(Uri source) {
         ExifInterface exif = new ExifInterface();
-        String mimeType = context.getContentResolver().getType(sourceUri);
-        if (mimeType.equals(ImageLoader.JPEG_MIME_TYPE)) {
+        String mimeType = null;
+        if (ContentResolver.SCHEME_FILE.equals(sourceUri.getScheme())) {
+            String extension = MimeTypeMap.getFileExtensionFromUrl(source.toString());
+            if (extension != null) {
+                MimeTypeMap mime = MimeTypeMap.getSingleton();
+                mimeType = mime.getMimeTypeFromExtension(extension);
+            }
+        } else {
+            mimeType = context.getContentResolver().getType(sourceUri);
+        }
+        if (mimeType != null && mimeType.equals(ImageLoader.JPEG_MIME_TYPE)) {
             InputStream inStream = null;
             try {
                 inStream = context.getContentResolver().openInputStream(source);
