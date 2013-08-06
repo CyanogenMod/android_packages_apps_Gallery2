@@ -16,7 +16,6 @@
 
 package com.android.gallery3d.util;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,29 +35,6 @@ public class LightCycleHelper {
         public PanoramaMetadata(boolean usePanoramaViewer, boolean isPanorama360) {
             mUsePanoramaViewer = usePanoramaViewer;
             mIsPanorama360 = isPanorama360;
-        }
-    }
-
-    public static class PanoramaViewHelper {
-
-        public PanoramaViewHelper(Activity activity) {
-            /* Do nothing */
-        }
-
-        public void onStart() {
-            /* Do nothing */
-        }
-
-        public void onCreate() {
-            /* Do nothing */
-        }
-
-        public void onStop() {
-            /* Do nothing */
-        }
-
-        public void showPanorama(Uri uri) {
-            /* Do nothing */
         }
     }
 

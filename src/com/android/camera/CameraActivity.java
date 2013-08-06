@@ -55,8 +55,8 @@ import com.android.camera.ui.FilmStripView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.util.LightCycleHelper;
+import com.android.gallery3d.util.PanoramaViewHelper;
 import com.android.gallery3d.util.RefocusHelper;
-import com.android.gallery3d.util.LightCycleHelper.PanoramaViewHelper;
 
 public class CameraActivity extends Activity
     implements CameraSwitchListener {
