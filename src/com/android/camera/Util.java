@@ -710,6 +710,19 @@ public class Util {
         return rotation;
     }
 
+    /**
+     * Down-samples a jpeg byte array.
+     * @param data a byte array of jpeg data
+     * @param downSampleFactor down-sample factor
+     * @return decoded and down-sampled bitmap
+     */
+    public static Bitmap downSample(final byte[] data, int downSampleFactor) {
+        final BitmapFactory.Options opts = new BitmapFactory.Options();
+        // Downsample the image
+        opts.inSampleSize = downSampleFactor;
+        return BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+    }
+
     public static void setGpsParameters(Parameters parameters, Location loc) {
         // Clear previous GPS location from the parameters.
         parameters.removeGpsData();
