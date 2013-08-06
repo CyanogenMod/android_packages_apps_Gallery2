@@ -197,9 +197,7 @@ public class VideoModule implements CameraModule,
                 @Override
                 public void onMediaSaved(Uri uri) {
                     if (uri != null) {
-                        mActivity.sendBroadcast(
-                                new Intent(Util.ACTION_NEW_VIDEO, uri));
-                        Util.broadcastNewPicture(mActivity, uri);
+                        mActivity.notifyNewMedia(uri);
                     }
                 }
             };
@@ -209,7 +207,7 @@ public class VideoModule implements CameraModule,
                 @Override
                 public void onMediaSaved(Uri uri) {
                     if (uri != null) {
-                        Util.broadcastNewPicture(mActivity, uri);
+                        mActivity.notifyNewMedia(uri);
                     }
                 }
             };
