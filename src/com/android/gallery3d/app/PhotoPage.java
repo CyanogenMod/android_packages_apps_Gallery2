@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
+import android.media.MediaFile;
 
 import com.android.camera.CameraActivity;
 import com.android.camera.ProxyLauncher;
@@ -1108,8 +1109,14 @@ public abstract class PhotoPage extends ActivityState implements
                 Intent intent = new Intent(mActivity, TrimVideo.class);
                 intent.setData(manager.getContentUri(path));
                 // We need the file path to wrap this into a RandomAccessFile.
-                intent.putExtra(KEY_MEDIA_ITEM_PATH, current.getFilePath());
-                mActivity.startActivityForResult(intent, REQUEST_TRIM);
+                String str = MediaFile.getMimeTypeForFile(current.getFilePath());
+                if("video/mp4".equals(str)){
+                    intent.putExtra(KEY_MEDIA_ITEM_PATH, current.getFilePath());
+                    mActivity.startActivityForResult(intent, REQUEST_TRIM);
+                } else {
+                    Toast.makeText(mActivity, mActivity.getString(R.string.can_not_trim),
+                        Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
             case R.id.action_mute: {

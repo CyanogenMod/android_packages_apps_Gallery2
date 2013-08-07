@@ -241,8 +241,22 @@ public class TrimVideo extends Activity implements
                     // Update the database for adding a new video file.
                     SaveVideoFileUtils.insertContent(mDstFileInfo,
                             getContentResolver(), mUri);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    mHandler.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            Toast.makeText(getApplicationContext(),
+                                getString(R.string.fail_trim),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                            if (mProgress != null) {
+                                mProgress.dismiss();
+                                mProgress = null;
+                            }
+                        }
+                    });
+                    return;
                 }
                 // After trimming is done, trigger the UI changed.
                 mHandler.post(new Runnable() {
