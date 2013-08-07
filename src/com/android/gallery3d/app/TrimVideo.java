@@ -237,6 +237,7 @@ public class TrimVideo extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
+                boolean hasError = false;
                 try {
                     VideoUtils.startTrim(mSrcFile, mDstFileInfo.mFile,
                             mTrimStartTime, mTrimEndTime);
@@ -244,7 +245,28 @@ public class TrimVideo extends Activity implements
                     SaveVideoFileUtils.insertContent(mDstFileInfo,
                             getContentResolver(), mUri);
                 } catch (IOException e) {
+                    hasError = true;
                     e.printStackTrace();
+                } catch (IllegalStateException e) {
+                    hasError = true;
+                    e.printStackTrace();
+                }
+                //If the exception happens,just notify the UI and avoid the crash.
+                if (hasError){
+                    mHandler.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            Toast.makeText(getApplicationContext(),
+                                getString(R.string.fail_trim),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                            if (mProgress != null) {
+                                mProgress.dismiss();
+                                mProgress = null;
+                            }
+                        }
+                    });
+                    return;
                 }
                 // After trimming is done, trigger the UI changed.
                 mHandler.post(new Runnable() {
