@@ -349,7 +349,7 @@ public class PhotoUI implements PieListener,
 
     public void initializeControlByIntent() {
         mBlocker = mRootView.findViewById(R.id.blocker);
-        mPreviewThumb = (ImageView) mActivity.findViewById(R.id.preview_thumb);
+        mPreviewThumb = (ImageView) mRootView.findViewById(R.id.preview_thumb);
         mPreviewThumb.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
