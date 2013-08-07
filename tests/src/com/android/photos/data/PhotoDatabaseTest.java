@@ -174,7 +174,7 @@ public class PhotoDatabaseTest extends InstrumentationTestCase {
         try {
             assertFalse(PhotoDatabaseUtils.insertAccount(db, null));
             assertTrue(PhotoDatabaseUtils.insertAccount(db, "hello"));
-            assertTrue(PhotoDatabaseUtils.insertAccount(db, "hello"));
+            assertFalse(PhotoDatabaseUtils.insertAccount(db, "hello"));
         } finally {
             db.endTransaction();
         }
