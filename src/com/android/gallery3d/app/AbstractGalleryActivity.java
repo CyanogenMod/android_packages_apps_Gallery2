@@ -42,7 +42,7 @@ import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLRootView;
-import com.android.gallery3d.util.LightCycleHelper.PanoramaViewHelper;
+import com.android.gallery3d.util.PanoramaViewHelper;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.photos.data.GalleryBitmapPool;
 
@@ -311,10 +311,12 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     private BatchService mBatchService;
     private boolean mBatchServiceIsBound = false;
     private ServiceConnection mBatchServiceConnection = new ServiceConnection() {
+        @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             mBatchService = ((BatchService.LocalBinder)service).getService();
         }
 
+        @Override
         public void onServiceDisconnected(ComponentName className) {
             mBatchService = null;
         }

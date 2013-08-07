@@ -28,7 +28,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Video.VideoColumns;
 import android.util.Log;
@@ -44,7 +43,7 @@ import com.android.camera.data.PanoramaMetadataLoader.PanoramaMetadataCallback;
 import com.android.camera.ui.FilmStripView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.util.LightCycleHelper.PanoramaMetadata;
-import com.android.gallery3d.util.LightCycleHelper.PanoramaViewHelper;
+import com.android.gallery3d.util.PanoramaViewHelper;
 
 import java.io.File;
 import java.util.Comparator;
