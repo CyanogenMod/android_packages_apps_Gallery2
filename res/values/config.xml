@@ -45,4 +45,6 @@
     <bool name="needsSamsungCamMode">false</bool>
     <!-- HTC Camcorder Mode -->
     <bool name="needsHTCCamMode">false</bool>
+    <!-- Always use recording dimensions for preview -->
+    <bool name="useVideoSizeForPreview">false</bool>
 </resources>
