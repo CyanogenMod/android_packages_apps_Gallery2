@@ -465,6 +465,7 @@ public class PhotoUI implements PieListener,
         mShutterButton.setVisibility(View.INVISIBLE);
         Util.fadeIn(mReviewRetakeButton);
         pauseFaceDetection();
+        enableGestures(false);
     }
 
     protected void hidePostCaptureAlert() {
@@ -474,6 +475,7 @@ public class PhotoUI implements PieListener,
         mShutterButton.setVisibility(View.VISIBLE);
         Util.fadeOut(mReviewRetakeButton);
         resumeFaceDetection();
+        enableGestures(true);
     }
 
     public void setDisplayOrientation(int orientation) {
