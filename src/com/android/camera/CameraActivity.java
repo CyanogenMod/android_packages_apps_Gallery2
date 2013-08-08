@@ -546,7 +546,7 @@ public class CameraActivity extends ActivityBase
             notifyScreenNailChanged();
             screenNail.acquireSurfaceTexture();
         } else {
-            if (screenNail.getWidth() != previewWidth || screenNail.getHeight() != previewHeight) {
+            if (screenNail.getTextureWidth() != previewWidth || screenNail.getTextureHeight() != previewHeight) {
                 screenNail.setSize(previewWidth, previewHeight);
             }
             screenNail.enableAspectRatioClamping();

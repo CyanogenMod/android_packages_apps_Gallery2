@@ -2096,8 +2096,8 @@ public class VideoModule implements CameraModule,
         }
 
         CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-        int oldWidth = screenNail.getWidth();
-        int oldHeight = screenNail.getHeight();
+        int oldWidth = screenNail.getTextureWidth();
+        int oldHeight = screenNail.getTextureHeight();
 
         if (oldWidth != width || oldHeight != height) {
             screenNail.setSize(width, height);
