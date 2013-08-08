@@ -24,7 +24,6 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.camera.CameraActivity;
 import com.android.gallery3d.anim.StateTransitionAnimation;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.UsageStatistics;

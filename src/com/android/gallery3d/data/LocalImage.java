@@ -32,7 +32,6 @@ import android.util.Log;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.app.PanoramaMetadataSupport;
-import com.android.gallery3d.app.StitchingProgressManager;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.exif.ExifInterface;
@@ -237,10 +236,6 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
-        StitchingProgressManager progressManager = mApplication.getStitchingProgressManager();
-        if (progressManager != null && progressManager.getProgress(getContentUri()) != null) {
-            return 0; // doesn't support anything while stitching!
-        }
         int operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
                 | SUPPORT_SETAS | SUPPORT_EDIT | SUPPORT_INFO;
         if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {

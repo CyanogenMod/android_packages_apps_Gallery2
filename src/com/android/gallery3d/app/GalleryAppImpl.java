@@ -42,22 +42,15 @@ public class GalleryAppImpl extends Application implements GalleryApp {
     private DataManager mDataManager;
     private ThreadPool mThreadPool;
     private DownloadCache mDownloadCache;
-    private StitchingProgressManager mStitchingProgressManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        com.android.camera.Util.initialize(this);
         initializeAsyncTask();
         GalleryUtils.initialize(this);
         WidgetUtils.initialize(this);
         PicasaSource.initialize(this);
         UsageStatistics.initialize(this);
-
-        mStitchingProgressManager = LightCycleHelper.createStitchingManagerInstance(this);
-        if (mStitchingProgressManager != null) {
-            mStitchingProgressManager.addChangeListener(getDataManager());
-        }
     }
 
     @Override
@@ -74,10 +67,6 @@ public class GalleryAppImpl extends Application implements GalleryApp {
         return mDataManager;
     }
 
-    @Override
-    public StitchingProgressManager getStitchingProgressManager() {
-        return mStitchingProgressManager;
-    }
 
     @Override
     public ImageCacheService getImageCacheService() {
