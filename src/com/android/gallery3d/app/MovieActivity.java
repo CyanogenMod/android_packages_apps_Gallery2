@@ -198,27 +198,7 @@ public class MovieActivity extends Activity {
         mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                int sessionId = mp.getAudioSessionId();
-                if (mBassBoostSupported) {
-                    mBassBoostEffect = new BassBoost(0, sessionId);
-                }
-                if (mVirtualizerSupported) {
-                    mVirtualizerEffect = new Virtualizer(0, sessionId);
-                }
-                if (mIsHeadsetOn) {
-                    if (mPrefs.getBoolean(Key.global_enabled.toString(), false)) {
-                        if (mBassBoostSupported) {
-                            mBassBoostEffect.setStrength((short)
-                                    mPrefs.getInt(Key.bb_strength.toString(), 0));
-                            mBassBoostEffect.setEnabled(true);
-                        }
-                        if (mVirtualizerSupported) {
-                            mVirtualizerEffect.setStrength((short)
-                                mPrefs.getInt(Key.virt_strength.toString(), 0));
-                            mVirtualizerEffect.setEnabled(true);
-                        }
-                    }
-                }
+                initEffects(mp.getAudioSessionId());
             }
         });
     }
@@ -409,6 +389,46 @@ public class MovieActivity extends Activity {
         }
     }
 
+    private void initEffects(int sessionId) {
+        // Singleton instance
+        if ((mBassBoostEffect == null) && mBassBoostSupported) {
+            mBassBoostEffect = new BassBoost(0, sessionId);
+        }
+
+        if ((mVirtualizerEffect == null) && mVirtualizerSupported) {
+            mVirtualizerEffect = new Virtualizer(0, sessionId);
+        }
+
+        if (mIsHeadsetOn) {
+            if (mPrefs.getBoolean(Key.global_enabled.toString(), false)) {
+                if (mBassBoostSupported) {
+                    mBassBoostEffect.setStrength((short)
+                            mPrefs.getInt(Key.bb_strength.toString(), 0));
+                    mBassBoostEffect.setEnabled(true);
+                }
+                if (mVirtualizerSupported) {
+                    mVirtualizerEffect.setStrength((short)
+                        mPrefs.getInt(Key.virt_strength.toString(), 0));
+                    mVirtualizerEffect.setEnabled(true);
+                }
+            }
+        }
+
+    }
+
+    private void releaseEffects() {
+        if (mBassBoostEffect != null) {
+            mBassBoostEffect.setEnabled(false);
+            mBassBoostEffect.release();
+            mBassBoostEffect = null;
+        }
+        if (mVirtualizerEffect != null) {
+            mVirtualizerEffect.setEnabled(false);
+            mVirtualizerEffect.release();
+            mVirtualizerEffect = null;
+        }
+    }
+
     private Intent createShareIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
@@ -455,6 +475,9 @@ public class MovieActivity extends Activity {
 
     @Override
     public void onPause() {
+        // Audio track will be deallocated for local video playback,
+        // thus recycle effect here.
+        releaseEffects();
         mPlayer.onPause();
         try {
             unregisterReceiver(mReceiver);
@@ -474,6 +497,8 @@ public class MovieActivity extends Activity {
             intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(mReceiver, intentFilter);
         }
+
+        initEffects(mPlayer.getAudioSessionId());
         super.onResume();
     }
 
@@ -485,17 +510,8 @@ public class MovieActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        releaseEffects();
         mPlayer.onDestroy();
-        if (mBassBoostEffect != null) {
-            mBassBoostEffect.setEnabled(false);
-            mBassBoostEffect.release();
-            mBassBoostEffect = null;
-        }
-        if (mVirtualizerEffect != null) {
-            mVirtualizerEffect.setEnabled(false);
-            mVirtualizerEffect.release();
-            mVirtualizerEffect = null;
-        }
         super.onDestroy();
     }
 
