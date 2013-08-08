@@ -168,6 +168,7 @@ public class TrimVideo extends Activity implements
         mTrimStartTime = savedInstanceState.getInt(KEY_TRIM_START, 0);
         mTrimEndTime = savedInstanceState.getInt(KEY_TRIM_END, 0);
         mVideoPosition = savedInstanceState.getInt(KEY_VIDEO_POSITION, 0);
+        mSaveVideoTextView.setEnabled(isModified());
     }
 
     // This updates the time bar display (if necessary). It is called by
