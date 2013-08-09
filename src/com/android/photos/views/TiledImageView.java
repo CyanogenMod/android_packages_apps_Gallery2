@@ -79,6 +79,10 @@ public class TiledImageView extends FrameLayout {
     private Object mLock = new Object();
     private ImageRendererWrapper mRenderer;
 
+    public static boolean isTilingSupported() {
+        return IS_SUPPORTED;
+    }
+
     public TiledImageView(Context context) {
         this(context, null);
     }
