@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterTinyPlanetRepresentation;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
@@ -35,6 +37,8 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
     private int mSelectedPosition;
     int mCategory;
     private int mOrientation;
+    private boolean mShowAddButton = false;
+    private String mAddButtonText;
 
     public CategoryAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -64,9 +68,13 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         mSelectedPosition = -1;
         if (category == MainPanel.LOOKS) {
             mSelectedPosition = 0;
+            mAddButtonText = getContext().getString(R.string.filtershow_add_button_looks);
         }
         if (category == MainPanel.BORDERS) {
             mSelectedPosition = 0;
+        }
+        if (category == MainPanel.VERSIONS) {
+            mAddButtonText = getContext().getString(R.string.filtershow_add_button_versions);
         }
     }
 
@@ -138,10 +146,20 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
             if (action.getRepresentation() != null
                     && action.getRepresentation()
                     instanceof FilterTinyPlanetRepresentation) {
-                remove(action);
+                super.remove(action);
                 return;
             }
         }
+    }
+
+    @Override
+    public void remove(Action action) {
+        if (mCategory != MainPanel.VERSIONS) {
+            return;
+        }
+        super.remove(action);
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+        activity.removeVersion(action);
     }
 
     public void setOrientation(int orientation) {
@@ -178,5 +196,17 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
             mSelectedPosition = selected;
             this.notifyDataSetChanged();
         }
+    }
+
+    public boolean showAddButton() {
+        return mShowAddButton;
+    }
+
+    public void setShowAddButton(boolean showAddButton) {
+        mShowAddButton = showAddButton;
+    }
+
+    public String getAddButtonText() {
+        return mAddButtonText;
     }
 }

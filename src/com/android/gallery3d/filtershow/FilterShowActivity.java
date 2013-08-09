@@ -45,6 +45,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewPropertyAnimator;
@@ -63,6 +64,7 @@ import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.category.Action;
 import com.android.gallery3d.filtershow.category.CategoryAdapter;
 import com.android.gallery3d.filtershow.category.MainPanel;
+import com.android.gallery3d.filtershow.category.SwipableView;
 import com.android.gallery3d.filtershow.data.UserPresetsManager;
 import com.android.gallery3d.filtershow.editors.BasicEditor;
 import com.android.gallery3d.filtershow.editors.Editor;
@@ -87,6 +89,7 @@ import com.android.gallery3d.filtershow.history.HistoryManager;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.imageshow.Spline;
+import com.android.gallery3d.filtershow.info.InfoPanel;
 import com.android.gallery3d.filtershow.pipeline.CachingPipeline;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.pipeline.ProcessingService;
@@ -129,6 +132,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private boolean mShowingTinyPlanet = false;
     private boolean mShowingImageStatePanel = false;
+    private boolean mShowingVersionsPanel = false;
+    private boolean mShowingInformationPanel = false;
 
     private final Vector<ImageShow> mImageViews = new Vector<ImageShow>();
 
@@ -152,7 +157,16 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryBordersAdapter = null;
     private CategoryAdapter mCategoryGeometryAdapter = null;
     private CategoryAdapter mCategoryFiltersAdapter = null;
+    private CategoryAdapter mCategoryVersionsAdapter = null;
     private int mCurrentPanel = MainPanel.LOOKS;
+    private Vector<FilterUserPresetRepresentation> mVersions =
+            new Vector<FilterUserPresetRepresentation>();
+    private int mVersionsCounter = 0;
+
+    private boolean mHandlingSwipeButton = false;
+    private View mHandledSwipeView = null;
+    private float mHandledSwipeViewLastDelta = 0;
+    private float mSwipeStartY = 0;
 
     private ProcessingService mBoundService;
     private boolean mIsBound = false;
@@ -303,6 +317,37 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    private void hideInformationPanel() {
+        FrameLayout infoLayout = (FrameLayout) findViewById(R.id.central_panel_container);
+        infoLayout.setVisibility(View.GONE);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(InfoPanel.FRAGMENT_TAG);
+        if (fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.remove(fragment);
+            transaction.commit();
+        }
+        mShowingInformationPanel = false;
+    }
+
+    public void showInformationPanel() {
+        mShowingInformationPanel = !mShowingInformationPanel;
+        if (!mShowingInformationPanel) {
+            hideInformationPanel();
+            showDefaultImageView();
+            return;
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        FrameLayout infoLayout = (FrameLayout) findViewById(R.id.central_panel_container);
+        infoLayout.setVisibility(View.VISIBLE);
+        mEditorPlaceHolder.hide();
+        mImageShow.setVisibility(View.GONE);
+
+        InfoPanel panel = new InfoPanel();
+        transaction.replace(R.id.central_panel_container, panel, InfoPanel.FRAGMENT_TAG);
+        transaction.commit();
+    }
+
     private void loadXML() {
         setContentView(R.layout.filtershow_activity);
 
@@ -335,10 +380,48 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillBorders();
         fillTools();
         fillEffects();
+        fillVersions();
     }
 
     public void setupStatePanel() {
         MasterImage.getImage().setHistoryManager(mMasterImage.getHistory());
+    }
+
+    private void fillVersions() {
+        mCategoryVersionsAdapter = new CategoryAdapter(this);
+        mCategoryVersionsAdapter.setShowAddButton(true);
+    }
+
+    public void updateVersions() {
+        mCategoryVersionsAdapter.clear();
+        FilterUserPresetRepresentation originalRep = new FilterUserPresetRepresentation(
+                getString(R.string.filtershow_version_original), new ImagePreset(), -1);
+        mCategoryVersionsAdapter.add(
+                new Action(this, originalRep, Action.FULL_VIEW));
+        ImagePreset current = new ImagePreset(MasterImage.getImage().getPreset());
+        FilterUserPresetRepresentation currentRep = new FilterUserPresetRepresentation(
+                getString(R.string.filtershow_version_current), current, -1);
+        mCategoryVersionsAdapter.add(
+                new Action(this, currentRep, Action.FULL_VIEW));
+        for (FilterUserPresetRepresentation rep : mVersions) {
+            mCategoryVersionsAdapter.add(
+                    new Action(this, rep, Action.FULL_VIEW));
+        }
+        mCategoryVersionsAdapter.notifyDataSetInvalidated();
+    }
+
+    public void addCurrentVersion() {
+        ImagePreset current = new ImagePreset(MasterImage.getImage().getPreset());
+        mVersionsCounter++;
+        FilterUserPresetRepresentation rep = new FilterUserPresetRepresentation(
+                "" + mVersionsCounter, current, -1);
+        mVersions.add(rep);
+        updateVersions();
+    }
+
+    public void removeVersion(Action action) {
+        mVersions.remove(action.getRepresentation());
+        updateVersions();
     }
 
     private void fillEffects() {
@@ -466,6 +549,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         return mCategoryFiltersAdapter;
     }
 
+    public CategoryAdapter getCategoryVersionsAdapter() {
+        return mCategoryVersionsAdapter;
+    }
+
     public void removeFilterRepresentation(FilterRepresentation filterRepresentation) {
         if (filterRepresentation == null) {
             return;
@@ -517,6 +604,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         // show representation
         Editor mCurrentEditor = mEditorPlaceHolder.showEditor(representation.getEditorId());
         loadEditorPanel(representation, mCurrentEditor);
+        hideInformationPanel();
     }
 
     public Editor getEditor(int editorID) {
@@ -622,6 +710,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             Bitmap largeBitmap = MasterImage.getImage().getOriginalBitmapLarge();
             mBoundService.setOriginalBitmap(largeBitmap);
+            MasterImage.getImage().resetGeometryImages();
 
             float previewScale = (float) largeBitmap.getWidth()
                     / (float) MasterImage.getImage().getOriginalBounds().width();
@@ -836,6 +925,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 manageUserPresets();
                 return true;
             }
+            case R.id.showInfoPanel: {
+                showInformationPanel();
+                return true;
+            }
         }
         return false;
     }
@@ -960,6 +1053,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    public void toggleVersionsPanel() {
+        mShowingVersionsPanel = !mShowingVersionsPanel;
+        Fragment panel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
+        if (panel != null && panel instanceof MainPanel) {
+            MainPanel mainPanel = (MainPanel) panel;
+            mainPanel.loadCategoryVersionsPanel();
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
@@ -1005,6 +1107,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void showDefaultImageView() {
+        hideInformationPanel();
         mEditorPlaceHolder.hide();
         mImageShow.setVisibility(View.VISIBLE);
         MasterImage.getImage().setCurrentFilter(null);
@@ -1123,4 +1226,39 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         return mSelectedImageUri;
     }
 
+    public void setHandlesSwipeForView(View view, float startY) {
+        if (view != null) {
+            mHandlingSwipeButton = true;
+        } else {
+            mHandlingSwipeButton = false;
+        }
+        mHandledSwipeView = view;
+        int[] location = new int[2];
+        view.getLocationInWindow(location);
+        mSwipeStartY = location[1] + startY;
+    }
+
+    public boolean dispatchTouchEvent (MotionEvent ev) {
+        if (mHandlingSwipeButton) {
+            if (ev.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                float delta = ev.getY() - mSwipeStartY;
+                mHandledSwipeView.setTranslationY(delta);
+                delta = Math.abs(delta);
+                float transparency = Math.min(1, delta / mHandledSwipeView.getHeight());
+                mHandledSwipeView.setAlpha(1.f - transparency);
+                mHandledSwipeViewLastDelta = delta;
+            }
+            if (ev.getActionMasked() == MotionEvent.ACTION_CANCEL
+                    || ev.getActionMasked() == MotionEvent.ACTION_UP) {
+                mHandledSwipeView.setTranslationY(0);
+                mHandledSwipeView.setAlpha(1.f);
+                mHandlingSwipeButton = false;
+                if (mHandledSwipeViewLastDelta > mHandledSwipeView.getHeight()) {
+                    ((SwipableView) mHandledSwipeView).delete();
+                }
+            }
+            return true;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

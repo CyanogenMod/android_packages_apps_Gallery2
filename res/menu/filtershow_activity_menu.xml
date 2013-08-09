@@ -20,6 +20,11 @@
         android:id="@+id/resetHistoryButton"
         android:title="@string/reset"/>
     <item
+        android:id="@+id/showInfoPanel"
+        android:showAsAction="never"
+        android:visible="true"
+        android:title="@string/filtershow_show_info_panel" />
+    <item
         android:id="@+id/showImageStateButton"
         android:showAsAction="never"
         android:visible="true"

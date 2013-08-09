@@ -24,13 +24,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.ui.SelectionRenderer;
 
-public class CategoryView extends View implements View.OnClickListener {
+public class CategoryView extends View
+        implements View.OnClickListener, SwipableView{
 
     private static final String LOGTAG = "CategoryView";
     public static final int VERTICAL = 0;
@@ -48,6 +51,8 @@ public class CategoryView extends View implements View.OnClickListener {
     private Paint mBorderPaint;
     private int mBorderStroke;
     private int mOrientation = VERTICAL;
+    private float mStartTouchY = 0;
+    private float mDeleteSlope = 20;
 
     public CategoryView(Context context) {
         super(context);
@@ -172,5 +177,29 @@ public class CategoryView extends View implements View.OnClickListener {
 
     public void setOrientation(int orientation) {
         mOrientation = orientation;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            mStartTouchY = event.getY();
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            setTranslationY(0);
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            float delta = event.getY() - mStartTouchY;
+            if (Math.abs(delta) > mDeleteSlope) {
+                FilterShowActivity activity = (FilterShowActivity) getContext();
+                activity.setHandlesSwipeForView(this, mStartTouchY);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void delete() {
+        mAdapter.remove(mAction);
     }
 }

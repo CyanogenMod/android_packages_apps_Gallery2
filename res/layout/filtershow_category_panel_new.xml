@@ -19,13 +19,14 @@
               xmlns:custom="http://schemas.android.com/apk/res/com.android.gallery3d"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="@color/filtershow_categoryview_background">
 
     <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:background="@color/background_main_toolbar" >
+            android:layout_weight="1"
+            android:scrollbars="none" >
 
         <com.android.gallery3d.filtershow.category.CategoryTrack
                 android:id="@+id/listItems"
@@ -37,5 +38,30 @@
                 />
 
     </HorizontalScrollView>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+                android:id="@+id/addButton"
+                android:layout_width="@dimen/category_panel_height"
+                android:layout_height="@dimen/category_panel_height"
+                android:src="@drawable/filtershow_add"
+                style="?android:attr/borderlessButtonStyle"
+                android:scaleType="fitCenter"
+                android:padding="16dp"
+                android:layout_marginBottom="6dp"
+                android:layout_gravity="center"/>
+
+        <TextView
+                android:id="@+id/addButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="bottom|center"/>
+
+    </FrameLayout>
 
 </LinearLayout>

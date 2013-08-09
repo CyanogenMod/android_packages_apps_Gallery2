@@ -245,4 +245,43 @@
     <!-- Label for newly created user preset [CHAR LIMIT=30] -->
     <string name="filtershow_new_preset">New Preset</string>
 
+    <!-- Label for showing the image information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_show_info_panel">Information</string>
+    <!-- Label for the information panel [CHAR LIMIT=30] -->
+    <string name="filtershow_show_info_panel_name">Image Name</string>
+    <!-- Label for the information panel [CHAR LIMIT=30] -->
+    <string name="filtershow_show_info_panel_size">Image Size</string>
+    <!-- Label for the information panel [CHAR LIMIT=30] -->
+    <string name="filtershow_show_info_panel_histogram">Histogram</string>
+    <!-- Label for the information panel [CHAR LIMIT=30] -->
+    <string name="filtershow_show_info_panel_exif">EXIF Data</string>
+
+    <!-- Label for the add button in the category panel [CHAR LIMIT=30] -->
+    <string name="filtershow_add_button_looks">Preset</string>
+    <!-- Label for the add button in the versions panel [CHAR LIMIT=30] -->
+    <string name="filtershow_add_button_versions">Version</string>
+    <!-- Label for the Original version in the versions panel [CHAR LIMIT=30] -->
+    <string name="filtershow_version_original">Original</string>
+    <!-- Label for the Current version in the versions panel [CHAR LIMIT=30] -->
+    <string name="filtershow_version_current">Current</string>
+
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_model">Model</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_aperture">Aperture</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_focal_length">Focal Length</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_iso">ISO</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_subject_distance">Subject Distance</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_date">Date taken</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_f_stop">F Stop</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_exposure_time">Exposure Time</string>
+    <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
+    <string name="filtershow_exif_copyright">Copyright</string>
+
 </resources>

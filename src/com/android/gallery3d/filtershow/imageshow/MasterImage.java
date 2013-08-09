@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 
+import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
@@ -39,6 +40,7 @@ import com.android.gallery3d.filtershow.pipeline.SharedBuffer;
 import com.android.gallery3d.filtershow.pipeline.SharedPreset;
 import com.android.gallery3d.filtershow.state.StateAdapter;
 
+import java.util.List;
 import java.util.Vector;
 
 public class MasterImage implements RenderingRequestCaller {
@@ -91,6 +93,7 @@ public class MasterImage implements RenderingRequestCaller {
     private Point mImageShowSize = new Point();
 
     private boolean mShowsOriginal;
+    private List<ExifTag> mEXIF;
 
     private MasterImage() {
     }
@@ -170,6 +173,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     public boolean loadBitmap(Uri uri, int size) {
         setUri(uri);
+        mEXIF = ImageLoader.getExif(getActivity(), uri);
         mOrientation = ImageLoader.getMetadataOrientation(mActivity, uri);
         Rect originalBounds = new Rect();
         mOriginalBitmapLarge = ImageLoader.loadOrientedConstrainedBitmap(uri, mActivity,
@@ -580,6 +584,10 @@ public class MasterImage implements RenderingRequestCaller {
 
     public ImagePreset getLoadedPreset() {
         return mLoadedPreset;
+    }
+
+    public List<ExifTag> getEXIF() {
+        return mEXIF;
     }
 
 }
