@@ -32,7 +32,7 @@
                  android:layout_weight="1" />
 
     <FrameLayout android:id="@+id/category_panel_container"
-                 android:layout_width="wrap_content"
+                 android:layout_width="match_parent"
                  android:visibility="visible"
                  android:layout_height="0dip"
                  android:layout_gravity="center"

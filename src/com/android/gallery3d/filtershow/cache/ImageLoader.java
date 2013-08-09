@@ -18,7 +18,6 @@ package com.android.gallery3d.filtershow.cache;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -34,15 +33,17 @@ import android.webkit.MimeTypeMap;
 
 import com.adobe.xmp.XMPException;
 import com.adobe.xmp.XMPMeta;
-import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
+import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.filtershow.tools.XmpPresets;
 import com.android.gallery3d.util.XmpUtilHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public final class ImageLoader {
 
@@ -75,6 +76,14 @@ public final class ImageLoader {
             ret = MimeTypeMap.getSingleton().getMimeTypeFromExtension(postfix);
         }
         return ret;
+    }
+
+    public static String getLocalPathFromUri(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri,
+                new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+        int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(index);
     }
 
     /**
@@ -498,5 +507,25 @@ public final class ImageLoader {
         } finally {
             Utils.closeSilently(is);
         }
+    }
+
+    public static List<ExifTag> getExif(Context context, Uri uri) {
+        String path = getLocalPathFromUri(context, uri);
+        if (path != null) {
+            Uri localUri = Uri.parse(path);
+            String mimeType = getMimeType(localUri);
+            if (!JPEG_MIME_TYPE.equals(mimeType)) {
+                return null;
+            }
+            try {
+                ExifInterface exif = new ExifInterface();
+                exif.readExif(path);
+                List<ExifTag> taglist = exif.getAllTags();
+                return taglist;
+            } catch (IOException e) {
+                Log.w(LOGTAG, "Failed to read EXIF tags", e);
+            }
+        }
+        return null;
     }
 }

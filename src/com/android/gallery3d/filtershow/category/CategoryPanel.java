@@ -17,23 +17,28 @@
 package com.android.gallery3d.filtershow.category;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 
-public class CategoryPanel extends Fragment {
+public class CategoryPanel extends Fragment implements View.OnClickListener {
 
     public static final String FRAGMENT_TAG = "CategoryPanel";
     private static final String PARAMETER_TAG = "currentPanel";
 
     private int mCurrentAdapter = MainPanel.LOOKS;
     private CategoryAdapter mAdapter;
+    private ImageButton mAddButton;
+    private TextView mAddButtonText;
 
     public void setAdapter(int value) {
         mCurrentAdapter = value;
@@ -70,7 +75,13 @@ public class CategoryPanel extends Fragment {
                 mAdapter.initializeSelection(MainPanel.FILTERS);
                 break;
             }
+            case MainPanel.VERSIONS: {
+                mAdapter = activity.getCategoryVersionsAdapter();
+                mAdapter.initializeSelection(MainPanel.VERSIONS);
+                break;
+            }
         }
+        updateAddButtonVisibility();
     }
 
     @Override
@@ -102,7 +113,38 @@ public class CategoryPanel extends Fragment {
             panel.setAdapter(mAdapter);
             mAdapter.setContainer(panel);
         }
+
+        mAddButton = (ImageButton) main.findViewById(R.id.addButton);
+        mAddButtonText = (TextView) main.findViewById(R.id.addButtonText);
+        if (mAddButton != null) {
+            mAddButton.setOnClickListener(this);
+            updateAddButtonVisibility();
+        }
         return main;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addButton:
+                FilterShowActivity activity = (FilterShowActivity) getActivity();
+                activity.addCurrentVersion();
+                break;
+        }
+    }
+
+    public void updateAddButtonVisibility() {
+        if (mAddButton == null) {
+            return;
+        }
+        FilterShowActivity activity = (FilterShowActivity) getActivity();
+        if (activity.isShowingImageStatePanel() && mAdapter.showAddButton()) {
+            mAddButton.setVisibility(View.VISIBLE);
+            if (mAdapter != null) {
+                mAddButtonText.setText(mAdapter.getAddButtonText());
+            }
+        } else {
+            mAddButton.setVisibility(View.GONE);
+        }
+    }
 }
