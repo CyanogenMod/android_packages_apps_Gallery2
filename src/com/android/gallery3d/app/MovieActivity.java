@@ -295,11 +295,7 @@ public class MovieActivity extends Activity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mBassBoostEffect.setEnabled(isChecked);
-                    mBassBoostEffect.setStrength((short)
-                            mPrefs.getInt(Key.bb_strength.toString(), 0));
                     mVirtualizerEffect.setEnabled(isChecked);
-                    mVirtualizerEffect.setStrength((short)
-                        mPrefs.getInt(Key.virt_strength.toString(), 0));
                     mBassBoostKnob.setEnabled(isChecked);
                     mVirtualizerKnob.setEnabled(isChecked);
                 }
