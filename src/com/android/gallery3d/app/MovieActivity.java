@@ -485,6 +485,7 @@ public class MovieActivity extends Activity {
 
     @Override
     public void onResume() {
+        invalidateOptionsMenu();
         mPlayer.onResume();
         if ((mVirtualizerSupported) || (mBassBoostSupported)) {
             final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
