@@ -89,7 +89,7 @@ public class HistogramView extends View {
         float h = getHeight() - Spline.curveHandleSize() / 2.0f;
         float dx = Spline.curveHandleSize() / 2.0f;
         float wl = w / histogram.length;
-        float wh = (0.3f * h) / max;
+        float wh = h / max;
         Paint paint = new Paint();
         paint.setARGB(100, 255, 255, 255);
         paint.setStrokeWidth((int) Math.ceil(wl));
