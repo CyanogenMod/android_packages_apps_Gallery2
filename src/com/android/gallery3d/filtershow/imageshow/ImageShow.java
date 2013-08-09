@@ -26,6 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -43,9 +44,7 @@ import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 public class ImageShow extends View implements OnGestureListener,
         ScaleGestureDetector.OnScaleGestureListener,
@@ -71,6 +70,10 @@ public class ImageShow extends View implements OnGestureListener,
     private int mShowOriginalDirection = 0;
     private static int UNVEIL_HORIZONTAL = 1;
     private static int UNVEIL_VERTICAL = 2;
+
+    private NinePatchDrawable mShadow = null;
+    private Rect mShadowBounds = new Rect();
+    private int mShadowMargin = 15; // not scaled, fixed in the asset
 
     private Point mTouchDown = new Point();
     private Point mTouch = new Point();
@@ -132,6 +135,7 @@ public class ImageShow extends View implements OnGestureListener,
         mOriginalTextSize = res.getDimensionPixelSize(R.dimen.photoeditor_original_text_size);
         mBackgroundColor = res.getColor(R.color.background_screen);
         mOriginalText = res.getString(R.string.original_picture_text);
+        mShadow = (NinePatchDrawable) res.getDrawable(R.drawable.geometry_shadow);
         setupGestureDetector(context);
         mActivity = (FilterShowActivity) context;
         MasterImage.getImage().addObserver(this);
@@ -285,6 +289,10 @@ public class ImageShow extends View implements OnGestureListener,
             if (updateBounds) {
                 mImageBounds = d;
             }
+            mShadowBounds.set(d.left - mShadowMargin, d.top - mShadowMargin,
+                    d.right + mShadowMargin, d.bottom + mShadowMargin);
+            mShadow.setBounds(mShadowBounds);
+            mShadow.draw(canvas);
             canvas.drawBitmap(image, s, d, mPaint);
         }
     }
