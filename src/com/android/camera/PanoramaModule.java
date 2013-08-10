@@ -908,7 +908,7 @@ public class PanoramaModule implements CameraModule,
         if (jpegData != null) {
             String filename = PanoUtil.createName(
                     mActivity.getResources().getString(R.string.pano_file_name_format), mTimeTaken);
-            String filepath = Storage.generateFilepath(filename);
+            String filepath = Storage.getInstance().generateFilepath(filename);
 
             Location loc = mLocationManager.getCurrentLocation();
             ExifInterface exif = new ExifInterface();
@@ -923,10 +923,10 @@ public class PanoramaModule implements CameraModule,
                 exif.writeExif(jpegData, filepath);
             } catch (IOException e) {
                 Log.e(TAG, "Cannot set exif for " + filepath, e);
-                Storage.writeFile(filepath, jpegData);
+                Storage.getInstance().writeFile(filepath, jpegData);
             }
             int jpegLength = (int) (new File(filepath).length());
-            return Storage.addImage(mContentResolver, filename, mTimeTaken,
+            return Storage.getInstance().addImage(mContentResolver, filename, mTimeTaken,
                     loc, orientation, jpegLength, filepath, width, height);
         }
         return null;
