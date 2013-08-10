@@ -154,7 +154,7 @@ public class MediaSaveService extends Service {
 
         @Override
         protected Uri doInBackground(Void... v) {
-            return Storage.addImage(
+            return Storage.getInstance().addImage(
                     resolver, title, date, loc, orientation, exif, data, width, height);
         }
 

@@ -151,7 +151,7 @@ public class SecureAlbum extends MediaSet implements StitchingChangeListener {
     private boolean isCameraBucketEmpty(Uri baseUri) {
         Uri uri = baseUri.buildUpon()
                 .appendQueryParameter("limit", "1").build();
-        String[] selection = {String.valueOf(MediaSetUtils.CAMERA_BUCKET_ID)};
+        String[] selection = {String.valueOf(MediaSetUtils.getCameraBucketId())};
         Cursor cursor = mContext.getContentResolver().query(uri, PROJECTION,
                 "bucket_id = ?", selection, null);
         if (cursor == null) return true;

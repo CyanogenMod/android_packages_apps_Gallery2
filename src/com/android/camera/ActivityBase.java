@@ -20,12 +20,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.hardware.Camera.Parameters;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
@@ -104,6 +106,7 @@ public abstract class ActivityBase extends AbstractGalleryActivity
     protected boolean mSecureCamera;
     private static boolean sFirstStartAfterScreenOn = true;
 
+    private String mStoragePath;
     private long mStorageSpace = Storage.LOW_STORAGE_THRESHOLD;
     private static final int UPDATE_STORAGE_HINT = 0;
     private final Handler mHandler = new Handler() {
@@ -212,6 +215,17 @@ public abstract class ActivityBase extends AbstractGalleryActivity
         return false;
     }
 
+    protected boolean setStoragePath(SharedPreferences prefs) {
+        String storagePath = prefs.getString(CameraSettings.KEY_STORAGE,
+                Environment.getExternalStorageDirectory().toString());
+        Storage.getInstance().setRoot(storagePath);
+        if (storagePath.equals(mStoragePath)) {
+            return false;
+        }
+        mStoragePath = storagePath;
+        return true;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -308,7 +322,7 @@ public abstract class ActivityBase extends AbstractGalleryActivity
     }
 
     protected void updateStorageSpace() {
-        mStorageSpace = Storage.getAvailableSpace();
+        mStorageSpace = Storage.getInstance().getAvailableSpace();
     }
 
     protected long getStorageSpace() {
@@ -367,7 +381,7 @@ public abstract class ActivityBase extends AbstractGalleryActivity
             if (mSecureCamera) {
                 path = "/secure/all/" + sSecureAlbumId;
             } else {
-                path = "/local/all/" + MediaSetUtils.CAMERA_BUCKET_ID;
+                path = "/local/all/" + Storage.getInstance().generateBucketId();
             }
         } else {
             path = "/local/all/0"; // Use 0 so gallery does not show anything.
@@ -401,7 +415,7 @@ public abstract class ActivityBase extends AbstractGalleryActivity
             if (mSecureCamera) {
                 path = "/secure/all/" + sSecureAlbumId;
             } else {
-                path = "/local/all/" + MediaSetUtils.CAMERA_BUCKET_ID;
+                path = "/local/all/" + Storage.getInstance().generateBucketId();
             }
         } else {
             path = "/local/all/0"; // Use 0 so gallery does not show anything.
