@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -30,12 +31,16 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.android.camera.CameraSettings;
+import com.android.camera.ComboPreferences;
+import com.android.camera.Storage;
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
@@ -75,6 +80,16 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         mPanoramaViewHelper = new PanoramaViewHelper(this);
         mPanoramaViewHelper.onCreate();
         doBindBatchService();
+        ComboPreferences prefs = new ComboPreferences(this);
+        CameraSettings.upgradeGlobalPreferences(prefs.getGlobal());
+        setStoragePath(prefs);
+    }
+
+    protected boolean setStoragePath(SharedPreferences prefs) {
+        String storagePath = prefs.getString(CameraSettings.KEY_STORAGE,
+                Environment.getExternalStorageDirectory().toString());
+        Storage.getInstance().setRoot(storagePath);
+        return true;
     }
 
     @Override
