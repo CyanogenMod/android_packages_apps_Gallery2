@@ -27,6 +27,8 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.media.CamcorderProfile;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.util.FloatMath;
 import android.util.Log;
 
@@ -64,6 +66,7 @@ public class CameraSettings {
     public static final String KEY_CAMERA_FIRST_USE_HINT_SHOWN = "pref_camera_first_use_hint_shown_key";
     public static final String KEY_VIDEO_FIRST_USE_HINT_SHOWN = "pref_video_first_use_hint_shown_key";
     public static final String KEY_PHOTOSPHERE_PICTURESIZE = "pref_photosphere_picturesize_key";
+    public static final String KEY_STORAGE = "pref_camera_storage_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
 
@@ -173,6 +176,7 @@ public class CameraSettings {
                 group.findPreference(KEY_VIDEOCAMERA_FLASH_MODE);
         ListPreference videoEffect = group.findPreference(KEY_VIDEO_EFFECT);
         ListPreference cameraHdr = group.findPreference(KEY_CAMERA_HDR);
+        ListPreference storage = group.findPreference(KEY_STORAGE);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -232,7 +236,42 @@ public class CameraSettings {
                     || !Util.isCameraHdrSupported(mParameters))) {
             removePreference(group, cameraHdr.getKey());
         }
+        if (storage != null){
+        	buildStorage(group, storage);
+        }
     }
+    
+    private void buildStorage(PreferenceGroup group, ListPreference storage) {
+        StorageManager sm = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
+        StorageVolume[] volumes = sm.getVolumeList();
+        String[] entries = new String[volumes.length];
+        String[] entryValues = new String[volumes.length];
+        int primary = 0;
+
+        if (volumes.length < 2) {
+            // No need for storage setting
+            removePreference(group, storage.getKey());
+            return;
+        }
+
+        for (int i = 0; i < volumes.length; i++) {
+            StorageVolume v = volumes[i];
+            entries[i] = v.getDescription(mContext);
+            entryValues[i] = v.getPath();
+            if (v.isPrimary()) {
+                primary = i;
+            }
+        }
+
+        storage.setEntries(entries);
+        storage.setEntryValues(entryValues);
+
+        // Filter saved invalid value
+        if (storage.findIndexOfValue(storage.getValue()) < 0) {
+            // Default to the primary storage
+            storage.setValueIndex(primary);
+        }
+    } 
 
     private void buildExposureCompensation(
             PreferenceGroup group, IconListPreference exposure) {
