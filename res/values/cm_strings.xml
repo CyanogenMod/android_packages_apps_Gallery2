@@ -18,6 +18,8 @@
     <string name="filtershow_undo_toast">@string/filtershow_undo</string>
     <!--  Text for redo toast message. Only modify if the string is too long to be displayed -->
     <string name="filtershow_redo_toast">@string/filtershow_redo</string>
+    <!-- More Settings screen, storage title -->
+    <string name="pref_camera_storage_title">Storage</string>
 
     <!-- Settings screen, dialog choice for 12.8 megapixels picture size [CHAR LIMIT=15] -->
     <string name="pref_camera_picturesize_entry_12_8mp">12.8M pixels</string>

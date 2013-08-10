@@ -23,6 +23,9 @@
             camera:title="@string/pref_video_quality_title"
             camera:entries="@array/pref_video_quality_entries"
             camera:entryValues="@array/pref_video_quality_entryvalues"/>
+    <ListPreference
+            camera:key="pref_camera_storage_key"
+            camera:title="@string/pref_camera_storage_title" />
     <IconListPreference
             camera:key="pref_video_time_lapse_frame_interval_key"
             camera:defaultValue="@string/pref_video_time_lapse_frame_interval_default"
