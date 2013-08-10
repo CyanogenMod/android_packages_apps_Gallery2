@@ -18,4 +18,6 @@
     <string name="filtershow_undo_toast">@string/filtershow_undo</string>
     <!--  Text for redo toast message. Only modify if the string is too long to be displayed -->
     <string name="filtershow_redo_toast">@string/filtershow_redo</string>
+    <!-- More Settings screen, storage title -->
+    <string name="pref_camera_storage_title">Storage</string>
 </resources>
