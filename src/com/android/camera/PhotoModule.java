@@ -434,6 +434,7 @@ public class PhotoModule
 
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
+        mActivity.setStoragePath(mPreferences);
         // we need to reset exposure for the preview
         resetExposureCompensation();
         // Starting the preview needs preferences, camera screen nail, and
@@ -691,7 +692,7 @@ public class PhotoModule
         queue.addIdleHandler(new MessageQueue.IdleHandler() {
             @Override
             public boolean queueIdle() {
-                Storage.ensureOSXCompatible();
+                Storage.getStorage().ensureOSXCompatible();
                 return false;
             }
         });
@@ -1940,6 +1941,12 @@ public class PhotoModule
                 mPreferences, mContentResolver);
         mLocationManager.recordLocation(recordLocation);
 
+        if(mActivity.setStoragePath(mPreferences)){
+        	mActivity.updateStorageSpaceAndHint();
+        	mActivity.reuseCameraScreenNail(!mIsImageCaptureIntent);
+        	
+        }
+        
         setCameraParametersWhenIdle(UPDATE_PARAM_PREFERENCE);
         mUI.updateOnScreenIndicators(mParameters, mPreferenceGroup, mPreferences);
     }
