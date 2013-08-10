@@ -16,22 +16,18 @@
 
 package com.android.gallery3d.filtershow.controller;
 
-import android.content.Context;
+import android.graphics.Bitmap;
 
-import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
+public class ParameterIconStyle extends BasicParameterStyle {
+    Bitmap[] mBitmaps;
 
-public interface ParameterStyles extends Parameter {
-    public static String sParameterType = "ParameterStyles";
+    public ParameterIconStyle(int id, Bitmap[] styles) {
+        super(id, styles.length);
+        mBitmaps = styles;
+    }
 
-    int getNumberOfStyles();
-
-    int getDefaultSelected();
-
-    int getSelected();
-
-    void setSelected(int value);
-
-    void getIcon(int index, BitmapCaller caller);
-
-    String getStyleTitle(int index, Context context);
+    @Override
+    public void getIcon(int index, BitmapCaller caller) {
+        caller.available(mBitmaps[index]);
+    }
 }

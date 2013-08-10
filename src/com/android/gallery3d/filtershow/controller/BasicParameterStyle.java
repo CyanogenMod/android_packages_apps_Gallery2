@@ -90,7 +90,7 @@ public class BasicParameterStyle implements ParameterStyles {
     }
 
     @Override
-    public void getIcon(int index, RenderingRequestCaller caller) {
+    public void getIcon(int index, BitmapCaller caller) {
         mEditor.computeIcon(index, caller);
     }
 

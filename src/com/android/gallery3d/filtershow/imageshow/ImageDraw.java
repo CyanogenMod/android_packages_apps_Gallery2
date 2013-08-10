@@ -94,7 +94,7 @@ public class ImageDraw extends ImageShow {
             mTmpPoint[0] = event.getX();
             mTmpPoint[1] = event.getY();
             mToOrig.mapPoints(mTmpPoint);
-            mFRep.startNewSection(mType, mCurrentColor, mCurrentSize, mTmpPoint[0], mTmpPoint[1]);
+            mFRep.startNewSection( mTmpPoint[0], mTmpPoint[1]);
         }
 
         if (event.getAction() == MotionEvent.ACTION_MOVE) {

@@ -18,6 +18,8 @@ package com.android.gallery3d.filtershow.editors;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,24 +34,51 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.colorpicker.ColorGridDialog;
 import com.android.gallery3d.filtershow.colorpicker.RGBListener;
+import com.android.gallery3d.filtershow.controller.BitmapCaller;
+import com.android.gallery3d.filtershow.controller.FilterView;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilterDraw;
 import com.android.gallery3d.filtershow.imageshow.ImageDraw;
 
-public class EditorDraw extends Editor {
+public class EditorDraw extends ParametricEditor implements FilterView {
     private static final String LOGTAG = "EditorDraw";
     public static final int ID = R.id.editorDraw;
     public ImageDraw mImageDraw;
+    private static final int MODE_BRIGHTNESS = FilterDrawRepresentation.PARAM_BRIGHTNESS;
+    private static final int MODE_SATURATION = FilterDrawRepresentation.PARAM_SATURATION;
+    private static final int MODE_SIZE = FilterDrawRepresentation.PARAM_SIZE;
+    private static final int MODE_HUEE = FilterDrawRepresentation.PARAM_HUE;
+    private static final int MODE_SIZEE = FilterDrawRepresentation.PARAM_SIZE;
+    private static final int MODE_OPACITY = FilterDrawRepresentation.PARAM_OPACITY;
+    private static final int MODE_STYLE = FilterDrawRepresentation.PARAM_STYLE;
+    int[] brushIcons = {
+            R.drawable.brush_flat,
+            R.drawable.brush_marker,
+            R.drawable.brush_spatter
+    };
+
+    String mParameterString;
 
     public EditorDraw() {
         super(ID);
     }
 
     @Override
+    public String calculateUserMessage(Context context, String effectName, Object parameterValue) {
+        FilterDrawRepresentation rep = getDrawRep();
+        if (rep == null) {
+            return "";
+        }
+        String paramString;
+        String val = rep.getValueString();
+        return mParameterString + val;
+    }
+
+    @Override
     public void createEditor(Context context, FrameLayout frameLayout) {
-        super.createEditor(context, frameLayout);
         mView = mImageShow = mImageDraw = new ImageDraw(context);
+        super.createEditor(context, frameLayout);
         mImageDraw.setEditor(this);
 
     }
@@ -58,10 +87,12 @@ public class EditorDraw extends Editor {
     public void reflectCurrentFilter() {
         super.reflectCurrentFilter();
         FilterRepresentation rep = getLocalRepresentation();
-
         if (rep != null && getLocalRepresentation() instanceof FilterDrawRepresentation) {
             FilterDrawRepresentation drawRep = (FilterDrawRepresentation) getLocalRepresentation();
             mImageDraw.setFilterDrawRepresentation(drawRep);
+            drawRep.getParam(FilterDrawRepresentation.PARAM_STYLE).setFilterView(this);
+            drawRep.setPramMode(FilterDrawRepresentation.PARAM_HUE);
+            control(drawRep.getCurrentParam(), mEditControl);
         }
     }
 
@@ -71,7 +102,7 @@ public class EditorDraw extends Editor {
         view.setText(mContext.getString(R.string.draw_style));
         view.setOnClickListener(new OnClickListener() {
 
-                @Override
+            @Override
             public void onClick(View arg0) {
                 showPopupMenu(accessoryViewList);
             }
@@ -95,64 +126,65 @@ public class EditorDraw extends Editor {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ImageFilterDraw filter = (ImageFilterDraw) mImageShow.getCurrentFilter();
-                if (item.getItemId() == R.id.draw_menu_color) {
-                    showColorGrid(item);
-                } else if (item.getItemId() == R.id.draw_menu_size) {
-                    showSizeDialog(item);
-                } else if (item.getItemId() == R.id.draw_menu_style_brush_marker) {
-                    ImageDraw idraw = (ImageDraw) mImageShow;
-                    idraw.setStyle(ImageFilterDraw.BRUSH_STYLE_MARKER);
-                } else if (item.getItemId() == R.id.draw_menu_style_brush_spatter) {
-                    ImageDraw idraw = (ImageDraw) mImageShow;
-                    idraw.setStyle(ImageFilterDraw.BRUSH_STYLE_SPATTER);
-                } else if (item.getItemId() == R.id.draw_menu_style_line) {
-                    ImageDraw idraw = (ImageDraw) mImageShow;
-                    idraw.setStyle(ImageFilterDraw.SIMPLE_STYLE);
-                } else if (item.getItemId() == R.id.draw_menu_clear) {
-                    ImageDraw idraw = (ImageDraw) mImageShow;
-                    idraw.resetParameter();
-                    commitLocalRepresentation();
-                }
-                mView.invalidate();
+                selectMenuItem(item);
                 return true;
             }
         });
         popupMenu.show();
+
     }
 
-    public void showSizeDialog(final MenuItem item) {
-        FilterShowActivity ctx = mImageShow.getActivity();
-        final Dialog dialog = new Dialog(ctx);
-        dialog.setTitle(R.string.draw_size_title);
-        dialog.setContentView(R.layout.filtershow_draw_size);
-        final SeekBar bar = (SeekBar) dialog.findViewById(R.id.sizeSeekBar);
-        ImageDraw idraw = (ImageDraw) mImageShow;
-        bar.setProgress(idraw.getSize());
-        Button button = (Button) dialog.findViewById(R.id.sizeAcceptButton);
-        button.setOnClickListener(new OnClickListener() {
+    protected void selectMenuItem(MenuItem item) {
+        ImageFilterDraw filter = (ImageFilterDraw) mImageShow.getCurrentFilter();
+        FilterDrawRepresentation rep = getDrawRep();
+        if (rep == null) {
+            return;
+        }
 
-            @Override
-            public void onClick(View arg0) {
-                int p = bar.getProgress();
+        switch (item.getItemId()) {
+            case R.id.draw_menu_clear:
                 ImageDraw idraw = (ImageDraw) mImageShow;
-                idraw.setSize(p + 1);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+                idraw.resetParameter();
+                commitLocalRepresentation();
+                break;
+            case R.id.draw_menu_hue:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_HUE);
+                break;
+            case R.id.draw_menu_opacity:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_OPACITY);
+                break;
+            case R.id.draw_menu_saturation:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_SATURATION);
+                break;
+            case R.id.draw_menu_size:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_SIZE);
+                break;
+            case R.id.draw_menu_style:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_STYLE);
+                break;
+            case R.id.draw_menu_value:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_BRIGHTNESS);
+                break;
+        }
+        if (item.getItemId() != R.id.draw_menu_clear) {
+            mParameterString = item.getTitle().toString();
+        }
+        control(rep.getCurrentParam(), mEditControl);
+        mControl.updateUI();
+        mView.invalidate();
     }
 
-    public void showColorGrid(final MenuItem item) {
-        RGBListener cl = new RGBListener() {
-            @Override
-            public void setColor(int rgb) {
-                ImageDraw idraw = (ImageDraw) mImageShow;
-                idraw.setColor(rgb);
-            }
-        };
-        ColorGridDialog cpd = new ColorGridDialog(mImageShow.getActivity(), cl);
-        cpd.show();
-        LayoutParams params = cpd.getWindow().getAttributes();
+    FilterDrawRepresentation getDrawRep() {
+        FilterRepresentation rep = getLocalRepresentation();
+        if (rep instanceof FilterDrawRepresentation) {
+            return (FilterDrawRepresentation) rep;
+        }
+        return null;
+    }
+
+    @Override
+    public void computeIcon(int index, BitmapCaller caller) {
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), brushIcons[index]);
+        caller.available(bitmap);
     }
 }

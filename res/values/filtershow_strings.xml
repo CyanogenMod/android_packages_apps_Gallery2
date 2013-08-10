@@ -207,8 +207,14 @@
     <string name="draw_style">Style</string>
     <!--  Label for the size to draw in in [CHAR LIMIT=14] -->
     <string name="draw_size">Size</string>
+    <!--  Label for the Hue to draw in [CHAR LIMIT=14] -->
+    <string name="draw_hue">Hue</string>
     <!--  Label for the color to draw in [CHAR LIMIT=14] -->
-    <string name="draw_color">Color</string>
+    <string name="draw_saturation">Saturation</string>
+    <!--  Label for the Brightness to draw in [CHAR LIMIT=14] -->
+    <string name="draw_value">Brightness</string>
+    <!--  Label for the color to draw in [CHAR LIMIT=14] -->
+    <string name="draw_opacity">Opacity</string>
     <!--  Label for the line style of drawing in [CHAR LIMIT=14] -->
     <string name="draw_style_line">Lines</string>
     <!--  Label for the Marker brush style of drawing in [CHAR LIMIT=14] -->

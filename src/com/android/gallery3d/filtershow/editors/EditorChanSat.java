@@ -27,6 +27,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
+import com.android.gallery3d.filtershow.controller.BitmapCaller;
 import com.android.gallery3d.filtershow.controller.FilterView;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.filters.FilterChanSatRepresentation;
@@ -158,15 +159,14 @@ public class EditorChanSat extends ParametricEditor implements OnSeekBarChangeLi
     }
 
     @Override
-    public void computeIcon(int n, RenderingRequestCaller caller) {
+    public void computeIcon(int n, BitmapCaller caller) {
         FilterChanSatRepresentation rep = getChanSatRep();
         if (rep == null) return;
         rep = (FilterChanSatRepresentation) rep.copy();
         ImagePreset preset = new ImagePreset();
         preset.addFilter(rep);
         Bitmap src = MasterImage.getImage().getThumbnailBitmap();
-        RenderingRequest.post(null, src, preset, RenderingRequest.STYLE_ICON_RENDERING,
-                caller);
+        caller.available(src);
     }
 
     protected void selectMenuItem(MenuItem item) {
