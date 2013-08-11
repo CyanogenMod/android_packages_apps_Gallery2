@@ -27,31 +27,61 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_margin="7dp"
-        android:text="@string/select_compression"/>
+        android:text="@string/select_output_settings"/>
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <GridLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignBounds"
+        android:useDefaultMargins="true"
+        android:columnOrderPreserved="false"
+        android:columnCount="5">
+
+        <TextView
+                android:text="@string/size"
+                android:layout_gravity="right|center_vertical"/>
+
+        <EditText
+                android:id="@+id/editableWidth"
+                android:layout_gravity="right|center_vertical"
+                android:layout_width="100dp"
+                android:inputType="number"/>
+
+        <TextView
+                android:text="@string/x"
+                android:layout_gravity="center"/>
+
+        <EditText
+                android:id="@+id/editableHeight"
+                android:layout_gravity="left|center_vertical"
+                android:layout_width="100dp"
+                android:inputType="number"/>
+
+        <TextView
+                android:id="@+id/estimadedSize"
+                android:layout_gravity="center"/>
+
+        <TextView
+                android:text="@string/quality"
+                android:layout_margin="7dp"
+                android:layout_gravity="right|center_vertical" />
 
         <SeekBar
                 android:id="@+id/qualitySeekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_margin="7dp"
+                android:layout_gravity="center"
                 android:max="100"
-                android:progress="100"/>
+                android:progress="100"
+                android:layout_width="400dp"
+                android:layout_columnSpan="3"/>
 
         <TextView
                 android:id="@+id/qualityTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="7dp"
-                android:layout_gravity="center_vertical|center_horizontal"/>
+                android:layout_margin="7dp"
+                android:layout_gravity="left|center_vertical"/>
 
-    </LinearLayout>
+    </GridLayout>
 
     <LinearLayout
             android:orientation="horizontal"

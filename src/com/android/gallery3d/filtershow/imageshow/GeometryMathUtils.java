@@ -282,6 +282,15 @@ public final class GeometryMathUtils {
         unpackGeometry(outHolder, geometry);
     }
 
+    public static Rect finalGeometryRect(int width, int height,
+                                         Collection<FilterRepresentation> geometry) {
+        GeometryHolder holder = unpackGeometry(geometry);
+        RectF crop = getTrueCropRect(holder, width, height);
+        Rect frame = new Rect();
+        crop.roundOut(frame);
+        return frame;
+    }
+
     private static Bitmap applyFullGeometryMatrix(Bitmap image, GeometryHolder holder) {
         int width = image.getWidth();
         int height = image.getHeight();

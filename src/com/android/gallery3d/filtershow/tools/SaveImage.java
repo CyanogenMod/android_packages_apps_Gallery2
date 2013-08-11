@@ -310,7 +310,8 @@ public class SaveImage {
         }
     }
 
-    public Uri processAndSaveImage(ImagePreset preset, boolean doAuxBackup, int quality) {
+    public Uri processAndSaveImage(ImagePreset preset, boolean doAuxBackup,
+                                   int quality, float sizeFactor) {
 
         Uri uri = resetToOriginalImageIfNeeded(preset, doAuxBackup);
         if (uri != null) {
@@ -340,6 +341,12 @@ public class SaveImage {
                         sampleSize);
                 if (bitmap == null) {
                     return null;
+                }
+                if (sizeFactor != 1f) {
+                    // if we have a valid size
+                    int w = (int) (bitmap.getWidth() * sizeFactor);
+                    int h = (int) (bitmap.getHeight() * sizeFactor);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
                 }
                 updateProgress();
                 CachingPipeline pipeline = new CachingPipeline(FiltersManager.getManager(),
@@ -458,7 +465,7 @@ public class SaveImage {
         Uri sourceImageUri = MasterImage.getImage().getUri();
 
         Intent processIntent = ProcessingService.getSaveIntent(filterShowActivity, preset,
-                destination, selectedImageUri, sourceImageUri, false, 90);
+                destination, selectedImageUri, sourceImageUri, false, 90, 1f);
 
         filterShowActivity.startService(processIntent);
 

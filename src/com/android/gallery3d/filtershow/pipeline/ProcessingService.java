@@ -32,7 +32,6 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
-import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
@@ -51,6 +50,7 @@ public class ProcessingService extends Service {
     private static final String DESTINATION_FILE = "destinationFile";
     private static final String SAVING = "saving";
     private static final String FLATTEN = "flatten";
+    private static final String SIZE_FACTOR = "sizeFactor";
 
     private ProcessingTaskController mProcessingTaskController;
     private ImageSavingTask mImageSavingTask;
@@ -139,13 +139,14 @@ public class ProcessingService extends Service {
     }
 
     public static Intent getSaveIntent(Context context, ImagePreset preset, File destination,
-            Uri selectedImageUri, Uri sourceImageUri, boolean doFlatten, int quality) {
+            Uri selectedImageUri, Uri sourceImageUri, boolean doFlatten, int quality, float sizeFactor) {
         Intent processIntent = new Intent(context, ProcessingService.class);
         processIntent.putExtra(ProcessingService.SOURCE_URI,
                 sourceImageUri.toString());
         processIntent.putExtra(ProcessingService.SELECTED_URI,
                 selectedImageUri.toString());
         processIntent.putExtra(ProcessingService.QUALITY, quality);
+        processIntent.putExtra(ProcessingService.SIZE_FACTOR, sizeFactor);
         if (destination != null) {
             processIntent.putExtra(ProcessingService.DESTINATION_FILE, destination.toString());
         }
@@ -192,6 +193,7 @@ public class ProcessingService extends Service {
             String selected = intent.getStringExtra(SELECTED_URI);
             String destination = intent.getStringExtra(DESTINATION_FILE);
             int quality = intent.getIntExtra(QUALITY, 100);
+            float sizeFactor = intent.getFloatExtra(SIZE_FACTOR, 1);
             boolean flatten = intent.getBooleanExtra(FLATTEN, false);
             Uri sourceUri = Uri.parse(source);
             Uri selectedUri = null;
@@ -206,7 +208,8 @@ public class ProcessingService extends Service {
             preset.readJsonFromString(presetJson);
             mNeedsAlive = false;
             mSaving = true;
-            handleSaveRequest(sourceUri, selectedUri, destinationFile, preset, flatten, quality);
+            handleSaveRequest(sourceUri, selectedUri, destinationFile, preset,
+                    flatten, quality, sizeFactor);
         }
         return START_REDELIVER_INTENT;
     }
@@ -224,7 +227,8 @@ public class ProcessingService extends Service {
     }
 
     public void handleSaveRequest(Uri sourceUri, Uri selectedUri,
-            File destinationFile, ImagePreset preset, boolean flatten, int quality) {
+            File destinationFile, ImagePreset preset, boolean flatten,
+            int quality, float sizeFactor) {
         mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         mNotificationId++;
@@ -242,7 +246,7 @@ public class ProcessingService extends Service {
         // Process the image
 
         mImageSavingTask.saveImage(sourceUri, selectedUri, destinationFile,
-                preset, flatten, quality);
+                preset, flatten, quality, sizeFactor);
     }
 
     public void updateNotificationWithBitmap(Bitmap bitmap) {

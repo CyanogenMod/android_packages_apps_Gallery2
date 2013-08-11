@@ -18,6 +18,7 @@ package com.android.gallery3d.filtershow.pipeline;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
@@ -35,6 +36,7 @@ public class ImageSavingTask extends ProcessingTask {
         ImagePreset preset;
         boolean flatten;
         int quality;
+        float sizeFactor;
     }
 
     static class UpdateBitmap implements Update {
@@ -55,7 +57,8 @@ public class ImageSavingTask extends ProcessingTask {
     }
 
     public void saveImage(Uri sourceUri, Uri selectedUri,
-                          File destinationFile, ImagePreset preset, boolean flatten, int quality) {
+                          File destinationFile, ImagePreset preset, boolean flatten,
+                          int quality, float sizeFactor) {
         SaveRequest request = new SaveRequest();
         request.sourceUri = sourceUri;
         request.selectedUri = selectedUri;
@@ -63,6 +66,7 @@ public class ImageSavingTask extends ProcessingTask {
         request.preset = preset;
         request.flatten = flatten;
         request.quality = quality;
+        request.sizeFactor = sizeFactor;
         postRequest(request);
     }
 
@@ -89,7 +93,8 @@ public class ImageSavingTask extends ProcessingTask {
                         postUpdate(updateProgress);
                     }
                 });
-        Uri uri = saveImage.processAndSaveImage(preset, !flatten, request.quality);
+        Uri uri = saveImage.processAndSaveImage(preset, !flatten,
+                request.quality, request.sizeFactor);
         URIResult result = new URIResult();
         result.uri = uri;
         return result;

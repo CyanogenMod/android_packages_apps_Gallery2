@@ -421,6 +421,10 @@ public class ImagePreset {
         return null;
     }
 
+    public Rect finalGeometryRect(int width, int height) {
+        return GeometryMathUtils.finalGeometryRect(width, height, getGeometryFilters());
+    }
+
     public Bitmap applyGeometry(Bitmap bitmap, FilterEnvironment environment) {
         // Apply any transform -- 90 rotate, flip, straighten, crop
         // Returns a new bitmap.
