@@ -231,7 +231,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         ImageFilter.setActivityForMemoryToasts(this);
         mUserPresetsManager = new UserPresetsManager(this);
         mUserPresetsAdapter = new UserPresetsAdapter(this);
-        mCategoryLooksAdapter = new CategoryAdapter(this);
     }
 
     public void updateUIAfterServiceStarted() {
@@ -1004,7 +1003,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getLooks();
 
-        mCategoryLooksAdapter.clear();
+        mCategoryLooksAdapter = new CategoryAdapter(this);
         int verticalItemHeight = (int) getResources().getDimension(R.dimen.action_item_height);
         mCategoryLooksAdapter.setItemHeight(verticalItemHeight);
         for (FilterRepresentation representation : filtersRepresentations) {

@@ -50,7 +50,7 @@ public class StatePanel extends Fragment {
         mToggleVersionsPanel = (ImageButton) mMainView.findViewById(R.id.toggleVersionsPanel);
         if (mMainPanel != null) {
             mMainPanel.setToggleVersionsPanelButton(mToggleVersionsPanel);
-        } else {
+        } else if (mToggleVersionsPanel != null) {
             mToggleVersionsPanel.setVisibility(View.GONE);
         }
         return mMainView;
