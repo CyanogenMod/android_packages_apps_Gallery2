@@ -18,6 +18,9 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Color;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 
 import com.android.gallery3d.R;
@@ -30,6 +33,8 @@ import com.android.gallery3d.filtershow.controller.ParameterOpacity;
 import com.android.gallery3d.filtershow.controller.ParameterSaturation;
 import com.android.gallery3d.filtershow.editors.EditorDraw;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class FilterDrawRepresentation extends FilterRepresentation {
@@ -78,6 +83,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         public float mRadius;
         public int mColor;
         public int noPoints = 0;
+        public float []mPoints = new float [20];
 
         @Override
         public String toString() {
@@ -220,17 +226,24 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         mCurrent.mType = type;
         mCurrent.mPath = new Path();
         mCurrent.mPath.moveTo(x, y);
-        mCurrent.noPoints = 0;
+        mCurrent.mPoints[0] = x;
+        mCurrent.mPoints[1] = y;
+        mCurrent.noPoints = 1;
     }
 
     public void addPoint(float x, float y) {
-        mCurrent.noPoints++;
+        int len = mCurrent.noPoints * 2;
         mCurrent.mPath.lineTo(x, y);
+        if ((len+2) > mCurrent.mPoints.length) {
+            mCurrent.mPoints = Arrays.copyOf(mCurrent.mPoints, mCurrent.mPoints.length * 2);
+        }
+        mCurrent.mPoints[len] = x;
+        mCurrent.mPoints[len + 1] = y;
+        mCurrent.noPoints++;
     }
 
     public void endSection(float x, float y) {
-        mCurrent.mPath.lineTo(x, y);
-        mCurrent.noPoints++;
+        addPoint(x, y);
         mDrawing.add(mCurrent);
         mCurrent = null;
     }
@@ -243,5 +256,88 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         mCurrent = null;
         mDrawing.clear();
     }
+    private static final String SERIAL_COLOR = "color";
+    private static final String SERIAL_RADIUS = "radius";
+    private static final String SERIAL_TYPE = "type";
+    private static final String SERIAL_POINTS_COUNT = "point_count";
+    private static final String SERIAL_POINTS = "points";
 
+    @Override
+    public void serializeRepresentation(JsonWriter writer) throws IOException {
+        writer.beginObject();
+        int len = mDrawing.size();
+        int count = 0;
+        float[] mPosition = new float[2];
+        float[] mTan = new float[2];
+
+        PathMeasure mPathMeasure = new PathMeasure();
+        for (int i = 0; i < len; i++) {
+            writer.name("path" + i);
+            writer.beginObject();
+            StrokeData mark = mDrawing.get(i);
+            writer.name(SERIAL_COLOR).value(mark.mColor);
+            writer.name(SERIAL_RADIUS).value(mark.mRadius);
+            writer.name(SERIAL_TYPE).value(mark.mType);
+            writer.name(SERIAL_POINTS_COUNT).value(mark.noPoints);
+            writer.name(SERIAL_POINTS);
+
+            writer.beginArray();
+            int npoints = mark.noPoints * 2;
+            for (int j = 0; j < npoints; j++) {
+                writer.value(mark.mPoints[j]);
+            }
+            writer.endArray();
+            writer.endObject();
+        }
+        writer.endObject();
+    }
+
+    @Override
+    public void deSerializeRepresentation(JsonReader sreader) throws IOException {
+        sreader.beginObject();
+        Vector<StrokeData> strokes = new Vector<StrokeData>();
+
+        while (sreader.hasNext()) {
+            sreader.nextName();
+            sreader.beginObject();
+            StrokeData stroke = new StrokeData();
+
+            while (sreader.hasNext()) {
+                String name = sreader.nextName();
+                if (name.equals(SERIAL_COLOR)) {
+                    stroke.mColor = sreader.nextInt();
+                } else if (name.equals(SERIAL_RADIUS)) {
+                    stroke.mRadius = (float) sreader.nextDouble();
+                } else if (name.equals(SERIAL_TYPE)) {
+                    stroke.mType = (byte) sreader.nextInt();
+                } else if (name.equals(SERIAL_POINTS_COUNT)) {
+                    stroke.noPoints = sreader.nextInt();
+                } else if (name.equals(SERIAL_POINTS)) {
+
+                    int count = 0;
+                    sreader.beginArray();
+                    while (sreader.hasNext()) {
+                        if ((count + 1) > stroke.mPoints.length) {
+                            stroke.mPoints = Arrays.copyOf(stroke.mPoints, count * 2);
+                        }
+                        stroke.mPoints[count++] = (float) sreader.nextDouble();
+                    }
+                    stroke.mPath = new Path();
+                    stroke.mPath.moveTo(stroke.mPoints[0], stroke.mPoints[1]);
+                    for (int i = 0; i < count; i += 2) {
+                        stroke.mPath.lineTo(stroke.mPoints[i], stroke.mPoints[i + 1]);
+                    }
+                    sreader.endArray();
+                    strokes.add(stroke);
+                } else {
+                    sreader.skipValue();
+                }
+            }
+            sreader.endObject();
+        }
+
+        mDrawing = strokes;
+
+        sreader.endObject();
+    }
 }
