@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.EditorRotate;
+import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 
 import java.io.IOException;
 
@@ -63,12 +64,12 @@ public class FilterRotateRepresentation extends FilterRepresentation {
     public FilterRotateRepresentation(Rotation rotation) {
         super(FilterRotateRepresentation.class.getSimpleName());
         setSerializationName(SERIALIZATION_NAME);
-        setShowParameterValue(true);
+        setShowParameterValue(false);
         setFilterClass(FilterRotateRepresentation.class);
         setFilterType(FilterRepresentation.TYPE_GEOMETRY);
         setSupportsPartialRendering(true);
         setTextId(R.string.rotate);
-        setEditorId(EditorRotate.ID);
+        setEditorId(ImageOnlyEditor.ID);
         setRotation(rotation);
     }
 

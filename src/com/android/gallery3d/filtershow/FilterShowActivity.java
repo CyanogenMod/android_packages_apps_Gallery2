@@ -80,7 +80,9 @@ import com.android.gallery3d.filtershow.editors.EditorRotate;
 import com.android.gallery3d.filtershow.editors.EditorStraighten;
 import com.android.gallery3d.filtershow.editors.EditorTinyPlanet;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
@@ -570,7 +572,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (filterRepresentation == null) {
             return;
         }
-        if (MasterImage.getImage().getCurrentFilterRepresentation() == filterRepresentation) {
+        if (!(filterRepresentation instanceof FilterRotateRepresentation)
+            && !(filterRepresentation instanceof FilterMirrorRepresentation)
+            && MasterImage.getImage().getCurrentFilterRepresentation() == filterRepresentation) {
             return;
         }
         ImagePreset oldPreset = MasterImage.getImage().getPreset();
@@ -579,6 +583,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (representation == null) {
             copy.addFilter(filterRepresentation);
         } else if (filterRepresentation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
+            representation.useParametersFrom(filterRepresentation);
             filterRepresentation = representation;
         } else {
             if (filterRepresentation.allowsSingleInstanceOnly()) {
@@ -598,6 +603,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             return;
         }
 
+        if (representation instanceof FilterRotateRepresentation) {
+            FilterRotateRepresentation r = (FilterRotateRepresentation) representation;
+            r.rotateCW();
+        }
+        if (representation instanceof FilterMirrorRepresentation) {
+            FilterMirrorRepresentation r = (FilterMirrorRepresentation) representation;
+            r.cycle();
+        }
         useFilterRepresentation(representation);
 
         // show representation

@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.EditorMirror;
+import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 
 import java.io.IOException;
 
@@ -63,12 +64,12 @@ public class FilterMirrorRepresentation extends FilterRepresentation {
     public FilterMirrorRepresentation(Mirror mirror) {
         super(FilterMirrorRepresentation.class.getSimpleName());
         setSerializationName(SERIALIZATION_NAME);
-        setShowParameterValue(true);
+        setShowParameterValue(false);
         setFilterClass(FilterMirrorRepresentation.class);
         setFilterType(FilterRepresentation.TYPE_GEOMETRY);
         setSupportsPartialRendering(true);
         setTextId(R.string.mirror);
-        setEditorId(EditorMirror.ID);
+        setEditorId(ImageOnlyEditor.ID);
         setMirror(mirror);
     }
 

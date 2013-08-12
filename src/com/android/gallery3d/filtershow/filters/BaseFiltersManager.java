@@ -242,13 +242,6 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
 
     public void addTools(Context context) {
 
-        int[] editorsId = {
-                EditorCrop.ID,
-                EditorStraighten.ID,
-                EditorRotate.ID,
-                EditorMirror.ID
-        };
-
         int[] textId = {
                 R.string.crop,
                 R.string.straighten,
@@ -270,10 +263,8 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
                 new FilterMirrorRepresentation()
         };
 
-        for (int i = 0; i < editorsId.length; i++) {
-            int editorId = editorsId[i];
+        for (int i = 0; i < textId.length; i++) {
             FilterRepresentation geometry = geometryFilters[i];
-            geometry.setEditorId(editorId);
             geometry.setTextId(textId[i]);
             geometry.setOverlayId(overlayId[i]);
             geometry.setOverlayOnly(true);
