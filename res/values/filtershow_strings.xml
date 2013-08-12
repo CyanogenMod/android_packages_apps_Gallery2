@@ -168,7 +168,7 @@
     <string name="edge">Edges</string>
     <!--  Label for an image effect that replicates the "pop art" style of segmenting
           images into solid colors, as popularized by Andy Warhol [CHAR LIMIT=10] -->
-    <string name="kmeans">Warhol</string>
+    <string name="kmeans">Posterize</string>
     <!--  Label for the image downsampling effect (makes image smaller) [CHAR LIMIT=15] -->
     <string name="downsample">Downsample</string>
     <!--  Label for the image graduated filter effect  [CHAR LIMIT=15] -->
