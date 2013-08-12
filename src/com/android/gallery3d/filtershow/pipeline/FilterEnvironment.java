@@ -17,15 +17,11 @@
 package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.support.v8.renderscript.Allocation;
 
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
-import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation.Rotation;
 import com.android.gallery3d.filtershow.filters.FiltersManagerInterface;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
 
@@ -82,7 +78,9 @@ public class FilterEnvironment {
         if (ref != null) {
             bitmap = ref.get();
         }
-        if (bitmap == null) {
+        if (bitmap == null
+                || bitmap.getWidth() != w
+                || bitmap.getHeight() != h) {
             bitmap = Bitmap.createBitmap(
                     w, h, Bitmap.Config.ARGB_8888);
         }
@@ -97,7 +95,7 @@ public class FilterEnvironment {
     }
 
     private Long calcKey(long w, long h) {
-        return (w << 32) | (h << 32);
+        return (w << 32) | h;
     }
 
     public void setImagePreset(ImagePreset imagePreset) {

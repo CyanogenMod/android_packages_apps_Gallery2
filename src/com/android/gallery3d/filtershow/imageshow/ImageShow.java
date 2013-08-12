@@ -256,7 +256,7 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     public void resetImageCaches(ImageShow caller) {
-        MasterImage.getImage().resetGeometryImages();
+        MasterImage.getImage().invalidatePreview();
     }
 
     public Bitmap getFiltersOnlyImage() {

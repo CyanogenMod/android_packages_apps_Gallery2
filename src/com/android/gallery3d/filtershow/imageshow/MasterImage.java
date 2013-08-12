@@ -332,27 +332,23 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public void resetGeometryImages() {
-        if (mGeometryOnlyPreset == null) {
-            ImagePreset newPreset = new ImagePreset(mPreset);
-            newPreset.setDoApplyFilters(false);
-            newPreset.setDoApplyGeometry(true);
-            if (mGeometryOnlyPreset == null
-                    || !newPreset.same(mGeometryOnlyPreset)) {
-                mGeometryOnlyPreset = newPreset;
-                RenderingRequest.post(mActivity, getOriginalBitmapLarge(),
-                        mGeometryOnlyPreset, RenderingRequest.GEOMETRY_RENDERING, this);
-            }
+        ImagePreset newPresetGeometryOnly = new ImagePreset(mPreset);
+        newPresetGeometryOnly.setDoApplyFilters(false);
+        newPresetGeometryOnly.setDoApplyGeometry(true);
+        if (mGeometryOnlyPreset == null
+                || !newPresetGeometryOnly.same(mGeometryOnlyPreset)) {
+            mGeometryOnlyPreset = newPresetGeometryOnly;
+            RenderingRequest.post(mActivity, getOriginalBitmapLarge(),
+                    mGeometryOnlyPreset, RenderingRequest.GEOMETRY_RENDERING, this);
         }
-        if (mFiltersOnlyPreset == null) {
-            ImagePreset newPreset = new ImagePreset(mPreset);
-            newPreset.setDoApplyFilters(true);
-            newPreset.setDoApplyGeometry(false);
-            if (mFiltersOnlyPreset == null
-                    || !newPreset.same(mFiltersOnlyPreset)) {
-                mFiltersOnlyPreset = newPreset;
-                RenderingRequest.post(mActivity, MasterImage.getImage().getOriginalBitmapLarge(),
-                        mFiltersOnlyPreset, RenderingRequest.FILTERS_RENDERING, this);
-            }
+        ImagePreset newPresetFiltersOnly = new ImagePreset(mPreset);
+        newPresetFiltersOnly.setDoApplyFilters(true);
+        newPresetFiltersOnly.setDoApplyGeometry(false);
+        if (mFiltersOnlyPreset == null
+                || !newPresetFiltersOnly.same(mFiltersOnlyPreset)) {
+            mFiltersOnlyPreset = newPresetFiltersOnly;
+            RenderingRequest.post(mActivity, MasterImage.getImage().getOriginalBitmapLarge(),
+                    mFiltersOnlyPreset, RenderingRequest.FILTERS_RENDERING, this);
         }
     }
 

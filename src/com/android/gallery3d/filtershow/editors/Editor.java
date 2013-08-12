@@ -242,10 +242,9 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         if (mChangesGeometry) {
             // Regenerate both the filtered and the geometry-only bitmaps
             MasterImage.getImage().resetGeometryImages();
-        } else {
-            // Regenerate only the filtered bitmap.
-            MasterImage.getImage().invalidateFiltersOnly();
         }
+        // Regenerate the filtered bitmap.
+        MasterImage.getImage().invalidateFiltersOnly();
         preset.fillImageStateAdapter(MasterImage.getImage().getState());
     }
 

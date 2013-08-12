@@ -116,7 +116,7 @@ public class CacheProcessing {
                           FilterEnvironment environment) {
 
         if (filters.size() == 0) {
-            return originalBitmap;
+            return environment.getBitmapCopy(originalBitmap);
         }
 
         if (DEBUG) {
@@ -172,12 +172,22 @@ public class CacheProcessing {
         for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
             if (i == -1 || cacheBitmap == null) {
                 cacheBitmap = environment.getBitmapCopy(originalBitmap);
+                if (DEBUG) {
+                    Log.v(LOGTAG, "i: " + i + " cacheBitmap: " + cacheBitmap + " w: "
+                            + cacheBitmap.getWidth() + " h: " + cacheBitmap.getHeight()
+                            + " got from original Bitmap: " + originalBitmap + " w: "
+                            + originalBitmap.getWidth() + " h: " + originalBitmap.getHeight());
+                }
                 if (i == -1) {
                     continue;
                 }
             }
             CacheStep step = mSteps.elementAt(i);
             if (step.cache == null) {
+                if (DEBUG) {
+                    Log.v(LOGTAG, "i: " + i + " get new copy for cacheBitmap "
+                            + cacheBitmap + " apply...");
+                }
                 cacheBitmap = environment.getBitmapCopy(cacheBitmap);
                 cacheBitmap = step.apply(environment, cacheBitmap);
                 environment.cache(step.cache);
