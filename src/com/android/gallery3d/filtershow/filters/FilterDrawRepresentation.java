@@ -76,6 +76,10 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         mCurrentParam = mAllParam[mParamMode];
     }
 
+    public int getParamMode() {
+        return mParamMode;
+    }
+
     public Parameter getCurrentParam() {
         return  mAllParam[mParamMode];
     }
@@ -223,14 +227,18 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         return Color.HSVToColor(op, hsv);
     }
 
-    public void startNewSection(float x, float y) {
+    public void fillStrokeParameters(StrokeData sd){
         byte type = (byte) mParamStyle.getSelected();
         int color = computeCurrentColor();
         float size = mParamSize.getValue();
+        sd.mColor = color;
+        sd.mRadius = size;
+        sd.mType = type;
+    }
+    
+    public void startNewSection(float x, float y) {
         mCurrent = new StrokeData();
-        mCurrent.mColor = color;
-        mCurrent.mRadius = size;
-        mCurrent.mType = type;
+        fillStrokeParameters(mCurrent);
         mCurrent.mPath = new Path();
         mCurrent.mPath.moveTo(x, y);
         mCurrent.mPoints[0] = x;

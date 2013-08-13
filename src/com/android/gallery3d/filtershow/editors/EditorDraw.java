@@ -16,24 +16,18 @@
 
 package com.android.gallery3d.filtershow.editors;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.SeekBar;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.FilterShowActivity;
-import com.android.gallery3d.filtershow.colorpicker.ColorGridDialog;
-import com.android.gallery3d.filtershow.colorpicker.RGBListener;
 import com.android.gallery3d.filtershow.controller.BitmapCaller;
 import com.android.gallery3d.filtershow.controller.FilterView;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
@@ -73,6 +67,8 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         }
         String paramString;
         String val = rep.getValueString();
+
+        mImageDraw.displayDrawLook();
         return mParameterString + val;
     }
 
@@ -189,4 +185,9 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), brushIcons[index]);
         caller.available(bitmap);
     }
+
+    public int getBrushIcon(int type){
+       return  brushIcons[type];
+    }
+
 }
