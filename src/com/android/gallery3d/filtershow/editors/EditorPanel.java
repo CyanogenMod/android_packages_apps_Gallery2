@@ -120,10 +120,21 @@ public class EditorPanel extends Fragment {
     }
 
     public void showImageStatePanel(boolean show) {
-        if (mMainView.findViewById(R.id.state_panel_container) == null) {
-            return;
+        View container = mMainView.findViewById(R.id.state_panel_container);
+        FragmentTransaction transaction = null;
+        boolean child = false;
+        if (container == null) {
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            container = activity.getMainStatePanelContainer(R.id.state_panel_container);
+        } else {
+            transaction = getChildFragmentManager().beginTransaction();
+            child = true;
         }
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (container == null) {
+            return;
+        } else {
+            transaction = getFragmentManager().beginTransaction();
+        }
         Fragment panel = getActivity().getSupportFragmentManager().findFragmentByTag(
                 MainPanel.FRAGMENT_TAG);
         if (panel == null || panel instanceof MainPanel) {
@@ -134,6 +145,9 @@ public class EditorPanel extends Fragment {
             transaction.replace(R.id.state_panel_container, statePanel, StatePanel.FRAGMENT_TAG);
         } else {
             Fragment statePanel = getChildFragmentManager().findFragmentByTag(StatePanel.FRAGMENT_TAG);
+            if (child) {
+                statePanel = getFragmentManager().findFragmentByTag(StatePanel.FRAGMENT_TAG);
+            }
             if (statePanel != null) {
                 transaction.remove(statePanel);
             }
