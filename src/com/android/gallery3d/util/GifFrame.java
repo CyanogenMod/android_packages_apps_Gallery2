@@ -3,12 +3,15 @@ package com.android.gallery3d.util;
 import android.graphics.Bitmap;
 
 public class GifFrame {
-    public GifFrame(Bitmap im, int del) {
-        image = im;
-        delay = del;
+
+    public Bitmap    mImage;
+    public int       mDelayInMs;  //in milliseconds
+    public int       mDispose;
+    public GifFrame  mNextFrame = null;
+
+    public GifFrame(Bitmap bitmap, int delay, int dispose) {
+        mImage = bitmap;
+        mDelayInMs = delay;
+        mDispose = dispose;
     }
-	
-    public Bitmap image;
-    public int delay;
-    public GifFrame nextFrame = null;
 }

@@ -1,46 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-	<LinearLayout 
-	    android:id="@+id/image_absoluteLayout"
-	    android:layout_height="match_parent" 
-		android:layout_width="match_parent">
-		<ImageView android:id="@+id/image_dispaly_area" 
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content" 
-			android:clickable="true">
-		</ImageView>
-	</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<!--	
-	<ImageView android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" 
-		android:id="@+id/arrow_left" 
-		android:layout_centerVertical="true" 
-		android:clickable="true" 
-		android:src="@drawable/arrow_left">
-	</ImageView>
-	
-	<ImageView android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" 
-		android:id="@+id/arrow_right" 
-		android:layout_alignParentRight="true" 
-		android:layout_centerVertical="true" 
-		android:clickable="true" 
-		android:src="@drawable/arrow_right">
-	</ImageView>
-	
-	<TextView android:id="@+id/tv_count" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content" 
-		android:layout_centerHorizontal="true" 
-		android:textSize="18sp"
-		android:textColor="#ffffffff"
-		android:layout_marginTop="5dip"
-		android:background="@drawable/text_frame">
-	</TextView>
--->	
+    <LinearLayout
+            android:id="@+id/image_absoluteLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+        <ImageView android:id="@+id/image_display_area"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:clickable="true">
+        </ImageView>
+    </LinearLayout>
+
 </RelativeLayout>
-

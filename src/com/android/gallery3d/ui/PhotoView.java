@@ -93,6 +93,9 @@ public class PhotoView extends GLView {
         // Returns true if the item is a Video.
         public boolean isVideo(int offset);
 
+        // Returns true if the item is a Gif.
+        public boolean isGif(int offset);
+
         // Returns true if the item can be deleted.
         public boolean isDeletable(int offset);
 
@@ -594,7 +597,6 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -607,7 +609,6 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(0);
             mIsPanorama = mModel.isPanorama(0);
             mIsStaticCamera = mModel.isStaticCamera(0);
-            mIsVideo = mModel.isVideo(0);
             mIsDeletable = mModel.isDeletable(0);
             mLoadingState = mModel.getLoadingState(0);
             setScreenNail(mModel.getScreenNail(0));
@@ -732,8 +733,11 @@ public class PhotoView extends GLView {
             // Draw the play video icon and the message.
             canvas.translate((int) (cx + 0.5f), (int) (cy + 0.5f));
             int s = (int) (scale * Math.min(r.width(), r.height()) + 0.5f);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            //Full pic locates at index 0 of the array in PhotoDataAdapter
+            if (mModel.isVideo(0) || mModel.isGif(0)) {
+                drawVideoPlayIcon(canvas, s);
+            }
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
 
@@ -775,7 +779,6 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -789,7 +792,6 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(mIndex);
             mIsPanorama = mModel.isPanorama(mIndex);
             mIsStaticCamera = mModel.isStaticCamera(mIndex);
-            mIsVideo = mModel.isVideo(mIndex);
             mIsDeletable = mModel.isDeletable(mIndex);
             mLoadingState = mModel.getLoadingState(mIndex);
             setScreenNail(mModel.getScreenNail(mIndex));
@@ -853,8 +855,10 @@ public class PhotoView extends GLView {
                 invalidate();
             }
             int s = Math.min(drawW, drawH);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            if (mModel.isVideo(mIndex) || mModel.isGif(mIndex)) {
+                drawVideoPlayIcon(canvas, s);
+            }
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
             canvas.restore();
@@ -1857,4 +1861,5 @@ public class PhotoView extends GLView {
         }
         return effect;
     }
+
 }
