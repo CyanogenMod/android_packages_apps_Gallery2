@@ -257,11 +257,19 @@ public class MainPanel extends Fragment {
     }
 
     public void showImageStatePanel(boolean show) {
-        if (mMainView.findViewById(R.id.state_panel_container) == null) {
-            return;
+        View container = mMainView.findViewById(R.id.state_panel_container);
+        FragmentTransaction transaction = null;
+        if (container == null) {
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            container = activity.getMainStatePanelContainer(R.id.state_panel_container);
+        } else {
+            transaction = getChildFragmentManager().beginTransaction();
         }
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        final View container = mMainView.findViewById(R.id.state_panel_container);
+        if (container == null) {
+            return;
+        } else {
+            transaction = getFragmentManager().beginTransaction();
+        }
         int currentPanel = mCurrentSelected;
         if (show) {
             container.setVisibility(View.VISIBLE);
