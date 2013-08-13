@@ -51,9 +51,16 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 220);
     private BasicParameterInt mParamSaturation = new ParameterSaturation(PARAM_SATURATION, 200);
     private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 200);
-    private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 3);
+    private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 4);
     int mParamMode;
     Parameter mCurrentParam = mParamSize;
+    private static final String SERIAL_COLOR = "color";
+    private static final String SERIAL_RADIUS = "radius";
+    private static final String SERIAL_TYPE = "type";
+    private static final String SERIAL_POINTS_COUNT = "point_count";
+    private static final String SERIAL_POINTS = "points";
+    private static final String SERIAL_PATH =  "path";
+
 
     private Parameter[] mAllParam = {
             mParamSize,
@@ -83,7 +90,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         public float mRadius;
         public int mColor;
         public int noPoints = 0;
-        public float []mPoints = new float [20];
+        public float[] mPoints = new float[20];
 
         @Override
         public String toString() {
@@ -256,11 +263,6 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         mCurrent = null;
         mDrawing.clear();
     }
-    private static final String SERIAL_COLOR = "color";
-    private static final String SERIAL_RADIUS = "radius";
-    private static final String SERIAL_TYPE = "type";
-    private static final String SERIAL_POINTS_COUNT = "point_count";
-    private static final String SERIAL_POINTS = "points";
 
     @Override
     public void serializeRepresentation(JsonWriter writer) throws IOException {
@@ -272,7 +274,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
 
         PathMeasure mPathMeasure = new PathMeasure();
         for (int i = 0; i < len; i++) {
-            writer.name("path" + i);
+            writer.name(SERIAL_PATH + i);
             writer.beginObject();
             StrokeData mark = mDrawing.get(i);
             writer.name(SERIAL_COLOR).value(mark.mColor);
