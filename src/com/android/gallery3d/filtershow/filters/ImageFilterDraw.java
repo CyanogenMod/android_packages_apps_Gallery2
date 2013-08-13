@@ -54,6 +54,7 @@ public class ImageFilterDraw extends ImageFilter {
 
     DrawStyle[] mDrawingsTypes = new DrawStyle[] {
             new SimpleDraw(),
+            new Brush(R.drawable.brush_gauss),
             new Brush(R.drawable.brush_marker),
             new Brush(R.drawable.brush_spatter)
     };
