@@ -637,6 +637,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mCategoryBordersAdapter.reflectImagePreset(preset);
     }
 
+    public View getMainStatePanelContainer(int id) {
+        return findViewById(id);
+    }
+
     private class LoadHighresBitmapTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {

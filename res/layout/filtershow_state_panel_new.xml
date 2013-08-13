@@ -29,7 +29,7 @@
                 android:layout_height="48dip"
                 custom:elemEndSize="128dip"
                 custom:elemSize="128dip"
-                android:layout_margin="8dip"
+                android:layout_margin="0dip"
                 android:animateLayoutChanges="true" />
 
     </HorizontalScrollView>
