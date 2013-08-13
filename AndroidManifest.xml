@@ -293,6 +293,16 @@
                 android:theme="@style/Theme.Gallery"
                 android:configChanges="orientation|keyboardHidden|screenSize" />
 
+        <activity android:name="com.android.gallery3d.util.ViewGifImage"
+                android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+                android:configChanges="orientation|keyboardHidden|screenSize|keyboard|navigation">
+            <intent-filter>
+                <action android:name="com.android.gallery3d.VIEW_GIF" />
+                <data android:mimeType="image/gif" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <provider android:name="com.android.gallery3d.provider.GalleryProvider"
                 android:syncable="false"
                 android:grantUriPermissions="true"

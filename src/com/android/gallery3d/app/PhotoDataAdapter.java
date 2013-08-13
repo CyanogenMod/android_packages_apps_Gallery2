@@ -512,6 +512,13 @@ public class PhotoDataAdapter implements PhotoPage.Model {
     }
 
     @Override
+    public boolean isGif(int offset) {
+        MediaItem item = getItem(mCurrentIndex + offset);
+        return (item != null) &&
+                MediaItem.MIME_TYPE_GIF.equalsIgnoreCase(item.getMimeType());
+    }
+
+    @Override
     public boolean isDeletable(int offset) {
         MediaItem item = getItem(mCurrentIndex + offset);
         return (item == null)
