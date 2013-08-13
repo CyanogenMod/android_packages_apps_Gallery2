@@ -58,6 +58,10 @@ public class Action implements RenderingRequestCaller {
         this(context, representation, CROP_VIEW);
     }
 
+    public int getType() {
+        return mType;
+    }
+
     public FilterRepresentation getRepresentation() {
         return mRepresentation;
     }

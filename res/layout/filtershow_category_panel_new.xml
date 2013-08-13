@@ -39,29 +39,10 @@
 
     </HorizontalScrollView>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageButton
-                android:id="@+id/addButton"
-                android:layout_width="@dimen/category_panel_height"
-                android:layout_height="@dimen/category_panel_height"
-                android:src="@drawable/filtershow_add"
-                style="?android:attr/borderlessButtonStyle"
-                android:scaleType="fitCenter"
-                android:padding="16dp"
-                android:layout_marginBottom="6dp"
-                android:layout_gravity="center"/>
-
-        <TextView
-                android:id="@+id/addButtonText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_gravity="bottom|center"/>
-
-    </FrameLayout>
+    <com.android.gallery3d.filtershow.category.IconView
+            android:id="@+id/addButton"
+            android:layout_width="@dimen/category_panel_height"
+            android:layout_height="@dimen/category_panel_height"
+            android:src="@drawable/filtershow_add"/>
 
 </LinearLayout>
