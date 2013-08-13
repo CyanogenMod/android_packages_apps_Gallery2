@@ -13,10 +13,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     external/jpeg
 
 LOCAL_SHARED_LIBRARIES := libjpeg
-ifeq (,$(TARGET_BUILD_APPS))
-   # platform build
-   LOCAL_SHARED_LIBRARIES := libcutils
-endif
 
 LOCAL_LDFLAGS        := -llog
 LOCAL_SDK_VERSION   := 9
