@@ -37,6 +37,7 @@ public abstract class MediaItem extends MediaObject {
     public static final int IMAGE_ERROR = -1;
 
     public static final String MIME_TYPE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_GIF = "image/gif";
 
     private static final int BYTESBUFFE_POOL_SIZE = 4;
     private static final int BYTESBUFFER_SIZE = 200 * 1024;
