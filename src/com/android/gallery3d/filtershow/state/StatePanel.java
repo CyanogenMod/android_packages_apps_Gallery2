@@ -44,6 +44,7 @@ public class StatePanel extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mMainView = (LinearLayout) inflater.inflate(R.layout.filtershow_state_panel_new, null);
+
         View panel = mMainView.findViewById(R.id.listStates);
         track = (StatePanelTrack) panel;
         track.setAdapter(MasterImage.getImage().getState());
