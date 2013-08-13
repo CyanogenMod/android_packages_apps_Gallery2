@@ -594,7 +594,7 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
+        private boolean mIsVideoOrGif;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -607,7 +607,14 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(0);
             mIsPanorama = mModel.isPanorama(0);
             mIsStaticCamera = mModel.isStaticCamera(0);
-            mIsVideo = mModel.isVideo(0);
+            boolean isGif = false;
+            try {
+                isGif = MediaItem.MIME_TYPE_GIF.equalsIgnoreCase(
+                        mModel.getMediaItem(0).getMimeType());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mIsVideoOrGif = mModel.isVideo(0) || isGif;
             mIsDeletable = mModel.isDeletable(0);
             mLoadingState = mModel.getLoadingState(0);
             setScreenNail(mModel.getScreenNail(0));
@@ -732,8 +739,10 @@ public class PhotoView extends GLView {
             // Draw the play video icon and the message.
             canvas.translate((int) (cx + 0.5f), (int) (cy + 0.5f));
             int s = (int) (scale * Math.min(r.width(), r.height()) + 0.5f);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            if (mIsVideoOrGif) {
+                drawVideoPlayIcon(canvas, s);
+            }
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
 
@@ -775,7 +784,7 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
+        private boolean mIsVideoOrGif;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -789,7 +798,14 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(mIndex);
             mIsPanorama = mModel.isPanorama(mIndex);
             mIsStaticCamera = mModel.isStaticCamera(mIndex);
-            mIsVideo = mModel.isVideo(mIndex);
+            boolean isGif = false;
+            try {
+                isGif = MediaItem.MIME_TYPE_GIF.equalsIgnoreCase(
+                        mModel.getMediaItem(mIndex).getMimeType());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mIsVideoOrGif = mModel.isVideo(mIndex) || isGif;
             mIsDeletable = mModel.isDeletable(mIndex);
             mLoadingState = mModel.getLoadingState(mIndex);
             setScreenNail(mModel.getScreenNail(mIndex));
@@ -853,8 +869,10 @@ public class PhotoView extends GLView {
                 invalidate();
             }
             int s = Math.min(drawW, drawH);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            if (mIsVideoOrGif) {
+                drawVideoPlayIcon(canvas, s);
+            }
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
             canvas.restore();

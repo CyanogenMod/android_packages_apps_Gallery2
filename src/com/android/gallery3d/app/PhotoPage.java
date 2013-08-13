@@ -72,6 +72,7 @@ import com.android.gallery3d.ui.SelectionManager;
 import com.android.gallery3d.ui.SynchronizedHandler;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.UsageStatistics;
+import com.android.gallery3d.util.ViewGifImage;
 
 public abstract class PhotoPage extends ActivityState implements
         PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
@@ -1137,6 +1138,11 @@ public abstract class PhotoPage extends ActivityState implements
             return;
         }
 
+        if (item.getMimeType().equals(MediaItem.MIME_TYPE_GIF)) {
+            viewAnimateGif((Activity) mActivity, item.getContentUri());
+            return;
+        }
+
         int supported = item.getSupportedOperations();
         boolean playVideo = ((supported & MediaItem.SUPPORT_PLAY) != 0);
         boolean unlock = ((supported & MediaItem.SUPPORT_UNLOCK) != 0);
@@ -1528,6 +1534,12 @@ public abstract class PhotoPage extends ActivityState implements
         } else {
             return "Unknown:" + item.getMediaType();
         }
+    }
+
+    private static void viewAnimateGif(Activity activity, Uri uri) {
+        Intent intent = new Intent("com.android.gallery3d.VIEW_GIF", uri);
+        intent.setClass(activity, ViewGifImage.class);
+        activity.startActivity(intent);
     }
 
 }
