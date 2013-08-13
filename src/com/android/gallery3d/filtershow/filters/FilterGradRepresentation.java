@@ -68,7 +68,7 @@ public class FilterGradRepresentation extends FilterRepresentation
         private int yPos1 = 100;
         private int xPos2 = -1;
         private int yPos2 = 100;
-        private int brightness = 40;
+        private int brightness = -40;
         private int contrast = 0;
         private int saturation = 0;
 
