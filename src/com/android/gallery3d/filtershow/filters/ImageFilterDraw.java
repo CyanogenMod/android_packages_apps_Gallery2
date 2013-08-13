@@ -110,6 +110,7 @@ public class ImageFilterDraw extends ImageFilter {
             Paint paint = new Paint();
 
             paint.setStyle(Style.STROKE);
+            paint.setAntiAlias(true);
             paint.setColor(sd.mColor);
             paint.setStrokeWidth(toScrMatrix.mapRadius(sd.mRadius));
 
