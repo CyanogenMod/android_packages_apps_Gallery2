@@ -37,8 +37,7 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
 
     private int mCurrentAdapter = MainPanel.LOOKS;
     private CategoryAdapter mAdapter;
-    private ImageButton mAddButton;
-    private TextView mAddButtonText;
+    private IconView mAddButton;
 
     public void setAdapter(int value) {
         mCurrentAdapter = value;
@@ -114,8 +113,7 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
             mAdapter.setContainer(panel);
         }
 
-        mAddButton = (ImageButton) main.findViewById(R.id.addButton);
-        mAddButtonText = (TextView) main.findViewById(R.id.addButtonText);
+        mAddButton = (IconView) main.findViewById(R.id.addButton);
         if (mAddButton != null) {
             mAddButton.setOnClickListener(this);
             updateAddButtonVisibility();
@@ -141,7 +139,7 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
         if (activity.isShowingImageStatePanel() && mAdapter.showAddButton()) {
             mAddButton.setVisibility(View.VISIBLE);
             if (mAdapter != null) {
-                mAddButtonText.setText(mAdapter.getAddButtonText());
+                mAddButton.setText(mAdapter.getAddButtonText());
             }
         } else {
             mAddButton.setVisibility(View.GONE);
