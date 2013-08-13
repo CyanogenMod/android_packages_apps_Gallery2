@@ -46,6 +46,6 @@
     <color name="gradcontrol_point_shadow_end">#00000000</color>
     <color name="gradcontrol_line_color">#FFFFFF</color>
     <color name="gradcontrol_line_shadow">#000000</color>
-
+    <color name="draw_rect_border">#888888</color>
 
 </resources>
