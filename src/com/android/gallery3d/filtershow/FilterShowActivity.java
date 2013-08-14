@@ -428,6 +428,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         updateVersions();
     }
 
+    public void removeLook(Action action) {
+        FilterUserPresetRepresentation rep = (FilterUserPresetRepresentation) action.getRepresentation();
+        if (rep == null) {
+            return;
+        }
+        mUserPresetsManager.delete(rep.getId());
+    }
+
     private void fillEffects() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getEffects();
@@ -1002,7 +1010,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         for (int i = 0; i < presets.size(); i++) {
             FilterUserPresetRepresentation representation = presets.get(i);
             mCategoryLooksAdapter.add(
-                    new Action(this, representation, Action.FULL_VIEW));
+                    new Action(this, representation, Action.FULL_VIEW, true));
             mUserPresetsAdapter.add(new Action(this, representation, Action.FULL_VIEW));
         }
         if (presets.size() > 0) {
@@ -1011,8 +1019,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mCategoryLooksAdapter.notifyDataSetInvalidated();
     }
 
-    public void saveCurrentImagePreset() {
-        mUserPresetsManager.save(MasterImage.getImage().getPreset());
+    public void saveCurrentImagePreset(String name) {
+        mUserPresetsManager.save(MasterImage.getImage().getPreset(), name);
     }
 
     private void deletePreset(int id) {
