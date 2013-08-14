@@ -159,12 +159,17 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
 
     @Override
     public void remove(Action action) {
-        if (mCategory != MainPanel.VERSIONS) {
+        if (!(mCategory == MainPanel.VERSIONS
+                || mCategory == MainPanel.LOOKS)) {
             return;
         }
         super.remove(action);
         FilterShowActivity activity = (FilterShowActivity) getContext();
-        activity.removeVersion(action);
+        if (mCategory == MainPanel.LOOKS) {
+            activity.removeLook(action);
+        } else if (mCategory == MainPanel.VERSIONS) {
+            activity.removeVersion(action);
+        }
     }
 
     public void setOrientation(int orientation) {
