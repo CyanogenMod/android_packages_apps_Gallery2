@@ -196,6 +196,8 @@ public class MovieActivity extends Activity {
         mMovieHooker.setParameter(null, mPlayer.getMoviePlayerExt());
         mMovieHooker.setParameter(null, mMovieItem);
         mMovieHooker.setParameter(null, mPlayer.getVideoSurface());
+        mMovieHooker.onCreate(savedInstanceState);
+
         // Determine available/supported effects
         final Descriptor[] effects = AudioEffect.queryEffects();
         for (final Descriptor effect : effects) {
@@ -463,6 +465,7 @@ public class MovieActivity extends Activity {
                 .requestAudioFocus(null, AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         super.onStart();
+        mMovieHooker.onStart();
     }
 
     @Override
@@ -470,6 +473,7 @@ public class MovieActivity extends Activity {
         ((AudioManager) getSystemService(AUDIO_SERVICE))
                 .abandonAudioFocus(null);
         super.onStop();
+        mMovieHooker.onStop();
     }
 
     @Override
@@ -481,6 +485,7 @@ public class MovieActivity extends Activity {
             // Do nothing
         }
         super.onPause();
+        mMovieHooker.onPause();
     }
 
     @Override
@@ -494,6 +499,7 @@ public class MovieActivity extends Activity {
             registerReceiver(mReceiver, intentFilter);
         }
         super.onResume();
+        mMovieHooker.onResume();
     }
 
     @Override
@@ -514,6 +520,7 @@ public class MovieActivity extends Activity {
             mVirtualizerEffect.release();
         }
         super.onDestroy();
+        mMovieHooker.onDestroy();
     }
 
     @Override

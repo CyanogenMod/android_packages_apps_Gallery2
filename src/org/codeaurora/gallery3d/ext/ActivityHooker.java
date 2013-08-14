@@ -52,6 +52,30 @@ public class ActivityHooker implements IActivityHooker {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onStart() {
+    }
+
+    @Override
+    public void onResume() {
+    }
+
+    @Override
+    public void onPause() {
+    }
+
+    @Override
+    public void onStop() {
+    }
+
+    @Override
+    public void onDestroy() {
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
