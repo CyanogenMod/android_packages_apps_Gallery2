@@ -49,7 +49,7 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
         loadAdapter(mCurrentAdapter);
     }
 
-    private void loadAdapter(int adapter) {
+    public void loadAdapter(int adapter) {
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         switch (adapter) {
             case MainPanel.LOOKS: {

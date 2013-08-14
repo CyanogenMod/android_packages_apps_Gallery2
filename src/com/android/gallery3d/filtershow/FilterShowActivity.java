@@ -429,11 +429,13 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void removeLook(Action action) {
-        FilterUserPresetRepresentation rep = (FilterUserPresetRepresentation) action.getRepresentation();
+        FilterUserPresetRepresentation rep =
+                (FilterUserPresetRepresentation) action.getRepresentation();
         if (rep == null) {
             return;
         }
         mUserPresetsManager.delete(rep.getId());
+        updateUserPresetsFromManager();
     }
 
     private void fillEffects() {
@@ -993,6 +995,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public void loadUserPresets() {
         mUserPresetsManager.load();
+        updateUserPresetsFromManager();
     }
 
     public void updateUserPresetsFromManager() {
@@ -1016,6 +1019,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (presets.size() > 0) {
             mCategoryLooksAdapter.add(new Action(this, Action.ADD_ACTION));
         }
+        mCategoryLooksAdapter.notifyDataSetChanged();
         mCategoryLooksAdapter.notifyDataSetInvalidated();
     }
 
@@ -1050,6 +1054,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (mUserPresetsManager.getRepresentations() == null
             || mUserPresetsManager.getRepresentations().size() == 0) {
             mCategoryLooksAdapter.add(new Action(this, Action.ADD_ACTION));
+        }
+
+        Fragment panel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
+        if (panel != null) {
+            if (panel instanceof MainPanel) {
+                MainPanel mainPanel = (MainPanel) panel;
+                mainPanel.loadCategoryLookPanel(true);
+            }
         }
     }
 
