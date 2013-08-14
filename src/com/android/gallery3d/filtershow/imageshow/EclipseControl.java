@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
@@ -56,6 +57,7 @@ public class EclipseControl {
     public final static int HAN_SW = 4;
     public final static int HAN_WEST = 5;
     public final static int HAN_NW = 6;
+    private Rect mImageBounds;
 
     public EclipseControl(Context context) {
         mSliderColor = Color.WHITE;
@@ -96,8 +98,13 @@ public class EclipseControl {
         return -1;
     }
 
-    public void setScrToImageMatrix(Matrix scrToImg) {
+    public void setScrImageInfo(Matrix scrToImg, Rect imageBounds) {
         mScrToImg = scrToImg;
+        mImageBounds = new Rect(imageBounds);
+    }
+
+    private boolean centerIsOutside(float x1, float y1) {
+        return (!mImageBounds.contains((int) x1, (int)  y1));
     }
 
     public void actionDown(float x, float y, Oval oval) {
@@ -130,6 +137,9 @@ public class EclipseControl {
             case HAN_CENTER:
                 float ctrdx = mDownX - mDownCenterX;
                 float ctrdy = mDownY - mDownCenterY;
+                if (centerIsOutside(x - ctrdx, y - ctrdy)) {
+                    break;
+                }
                 oval.setCenter(x - ctrdx, y - ctrdy);
                 // setRepresentation(mVignetteRep);
                 break;

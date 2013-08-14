@@ -71,7 +71,8 @@ public class ImageVignette extends ImageShow {
         float x = event.getX();
         float y = event.getY();
 
-        mElipse.setScrToImageMatrix(getScreenToImageMatrix(true));
+        mElipse.setScrImageInfo(getScreenToImageMatrix(true),
+                MasterImage.getImage().getOriginalBounds());
 
         boolean didComputeEllipses = false;
         switch (mask) {
