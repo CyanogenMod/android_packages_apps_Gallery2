@@ -16,17 +16,24 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
+    <com.android.gallery3d.filtershow.category.IconView
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/category_panel_height"
+            android:src="@drawable/filtershow_add"/>
 
     <ListView
             android:id="@+id/listItems"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_margin="8dip"
             android:divider="@android:color/transparent"
-            android:dividerHeight="8dip" />
+            android:dividerHeight="8dip"
+            android:layout_weight="1"/>
 
 </LinearLayout>
