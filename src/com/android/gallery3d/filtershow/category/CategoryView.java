@@ -43,6 +43,7 @@ public class CategoryView extends IconView
     private int mSelectionStroke;
     private Paint mBorderPaint;
     private int mBorderStroke;
+    private float mStartTouchX = 0;
     private float mStartTouchY = 0;
     private float mDeleteSlope = 20;
     private int mSelectionColor = Color.WHITE;
@@ -147,15 +148,20 @@ public class CategoryView extends IconView
         }
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             mStartTouchY = event.getY();
+            mStartTouchX = event.getX();
         }
         if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            setTranslationX(0);
             setTranslationY(0);
         }
         if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
             float delta = event.getY() - mStartTouchY;
+            if (getOrientation() == CategoryView.VERTICAL) {
+                delta = event.getX() - mStartTouchX;
+            }
             if (Math.abs(delta) > mDeleteSlope) {
                 FilterShowActivity activity = (FilterShowActivity) getContext();
-                activity.setHandlesSwipeForView(this, mStartTouchY);
+                activity.setHandlesSwipeForView(this, mStartTouchX, mStartTouchY);
             }
         }
         return true;
