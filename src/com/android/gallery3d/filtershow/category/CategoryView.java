@@ -95,6 +95,14 @@ public class CategoryView extends IconView
         }
     }
 
+    @Override
+    public boolean needsCenterText() {
+        if (mAction != null && mAction.getType() == Action.ADD_ACTION) {
+            return true;
+        }
+        return super.needsCenterText();
+    }
+
     public void onDraw(Canvas canvas) {
         if (mAction != null) {
             if (mAction.getType() == Action.SPACER) {
