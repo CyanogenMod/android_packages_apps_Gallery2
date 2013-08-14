@@ -26,6 +26,7 @@
         android:id="@+id/primarySeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/FilterShowSlider" />
+        style="@style/FilterShowSlider"
+        android:visibility="gone" />
 
 </LinearLayout>
