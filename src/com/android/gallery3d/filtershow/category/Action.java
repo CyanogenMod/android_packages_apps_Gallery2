@@ -43,19 +43,36 @@ public class Action implements RenderingRequestCaller {
     private ArrayAdapter mAdapter;
     public static final int FULL_VIEW = 0;
     public static final int CROP_VIEW = 1;
+    public static final int ADD_ACTION = 2;
+    public static final int SPACER = 3;
     private int mType = CROP_VIEW;
     private Bitmap mPortraitImage;
     private Bitmap mOverlayBitmap;
     private Context mContext;
+    private boolean mCanBeRemoved = false;
+
+    public Action(Context context, FilterRepresentation representation, int type,
+                  boolean canBeRemoved) {
+        this(context, representation, type);
+        mCanBeRemoved = canBeRemoved;
+    }
 
     public Action(Context context, FilterRepresentation representation, int type) {
-        mContext = context;
+        this(context, type);
         setRepresentation(representation);
+    }
+
+    public Action(Context context, int type) {
+        mContext = context;
         setType(type);
     }
 
     public Action(Context context, FilterRepresentation representation) {
         this(context, representation, CROP_VIEW);
+    }
+
+    public boolean canBeRemoved() {
+        return mCanBeRemoved;
     }
 
     public int getType() {
