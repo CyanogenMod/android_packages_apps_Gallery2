@@ -171,6 +171,21 @@
             </intent-filter>
         </activity-alias>
 
+        <!-- This activity acts as a trampoline to the new Camera activity
+             in com.android.camera2 package, so that existing shortcuts
+             are preserved. -->
+        <activity android:name="com.android.camera.CameraActivity"
+            android:icon="@mipmap/ic_launcher_camera"
+            android:label="@string/camera_label"
+            android:theme="@style/android:Theme.NoDisplay" />
+        <activity-alias android:name="com.android.camera.CameraLauncher"
+            android:targetActivity="com.android.camera.CameraActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
          <!-- This activity receives USB_DEVICE_ATTACHED intents and allows importing
          media from attached MTP devices, like cameras and camera phones -->
         <activity android:launchMode="singleInstance"
