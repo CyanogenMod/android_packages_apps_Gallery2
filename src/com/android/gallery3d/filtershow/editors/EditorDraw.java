@@ -48,6 +48,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     private static final int MODE_STYLE = FilterDrawRepresentation.PARAM_STYLE;
     int[] brushIcons = {
             R.drawable.brush_flat,
+            R.drawable.brush_round,
             R.drawable.brush_gauss,
             R.drawable.brush_marker,
             R.drawable.brush_spatter
