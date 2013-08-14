@@ -51,7 +51,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 220);
     private BasicParameterInt mParamSaturation = new ParameterSaturation(PARAM_SATURATION, 200);
     private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 200);
-    private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 4);
+    private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 5);
     int mParamMode;
     Parameter mCurrentParam = mParamSize;
     private static final String SERIAL_COLOR = "color";
@@ -235,7 +235,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         sd.mRadius = size;
         sd.mType = type;
     }
-    
+
     public void startNewSection(float x, float y) {
         mCurrent = new StrokeData();
         fillStrokeParameters(mCurrent);
