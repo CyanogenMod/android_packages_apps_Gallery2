@@ -46,6 +46,54 @@ public class ActivityHookerGroup extends ActivityHooker {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        for (IActivityHooker hook : mHooks) {
+            hook.onCreate(savedInstanceState);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        for (IActivityHooker hook : mHooks) {
+            hook.onStart();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        for (IActivityHooker hook : mHooks) {
+            hook.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        for (IActivityHooker hook : mHooks) {
+            hook.onPause();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        for (IActivityHooker hook : mHooks) {
+            hook.onStop();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (IActivityHooker hook : mHooks) {
+            hook.onDestroy();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         boolean handle = false;

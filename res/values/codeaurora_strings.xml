@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="loop">"Loop"</string>
     <string name="single">"Single"</string>
+    <string name="stereo">"Stereo"</string>
+    <string name="single_track">"Single track"</string>
 </resources>
