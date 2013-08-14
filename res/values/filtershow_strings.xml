@@ -257,6 +257,8 @@
     <string name="filtershow_manage_preset">Manage user presets</string>
     <!-- Label for newly created user preset [CHAR LIMIT=30] -->
     <string name="filtershow_new_preset">New Preset</string>
+    <!-- Label for preset name [CHAR LIMIT=30] -->
+    <string name="filtershow_preset_name">Preset Name</string>
 
     <!-- Label for showing the image information panel [CHAR LIMIT=50] -->
     <string name="filtershow_show_info_panel">Information</string>
