@@ -48,12 +48,14 @@
     <!--  Text for the image state panel menu item [CHAR LIMIT=30] -->
     <string name="hide_imagestate_panel">Hide Applied Effects</string>
     <!--  Text for the menu item to export a flattened photo[CHAR LIMIT=30] -->
-    <string name="export_flattened">Export Flattened Image</string>
+    <string name="export_image">Export</string>
 
     <!-- Export Dialog-->
 
+    <!--  Text for the dialog title to export a flattened photo[CHAR LIMIT=30] -->
+    <string name="export_flattened">Export Flattened Image</string>
     <!--  Text for selecting export image quality [CHAR LIMIT=100] -->
-    <string name="select_output_settings">Select Output Settings.</string>
+    <string name="select_output_settings">The exported image will be a copy, without the history.</string>
     <!--  Text for quality value tag [CHAR LIMIT=30] -->
     <string name="quality">Quality</string>
     <!--  Text for size value tag [CHAR LIMIT=30] -->

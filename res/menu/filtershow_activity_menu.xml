@@ -38,5 +38,5 @@
         android:id="@+id/exportFlattenButton"
         android:showAsAction="never"
         android:visible="true"
-        android:title="@string/export_flattened" />
+        android:title="@string/export_image" />
 </menu>
