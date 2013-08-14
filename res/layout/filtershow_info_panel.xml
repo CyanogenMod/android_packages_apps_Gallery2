@@ -18,8 +18,49 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="#3a4e56"
-              android:padding="16dp">
+              android:background="#3a4e56">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#222">
+
+        <ImageButton
+                android:id="@+id/cancelInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="left|center_vertical"
+                android:background="@android:color/transparent"
+                android:layout_weight=".1"
+                android:gravity="left"
+                android:src="@drawable/ic_menu_cancel_holo_light"
+                android:textSize="18dip"/>
+
+        <ImageView
+                android:layout_width="2dp"
+                android:layout_height="fill_parent"
+                android:src="@drawable/filtershow_vertical_bar"/>
+
+        <TextView
+                style="?android:textAppearanceLarge"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:layout_gravity="left|center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dip"
+                android:text="@string/filtershow_show_info_panel"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:background="#3a4e56"
+                  android:padding="16dp">
 
     <ScrollView
             android:layout_width="match_parent"
@@ -115,5 +156,5 @@
                     android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
-
+    </LinearLayout>
 </LinearLayout>
