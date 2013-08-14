@@ -145,7 +145,7 @@ public class ParametricEditor extends Editor {
         };
     }
 
-    static boolean useCompact(Context context) {
+    protected static boolean useCompact(Context context) {
         return context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT;
     }

@@ -16,15 +16,18 @@
 package com.android.gallery3d.filtershow.editors;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.android.gallery3d.R;
@@ -51,7 +54,7 @@ public class EditorGrad extends ParametricEditor
     private static final int DEL_ICON = R.drawable.ic_grad_del;
     private int mSliderMode = MODE_BRIGHTNESS;
     ImageGrad mImageGrad;
-
+    ParamAdapter []mAdapters = new ParamAdapter[3];
     public EditorGrad() {
         super(ID, R.layout.filtershow_grad_editor, R.id.gradEditor);
     }
@@ -85,7 +88,11 @@ public class EditorGrad extends ParametricEditor
     }
 
     public void updateSeekBar(FilterGradRepresentation rep) {
-        mControl.updateUI();
+        if (ParametricEditor.useCompact(mContext)) {
+            mControl.updateUI();
+        } else {
+            updateParameters();
+        }
     }
 
     @Override
@@ -124,6 +131,96 @@ public class EditorGrad extends ParametricEditor
         if (mPopupMenu != null) {
             MenuItem item = mPopupMenu.getMenu().findItem(R.id.editor_grad_brightness);
             mEffectName = item.getTitle().toString();
+        }
+    }
+
+    @Override
+    public void setUtilityPanelUI(View actionButton, View editControl) {
+        if (ParametricEditor.useCompact(mContext)) {
+            super.setUtilityPanelUI(actionButton, editControl);
+            return;
+        }
+        mSeekBar = (SeekBar) editControl.findViewById(R.id.primarySeekBar);
+        if (mSeekBar != null) {
+            mSeekBar.setVisibility(View.GONE);
+        }
+        LayoutInflater inflater =
+                (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout lp = (LinearLayout) inflater.inflate(
+                R.layout.filtershow_grad_ui, (ViewGroup) editControl, true);
+
+        mAdapters[0] = new ParamAdapter(R.id.gradContrastSeekBar, R.id.gradContrastValue,
+                lp, MODE_CONTRAST);
+        mAdapters[1] = new ParamAdapter(R.id.gradBrightnessSeekBar, R.id.gradBrightnessValue,
+                lp, MODE_BRIGHTNESS);
+        mAdapters[2] = new ParamAdapter(R.id.gradSaturationSeekBar, R.id.gradSaturationValue,
+                lp, MODE_SATURATION);
+        lp.findViewById(R.id.gradAddButton).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fireLeftAction();
+            }
+        });
+        lp.findViewById(R.id.gradDelButton).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fireRightAction();
+            }
+        });
+    }
+
+    public void updateParameters() {
+        FilterGradRepresentation rep = getGradRepresentation();
+        for (int i = 0; i < mAdapters.length; i++) {
+            mAdapters[i].updateValues(rep);
+        }
+    }
+
+    private class ParamAdapter implements OnSeekBarChangeListener {
+        SeekBar mSlider;
+        TextView mTextView;
+        int mMin = -100;
+        int mMax = 100;
+        int mMode;
+
+        public ParamAdapter(int seekId, int textId, LinearLayout layout, int mode) {
+            mSlider = (SeekBar) layout.findViewById(seekId);
+            mTextView = (TextView) layout.findViewById(textId);
+            mSlider.setOnSeekBarChangeListener(this);
+            mSlider.setMax(mMax - mMin);
+            mMode = mode;
+            FilterGradRepresentation rep = getGradRepresentation();
+            if (rep != null){
+                updateValues(rep);
+            }
+        }
+
+        public void updateValues(FilterGradRepresentation rep) {
+            int value = rep.getParameter(mMode);
+            mTextView.setText(Integer.toString(value));
+            mSlider.setProgress(value - mMin);
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            FilterGradRepresentation rep = getGradRepresentation();
+            int value = progress + mMin;
+            rep.setParameter(mMode, value);
+            mSliderMode = mMode;
+            mEffectName = "";
+            mTextView.setText(Integer.toString(value));
+            mView.invalidate();
+            commitLocalRepresentation();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
         }
     }
 
