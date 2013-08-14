@@ -53,7 +53,8 @@ public class ImageFilterDraw extends ImageFilter {
     }
 
     DrawStyle[] mDrawingsTypes = new DrawStyle[] {
-            new SimpleDraw(),
+            new SimpleDraw(0),
+            new SimpleDraw(1),
             new Brush(R.drawable.brush_gauss),
             new Brush(R.drawable.brush_marker),
             new Brush(R.drawable.brush_spatter)
@@ -92,6 +93,11 @@ public class ImageFilterDraw extends ImageFilter {
 
     class SimpleDraw implements DrawStyle {
         byte mType;
+        int mMode;
+
+        public SimpleDraw(int mode) {
+            mMode = mode;
+        }
 
         @Override
         public void setType(byte type) {
@@ -110,6 +116,11 @@ public class ImageFilterDraw extends ImageFilter {
             Paint paint = new Paint();
 
             paint.setStyle(Style.STROKE);
+            if (mMode == 0) {
+                paint.setStrokeCap(Paint.Cap.SQUARE);
+            } else {
+                paint.setStrokeCap(Paint.Cap.ROUND);
+            }
             paint.setAntiAlias(true);
             paint.setColor(sd.mColor);
             paint.setStrokeWidth(toScrMatrix.mapRadius(sd.mRadius));
