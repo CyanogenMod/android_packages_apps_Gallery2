@@ -404,9 +404,12 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 getString(R.string.filtershow_version_current), current, -1);
         mCategoryVersionsAdapter.add(
                 new Action(this, currentRep, Action.FULL_VIEW));
+        if (mVersions.size() > 0) {
+            mCategoryVersionsAdapter.add(new Action(this, Action.SPACER));
+        }
         for (FilterUserPresetRepresentation rep : mVersions) {
             mCategoryVersionsAdapter.add(
-                    new Action(this, rep, Action.FULL_VIEW));
+                    new Action(this, rep, Action.FULL_VIEW, true));
         }
         mCategoryVersionsAdapter.notifyDataSetInvalidated();
     }
@@ -949,6 +952,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         return false;
     }
 
+    public void addNewPreset() {
+        DialogFragment dialog = new PresetManagementDialog();
+        dialog.show(getSupportFragmentManager(), "NoticeDialogFragment");
+    }
+
     private void manageUserPresets() {
         DialogFragment dialog = new PresetManagementDialog();
         dialog.show(getSupportFragmentManager(), "NoticeDialogFragment");
@@ -987,6 +995,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (mCategoryLooksAdapter != null) {
             fillLooks();
         }
+        if (presets.size() > 0) {
+            mCategoryLooksAdapter.add(new Action(this, Action.SPACER));
+        }
         mUserPresetsAdapter.clear();
         for (int i = 0; i < presets.size(); i++) {
             FilterUserPresetRepresentation representation = presets.get(i);
@@ -994,8 +1005,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                     new Action(this, representation, Action.FULL_VIEW));
             mUserPresetsAdapter.add(new Action(this, representation, Action.FULL_VIEW));
         }
+        if (presets.size() > 0) {
+            mCategoryLooksAdapter.add(new Action(this, Action.ADD_ACTION));
+        }
         mCategoryLooksAdapter.notifyDataSetInvalidated();
-
     }
 
     public void saveCurrentImagePreset() {
@@ -1025,6 +1038,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mCategoryLooksAdapter.setItemHeight(verticalItemHeight);
         for (FilterRepresentation representation : filtersRepresentations) {
             mCategoryLooksAdapter.add(new Action(this, representation, Action.FULL_VIEW));
+        }
+        if (mUserPresetsManager.getRepresentations() == null
+            || mUserPresetsManager.getRepresentations().size() == 0) {
+            mCategoryLooksAdapter.add(new Action(this, Action.ADD_ACTION));
         }
     }
 
