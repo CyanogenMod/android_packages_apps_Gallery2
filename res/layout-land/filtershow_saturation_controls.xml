@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <GridLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alignmentMode="alignBounds"
+                android:useDefaultMargins="true"
+                android:columnOrderPreserved="false"
+                android:columnCount="2">
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_main"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/mainValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/mainSeekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_red"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/redValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/redSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_yellow"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/yellowValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/yellowSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_green"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/greenValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/greenSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_cyan"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/cyanValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/cyanSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_blue"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/blueValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/blueSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+
+            <TextView
+                    android:layout_gravity="left|center_vertical"
+                    android:text="@string/editor_chan_sat_magenta"
+                    android:layout_marginLeft="8dp"/>
+            <TextView
+                    android:layout_gravity="right|center_vertical"
+                    android:id="@+id/magentaValue"
+                    android:layout_marginRight="8dp"/>
+            <SeekBar
+                    android:id="@+id/magentaSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/FilterShowSlider"
+                    android:layout_columnSpan="2"/>
+        </GridLayout>
+    </ScrollView>
+
+</LinearLayout>
