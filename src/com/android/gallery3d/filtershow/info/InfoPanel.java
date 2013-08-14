@@ -22,16 +22,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.exif.ExifTag;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
@@ -45,6 +46,7 @@ public class InfoPanel extends Fragment {
     private TextView mImageName;
     private TextView mImageSize;
     private TextView mExifData;
+    private ImageButton mHideButton;
 
     private String createStringFromIfFound(ExifTag exifTag, int tag, int str) {
         String exifString = "";
@@ -72,10 +74,19 @@ public class InfoPanel extends Fragment {
         mImageName = (TextView) mMainView.findViewById(R.id.imageName);
         mImageSize = (TextView) mMainView.findViewById(R.id.imageSize);
         mExifData = (TextView) mMainView.findViewById(R.id.exifData);
+        mHideButton =(ImageButton) mMainView.findViewById(R.id.cancelInfo);
+
         HistogramView histogramView = (HistogramView) mMainView.findViewById(R.id.histogramView);
 
         histogramView.setBitmap(bitmap);
 
+        mHideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FilterShowActivity activity = (FilterShowActivity)getActivity();
+                activity.toggleInformationPanel();
+            }
+        });
         Uri uri = MasterImage.getImage().getUri();
         String path = ImageLoader.getLocalPathFromUri(getActivity(), uri);
         Uri localUri = null;
