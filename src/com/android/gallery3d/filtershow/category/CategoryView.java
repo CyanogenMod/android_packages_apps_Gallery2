@@ -128,13 +128,16 @@ public class CategoryView extends IconView
         setText(mAction.getName());
         mAdapter = adapter;
         mCanBeRemoved = action.canBeRemoved();
-        invalidate();
+        setUseOnlyDrawable(false);
         if (mAction.getType() == Action.ADD_ACTION) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.filtershow_add);
             setBitmap(bitmap);
             setUseOnlyDrawable(true);
             setText(getResources().getString(R.string.filtershow_add_button_looks));
+        } else {
+            setBitmap(mAction.getImage());
         }
+        invalidate();
     }
 
     @Override
