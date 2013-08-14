@@ -85,9 +85,14 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         }
         CategoryView view = (CategoryView) convertView;
         view.setOrientation(mOrientation);
-        view.setAction(getItem(position), this);
+        Action action = getItem(position);
+        view.setAction(action, this);
+        int width = mItemWidth;
+        if (action.getType() == Action.SPACER) {
+            width = width / 2;
+        }
         view.setLayoutParams(
-                new ListView.LayoutParams(mItemWidth, mItemHeight));
+                new ListView.LayoutParams(width, mItemHeight));
         view.setTag(position);
         view.invalidate();
         return view;
@@ -185,8 +190,12 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         }
         if (rep != null) {
             for (int i = 0; i < getCount(); i++) {
+                FilterRepresentation itemRep = getItem(i).getRepresentation();
+                if (itemRep == null) {
+                    continue;
+                }
                 if (rep.getName().equalsIgnoreCase(
-                        getItem(i).getRepresentation().getName())) {
+                        itemRep.getName())) {
                     selected = i;
                     break;
                 }

@@ -57,8 +57,8 @@ public class IconView extends View {
                 "http://schemas.android.com/apk/res/android", "src", 0);
         Resources res = context.getResources();
         Bitmap bitmap = BitmapFactory.decodeStream(res.openRawResource(bitmapRsc));
-        mUseOnlyDrawable = true;
         setBitmap(bitmap);
+        setUseOnlyDrawable(true);
     }
 
     public IconView(Context context) {
@@ -150,6 +150,10 @@ public class IconView extends View {
 
     public void setBitmap(Bitmap bitmap) {
         mBitmap = bitmap;
+    }
+
+    public void setUseOnlyDrawable(boolean value) {
+        mUseOnlyDrawable = value;
     }
 
     public Rect getBitmapBounds() {
