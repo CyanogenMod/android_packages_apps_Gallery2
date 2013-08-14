@@ -117,13 +117,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
                 R.layout.filtershow_seekbar, (ViewGroup) editControl, true);
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
         mSeekBar.setOnSeekBarChangeListener(this);
-
-        if (showsSeekBar()) {
-            mSeekBar.setOnSeekBarChangeListener(this);
-            mSeekBar.setVisibility(View.VISIBLE);
-        } else {
-            mSeekBar.setVisibility(View.INVISIBLE);
-        }
+        mSeekBar.setVisibility(View.GONE);
 
         if (mButton != null) {
             if (showsPopupIndicator()) {
