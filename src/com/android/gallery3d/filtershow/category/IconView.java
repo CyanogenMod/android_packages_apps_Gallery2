@@ -87,13 +87,20 @@ public class IconView extends View {
         mPaint.getTextBounds(text, 0, text.length(), mTextBounds);
     }
 
+    public boolean needsCenterText() {
+        if (mOrientation == HORIZONTAL) {
+            return true;
+        }
+        return false;
+    }
+
     protected void drawText(Canvas canvas, String text) {
         if (text == null) {
             return;
         }
         float textWidth = mPaint.measureText(text);
         int x = (int) (canvas.getWidth() - textWidth - 2*mMargin);
-        if (mOrientation == HORIZONTAL) {
+        if (needsCenterText()) {
             x = (int) ((canvas.getWidth() - textWidth) / 2.0f);
         }
         if (x < 0) {
