@@ -73,6 +73,7 @@ public class FilterChanSatRepresentation extends FilterRepresentation implements
         setSerializationName(SERIALIZATION_NAME);
         setFilterClass(ImageFilterChanSat.class);
         setEditorId(EditorChanSat.ID);
+        setSupportsPartialRendering(true);
     }
 
     public String toString() {
