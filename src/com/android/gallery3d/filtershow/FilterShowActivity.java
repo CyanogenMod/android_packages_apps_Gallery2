@@ -63,6 +63,7 @@ import com.android.gallery3d.data.LocalAlbum;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.category.Action;
 import com.android.gallery3d.filtershow.category.CategoryAdapter;
+import com.android.gallery3d.filtershow.category.CategoryView;
 import com.android.gallery3d.filtershow.category.MainPanel;
 import com.android.gallery3d.filtershow.category.SwipableView;
 import com.android.gallery3d.filtershow.data.UserPresetsManager;
@@ -168,6 +169,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private boolean mHandlingSwipeButton = false;
     private View mHandledSwipeView = null;
     private float mHandledSwipeViewLastDelta = 0;
+    private float mSwipeStartX = 0;
     private float mSwipeStartY = 0;
 
     private ProcessingService mBoundService;
@@ -1279,7 +1281,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         return mSelectedImageUri;
     }
 
-    public void setHandlesSwipeForView(View view, float startY) {
+    public void setHandlesSwipeForView(View view, float startX, float startY) {
         if (view != null) {
             mHandlingSwipeButton = true;
         } else {
@@ -1288,25 +1290,42 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mHandledSwipeView = view;
         int[] location = new int[2];
         view.getLocationInWindow(location);
+        mSwipeStartX = location[0] + startX;
         mSwipeStartY = location[1] + startY;
     }
 
     public boolean dispatchTouchEvent (MotionEvent ev) {
         if (mHandlingSwipeButton) {
+            int direction = CategoryView.HORIZONTAL;
+            if (mHandledSwipeView instanceof CategoryView) {
+                direction = ((CategoryView) mHandledSwipeView).getOrientation();
+            }
             if (ev.getActionMasked() == MotionEvent.ACTION_MOVE) {
                 float delta = ev.getY() - mSwipeStartY;
-                mHandledSwipeView.setTranslationY(delta);
+                float distance = mHandledSwipeView.getHeight();
+                if (direction == CategoryView.VERTICAL) {
+                    delta = ev.getX() - mSwipeStartX;
+                    mHandledSwipeView.setTranslationX(delta);
+                    distance = mHandledSwipeView.getWidth();
+                } else {
+                    mHandledSwipeView.setTranslationY(delta);
+                }
                 delta = Math.abs(delta);
-                float transparency = Math.min(1, delta / mHandledSwipeView.getHeight());
+                float transparency = Math.min(1, delta / distance);
                 mHandledSwipeView.setAlpha(1.f - transparency);
                 mHandledSwipeViewLastDelta = delta;
             }
             if (ev.getActionMasked() == MotionEvent.ACTION_CANCEL
                     || ev.getActionMasked() == MotionEvent.ACTION_UP) {
+                mHandledSwipeView.setTranslationX(0);
                 mHandledSwipeView.setTranslationY(0);
                 mHandledSwipeView.setAlpha(1.f);
                 mHandlingSwipeButton = false;
-                if (mHandledSwipeViewLastDelta > mHandledSwipeView.getHeight()) {
+                float distance = mHandledSwipeView.getHeight();
+                if (direction == CategoryView.VERTICAL) {
+                    distance = mHandledSwipeView.getWidth();
+                }
+                if (mHandledSwipeViewLastDelta > distance) {
                     ((SwipableView) mHandledSwipeView).delete();
                 }
             }
