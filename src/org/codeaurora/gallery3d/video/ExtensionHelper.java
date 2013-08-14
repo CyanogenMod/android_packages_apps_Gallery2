@@ -17,9 +17,13 @@ public class ExtensionHelper {
 
         final ActivityHookerGroup group = new ActivityHookerGroup();
         boolean loop = context.getResources().getBoolean(R.bool.loop);
+        boolean stereo = context.getResources().getBoolean(R.bool.stereo);
 
         if (loop == true) {
             group.addHooker(new LoopVideoHooker()); // add it for common feature.
+        }
+        if (stereo == true) {
+            group.addHooker(new StereoAudioHooker()); // add it for common feature.
         }
 
         return group;
