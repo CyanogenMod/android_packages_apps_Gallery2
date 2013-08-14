@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.editors;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.View;
@@ -144,21 +145,9 @@ public class ParametricEditor extends Editor {
         };
     }
 
-    // TODO: need a better way to decide which representation
     static boolean useCompact(Context context) {
-        WindowManager w = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
-        Point size = new Point();
-        w.getDefaultDisplay().getSize(size);
-        if (size.x < size.y) { // if tall than wider
-            return true;
-        }
-        if (size.x < MINIMUM_WIDTH) {
-            return true;
-        }
-        if (size.y < MINIMUM_HEIGHT) {
-            return true;
-        }
-        return false;
+        return context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
     }
 
     protected Parameter getParameterToEdit(FilterRepresentation rep) {
