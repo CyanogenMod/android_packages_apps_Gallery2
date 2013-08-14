@@ -88,11 +88,20 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         Action action = getItem(position);
         view.setAction(action, this);
         int width = mItemWidth;
+        int height = mItemHeight;
         if (action.getType() == Action.SPACER) {
-            width = width / 2;
+            if (mOrientation == CategoryView.HORIZONTAL) {
+                width = width / 2;
+            } else {
+                height = height / 2;
+            }
+        }
+        if (action.getType() == Action.ADD_ACTION
+                && mOrientation == CategoryView.VERTICAL) {
+            height = height / 2;
         }
         view.setLayoutParams(
-                new ListView.LayoutParams(width, mItemHeight));
+                new ListView.LayoutParams(width, height));
         view.setTag(position);
         view.invalidate();
         return view;

@@ -73,6 +73,9 @@ public class CategoryView extends IconView
         if (mAction.getType() == Action.CROP_VIEW) {
             return true;
         }
+        if (mAction.getType() == Action.ADD_ACTION) {
+            return true;
+        }
         return false;
     }
 
@@ -84,7 +87,11 @@ public class CategoryView extends IconView
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mSpacerColor);
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, getWidth() / 5, mPaint);
+        if (getOrientation() == CategoryView.VERTICAL) {
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, getHeight() / 5, mPaint);
+        } else {
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, getWidth() / 5, mPaint);
+        }
     }
 
     public void onDraw(Canvas canvas) {
