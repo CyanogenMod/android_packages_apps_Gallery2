@@ -19,6 +19,7 @@ package com.android.gallery3d.filtershow.category;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -44,6 +45,9 @@ public class CategoryView extends IconView
     private int mBorderStroke;
     private float mStartTouchY = 0;
     private float mDeleteSlope = 20;
+    private int mSelectionColor = Color.WHITE;
+    private int mSpacerColor = Color.WHITE;
+    private boolean mCanBeRemoved = false;
 
     public CategoryView(Context context) {
         super(context);
@@ -52,7 +56,10 @@ public class CategoryView extends IconView
         mSelectionStroke = res.getDimensionPixelSize(R.dimen.thumbnail_margin);
         mSelectPaint = new Paint();
         mSelectPaint.setStyle(Paint.Style.FILL);
-        mSelectPaint.setColor(res.getColor(R.color.filtershow_category_selection));
+        mSelectionColor = res.getColor(R.color.filtershow_category_selection);
+        mSpacerColor = res.getColor(R.color.filtershow_categoryview_text);
+
+        mSelectPaint.setColor(mSelectionColor);
         mBorderPaint = new Paint(mSelectPaint);
         mBorderPaint.setColor(Color.BLACK);
         mBorderStroke = mSelectionStroke / 3;
@@ -69,8 +76,23 @@ public class CategoryView extends IconView
         return false;
     }
 
+    private boolean canBeRemoved() {
+        return mCanBeRemoved;
+    }
+
+    private void drawSpacer(Canvas canvas) {
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(mSpacerColor);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, getWidth() / 5, mPaint);
+    }
+
     public void onDraw(Canvas canvas) {
         if (mAction != null) {
+            if (mAction.getType() == Action.SPACER) {
+                drawSpacer(canvas);
+                return;
+            }
             if (mAction.getImage() == null) {
                 mAction.setImageFrame(new Rect(0, 0, getWidth(), getHeight()), getOrientation());
             } else {
@@ -89,19 +111,33 @@ public class CategoryView extends IconView
         mAction = action;
         setText(mAction.getName());
         mAdapter = adapter;
+        mCanBeRemoved = action.canBeRemoved();
         invalidate();
+        if (mAction.getType() == Action.ADD_ACTION) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.filtershow_add);
+            setBitmap(bitmap);
+            setUseOnlyDrawable(true);
+            setText(getResources().getString(R.string.filtershow_add_button_looks));
+        }
     }
 
     @Override
     public void onClick(View view) {
         FilterShowActivity activity = (FilterShowActivity) getContext();
-        activity.showRepresentation(mAction.getRepresentation());
-        mAdapter.setSelected(this);
+        if (mAction.getType() == Action.ADD_ACTION) {
+            activity.addNewPreset();
+        } else if (mAction.getType() != Action.SPACER) {
+            activity.showRepresentation(mAction.getRepresentation());
+            mAdapter.setSelected(this);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
+        boolean ret = super.onTouchEvent(event);
+        if (!canBeRemoved()) {
+            return ret;
+        }
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             mStartTouchY = event.getY();
         }
