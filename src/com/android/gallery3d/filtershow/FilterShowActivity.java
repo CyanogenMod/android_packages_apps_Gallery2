@@ -605,8 +605,12 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 // Don't just update the filter representation. Centralize the
                 // logic in the addFilter(), such that we can keep "None" as
                 // null.
-                copy.removeFilter(representation);
-                copy.addFilter(filterRepresentation);
+                if (!representation.equals(filterRepresentation)) {
+                    // Only do this if the filter isn't the same
+                    // (state panel clicks can lead us here)
+                    copy.removeFilter(representation);
+                    copy.addFilter(filterRepresentation);
+                }
             }
         }
         MasterImage.getImage().setPreset(copy, filterRepresentation, true);
