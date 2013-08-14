@@ -21,12 +21,15 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 
 public class PresetManagementDialog extends DialogFragment implements View.OnClickListener {
     private UserPresetsAdapter mAdapter;
+    private EditText mEditText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,13 +38,10 @@ public class PresetManagementDialog extends DialogFragment implements View.OnCli
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         mAdapter = activity.getUserPresetsAdapter();
-        ListView panel = (ListView) view.findViewById(R.id.listItems);
-        panel.setAdapter(mAdapter);
-
+        mEditText = (EditText) view.findViewById(R.id.editView);
         view.findViewById(R.id.cancel).setOnClickListener(this);
-        view.findViewById(R.id.addpreset).setOnClickListener(this);
         view.findViewById(R.id.ok).setOnClickListener(this);
-        getDialog().setTitle(getString(R.string.filtershow_manage_preset));
+        getDialog().setTitle(getString(R.string.filtershow_save_preset));
         return view;
     }
 
@@ -55,11 +55,9 @@ public class PresetManagementDialog extends DialogFragment implements View.OnCli
                 activity.updateUserPresetsFromAdapter(mAdapter);
                 dismiss();
                 break;
-            case R.id.addpreset:
-                activity.saveCurrentImagePreset();
-                dismiss();
-                break;
             case R.id.ok:
+                String text = String.valueOf(mEditText.getText());
+                activity.saveCurrentImagePreset(text);
                 mAdapter.updateCurrent();
                 activity.updateUserPresetsFromAdapter(mAdapter);
                 dismiss();

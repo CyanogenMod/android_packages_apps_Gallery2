@@ -22,14 +22,30 @@
               android:divider="?android:dividerVertical"
               android:showDividers="middle">
 
-    <ListView
-            android:id="@+id/listItems"
-            android:orientation="vertical"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dip">
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/filtershow_preset_name"
+                android:layout_margin="8dp"
+                />
+
+        <EditText
+            android:id="@+id/editView"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dip"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="8dip"/>
+            android:focusable="true"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
+    </LinearLayout>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -44,14 +60,6 @@
                 android:layout_weight="1"
                 android:text="@string/cancel"
                 style="?android:attr/buttonBarButtonStyle" />
-
-        <Button
-                android:id="@+id/addpreset"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/filtershow_save_preset"
-                style="?android:attr/buttonBarButtonStyle"/>
 
         <Button
                 android:id="@+id/ok"
