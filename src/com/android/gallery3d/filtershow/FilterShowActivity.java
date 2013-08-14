@@ -320,7 +320,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
-    private void hideInformationPanel() {
+    public void hideInformationPanel() {
         FrameLayout infoLayout = (FrameLayout) findViewById(R.id.central_panel_container);
         infoLayout.setVisibility(View.GONE);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(InfoPanel.FRAGMENT_TAG);
@@ -332,7 +332,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mShowingInformationPanel = false;
     }
 
-    public void showInformationPanel() {
+    public void toggleInformationPanel() {
         mShowingInformationPanel = !mShowingInformationPanel;
         if (!mShowingInformationPanel) {
             hideInformationPanel();
@@ -957,7 +957,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 return true;
             }
             case R.id.showInfoPanel: {
-                showInformationPanel();
+                toggleInformationPanel();
                 return true;
             }
         }
