@@ -2333,11 +2333,17 @@ public class VideoModule implements CameraModule,
             // We need to keep a preview frame for the animation before
             // releasing the camera. This will trigger onPreviewTextureCopied.
             ((CameraScreenNail) mActivity.mCameraScreenNail).copyTexture();
-            // Disable all camera controls.
-            mSwitchingCamera = true;
         } else {
             switchCamera();
         }
+    }
+
+    @Override
+    public void onCameraPickerSuperClicked() {
+        if (mPaused || mPendingSwitchCameraId != -1) return;
+
+        // Disable all camera controls.
+        mSwitchingCamera = true;
     }
 
     @Override

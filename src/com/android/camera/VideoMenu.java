@@ -93,6 +93,13 @@ public class VideoMenu extends PieController
                     [lpref.findIndexOfValue(lpref.getValue())]);
 
             final PieItem fitem = item;
+            item.setOnSuperClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(PieItem item) {
+                    mListener.onCameraPickerSuperClicked();
+                }
+            });
             item.setOnClickListener(new OnClickListener() {
 
                 @Override

@@ -455,6 +455,7 @@ public class PieRenderer extends OverlayRenderer
         mFadeOut.setAnimationListener(new AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                item.performSuperClick();
             }
 
             @Override

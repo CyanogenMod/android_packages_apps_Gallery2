@@ -38,6 +38,7 @@ public abstract class CameraPreference {
         public void onRestorePreferencesClicked();
         public void onOverriddenPreferencesClicked();
         public void onCameraPickerClicked(int cameraId);
+        public void onCameraPickerSuperClicked();
     }
 
     public CameraPreference(Context context, AttributeSet attrs) {
