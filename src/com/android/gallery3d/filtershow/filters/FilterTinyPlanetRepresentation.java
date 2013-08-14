@@ -34,6 +34,7 @@ public class FilterTinyPlanetRepresentation extends FilterBasicRepresentation {
         setTextId(R.string.tinyplanet);
         setEditorId(EditorTinyPlanet.ID);
         setMinimum(1);
+        setSupportsPartialRendering(false);
     }
 
     @Override
@@ -75,6 +76,16 @@ public class FilterTinyPlanetRepresentation extends FilterBasicRepresentation {
 
     public boolean isNil() {
         // TinyPlanet always has an effect
+        return false;
+    }
+
+    public boolean equals(FilterRepresentation representation) {
+        if (!super.equals(representation)) {
+            return false;
+        }
+        if (mAngle == ((FilterTinyPlanetRepresentation) representation).mAngle) {
+            return true;
+        }
         return false;
     }
 
