@@ -146,9 +146,8 @@ public class MainPanel extends Fragment {
         transaction.commit();
     }
 
-    public void loadCategoryLookPanel() {
-        if (mCurrentSelected == LOOKS) {
-
+    public void loadCategoryLookPanel(boolean force) {
+        if (!force && mCurrentSelected == LOOKS) {
             return;
         }
         boolean fromRight = isRightAnimation(LOOKS);
@@ -217,7 +216,7 @@ public class MainPanel extends Fragment {
     public void showPanel(int currentPanel) {
         switch (currentPanel) {
             case LOOKS: {
-                loadCategoryLookPanel();
+                loadCategoryLookPanel(false);
                 break;
             }
             case BORDERS: {
