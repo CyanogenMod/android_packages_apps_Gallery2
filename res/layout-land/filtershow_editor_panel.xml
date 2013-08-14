@@ -36,6 +36,13 @@
                 android:layout_alignParentTop="true"
                 />
 
+        <View
+                android:id="@+id/bottomControlLineBottom"
+                android:background="@color/toolbar_separation_line"
+                android:layout_height="1dip"
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                />
         <LinearLayout
                 android:id="@+id/applyBar"
                 android:layout_width="match_parent"
@@ -44,7 +51,7 @@
                 android:orientation="horizontal"
                 android:baselineAligned="false"
                 android:visibility="visible"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@id/bottomControlLineBottom"
                 >
 
             <ImageButton
@@ -101,13 +108,20 @@
                     android:src="@drawable/ic_menu_done_holo_light"
                     android:textSize="18dip"/>
         </LinearLayout>
+        <View
+                android:id="@+id/bottomControlLineTop"
+                android:background="@color/toolbar_separation_line"
+                android:layout_height="1dip"
+                android:layout_width="match_parent"
+                android:layout_above="@id/applyBar"
+                />
 
         <LinearLayout
                 android:id="@+id/controlArea"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
-                android:layout_above="@id/applyBar"
+                android:layout_above="@id/bottomControlLineTop"
                 android:layout_below="@id/toggle_state"
                 android:gravity="bottom"
                 android:visibility="visible">
