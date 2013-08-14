@@ -141,6 +141,7 @@ public class EditorPanel extends Fragment {
             transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         }
         if (show) {
+            container.setVisibility(View.VISIBLE);
             StatePanel statePanel = new StatePanel();
             transaction.replace(R.id.state_panel_container, statePanel, StatePanel.FRAGMENT_TAG);
         } else {
