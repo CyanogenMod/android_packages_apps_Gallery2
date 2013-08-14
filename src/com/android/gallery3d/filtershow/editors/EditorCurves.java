@@ -30,6 +30,12 @@ public class EditorCurves extends Editor {
 
     public EditorCurves() {
         super(ID);
+        int k =R.menu.filtershow_menu_curves;
+    }
+
+    @Override
+    protected void updateText() {
+
     }
 
     @Override
