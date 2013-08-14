@@ -26,7 +26,36 @@ import android.view.MenuItem;
  *           //do something return true; default: return false; } } }
  */
 public interface IActivityHooker {
-
+    /**
+     * Will be called in Host Activity.onCreate(Bundle savedInstanceState)
+     * @param savedInstanceState
+     */
+    void onCreate(Bundle savedInstanceState);
+    /**
+     * Will be called in Host Activity.onStart()
+     */
+    void onStart();
+    /**
+     * Will be called in Host Activity.onStop()
+     */
+    void onStop();
+    /**
+     * Will be called in Host Activity.onPause()
+     */
+    void onPause();
+    /**
+     * Will be called in Host Activity.onResume()
+     */
+    void onResume();
+    /**
+     * Will be called in Host Activity.onDestroy()
+     */
+    void onDestroy();
+    /**
+     * Will be called in Host Activity.onCreateOptionsMenu(Menu menu)
+     * @param menu
+     * @return
+     */
     /**
      * Will be called in Host Activity.onCreateOptionsMenu(Menu menu)
      *

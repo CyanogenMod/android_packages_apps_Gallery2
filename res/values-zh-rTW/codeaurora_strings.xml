@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="loop">"循環"</string>
     <string name="single">"單次"</string>
+    <string name="stereo">"立體聲"</string>
+    <string name="single_track">"單聲道"</string>
 </resources>
