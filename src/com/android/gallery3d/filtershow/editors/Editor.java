@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.editors;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -118,6 +119,12 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
         mSeekBar.setOnSeekBarChangeListener(this);
         mSeekBar.setVisibility(View.GONE);
+        if (context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT) {
+            if (showsSeekBar()) {
+               mSeekBar.setVisibility(View.VISIBLE);
+            }
+        }
 
         if (mButton != null) {
             if (showsPopupIndicator()) {
