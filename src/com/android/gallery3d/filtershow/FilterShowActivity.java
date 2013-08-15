@@ -596,6 +596,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         ImagePreset copy = new ImagePreset(oldPreset);
         FilterRepresentation representation = copy.getRepresentation(filterRepresentation);
         if (representation == null) {
+            filterRepresentation = filterRepresentation.copy();
             copy.addFilter(filterRepresentation);
         } else if (filterRepresentation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
             representation.useParametersFrom(filterRepresentation);

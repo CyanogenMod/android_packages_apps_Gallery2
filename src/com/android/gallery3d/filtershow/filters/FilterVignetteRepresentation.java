@@ -51,6 +51,11 @@ public class FilterVignetteRepresentation extends FilterBasicRepresentation impl
     }
 
     @Override
+    public String toString() {
+        return getName() + " : " + mCenterX + ", " + mCenterY + " radius: " + mRadiusX;
+    }
+
+    @Override
     public FilterRepresentation copy() {
         FilterVignetteRepresentation representation = new FilterVignetteRepresentation();
         copyAllParameters(representation);
