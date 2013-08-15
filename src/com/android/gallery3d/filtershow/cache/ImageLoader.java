@@ -24,7 +24,9 @@ import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -37,6 +39,7 @@ import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 import com.android.gallery3d.filtershow.tools.XmpPresets;
 import com.android.gallery3d.util.XmpUtilHelper;
 
@@ -230,22 +233,50 @@ public final class ImageLoader {
      * if it is a subset of the bitmap stored at uri.  Otherwise returns
      * null.
      */
-    public static Bitmap loadRegionBitmap(Context context, Uri uri, BitmapFactory.Options options,
-            Rect bounds) {
+    public static Bitmap loadRegionBitmap(Context context, FilterEnvironment environment,
+                                          Uri uri, BitmapFactory.Options options,
+                                          Rect bounds) {
         InputStream is = null;
+        int w = 0;
+        int h = 0;
+        if (options.inSampleSize != 0) {
+            return null;
+        }
         try {
             is = context.getContentResolver().openInputStream(uri);
             BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(is, false);
             Rect r = new Rect(0, 0, decoder.getWidth(), decoder.getHeight());
+            w = decoder.getWidth();
+            h = decoder.getHeight();
+            Rect imageBounds = new Rect(bounds);
             // return null if bounds are not entirely within the bitmap
-            if (!r.contains(bounds)) {
-                return null;
+            if (!r.contains(imageBounds)) {
+                imageBounds.intersect(r);
             }
-            return decoder.decodeRegion(bounds, options);
+            Bitmap reuse = environment.getBitmap(imageBounds.width(), imageBounds.height());
+            options.inBitmap = reuse;
+            Bitmap bitmap = decoder.decodeRegion(imageBounds, options);
+            if (bitmap != reuse) {
+                environment.cache(reuse); // not reused, put back in cache
+            }
+            if (imageBounds.width() != bounds.width() || imageBounds.height() != bounds.height()) {
+                Bitmap temp = environment.getBitmap(bounds.width(), bounds.height());
+                Canvas canvas = new Canvas(temp);
+                canvas.drawARGB(0, 0, 0, 0);
+                float dx = imageBounds.left - bounds.left;
+                float dy = imageBounds.top - bounds.top;
+                canvas.drawBitmap(bitmap, dx, dy, null);
+                return temp;
+            }
+            return bitmap;
         } catch (FileNotFoundException e) {
             Log.e(LOGTAG, "FileNotFoundException for " + uri, e);
         } catch (IOException e) {
             Log.e(LOGTAG, "FileNotFoundException for " + uri, e);
+        } catch (IllegalArgumentException e) {
+            Log.e(LOGTAG, "exc, image decoded " + w + " x " + h + " bounds: "
+                    + bounds.left + "," + bounds.top + " - "
+                    + bounds.width() + "x" + bounds.height() + " exc: " + e);
         } finally {
             Utils.closeSilently(is);
         }
@@ -365,8 +396,10 @@ public final class ImageLoader {
         return bmap;
     }
 
-    public static Bitmap getScaleOneImageForPreset(Context context, Uri uri, Rect bounds,
-            Rect destination) {
+    public static Bitmap getScaleOneImageForPreset(Context context,
+                                                   FilterEnvironment environment,
+                                                   Uri uri, Rect bounds,
+                                                   Rect destination) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
         if (destination != null) {
@@ -380,7 +413,7 @@ public final class ImageLoader {
                 options.inSampleSize = sampleSize;
             }
         }
-        Bitmap bmp = loadRegionBitmap(context, uri, options, bounds);
+        Bitmap bmp = loadRegionBitmap(context, environment, uri, options, bounds);
         return bmp;
     }
 
