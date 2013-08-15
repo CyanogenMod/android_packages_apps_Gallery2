@@ -145,6 +145,7 @@ public class CacheProcessing {
             if (similar) {
                 similarUpToIndex = i;
             } else {
+                environment.cache(cacheStep.cache);
                 mSteps.remove(i);
                 mSteps.insertElementAt(newStep, i);
             }
@@ -188,9 +189,9 @@ public class CacheProcessing {
                     Log.v(LOGTAG, "i: " + i + " get new copy for cacheBitmap "
                             + cacheBitmap + " apply...");
                 }
+                environment.cache(step.cache);
                 cacheBitmap = environment.getBitmapCopy(cacheBitmap);
                 cacheBitmap = step.apply(environment, cacheBitmap);
-                environment.cache(step.cache);
                 step.cache = cacheBitmap;
             }
         }

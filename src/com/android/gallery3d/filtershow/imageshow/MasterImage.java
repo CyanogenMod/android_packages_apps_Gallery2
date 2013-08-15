@@ -27,6 +27,7 @@ import android.os.Message;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
@@ -94,6 +95,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     private boolean mShowsOriginal;
     private List<ExifTag> mEXIF;
+    private BitmapCache mBitmapCache = new BitmapCache();
 
     private MasterImage() {
     }
@@ -371,6 +373,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void invalidatePartialPreview() {
         if (mPartialBitmap != null) {
+            mBitmapCache.cache(mPartialBitmap);
             mPartialBitmap = null;
             notifyObservers();
         }
@@ -378,6 +381,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void invalidateHighresPreview() {
         if (mHighresBitmap != null) {
+            mBitmapCache.cache(mHighresBitmap);
             mHighresBitmap = null;
             notifyObservers();
         }
@@ -476,11 +480,13 @@ public class MasterImage implements RenderingRequestCaller {
         }
         if (request.getType() == RenderingRequest.PARTIAL_RENDERING
                 && request.getScaleFactor() == getScaleFactor()) {
+            mBitmapCache.cache(mPartialBitmap);
             mPartialBitmap = request.getBitmap();
             notifyObservers();
             needsCheckModification = true;
         }
         if (request.getType() == RenderingRequest.HIGHRES_RENDERING) {
+            mBitmapCache.cache(mHighresBitmap);
             mHighresBitmap = request.getBitmap();
             notifyObservers();
             needsCheckModification = true;
@@ -586,4 +592,7 @@ public class MasterImage implements RenderingRequestCaller {
         return mEXIF;
     }
 
+    public BitmapCache getBitmapCache() {
+        return mBitmapCache;
+    }
 }
