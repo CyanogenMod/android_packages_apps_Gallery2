@@ -284,8 +284,10 @@ public class ImageShow extends View implements OnGestureListener,
             float ty = (getHeight() - h) / 2.0f;
             float tx = (getWidth() - w) / 2.0f;
 
-            Rect d = new Rect((int) tx, (int) ty, (int) (w + tx),
-                    (int) (h + ty));
+            Rect d = new Rect((int) tx + mShadowMargin,
+                    (int) ty + mShadowMargin,
+                    (int) (w + tx) - mShadowMargin,
+                    (int) (h + ty) - mShadowMargin);
             if (updateBounds) {
                 mImageBounds = d;
             }
