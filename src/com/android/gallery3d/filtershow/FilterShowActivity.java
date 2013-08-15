@@ -598,9 +598,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (representation == null) {
             filterRepresentation = filterRepresentation.copy();
             copy.addFilter(filterRepresentation);
-        } else if (filterRepresentation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
-            representation.useParametersFrom(filterRepresentation);
-            filterRepresentation = representation;
         } else {
             if (filterRepresentation.allowsSingleInstanceOnly()) {
                 // Don't just update the filter representation. Centralize the
@@ -746,7 +743,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             Bitmap largeBitmap = MasterImage.getImage().getOriginalBitmapLarge();
             mBoundService.setOriginalBitmap(largeBitmap);
-            MasterImage.getImage().resetGeometryImages();
+            MasterImage.getImage().resetGeometryImages(true);
 
             float previewScale = (float) largeBitmap.getWidth()
                     / (float) MasterImage.getImage().getOriginalBounds().width();
