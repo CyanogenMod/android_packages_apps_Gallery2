@@ -166,6 +166,9 @@ public class IngestService extends Service implements ImportTask.Listener,
             mClientActivity.onIndexFinish();
             mRedeliverIndexFinish = false;
         }
+        if (mDevice != null) {
+            mNeedRelaunchNotification = true;
+        }
     }
 
     protected void importSelectedItems(SparseBooleanArray selected, Adapter adapter) {
