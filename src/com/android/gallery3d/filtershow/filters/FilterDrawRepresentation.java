@@ -28,6 +28,7 @@ import com.android.gallery3d.filtershow.controller.BasicParameterInt;
 import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.controller.ParameterBrightness;
+import com.android.gallery3d.filtershow.controller.ParameterColor;
 import com.android.gallery3d.filtershow.controller.ParameterHue;
 import com.android.gallery3d.filtershow.controller.ParameterOpacity;
 import com.android.gallery3d.filtershow.controller.ParameterSaturation;
@@ -35,23 +36,20 @@ import com.android.gallery3d.filtershow.editors.EditorDraw;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Vector;
 
 public class FilterDrawRepresentation extends FilterRepresentation {
     private static final String LOGTAG = "FilterDrawRepresentation";
 
     public static final int PARAM_SIZE = 0;
-    public static final int PARAM_HUE = 1;
-    public static final int PARAM_BRIGHTNESS = 2;
-    public static final int PARAM_SATURATION = 3;
-    public static final int PARAM_OPACITY = 4;
-    public static final int PARAM_STYLE = 5;
+
+    public static final int PARAM_STYLE = 1;
+    public static final int PARAM_COLOR = 2;
     private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
-    private BasicParameterInt mParamHue = new ParameterHue(PARAM_HUE, 0);
-    private BasicParameterInt mParamBrightness = new ParameterBrightness(PARAM_BRIGHTNESS, 220);
-    private BasicParameterInt mParamSaturation = new ParameterSaturation(PARAM_SATURATION, 200);
-    private ParameterOpacity mParamOpacity = new ParameterOpacity(PARAM_OPACITY, 200);
+
     private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 5);
+    ParameterColor mParamColor = new ParameterColor(PARAM_COLOR);
     int mParamMode;
     Parameter mCurrentParam = mParamSize;
     private static final String SERIAL_COLOR = "color";
@@ -64,11 +62,8 @@ public class FilterDrawRepresentation extends FilterRepresentation {
 
     private Parameter[] mAllParam = {
             mParamSize,
-            mParamHue,
-            mParamBrightness,
-            mParamSaturation,
-            mParamOpacity,
-            mParamStyle
+            mParamStyle,
+            mParamColor
     };
 
     public void setPramMode(int mode) {
@@ -96,6 +91,33 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         public int noPoints = 0;
         public float[] mPoints = new float[20];
 
+        public StrokeData() {
+        }
+
+        public StrokeData(StrokeData copy) {
+            mType = copy.mType;
+            mPath = new Path(copy.mPath);
+            mRadius = copy.mRadius;
+            mColor = copy.mColor;
+            noPoints = copy.noPoints;
+            mPoints = Arrays.copyOf(copy.mPoints, copy.mPoints.length);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof StrokeData)) {
+                return false;
+            }
+            StrokeData sd = (StrokeData) o;
+            if (mType != sd.mType
+                    || mRadius != sd.mRadius
+                    || noPoints != sd.noPoints
+                    || mColor != sd.mColor) {
+                return false;
+            }
+            return mPath.equals(sd.mPath);
+        }
+
         @Override
         public String toString() {
             return "stroke(" + mType + ", path(" + (mPath) + "), " + mRadius + " , "
@@ -108,19 +130,23 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         }
     }
 
-    public String getValueString() {
+    static String colorHexString(int val) {
+        String str = "00000000" + Integer.toHexString(val);
+        str = "0x" + str.substring(str.length() - 8);
+        return str;
+    }
 
+    public String getValueString() {
+        int val;
         switch (mParamMode) {
+            case PARAM_COLOR:
+                val = ((ParameterColor) mAllParam[mParamMode]).getValue();
+                return ((val > 0) ? " +" : " ") + colorHexString(val);
             case PARAM_SIZE:
-            case PARAM_HUE:
-            case PARAM_BRIGHTNESS:
-            case PARAM_SATURATION:
-            case PARAM_OPACITY:
-                int val = ((BasicParameterInt) mAllParam[mParamMode]).getValue();
+                val = ((BasicParameterInt) mAllParam[mParamMode]).getValue();
                 return ((val > 0) ? " +" : " ") + val;
             case PARAM_STYLE:
                 return "";
-
         }
         return "";
     }
@@ -183,7 +209,11 @@ public class FilterDrawRepresentation extends FilterRepresentation {
                     mCurrent = null;
                 }
                 if (representation.mDrawing != null) {
-                    mDrawing = (Vector<StrokeData>) representation.mDrawing.clone();
+                    mDrawing = new Vector<StrokeData>();
+                    for (Iterator<StrokeData> elem = representation.mDrawing.iterator(); elem.hasNext(); ) {
+                        StrokeData next =  elem.next();
+                        mDrawing.add(new StrokeData(next));
+                    }
                 } else {
                     mDrawing = null;
                 }
@@ -205,26 +235,33 @@ public class FilterDrawRepresentation extends FilterRepresentation {
             FilterDrawRepresentation fdRep = (FilterDrawRepresentation) representation;
             if (fdRep.mDrawing.size() != mDrawing.size())
                 return false;
-            if (fdRep.mCurrent == null && (mCurrent == null || mCurrent.mPath == null)) {
-                return true;
+            if (fdRep.mCurrent == null ^ (mCurrent == null || mCurrent.mPath == null)) {
+                return false;
             }
+
+
             if (fdRep.mCurrent != null && mCurrent != null && mCurrent.mPath != null) {
                 if (fdRep.mCurrent.noPoints == mCurrent.noPoints) {
                     return true;
                 }
                 return false;
             }
+
+        int n = mDrawing.size();
+        for (int i = 0; i < n; i++) {
+            StrokeData a = mDrawing.get(i);
+            StrokeData b = mDrawing.get(i);
+            if (!a.equals(b)){
+                return false;
+            }
+        }
+        return true;
         }
         return false;
     }
 
     private int computeCurrentColor(){
-        float hue = 360 * mParamHue.getValue() / (float) mParamHue.getMaximum();
-        float sat = mParamSaturation.getValue() / (float) mParamSaturation.getMaximum();
-        float val = mParamBrightness.getValue() / (float) mParamBrightness.getMaximum();
-        int op = mParamOpacity.getValue();
-        float[] hsv = new float[]{hue, sat, val};
-        return Color.HSVToColor(op, hsv);
+        return mParamColor.getValue();
     }
 
     public void fillStrokeParameters(StrokeData sd){

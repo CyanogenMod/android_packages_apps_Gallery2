@@ -98,6 +98,8 @@ public class ImageDraw extends ImageShow {
 
     public void setFilterDrawRepresentation(FilterDrawRepresentation fr) {
         mFRep = fr;
+        mTmpStrokData =
+                new FilterDrawRepresentation.StrokeData();
     }
 
     public Drawable getIcon(Context context) {

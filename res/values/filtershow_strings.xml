@@ -225,7 +225,7 @@
     <!--  Label for the Brightness to draw in [CHAR LIMIT=14] -->
     <string name="draw_value">Brightness</string>
     <!--  Label for the color to draw in [CHAR LIMIT=14] -->
-    <string name="draw_opacity">Opacity</string>
+    <string name="draw_color">Color</string>
     <!--  Label for the line style of drawing in [CHAR LIMIT=14] -->
     <string name="draw_style_line">Lines</string>
     <!--  Label for the Marker brush style of drawing in [CHAR LIMIT=14] -->

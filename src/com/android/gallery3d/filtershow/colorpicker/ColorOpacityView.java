@@ -54,7 +54,7 @@ public class ColorOpacityView extends View implements ColorListener {
     private int mSliderColor;
     private float mDotX = mBorder;
     private float mDotY = mBorder;
-    private final static float DOT_SIZE = ColorRectView.DOT_SIZE;
+    private final static float DOT_SIZE = ColorHueView.DOT_SIZE;
     public final static float BORDER_SIZE = 20;;
 
     public ColorOpacityView(Context ctx, AttributeSet attrs) {
@@ -79,6 +79,10 @@ public class ColorOpacityView extends View implements ColorListener {
         mLinePaint2.setColor(mSliderColor);
         mLinePaint2.setStrokeWidth(4);
 
+        makeCheckPaint();
+    }
+
+    private void makeCheckPaint(){
         int[] colors = new int[16 * 16];
         for (int i = 0; i < colors.length; i++) {
             int y = i / (16 * 8);
@@ -129,9 +133,9 @@ public class ColorOpacityView extends View implements ColorListener {
         mDotX = pos + mBorder;
 
         int[] colors3 = new int[] {
-        mSliderColor, mSliderColor, 0x66000000, 0 };
+                mSliderColor, mSliderColor, 0x66000000, 0 };
         RadialGradient g = new RadialGradient(mDotX, mDotY, mDotRadius, colors3, new float[] {
-        0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
+                0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
         mDotPaint.setShader(g);
     }
 
@@ -171,8 +175,6 @@ public class ColorOpacityView extends View implements ColorListener {
     @Override
     public void setColor(float[] hsv) {
         System.arraycopy(hsv, 0, mHSVO, 0, mHSVO.length);
-
-        float oy = mDotY;
 
         updatePaint();
         setupButton();
