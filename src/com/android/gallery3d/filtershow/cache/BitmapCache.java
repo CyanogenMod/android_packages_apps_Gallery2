@@ -49,8 +49,21 @@ public class BitmapCache {
             list = new ArrayList<WeakReference<Bitmap>>();
             mBitmapCache.put(key, list);
         }
+        int i = 0;
+        while (i < list.size()) {
+            if (list.get(i).get() == null) {
+                list.remove(i);
+            } else {
+                i++;
+            }
+        }
+        for (i = 0; i < list.size(); i++) {
+            if (list.get(i).get() == null) {
+                list.remove(i);
+            }
+        }
         if (list.size() < mMaxItemsPerKey) {
-            for (int i = 0; i < list.size(); i++) {
+            for (i = 0; i < list.size(); i++) {
                 WeakReference<Bitmap> ref = list.get(i);
                 if (ref.get() == bitmap) {
                     return; // bitmap already in the cache
