@@ -37,10 +37,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.InputDevice;
-import android.view.InputDevice.MotionRange;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -50,8 +46,6 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.tools.SaveImage;
-import com.google.android.pano.util.TouchNavGestureDetector;
-import com.google.android.pano.util.TouchNavGestureDetector.OnGestureListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -63,10 +57,9 @@ import java.io.OutputStream;
 /**
  * Activity for cropping an image.
  */
-public class CropActivity extends Activity implements OnGestureListener {
+public class CropActivity extends Activity {
     private static final String LOGTAG = "CropActivity";
     public static final String CROP_ACTION = "com.android.camera.action.CROP";
-    private static final int MIN_SCROLL_LENGTH = 5;
     private CropExtras mCropExtras = null;
     private LoadBitmapTask mLoadBitmapTask = null;
 
@@ -99,25 +92,9 @@ public class CropActivity extends Activity implements OnGestureListener {
 
     private static final int FLAG_CHECK = DO_SET_WALLPAPER | DO_RETURN_DATA | DO_EXTRA_OUTPUT;
 
-    private TouchNavGestureDetector mGestureDetector;
-    private float mTouchPadToViewRatioX;
-    private float mTouchPadToViewRatioY;
-    private float mResolutionX;
-    private float mResolutionY;
-
-    /**
-     * Used for click filtering. Any scroll less than MIN_SCROLL_LENGTH will not
-     * be registered. This will make clicking motions not trigger a scroll. Once
-     * you get past MIN_SCROLL_LENGTH, you can go below it again and register
-     * scrolls. This is to allow for starting a scroll and then moving back to
-     * the origin of the scroll.
-     */
-    private boolean mDidStartDrag;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGestureDetector = new TouchNavGestureDetector(this, this);
         Intent intent = getIntent();
         setResult(RESULT_CANCELED, new Intent());
         mCropExtras = getExtrasFromIntent(intent);
@@ -129,18 +106,16 @@ public class CropActivity extends Activity implements OnGestureListener {
         mCropView = (CropView) findViewById(R.id.cropView);
 
         ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            actionBar.setCustomView(R.layout.filtershow_actionbar);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.filtershow_actionbar);
 
-            mSaveButton = actionBar.getCustomView();
-            mSaveButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startFinishOutput();
-                }
-            });
-        }
+        View mSaveButton = actionBar.getCustomView();
+        mSaveButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startFinishOutput();
+            }
+        });
 
         if (intent.getData() != null) {
             mSourceUri = intent.getData();
@@ -719,106 +694,4 @@ public class CropActivity extends Activity implements OnGestureListener {
         RectF scaledCrop = CropMath.getScaledCropBounds(crop, photo, imageBounds);
         return scaledCrop;
     }
-
-    @Override
-    public boolean onGenericMotionEvent(MotionEvent event) {
-        boolean handled = super.onGenericMotionEvent(event);
-        if (!handled) {
-            handled = mGestureDetector.onGenericMotionEvent(event);
-            if (!handled
-                    && (event.getSource() & TouchNavGestureDetector.SOURCE_TOUCH_NAVIGATION)
-                        == TouchNavGestureDetector.SOURCE_TOUCH_NAVIGATION) {
-                int action = event.getActionMasked();
-                switch (action) {
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        sendScaledMotionEvent(event);
-                        handled = true;
-                        break;
-                }
-            }
-        }
-        return handled;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        boolean handled = super.onKeyDown(keyCode, event);
-        if (!handled) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
-                startFinishOutput();
-                handled = true;
-            }
-        }
-        return handled;
-    }
-
-    /**
-     * Returns whether a scroll happened.
-     */
-    @Override
-    public boolean onScroll(MotionEvent downEvent, MotionEvent currentEvent, float deltaX,
-            float deltaY) {
-        // If <5mm from the start, consider it a click. Used for smoother
-        // clicks.
-        if (!mDidStartDrag) {
-            float distanceX = Math.abs((currentEvent.getX() - downEvent.getX()) / mResolutionX);
-            float distanceY = Math.abs((currentEvent.getY() - downEvent.getY()) / mResolutionY);
-            if (distanceX < MIN_SCROLL_LENGTH && distanceY < MIN_SCROLL_LENGTH) {
-                // Not moved enough to scroll.
-                return false;
-            }
-        }
-        // Moved enough to scroll.
-        mDidStartDrag = true;
-        sendScaledMotionEvent(currentEvent);
-        return true;
-    }
-
-    @Override
-    public boolean onFling(MotionEvent downEvent, MotionEvent currentEvent, float velX,
-            float velY) {
-        sendScaledMotionEvent(currentEvent);
-        return true;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent downEvent) {
-        mDidStartDrag = false;
-        InputDevice device = downEvent.getDevice();
-        MotionRange motionRangeX = device.getMotionRange(MotionEvent.AXIS_X);
-        MotionRange motionRangeY = device.getMotionRange(MotionEvent.AXIS_Y);
-
-        if (motionRangeX == null || motionRangeY == null) {
-            return false;
-        }
-
-        mResolutionX = motionRangeX.getResolution();
-        mResolutionY = motionRangeY.getResolution();
-
-        if (mResolutionX == 0) {
-            mResolutionX = TouchNavGestureDetector.DEFAULT_TOUCH_RESOLUTION;
-        }
-        if (mResolutionY == 0) {
-            mResolutionY = TouchNavGestureDetector.DEFAULT_TOUCH_RESOLUTION;
-        }
-
-        // This is the conversion between a drag on the device vs. a drag on
-        // the screen.
-        mTouchPadToViewRatioX = mCropView.getWidth() / motionRangeX.getRange();
-        mTouchPadToViewRatioY = mCropView.getHeight() / motionRangeY.getRange();
-
-        sendScaledMotionEvent(downEvent);
-        return true;
-    }
-
-    private void sendScaledMotionEvent(MotionEvent event) {
-        final int scaledX = (int) (mTouchPadToViewRatioX * event.getX());
-        final int scaledY = (int) (mTouchPadToViewRatioY * event.getY());
-        final MotionEvent ev = MotionEvent.obtain(event.getEventTime(), event.getEventTime(),
-                event.getActionMasked(), scaledX, scaledY, 0);
-        mCropView.onTouchEvent(ev);
-        ev.recycle();
-    }
-
 }
