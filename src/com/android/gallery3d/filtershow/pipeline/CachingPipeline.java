@@ -349,7 +349,6 @@ public class CachingPipeline implements PipelineInterface {
         }
         setupEnvironment(preset, false);
         Vector<FilterRepresentation> filters = preset.getFilters();
-        mEnvironment.cache(buffer.getProducer()); // the producer bitmap isn't needed anymore
         Bitmap result = mCachedProcessing.process(mOriginalBitmap, filters, mEnvironment);
         buffer.setProducer(result);
     }
