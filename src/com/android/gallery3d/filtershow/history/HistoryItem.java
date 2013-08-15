@@ -28,7 +28,7 @@ public class HistoryItem {
     private Bitmap mPreviewImage;
 
     public HistoryItem(ImagePreset preset, FilterRepresentation representation) {
-        mImagePreset = new ImagePreset(preset);
+        mImagePreset = preset; // just keep a pointer to the current preset
         if (representation != null) {
             mFilterRepresentation = representation.copy();
         }
