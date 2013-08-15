@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v8.renderscript.Allocation;
 
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManagerInterface;
@@ -36,6 +37,7 @@ public class FilterEnvironment {
     private FiltersManagerInterface mFiltersManager;
     private PipelineInterface mPipeline;
     private volatile boolean mStop = false;
+    private BitmapCache mBitmapCache;
 
     public static final int QUALITY_ICON = 0;
     public static final int QUALITY_PREVIEW = 1;
@@ -49,53 +51,27 @@ public class FilterEnvironment {
         this.mStop = stop;
     }
 
-    private HashMap<Long, WeakReference<Bitmap>>
-            bitmapCach = new HashMap<Long, WeakReference<Bitmap>>();
-
     private HashMap<Integer, Integer>
                     generalParameters = new HashMap<Integer, Integer>();
 
+    public void setBitmapCache(BitmapCache cache) {
+        mBitmapCache = cache;
+    }
+
     public void cache(Buffer buffer) {
-        if (buffer == null) {
-            return;
-        }
-        Bitmap bitmap = buffer.getBitmap();
-        cache(bitmap);
+        mBitmapCache.cache(buffer);
     }
 
     public void cache(Bitmap bitmap) {
-        if (bitmap == null) {
-            return;
-        }
-        Long key = calcKey(bitmap.getWidth(), bitmap.getHeight());
-        bitmapCach.put(key, new WeakReference<Bitmap>(bitmap));
+        mBitmapCache.cache(bitmap);
     }
 
     public Bitmap getBitmap(int w, int h) {
-        Long key = calcKey(w, h);
-        WeakReference<Bitmap> ref = bitmapCach.remove(key);
-        Bitmap bitmap = null;
-        if (ref != null) {
-            bitmap = ref.get();
-        }
-        if (bitmap == null
-                || bitmap.getWidth() != w
-                || bitmap.getHeight() != h) {
-            bitmap = Bitmap.createBitmap(
-                    w, h, Bitmap.Config.ARGB_8888);
-        }
-        return bitmap;
+        return mBitmapCache.getBitmap(w, h);
     }
 
     public Bitmap getBitmapCopy(Bitmap source) {
-        Bitmap bitmap = getBitmap(source.getWidth(), source.getHeight());
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawBitmap(source, 0, 0, null);
-        return bitmap;
-    }
-
-    private Long calcKey(long w, long h) {
-        return (w << 32) | h;
+        return mBitmapCache.getBitmapCopy(source);
     }
 
     public void setImagePreset(ImagePreset imagePreset) {
