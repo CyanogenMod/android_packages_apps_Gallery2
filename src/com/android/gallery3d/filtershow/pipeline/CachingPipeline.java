@@ -157,6 +157,7 @@ public class CachingPipeline implements PipelineInterface {
     private void setupEnvironment(ImagePreset preset, boolean highResPreview) {
         mEnvironment.setPipeline(this);
         mEnvironment.setFiltersManager(mFiltersManager);
+        mEnvironment.setBitmapCache(MasterImage.getImage().getBitmapCache());
         if (highResPreview) {
             mEnvironment.setScaleFactor(mHighResPreviewScaleFactor);
         } else {
@@ -213,8 +214,7 @@ public class CachingPipeline implements PipelineInterface {
             if (bitmap == null) {
                 return;
             }
-            // TODO: use a cache of bitmaps
-            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            bitmap = mEnvironment.getBitmapCopy(bitmap);
             bitmap = preset.applyGeometry(bitmap, mEnvironment);
 
             mEnvironment.setQuality(FilterEnvironment.QUALITY_PREVIEW);
@@ -251,6 +251,7 @@ public class CachingPipeline implements PipelineInterface {
             if (request.getType() == RenderingRequest.PARTIAL_RENDERING) {
                 MasterImage master = MasterImage.getImage();
                 bitmap = ImageLoader.getScaleOneImageForPreset(master.getActivity(),
+                        mEnvironment,
                         master.getUri(), request.getBounds(),
                         request.getDestination());
                 if (bitmap == null) {
