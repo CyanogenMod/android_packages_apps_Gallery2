@@ -197,7 +197,9 @@ public class ImageShow extends View implements OnGestureListener,
 
     @Override
     public void onDraw(Canvas canvas) {
-        MasterImage.getImage().setImageShowSize(getWidth(), getHeight());
+        MasterImage.getImage().setImageShowSize(
+                getWidth() - 2*mShadowMargin,
+                getHeight() - 2*mShadowMargin);
 
         float cx = canvas.getWidth()/2.0f;
         float cy = canvas.getHeight()/2.0f;
