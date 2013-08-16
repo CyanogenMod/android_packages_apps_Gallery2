@@ -238,6 +238,7 @@ public class MasterImage implements RenderingRequestCaller {
             mHistory.addHistoryItem(historyItem);
         }
         updatePresets(true);
+        resetGeometryImages(false);
         mActivity.updateCategories();
     }
 
@@ -333,11 +334,11 @@ public class MasterImage implements RenderingRequestCaller {
         }
     }
 
-    public void resetGeometryImages() {
+    public void resetGeometryImages(boolean force) {
         ImagePreset newPresetGeometryOnly = new ImagePreset(mPreset);
         newPresetGeometryOnly.setDoApplyFilters(false);
         newPresetGeometryOnly.setDoApplyGeometry(true);
-        if (mGeometryOnlyPreset == null
+        if (force || mGeometryOnlyPreset == null
                 || !newPresetGeometryOnly.same(mGeometryOnlyPreset)) {
             mGeometryOnlyPreset = newPresetGeometryOnly;
             RenderingRequest.post(mActivity, getOriginalBitmapLarge(),
@@ -346,7 +347,7 @@ public class MasterImage implements RenderingRequestCaller {
         ImagePreset newPresetFiltersOnly = new ImagePreset(mPreset);
         newPresetFiltersOnly.setDoApplyFilters(true);
         newPresetFiltersOnly.setDoApplyGeometry(false);
-        if (mFiltersOnlyPreset == null
+        if (force || mFiltersOnlyPreset == null
                 || !newPresetFiltersOnly.same(mFiltersOnlyPreset)) {
             mFiltersOnlyPreset = newPresetFiltersOnly;
             RenderingRequest.post(mActivity, MasterImage.getImage().getOriginalBitmapLarge(),
