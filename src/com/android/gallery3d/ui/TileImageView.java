@@ -153,7 +153,6 @@ public class TileImageView extends GLView {
 
     public TileImageView(GalleryContext context) {
         mThreadPool = context.getThreadPool();
-        mTileDecoder = mThreadPool.submit(new TileDecoder());
         if (sTileSize == 0) {
             if (isHighResolution(context.getAndroidContext())) {
                 sTileSize = 512 ;
