@@ -39,4 +39,9 @@
         android:showAsAction="never"
         android:visible="true"
         android:title="@string/export_image" />
+    <item
+        android:id="@+id/printButton"
+        android:showAsAction="never"
+        android:visible="true"
+        android:title="@string/print_image"/>
 </menu>
