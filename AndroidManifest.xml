@@ -202,6 +202,13 @@
         </activity>
         <activity android:name="com.android.gallery3d.app.TrimVideo"
                 android:label="@string/trim_label">
+            <intent-filter android:label="@string/crop_label">
+                <action android:name="com.android.camera.action.TRIM" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
         </activity>
 
         <permission android:name="com.android.gallery3d.filtershow.permission.READ"
