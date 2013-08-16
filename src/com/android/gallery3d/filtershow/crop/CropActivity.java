@@ -347,6 +347,8 @@ public class CropActivity extends Activity {
         if (success) {
             setResult(RESULT_OK, intent);
         } else {
+            Toast.makeText(CropActivity.this, R.string.save_error,
+                    Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED, intent);
         }
         done();
@@ -502,9 +504,13 @@ public class CropActivity extends Activity {
                         fullSize = BitmapFactory.decodeStream(mInStream);
                     }
                     if (fullSize != null) {
-                        crop = Bitmap.createBitmap(fullSize, roundedTrueCrop.left,
-                                roundedTrueCrop.top, roundedTrueCrop.width(),
-                                roundedTrueCrop.height());
+                        try {
+                            crop = Bitmap.createBitmap(fullSize, roundedTrueCrop.left,
+                                    roundedTrueCrop.top, roundedTrueCrop.width(),
+                                    roundedTrueCrop.height());
+                        } catch (java.lang.OutOfMemoryError err) {
+                            Log.e(LOGTAG, "failed to create bitmap:" + err );
+                        }
                     }
                 }
 
