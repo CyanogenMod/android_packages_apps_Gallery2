@@ -49,6 +49,8 @@
     <string name="hide_imagestate_panel">Hide Applied Effects</string>
     <!--  Text for the menu item to export a flattened photo[CHAR LIMIT=30] -->
     <string name="export_image">Export</string>
+    <!-- Text for the print menu item [CHAR LIMIT=20] -->
+    <string name="print_image">Print</string>
 
     <!-- Export Dialog-->
 

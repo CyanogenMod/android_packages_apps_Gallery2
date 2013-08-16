@@ -29,11 +29,14 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
@@ -106,10 +109,13 @@ import com.android.gallery3d.filtershow.tools.XmpPresets.XMresults;
 import com.android.gallery3d.filtershow.ui.ExportDialog;
 import com.android.gallery3d.filtershow.ui.FramedTextButton;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.PrintJob;
 import com.android.gallery3d.util.UsageStatistics;
 import com.android.photos.data.GalleryBitmapPool;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -962,8 +968,17 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 toggleInformationPanel();
                 return true;
             }
+            case R.id.printButton: {
+                print();
+                return true;
+            }
         }
         return false;
+    }
+
+    public void print() {
+        Bitmap bitmap = MasterImage.getImage().getHighresImage();
+        PrintJob.printBitmap(this, "ImagePrint", bitmap);
     }
 
     public void addNewPreset() {
