@@ -95,7 +95,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         mEditTitle = editTitle;
         mFilterTitle = stateButton;
         mButton = editTitle;
-        MasterImage.getImage().resetGeometryImages();
+        MasterImage.getImage().resetGeometryImages(false);
         setMenuIcon(true);
         setUtilityPanelUI(actionButton, editControl);
     }
@@ -242,7 +242,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         }
         if (mChangesGeometry) {
             // Regenerate both the filtered and the geometry-only bitmaps
-            MasterImage.getImage().resetGeometryImages();
+            MasterImage.getImage().resetGeometryImages(true);
         }
         // Regenerate the filtered bitmap.
         MasterImage.getImage().invalidateFiltersOnly();
