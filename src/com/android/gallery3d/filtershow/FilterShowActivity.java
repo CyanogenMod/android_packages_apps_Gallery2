@@ -118,6 +118,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private LoadBitmapTask mLoadBitmapTask;
     private boolean mLoading = true;
+    private boolean mPaused  = true;
 
     private CategoryAdapter mCategoryLooksAdapter = null;
     private CategoryAdapter mCategoryBordersAdapter = null;
@@ -129,6 +130,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mPaused = true;
         boolean onlyUsePortrait = getResources().getBoolean(R.bool.only_use_portrait);
         if (onlyUsePortrait) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -499,21 +501,25 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             final View imageShow = findViewById(R.id.imageShow);
             imageShow.setVisibility(View.VISIBLE);
 
-            Bitmap largeBitmap = mImageLoader.getOriginalBitmapLarge();
-            FilteringPipeline pipeline = FilteringPipeline.getPipeline();
-            pipeline.setOriginal(largeBitmap);
-            float previewScale = (float) largeBitmap.getWidth() / (float) mImageLoader.getOriginalBounds().width();
-            pipeline.setPreviewScaleFactor(previewScale);
-            Bitmap highresBitmap = mImageLoader.getOriginalBitmapHighres();
-            if (highresBitmap != null) {
-                float highResPreviewScale = (float) highresBitmap.getWidth() / (float) mImageLoader.getOriginalBounds().width();
-                pipeline.setHighResPreviewScaleFactor(highResPreviewScale);
+            if (!mPaused) {
+                Bitmap largeBitmap = mImageLoader.getOriginalBitmapLarge();
+                FilteringPipeline pipeline = FilteringPipeline.getPipeline();
+                pipeline.setOriginal(largeBitmap);
+                float previewScale = (float) largeBitmap.getWidth() /
+                        (float) mImageLoader.getOriginalBounds().width();
+                pipeline.setPreviewScaleFactor(previewScale);
+                Bitmap highresBitmap = mImageLoader.getOriginalBitmapHighres();
+                if (highresBitmap != null) {
+                    float highResPreviewScale = (float) highresBitmap.getWidth() /
+                            (float) mImageLoader.getOriginalBounds().width();
+                    pipeline.setHighResPreviewScaleFactor(highResPreviewScale);
+                }
+                pipeline.turnOnPipeline(true);
+                MasterImage.getImage().setOriginalGeometry(largeBitmap);
             }
             if (!mShowingTinyPlanet) {
                 mCategoryFiltersAdapter.removeTinyPlanet();
             }
-            pipeline.turnOnPipeline(true);
-            MasterImage.getImage().setOriginalGeometry(largeBitmap);
             mCategoryLooksAdapter.imageLoaded();
             mCategoryBordersAdapter.imageLoaded();
             mCategoryGeometryAdapter.imageLoaded();
@@ -663,6 +669,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     @Override
     public void onPause() {
         super.onPause();
+        mPaused = true;
         rsPause();
         if (mShareActionProvider != null) {
             mShareActionProvider.setOnShareTargetSelectedListener(null);
@@ -672,6 +679,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     @Override
     public void onResume() {
         super.onResume();
+        mPaused = false;
         rsResume();
         if (mShareActionProvider != null) {
             mShareActionProvider.setOnShareTargetSelectedListener(this);
