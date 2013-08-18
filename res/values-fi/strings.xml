@@ -436,4 +436,11 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d valokuva"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d valokuvaa"</item>
   </plurals>
+    <string name="bass_boost_strength">Basson korostus</string>
+    <string name="virtualizer_strength">3D-efekti</string>
+    <string name="audio_effects">Audioefektit</string>
+    <string name="headset_plug">Liitä kuulokkeet näihin efekteihin.</string>
+    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+    <string name="fail_trim">Anteeksi, tätä videota ei voi muokata</string>
+    <string name="can_not_trim">Vain mp4-tiedostoja voi muokata</string>
 </resources>
