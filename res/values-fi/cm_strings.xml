@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_camera_storage_title">Tallennustila</string>
+    <string name="pref_camera_picturesize_entry_12_8mp">12.8MP</string>
+    <string name="pref_camera_picturesize_entry_11_5mp">11.5MP</string>
+    <string name="pref_camera_picturesize_entry_9mp">9MP</string>
+    <string name="pref_camera_picturesize_entry_6_4mp">6.4MP</string>
+    <string name="pref_camera_picturesize_entry_6mp">6MP</string>
+    <string name="pref_camera_picturesize_entry_4_5mp">4.5MP</string>
+    <string name="pref_camera_picturesize_entry_3_7mp">3.7MP</string>
+    <string name="pref_camera_picturesize_entry_2_5mp">2.5MP</string>
+    <string name="pref_camera_picturesize_entry_2_1mp">2.1MP</string>
+    <string name="pref_camera_picturesize_entry_1_9mp">1.9MP</string>
+    <string name="pref_camera_picturesize_entry_1_5mp">1.5MP</string>
+    <string name="pref_camera_picturesize_entry_wxga">WXGA</string>
+    <string name="pref_camera_picturesize_entry_xga">XGA</string>
+    <string name="pref_camera_picturesize_entry_svga">SVGA</string>
+    <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
+    <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">Basson korostus</string>
+    <string name="virtualizer_strength">3D-efekti</string>
+    <string name="audio_effects">Audioefektit</string>
+    <string name="headset_plug">Liitä kuulokkeet näihin efekteihin.</string>
+    <string name="fail_trim">Anteeksi, tätä videota ei voi muokata</string>
+    <string name="can_not_trim">Vain mp4-tiedostoja voi muokata</string>
+</resources>
