@@ -363,7 +363,7 @@
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"Cambiar a vídeo"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"Cambiar a modo panorámico"</string>
     <string name="accessibility_switch_to_new_panorama" msgid="8116783308051524188">"Cambiar a nueva panorámica"</string>
-    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Cambiar a modo de reajuste"</string>
+    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Cambiar a reenfoque"</string>
     <string name="accessibility_review_cancel" msgid="9070531914908644686">"Cancelar"</string>
     <string name="accessibility_review_ok" msgid="7793302834271343168">"Listo"</string>
     <string name="accessibility_review_retake" msgid="659300290054705484">"Revisar repetición"</string>

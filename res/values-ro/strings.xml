@@ -60,7 +60,7 @@
     <string name="share_panorama" msgid="2569029972820978718">"Trimiteți panorama"</string>
     <string name="share_as_photo" msgid="8959225188897026149">"Trimiteți fotografia"</string>
     <string name="deleted" msgid="6795433049119073871">"Ștearsă"</string>
-    <string name="undo" msgid="2930873956446586313">"ANULAŢI"</string>
+    <string name="undo" msgid="2930873956446586313">"ANULAȚI"</string>
     <string name="select_all" msgid="3403283025220282175">"Selectaţi-le pe toate"</string>
     <string name="deselect_all" msgid="5758897506061723684">"Deselectaţi-le pe toate"</string>
     <string name="slideshow" msgid="4355906903247112975">"Prezentare"</string>
@@ -346,7 +346,7 @@
     <string name="video_recording_stopped" msgid="5086919511555808580">"Înregistrarea videoclipului s-a oprit."</string>
     <string name="disable_video_snapshot_hint" msgid="4957723267826476079">"Instant. video este dezact. când efectele speciale sunt pornite."</string>
     <string name="clear_effects" msgid="5485339175014139481">"Ștergeţi efectul"</string>
-    <string name="effect_silly_faces" msgid="8107732405347155777">"FEŢE PROSTUŢE"</string>
+    <string name="effect_silly_faces" msgid="8107732405347155777">"FEȚE PROSTUȚE"</string>
     <string name="effect_background" msgid="6579360207378171022">"FUNDAL"</string>
     <string name="accessibility_shutter_button" msgid="2664037763232556307">"Butonul Declanşaţi"</string>
     <string name="accessibility_menu_button" msgid="7140794046259897328">"Butonul Meniu"</string>
@@ -363,7 +363,7 @@
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"Comutaţi la camera video"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"Comutaţi la panoramă"</string>
     <string name="accessibility_switch_to_new_panorama" msgid="8116783308051524188">"Comutaţi la o panoramă nouă"</string>
-    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Comutați la refocalizare"</string>
+    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Comutați la refocalizare"</string>
     <string name="accessibility_review_cancel" msgid="9070531914908644686">"Anulaţi examinarea"</string>
     <string name="accessibility_review_ok" msgid="7793302834271343168">"Terminaţi examinarea"</string>
     <string name="accessibility_review_retake" msgid="659300290054705484">"Refaceţi"</string>
