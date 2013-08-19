@@ -62,6 +62,10 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.ui.Knob;
+import org.codeaurora.gallery3d.ext.IActivityHooker;
+import org.codeaurora.gallery3d.ext.MovieItem;
+import org.codeaurora.gallery3d.ext.IMovieItem;
+import org.codeaurora.gallery3d.video.ExtensionHelper;
 
 /**
  * This activity plays a video from a specified URI.
@@ -79,7 +83,6 @@ public class MovieActivity extends Activity {
     private MoviePlayer mPlayer;
     private boolean mFinishOnCompletion;
     private Uri mUri;
-    private boolean mTreatUpAsBack;
 
     private static final short BASSBOOST_MAX_STRENGTH = 1000;
     private static final short VIRTUALIZER_MAX_STRENGTH = 1000;
@@ -99,6 +102,9 @@ public class MovieActivity extends Activity {
     private Switch mSwitch;
     private Knob mBassBoostKnob;
     private Knob mVirtualizerKnob;
+
+    private IMovieItem mMovieItem;
+    private IActivityHooker mMovieHooker;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -153,11 +159,14 @@ public class MovieActivity extends Activity {
         setSystemUiVisibility(rootView);
 
         Intent intent = getIntent();
+
+        mMovieHooker = ExtensionHelper.getHooker(this);
+        initMovieInfo(intent);
+
         initializeActionBar(intent);
         mFinishOnCompletion = intent.getBooleanExtra(
                 MediaStore.EXTRA_FINISH_ON_COMPLETION, true);
-        mTreatUpAsBack = intent.getBooleanExtra(KEY_TREAT_UP_AS_BACK, false);
-        mPlayer = new MoviePlayer(rootView, this, intent.getData(), savedInstanceState,
+        mPlayer = new MoviePlayer(rootView, this, mMovieItem, savedInstanceState,
                 !mFinishOnCompletion) {
             @Override
             public void onCompletion() {
@@ -183,7 +192,10 @@ public class MovieActivity extends Activity {
         // We set the background in the theme to have the launching animation.
         // But for the performance (and battery), we remove the background here.
         win.setBackgroundDrawable(null);
-
+        mMovieHooker.init(this, intent);
+        mMovieHooker.setParameter(null, mPlayer.getMoviePlayerExt());
+        mMovieHooker.setParameter(null, mMovieItem);
+        mMovieHooker.setParameter(null, mPlayer.getVideoSurface());
         // Determine available/supported effects
         final Descriptor[] effects = AudioEffect.queryEffects();
         for (final Descriptor effect : effects) {
@@ -299,6 +311,14 @@ public class MovieActivity extends Activity {
                 return true;
             }
         });
+        mMovieHooker.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        mMovieHooker.onPrepareOptionsMenu(menu);
         return true;
     }
 
@@ -402,19 +422,16 @@ public class MovieActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (mTreatUpAsBack) {
-                finish();
-            } else {
-                startActivity(new Intent(this, GalleryActivity.class));
-                finish();
-            }
+         // If click back up button, we will always finish current activity and 
+         // back to previous one.
+            finish();
             return true;
         } else if (id == R.id.action_share) {
             startActivity(Intent.createChooser(createShareIntent(),
                     getString(R.string.share)));
             return true;
         }
-        return false;
+        return mMovieHooker.onOptionsItemSelected(item);
     }
 
     public void showHeadsetPlugToast() {
@@ -493,5 +510,18 @@ public class MovieActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         return mPlayer.onKeyUp(keyCode, event)
                 || super.onKeyUp(keyCode, event);
+    }
+
+    private boolean isSharable() {
+        String scheme = mUri.getScheme();
+        return ContentResolver.SCHEME_FILE.equals(scheme)
+                || (ContentResolver.SCHEME_CONTENT.equals(scheme) && MediaStore.AUTHORITY
+                        .equals(mUri.getAuthority()));
+    }
+    private void initMovieInfo(Intent intent) {
+        Uri original = intent.getData();
+        String mimeType = intent.getType();
+        mMovieItem = new MovieItem(original, mimeType, null);
+        mMovieItem.setOriginalUri(original);
     }
 }
