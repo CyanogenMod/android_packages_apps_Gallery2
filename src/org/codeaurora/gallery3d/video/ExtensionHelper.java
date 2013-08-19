@@ -18,6 +18,7 @@ public class ExtensionHelper {
         final ActivityHookerGroup group = new ActivityHookerGroup();
         boolean loop = context.getResources().getBoolean(R.bool.loop);
         boolean stereo = context.getResources().getBoolean(R.bool.stereo);
+        boolean streaming = context.getResources().getBoolean(R.bool.streaming);
 
         if (loop == true) {
             group.addHooker(new LoopVideoHooker()); // add it for common feature.
@@ -25,7 +26,10 @@ public class ExtensionHelper {
         if (stereo == true) {
             group.addHooker(new StereoAudioHooker()); // add it for common feature.
         }
-
+        if (streaming == true) {
+            group.addHooker(new StreamingHooker());
+            group.addHooker(new BookmarkHooker());
+        }
         return group;
     }
 }

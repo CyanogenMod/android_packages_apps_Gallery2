@@ -27,6 +27,8 @@ public interface ControllerOverlay {
     void onSeekEnd(int time, int trimStartTime, int trimEndTime);
     void onShown();
     void onHidden();
+    // get current video is from RTSP
+    boolean onIsRTSP();
     void onReplay();
   }
 

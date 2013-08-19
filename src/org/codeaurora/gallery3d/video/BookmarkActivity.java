@@ -1,4 +1,4 @@
-package com.qcom.gallery3d.video;
+package org.codeaurora.gallery3d.video;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -29,63 +30,63 @@ import android.widget.TextView;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.MovieActivity;
-import com.qcom.gallery3d.ext.QcomLog;
 
 public class BookmarkActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "BookmarkActivity";
     private static final boolean LOG = true;
-    
+
     private BookmarkEnhance mBookmark;
     private BookmarkAdapter mAdapter;
     private Cursor mCursor;
     private ListView mListView;
     private TextView mEmptyView;
-    
+
     private static final int MENU_DELETE_ALL = 1;
     private static final int MENU_DELETE_ONE = 2;
     private static final int MENU_EDIT = 3;
-    
+
     public static final String KEY_LOGO_BITMAP = "logo-bitmap";
-    
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmark);
-        
+
         Bitmap logo = getIntent().getParcelableExtra(KEY_LOGO_BITMAP);
         if (logo != null) {
             getActionBar().setLogo(new BitmapDrawable(getResources(), logo));
         }
-        
+
         mListView = (ListView) findViewById(android.R.id.list);
         mEmptyView = (TextView) findViewById(android.R.id.empty);
-        
+
         mBookmark = new BookmarkEnhance(this);
         mCursor = mBookmark.query();
-        mAdapter = new BookmarkAdapter(this, R.layout.bookmark_item, null, new String[]{}, new int[]{});
+        mAdapter = new BookmarkAdapter(this, R.layout.bookmark_item, null, new String[] {},
+                new int[] {});
         mListView.setEmptyView(mEmptyView);
         mListView.setAdapter(mAdapter);
         mAdapter.changeCursor(mCursor);
-        
+
         mListView.setOnItemClickListener(this);
         registerForContextMenu(mListView);
     }
-    
+
     @Override
     protected void onStart() {
         super.onStart();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
     }
-    
+
     @Override
     protected void onDestroy() {
         if (mAdapter != null) {
@@ -93,34 +94,34 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
         }
         super.onDestroy();
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_DELETE_ALL, 0, R.string.delete_all)
-            .setIcon(android.R.drawable.ic_menu_delete);
+                .setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch(item.getItemId()) {
-        case MENU_DELETE_ALL:
-            mBookmark.deleteAll();
-            return true;
-        default:
-            break;
+        switch (item.getItemId()) {
+            case MENU_DELETE_ALL:
+                mBookmark.deleteAll();
+                return true;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     private class BookmarkAdapter extends SimpleCursorAdapter {
 
         public BookmarkAdapter(final Context context, final int layout, final Cursor c,
                 final String[] from, final int[] to) {
             super(context, layout, c, from, to);
         }
-        
+
         @Override
         public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
             final View view = super.newView(context, cursor, parent);
@@ -130,7 +131,7 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
             view.setTag(holder);
             return view;
         }
-        
+
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
             final ViewHolder holder = (ViewHolder) view.getTag();
@@ -141,14 +142,14 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
             holder.mTitleView.setText(holder.mTitle);
             holder.mDataView.setText(holder.mData);
         }
-        
+
         @Override
         public void changeCursor(final Cursor c) {
             super.changeCursor(c);
         }
-        
+
     }
-    
+
     private class ViewHolder {
         long mId;
         String mTitle;
@@ -159,7 +160,8 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
     }
 
     @Override
-    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+            final long id) {
         final Object o = view.getTag();
         if (o instanceof ViewHolder) {
             final ViewHolder holder = (ViewHolder) o;
@@ -174,7 +176,7 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
             startActivity(intent);
         }
         if (LOG) {
-            QcomLog.v(TAG, "onItemClick(" + position + ", " + id + ")");
+            Log.v(TAG, "onItemClick(" + position + ", " + id + ")");
         }
     }
 
@@ -185,41 +187,41 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
         menu.add(0, MENU_DELETE_ONE, 0, R.string.delete);
         menu.add(0, MENU_EDIT, 0, R.string.edit);
     }
-    
+
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-        case MENU_DELETE_ONE:
-            mBookmark.delete(info.id);
-            return true;
-        case MENU_EDIT:
-            final Object obj = info.targetView.getTag();
-            if (obj instanceof ViewHolder) {
-                showEditDialog((ViewHolder)obj);
-            } else {
-                QcomLog.w(TAG, "wrong context item info " + info);
-            }
-            return true;
-        default:
-            return super.onContextItemSelected(item);
+            case MENU_DELETE_ONE:
+                mBookmark.delete(info.id);
+                return true;
+            case MENU_EDIT:
+                final Object obj = info.targetView.getTag();
+                if (obj instanceof ViewHolder) {
+                    showEditDialog((ViewHolder) obj);
+                } else {
+                    Log.w(TAG, "wrong context item info " + info);
+                }
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
-    
+
     private void showEditDialog(final ViewHolder holder) {
         if (LOG) {
-            QcomLog.v(TAG, "showEditDialog(" + holder + ")");
+            Log.v(TAG, "showEditDialog(" + holder + ")");
         }
         if (holder == null) {
             return;
         }
         final LayoutInflater inflater = LayoutInflater.from(this);
         final View v = inflater.inflate(R.layout.bookmark_edit_dialog, null);
-        final EditText titleView = (EditText)v.findViewById(R.id.title);
-        final EditText dataView = (EditText)v.findViewById(R.id.data);
+        final EditText titleView = (EditText) v.findViewById(R.id.title);
+        final EditText dataView = (EditText) v.findViewById(R.id.data);
         titleView.setText(holder.mTitle);
         dataView.setText(holder.mData);
-        
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edit);
         builder.setView(v);
@@ -231,7 +233,7 @@ public class BookmarkActivity extends Activity implements OnItemClickListener {
                 mBookmark.update(holder.mId, titleView.getText().toString(),
                         dataView.getText().toString(), 0);
             }
-            
+
         });
         builder.setNegativeButton(android.R.string.cancel, null);
         final AlertDialog dialog = builder.create();
