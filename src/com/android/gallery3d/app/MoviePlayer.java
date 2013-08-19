@@ -23,10 +23,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Metadata;
 import android.media.audiofx.AudioEffect;
 import android.media.audiofx.Virtualizer;
 import android.net.Uri;
@@ -39,6 +43,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.VideoView;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
@@ -47,18 +52,27 @@ import com.android.gallery3d.util.CacheManager;
 import com.android.gallery3d.util.GalleryUtils;
 import org.codeaurora.gallery3d.ext.IMoviePlayer;
 import org.codeaurora.gallery3d.ext.IMovieItem;
+import org.codeaurora.gallery3d.ext.MovieUtils;
+import org.codeaurora.gallery3d.video.BookmarkEnhance;
 import org.codeaurora.gallery3d.video.ExtensionHelper;
+import org.codeaurora.gallery3d.video.CodeauroraVideoView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MoviePlayer implements
         MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
-        ControllerOverlay.Listener {
+        ControllerOverlay.Listener,
+        MediaPlayer.OnInfoListener,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnSeekCompleteListener {
     @SuppressWarnings("unused")
     private static final String TAG = "MoviePlayer";
+    private static final boolean LOG = false;
 
     private static final String KEY_VIDEO_POSITION = "video-position";
     private static final String KEY_RESUMEABLE_TIME = "resumeable-timeout";
@@ -72,18 +86,30 @@ public class MoviePlayer implements
     private static final String CMDNAME = "command";
     private static final String CMDPAUSE = "pause";
 
+    private static final String KEY_VIDEO_CAN_SEEK = "video_can_seek";
+    private static final String KEY_VIDEO_CAN_PAUSE = "video_can_pause";
+    private static final String KEY_VIDEO_LAST_DURATION = "video_last_duration";
+    private static final String KEY_VIDEO_LAST_DISCONNECT_TIME = "last_disconnect_time";
+    private static final String KEY_VIDEO_STREAMING_TYPE = "video_streaming_type";
+    private static final String KEY_VIDEO_STATE = "video_state";
+
     private static final String VIRTUALIZE_EXTRA = "virtualize";
     private static final long BLACK_TIMEOUT = 500;
+    private static final int DELAY_REMOVE_MS = 10000;
+    public static final int SERVER_TIMEOUT = 8801;
 
     // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
     // Otherwise, we pause the player.
     private static final long RESUMEABLE_TIMEOUT = 3 * 60 * 1000; // 3 mins
 
     public static final int STREAMING_LOCAL = 0;
+    public static final int STREAMING_HTTP = 1;
+    public static final int STREAMING_RTSP = 2;
+    public static final int STREAMING_SDP = 3;
     private int mStreamingType = STREAMING_LOCAL;
 
     private Context mContext;
-    private final VideoView mVideoView;
+    private final CodeauroraVideoView mVideoView;
     private final View mRootView;
     private final Bookmarker mBookmarker;
     private final Uri mUri;
@@ -94,6 +120,10 @@ public class MoviePlayer implements
     private long mResumeableTime = Long.MAX_VALUE;
     private int mVideoPosition = 0;
     private boolean mHasPaused = false;
+    private boolean mVideoHasPaused = false;
+    private boolean mCanResumed = false;
+    private boolean mFirstBePlayed = false;
+    private boolean mKeyguardLocked = false;
     private int mLastSystemUiVis = 0;
 
     // If the time bar is being dragged.
@@ -104,10 +134,18 @@ public class MoviePlayer implements
 
     private Virtualizer mVirtualizer;
 
+    private MovieActivity mActivityContext;//for dialog and toast context
     private MoviePlayerExtension mPlayerExt = new MoviePlayerExtension();
+    private RetryExtension mRetryExt = new RetryExtension();
+    private ServerTimeoutExtension mServerTimeoutExt = new ServerTimeoutExtension();
     private boolean mCanReplay;
+    private boolean mVideoCanSeek = false;
+    private boolean mVideoCanPause = false;
+    private boolean mWaitMetaData;
+    private boolean mIsShowResumingDialog;
     private TState mTState = TState.PLAYING;
     private IMovieItem mMovieItem;
+    private int mVideoLastDuration;//for duration displayed in init state
 
     private enum TState {
         PLAYING,
@@ -141,11 +179,36 @@ public class MoviePlayer implements
         }
     };
 
+    private Runnable mDelayVideoRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (LOG) {
+                Log.v(TAG, "mDelayVideoRunnable.run()");
+            }
+            mVideoView.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                mKeyguardLocked = true;
+            } else if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+                if ((mCanResumed) && (!mVideoHasPaused)) {
+                    playVideo();
+                }
+                mKeyguardLocked = false;
+                mCanResumed = false;
+            }
+        }
+    };
+
     public MoviePlayer(View rootView, final MovieActivity movieActivity,
             IMovieItem info, Bundle savedInstance, boolean canReplay) {
         mContext = movieActivity.getApplicationContext();
         mRootView = rootView;
-        mVideoView = (VideoView) rootView.findViewById(R.id.surface_view);
+        mVideoView = (CodeauroraVideoView) rootView.findViewById(R.id.surface_view);
         mBookmarker = new Bookmarker(movieActivity);
 
         mController = new MovieControllerOverlay(mContext);
@@ -153,7 +216,7 @@ public class MoviePlayer implements
         mController.setListener(this);
         mController.setCanReplay(canReplay);
 
-        init(info, canReplay);
+        init(movieActivity, info, canReplay);
         mUri = mMovieItem.getUri();
 
         mVideoView.setOnErrorListener(this);
@@ -209,6 +272,12 @@ public class MoviePlayer implements
         mAudioBecomingNoisyReceiver = new AudioBecomingNoisyReceiver();
         mAudioBecomingNoisyReceiver.register();
 
+        // Listen for broadcasts related to user-presence
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        mContext.registerReceiver(mReceiver, filter);
+
         Intent i = new Intent(SERVICECMD);
         i.putExtra(CMDNAME, CMDPAUSE);
         movieActivity.sendBroadcast(i);
@@ -221,11 +290,13 @@ public class MoviePlayer implements
             onRestoreInstanceState(savedInstance);
             mHasPaused = true;
         } else {
-            final Integer bookmark = mBookmarker.getBookmark(mUri);
+            mTState = TState.PLAYING;
+            mFirstBePlayed = true;
+            final BookmarkerInfo bookmark = mBookmarker.getBookmark(mMovieItem.getUri());
             if (bookmark != null) {
                 showResumeDialog(movieActivity, bookmark);
             } else {
-                startVideo();
+                doStartVideo(false, 0, 0);
             }
         }
     }
@@ -273,12 +344,12 @@ public class MoviePlayer implements
         onSaveInstanceStateMore(outState);
     }
 
-    private void showResumeDialog(Context context, final int bookmark) {
+    private void showResumeDialog(Context context, final BookmarkerInfo bookmark) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.resume_playing_title);
         builder.setMessage(String.format(
                 context.getString(R.string.resume_playing_message),
-                GalleryUtils.formatDuration(context, bookmark / 1000)));
+                GalleryUtils.formatDuration(context, bookmark.mBookmark / 1000)));
         builder.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -289,40 +360,144 @@ public class MoviePlayer implements
                 R.string.resume_playing_resume, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mVideoView.seekTo(bookmark);
-                startVideo();
+                // here try to seek for bookmark
+                mVideoCanSeek = true;
+                doStartVideo(true, bookmark.mBookmark, bookmark.mDuration);
             }
         });
         builder.setNegativeButton(
                 R.string.resume_playing_restart, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startVideo();
+                doStartVideo(true, 0, bookmark.mDuration);
             }
         });
-        builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                mIsShowResumingDialog = true;
+            }
+        });
+        dialog.setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface arg0) {
+                mIsShowResumingDialog = false;
+            }
+        });
+        dialog.show();
     }
 
-    public void onPause() {
+    public boolean onPause() {
+        if (LOG) {
+            Log.v(TAG, "onPause() isLiveStreaming()=" + isLiveStreaming());
+        }
+        boolean pause = false;
+        if (isLiveStreaming()) {
+            pause = false;
+        } else {
+            doOnPause();
+            pause = true;
+        }
+        if (LOG) {
+            Log.v(TAG, "onPause() , return " + pause);
+        }
+        return pause;
+    }
+
+    // we should stop video anyway after this function called.
+    public void onStop() {
+        if (LOG) {
+            Log.v(TAG, "onStop() mHasPaused=" + mHasPaused);
+        }
+        if (!mHasPaused) {
+            doOnPause();
+        }
+    }
+
+    private void doOnPause() {
+        long start = System.currentTimeMillis();
+        addBackground();
         mHasPaused = true;
         mHandler.removeCallbacksAndMessages(null);
-        mVideoPosition = mVideoView.getCurrentPosition();
-        mBookmarker.setBookmark(mUri, mVideoPosition, mVideoView.getDuration());
-        mVideoView.suspend();
+        int position = mVideoView.getCurrentPosition();
+        mVideoPosition = position >= 0 ? position : mVideoPosition;
+        Log.v(TAG, "mVideoPosition is " + mVideoPosition);
+        int duration = mVideoView.getDuration();
+        mVideoLastDuration = duration > 0 ? duration : mVideoLastDuration;
+        mBookmarker.setBookmark(mMovieItem.getUri(), mVideoPosition, mVideoLastDuration);
+        long end1 = System.currentTimeMillis();
+        // change suspend to release for sync paused and killed case
+        mVideoView.stopPlayback();
         mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
+        mVideoView.setResumed(false);// avoid start after surface created
+        // Workaround for last-seek frame difference
+        mVideoView.setVisibility(View.INVISIBLE);
+        long end2 = System.currentTimeMillis();
+        // TODO comments by sunlei
+        mServerTimeoutExt.recordDisconnectTime();
+        if (LOG) {
+            Log.v(TAG, "doOnPause() save video info consume:" + (end1 - start));
+            Log.v(TAG, "doOnPause() suspend video consume:" + (end2 - end1));
+            Log.v(TAG, "doOnPause() mVideoPosition=" + mVideoPosition + ", mResumeableTime="
+                    + mResumeableTime
+                    + ", mVideoLastDuration=" + mVideoLastDuration + ", mIsShowResumingDialog="
+                    + mIsShowResumingDialog);
+        }
     }
 
     public void onResume() {
+        mDragging = false;// clear drag info
         if (mHasPaused) {
-            mVideoView.seekTo(mVideoPosition);
-            mVideoView.resume();
+            //M: same as launch case to delay transparent.
+            mVideoView.removeCallbacks(mDelayVideoRunnable);
+            mVideoView.postDelayed(mDelayVideoRunnable, BLACK_TIMEOUT);
 
-            // If we have slept for too long, pause the play
-            if (System.currentTimeMillis() > mResumeableTime) {
+            if (mServerTimeoutExt.handleOnResume() || mIsShowResumingDialog) {
+                mHasPaused = false;
+                return;
+            }
+            switch (mTState) {
+                case RETRY_ERROR:
+                    mRetryExt.showRetry();
+                    break;
+                case STOPED:
+                    mPlayerExt.stopVideo();
+                    break;
+                case COMPELTED:
+                    mController.showEnded();
+                    if (mVideoCanSeek || mVideoView.canSeekForward()) {
+                        mVideoView.seekTo(mVideoPosition);
+                    }
+                    mVideoView.setDuration(mVideoLastDuration);
+                    break;
+                case PAUSED:
+                    // if video was paused, so it should be started.
+                    doStartVideo(true, mVideoPosition, mVideoLastDuration, false);
+                    pauseVideo();
+                    break;
+                default:
+                    doStartVideo(true, mVideoPosition, mVideoLastDuration);
+                    pauseVideoMoreThanThreeMinutes();
+                    break;
+            }
+            mHasPaused = false;
+        }
+        mHandler.post(mProgressChecker);
+    }
+
+    private void pauseVideoMoreThanThreeMinutes() {
+        // If we have slept for too long, pause the play
+        // If is live streaming, do not pause it too
+        long now = System.currentTimeMillis();
+        if (now > mResumeableTime && !isLiveStreaming()) {
+            if (mVideoCanPause || mVideoView.canPause()) {
                 pauseVideo();
             }
         }
-        mHandler.post(mProgressChecker);
+        if (LOG) {
+            Log.v(TAG, "pauseVideoMoreThanThreeMinutes() now=" + now);
+        }
     }
 
     public void onDestroy() {
@@ -332,6 +507,8 @@ public class MoviePlayer implements
         }
         mVideoView.stopPlayback();
         mAudioBecomingNoisyReceiver.unregister();
+        mContext.unregisterReceiver(mReceiver);
+        mServerTimeoutExt.clearTimeoutDialog();
     }
 
     // This updates the time bar display (if necessary). It is called every
@@ -347,11 +524,13 @@ public class MoviePlayer implements
         return position;
     }
 
-    private void startVideo() {
+    private void doStartVideo(final boolean enableFasten, final int position, final int duration,
+            boolean start) {
         // For streams that we expect to be slow to start up, show a
         // progress spinner until playback starts.
-        String scheme = mUri.getScheme();
-        if ("http".equalsIgnoreCase(scheme) || "rtsp".equalsIgnoreCase(scheme)) {
+        String scheme = mMovieItem.getUri().getScheme();
+        if ("http".equalsIgnoreCase(scheme) || "rtsp".equalsIgnoreCase(scheme)
+                || "https".equalsIgnoreCase(scheme)) {
             mController.showLoading();
             mHandler.removeCallbacks(mPlayingChecker);
             mHandler.postDelayed(mPlayingChecker, 250);
@@ -360,22 +539,53 @@ public class MoviePlayer implements
             mController.hide();
         }
 
-        mVideoView.start();
+        if (onIsRTSP()) {
+            Map<String, String> header = new HashMap<String, String>(1);
+            header.put("CODEAURORA-ASYNC-RTSP-PAUSE-PLAY", "true");
+            mVideoView.setVideoURI(mMovieItem.getUri(), header, !mWaitMetaData);
+        } else {
+            mVideoView.setVideoURI(mMovieItem.getUri(), null, !mWaitMetaData);
+        }
+        if (start) {
+            mVideoView.start();
+        }
         //we may start video from stopVideo,
         //this case, we should reset canReplay flag according canReplay and loop
         boolean loop = mPlayerExt.getLoop();
         boolean canReplay = loop ? loop : mCanReplay;
         mController.setCanReplay(canReplay);
+        if (position > 0 && (mVideoCanSeek || mVideoView.canSeekBackward()
+                    || mVideoView.canSeekForward())) {
+            mVideoView.seekTo(position);
+        }
+        if (enableFasten) {
+            mVideoView.setDuration(duration);
+        }
         setProgress();
     }
 
+    private void doStartVideo(boolean enableFasten, int position, int duration) {
+        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).requestAudioFocus(
+                null, AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        doStartVideo(enableFasten, position, duration, true);
+    }
+
     private void playVideo() {
+        if (LOG) {
+            Log.v(TAG, "playVideo()");
+        }
+        mTState = TState.PLAYING;
         mVideoView.start();
         mController.showPlaying();
         setProgress();
     }
 
     private void pauseVideo() {
+        if (LOG) {
+            Log.v(TAG, "pauseVideo()");
+        }
+        mTState = TState.PAUSED;
         mVideoView.pause();
         mController.showPaused();
     }
@@ -383,6 +593,13 @@ public class MoviePlayer implements
     // Below are notifications from VideoView
     @Override
     public boolean onError(MediaPlayer player, int arg1, int arg2) {
+        mMovieItem.setError();
+        if (mServerTimeoutExt.onError(player, arg1, arg2)) {
+            return true;
+        }
+        if (mRetryExt.onError(player, arg1, arg2)) {
+            return true;
+        }
         mHandler.removeCallbacksAndMessages(null);
         // VideoView will show an error dialog if we return false, so no need
         // to show more message.
@@ -392,6 +609,14 @@ public class MoviePlayer implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        if (LOG) {
+            Log.v(TAG, "onCompletion() mCanReplay=" + mCanReplay);
+        }
+        if (mMovieItem.getError()) {
+            Log.w(TAG, "error occured, exit the video player!");
+            mActivityContext.finish();
+            return;
+        }
         if (mPlayerExt.getLoop()) {
             onReplay();
         } else { //original logic
@@ -434,6 +659,11 @@ public class MoviePlayer implements
     }
 
     @Override
+    public void onSeekComplete(MediaPlayer mp) {
+        setProgress();
+    }
+
+    @Override
     public void onShown() {
         mShowing = true;
         setProgress();
@@ -447,8 +677,57 @@ public class MoviePlayer implements
     }
 
     @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        if (LOG) {
+            Log.v(TAG, "onInfo() what:" + what + " extra:" + extra);
+        }
+        if (what == MediaPlayer.MEDIA_INFO_METADATA_UPDATE && mServerTimeoutExt != null) {
+            Log.e(TAG, "setServerTimeout " + extra);
+            mServerTimeoutExt.setTimeout(extra * 1000);
+        }
+        if (mRetryExt.onInfo(mp, what, extra)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        if (LOG) {
+            Log.v(TAG, "onPrepared(" + mp + ")");
+        }
+        getVideoInfo(mp);
+        boolean canPause = mVideoView.canPause();
+        boolean canSeek = mVideoView.canSeekBackward() && mVideoView.canSeekForward();
+        if (!canPause && !mVideoView.isTargetPlaying()) {
+            mVideoView.start();
+        }
+        if (LOG) {
+            Log.v(TAG, "onPrepared() canPause=" + canPause + ", canSeek=" + canSeek);
+        }
+    }
+
+    public boolean onIsRTSP() {
+        if (MovieUtils.isRtspStreaming(mMovieItem.getUri(), mMovieItem
+                .getMimeType())) {
+            Log.v(TAG, "onIsRTSP() is RTSP");
+            return true;
+        }
+        Log.v(TAG, "onIsRTSP() is not RTSP");
+        return false;
+    }
+
+    @Override
     public void onReplay() {
-        startVideo();
+        if (LOG) {
+            Log.v(TAG, "onReplay()");
+        }
+        mTState = TState.PLAYING;
+        mFirstBePlayed = true;
+        if (mRetryExt.handleOnReplay()) {
+            return;
+        }
+        doStartVideo(false, 0, 0);
     }
 
     // Below are key events passed from MovieActivity.
@@ -462,14 +741,14 @@ public class MoviePlayer implements
         switch (keyCode) {
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                if (mVideoView.isPlaying()) {
+                if (mVideoView.isPlaying() && mVideoView.canPause()) {
                     pauseVideo();
                 } else {
                     playVideo();
                 }
                 return true;
             case KEYCODE_MEDIA_PAUSE:
-                if (mVideoView.isPlaying()) {
+                if (mVideoView.isPlaying() && mVideoView.canPause()) {
                     pauseVideo();
                 }
                 return true;
@@ -500,9 +779,14 @@ public class MoviePlayer implements
                 || keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE;
     }
 
-    private void init(IMovieItem info, boolean canReplay) {
+    private void init(MovieActivity movieActivity, IMovieItem info, boolean canReplay) {
+        mActivityContext = movieActivity;
         mCanReplay = canReplay;
         mMovieItem = info;
+        judgeStreamingType(info.getUri(), info.getMimeType());
+
+        mVideoView.setOnInfoListener(this);
+        mVideoView.setOnPreparedListener(this);
     }
 
     // We want to pause when the headset is unplugged.
@@ -531,11 +815,70 @@ public class MoviePlayer implements
         mVideoView.setOnPreparedListener(listener);
     }
 
+    public boolean isFullBuffer() {
+        if (mStreamingType == STREAMING_RTSP || mStreamingType == STREAMING_SDP) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean isLocalFile() {
         if (mStreamingType == STREAMING_LOCAL) {
             return true;
         }
         return false;
+    }
+
+    private void getVideoInfo(MediaPlayer mp) {
+        if (!MovieUtils.isLocalFile(mMovieItem.getUri(), mMovieItem.getMimeType())) {
+            Metadata data = mp.getMetadata(MediaPlayer.METADATA_ALL,
+                    MediaPlayer.BYPASS_METADATA_FILTER);
+            if (data != null) {
+                // TODO comments by sunlei
+                mServerTimeoutExt.setVideoInfo(data);
+            } else {
+                Log.w(TAG, "Metadata is null!");
+            }
+        }
+    }
+
+    private void judgeStreamingType(Uri uri, String mimeType) {
+        if (LOG) {
+            Log.v(TAG, "judgeStreamingType(" + uri + ")");
+        }
+        if (uri == null) {
+            return;
+        }
+        String scheme = uri.getScheme();
+        mWaitMetaData = true;
+        if (MovieUtils.isSdpStreaming(uri, mimeType)) {
+            mStreamingType = STREAMING_SDP;
+            mWaitMetaData = false;
+        } else if (MovieUtils.isRtspStreaming(uri, mimeType)) {
+            mStreamingType = STREAMING_RTSP;
+            mWaitMetaData = false;
+        } else if (MovieUtils.isHttpStreaming(uri, mimeType)) {
+            mStreamingType = STREAMING_HTTP;
+            mWaitMetaData = false;
+        } else {
+            mStreamingType = STREAMING_LOCAL;
+            mWaitMetaData = false;
+        }
+        if (LOG) {
+            Log.v(TAG, "mStreamingType=" + mStreamingType
+                    + " mCanGetMetaData=" + mWaitMetaData);
+        }
+    }
+
+    public boolean isLiveStreaming() {
+        boolean isLive = false;
+        if (mStreamingType == STREAMING_SDP) {
+            isLive = true;
+        }
+        if (LOG) {
+            Log.v(TAG, "isLiveStreaming() return " + isLive);
+        }
+        return isLive;
     }
 
     public IMoviePlayer getMoviePlayerExt() {
@@ -546,13 +889,62 @@ public class MoviePlayer implements
         return mVideoView;
     }
 
-    private void onSaveInstanceStateMore(Bundle outState) {
+    // Wait for any animation, ten seconds should be enough
+    private final Runnable mRemoveBackground = new Runnable() {
+        @Override
+        public void run() {
+            if (LOG) {
+                Log.v(TAG, "mRemoveBackground.run()");
+            }
+            mRootView.setBackground(null);
+        }
+    };
 
+    private void removeBackground() {
+        if (LOG) {
+            Log.v(TAG, "removeBackground()");
+        }
+        mHandler.removeCallbacks(mRemoveBackground);
+        mHandler.postDelayed(mRemoveBackground, DELAY_REMOVE_MS);
+    }
+
+    // add background for removing ghost image.
+    private void addBackground() {
+        if (LOG) {
+            Log.v(TAG, "addBackground()");
+        }
+        mHandler.removeCallbacks(mRemoveBackground);
+        mRootView.setBackgroundColor(Color.BLACK);
+    }
+
+    private void clearVideoInfo() {
+        mVideoPosition = 0;
+        mVideoLastDuration = 0;
+
+        if (mServerTimeoutExt != null) {
+            mServerTimeoutExt.clearServerInfo();
+        }
+    }
+
+    private void onSaveInstanceStateMore(Bundle outState) {
+        outState.putInt(KEY_VIDEO_LAST_DURATION, mVideoLastDuration);
+        outState.putBoolean(KEY_VIDEO_CAN_SEEK, mVideoView.canSeekForward());
+        outState.putBoolean(KEY_VIDEO_CAN_PAUSE, mVideoView.canPause());
+        outState.putInt(KEY_VIDEO_STREAMING_TYPE, mStreamingType);
+        outState.putString(KEY_VIDEO_STATE, String.valueOf(mTState));
+        mServerTimeoutExt.onSaveInstanceState(outState);
+        mRetryExt.onSaveInstanceState(outState);
         mPlayerExt.onSaveInstanceState(outState);
     }
 
     private void onRestoreInstanceState(Bundle icicle) {
-
+        mVideoLastDuration = icicle.getInt(KEY_VIDEO_LAST_DURATION);
+        mVideoCanSeek = icicle.getBoolean(KEY_VIDEO_CAN_SEEK);
+        mVideoCanPause = icicle.getBoolean(KEY_VIDEO_CAN_PAUSE);
+        mStreamingType = icicle.getInt(KEY_VIDEO_STREAMING_TYPE);
+        mTState = TState.valueOf(icicle.getString(KEY_VIDEO_STATE));
+        mServerTimeoutExt.onRestoreInstanceState(icicle);
+        mRetryExt.onRestoreInstanceState(icicle);
         mPlayerExt.onRestoreInstanceState(icicle);
     }
 
@@ -560,7 +952,10 @@ public class MoviePlayer implements
 
         private static final String KEY_VIDEO_IS_LOOP = "video_is_loop";
 
+        private BookmarkEnhance mBookmark;//for bookmark
         private boolean mIsLoop;
+        private boolean mLastPlaying;
+        private boolean mLastCanPaused;
 
         @Override
         public boolean getLoop() {
@@ -587,7 +982,301 @@ public class MoviePlayer implements
         public void onSaveInstanceState(Bundle outState) {
             outState.putBoolean(KEY_VIDEO_IS_LOOP, mIsLoop);
         }
+
+        @Override
+        public void stopVideo() {
+            if (LOG) {
+                Log.v(TAG, "stopVideo()");
+            }
+            mTState = TState.STOPED;
+            mVideoView.clearSeek();
+            mVideoView.clearDuration();
+            mVideoView.stopPlayback();
+            mVideoView.setResumed(false);
+            mVideoView.setVisibility(View.INVISIBLE);
+            mVideoView.setVisibility(View.VISIBLE);
+            clearVideoInfo();
+            mFirstBePlayed = false;
+            mController.setCanReplay(true);
+            mController.showEnded();
+            setProgress();
+        }
+
+        @Override
+        public boolean canStop() {
+            boolean stopped = false;
+            if (mController != null) {
+                //stopped = mOverlayExt.isPlayingEnd();
+            }
+            if (LOG) {
+                Log.v(TAG, "canStop() stopped=" + stopped);
+            }
+            return !stopped;
+        }
+
+        @Override
+        public void addBookmark() {
+            if (mBookmark == null) {
+                mBookmark = new BookmarkEnhance(mActivityContext);
+            }
+            String uri = String.valueOf(mMovieItem.getUri());
+            if (mBookmark.exists(uri)) {
+                Toast.makeText(mActivityContext, R.string.bookmark_exist, Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                mBookmark.insert(mMovieItem.getTitle(), uri,
+                        mMovieItem.getMimeType(), 0);
+                Toast.makeText(mActivityContext, R.string.bookmark_add_success, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
     };
+
+    private class RetryExtension implements Restorable, MediaPlayer.OnErrorListener,
+            MediaPlayer.OnInfoListener {
+        private static final String KEY_VIDEO_RETRY_COUNT = "video_retry_count";
+        private int mRetryDuration;
+        private int mRetryPosition;
+        private int mRetryCount;
+
+        public void retry() {
+            doStartVideo(true, mRetryPosition, mRetryDuration);
+            if (LOG) {
+                Log.v(TAG, "retry() mRetryCount=" + mRetryCount + ", mRetryPosition="
+                        + mRetryPosition);
+            }
+        }
+
+        public void clearRetry() {
+            if (LOG) {
+                Log.v(TAG, "clearRetry() mRetryCount=" + mRetryCount);
+            }
+            mRetryCount = 0;
+        }
+
+        public boolean reachRetryCount() {
+            if (LOG) {
+                Log.v(TAG, "reachRetryCount() mRetryCount=" + mRetryCount);
+            }
+            if (mRetryCount > 3) {
+                return true;
+            }
+            return false;
+        }
+
+        public int getRetryCount() {
+            if (LOG) {
+                Log.v(TAG, "getRetryCount() return " + mRetryCount);
+            }
+            return mRetryCount;
+        }
+
+        public boolean isRetrying() {
+            boolean retry = false;
+            if (mRetryCount > 0) {
+                retry = true;
+            }
+            if (LOG) {
+                Log.v(TAG, "isRetrying() mRetryCount=" + mRetryCount);
+            }
+            return retry;
+        }
+
+        @Override
+        public void onRestoreInstanceState(Bundle icicle) {
+            mRetryCount = icicle.getInt(KEY_VIDEO_RETRY_COUNT);
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putInt(KEY_VIDEO_RETRY_COUNT, mRetryCount);
+        }
+
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            return false;
+        }
+
+        @Override
+        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+            return false;
+        }
+
+        public boolean handleOnReplay() {
+            if (isRetrying()) { // from connecting error
+                clearRetry();
+                int errorPosition = mVideoView.getCurrentPosition();
+                int errorDuration = mVideoView.getDuration();
+                doStartVideo(errorPosition > 0, errorPosition, errorDuration);
+                if (LOG) {
+                    Log.v(TAG, "onReplay() errorPosition=" + errorPosition + ", errorDuration="
+                            + errorDuration);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public void showRetry() {
+            if (mVideoCanSeek || mVideoView.canSeekForward()) {
+                mVideoView.seekTo(mVideoPosition);
+            }
+            mVideoView.setDuration(mVideoLastDuration);
+            mRetryPosition = mVideoPosition;
+            mRetryDuration = mVideoLastDuration;
+        }
+    }
+    private class ServerTimeoutExtension implements Restorable, MediaPlayer.OnErrorListener {
+        // for cmcc server timeout case
+        // please remember to clear this value when changed video.
+        private int mServerTimeout = -1;
+        private long mLastDisconnectTime;
+        private boolean mIsShowDialog = false;
+        private AlertDialog mServerTimeoutDialog;
+
+        // check whether disconnect from server timeout or not.
+        // if timeout, return false. otherwise, return true.
+        private boolean passDisconnectCheck() {
+            if (!isFullBuffer()) {
+                // record the time disconnect from server
+                long now = System.currentTimeMillis();
+                if (LOG) {
+                    Log.v(TAG, "passDisconnectCheck() now=" + now + ", mLastDisconnectTime="
+                            + mLastDisconnectTime
+                            + ", mServerTimeout=" + mServerTimeout);
+                }
+                if (mServerTimeout > 0 && (now - mLastDisconnectTime) > mServerTimeout) {
+                    // disconnect time more than server timeout, notify user
+                    notifyServerTimeout();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void recordDisconnectTime() {
+            if (!isFullBuffer()) {
+                // record the time disconnect from server
+                mLastDisconnectTime = System.currentTimeMillis();
+            }
+            if (LOG) {
+                Log.v(TAG, "recordDisconnectTime() mLastDisconnectTime=" + mLastDisconnectTime);
+            }
+        }
+
+        private void clearServerInfo() {
+            mServerTimeout = -1;
+        }
+
+        private void notifyServerTimeout() {
+            if (mServerTimeoutDialog == null) {
+                // for updating last position and duration.
+                if (mVideoCanSeek || mVideoView.canSeekForward()) {
+                    mVideoView.seekTo(mVideoPosition);
+                }
+                mVideoView.setDuration(mVideoLastDuration);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivityContext);
+                mServerTimeoutDialog = builder.setTitle(R.string.server_timeout_title)
+                        .setMessage(R.string.server_timeout_message)
+                        .setNegativeButton(android.R.string.cancel, new OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (LOG) {
+                                    Log.v(TAG, "NegativeButton.onClick() mIsShowDialog="
+                                            + mIsShowDialog);
+                                }
+                                mController.showEnded();
+                                onCompletion();
+                            }
+
+                        })
+                        .setPositiveButton(R.string.resume_playing_resume, new OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (LOG) {
+                                    Log.v(TAG, "PositiveButton.onClick() mIsShowDialog="
+                                            + mIsShowDialog);
+                                }
+                                doStartVideo(true, mVideoPosition, mVideoLastDuration);
+                            }
+
+                        })
+                        .create();
+                mServerTimeoutDialog.setOnDismissListener(new OnDismissListener() {
+
+                    public void onDismiss(DialogInterface dialog) {
+                        if (LOG) {
+                            Log.v(TAG, "mServerTimeoutDialog.onDismiss()");
+                        }
+                        mIsShowDialog = false;
+                    }
+
+                });
+                mServerTimeoutDialog.setOnShowListener(new OnShowListener() {
+
+                    public void onShow(DialogInterface dialog) {
+                        if (LOG) {
+                            Log.v(TAG, "mServerTimeoutDialog.onShow()");
+                        }
+                        mIsShowDialog = true;
+                    }
+
+                });
+            }
+            mServerTimeoutDialog.show();
+        }
+
+        private void clearTimeoutDialog() {
+            if (mServerTimeoutDialog != null && mServerTimeoutDialog.isShowing()) {
+                mServerTimeoutDialog.dismiss();
+            }
+            mServerTimeoutDialog = null;
+        }
+
+        @Override
+        public void onRestoreInstanceState(Bundle icicle) {
+            mLastDisconnectTime = icicle.getLong(KEY_VIDEO_LAST_DISCONNECT_TIME);
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putLong(KEY_VIDEO_LAST_DISCONNECT_TIME, mLastDisconnectTime);
+        }
+
+        public boolean handleOnResume() {
+            if (mIsShowDialog && !isLiveStreaming()) {
+                // wait for user's operation
+                return true;
+            }
+            if (!passDisconnectCheck()) {
+                return true;
+            }
+            return false;
+        }
+
+        public void setVideoInfo(Metadata data) {
+            if (data.has(SERVER_TIMEOUT)) {
+                mServerTimeout = data.getInt(SERVER_TIMEOUT);
+                if (LOG) {
+                    Log.v(TAG, "get server timeout from metadata. mServerTimeout="
+                            + mServerTimeout);
+                }
+            }
+        }
+
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            // if we are showing a dialog, cancel the error dialog
+            if (mIsShowDialog) {
+                return true;
+            }
+            return false;
+        }
+
+        public void setTimeout(int timeout) {
+            mServerTimeout = timeout;
+        }
+    }
 }
 
 class Bookmarker {
@@ -609,6 +1298,10 @@ class Bookmarker {
 
     public void setBookmark(Uri uri, int bookmark, int duration) {
         try {
+            // do not record or override bookmark if duration is not valid.
+            if (duration <= 0) {
+                return;
+            }
             BlobCache cache = CacheManager.getCache(mContext,
                     BOOKMARK_CACHE_FILE, BOOKMARK_CACHE_MAX_ENTRIES,
                     BOOKMARK_CACHE_MAX_BYTES, BOOKMARK_CACHE_VERSION);
@@ -617,7 +1310,7 @@ class Bookmarker {
             DataOutputStream dos = new DataOutputStream(bos);
             dos.writeUTF(uri.toString());
             dos.writeInt(bookmark);
-            dos.writeInt(duration);
+            dos.writeInt(Math.abs(duration));
             dos.flush();
             cache.insert(uri.hashCode(), bos.toByteArray());
         } catch (Throwable t) {
@@ -625,7 +1318,7 @@ class Bookmarker {
         }
     }
 
-    public Integer getBookmark(Uri uri) {
+    public BookmarkerInfo getBookmark(Uri uri) {
         try {
             BlobCache cache = CacheManager.getCache(mContext,
                     BOOKMARK_CACHE_FILE, BOOKMARK_CACHE_MAX_ENTRIES,
@@ -649,10 +1342,31 @@ class Bookmarker {
                     || (bookmark > (duration - HALF_MINUTE))) {
                 return null;
             }
-            return Integer.valueOf(bookmark);
+            return new BookmarkerInfo(bookmark, duration);
         } catch (Throwable t) {
             Log.w(TAG, "getBookmark failed", t);
         }
         return null;
+    }
+}
+
+class BookmarkerInfo {
+    public final int mBookmark;
+    public final int mDuration;
+
+    public BookmarkerInfo(int bookmark, int duration) {
+        this.mBookmark = bookmark;
+        this.mDuration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("BookmarkInfo(bookmark=")
+                .append(mBookmark)
+                .append(", duration=")
+                .append(mDuration)
+                .append(")")
+                .toString();
     }
 }

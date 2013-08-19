@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER" />
 
@@ -360,5 +361,33 @@
         </receiver>
 
         <service android:name="com.android.camera.MediaSaveService" />
+
+        <activity android:name="org.codeaurora.gallery3d.video.SettingsActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:label="@string/streaming_settings" >
+            <intent-filter>
+                <action android:name="org.codeaurora.settings.streaming" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <receiver android:name="org.codeaurora.gallery3d.video.DmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="streaming.action.WRITE_SETTINGS" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="org.codeaurora.gallery3d.video.BookmarkActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:icon="@drawable/ic_menu_display_bookmark"
+                android:label="@string/bookmark_list"
+                android:theme="@android:style/Theme.Holo" >
+            <intent-filter>
+                <action android:name="org.codeaurora.bookmark.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

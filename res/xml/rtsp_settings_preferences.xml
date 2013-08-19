@@ -1,89 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-write by lhy
--->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <PreferenceCategory
-        android:title="@string/rtp">
-
+    <PreferenceCategory android:title="@string/rtp" >
         <EditTextPreference
-            android:order="1"
+            android:dialogTitle="@string/set_rtp_min_port"
+            android:inputType="number"
             android:key="rtp_min_port"
-            android:title="@string/rtp_min_port"
+            android:maxLength="5"
+            android:order="1"
             android:summary=""
-            android:inputType="number"
-        	android:maxLength="5"
-            android:dialogTitle="@string/set_rtp_min_port" />
-
+            android:title="@string/rtp_min_port" />
         <EditTextPreference
-            android:order="2"
+            android:dialogTitle="@string/rtp_max_port"
+            android:inputType="number"
             android:key="rtp_max_port"
-            android:title="@string/rtp_max_port"
+            android:maxLength="5"
+            android:order="2"
             android:summary=""
-            android:inputType="number"
-        	android:maxLength="5"
-            android:dialogTitle="@string/rtp_max_port" />
+            android:title="@string/rtp_max_port" />
     </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:title="@string/rtcp">
-
+    <PreferenceCategory android:title="@string/rtcp" >
         <EditTextPreference
-            android:order="3"
+            android:dialogTitle="@string/set_rtcp_min_port"
+            android:inputType="number"
             android:key="rtcp_min_port"
-            android:title="@string/rtcp_min_port"
+            android:maxLength="5"
+            android:order="3"
             android:summary=""
-            android:inputType="number"
-        	android:maxLength="5"
-            android:dialogTitle="@string/set_rtcp_min_port" />
-
+            android:title="@string/rtcp_min_port" />
         <EditTextPreference
-            android:order="4"
+            android:dialogTitle="@string/rtcp_max_port"
+            android:inputType="number"
             android:key="rtcp_max_port"
-            android:title="@string/rtcp_max_port"
+            android:maxLength="5"
+            android:order="4"
             android:summary=""
-            android:inputType="number"
-        	android:maxLength="5"
-            android:dialogTitle="@string/rtcp_max_port" />
+            android:title="@string/rtcp_max_port" />
     </PreferenceCategory>
-    
-     <PreferenceCategory
-        android:title="@string/buffer_size">
-
+    <PreferenceCategory android:title="@string/buffer_size" >
         <EditTextPreference
-            android:order="5"
-            android:key="buffer_size"
-            android:title="@string/buffer_size"
-            android:summary=""
+            android:dialogTitle="@string/set_buffer_size"
             android:inputType="number"
-        	android:maxLength="5"
-            android:dialogTitle="@string/set_buffer_size" />
-
+            android:key="buffer_size"
+            android:maxLength="5"
+            android:order="5"
+            android:summary=""
+            android:title="@string/buffer_size" />
     </PreferenceCategory>
-	    
-    <PreferenceCategory android:title="@string/apn">
-    <PreferenceScreen
+    <PreferenceCategory android:title="@string/apn" >
+        <PreferenceScreen
             android:key="apn"
-            android:title="@string/apn">
-            <!--
-            <intent
-            android:action="android.intent.action.MAIN"
-            android:targetPackage="com.android.settings"
-            android:targetClass="com.android.settings.ApnSettings" />
-            -->
- </PreferenceScreen>
- <!--
-        <ListPreference
-            android:order="6"
-            android:key="apn"
-            android:title="@string/apn"
-            android:entries="@array/apn_entries"
-            android:entryValues="@array/apn_values"
-            android:dialogTitle="@string/set_apn" />
-            -->
+            android:title="@string/apn" >
+        </PreferenceScreen>
     </PreferenceCategory>
-
 
 </PreferenceScreen>
