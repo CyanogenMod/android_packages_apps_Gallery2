@@ -17,4 +17,5 @@
     <bool name="show_action_bar_title">false</bool>
     <bool name="loop">false</bool>
     <bool name="stereo">false</bool>
+    <bool name="streaming">false</bool>
 </resources>
