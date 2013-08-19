@@ -363,7 +363,7 @@
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"Mudar para vídeo"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"Mudar para panorama"</string>
     <string name="accessibility_switch_to_new_panorama" msgid="8116783308051524188">"Mudar para o novo panorama"</string>
-    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Mudar para Focar Novamente"</string>
+    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Mudar para focar novamente"</string>
     <string name="accessibility_review_cancel" msgid="9070531914908644686">"Comentário cancelado."</string>
     <string name="accessibility_review_ok" msgid="7793302834271343168">"Reveja o que está concluído"</string>
     <string name="accessibility_review_retake" msgid="659300290054705484">"Retomar comentário"</string>
