@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Yenza kabusha"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Bonisa imiphumela esetshenzisiwe"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Fihla imiphumela esetshenzisiwe"</string>
+    <string name="export_image" msgid="3202835713172222134">"Hambisa"</string>
+    <string name="print_image" msgid="1942989216591621413">"Phrinta"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Thumela isithombe esiyisicaba"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Khetha izilungiselelo zokukhiphayo."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Isithombe esihanjisiwe sizoba yikhophi, ngaphandle komlando."</string>
     <string name="quality" msgid="179292110309050529">"Ikhwalithi"</string>
     <string name="size" msgid="4639404642236356037">"Usayizi"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Londoloza ukumisa kabusha kwamanje"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Phatha ukumisa kabusha komsebenzisi"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Ukumisa kabusha okusha"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Misa kabusha igama"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Ulwazi"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Igama lesithombe"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Usayizi wesithombe"</string>

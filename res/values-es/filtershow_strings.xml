@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Rehacer"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Mostrar efectos aplicados"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ocultar efectos aplicados"</string>
+    <string name="export_image" msgid="3202835713172222134">"Exportar"</string>
+    <string name="print_image" msgid="1942989216591621413">"Imprimir"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Exportar imagen aplastada"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Seleccionar ajustes de salida."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"La imagen exportada será una copia y no incluirá el historial."</string>
     <string name="quality" msgid="179292110309050529">"Calidad"</string>
     <string name="size" msgid="4639404642236356037">"Tamaño"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Guardar valor predeterminado"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Administrar predeterminados"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Nuevo valor predeterminado"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nombre predeterminado"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Información"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Nombre de la imagen"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Tamaño de la imagen"</string>
@@ -138,5 +141,5 @@
     <string name="filtershow_exif_date" msgid="8882402253732028544">"Fecha de creación"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"Número f"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"Tiempo de exposición"</string>
-    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"Derechos de autor"</string>
+    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"Copyright"</string>
 </resources>

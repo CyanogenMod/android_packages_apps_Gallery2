@@ -23,14 +23,16 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Se setează imaginea de fundal"</string>
     <string name="download_failure" msgid="5923323939788582895">"Nu s-au putut descărca fotografiile. Rețea indisponibilă."</string>
     <string name="original" msgid="3524493791230430897">"Originală"</string>
-    <string name="saved" msgid="6678827180814174711">"Salvat"</string>
+    <string name="saved" msgid="6678827180814174711">"Salvată"</string>
     <string name="borders" msgid="2067345080568684614">"Chenar"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Anulaţi"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Repetaţi"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Afișați efectele aplicate"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ascundeți efectele aplicate"</string>
+    <string name="export_image" msgid="3202835713172222134">"Exportaţi"</string>
+    <string name="print_image" msgid="1942989216591621413">"Printați"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Exportați imaginea aplatizată"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Selectați Setări de ieșire."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Imaginea exportată va fi o copie, fără istoric."</string>
     <string name="quality" msgid="179292110309050529">"Calitate"</string>
     <string name="size" msgid="4639404642236356037">"Dimensiune"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -116,11 +118,12 @@
     <string name="draw_size_accept" msgid="6781529716526190028">"OK"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"Original"</string>
     <string name="state_panel_result" msgid="318640531123298676">"Rezultat"</string>
-    <string name="filtershow_notification_label" msgid="1653168445525855247">"Se salvează imaginea"</string>
+    <string name="filtershow_notification_label" msgid="1653168445525855247">"Se salvează imaginea"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"Se procesează..."</string>
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Salvați presetarea curentă"</string>
-    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gestionați presetările utilizatorului"</string>
+    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gestionați presetările"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Presetare nouă"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nume prestabilit"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informații"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Numele imaginii"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Dimensiunea imaginii"</string>
@@ -129,9 +132,9 @@
     <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Presetare"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Versiune"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"Original"</string>
-    <string name="filtershow_version_current" msgid="6609334422797468952">"În prezent"</string>
+    <string name="filtershow_version_current" msgid="6609334422797468952">"Actual"</string>
     <string name="filtershow_exif_model" msgid="3543206476046267466">"Model"</string>
-    <string name="filtershow_exif_aperture" msgid="5076571522763604380">"Deschidere"</string>
+    <string name="filtershow_exif_aperture" msgid="5076571522763604380">"Apertură"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"Distanța focală"</string>
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
     <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"Distanța subiectului"</string>

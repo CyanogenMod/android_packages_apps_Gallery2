@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"फिर से करें"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"लागू प्रभाव दिखाएं"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"लागू प्रभाव छिपाएं"</string>
+    <string name="export_image" msgid="3202835713172222134">"निर्यात करें"</string>
+    <string name="print_image" msgid="1942989216591621413">"प्रिंट करें"</string>
     <string name="export_flattened" msgid="9046192331465915411">"चौरस चित्र निर्यात करें"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"ऑउटपुट सेटिंग चुनें."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"निर्यात किया गया चित्र, इतिहास के बिना एक प्रतिलिपि होगा."</string>
     <string name="quality" msgid="179292110309050529">"गुणवत्ता"</string>
     <string name="size" msgid="4639404642236356037">"आकार"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"वर्तमान प्रीसेट सहेजें"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"उपयोगकर्ता प्रीसेट प्रबंधित करें"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"नया प्रीसेट"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"नाम प्रीसेट करें"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"जानकारी"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"चित्र का नाम"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"चित्र का आकार"</string>

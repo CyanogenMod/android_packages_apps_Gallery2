@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Ulangi"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Tampilkan Efek yang Diterapkan"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Sembunyikan Efek yang Diterapkan"</string>
+    <string name="export_image" msgid="3202835713172222134">"Ekspor"</string>
+    <string name="print_image" msgid="1942989216591621413">"Cetak"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Ekspor Gambar yang Dipipihkan"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Pilih Setelan Keluaran."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Gambar yang diekspor akan berupa salinan, tanpa riwayat."</string>
     <string name="quality" msgid="179292110309050529">"Kualitas"</string>
     <string name="size" msgid="4639404642236356037">"Ukuran"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Simpan prasetel saat ini"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Kelola prasetel pengguna"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Prasetel Baru"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nama Prasetel"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informasi"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Nama Gambar"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Ukuran Gambar"</string>

@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Rudia"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Onyesha Athari ambazo Zimetekelezwa"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ficha Athari ambazo Zimetekelezwa"</string>
+    <string name="export_image" msgid="3202835713172222134">"Hamisha"</string>
+    <string name="print_image" msgid="1942989216591621413">"Chapa"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Tuma Picha Bapa"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Chagua Mipangilio ya Kutoa."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Picha iliyopelekwa itakuwa nakala, bila historia."</string>
     <string name="quality" msgid="179292110309050529">"Ubora"</string>
     <string name="size" msgid="4639404642236356037">"Ukubwa"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -83,8 +85,8 @@
     <string name="edge" msgid="7036064886242147551">"Pambizoni"</string>
     <string name="kmeans" msgid="2080952022674981541">"Weka kwenye bango"</string>
     <string name="downsample" msgid="3552938534146980104">"Sampuli ndogo"</string>
-    <string name="grad" msgid="546774853424848655">"Kuhitimu"</string>
-    <string name="editor_grad_brightness" msgid="5937316734380235741">"Ung\'aavu"</string>
+    <string name="grad" msgid="546774853424848655">"Iliyoboreshwa"</string>
+    <string name="editor_grad_brightness" msgid="5937316734380235741">"Ung\'avu"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"Utofautishaji"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"Ukolezaji"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"Kuu"</string>
@@ -104,7 +106,7 @@
     <string name="draw_size" msgid="4360005386104151209">"Ukubwa"</string>
     <string name="draw_hue" msgid="4975135843189267133">"Rangi"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"Ukolezaji"</string>
-    <string name="draw_value" msgid="6571604055161538273">"Ung\'aavu"</string>
+    <string name="draw_value" msgid="6571604055161538273">"Ung\'avu"</string>
     <string name="draw_opacity" msgid="1669435135236987503">"Uwazi"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"Mistari"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Kialamisho"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Hifadhi mipangilio msingi ya sasa"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Dhibiti mipangilio msingi ya mtumiaji"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Mipangilio msingi Mipya"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Weka Jina Kabla"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Habari"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Jina la Picha"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Ukubwa wa Picha"</string>

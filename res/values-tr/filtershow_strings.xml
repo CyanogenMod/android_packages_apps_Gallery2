@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Yeniden yap"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Uygulanan Efektleri Göster"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Uygulanan Efektleri Gizle"</string>
+    <string name="export_image" msgid="3202835713172222134">"Dışa aktar"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <string name="export_flattened" msgid="9046192331465915411">"Düzleştirilen Resmi Dışa Aktar"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Çıkış Ayarlarını Seçin"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Dışa aktarılan resim, üzerinde yapılan işlemlere yönelik geçmiş bilgileri olmadan kopyalanır."</string>
     <string name="quality" msgid="179292110309050529">"Kaliteli"</string>
     <string name="size" msgid="4639404642236356037">"Boyut"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +124,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Mevcut hazır ayarı kaydet"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Kullanıcı hazır ayarlarını yönet"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Yeni Hazır Ayar"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Ön Ayar Adı"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Bilgi"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Resim Adı"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Resim Boyutu"</string>

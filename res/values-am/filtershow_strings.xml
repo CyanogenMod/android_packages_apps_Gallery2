@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"ድገም"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"የተተገበሩ ተጽዕኖዎችን አሳይ"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"የተተገበሩ ተጽዕኖዎችን ደብቅ"</string>
+    <string name="export_image" msgid="3202835713172222134">"ወደ ውጪ ላክ"</string>
+    <string name="print_image" msgid="1942989216591621413">"አትም"</string>
     <string name="export_flattened" msgid="9046192331465915411">"ጠፍጣፋ የተደረገ ምስል ይላኩ"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"የውፅዓት ቅንብሮችን ይምረጡ።"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"ወደ ውጪ የተላከው ምስል ቅጂ ይናል፣ ከታሪኩ ውጪ።"</string>
     <string name="quality" msgid="179292110309050529">"ጥራት"</string>
     <string name="size" msgid="4639404642236356037">"መጠን"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -83,7 +85,7 @@
     <string name="edge" msgid="7036064886242147551">"ጠርዞች"</string>
     <string name="kmeans" msgid="2080952022674981541">"ግራጫማ አድርግ"</string>
     <string name="downsample" msgid="3552938534146980104">"ናሙና ማውረድ"</string>
-    <string name="grad" msgid="546774853424848655">"የተመረቀ"</string>
+    <string name="grad" msgid="546774853424848655">"የተሻሻለ"</string>
     <string name="editor_grad_brightness" msgid="5937316734380235741">"ብሩህነት"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"ንፅፅር"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"የቀለም ሙሌት"</string>
@@ -93,7 +95,7 @@
     <string name="editor_chan_sat_green" msgid="1514055896212975167">"አረንጓዴ"</string>
     <string name="editor_chan_sat_cyan" msgid="1367634650172508288">"አረንጓዴ-ሰማያዊ"</string>
     <string name="editor_chan_sat_blue" msgid="384409736863387895">"ሰማያዊ"</string>
-    <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"ቀይ-ሰማያዊ"</string>
+    <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"ሮዝ"</string>
     <string name="editor_grad_style" msgid="2168414479007745179">"ቅጥ"</string>
     <string name="editor_grad_new" msgid="4857265951369377379">"አዲስ"</string>
     <string name="curves_channel_rgb" msgid="7909209509638333690">"ቀ አ ሰ"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"የአሁኑን ቅድመ-ቅምጥ ያስቀምጡ"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"የተጠቃሚ ቅድመ-ቅምጦችን ያስተዳድሩ"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"አዲስ ቅድመ-ቅምጥ"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"ቅድመ-ቅምጥ ስም"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"መረጃ"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"የምስል ስም"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"የምስል መጠን"</string>

@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"重做"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"显示应用的效果"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"隐藏应用的效果"</string>
+    <string name="export_image" msgid="3202835713172222134">"导出"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <string name="export_flattened" msgid="9046192331465915411">"导出平面图"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"选择输出设置。"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"导出的图片将是图片副本，且不含任何历史记录。"</string>
     <string name="quality" msgid="179292110309050529">"品质"</string>
     <string name="size" msgid="4639404642236356037">"大小"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -85,7 +88,7 @@
     <string name="downsample" msgid="3552938534146980104">"下采样"</string>
     <string name="grad" msgid="546774853424848655">"渐变"</string>
     <string name="editor_grad_brightness" msgid="5937316734380235741">"亮度"</string>
-    <string name="editor_grad_contrast" msgid="3454456673401803360">"反差"</string>
+    <string name="editor_grad_contrast" msgid="3454456673401803360">"对比度"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"饱和度"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"主色"</string>
     <string name="editor_chan_sat_red" msgid="1699222266490540696">"红色"</string>
@@ -120,7 +123,8 @@
     <string name="filtershow_notification_message" msgid="2661871765484036286">"正在处理…"</string>
     <string name="filtershow_save_preset" msgid="3933550455577927439">"保存当前预设"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"管理用户预设"</string>
-    <string name="filtershow_new_preset" msgid="8923930134923416617">"新建预设"</string>
+    <string name="filtershow_new_preset" msgid="8923930134923416617">"新预设"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"预设名称"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"信息"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"图片名称"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"图片大小"</string>
@@ -128,8 +132,8 @@
     <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"EXIF 数据"</string>
     <string name="filtershow_add_button_looks" msgid="8630823661416925426">"预设"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"版本"</string>
-    <string name="filtershow_version_original" msgid="1413894292200912828">"原始版本"</string>
-    <string name="filtershow_version_current" msgid="6609334422797468952">"当前版本"</string>
+    <string name="filtershow_version_original" msgid="1413894292200912828">"原图"</string>
+    <string name="filtershow_version_current" msgid="6609334422797468952">"当前"</string>
     <string name="filtershow_exif_model" msgid="3543206476046267466">"型号"</string>
     <string name="filtershow_exif_aperture" msgid="5076571522763604380">"光圈"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"焦距"</string>
