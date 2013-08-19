@@ -651,11 +651,8 @@ public abstract class PhotoPage extends ActivityState implements
     }
 
     private void launchCamera() {
-        throw new RuntimeException("Not implemented yet.");
-//        Intent intent = new Intent(mActivity, CameraActivity.class)
-//            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        mRecenterCameraOnResume = false;
-//        mActivity.startActivity(intent);
+        mRecenterCameraOnResume = false;
+        GalleryUtils.startCameraActivity(mActivity);
     }
 
     private void launchPhotoEditor() {
