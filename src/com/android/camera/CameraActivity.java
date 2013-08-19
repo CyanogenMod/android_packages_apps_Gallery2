@@ -18,6 +18,7 @@ package com.android.camera;
 import com.android.gallery3d.util.CameraHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 /** Trampoline activity that launches the new Camera activity defined in CameraHelper. */
@@ -25,7 +26,9 @@ public class CameraActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        startActivity(CameraHelper.CAMERA_LAUNCHER_INTENT);
+        Intent intent = CameraHelper.CAMERA_LAUNCHER_INTENT;
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 }
