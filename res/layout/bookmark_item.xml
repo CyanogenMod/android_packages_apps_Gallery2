@@ -3,19 +3,19 @@
     android:id="@+id/panel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dip"
     android:orientation="vertical"
-    >
+    android:padding="6dip" >
+
     <TextView
-        android:id="@+id/title" 
-        android:layout_width="wrap_content" 
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:singleLine="true"
-        />
-    <TextView 
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
         android:id="@+id/data"
-        android:layout_width="wrap_content" 
-        android:layout_height="match_parent"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
