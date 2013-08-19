@@ -31,10 +31,12 @@ import android.widget.SeekBar;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.ActionSlider;
 import com.android.gallery3d.filtershow.controller.BasicSlider;
+import com.android.gallery3d.filtershow.controller.ColorChooser;
 import com.android.gallery3d.filtershow.controller.Control;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.controller.ParameterActionAndInt;
 import com.android.gallery3d.filtershow.controller.ParameterBrightness;
+import com.android.gallery3d.filtershow.controller.ParameterColor;
 import com.android.gallery3d.filtershow.controller.ParameterHue;
 import com.android.gallery3d.filtershow.controller.ParameterInteger;
 import com.android.gallery3d.filtershow.controller.ParameterOpacity;
@@ -73,6 +75,8 @@ public class ParametricEditor extends Editor {
         landscapeMap.put(ParameterOpacity.sParameterType, SliderOpacity.class);
         portraitMap.put(ParameterBrightness.sParameterType, SliderBrightness.class);
         landscapeMap.put(ParameterBrightness.sParameterType, SliderBrightness.class);
+        portraitMap.put(ParameterColor.sParameterType, ColorChooser.class);
+        landscapeMap.put(ParameterColor.sParameterType, ColorChooser.class);
 
         portraitMap.put(ParameterInteger.sParameterType, BasicSlider.class);
         landscapeMap.put(ParameterInteger.sParameterType, TitledSlider.class);

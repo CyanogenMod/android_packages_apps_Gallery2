@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -36,28 +37,29 @@ import java.util.ArrayList;
 
 public class ColorHueView extends View implements ColorListener {
 
-    private float mRadius;
     private float mWidth;
-    private Paint mBarPaint1;
+
     private Paint mLinePaint1;
     private Paint mLinePaint2;
-    private Paint mCheckPaint;
-
+    private Paint mPaint = new Paint();
     private float mHeight;
     private Paint mDotPaint;
     private int mBgcolor = 0;
-
+    Bitmap mBitmap;
     private float mDotRadius;
     private float mBorder;
 
-    private float[] mHSVO = new float[4];
+    private float[] mHSVO = {0.f,0.f,0.f,0.f};
     private int mSliderColor;
     private float mDotX = mBorder;
     private float mDotY = mBorder;
-    private final static float DOT_SIZE = ColorRectView.DOT_SIZE;
-    public final static float BORDER_SIZE = 20;;
 
-    private ArrayList<ColorListener> mColorListeners = new ArrayList<ColorListener>();
+    public final static float DOT_SIZE = 20;
+    public final static float BORDER_SIZE = 20;
+    RectF mRect = new RectF();
+    int[] mTmpBuff;
+    float[] mTmpHSV = new float[3];
+    private Paint mCheckPaint;
 
     public ColorHueView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
@@ -65,7 +67,6 @@ public class ColorHueView extends View implements ColorListener {
         float mDpToPix = metrics.density;
         mDotRadius = DOT_SIZE * mDpToPix;
         mBorder = BORDER_SIZE * mDpToPix;
-        mBarPaint1 = new Paint();
 
         mDotPaint = new Paint();
 
@@ -73,7 +74,6 @@ public class ColorHueView extends View implements ColorListener {
         mDotPaint.setColor(ctx.getResources().getColor(R.color.slider_dot_color));
         mSliderColor = ctx.getResources().getColor(R.color.slider_line_color);
 
-        mBarPaint1.setStyle(Paint.Style.FILL);
 
         mLinePaint1 = new Paint();
         mLinePaint1.setColor(Color.GRAY);
@@ -81,17 +81,40 @@ public class ColorHueView extends View implements ColorListener {
         mLinePaint2.setColor(mSliderColor);
         mLinePaint2.setStrokeWidth(4);
 
-        int[] colors = new int[16 * 16];
-        for (int i = 0; i < colors.length; i++) {
-            int y = i / (16 * 8);
-            int x = (i / 8) % 2;
-            colors[i] = (x == y) ? 0xFFAAAAAA : 0xFF444444;
-        }
-        Bitmap bitmap = Bitmap.createBitmap(colors, 16, 16, Bitmap.Config.ARGB_8888);
-        BitmapShader bs = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        mCheckPaint = new Paint();
-        mCheckPaint.setShader(bs);
+        mBitmap = Bitmap.createBitmap(256, 7, Bitmap.Config.ARGB_8888);
+        mTmpBuff = new int[256 * 7];
+        mPaint.setAntiAlias(true);
+        mPaint.setFilterBitmap(true);
+        fillBitmap();
+        makeCheckPaint();
     }
+
+    void fillBitmap() {
+        int w = mBitmap.getWidth();
+        int h = mBitmap.getHeight();
+
+        for (int x = 0; x < w; x++) {
+            float hue = 360 * (x) / (float) w;
+
+
+            int color = Color.HSVToColor((int)(mHSVO[3]*255),mHSVO);
+            mTmpBuff[x + w * 2] = color;
+            mTmpBuff[x + w * 3] = color;
+            mTmpBuff[x + w * 4] = color;
+
+            mTmpHSV[0] = hue;
+            mTmpHSV[1] = 1;
+            mTmpHSV[2] = 1;
+            color = Color.HSVToColor(mTmpHSV);
+            mTmpBuff[x] = color;
+            mTmpBuff[x + w] = color;
+            mTmpBuff[x + w * 5] = color;
+            mTmpBuff[x + w * 6] = color;
+        }
+
+        mBitmap.setPixels(mTmpBuff, 0, w, 0, 0, w, h);
+    }
+
 
     public boolean onDown(MotionEvent e) {
         return true;
@@ -114,26 +137,28 @@ public class ColorHueView extends View implements ColorListener {
         if (mDotX > mWidth - mBorder) {
             mDotX = mWidth - mBorder;
         }
-        mHSVO[3] = (mDotX - mBorder) / (mWidth - mBorder * 2);
+        mHSVO[0] = 360 * (mDotX - mBorder) / (mWidth - mBorder * 2);
         notifyColorListeners(mHSVO);
         setupButton();
-        invalidate((int) (ox - mDotRadius), (int) (oy - mDotRadius), (int) (ox + mDotRadius),
-                (int) (oy + mDotRadius));
-        invalidate(
-                (int) (mDotX - mDotRadius), (int) (mDotY - mDotRadius), (int) (mDotX + mDotRadius),
-                (int) (mDotY + mDotRadius));
+        fillBitmap();
+//        invalidate((int) (ox - mDotRadius), (int) (oy - mDotRadius), (int) (ox + mDotRadius),
+//                (int) (oy + mDotRadius));
+//        invalidate(
+//                (int) (mDotX - mDotRadius), (int) (mDotY - mDotRadius), (int) (mDotX + mDotRadius),
+//                (int) (mDotY + mDotRadius));
+        invalidate();
 
         return true;
     }
 
     private void setupButton() {
-        float pos = mHSVO[3] * (mWidth - mBorder * 2);
+        float pos = mHSVO[0] / 360 * (mWidth - mBorder * 2);
         mDotX = pos + mBorder;
 
-        int[] colors3 = new int[] {
-        mSliderColor, mSliderColor, 0x66000000, 0 };
-        RadialGradient g = new RadialGradient(mDotX, mDotY, mDotRadius, colors3, new float[] {
-        0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
+        int[] colors3 = new int[]{
+                mSliderColor, mSliderColor, 0x66000000, 0};
+        RadialGradient g = new RadialGradient(mDotX, mDotY, mDotRadius, colors3, new float[]{
+                0, .3f, .31f, 1}, Shader.TileMode.CLAMP);
         mDotPaint.setShader(g);
     }
 
@@ -142,38 +167,23 @@ public class ColorHueView extends View implements ColorListener {
         mWidth = w;
         mHeight = h;
         mDotY = mHeight / 2;
-        updatePaint();
         setupButton();
     }
 
-    private int[] mColors = new int[] {
-            0xFFFF0000,// red
-            0xFFFFFF00,// yellow
-            0xFF00FF00,// green
-            0xFF00FFFF,// cyan
-            0xFF0000FF,// blue
-            0xFFFF00FF,// magenta
-            0xFFFF0000,// red
-    };
-
-    private void updatePaint() {
-
-        int color2 = Color.HSVToColor(mHSVO);
-        int color1 = color2 & 0xFFFFFF;
-
-        Shader sg = new LinearGradient(
-                mBorder, mBorder, mWidth - mBorder, mBorder,
-                mColors, null, Shader.TileMode.CLAMP);
-        mBarPaint1.setShader(sg);
-
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(mBgcolor);
-        canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mCheckPaint);
-        canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mBarPaint1);
+
+        mRect.left = mBorder;
+        mRect.right = mWidth - mBorder;
+        mRect.top = mBorder;
+        mRect.bottom = mHeight - mBorder;
+        canvas.drawRect(mRect,mCheckPaint);
+        canvas.drawBitmap(mBitmap, null, mRect, mPaint);
+
+
         canvas.drawLine(mDotX, mDotY, mWidth - mBorder, mDotY, mLinePaint1);
         canvas.drawLine(mBorder, mDotY, mDotX, mDotY, mLinePaint2);
         if (mDotX != Float.NaN) {
@@ -181,16 +191,28 @@ public class ColorHueView extends View implements ColorListener {
         }
     }
 
+    private void makeCheckPaint(){
+        int[] colors = new int[16 * 16];
+        for (int i = 0; i < colors.length; i++) {
+            int y = i / (16 * 8);
+            int x = (i / 8) % 2;
+            colors[i] = (x == y) ? 0xFFAAAAAA : 0xFF444444;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(colors, 16, 16, Bitmap.Config.ARGB_8888);
+        BitmapShader bs = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        mCheckPaint = new Paint();
+        mCheckPaint.setShader(bs);
+    }
+
     @Override
     public void setColor(float[] hsv) {
         System.arraycopy(hsv, 0, mHSVO, 0, mHSVO.length);
-
-        float oy = mDotY;
-
-        updatePaint();
+        fillBitmap();
         setupButton();
         invalidate();
     }
+
+    ArrayList<ColorListener> mColorListeners = new ArrayList<ColorListener>();
 
     public void notifyColorListeners(float[] hsvo) {
         for (ColorListener l : mColorListeners) {

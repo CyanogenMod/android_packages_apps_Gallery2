@@ -22,20 +22,11 @@
                 android:id="@+id/draw_menu_style"
                 android:title="@string/draw_style"/>
         <item
-                android:id="@+id/draw_menu_opacity"
-                android:title="@string/draw_opacity"/>
-        <item
-                android:id="@+id/draw_menu_value"
-                android:title="@string/draw_value"/>
-        <item
-                android:id="@+id/draw_menu_saturation"
-                android:title="@string/draw_saturation"/>
-        <item
-                android:id="@+id/draw_menu_hue"
-                android:title="@string/draw_hue"/>
-        <item
                 android:id="@+id/draw_menu_size"
                 android:title="@string/draw_size"/>
+        <item
+                android:id="@+id/draw_menu_color"
+                android:title="@string/draw_color"/>
         <item
                 android:id="@+id/draw_menu_clear"
                 android:title="@string/draw_clear"/>

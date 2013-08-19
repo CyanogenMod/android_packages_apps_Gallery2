@@ -29,6 +29,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.app.Log;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation.StrokeData;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
@@ -232,6 +233,8 @@ public class ImageFilterDraw extends ImageFilter {
             return;
         }
         if (quality == FilterEnvironment.QUALITY_FINAL) {
+            Log.v(LOGTAG,"################### paint QUALITY_FINAL");
+
             for (FilterDrawRepresentation.StrokeData strokeData : mParameters.getDrawing()) {
                 paint(strokeData, canvas, originalRotateToScreen, quality);
             }
@@ -255,6 +258,8 @@ public class ImageFilterDraw extends ImageFilter {
 
         StrokeData stroke = mParameters.getCurrentDrawing();
         if (stroke != null) {
+            Log.v(LOGTAG,"################### paint current");
+
             paint(stroke, canvas, originalRotateToScreen, quality);
         }
     }
@@ -267,6 +272,7 @@ public class ImageFilterDraw extends ImageFilter {
         for (int i = mCachedStrokes; i < n; i++) {
             paint(v.get(i), drawCache, originalRotateToScreen, FilterEnvironment.QUALITY_PREVIEW);
         }
+        Log.v(LOGTAG,"################### filling buffer with "+mCachedStrokes+" to "+n);
         mCachedStrokes = n;
     }
 
