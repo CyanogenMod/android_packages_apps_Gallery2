@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Wiederholen"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Angewendete Effekte anzeigen"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Angewendete Effekte ausblenden"</string>
+    <string name="export_image" msgid="3202835713172222134">"Exportieren"</string>
+    <string name="print_image" msgid="1942989216591621413">"Drucken"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Abgeflachtes Bild exportieren"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Ausgabeeinstellungen auswählen"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Das exportierte Bild wird als Kopie gespeichert und beinhaltet keinen Verlauf."</string>
     <string name="quality" msgid="179292110309050529">"Qualität"</string>
     <string name="size" msgid="4639404642236356037">"Größe"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Diese Voreinstellung speichern"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Voreinstellungen verwalten"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Neue Voreinstellung"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Name der Voreinstellung"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informationen"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Bildname"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Bildgröße"</string>

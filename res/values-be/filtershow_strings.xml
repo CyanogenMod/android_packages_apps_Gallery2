@@ -30,9 +30,13 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Паўтарыць"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Паказваць прымененыя эфекты"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Хаваць прымененыя эфекты"</string>
+    <!-- no translation found for export_image (3202835713172222134) -->
+    <skip />
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <!-- no translation found for export_flattened (9046192331465915411) -->
     <skip />
-    <!-- no translation found for select_output_settings (3381156598984241419) -->
+    <!-- no translation found for select_output_settings (1268532018080310748) -->
     <skip />
     <!-- no translation found for quality (179292110309050529) -->
     <skip />
@@ -149,6 +153,8 @@
     <!-- no translation found for filtershow_manage_preset (3872896753708921286) -->
     <skip />
     <!-- no translation found for filtershow_new_preset (8923930134923416617) -->
+    <skip />
+    <!-- no translation found for filtershow_preset_name (7015939727047649866) -->
     <skip />
     <!-- no translation found for filtershow_show_info_panel (5773036746043711115) -->
     <skip />

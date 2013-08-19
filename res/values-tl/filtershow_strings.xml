@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"I-redo"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Ipakita Mga Inilapat na Effect"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Itago Mga Inilapat na Effect"</string>
+    <string name="export_image" msgid="3202835713172222134">"I-export"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <string name="export_flattened" msgid="9046192331465915411">"I-export Naka-flat na Larawan"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Piliin ang Mga Setting ng Output."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Magiging isang kopya ang na-export na larawan, na wala ang kasaysayan."</string>
     <string name="quality" msgid="179292110309050529">"Kalidad"</string>
     <string name="size" msgid="4639404642236356037">"Laki"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +124,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"I-save ang kasalukuyang preset"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Pamahalaan ang preset ng user"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Bagong Preset"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"I-preset ang Pangalan"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Impormasyon"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Pangalan ng Larawan"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Laki ng Larawan"</string>
