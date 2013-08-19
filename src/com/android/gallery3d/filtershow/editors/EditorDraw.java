@@ -19,6 +19,7 @@ package com.android.gallery3d.filtershow.editors;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,7 @@ import android.widget.PopupMenu;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.BitmapCaller;
+import com.android.gallery3d.filtershow.controller.ColorChooser;
 import com.android.gallery3d.filtershow.controller.FilterView;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
@@ -39,13 +41,10 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     private static final String LOGTAG = "EditorDraw";
     public static final int ID = R.id.editorDraw;
     public ImageDraw mImageDraw;
-    private static final int MODE_BRIGHTNESS = FilterDrawRepresentation.PARAM_BRIGHTNESS;
-    private static final int MODE_SATURATION = FilterDrawRepresentation.PARAM_SATURATION;
     private static final int MODE_SIZE = FilterDrawRepresentation.PARAM_SIZE;
-    private static final int MODE_HUEE = FilterDrawRepresentation.PARAM_HUE;
     private static final int MODE_SIZEE = FilterDrawRepresentation.PARAM_SIZE;
-    private static final int MODE_OPACITY = FilterDrawRepresentation.PARAM_OPACITY;
     private static final int MODE_STYLE = FilterDrawRepresentation.PARAM_STYLE;
+    private static final int MODE_COLOR = FilterDrawRepresentation.PARAM_COLOR;
     int[] brushIcons = {
             R.drawable.brush_flat,
             R.drawable.brush_round,
@@ -53,7 +52,13 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             R.drawable.brush_marker,
             R.drawable.brush_spatter
     };
-
+    int[] mBasColors = {
+            Color.RED & 0x80FFFFFF,
+            Color.GREEN & 0x80FFFFFF,
+            Color.BLUE & 0x80FFFFFF,
+            Color.BLACK & 0x80FFFFFF,
+            Color.WHITE & 0x80FFFFFF
+    };
     String mParameterString;
 
     public EditorDraw() {
@@ -89,7 +94,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             FilterDrawRepresentation drawRep = (FilterDrawRepresentation) getLocalRepresentation();
             mImageDraw.setFilterDrawRepresentation(drawRep);
             drawRep.getParam(FilterDrawRepresentation.PARAM_STYLE).setFilterView(this);
-            drawRep.setPramMode(FilterDrawRepresentation.PARAM_HUE);
+            drawRep.setPramMode(FilterDrawRepresentation.PARAM_COLOR);
             mParameterString = mContext.getString(R.string.draw_hue);
             control(drawRep.getCurrentParam(), mEditControl);
         }
@@ -146,29 +151,28 @@ public class EditorDraw extends ParametricEditor implements FilterView {
                 idraw.resetParameter();
                 commitLocalRepresentation();
                 break;
-            case R.id.draw_menu_hue:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_HUE);
-                break;
-            case R.id.draw_menu_opacity:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_OPACITY);
-                break;
-            case R.id.draw_menu_saturation:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_SATURATION);
-                break;
             case R.id.draw_menu_size:
                 rep.setPramMode(FilterDrawRepresentation.PARAM_SIZE);
                 break;
             case R.id.draw_menu_style:
                 rep.setPramMode(FilterDrawRepresentation.PARAM_STYLE);
                 break;
-            case R.id.draw_menu_value:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_BRIGHTNESS);
+            case R.id.draw_menu_color:
+                rep.setPramMode(FilterDrawRepresentation.PARAM_COLOR);
                 break;
         }
         if (item.getItemId() != R.id.draw_menu_clear) {
             mParameterString = item.getTitle().toString();
         }
+        if (mControl instanceof ColorChooser) {
+            ColorChooser c = (ColorChooser) mControl;
+            mBasColors = c.getColorSet();
+        }
         control(rep.getCurrentParam(), mEditControl);
+        if (mControl instanceof ColorChooser) {
+            ColorChooser c = (ColorChooser) mControl;
+            c.setColorSet(mBasColors);
+        }
         mControl.updateUI();
         mView.invalidate();
     }
@@ -187,8 +191,8 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         caller.available(bitmap);
     }
 
-    public int getBrushIcon(int type){
-       return  brushIcons[type];
+    public int getBrushIcon(int type) {
+        return brushIcons[type];
     }
 
 }
