@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Възстановяване"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Приложени ефекти: Показване"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Приложени ефекти: Скриване"</string>
+    <string name="export_image" msgid="3202835713172222134">"Експортиране"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <string name="export_flattened" msgid="9046192331465915411">"Еднослойно изобр.: Експорт."</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Изберете изходни настройки."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Експортираното изображение ще бъде копие и няма да включва историята на промените."</string>
     <string name="quality" msgid="179292110309050529">"Качество"</string>
     <string name="size" msgid="4639404642236356037">"Размер"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +124,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Текуща готова настр.: Запазв."</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Готови потр. настр.: Управл."</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Нова готова настройка"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Предварително зададено име"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Информация"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Име на изображението"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Размер на изображението"</string>

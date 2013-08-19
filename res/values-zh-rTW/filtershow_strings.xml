@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"重做"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"顯示套用的效果"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"隱藏套用的效果"</string>
+    <string name="export_image" msgid="3202835713172222134">"匯出"</string>
+    <string name="print_image" msgid="1942989216591621413">"列印"</string>
     <string name="export_flattened" msgid="9046192331465915411">"匯出壓平合併的圖片"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"選取輸出設定。"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"匯出的項目是不含紀錄的複製圖片。"</string>
     <string name="quality" msgid="179292110309050529">"畫質"</string>
     <string name="size" msgid="4639404642236356037">"大小"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -87,7 +89,7 @@
     <string name="editor_grad_brightness" msgid="5937316734380235741">"亮度"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"對比"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"飽和度"</string>
-    <string name="editor_chan_sat_main" msgid="4427652337797121940">"代表色"</string>
+    <string name="editor_chan_sat_main" msgid="4427652337797121940">"主色"</string>
     <string name="editor_chan_sat_red" msgid="1699222266490540696">"紅色"</string>
     <string name="editor_chan_sat_yellow" msgid="1488997071882154179">"黃色"</string>
     <string name="editor_chan_sat_green" msgid="1514055896212975167">"綠色"</string>
@@ -95,7 +97,7 @@
     <string name="editor_chan_sat_blue" msgid="384409736863387895">"藍色"</string>
     <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"洋紅色"</string>
     <string name="editor_grad_style" msgid="2168414479007745179">"樣式"</string>
-    <string name="editor_grad_new" msgid="4857265951369377379">"新圖層"</string>
+    <string name="editor_grad_new" msgid="4857265951369377379">"新"</string>
     <string name="curves_channel_rgb" msgid="7909209509638333690">"RGB"</string>
     <string name="curves_channel_red" msgid="4199710104162111357">"紅色"</string>
     <string name="curves_channel_green" msgid="3733003466905031016">"綠色"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"儲存目前的預設"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"管理使用者預設"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"新預設"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"預設名稱"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"資訊"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"圖片名稱"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"圖片大小"</string>
@@ -130,11 +133,11 @@
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"版本"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"原始版本"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"目前版本"</string>
-    <string name="filtershow_exif_model" msgid="3543206476046267466">"模型"</string>
+    <string name="filtershow_exif_model" msgid="3543206476046267466">"型號"</string>
     <string name="filtershow_exif_aperture" msgid="5076571522763604380">"光圈"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"焦距"</string>
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
-    <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"主題距離"</string>
+    <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"拍攝距離"</string>
     <string name="filtershow_exif_date" msgid="8882402253732028544">"拍攝日期"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"光圈孔徑"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"曝光時間"</string>

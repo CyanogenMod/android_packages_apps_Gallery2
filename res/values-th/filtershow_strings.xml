@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"ทำซ้ำ"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"แสดงเอฟเฟ็กต์ที่ใช้"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"ซ่อนเอฟเฟ็กต์ที่ใช้"</string>
-    <string name="export_flattened" msgid="9046192331465915411">"ส่งออกภาพแบบแบน"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"เลือกการตั้งค่าเอาต์พุต"</string>
+    <string name="export_image" msgid="3202835713172222134">"ส่งออก"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
+    <string name="export_flattened" msgid="9046192331465915411">"ส่งออกภาพรวมเลเยอร์"</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"รูปภาพที่ส่งออกจะเป็นสำเนา โดยที่ไม่มีประวัติ"</string>
     <string name="quality" msgid="179292110309050529">"คุณภาพ"</string>
     <string name="size" msgid="4639404642236356037">"ขนาด"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -83,7 +86,7 @@
     <string name="edge" msgid="7036064886242147551">"ขอบ"</string>
     <string name="kmeans" msgid="2080952022674981541">"โปสเตอร์"</string>
     <string name="downsample" msgid="3552938534146980104">"ลดลง"</string>
-    <string name="grad" msgid="546774853424848655">"เพิ่มตามลำดับ"</string>
+    <string name="grad" msgid="546774853424848655">"ไล่ระดับ"</string>
     <string name="editor_grad_brightness" msgid="5937316734380235741">"ความสว่าง"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"คอนทราสต์"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"ความอิ่มตัว"</string>
@@ -119,8 +122,9 @@
     <string name="filtershow_notification_label" msgid="1653168445525855247">"การบันทึกภาพ"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"กำลังดำเนินการ..."</string>
     <string name="filtershow_save_preset" msgid="3933550455577927439">"บันทึกค่ากำหนดล่วงหน้าปัจจุบัน"</string>
-    <string name="filtershow_manage_preset" msgid="3872896753708921286">"จัดการค่ากำหนดล่วงหน้าผู้ใช้"</string>
+    <string name="filtershow_manage_preset" msgid="3872896753708921286">"จัดการค่ากำหนดของผู้ใช้"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"ค่าที่กำหนดล่วงหน้าใหม่"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"ชื่อที่กำหนดล่วงหน้า"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"ข้อมูล"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"ชื่อรูปภาพ"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"ขนาดรูปภาพ"</string>
@@ -134,7 +138,7 @@
     <string name="filtershow_exif_aperture" msgid="5076571522763604380">"รูรับแสง"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"ความยาวโฟกัส"</string>
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
-    <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"ช่วงระยะห่างของแบบ"</string>
+    <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"ระยะห่างของแบบ"</string>
     <string name="filtershow_exif_date" msgid="8882402253732028544">"วันที่ถ่าย"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"F Stop"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"เวลาเปิดรับแสง"</string>

@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"انجام مجدد"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"نمایش جلوه‌های اعمال شده"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"پنهان کردن جلوه‌های اعمال شده"</string>
+    <string name="export_image" msgid="3202835713172222134">"صادر کردن"</string>
+    <string name="print_image" msgid="1942989216591621413">"چاپ"</string>
     <string name="export_flattened" msgid="9046192331465915411">"صدور تصویر صاف"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"تنظیمات خروجی را انتخاب کنید."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"تصویر صادرشده نسخه‌ای فاقد سابقه ویرایش است."</string>
     <string name="quality" msgid="179292110309050529">"کیفیت"</string>
     <string name="size" msgid="4639404642236356037">"اندازه"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -81,12 +83,12 @@
     <string name="negative" msgid="6998313764388022201">"نگاتیو"</string>
     <string name="none" msgid="6633966646410296520">"هیچکدام"</string>
     <string name="edge" msgid="7036064886242147551">"لبه‌ها"</string>
-    <string name="kmeans" msgid="2080952022674981541">"پوستری‌کردن"</string>
+    <string name="kmeans" msgid="2080952022674981541">"چندرنگی‌"</string>
     <string name="downsample" msgid="3552938534146980104">"کاهش وضوح"</string>
     <string name="grad" msgid="546774853424848655">"فارغ‌التحصیل"</string>
     <string name="editor_grad_brightness" msgid="5937316734380235741">"روشنایی"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"کنتراست"</string>
-    <string name="editor_grad_saturation" msgid="3760247354109521726">"اشباع"</string>
+    <string name="editor_grad_saturation" msgid="3760247354109521726">"اشباع رنگ"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"اصلی"</string>
     <string name="editor_chan_sat_red" msgid="1699222266490540696">"قرمز"</string>
     <string name="editor_chan_sat_yellow" msgid="1488997071882154179">"زرد"</string>
@@ -103,7 +105,7 @@
     <string name="draw_style" msgid="2036125061987325389">"سبک"</string>
     <string name="draw_size" msgid="4360005386104151209">"اندازه"</string>
     <string name="draw_hue" msgid="4975135843189267133">"رنگ‌مایه"</string>
-    <string name="draw_saturation" msgid="5394395648014454882">"اشباع"</string>
+    <string name="draw_saturation" msgid="5394395648014454882">"اشباع رنگ"</string>
     <string name="draw_value" msgid="6571604055161538273">"روشنایی"</string>
     <string name="draw_opacity" msgid="1669435135236987503">"تاری"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"خطوط"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"ذخیره پیش‌تنظیم فعلی"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"مدیریت پیش‌تنظیم‌های کاربر"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"پیش‌تنظیم جدید"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"نام از پیش تعیین شده"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"اطلاعات"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"نام تصویر"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"اندازه تصویر"</string>

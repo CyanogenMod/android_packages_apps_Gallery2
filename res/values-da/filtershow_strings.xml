@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Annuller fortryd"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Vis anvendte effekter"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Skjul anvendte effekter"</string>
+    <string name="export_image" msgid="3202835713172222134">"Eksportér"</string>
+    <string name="print_image" msgid="1942989216591621413">"Udskriv"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Eksportér fladt billede"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Vælg outputindstillinger."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Det eksporterede billede vil være en kopi uden historie."</string>
     <string name="quality" msgid="179292110309050529">"Kvalitet"</string>
     <string name="size" msgid="4639404642236356037">"Størrelse"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -91,9 +93,9 @@
     <string name="editor_chan_sat_red" msgid="1699222266490540696">"Rød"</string>
     <string name="editor_chan_sat_yellow" msgid="1488997071882154179">"Gul"</string>
     <string name="editor_chan_sat_green" msgid="1514055896212975167">"Grøn"</string>
-    <string name="editor_chan_sat_cyan" msgid="1367634650172508288">"Grønblå"</string>
+    <string name="editor_chan_sat_cyan" msgid="1367634650172508288">"Cyan"</string>
     <string name="editor_chan_sat_blue" msgid="384409736863387895">"Blå"</string>
-    <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"Lyslilla"</string>
+    <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"Magenta"</string>
     <string name="editor_grad_style" msgid="2168414479007745179">"Stil"</string>
     <string name="editor_grad_new" msgid="4857265951369377379">"ny"</string>
     <string name="curves_channel_rgb" msgid="7909209509638333690">"RGB"</string>
@@ -105,7 +107,7 @@
     <string name="draw_hue" msgid="4975135843189267133">"Farvetone"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"Mætning"</string>
     <string name="draw_value" msgid="6571604055161538273">"Lysstyrke"</string>
-    <string name="draw_opacity" msgid="1669435135236987503">"Opacitet"</string>
+    <string name="draw_opacity" msgid="1669435135236987503">"Gennemsigtighed"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"Linjer"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Tusch"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Stænk"</string>
@@ -116,23 +118,24 @@
     <string name="draw_size_accept" msgid="6781529716526190028">"OK"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"Original"</string>
     <string name="state_panel_result" msgid="318640531123298676">"Resultat"</string>
-    <string name="filtershow_notification_label" msgid="1653168445525855247">"Billedet gemmes"</string>
+    <string name="filtershow_notification_label" msgid="1653168445525855247">"Gemmer billedet"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"Behandler..."</string>
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Gem aktuel forudindstilling"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Administrer brugerforudindstil."</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Ny forudindstilling"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Forudindstillet navn"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Oplysninger"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Billednavn"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Billedstørrelse"</string>
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"Histogram"</string>
     <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"EXIF-data"</string>
-    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Forindstil"</string>
+    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Forindstilling"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Version"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"Original"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"Aktuel"</string>
     <string name="filtershow_exif_model" msgid="3543206476046267466">"Model"</string>
     <string name="filtershow_exif_aperture" msgid="5076571522763604380">"Blænde"</string>
-    <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"Brændvidde"</string>
+    <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"Fokuslængde"</string>
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
     <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"Motivafstand"</string>
     <string name="filtershow_exif_date" msgid="8882402253732028544">"Oprettelsesdato"</string>
