@@ -1,21 +1,23 @@
-package com.qcom.gallery3d.video;
+package org.codeaurora.gallery3d.video;
 
-import com.qcom.gallery3d.ext.ActivityHooker;
-import com.qcom.gallery3d.ext.IMovieItem;
-import com.qcom.gallery3d.ext.IMoviePlayer;
-import com.qcom.gallery3d.ext.QcomLog;
+import android.util.Log;
+
+import org.codeaurora.gallery3d.ext.ActivityHooker;
+import org.codeaurora.gallery3d.ext.IMovieItem;
+import org.codeaurora.gallery3d.ext.IMoviePlayer;
 
 public class MovieHooker extends ActivityHooker {
+
     private static final String TAG = "MovieHooker";
     private static final boolean LOG = true;
     private IMovieItem mMovieItem;
     private IMoviePlayer mPlayer;
-    
+
     @Override
     public void setParameter(final String key, final Object value) {
         super.setParameter(key, value);
         if (LOG) {
-            QcomLog.v(TAG, "setParameter(" + key + ", " + value + ")");
+            Log.v(TAG, "setParameter(" + key + ", " + value + ")");
         }
         if (value instanceof IMovieItem) {
             mMovieItem = (IMovieItem) value;
@@ -25,14 +27,18 @@ public class MovieHooker extends ActivityHooker {
             onMoviePlayerChanged(mPlayer);
         }
     }
-    
+
     public IMovieItem getMovieItem() {
         return mMovieItem;
     }
+
     public IMoviePlayer getPlayer() {
         return mPlayer;
     }
-    
-    public void onMovieItemChanged(final IMovieItem item){}
-    public void onMoviePlayerChanged(final IMoviePlayer player){}
+
+    public void onMovieItemChanged(final IMovieItem item) {
+    }
+
+    public void onMoviePlayerChanged(final IMoviePlayer player) {
+    }
 }
