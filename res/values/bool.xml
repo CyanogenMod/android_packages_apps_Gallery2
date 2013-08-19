@@ -15,4 +15,5 @@
 -->
 <resources>
     <bool name="show_action_bar_title">false</bool>
+    <bool name="loop">false</bool>
 </resources>
