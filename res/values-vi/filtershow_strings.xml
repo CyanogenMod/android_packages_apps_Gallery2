@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Làm lại"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Hiển thị các hiệu ứng được áp dụng"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ẩn các hiệu ứng được áp dụng"</string>
+    <string name="export_image" msgid="3202835713172222134">"Xuất"</string>
+    <string name="print_image" msgid="1942989216591621413">"In"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Xuất hình ảnh đã làm phẳng"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Chọn cài đặt thiết bị ra."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Ảnh được xuất sẽ là một bản sao mà không có lịch sử."</string>
     <string name="quality" msgid="179292110309050529">"Chất lượng"</string>
     <string name="size" msgid="4639404642236356037">"Kích thước"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Lưu giá trị đặt sẵn hiện tại"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Q.lý g.trị đặt sẵn của ng.dùng"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Giá trị đặt sẵn mới"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Tên đặt sẵn"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Thông tin"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Tên hình ảnh"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Kích thước hình ảnh"</string>

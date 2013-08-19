@@ -29,8 +29,11 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"다시실행"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"적용된 효과 표시"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"적용된 효과 숨기기"</string>
+    <string name="export_image" msgid="3202835713172222134">"내보내기"</string>
+    <!-- no translation found for print_image (1942989216591621413) -->
+    <skip />
     <string name="export_flattened" msgid="9046192331465915411">"평면 이미지 내보내기"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"출력 설정을 선택합니다."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"내보내는 이미지는 기록이 없는 사본입니다."</string>
     <string name="quality" msgid="179292110309050529">"화질"</string>
     <string name="size" msgid="4639404642236356037">"크기"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +124,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"현재 사전설정 저장"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"사용자 사전설정 관리"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"새로운 사전설정"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"프리셋 이름"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"정보"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"이미지 이름"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"이미지 크기"</string>

@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Ponovi"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Prikaži primijenjene efekte"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Sakrij primijenjene efekte"</string>
+    <string name="export_image" msgid="3202835713172222134">"Izvezi"</string>
+    <string name="print_image" msgid="1942989216591621413">"Ispis"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Izvoz spljoštene slike"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Odaberite postavke izlaza."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Izvezena slika bit će kopija, bez povijesti."</string>
     <string name="quality" msgid="179292110309050529">"Kvaliteta"</string>
     <string name="size" msgid="4639404642236356037">"Veličina"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Spremi trenutačnu postavku"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Upravljaj korisnič. postavkama"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Nova definirana postavka"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Naziv definirane postavke"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informacije"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Naziv slike"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Veličina slike"</string>

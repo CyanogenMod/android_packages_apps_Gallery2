@@ -29,8 +29,10 @@
     <string name="filtershow_redo" msgid="4219489910543059747">"Gör om"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Visa tillämpade effekter"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Dölj tillämpade effekter"</string>
+    <string name="export_image" msgid="3202835713172222134">"Exportera"</string>
+    <string name="print_image" msgid="1942989216591621413">"Skriv ut"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Exportera m. sammanlagda lager"</string>
-    <string name="select_output_settings" msgid="3381156598984241419">"Välj inställningar för utdata."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Den exporterade bilden kommer att vara en kopia utan historik."</string>
     <string name="quality" msgid="179292110309050529">"Kvalitet"</string>
     <string name="size" msgid="4639404642236356037">"Storlek"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -121,6 +123,7 @@
     <string name="filtershow_save_preset" msgid="3933550455577927439">"Spara aktuellt förval"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"Hantera egna förval"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"Nytt förval"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Förvalt namn"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Information"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Bildnamn"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Bildstorlek"</string>
