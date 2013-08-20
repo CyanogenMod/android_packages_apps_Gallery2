@@ -51,4 +51,7 @@
     <!-- Grad filter minimum touch distance -->
     <dimen name="draw_rect_round">10dip</dimen>
 
+    <!-- Grad filter minimum touch distance -->
+    <dimen name="draw_style_icon_dim">64dip</dimen>
+
 </resources>

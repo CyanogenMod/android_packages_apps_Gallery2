@@ -163,8 +163,8 @@ public class ColorOpacityView extends View implements ColorListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(mBgcolor);
-        canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mCheckPaint);
-        canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mBarPaint1);
+        canvas.drawRect(mBorder, 0, mWidth - mBorder, mHeight, mCheckPaint);
+        canvas.drawRect(mBorder, 0, mWidth - mBorder, mHeight, mBarPaint1);
         canvas.drawLine(mDotX, mDotY, mWidth - mBorder, mDotY, mLinePaint1);
         canvas.drawLine(mBorder, mDotY, mDotX, mDotY, mLinePaint2);
         if (mDotX != Float.NaN) {
