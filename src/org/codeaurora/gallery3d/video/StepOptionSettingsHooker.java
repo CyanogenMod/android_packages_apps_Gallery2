@@ -1,4 +1,4 @@
-package com.qcom.gallery3d.video;
+package org.codeaurora.gallery3d.video;
 
 import android.content.Intent;
 import android.view.Menu;
@@ -6,8 +6,8 @@ import android.view.MenuItem;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.MovieActivity;
-import com.qcom.gallery3d.ext.ActivityHooker;
-import com.qcom.gallery3d.video.VideoSettingsActivity;
+import org.codeaurora.gallery3d.ext.ActivityHooker;
+import org.codeaurora.gallery3d.video.VideoSettingsActivity;
 
 public class StepOptionSettingsHooker extends ActivityHooker {
     private static final int MENU_STEP_OPTION_SETTING = 1;
