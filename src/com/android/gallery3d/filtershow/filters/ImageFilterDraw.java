@@ -230,10 +230,11 @@ public class ImageFilterDraw extends ImageFilter {
         paint.setStrokeWidth(40);
 
         if (mParameters.getDrawing().isEmpty() && mParameters.getCurrentDrawing() == null) {
+            mOverlayBitmap = null;
+            mCachedStrokes = -1;
             return;
         }
         if (quality == FilterEnvironment.QUALITY_FINAL) {
-            Log.v(LOGTAG,"################### paint QUALITY_FINAL");
 
             for (FilterDrawRepresentation.StrokeData strokeData : mParameters.getDrawing()) {
                 paint(strokeData, canvas, originalRotateToScreen, quality);
@@ -258,8 +259,6 @@ public class ImageFilterDraw extends ImageFilter {
 
         StrokeData stroke = mParameters.getCurrentDrawing();
         if (stroke != null) {
-            Log.v(LOGTAG,"################### paint current");
-
             paint(stroke, canvas, originalRotateToScreen, quality);
         }
     }
@@ -272,7 +271,6 @@ public class ImageFilterDraw extends ImageFilter {
         for (int i = mCachedStrokes; i < n; i++) {
             paint(v.get(i), drawCache, originalRotateToScreen, FilterEnvironment.QUALITY_PREVIEW);
         }
-        Log.v(LOGTAG,"################### filling buffer with "+mCachedStrokes+" to "+n);
         mCachedStrokes = n;
     }
 
