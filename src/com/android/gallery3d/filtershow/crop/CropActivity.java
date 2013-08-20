@@ -106,17 +106,18 @@ public class CropActivity extends Activity {
         mCropView = (CropView) findViewById(R.id.cropView);
 
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(R.layout.filtershow_actionbar);
+        if (actionBar != null) {
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setCustomView(R.layout.filtershow_actionbar);
 
-        View mSaveButton = actionBar.getCustomView();
-        mSaveButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startFinishOutput();
-            }
-        });
-
+            View mSaveButton = actionBar.getCustomView();
+            mSaveButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startFinishOutput();
+                }
+            });
+        }
         if (intent.getData() != null) {
             mSourceUri = intent.getData();
             startLoadBitmap(mSourceUri);
@@ -275,7 +276,7 @@ public class CropActivity extends Activity {
         }
     }
 
-    private void startFinishOutput() {
+    protected void startFinishOutput() {
         if (finalIOGuard) {
             return;
         } else {
