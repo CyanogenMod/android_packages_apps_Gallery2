@@ -31,4 +31,11 @@
     <string name="pref_camera_picturesize_entry_svga">SVGA</string>
     <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
     <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">Refuerzo de graves</string>
+    <string name="virtualizer_strength">Efecto 3D</string>
+    <string name="audio_effects">Efectos de sonido</string>
+    <string name="headset_plug">Conecta los auriculares para estos efectos.</string>
+    <string name="audio_effects_dialog_title">Efectos de sonido Snapdragon</string>
+    <string name="fail_trim">Este tipo de archivo no puede ser recortado</string>
+    <string name="can_not_trim">Solo los archivos mp4 pueden ser recortados</string>
 </resources>
