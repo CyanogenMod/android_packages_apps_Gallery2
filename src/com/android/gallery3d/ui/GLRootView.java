@@ -339,6 +339,9 @@ public class GLRootView extends GLSurfaceView
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        //clear the undefined buffer before draw
+        mCanvas.clearBuffer();
+
         AnimationTime.update();
         long t0;
         if (DEBUG_PROFILE_SLOW_ONLY) {
