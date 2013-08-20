@@ -18,9 +18,11 @@ package com.android.gallery3d.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.print.PageRange;
@@ -29,13 +31,20 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PdfDocument;
+import com.android.gallery3d.app.AbstractGalleryActivity;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 
 public class PrintJob {
+    private final static int MAX_PRINT_SIZE = 2048;
+
     public static void printBitmap(Context context, final String jobName, final Bitmap bitmap) {
+        if (bitmap == null) {
+            return;
+        }
         PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
         android.print.PrintJob printJob = printManager.print(jobName,
                 new PrintDocumentAdapter() {
@@ -95,4 +104,9 @@ public class PrintJob {
 
     }
 
+    public static void printBitmapAtUri(Context context, String imagePrint, Uri uri) {
+        // TODO: load full size images. For now, it's better to constrain ourselves.
+        Bitmap bitmap = ImageLoader.loadConstrainedBitmap(uri, context, MAX_PRINT_SIZE, null, false);
+        printBitmap(context, imagePrint, bitmap);
+    }
 }
