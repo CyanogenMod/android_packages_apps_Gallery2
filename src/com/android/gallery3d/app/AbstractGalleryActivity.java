@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
@@ -40,9 +41,11 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLRootView;
 import com.android.gallery3d.util.PanoramaViewHelper;
+import com.android.gallery3d.util.PrintJob;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.photos.data.GalleryBitmapPool;
 
@@ -341,5 +344,19 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         } else {
             throw new RuntimeException("Batch service unavailable");
         }
+    }
+
+    public void printSelectedImage(Uri uri) {
+        if (uri == null) {
+            return;
+        }
+        String path = ImageLoader.getLocalPathFromUri(this, uri);
+        if (path != null) {
+            Uri localUri = Uri.parse(path);
+            path = localUri.getLastPathSegment();
+        } else {
+            path = uri.getLastPathSegment();
+        }
+        PrintJob.printBitmapAtUri(this, path, uri);
     }
 }
