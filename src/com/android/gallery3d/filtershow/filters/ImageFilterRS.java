@@ -184,7 +184,6 @@ public abstract class ImageFilterRS extends ImageFilter {
     public Allocation loadScaledResourceAlpha(int resource, int inSampleSize) {
         Resources res = getEnvironment().getPipeline().getResources();
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
         options.inSampleSize      = inSampleSize;
         Bitmap bitmap = BitmapFactory.decodeResource(
                 res,
@@ -197,7 +196,6 @@ public abstract class ImageFilterRS extends ImageFilter {
     public Allocation loadScaledResourceAlpha(int resource, int w, int h, int inSampleSize) {
         Resources res = getEnvironment().getPipeline().getResources();
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ALPHA_8;
         options.inSampleSize      = inSampleSize;
         Bitmap bitmap = BitmapFactory.decodeResource(
                 res,
