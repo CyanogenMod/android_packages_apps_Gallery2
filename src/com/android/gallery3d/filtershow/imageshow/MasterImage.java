@@ -438,6 +438,9 @@ public class MasterImage implements RenderingRequestCaller {
         if (mActivity.getProcessingService() == null) {
             return;
         }
+        if (mPreset == null) {
+            return;
+        }
         mActivity.getProcessingService().postHighresRenderingRequest(mPreset,
                 getScaleFactor(), this);
         invalidateHighresPreview();
