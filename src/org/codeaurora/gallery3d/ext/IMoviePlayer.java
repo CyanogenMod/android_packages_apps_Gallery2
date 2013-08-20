@@ -32,4 +32,11 @@ public interface IMoviePlayer {
      * Stop current video.
      */
     void stopVideo();
+
+    /**
+     * start current item and stop playing video.
+     *
+     * @param item
+     */
+    void startNextVideo(IMovieItem item);
 }

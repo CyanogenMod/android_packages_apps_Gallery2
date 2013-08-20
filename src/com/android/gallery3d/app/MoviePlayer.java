@@ -27,6 +27,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -50,11 +51,16 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BlobCache;
 import com.android.gallery3d.util.CacheManager;
 import com.android.gallery3d.util.GalleryUtils;
+import org.codeaurora.gallery3d.ext.IContrllerOverlayExt;
 import org.codeaurora.gallery3d.ext.IMoviePlayer;
 import org.codeaurora.gallery3d.ext.IMovieItem;
 import org.codeaurora.gallery3d.ext.MovieUtils;
 import org.codeaurora.gallery3d.video.BookmarkEnhance;
 import org.codeaurora.gallery3d.video.ExtensionHelper;
+import org.codeaurora.gallery3d.video.IControllerRewindAndForward;
+import org.codeaurora.gallery3d.video.IControllerRewindAndForward.IRewindAndForwardListener;
+import org.codeaurora.gallery3d.video.ScreenModeManager;
+import org.codeaurora.gallery3d.video.ScreenModeManager.ScreenModeListener;
 import org.codeaurora.gallery3d.video.CodeauroraVideoView;
 
 import java.io.ByteArrayInputStream;
@@ -69,10 +75,12 @@ public class MoviePlayer implements
         ControllerOverlay.Listener,
         MediaPlayer.OnInfoListener,
         MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnSeekCompleteListener {
+        MediaPlayer.OnSeekCompleteListener,
+        MediaPlayer.OnVideoSizeChangedListener,
+        MediaPlayer.OnBufferingUpdateListener {
     @SuppressWarnings("unused")
     private static final String TAG = "MoviePlayer";
-    private static final boolean LOG = false;
+    private static final boolean LOG = true;
 
     private static final String KEY_VIDEO_POSITION = "video-position";
     private static final String KEY_RESUMEABLE_TIME = "resumeable-timeout";
@@ -112,7 +120,6 @@ public class MoviePlayer implements
     private final CodeauroraVideoView mVideoView;
     private final View mRootView;
     private final Bookmarker mBookmarker;
-    private final Uri mUri;
     private final Handler mHandler = new Handler();
     private final AudioBecomingNoisyReceiver mAudioBecomingNoisyReceiver;
     private final MovieControllerOverlay mController;
@@ -124,6 +131,7 @@ public class MoviePlayer implements
     private boolean mCanResumed = false;
     private boolean mFirstBePlayed = false;
     private boolean mKeyguardLocked = false;
+    private boolean mIsOnlyAudio = false;
     private int mLastSystemUiVis = 0;
 
     // If the time bar is being dragged.
@@ -138,6 +146,10 @@ public class MoviePlayer implements
     private MoviePlayerExtension mPlayerExt = new MoviePlayerExtension();
     private RetryExtension mRetryExt = new RetryExtension();
     private ServerTimeoutExtension mServerTimeoutExt = new ServerTimeoutExtension();
+    private ScreenModeExt mScreenModeExt = new ScreenModeExt();
+    private IContrllerOverlayExt mOverlayExt;
+    private IControllerRewindAndForward mControllerRewindAndForwardExt;
+    private IRewindAndForwardListener mRewindAndForwardListener = new ControllerRewindAndForwardExt();
     private boolean mCanReplay;
     private boolean mVideoCanSeek = false;
     private boolean mVideoCanPause = false;
@@ -200,6 +212,9 @@ public class MoviePlayer implements
                 }
                 mKeyguardLocked = false;
                 mCanResumed = false;
+            } else if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+                Log.v(TAG, "Intent.ACTION_SHUTDOWN received");
+                mActivityContext.finish();
             }
         }
     };
@@ -211,17 +226,20 @@ public class MoviePlayer implements
         mVideoView = (CodeauroraVideoView) rootView.findViewById(R.id.surface_view);
         mBookmarker = new Bookmarker(movieActivity);
 
-        mController = new MovieControllerOverlay(mContext);
+        mController = new MovieControllerOverlay(movieActivity);
         ((ViewGroup)rootView).addView(mController.getView());
         mController.setListener(this);
         mController.setCanReplay(canReplay);
 
         init(movieActivity, info, canReplay);
-        mUri = mMovieItem.getUri();
 
         mVideoView.setOnErrorListener(this);
         mVideoView.setOnCompletionListener(this);
-        mVideoView.setVideoURI(mUri);
+
+        if (mVirtualizer != null) {
+            mVirtualizer.release();
+            mVirtualizer = null;
+        }
 
         Intent ai = movieActivity.getIntent();
         boolean virtualize = ai.getBooleanExtra(VIRTUALIZE_EXTRA, false);
@@ -276,6 +294,7 @@ public class MoviePlayer implements
         final IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_USER_PRESENT);
+        filter.addAction(Intent.ACTION_SHUTDOWN);
         mContext.registerReceiver(mReceiver, filter);
 
         Intent i = new Intent(SERVICECMD);
@@ -285,8 +304,6 @@ public class MoviePlayer implements
         if (savedInstance != null) { // this is a resumed activity
             mVideoPosition = savedInstance.getInt(KEY_VIDEO_POSITION, 0);
             mResumeableTime = savedInstance.getLong(KEY_RESUMEABLE_TIME, Long.MAX_VALUE);
-            mVideoView.start();
-            mVideoView.suspend();
             onRestoreInstanceState(savedInstance);
             mHasPaused = true;
         } else {
@@ -299,6 +316,7 @@ public class MoviePlayer implements
                 doStartVideo(false, 0, 0);
             }
         }
+        mScreenModeExt.setScreenMode();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -312,11 +330,17 @@ public class MoviePlayer implements
                 new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
+                boolean finish = (mActivityContext == null ? true : mActivityContext.isFinishing());
                 int diff = mLastSystemUiVis ^ visibility;
                 mLastSystemUiVis = visibility;
                 if ((diff & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
                         && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
                     mController.show();
+                    mRootView.setBackgroundColor(Color.BLACK);
+                }
+
+                if (LOG) {
+                    Log.v(TAG, "onSystemUiVisibilityChange(" + visibility + ") finishing()=" + finish);
                 }
             }
         });
@@ -388,6 +412,12 @@ public class MoviePlayer implements
         dialog.show();
     }
 
+    public void setDefaultScreenMode() {
+        addBackground();
+        mController.setDefaultScreenMode();
+        removeBackground();
+    }
+
     public boolean onPause() {
         if (LOG) {
             Log.v(TAG, "onPause() isLiveStreaming()=" + isLiveStreaming());
@@ -427,14 +457,14 @@ public class MoviePlayer implements
         mVideoLastDuration = duration > 0 ? duration : mVideoLastDuration;
         mBookmarker.setBookmark(mMovieItem.getUri(), mVideoPosition, mVideoLastDuration);
         long end1 = System.currentTimeMillis();
-        // change suspend to release for sync paused and killed case
-        mVideoView.stopPlayback();
+        mVideoView.suspend();
         mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
         mVideoView.setResumed(false);// avoid start after surface created
         // Workaround for last-seek frame difference
         mVideoView.setVisibility(View.INVISIBLE);
         long end2 = System.currentTimeMillis();
         // TODO comments by sunlei
+        mOverlayExt.clearBuffering();
         mServerTimeoutExt.recordDisconnectTime();
         if (LOG) {
             Log.v(TAG, "doOnPause() save video info consume:" + (end1 - start));
@@ -477,7 +507,8 @@ public class MoviePlayer implements
                     pauseVideo();
                     break;
                 default:
-                    doStartVideo(true, mVideoPosition, mVideoLastDuration);
+                    mVideoView.seekTo(mVideoPosition);
+                    mVideoView.resume();
                     pauseVideoMoreThanThreeMinutes();
                     break;
             }
@@ -515,12 +546,16 @@ public class MoviePlayer implements
     // second by mProgressChecker and also from places where the time bar needs
     // to be updated immediately.
     private int setProgress() {
-        if (mDragging || !mShowing) {
+        if (mDragging || (!mShowing && !mIsOnlyAudio)) {
             return 0;
         }
         int position = mVideoView.getCurrentPosition();
         int duration = mVideoView.getDuration();
         mController.setTimes(position, duration, 0, 0);
+        if (mControllerRewindAndForwardExt != null
+		        && mControllerRewindAndForwardExt.getPlayPauseEanbled()) {
+            updateRewindAndForwardUI();
+        }
         return position;
     }
 
@@ -532,6 +567,7 @@ public class MoviePlayer implements
         if ("http".equalsIgnoreCase(scheme) || "rtsp".equalsIgnoreCase(scheme)
                 || "https".equalsIgnoreCase(scheme)) {
             mController.showLoading();
+            mOverlayExt.setPlayingInfo(isLiveStreaming());
             mHandler.removeCallbacks(mPlayingChecker);
             mHandler.postDelayed(mPlayingChecker, 250);
         } else {
@@ -548,14 +584,15 @@ public class MoviePlayer implements
         }
         if (start) {
             mVideoView.start();
+            mVideoView.setVisibility(View.VISIBLE);
+            mActivityContext.initEffects(mVideoView.getAudioSessionId());
         }
         //we may start video from stopVideo,
         //this case, we should reset canReplay flag according canReplay and loop
         boolean loop = mPlayerExt.getLoop();
         boolean canReplay = loop ? loop : mCanReplay;
         mController.setCanReplay(canReplay);
-        if (position > 0 && (mVideoCanSeek || mVideoView.canSeekBackward()
-                    || mVideoView.canSeekForward())) {
+        if (position > 0 && (mVideoCanSeek || mVideoView.canSeek())) {
             mVideoView.seekTo(position);
         }
         if (enableFasten) {
@@ -603,6 +640,8 @@ public class MoviePlayer implements
         mHandler.removeCallbacksAndMessages(null);
         // VideoView will show an error dialog if we return false, so no need
         // to show more message.
+        //M:resume controller
+        mController.setViewEnabled(true);
         mController.showErrorMessage("");
         return false;
     }
@@ -635,9 +674,23 @@ public class MoviePlayer implements
     @Override
     public void onPlayPause() {
         if (mVideoView.isPlaying()) {
-            pauseVideo();
+            if (mVideoView.canPause()) {
+                pauseVideo();
+                //set view disabled(play/pause asynchronous processing)
+                mController.setViewEnabled(true);
+                if (mControllerRewindAndForwardExt != null) {
+                    mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                            .canStop(), false, false);
+                }
+            }
         } else {
             playVideo();
+            //set view disabled(play/pause asynchronous processing)
+            mController.setViewEnabled(true);
+            if (mControllerRewindAndForwardExt != null) {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(), false, false);
+            }
         }
     }
 
@@ -648,14 +701,17 @@ public class MoviePlayer implements
 
     @Override
     public void onSeekMove(int time) {
-        mVideoView.seekTo(time);
+        if (mVideoView.canSeek()) {
+            mVideoView.seekTo(time);
+        }
     }
 
     @Override
     public void onSeekEnd(int time, int start, int end) {
         mDragging = false;
-        mVideoView.seekTo(time);
-        setProgress();
+        if (mVideoView.canSeek()) {
+            mVideoView.seekTo(time);
+        }
     }
 
     @Override
@@ -665,6 +721,7 @@ public class MoviePlayer implements
 
     @Override
     public void onShown() {
+        addBackground();
         mShowing = true;
         setProgress();
         showSystemUi(true);
@@ -674,6 +731,7 @@ public class MoviePlayer implements
     public void onHidden() {
         mShowing = false;
         showSystemUi(false);
+        removeBackground();
     }
 
     @Override
@@ -681,7 +739,11 @@ public class MoviePlayer implements
         if (LOG) {
             Log.v(TAG, "onInfo() what:" + what + " extra:" + extra);
         }
-        if (what == MediaPlayer.MEDIA_INFO_METADATA_UPDATE && mServerTimeoutExt != null) {
+        if (what == MediaPlayer.MEDIA_INFO_NOT_SEEKABLE && mOverlayExt != null) {
+            boolean flag = (extra == 1);
+            mOverlayExt.setCanPause(flag);
+            mOverlayExt.setCanScrubbing(flag);
+        } else if (what == MediaPlayer.MEDIA_INFO_METADATA_UPDATE && mServerTimeoutExt != null) {
             Log.e(TAG, "setServerTimeout " + extra);
             mServerTimeoutExt.setTimeout(extra * 1000);
         }
@@ -692,16 +754,29 @@ public class MoviePlayer implements
     }
 
     @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        boolean fullBuffer = isFullBuffer();
+        mOverlayExt.showBuffering(fullBuffer, percent);
+    }
+
+    @Override
     public void onPrepared(MediaPlayer mp) {
         if (LOG) {
             Log.v(TAG, "onPrepared(" + mp + ")");
         }
+        if (!isLocalFile()) {
+            mOverlayExt.setPlayingInfo(isLiveStreaming());
+        }
         getVideoInfo(mp);
         boolean canPause = mVideoView.canPause();
-        boolean canSeek = mVideoView.canSeekBackward() && mVideoView.canSeekForward();
+        boolean canSeek = mVideoView.canSeek();
+        mOverlayExt.setCanPause(canPause);
+        mOverlayExt.setCanScrubbing(canSeek);
+        mController.setPlayPauseReplayResume();
         if (!canPause && !mVideoView.isTargetPlaying()) {
             mVideoView.start();
         }
+        updateRewindAndForwardUI();
         if (LOG) {
             Log.v(TAG, "onPrepared() canPause=" + canPause + ", canSeek=" + canSeek);
         }
@@ -770,6 +845,19 @@ public class MoviePlayer implements
         return isMediaKey(keyCode);
     }
 
+    public void updateRewindAndForwardUI() {
+        Log.v(TAG, "updateRewindAndForwardUI");
+        Log.v(TAG, "updateRewindAndForwardUI== getCurrentPosition = " +  mVideoView.getCurrentPosition());
+        Log.v(TAG, "updateRewindAndForwardUI==getDuration =" +  mVideoView.getDuration());
+        if (mControllerRewindAndForwardExt != null) {
+            mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                    .canStop(), mVideoView.canSeekBackward()
+                    && mControllerRewindAndForwardExt.getTimeBarEanbled(), mVideoView
+                    .canSeekForward()
+                    && mControllerRewindAndForwardExt.getTimeBarEanbled());
+        }
+    }
+
     private static boolean isMediaKey(int keyCode) {
         return keyCode == KeyEvent.KEYCODE_HEADSETHOOK
                 || keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS
@@ -787,6 +875,20 @@ public class MoviePlayer implements
 
         mVideoView.setOnInfoListener(this);
         mVideoView.setOnPreparedListener(this);
+        mVideoView.setOnBufferingUpdateListener(this);
+        mVideoView.setOnVideoSizeChangedListener(this);
+        mRootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mController.show();
+                return true;
+            }
+        });
+        mOverlayExt = mController.getOverlayExt();
+        mControllerRewindAndForwardExt = mController.getControllerRewindAndForwardExt();
+        if (mControllerRewindAndForwardExt != null) {
+            mControllerRewindAndForwardExt.setIListener(mRewindAndForwardListener);
+        }
     }
 
     // We want to pause when the headset is unplugged.
@@ -803,7 +905,7 @@ public class MoviePlayer implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mVideoView.isPlaying()) pauseVideo();
+            if (mVideoView.isPlaying() && mVideoView.canPause()) pauseVideo();
         }
     }
 
@@ -881,6 +983,20 @@ public class MoviePlayer implements
         return isLive;
     }
 
+    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+        // reget the audio type
+        if (width != 0 && height != 0) {
+            mIsOnlyAudio = false;
+        } else {
+            mIsOnlyAudio = true;
+        }
+        mOverlayExt.setBottomPanel(mIsOnlyAudio, true);
+        if (LOG) {
+            Log.v(TAG, "onVideoSizeChanged(" + width + ", " + height + ") mIsOnlyAudio="
+                    + mIsOnlyAudio);
+        }
+    }
+
     public IMoviePlayer getMoviePlayerExt() {
         return mPlayerExt;
     }
@@ -920,6 +1036,7 @@ public class MoviePlayer implements
     private void clearVideoInfo() {
         mVideoPosition = 0;
         mVideoLastDuration = 0;
+        mIsOnlyAudio = false;
 
         if (mServerTimeoutExt != null) {
             mServerTimeoutExt.clearServerInfo();
@@ -933,6 +1050,7 @@ public class MoviePlayer implements
         outState.putInt(KEY_VIDEO_STREAMING_TYPE, mStreamingType);
         outState.putString(KEY_VIDEO_STATE, String.valueOf(mTState));
         mServerTimeoutExt.onSaveInstanceState(outState);
+        mScreenModeExt.onSaveInstanceState(outState);
         mRetryExt.onSaveInstanceState(outState);
         mPlayerExt.onSaveInstanceState(outState);
     }
@@ -944,6 +1062,7 @@ public class MoviePlayer implements
         mStreamingType = icicle.getInt(KEY_VIDEO_STREAMING_TYPE);
         mTState = TState.valueOf(icicle.getString(KEY_VIDEO_STATE));
         mServerTimeoutExt.onRestoreInstanceState(icicle);
+        mScreenModeExt.onRestoreInstanceState(icicle);
         mRetryExt.onRestoreInstanceState(icicle);
         mPlayerExt.onRestoreInstanceState(icicle);
     }
@@ -968,6 +1087,26 @@ public class MoviePlayer implements
                 mIsLoop = loop;
                 mController.setCanReplay(loop);
             }
+        }
+
+        @Override
+        public void startNextVideo(IMovieItem item) {
+            IMovieItem next = item;
+            if (next != null && next != mMovieItem) {
+                int position = mVideoView.getCurrentPosition();
+                int duration = mVideoView.getDuration();
+                mBookmarker.setBookmark(mMovieItem.getUri(), position, duration);
+                mVideoView.stopPlayback();
+                mVideoView.setVisibility(View.INVISIBLE);
+                clearVideoInfo();
+                mMovieItem = next;
+                mActivityContext.refreshMovieInfo(mMovieItem);
+                doStartVideo(false, 0, 0);
+                mVideoView.setVisibility(View.VISIBLE);
+            } else {
+                Log.e(TAG, "Cannot play the next video! " + item);
+            }
+            mActivityContext.closeOptionsMenu();
         }
 
         @Override
@@ -999,6 +1138,7 @@ public class MoviePlayer implements
             mFirstBePlayed = false;
             mController.setCanReplay(true);
             mController.showEnded();
+            mController.setViewEnabled(true);
             setProgress();
         }
 
@@ -1006,7 +1146,7 @@ public class MoviePlayer implements
         public boolean canStop() {
             boolean stopped = false;
             if (mController != null) {
-                //stopped = mOverlayExt.isPlayingEnd();
+                stopped = mOverlayExt.isPlayingEnd();
             }
             if (LOG) {
                 Log.v(TAG, "canStop() stopped=" + stopped);
@@ -1276,6 +1416,145 @@ public class MoviePlayer implements
         public void setTimeout(int timeout) {
             mServerTimeout = timeout;
         }
+    }
+
+    private class ScreenModeExt implements Restorable, ScreenModeListener {
+        private static final String KEY_VIDEO_SCREEN_MODE = "video_screen_mode";
+        private int mScreenMode = ScreenModeManager.SCREENMODE_BIGSCREEN;
+        private ScreenModeManager mScreenModeManager = new ScreenModeManager();
+
+        public void setScreenMode() {
+            mVideoView.setScreenModeManager(mScreenModeManager);
+            mController.setScreenModeManager(mScreenModeManager);
+            mScreenModeManager.addListener(this);
+            //notify all listener to change screen mode
+            mScreenModeManager.setScreenMode(mScreenMode);
+            if (LOG) {
+                Log.v(TAG, "setScreenMode() mScreenMode=" + mScreenMode);
+            }
+        }
+
+        @Override
+        public void onScreenModeChanged(int newMode) {
+            mScreenMode = newMode;// changed from controller
+            if (LOG) {
+                Log.v(TAG, "OnScreenModeClicked(" + newMode + ")");
+            }
+        }
+
+        @Override
+        public void onRestoreInstanceState(Bundle icicle) {
+            mScreenMode = icicle.getInt(KEY_VIDEO_SCREEN_MODE,
+                    ScreenModeManager.SCREENMODE_BIGSCREEN);
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putInt(KEY_VIDEO_SCREEN_MODE, mScreenMode);
+        }
+    }
+
+    private class ControllerRewindAndForwardExt implements IRewindAndForwardListener {
+        @Override
+        public void onPlayPause() {
+            onPlayPause();
+        }
+
+        @Override
+        public void onSeekStart() {
+            onSeekStart();
+        }
+
+        @Override
+        public void onSeekMove(int time) {
+            onSeekMove(time);
+        }
+
+        @Override
+        public void onSeekEnd(int time, int trimStartTime, int trimEndTime) {
+            onSeekEnd(time, trimStartTime, trimEndTime);
+        }
+
+        @Override
+        public void onShown() {
+            onShown();
+        }
+
+        @Override
+        public void onHidden() {
+            onHidden();
+        }
+
+        @Override
+        public void onReplay() {
+            onReplay();
+        }
+
+        @Override
+        public boolean onIsRTSP() {
+            return false;
+        }
+
+        @Override
+        public void onStopVideo() {
+            Log.v(TAG, "ControllerRewindAndForwardExt onStopVideo()");
+            if (mPlayerExt.canStop()) {
+                mPlayerExt.stopVideo();
+                mControllerRewindAndForwardExt.showControllerButtonsView(false,
+                        false, false);
+            }
+        }
+
+        @Override
+        public void onRewind() {
+            Log.v(TAG, "ControllerRewindAndForwardExt onRewind()");
+            if (mVideoView != null && mVideoView.canSeekBackward()) {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(),
+                        false, false);
+                int stepValue = getStepOptionValue();
+                int targetDuration = mVideoView.getCurrentPosition()
+                        - stepValue < 0 ? 0 : mVideoView.getCurrentPosition()
+                        - stepValue;
+                Log.v(TAG, "onRewind targetDuration " + targetDuration);
+                mVideoView.seekTo(targetDuration);
+            } else {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(),
+                        false, false);
+            }
+        }
+
+        @Override
+        public void onForward() {
+            Log.v(TAG, "ControllerRewindAndForwardExt onForward()");
+            if (mVideoView != null && mVideoView.canSeekForward()) {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(),
+                        false, false);
+                int stepValue = getStepOptionValue();
+                int targetDuration = mVideoView.getCurrentPosition()
+                        + stepValue > mVideoView.getDuration() ? mVideoView
+                        .getDuration() : mVideoView.getCurrentPosition()
+                        + stepValue;
+                Log.v(TAG, "onForward targetDuration " + targetDuration);
+                mVideoView.seekTo(targetDuration);
+            } else {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(),
+                        false, false);
+            }
+        }
+    }
+
+    public int getStepOptionValue() {
+        final String slectedStepOption = "selected_step_option";
+        final String videoPlayerData = "video_player_data";
+        final int stepBase = 3000;
+        final int stepOptionThreeSeconds = 0;
+        SharedPreferences mPrefs = mContext.getSharedPreferences(
+                videoPlayerData, 0);
+        return (mPrefs.getInt(slectedStepOption, stepOptionThreeSeconds) + 1) * stepBase;
     }
 }
 

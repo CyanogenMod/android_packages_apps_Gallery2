@@ -1,6 +1,6 @@
-package com.qcom.gallery3d.video;
+package org.codeaurora.gallery3d.video;
 
-import com.qcom.gallery3d.ext.QcomLog;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -36,10 +36,10 @@ public class ScreenModeManager {
             | (SCREENMODE_CROPSCREEN & screenModes);
         if ((screenModes & SCREENMODE_ALL) == 0) {
             mScreenModes = SCREENMODE_ALL;
-            QcomLog.w(TAG, "wrong screenModes=" + screenModes + ". use default value " + SCREENMODE_ALL);
+            Log.w(TAG, "wrong screenModes=" + screenModes + ". use default value " + SCREENMODE_ALL);
         }
         if (LOG) {
-            QcomLog.v(TAG, "enableScreenMode(" + screenModes + ") mScreenModes=" + mScreenModes);
+            Log.v(TAG, "enableScreenMode(" + screenModes + ") mScreenModes=" + mScreenModes);
         }
     }
     
@@ -54,7 +54,7 @@ public class ScreenModeManager {
     
     public void setScreenMode(final int curScreenMode) {
         if (LOG) {
-            QcomLog.v(TAG, "setScreenMode(" + curScreenMode + ")");
+            Log.v(TAG, "setScreenMode(" + curScreenMode + ")");
         }
         mScreenMode = curScreenMode;
         for (final ScreenModeListener listener : mListeners) {
@@ -64,7 +64,7 @@ public class ScreenModeManager {
     
     public int getScreenMode() {
         if (LOG) {
-            QcomLog.v(TAG, "getScreenMode() return " + mScreenMode);
+            Log.v(TAG, "getScreenMode() return " + mScreenMode);
         }
         return mScreenMode;
     }
@@ -85,7 +85,7 @@ public class ScreenModeManager {
             }
         }
         if (LOG) {
-            QcomLog.v(TAG, "getNextScreenMode() = " + mode);
+            Log.v(TAG, "getNextScreenMode() = " + mode);
         }
         return mode;
     }
@@ -96,14 +96,14 @@ public class ScreenModeManager {
             mListeners.add(l);
         }
         if (LOG) {
-            QcomLog.v(TAG, "addListener(" + l + ")");
+            Log.v(TAG, "addListener(" + l + ")");
         }
     }
     
     public void removeListener(final ScreenModeListener l) {
         mListeners.remove(l);
         if (LOG) {
-            QcomLog.v(TAG, "removeListener(" + l + ")");
+            Log.v(TAG, "removeListener(" + l + ")");
         }
     }
     

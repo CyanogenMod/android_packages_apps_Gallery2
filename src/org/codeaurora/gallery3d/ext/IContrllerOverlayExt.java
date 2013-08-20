@@ -1,4 +1,4 @@
-package com.qcom.gallery3d.ext;
+package org.codeaurora.gallery3d.ext;
 /**
  * Controller overlay extension interface.
  */

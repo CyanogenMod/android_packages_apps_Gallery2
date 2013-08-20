@@ -51,14 +51,12 @@ public class StereoAudioHooker extends MovieHooker {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (getMenuOriginalId(item.getItemId())) {
-            case MENU_STEREO_AUDIO:
-                mCurrentStereoAudio = !mCurrentStereoAudio;
-                setStereoAudio(mCurrentStereoAudio);
-                return true;
-            default:
-                return false;
+        if(getMenuOriginalId(item.getItemId()) == MENU_STEREO_AUDIO) {
+            mCurrentStereoAudio = !mCurrentStereoAudio;
+            setStereoAudio(mCurrentStereoAudio);
+            return true;
         }
+        return false;
     }
 
     private boolean getStereoAudio() {
@@ -93,13 +91,8 @@ public class StereoAudioHooker extends MovieHooker {
 
     private void updateStereoAudioIcon() {
         if (mMenuStereoAudio != null) {
-            if (mCurrentStereoAudio) {
-                mMenuStereoAudio.setTitle(R.string.single_track);
-                mMenuStereoAudio.setIcon(R.drawable.ic_menu_single_track);
-            } else {
-                mMenuStereoAudio.setTitle(R.string.stereo);
-                mMenuStereoAudio.setIcon(R.drawable.ic_menu_stereo);
-            }
+            mMenuStereoAudio.setTitle(mCurrentStereoAudio?R.string.single_track:R.string.stereo);
+            mMenuStereoAudio.setIcon(mCurrentStereoAudio?R.drawable.ic_menu_single_track:R.drawable.ic_menu_stereo);
         }
     }
 

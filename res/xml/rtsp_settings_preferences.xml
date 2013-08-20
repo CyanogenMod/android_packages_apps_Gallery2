@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/rtp" >
+    <PreferenceCategory android:title="@string/rtp_rtcp" >
         <EditTextPreference
             android:dialogTitle="@string/set_rtp_min_port"
             android:inputType="number"
@@ -19,30 +19,12 @@
             android:summary=""
             android:title="@string/rtp_max_port" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/rtcp" >
-        <EditTextPreference
-            android:dialogTitle="@string/set_rtcp_min_port"
-            android:inputType="number"
-            android:key="rtcp_min_port"
-            android:maxLength="5"
-            android:order="3"
-            android:summary=""
-            android:title="@string/rtcp_min_port" />
-        <EditTextPreference
-            android:dialogTitle="@string/rtcp_max_port"
-            android:inputType="number"
-            android:key="rtcp_max_port"
-            android:maxLength="5"
-            android:order="4"
-            android:summary=""
-            android:title="@string/rtcp_max_port" />
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/buffer_size" >
         <EditTextPreference
             android:dialogTitle="@string/set_buffer_size"
             android:inputType="number"
             android:key="buffer_size"
-            android:maxLength="5"
+            android:maxLength="10"
             android:order="5"
             android:summary=""
             android:title="@string/buffer_size" />
