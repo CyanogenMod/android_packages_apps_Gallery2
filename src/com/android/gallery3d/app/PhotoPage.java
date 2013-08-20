@@ -1059,6 +1059,10 @@ public abstract class PhotoPage extends ActivityState implements
                 }
                 return true;
             }
+            case R.id.print: {
+                mActivity.printSelectedImage(manager.getContentUri(path));
+                return true;
+            }
             case R.id.action_delete:
                 confirmMsg = mActivity.getResources().getQuantityString(
                         R.plurals.delete_selection, 1);
