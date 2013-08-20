@@ -178,8 +178,8 @@ public class ColorHueView extends View implements ColorListener {
 
         mRect.left = mBorder;
         mRect.right = mWidth - mBorder;
-        mRect.top = mBorder;
-        mRect.bottom = mHeight - mBorder;
+        mRect.top = 0;
+        mRect.bottom = mHeight;
         canvas.drawRect(mRect,mCheckPaint);
         canvas.drawBitmap(mBitmap, null, mRect, mPaint);
 
