@@ -52,24 +52,23 @@ public class StreamingHooker extends MovieHooker {
     }
 
     private void gotoInputUrl() {
-        final String appName = getClass().getName();
+        final String APN_NAME = getClass().getName();
+        final String URI_STR = "about:blank";
+        final String EXTRA_NAME = "inputUrl";
+
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("about:blank"));
-        intent.putExtra("inputUrl", true);
-        intent.putExtra(Browser.EXTRA_APPLICATION_ID, appName);
+        intent.setData(Uri.parse(URI_STR));
+        intent.putExtra(EXTRA_NAME, true);
+        intent.putExtra(Browser.EXTRA_APPLICATION_ID, APN_NAME);
         getContext().startActivity(intent);
         if (LOG) {
-            Log.v(TAG, "gotoInputUrl() appName=" + appName);
+            Log.v(TAG, "gotoInputUrl() appName=" + APN_NAME);
         }
     }
 
     private void gotoSettings() {
         final Intent intent = new Intent(ACTION_STREAMING);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-        // | Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-        // intent.putExtra(KEY_LOGO_BITMAP,
-        // getIntent().getParcelableExtra(KEY_LOGO_BITMAP));
         getContext().startActivity(intent);
         if (LOG) {
             Log.v(TAG, "gotoInputUrl()");

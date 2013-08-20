@@ -19,6 +19,7 @@ public class ExtensionHelper {
         boolean loop = context.getResources().getBoolean(R.bool.loop);
         boolean stereo = context.getResources().getBoolean(R.bool.stereo);
         boolean streaming = context.getResources().getBoolean(R.bool.streaming);
+        boolean playlist = context.getResources().getBoolean(R.bool.playlist);
 
         if (loop == true) {
             group.addHooker(new LoopVideoHooker()); // add it for common feature.
@@ -29,6 +30,10 @@ public class ExtensionHelper {
         if (streaming == true) {
             group.addHooker(new StreamingHooker());
             group.addHooker(new BookmarkHooker());
+        }
+        if (playlist == true) {
+            group.addHooker(new MovieListHooker()); // add it for common feature.
+            group.addHooker(new StepOptionSettingsHooker());
         }
         return group;
     }

@@ -29,6 +29,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Strings for step option settins -->
+    <string name="setp_option_name">Step</string>
+    <string name="step_option_desc">Customize fast forward/backward step</string>
+    <string name="setp_option_three_second">3 seconds</string>
+    <string name="setp_option_six_second">6 seconds</string>
+
     <string name="loop">"Loop"</string>
     <string name="single">"Single"</string>
     <string name="stereo">"Stereo"</string>
@@ -36,27 +42,28 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="media_detail">"Media details"</string>
     <string name="input_url">"Input URL"</string>
     <string name="streaming_settings">"Streaming Settings"</string>
+    <string name="next">"Next"</string>
+    <string name="previous">"Previous"</string>
 
-    <string name="rtp">RTP</string>
-    <string name="rtcp">RTCP</string>
+    <string name="rtp_rtcp">RTP/RTCP</string>
     <string name="min_port">min port:</string>
     <string name="max_port">max port:</string>
     <string name="buffer_size">Buffer Size</string>
     <string name="apn">Prefered APN</string>
     <string name="rtp_min_port">Min port</string>
     <string name="rtp_max_port">Max port</string>
-    <string name="rtcp_min_port">Min port</string>
-    <string name="rtcp_max_port">Max port</string>
     <string name="set_rtp_min_port">Set min port</string>
     <string name="set_rtp_max_port">Set max port</string>
-    <string name="set_rtcp_min_port">Set min port</string>
-    <string name="set_rtcp_max_port">Set max port</string>
     <string name="set_buffer_size">Set buffer size</string>
     <string name="set_apn">Select prefered apn</string>
     <string name="setting">Settings</string>
 
     <string name="server_timeout_title">"Server Timeout"</string>
     <string name="server_timeout_message">"Reconnect the server to play the video or not?"</string>
+    <string name="videoview_error_text_cannot_connect_retry">"Connection failed, try to reconnect %1$d..."</string>
+    <string name="media_controller_live">Live</string>
+    <string name="media_controller_playing">Playing</string>
+    <string name="media_controller_connecting">Connecting...</string>
 
     <string name="bookmark_add">"Add bookmark"</string>
     <string name="bookmark_display">"Show bookmarks"</string>
