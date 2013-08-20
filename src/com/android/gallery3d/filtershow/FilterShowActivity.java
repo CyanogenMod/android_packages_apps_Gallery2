@@ -732,9 +732,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
 
             if (!result) {
-                cannotLoadImage();
-                // TODO: We should figure out the best way preventing this from
-                // happening, e.g: early checking.
+                if (!mOriginalImageUri.equals(mSelectedImageUri)) {
+                    mOriginalImageUri = mSelectedImageUri;
+                    mOriginalPreset = null;
+                    Toast.makeText(FilterShowActivity.this,
+                            R.string.cannot_edit_original, Toast.LENGTH_SHORT).show();
+                    startLoadBitmap(mOriginalImageUri);
+                } else {
+                    cannotLoadImage();
+                }
                 return;
             }
 

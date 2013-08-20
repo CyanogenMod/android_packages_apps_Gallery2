@@ -436,6 +436,17 @@ public class SaveImage {
         // We are using the destination file name such that photos sitting in
         // the auxiliary directory are matching the parent directory.
         File newSrcFile = new File(auxDiretory, dstFile.getName());
+        // Maintain the suffix during move
+        String to = newSrcFile.getName();
+        String from = srcFile.getName();
+        to = to.substring(to.lastIndexOf("."));
+        from = from.substring(from.lastIndexOf("."));
+
+        if (!to.equals(from)) {
+            String name = dstFile.getName();
+            name = name.substring(0, name.lastIndexOf(".")) + from;
+            newSrcFile = new File(auxDiretory, name);
+        }
 
         if (!newSrcFile.exists()) {
             srcFile.renameTo(newSrcFile);

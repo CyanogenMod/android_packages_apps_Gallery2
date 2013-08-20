@@ -392,6 +392,9 @@ public final class ImageLoader {
         Bitmap bmap = loadConstrainedBitmap(uri, context, maxSideLength, originalBounds, false);
         if (bmap != null) {
             bmap = orientBitmap(bmap, orientation);
+            if (bmap.getConfig()!= Bitmap.Config.ARGB_8888){
+                bmap = bmap.copy( Bitmap.Config.ARGB_8888,true);
+            }
         }
         return bmap;
     }
