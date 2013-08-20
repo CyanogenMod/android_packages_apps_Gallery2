@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
+import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.media.Metadata;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -26,6 +28,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 
+import org.codeaurora.gallery3d.video.ScreenModeManager.ScreenModeListener;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -36,7 +40,7 @@ import java.util.Map;
  * it can be used in any layout manager, and provides various display options
  * such as scaling and tinting.
  */
-public class CodeauroraVideoView extends SurfaceView implements MediaPlayerControl {
+public class CodeauroraVideoView extends SurfaceView implements MediaPlayerControl, ScreenModeListener{
     private static final boolean LOG = true;
     private String TAG = "CodeauroraVideoView";
     // settable by the client
@@ -77,6 +81,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private MediaPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener;
     private MediaPlayer.OnVideoSizeChangedListener mVideoSizeListener;
     private MediaPlayer.OnPreparedListener mPreparedListener;
+    private ScreenModeManager mScreenManager;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
     private OnInfoListener  mOnInfoListener;
@@ -84,6 +89,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean     mCanPause;
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
+    private boolean     mCanSeek;
     private boolean     mHasGotPreparedCallBack = false;
     private boolean mNeedWaitLayout = false;
     private boolean mHasGotMetaData = false;
@@ -99,9 +105,9 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                     if (mMediaPlayer == null || mUri == null) {
                         Log.w(TAG, "Cannot prepare play! mMediaPlayer=" + mMediaPlayer
                                 + ", mUri=" + mUri);
-                    } else {
-                        doPreparedIfReady(mMediaPlayer);
+                        return;
                     }
+                    doPreparedIfReady(mMediaPlayer);
                     break;
                 default:
                     Log.w(TAG, "Unhandled message " + msg);
@@ -130,57 +136,47 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
-        int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
-        if (mVideoWidth > 0 && mVideoHeight > 0) {
-
-            int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-            int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-            int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-            int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-
-            if (widthSpecMode == MeasureSpec.EXACTLY && heightSpecMode == MeasureSpec.EXACTLY) {
-                // the size is fixed
-                width = widthSpecSize;
-                height = heightSpecSize;
-
-                // for compatibility, we adjust size based on aspect ratio
-                if ( mVideoWidth * height  < width * mVideoHeight ) {
-                    width = height * mVideoWidth / mVideoHeight;
-                } else if ( mVideoWidth * height  > width * mVideoHeight ) {
-                    height = width * mVideoHeight / mVideoWidth;
+        int width = 0;
+        int height = 0;
+        int screenMode = ScreenModeManager.SCREENMODE_BIGSCREEN;
+        if (mScreenManager != null) {
+            screenMode = mScreenManager.getScreenMode();
+        }
+        switch (screenMode) {
+            case ScreenModeManager.SCREENMODE_BIGSCREEN:
+                width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+                height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+                if (mVideoWidth > 0 && mVideoHeight > 0) {
+                    if (mVideoWidth * height > width * mVideoHeight) {
+                        height = width * mVideoHeight / mVideoWidth;
+                    } else if (mVideoWidth * height < width * mVideoHeight) {
+                        width = height * mVideoWidth / mVideoHeight;
+                    }
                 }
-            } else if (widthSpecMode == MeasureSpec.EXACTLY) {
-                // only the width is fixed, adjust the height to match aspect ratio if possible
-                width = widthSpecSize;
-                height = width * mVideoHeight / mVideoWidth;
-                if (heightSpecMode == MeasureSpec.AT_MOST && height > heightSpecSize) {
-                    // couldn't match aspect ratio within the constraints
-                    height = heightSpecSize;
+                break;
+            case ScreenModeManager.SCREENMODE_FULLSCREEN:
+                width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+                height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+                break;
+            case ScreenModeManager.SCREENMODE_CROPSCREEN:
+                width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+                height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+                if (mVideoWidth > 0 && mVideoHeight > 0) {
+                    if (mVideoWidth * height > width * mVideoHeight) {
+                        width = height * mVideoWidth / mVideoHeight;
+                    } else if (mVideoWidth * height < width * mVideoHeight) {
+                        height = width * mVideoHeight / mVideoWidth;
+                    }
                 }
-            } else if (heightSpecMode == MeasureSpec.EXACTLY) {
-                // only the height is fixed, adjust the width to match aspect ratio if possible
-                height = heightSpecSize;
-                width = height * mVideoWidth / mVideoHeight;
-                if (widthSpecMode == MeasureSpec.AT_MOST && width > widthSpecSize) {
-                    // couldn't match aspect ratio within the constraints
-                    width = widthSpecSize;
-                }
-            } else {
-                // neither the width nor the height are fixed, try to use actual video size
-                width = mVideoWidth;
-                height = mVideoHeight;
-                if (heightSpecMode == MeasureSpec.AT_MOST && height > heightSpecSize) {
-                    height = heightSpecSize;
-                    width = height * mVideoWidth / mVideoHeight;
-                }
-                if (widthSpecMode == MeasureSpec.AT_MOST && width > widthSpecSize) {
-                    width = widthSpecSize;
-                    height = width * mVideoHeight / mVideoWidth;
-                }
-            }
-        } else {
-            // no size yet, just adopt the given spec sizes
+                break;
+            default:
+                Log.w(TAG, "wrong screen mode : " + screenMode);
+                break;
+        }
+        if (LOG) {
+            Log.v(TAG, "onMeasure() set size: " + width + 'x' + height);
+            Log.v(TAG, "onMeasure() video size: " + mVideoWidth + 'x' + mVideoHeight);
+            Log.v(TAG, "onMeasure() mNeedWaitLayout=" + mNeedWaitLayout);
         }
         setMeasuredDimension(width, height);
         if (mNeedWaitLayout) { // when OnMeasure ok, start video.
@@ -234,10 +230,13 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                             || data.getBoolean(Metadata.SEEK_BACKWARD_AVAILABLE);
                     mCanSeekForward = !data.has(Metadata.SEEK_FORWARD_AVAILABLE)
                             || data.getBoolean(Metadata.SEEK_FORWARD_AVAILABLE);
+                    mCanSeek = !data.has(Metadata.SEEK_AVAILABLE)
+                            || data.getBoolean(Metadata.SEEK_AVAILABLE);
                 } else {
                     mCanPause = true;
                     mCanSeekBack = true;
                     mCanSeekForward = true;
+                    mCanSeek = true;
                     Log.w(TAG, "Metadata is null!");
                 }
                 if (LOG) {
@@ -251,11 +250,6 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         mErrorListener = new MediaPlayer.OnErrorListener() {
             public boolean onError(final MediaPlayer mp, final int frameworkErr, final int implErr) {
                 Log.d(TAG, "Error: " + frameworkErr + "," + implErr);
-                if (mCurrentState == STATE_ERROR) {
-                    Log.w(TAG, "Duplicate error message. error message has been sent! " +
-                            "error=(" + frameworkErr + "," + implErr + ")");
-                    return true;
-                }
                 //record error position and duration
                 //here disturb the original logic
                 mSeekWhenPrepared = getCurrentPosition();
@@ -349,11 +343,15 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
 
         getHolder().removeCallback(mSHCallback);
         mSHCallback = new SurfaceHolder.Callback() {
-            public void surfaceChanged(final SurfaceHolder holder, final int format, final int w, final int h) {
+            public void surfaceChanged(final SurfaceHolder holder, final int format, 
+                    final int w, final int h) {
                 if (LOG) {
-                    Log.v(TAG, "surfaceChanged(" + holder + ", " + format + ", " + w + ", " + h + ")");
-                    Log.v(TAG, "surfaceChanged() mMediaPlayer=" + mMediaPlayer + ", mTargetState=" + mTargetState
-                            + ", mVideoWidth=" + mVideoWidth + ", mVideoHeight=" + mVideoHeight);
+                    Log.v(TAG, "surfaceChanged(" + holder + ", " + format
+                            + ", " + w + ", " + h + ")");
+                    Log.v(TAG, "surfaceChanged() mMediaPlayer=" + mMediaPlayer
+                            + ", mTargetState=" + mTargetState
+                            + ", mVideoWidth=" + mVideoWidth 
+                            + ", mVideoHeight=" + mVideoHeight);
                 }
                 mSurfaceWidth = w;
                 mSurfaceHeight = h;
@@ -372,6 +370,29 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                 if (LOG) {
                     Log.v(TAG, "surfaceCreated(" + holder + ")");
                 }
+                /*
+                if (mCurrentState == STATE_SUSPENDED) {
+                    mSurfaceHolder = holder;
+                    mMediaPlayer.setDisplay(mSurfaceHolder);
+                    if (mMediaPlayer.resume()) {
+                        mCurrentState = STATE_PREPARED;
+                        if (mSeekWhenPrepared != 0) {
+                            seekTo(mSeekWhenPrepared);
+                        }
+                        if (mTargetState == STATE_PLAYING) {
+                            start();
+                        }
+                        return;
+                    } else {
+                        release(false);
+                    }
+                }
+                */
+                if (mCurrentState == STATE_SUSPENDED) {
+                    mSurfaceHolder = holder;
+                    mMediaPlayer.setDisplay(mSurfaceHolder);
+                    release(false);
+                }
                 mSurfaceHolder = holder;
                 openVideo();
             }
@@ -384,6 +405,10 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                 mSurfaceHolder = null;
                 if (mMediaController != null) {
                     mMediaController.hide();
+                }
+                if (isHTTPStreaming(mUri) && mCurrentState == STATE_SUSPENDED) {
+                    // Don't call release() while run suspend operation
+                    return;
                 }
                 release(true);
             }
@@ -541,57 +566,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         }
     };
 
-    private MediaPlayer.OnErrorListener mErrorListener =
-        new MediaPlayer.OnErrorListener() {
-        public boolean onError(MediaPlayer mp, int framework_err, int impl_err) {
-            Log.d(TAG, "Error: " + framework_err + "," + impl_err);
-            mCurrentState = STATE_ERROR;
-            mTargetState = STATE_ERROR;
-            if (mMediaController != null) {
-                mMediaController.hide();
-            }
-
-            /* If an error handler has been supplied, use it and finish. */
-            if (mOnErrorListener != null) {
-                if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
-                    return true;
-                }
-            }
-
-            /* Otherwise, pop up an error dialog so the user knows that
-             * something bad has happened. Only try and pop up the dialog
-             * if we're attached to a window. When we're going away and no
-             * longer have a window, don't bother showing the user an error.
-             */
-            if (getWindowToken() != null) {
-                Resources r = mContext.getResources();
-                int messageId;
-
-                if (framework_err == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK) {
-                    messageId = com.android.internal.R.string.VideoView_error_text_invalid_progressive_playback;
-                } else {
-                    messageId = com.android.internal.R.string.VideoView_error_text_unknown;
-                }
-
-                new AlertDialog.Builder(mContext)
-                        .setMessage(messageId)
-                        .setPositiveButton(com.android.internal.R.string.VideoView_error_button,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        /* If we get here, there is no onError listener, so
-                                         * at least inform them that the video is over.
-                                         */
-                                        if (mOnCompletionListener != null) {
-                                            mOnCompletionListener.onCompletion(mMediaPlayer);
-                                        }
-                                    }
-                                })
-                        .setCancelable(false)
-                        .show();
-            }
-            return true;
-        }
-    };
+    private MediaPlayer.OnErrorListener mErrorListener;
 
     private MediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
         new MediaPlayer.OnBufferingUpdateListener() {
@@ -678,7 +653,6 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             mSurfaceHolder = holder;
             openVideo();
             */
-
             if (LOG) {
                 Log.v(TAG, "surfaceCreated(" + holder + ")");
             }
@@ -813,20 +787,53 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     }
 
     public void suspend() {
-        // HTTP streaming will call mMediaPlayer->suspend(), others will call release()
         /*
+        // HTTP streaming will call mMediaPlayer->suspend(), others will call release()
         if (isHTTPStreaming(mUri) && mCurrentState != STATE_PREPARING) {
-            if (mMediaPlayer.suspend()) {
-                mTargetState = mCurrentState;
-                mCurrentState = STATE_SUSPENDED;
-                return;
+            if (mMediaPlayer != null) {
+                if (mMediaPlayer.suspend()) {
+                    mTargetState = mCurrentState;
+                    mCurrentState = STATE_SUSPENDED;
+                    return;
+                }
             }
         }*/
         release(false);
     }
 
     public void resume() {
-        setResumed(true);
+        /*
+        // HTTP streaming (with suspended status) will call mMediaPlayer->resume(), others will call openVideo()
+        if (mCurrentState == STATE_SUSPENDED) {
+            if (mSurfaceHolder != null) {
+                // The surface hasn't been destroyed
+                if (mMediaPlayer.resume()) {
+                    mCurrentState = STATE_PREPARED;
+                    if (mSeekWhenPrepared !=0) {
+                        seekTo(mSeekWhenPrepared);
+                    }
+                    if (mTargetState == STATE_PLAYING) {
+                        start();
+                    }
+                    return;
+                } else {
+                     // resume failed, so call release() before openVideo()
+                     release(false);
+                }
+            } else {
+                // The surface has been destroyed, resume operation will be done after surface created
+                return;
+            }
+        }*/
+        // HTTP streaming (with suspended status) will call mMediaPlayer->resume(), others will call openVideo()
+        if (mCurrentState == STATE_SUSPENDED) {
+            if (mSurfaceHolder != null) {
+                 release(false);
+            } else {
+                // The surface has been destroyed, resume operation will be done after surface created
+                return;
+            }
+        }
         openVideo();
     }
 
@@ -917,6 +924,10 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     @Override
     public boolean canSeekForward() {
         return mCanSeekForward;
+    }
+
+    public boolean canSeek() {
+        return mCanSeek;
     }
 
     @Override
@@ -1028,5 +1039,34 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             Log.v(TAG, "isTargetPlaying() mTargetState=" + mTargetState);
         }
         return mTargetState == STATE_PLAYING;
+    }
+
+    public void setScreenModeManager(final ScreenModeManager manager) {
+        mScreenManager = manager;
+        if (mScreenManager != null) {
+            mScreenManager.addListener(this);
+        }
+        if (LOG) {
+            Log.v(TAG, "setScreenModeManager(" + manager + ")");
+        }
+    }
+
+    @Override
+    public void onScreenModeChanged(final int newMode) {
+        this.requestLayout();
+    }
+
+    public void setOnVideoSizeChangedListener(final OnVideoSizeChangedListener l) {
+        mVideoSizeListener = l;
+        if (LOG) {
+            Log.i(TAG, "setOnVideoSizeChangedListener(" + l + ")");
+        }
+    }
+
+    public void setOnBufferingUpdateListener(final OnBufferingUpdateListener l) {
+        mOnBufferingUpdateListener = l;
+        if (LOG) {
+            Log.v(TAG, "setOnBufferingUpdateListener(" + l + ")");
+        }
     }
 }

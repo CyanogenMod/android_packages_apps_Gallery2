@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -65,8 +66,9 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.ui.Knob;
 import org.codeaurora.gallery3d.ext.IActivityHooker;
-import org.codeaurora.gallery3d.ext.MovieItem;
 import org.codeaurora.gallery3d.ext.IMovieItem;
+import org.codeaurora.gallery3d.ext.MovieItem;
+import org.codeaurora.gallery3d.ext.MovieUtils;
 import org.codeaurora.gallery3d.video.ExtensionHelper;
 import org.codeaurora.gallery3d.video.MovieTitleHelper;
 
@@ -79,20 +81,21 @@ import org.codeaurora.gallery3d.video.MovieTitleHelper;
  */
 public class MovieActivity extends Activity {
     @SuppressWarnings("unused")
-    private static final String TAG = "MovieActivity";
+    private static final String  TAG = "MovieActivity";
     private static final boolean LOG = true;
-    public static final String KEY_LOGO_BITMAP = "logo-bitmap";
-    public static final String KEY_TREAT_UP_AS_BACK = "treat-up-as-back";
-    private static final String VIDEO_SDP_MIME_TYPE = "application/sdp";
-    private static final String VIDEO_SDP_TITLE = "rtsp://";
-    private static final String VIDEO_FILE_SCHEMA = "file";
-    private static final String VIDEO_MIME_TYPE = "video/*";
+    public  static final String  KEY_LOGO_BITMAP = "logo-bitmap";
+    public  static final String  KEY_TREAT_UP_AS_BACK = "treat-up-as-back";
+    private static final String  VIDEO_SDP_MIME_TYPE = "application/sdp";
+    private static final String  VIDEO_SDP_TITLE = "rtsp://";
+    private static final String  VIDEO_FILE_SCHEMA = "file";
+    private static final String  VIDEO_MIME_TYPE = "video/*";
+    private static final String  SHARE_HISTORY_FILE = "video_share_history_file";
 
     private MoviePlayer mPlayer;
-    private boolean mFinishOnCompletion;
-    private Uri mUri;
+    private boolean     mFinishOnCompletion;
+    private Uri         mUri;
 
-    private static final short BASSBOOST_MAX_STRENGTH = 1000;
+    private static final short BASSBOOST_MAX_STRENGTH   = 1000;
     private static final short VIRTUALIZER_MAX_STRENGTH = 1000;
 
     private boolean mIsHeadsetOn = false;
@@ -104,17 +107,19 @@ public class MovieActivity extends Activity {
         global_enabled, bb_strength, virt_strength
     };
 
-    private BassBoost mBassBoostEffect;
+    private BassBoost   mBassBoostEffect;
     private Virtualizer mVirtualizerEffect;
     private AlertDialog mEffectDialog;
-    private Switch mSwitch;
-    private Knob mBassBoostKnob;
-    private Knob mVirtualizerKnob;
+    private Switch      mSwitch;
+    private Knob        mBassBoostKnob;
+    private Knob        mVirtualizerKnob;
 
-    private IMovieItem mMovieItem;
-    private IActivityHooker mMovieHooker;
-    private KeyguardManager mKeyguardManager;
-    private boolean mResumed = false;
+    private ShareActionProvider mShareProvider;
+    private IMovieItem          mMovieItem;
+    private IActivityHooker     mMovieHooker;
+    private KeyguardManager     mKeyguardManager;
+
+    private boolean mResumed        = false;
     private boolean mControlResumed = false;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -285,17 +290,14 @@ public class MovieActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.movie, menu);
-
-        // Document says EXTRA_STREAM should be a content: Uri
-        // So, we only share the video if it's "content:".
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        if (ContentResolver.SCHEME_CONTENT.equals(mUri.getScheme())) {
-            shareItem.setVisible(true);
-            ((ShareActionProvider) shareItem.getActionProvider())
-                    .setShareIntent(createShareIntent());
-        } else {
-            shareItem.setVisible(false);
+        MenuItem shareMenu = menu.findItem(R.id.action_share);
+        ShareActionProvider provider = (ShareActionProvider) shareMenu.getActionProvider();
+        mShareProvider = provider;
+        if (mShareProvider != null) {
+            // share provider is singleton, we should refresh our history file.
+            mShareProvider.setShareHistoryFileName(SHARE_HISTORY_FILE);
         }
+        refreshShareProvider(mMovieItem);
 
         final MenuItem mi = menu.add(R.string.audio_effects);
         mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -549,6 +551,15 @@ public class MovieActivity extends Activity {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ||
+            this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mPlayer.setDefaultScreenMode();
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mPlayer.onSaveInstanceState(outState);
@@ -655,6 +666,28 @@ public class MovieActivity extends Activity {
                     + mKeyguardManager);
         }
         return locked;
+    }
+
+    public void refreshMovieInfo(IMovieItem info) {
+        mMovieItem = info;
+        setActionBarTitle(info.getTitle());
+        refreshShareProvider(info);
+        mMovieHooker.setParameter(null, mMovieItem);
+    }
+
+    private void refreshShareProvider(IMovieItem info) {
+        // we only share the video if it's "content:".
+        if (mShareProvider != null) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            if (MovieUtils.isLocalFile(info.getUri(), info.getMimeType())) {
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_STREAM, info.getUri());
+            } else {
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(info.getUri()));
+            }
+            mShareProvider.setShareIntent(intent);
+        }
     }
 
     private void enhanceActionBar() {

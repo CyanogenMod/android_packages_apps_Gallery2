@@ -15,7 +15,9 @@
 -->
 <resources>
     <bool name="show_action_bar_title">false</bool>
-    <bool name="loop">false</bool>
-    <bool name="stereo">false</bool>
-    <bool name="streaming">false</bool>
+    <bool name="playlist">true</bool>
+    <bool name="loop">true</bool>
+    <bool name="stereo">true</bool>
+    <bool name="streaming">true</bool>
+    <bool name="speaker">true</bool>
 </resources>

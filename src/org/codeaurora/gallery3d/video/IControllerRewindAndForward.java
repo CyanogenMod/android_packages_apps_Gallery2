@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.qcom.gallery3d.video;
+package org.codeaurora.gallery3d.video;
 
 import com.android.gallery3d.app.ControllerOverlay;
 import com.android.gallery3d.app.ControllerOverlay.Listener;
