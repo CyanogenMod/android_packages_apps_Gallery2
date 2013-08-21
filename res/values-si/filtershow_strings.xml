@@ -107,7 +107,7 @@
     <string name="draw_hue" msgid="4975135843189267133">"පැහැය"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"සන්තෘප්තිය"</string>
     <string name="draw_value" msgid="6571604055161538273">"දීප්තිමත් බව"</string>
-    <string name="draw_opacity" msgid="1669435135236987503">"පාරාන්ධතාව"</string>
+    <string name="draw_color" msgid="2119030386987211193">"වර්ණය"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"රේඛා"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"ලකුණ"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"ස්පැටර්"</string>

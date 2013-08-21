@@ -32,7 +32,7 @@
     <string name="export_image" msgid="3202835713172222134">"Eksportér"</string>
     <string name="print_image" msgid="1942989216591621413">"Udskriv"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Eksportér fladt billede"</string>
-    <string name="select_output_settings" msgid="1268532018080310748">"Det eksporterede billede vil være en kopi uden historie."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Det eksporterede billede vil være en kopi uden historik."</string>
     <string name="quality" msgid="179292110309050529">"Kvalitet"</string>
     <string name="size" msgid="4639404642236356037">"Størrelse"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -107,7 +107,7 @@
     <string name="draw_hue" msgid="4975135843189267133">"Farvetone"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"Mætning"</string>
     <string name="draw_value" msgid="6571604055161538273">"Lysstyrke"</string>
-    <string name="draw_opacity" msgid="1669435135236987503">"Gennemsigtighed"</string>
+    <string name="draw_color" msgid="2119030386987211193">"Farve"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"Linjer"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Tusch"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Stænk"</string>
