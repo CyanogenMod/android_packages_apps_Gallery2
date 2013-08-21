@@ -309,9 +309,26 @@ public class MoviePlayer implements
         mBookmarker.setBookmark(mUri, mVideoPosition, mVideoView.getDuration());
         mVideoView.suspend();
         mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
+
+        int session = mVideoView.getAudioSessionId();
+        if (session != 0) {
+            final Intent intent = new Intent(
+                    AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+            intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, session);
+            intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, mContext.getPackageName());
+            mContext.sendBroadcast(intent);
+        }
     }
 
     public void onResume() {
+        int session = mVideoView.getAudioSessionId();
+        if (session != 0) {
+            final Intent intent = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+            intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, session);
+            intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, mContext.getPackageName());
+            mContext.sendBroadcast(intent);
+        }
+
         if (mHasPaused) {
             mVideoView.seekTo(mVideoPosition);
             mVideoView.resume();
