@@ -20,6 +20,8 @@
 
     <!--  String shown when we cannot load the image when starting the activity [CHAR LIMIT=NONE] -->
     <string name="cannot_load_image">Cannot load the image!</string>
+    <!--  String shown when we cannot load the original to edit [CHAR LIMIT=NONE] -->
+    <string name="cannot_edit_original">Cannot edit original</string>
     <!--  String displayed when showing the original image [CHAR LIMIT=NONE] -->
     <string name="original_picture_text">@string/original</string>
     <!--  String displayed when setting the homepage wallpaper in the background [CHAR LIMIT=NONE] -->
