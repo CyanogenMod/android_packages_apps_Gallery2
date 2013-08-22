@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v8.renderscript.Allocation;
 
+import com.android.gallery3d.app.Log;
 import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
@@ -126,6 +127,9 @@ public class FilterEnvironment {
             return bitmap;
         }
         ImageFilter filter = mFiltersManager.getFilterForRepresentation(representation);
+        if (filter == null){
+            Log.e(LOGTAG,"No ImageFilter for "+representation.getSerializationName());
+        }
         filter.useRepresentation(representation);
         filter.setEnvironment(this);
         Bitmap ret = filter.apply(bitmap, mScaleFactor, mQuality);

@@ -16,6 +16,8 @@
 
 package com.android.gallery3d.filtershow.controller;
 
+import android.graphics.Color;
+
 public class ParameterColor implements Parameter {
     public static String sParameterType = "ParameterColor";
     protected Control mControl;
@@ -23,10 +25,12 @@ public class ParameterColor implements Parameter {
     float[] mHSVO = new float[4];
     String mParameterName;
     int mValue;
-    public final int  ID;
+    public final int ID;
 
-    public ParameterColor(int id) {
+    public ParameterColor(int id, int defaultColor) {
         ID = id;
+        Color.colorToHSV(defaultColor, mHSVO);
+        mHSVO[3] = ((defaultColor >> 24) & 0xFF) / (float) 255;
     }
 
     @Override
@@ -36,23 +40,22 @@ public class ParameterColor implements Parameter {
 
     public void setColor(float[] hsvo) {
         mHSVO = hsvo;
+        mValue = Color.HSVToColor((int) (hsvo[3] * 255), mHSVO);
     }
 
     public float[] getColor() {
-        mHSVO[3] = getValue() ;
         return mHSVO;
     }
 
-
     public void copyFrom(Parameter src) {
-        if (!(src instanceof BasicParameterInt)) {
+        if (!(src instanceof ParameterColor)) {
             throw new IllegalArgumentException(src.getClass().getName());
         }
-        BasicParameterInt p = (BasicParameterInt) src;
+        ParameterColor p = (ParameterColor) src;
 
         mValue = p.mValue;
+        System.arraycopy(p.mHSVO, 0, mHSVO, 0, 4);
     }
-
 
     @Override
     public String getParameterName() {
@@ -61,7 +64,7 @@ public class ParameterColor implements Parameter {
 
     @Override
     public String getValueString() {
-        return  "("+Integer.toHexString(mValue)+")";
+        return "(" + Integer.toHexString(mValue) + ")";
     }
 
     @Override
@@ -75,6 +78,8 @@ public class ParameterColor implements Parameter {
 
     public void setValue(int value) {
         mValue = value;
+        Color.colorToHSV(mValue, mHSVO);
+        mHSVO[3] = ((mValue >> 24) & 0xFF) / (float) 255;
     }
 
     @Override
