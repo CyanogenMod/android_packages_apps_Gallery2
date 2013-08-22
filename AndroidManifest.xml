@@ -179,6 +179,7 @@
             android:label="@string/camera_label"
             android:theme="@style/android:Theme.NoDisplay" />
         <activity-alias android:name="com.android.camera.CameraLauncher"
+            android:label="@string/camera_label"
             android:targetActivity="com.android.camera.CameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
