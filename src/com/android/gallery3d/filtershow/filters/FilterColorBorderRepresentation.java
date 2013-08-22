@@ -16,23 +16,50 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.graphics.Color;
+
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.controller.BasicParameterInt;
+import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
+import com.android.gallery3d.filtershow.controller.Parameter;
+import com.android.gallery3d.filtershow.controller.ParameterColor;
+import com.android.gallery3d.filtershow.editors.EditorColorBorder;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 
 public class FilterColorBorderRepresentation extends FilterRepresentation {
-    private int mColor;
-    private int mBorderSize;
-    private int mBorderRadius;
+    private static final String LOGTAG = "FilterColorBorderRepresentation";
+    private static final String SERIALIZATION_NAME = "COLORBORDER";
+
+    public static final int PARAM_SIZE = 0;
+    public static final int PARAM_RADIUS = 1;
+    public static final int PARAM_COLOR = 2;
+    public static int DEFAULT_MENU_COLOR1 = Color.WHITE;
+    public static int DEFAULT_MENU_COLOR2 = Color.BLACK;
+    public static int DEFAULT_MENU_COLOR3 = Color.GRAY;
+    public static int DEFAULT_MENU_COLOR4 = 0xFFFFCCAA;
+    public static int DEFAULT_MENU_COLOR5 = 0xFFAAAAAA;
+    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
+    private BasicParameterInt mParamRadius = new BasicParameterInt(PARAM_RADIUS, 4, 2, 300);
+    private ParameterColor mParamColor = new ParameterColor(PARAM_COLOR, DEFAULT_MENU_COLOR1);
+
+    private Parameter[] mAllParam = {
+            mParamSize,
+            mParamRadius,
+            mParamColor
+    };
+    private int mPramMode;
 
     public FilterColorBorderRepresentation(int color, int size, int radius) {
         super("ColorBorder");
-        mColor = color;
-        mBorderSize = size;
-        mBorderRadius = radius;
+        setSerializationName(SERIALIZATION_NAME);
         setFilterType(FilterRepresentation.TYPE_BORDER);
         setTextId(R.string.borders);
-        setEditorId(ImageOnlyEditor.ID);
+        setEditorId(EditorColorBorder.ID);
         setShowParameterValue(false);
+        setFilterClass(ImageFilterColorBorder.class);
+        mParamColor.setValue(color);
+        mParamSize.setValue(size);
+        mParamColor.setValue(radius);
     }
 
     public String toString() {
@@ -41,7 +68,8 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
 
     @Override
     public FilterRepresentation copy() {
-        FilterColorBorderRepresentation representation = new FilterColorBorderRepresentation(0,0,0);
+        FilterColorBorderRepresentation representation =
+                new FilterColorBorderRepresentation(0, 0, 0);
         copyAllParameters(representation);
         return representation;
     }
@@ -69,9 +97,10 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
         }
         if (representation instanceof FilterColorBorderRepresentation) {
             FilterColorBorderRepresentation border = (FilterColorBorderRepresentation) representation;
-            if (border.mColor == mColor
-                    && border.mBorderSize == mBorderSize
-                    && border.mBorderRadius == mBorderRadius) {
+            if (border.mParamColor.getValue() == mParamColor.getValue()
+                    && border.mParamRadius.getValue() == mParamRadius.getValue()
+                    && border.mParamSize.getValue() == mParamSize.getValue()) {
+
                 return true;
             }
         }
@@ -82,32 +111,48 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
         return true;
     }
 
+    public Parameter getParam(int mode) {
+        return mAllParam[mode];
+    }
+
     @Override
     public int getTextId() {
         return R.string.borders;
     }
 
     public int getColor() {
-        return mColor;
+        return mParamColor.getValue();
     }
 
     public void setColor(int color) {
-        mColor = color;
+        mParamColor.setValue(color);
     }
 
     public int getBorderSize() {
-        return mBorderSize;
+        return mParamSize.getValue();
     }
 
     public void setBorderSize(int borderSize) {
-        mBorderSize = borderSize;
+        mParamSize.setValue(borderSize);
     }
 
     public int getBorderRadius() {
-        return mBorderRadius;
+        return mParamRadius.getValue();
     }
 
     public void setBorderRadius(int borderRadius) {
-        mBorderRadius = borderRadius;
+        mParamRadius.setValue(borderRadius);
+    }
+
+    public void setPramMode(int pramMode) {
+        this.mPramMode = pramMode;
+    }
+
+    public Parameter getCurrentParam() {
+        return mAllParam[mPramMode];
+    }
+
+    public String getValueString() {
+        return "";
     }
 }

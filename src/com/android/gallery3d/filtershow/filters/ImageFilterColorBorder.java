@@ -18,19 +18,32 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-public class ImageFilterParametricBorder extends ImageFilter {
-    private FilterColorBorderRepresentation mParameters = null;
+import com.android.gallery3d.app.Log;
 
-    public ImageFilterParametricBorder() {
+public class ImageFilterColorBorder extends ImageFilter {
+    private static final String LOGTAG = "ImageFilterColorBorder";
+    private FilterColorBorderRepresentation mParameters = null;
+    Paint mPaint = new Paint();
+    RectF mRect = new RectF();
+
+    public ImageFilterColorBorder() {
         mName = "Border";
+        mPaint.setStyle(Paint.Style.STROKE);
+    }
+
+    public FilterRepresentation getDefaultRepresentation() {
+        return new FilterColorBorderRepresentation(Color.WHITE, 4, 4);
     }
 
     public void useRepresentation(FilterRepresentation representation) {
-        FilterColorBorderRepresentation parameters = (FilterColorBorderRepresentation) representation;
+        FilterColorBorderRepresentation parameters =
+                (FilterColorBorderRepresentation) representation;
         mParameters = parameters;
     }
 
@@ -42,28 +55,24 @@ public class ImageFilterParametricBorder extends ImageFilter {
         if (getParameters() == null) {
             return;
         }
-        Path border = new Path();
-        border.moveTo(0, 0);
-        float bs = getParameters().getBorderSize() / 100.0f * w;
-        float r = getParameters().getBorderRadius() / 100.0f * w;
-        border.lineTo(0, h);
-        border.lineTo(w, h);
-        border.lineTo(w, 0);
-        border.lineTo(0, 0);
-        border.addRoundRect(new RectF(bs, bs, w - bs, h - bs),
-                r, r, Path.Direction.CW);
-
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(getParameters().getColor());
-        canvas.drawPath(border, paint);
+        mRect.set(0, 0, w, h);
+        mPaint.setColor(getParameters().getColor());
+        float size = getParameters().getBorderSize();
+        float radius = getParameters().getBorderRadius();
+        Matrix m = getOriginalToScreenMatrix(w, h);
+        radius = m.mapRadius(radius);
+        size = m.mapRadius(size);
+        mPaint.setStrokeWidth(size);
+        canvas.drawRoundRect(mRect, radius, radius, mPaint);
+        mRect.set(0 - radius, -radius, w + radius, h + radius);
+        canvas.drawRoundRect(mRect, 0, 0, mPaint);
     }
 
     @Override
     public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
-       Canvas canvas = new Canvas(bitmap);
-       applyHelper(canvas, bitmap.getWidth(), bitmap.getHeight());
-       return bitmap;
+        Canvas canvas = new Canvas(bitmap);
+        applyHelper(canvas, bitmap.getWidth(), bitmap.getHeight());
+        return bitmap;
     }
 
 }
