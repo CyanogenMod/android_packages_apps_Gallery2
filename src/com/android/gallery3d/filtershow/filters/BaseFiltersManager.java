@@ -20,10 +20,6 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.editors.EditorCrop;
-import com.android.gallery3d.filtershow.editors.EditorMirror;
-import com.android.gallery3d.filtershow.editors.EditorRotate;
-import com.android.gallery3d.filtershow.editors.EditorStraighten;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
 import java.util.ArrayList;
@@ -141,7 +137,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         filters.add(ImageFilterKMeans.class);
         filters.add(ImageFilterFx.class);
         filters.add(ImageFilterBorder.class);
-        filters.add(ImageFilterParametricBorder.class);
+        filters.add(ImageFilterColorBorder.class);
     }
 
     public ArrayList<FilterRepresentation> getLooks() {

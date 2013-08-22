@@ -237,6 +237,16 @@
     <!--  Label for the removing drawing from screen [CHAR LIMIT=14] -->
     <string name="draw_clear">Clear</string>
 
+
+    <!--  Label for the with of the border[CHAR LIMIT=14] -->
+    <string name="color_border_size">thickness</string>
+    <!--  Label for the border corner size (or rounding) [CHAR LIMIT=14] -->
+    <string name="color_border_corner_size">Corner Size</string>
+    <!--  Label for selecting the border color [CHAR LIMIT=14] -->
+    <string name="color_border_color">Color</string>
+     <!--  Label for the removing borders [CHAR LIMIT=14] -->
+    <string name="color_border_clear">Clear</string>
+
     <!--  Label for the select the color [CHAR LIMIT=35] -->
     <string name="color_pick_select">Choose custom color</string>
     <!--  The title for the color pick dialog [CHAR LIMIT=20] -->
