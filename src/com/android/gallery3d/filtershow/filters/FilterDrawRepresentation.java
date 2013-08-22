@@ -43,12 +43,16 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     private static final String LOGTAG = "FilterDrawRepresentation";
 
     public static final int PARAM_SIZE = 0;
-
     public static final int PARAM_STYLE = 1;
     public static final int PARAM_COLOR = 2;
     private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
     private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 5);
-    ParameterColor mParamColor = new ParameterColor(PARAM_COLOR);
+    public static int DEFAULT_MENU_COLOR1 = Color.RED & 0x80FFFFFF;
+    public static int DEFAULT_MENU_COLOR2 = Color.GREEN & 0x80FFFFFF;
+    public static int DEFAULT_MENU_COLOR3 = Color.BLUE & 0x80FFFFFF;
+    public static int DEFAULT_MENU_COLOR4 = Color.BLACK & 0x80FFFFFF;
+    public static int DEFAULT_MENU_COLOR5 = Color.WHITE & 0x80FFFFFF;
+    ParameterColor mParamColor = new ParameterColor(PARAM_COLOR,DEFAULT_MENU_COLOR1);
     int mParamMode;
     Parameter mCurrentParam = mParamSize;
     private static final String SERIAL_COLOR = "color";

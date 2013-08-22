@@ -16,13 +16,10 @@
 
 package com.android.gallery3d.filtershow.editors;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,34 +27,23 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.colorpicker.ColorHueView;
-import com.android.gallery3d.filtershow.colorpicker.ColorListener;
-import com.android.gallery3d.filtershow.colorpicker.ColorOpacityView;
-import com.android.gallery3d.filtershow.colorpicker.ColorSVRectView;
 import com.android.gallery3d.filtershow.controller.BitmapCaller;
 import com.android.gallery3d.filtershow.controller.ColorChooser;
 import com.android.gallery3d.filtershow.controller.FilterView;
-import com.android.gallery3d.filtershow.controller.ParameterColor;
-import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterColorBorderRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
-import com.android.gallery3d.filtershow.filters.ImageFilterDraw;
-import com.android.gallery3d.filtershow.imageshow.ImageDraw;
+import com.android.gallery3d.filtershow.filters.ImageFilterColorBorder;
+import com.android.gallery3d.filtershow.imageshow.ImageShow;
 
-public class EditorDraw extends ParametricEditor implements FilterView {
-    private static final String LOGTAG = "EditorDraw";
-    public static final int ID = R.id.editorDraw;
-    public ImageDraw mImageDraw;
-    private static final int MODE_SIZE = FilterDrawRepresentation.PARAM_SIZE;
-    private static final int MODE_SIZEE = FilterDrawRepresentation.PARAM_SIZE;
-    private static final int MODE_STYLE = FilterDrawRepresentation.PARAM_STYLE;
-    private static final int MODE_COLOR = FilterDrawRepresentation.PARAM_COLOR;
+public class EditorColorBorder extends ParametricEditor implements FilterView {
+    private static final String LOGTAG = "EditorColorBorder";
+    public static final int ID = R.id.editorColorBorder;
+
     int[] brushIcons = {
             R.drawable.brush_flat,
             R.drawable.brush_round,
@@ -67,23 +53,23 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     };
 
     int[] mBasColors = {
-            FilterDrawRepresentation.DEFAULT_MENU_COLOR1,
-            FilterDrawRepresentation.DEFAULT_MENU_COLOR2,
-            FilterDrawRepresentation.DEFAULT_MENU_COLOR3,
-            FilterDrawRepresentation.DEFAULT_MENU_COLOR4,
-            FilterDrawRepresentation.DEFAULT_MENU_COLOR5,
+            FilterColorBorderRepresentation.DEFAULT_MENU_COLOR1,
+            FilterColorBorderRepresentation.DEFAULT_MENU_COLOR2,
+            FilterColorBorderRepresentation.DEFAULT_MENU_COLOR3,
+            FilterColorBorderRepresentation.DEFAULT_MENU_COLOR4,
+            FilterColorBorderRepresentation.DEFAULT_MENU_COLOR5,
     };
-    private EditorDrawTabletUI mTabletUI;
+    private EditorColorBorderTabletUI mTabletUI;
     private String mParameterString;
     private int mSelectedColorButton;
 
-    public EditorDraw() {
+    public EditorColorBorder() {
         super(ID);
     }
 
     @Override
     public String calculateUserMessage(Context context, String effectName, Object parameterValue) {
-        FilterDrawRepresentation rep = getDrawRep();
+        FilterColorBorderRepresentation rep = getColorBorderRep();
         if (rep == null) {
             return "";
         }
@@ -92,45 +78,38 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         }
         String paramString;
         String val = rep.getValueString();
-
-        mImageDraw.displayDrawLook();
         return mParameterString + val;
     }
 
     @Override
     public void createEditor(Context context, FrameLayout frameLayout) {
-        mView = mImageShow = mImageDraw = new ImageDraw(context);
+        mView = mImageShow = new ImageShow(context);
         super.createEditor(context, frameLayout);
-        mImageDraw.setEditor(this);
-
     }
 
     @Override
     public void reflectCurrentFilter() {
         super.reflectCurrentFilter();
         FilterRepresentation rep = getLocalRepresentation();
-        if (rep != null && getLocalRepresentation() instanceof FilterDrawRepresentation) {
-            FilterDrawRepresentation drawRep = (FilterDrawRepresentation) getLocalRepresentation();
-            mImageDraw.setFilterDrawRepresentation(drawRep);
+        if (rep != null && getLocalRepresentation() instanceof FilterColorBorderRepresentation) {
+            FilterColorBorderRepresentation cbRep =
+                    (FilterColorBorderRepresentation) getLocalRepresentation();
             if (!ParametricEditor.useCompact(mContext)) {
                 if (mTabletUI != null) {
-
-                    mTabletUI.setDrawRepresentation(drawRep);
+                    mTabletUI.setColorBorderRepresentation(cbRep);
                 }
                 return;
             }
-
-            drawRep.getParam(FilterDrawRepresentation.PARAM_STYLE).setFilterView(this);
-            drawRep.setPramMode(FilterDrawRepresentation.PARAM_COLOR);
-            mParameterString = mContext.getString(R.string.draw_hue);
-            control(drawRep.getCurrentParam(), mEditControl);
+            cbRep.setPramMode(FilterColorBorderRepresentation.PARAM_COLOR);
+            mParameterString = mContext.getString(R.string.color_border_color);
+            control(cbRep.getCurrentParam(), mEditControl);
         }
     }
 
     @Override
     public void openUtilityPanel(final LinearLayout accessoryViewList) {
         Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
-        view.setText(mContext.getString(R.string.draw_hue));
+        view.setText(mContext.getString(R.string.color_border_size));
         view.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -152,7 +131,8 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             return;
         }
         final PopupMenu popupMenu = new PopupMenu(mImageShow.getActivity(), button);
-        popupMenu.getMenuInflater().inflate(R.menu.filtershow_menu_draw, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.filtershow_menu_color_border,
+                popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
             @Override
@@ -162,31 +142,29 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             }
         });
         popupMenu.show();
-
     }
 
     protected void selectMenuItem(MenuItem item) {
-        ImageFilterDraw filter = (ImageFilterDraw) mImageShow.getCurrentFilter();
-        FilterDrawRepresentation rep = getDrawRep();
+        ImageFilterColorBorder filter = (ImageFilterColorBorder) mImageShow.getCurrentFilter();
+        FilterColorBorderRepresentation rep = getColorBorderRep();
         if (rep == null) {
             return;
         }
-
         switch (item.getItemId()) {
-            case R.id.draw_menu_clear:
-                clearDrawing();
+            case R.id.color_border_menu_clear:
+                clearFrame();
                 break;
-            case R.id.draw_menu_size:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_SIZE);
+            case R.id.color_border_menu_size:
+                rep.setPramMode(FilterColorBorderRepresentation.PARAM_SIZE);
                 break;
-            case R.id.draw_menu_style:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_STYLE);
+            case R.id.color_border_menu_corner_size:
+                rep.setPramMode(FilterColorBorderRepresentation.PARAM_RADIUS);
                 break;
-            case R.id.draw_menu_color:
-                rep.setPramMode(FilterDrawRepresentation.PARAM_COLOR);
+            case R.id.color_border_menu_color:
+                rep.setPramMode(FilterColorBorderRepresentation.PARAM_COLOR);
                 break;
         }
-        if (item.getItemId() != R.id.draw_menu_clear) {
+        if (item.getItemId() != R.id.color_border_menu_clear) {
             mParameterString = item.getTitle().toString();
         }
         if (mControl instanceof ColorChooser) {
@@ -202,9 +180,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         mView.invalidate();
     }
 
-    public void clearDrawing(){
-        ImageDraw idraw = (ImageDraw) mImageShow;
-        idraw.resetParameter();
+    public void clearFrame() {
         commitLocalRepresentation();
     }
 
@@ -218,19 +194,15 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         if (mSeekBar != null) {
             mSeekBar.setVisibility(View.GONE);
         }
-        LayoutInflater inflater =
-                (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout lp = (LinearLayout) inflater.inflate(
-                R.layout.filtershow_draw_ui, (ViewGroup) editControl, true);
 
-        mTabletUI = new EditorDrawTabletUI(this, mContext, lp);
+        mTabletUI = new EditorColorBorderTabletUI(this, mContext, editControl);
 
     }
 
-    FilterDrawRepresentation getDrawRep() {
+    FilterColorBorderRepresentation getColorBorderRep() {
         FilterRepresentation rep = getLocalRepresentation();
-        if (rep instanceof FilterDrawRepresentation) {
-            return (FilterDrawRepresentation) rep;
+        if (rep instanceof FilterColorBorderRepresentation) {
+            return (FilterColorBorderRepresentation) rep;
         }
         return null;
     }
