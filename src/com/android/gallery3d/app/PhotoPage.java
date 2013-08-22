@@ -1215,6 +1215,9 @@ public abstract class PhotoPage extends ActivityState implements
                 .findPathByUri(intent.getData(), intent.getType());
         if (path != null) {
             Path albumPath = mApplication.getDataManager().getDefaultSetOf(path);
+            if (albumPath == null) {
+                return;
+            }
             if (!albumPath.equalsIgnoreCase(mOriginalSetPathString)) {
                 // If the edited image is stored in a different album, we need
                 // to start a new activity state to show the new image
