@@ -402,7 +402,8 @@ public class SaveImage {
 
     /**
      *  Move the source file to auxiliary directory if needed and return the Uri
-     *  pointing to this new source file.
+     *  pointing to this new source file. If any file error happens, then just
+     *  don't move into the auxiliary directory.
      * @param srcUri Uri to the source image.
      * @param dstFile Providing the destination file info to help to build the
      *  auxiliary directory and new source file's name.
@@ -419,7 +420,10 @@ public class SaveImage {
         // if necessary.
         File auxDiretory = getLocalAuxDirectory(dstFile);
         if (!auxDiretory.exists()) {
-            auxDiretory.mkdirs();
+            boolean success = auxDiretory.mkdirs();
+            if (!success) {
+                return srcUri;
+            }
         }
 
         // Make sure there is a .nomedia file in the auxiliary directory, such
@@ -449,7 +453,10 @@ public class SaveImage {
         }
 
         if (!newSrcFile.exists()) {
-            srcFile.renameTo(newSrcFile);
+            boolean success = srcFile.renameTo(newSrcFile);
+            if (!success) {
+                return srcUri;
+            }
         }
 
         return Uri.fromFile(newSrcFile);
@@ -634,7 +641,12 @@ public class SaveImage {
                 });
 
         Uri result = sourceUri;
-        if (oldSelectedFile == null || !deleteOriginal) {
+
+        // In the case of incoming Uri is just a local file Uri (like a cached
+        // file), we can't just update the Uri. We have to create a new Uri.
+        boolean fileUri = isFileUri(sourceUri);
+
+        if (fileUri || oldSelectedFile == null || !deleteOriginal) {
             result = context.getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
         } else {
@@ -643,8 +655,19 @@ public class SaveImage {
                 oldSelectedFile.delete();
             }
         }
-
         return result;
+    }
+
+    /**
+     * @param sourceUri
+     * @return true if the sourceUri is a local file Uri.
+     */
+    private static boolean isFileUri(Uri sourceUri) {
+        String scheme = sourceUri.getScheme();
+        if (scheme != null && scheme.equals(ContentResolver.SCHEME_FILE)) {
+            return true;
+        }
+        return false;
     }
 
 }
