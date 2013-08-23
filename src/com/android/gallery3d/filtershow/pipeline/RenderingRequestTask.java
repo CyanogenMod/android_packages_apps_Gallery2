@@ -63,7 +63,13 @@ public class RenderingRequestTask extends ProcessingTask {
     public Result doInBackground(Request message) {
         RenderingRequest request = ((Render) message).request;
         RenderResult result = null;
-        mPreviewPipeline.render(request);
+        if (request.getType() == RenderingRequest.GEOMETRY_RENDERING) {
+            mPreviewPipeline.renderGeometry(request);
+        } else if (request.getType() == RenderingRequest.FILTERS_RENDERING) {
+            mPreviewPipeline.renderFilters(request);
+        } else {
+            mPreviewPipeline.render(request);
+        }
         result = new RenderResult();
         result.request = request;
         return result;

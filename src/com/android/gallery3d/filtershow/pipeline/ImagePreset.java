@@ -24,6 +24,7 @@ import android.util.JsonWriter;
 import android.util.Log;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.BaseFiltersManager;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
@@ -229,6 +230,37 @@ public class ImagePreset {
                 if (!a.same(b)) {
                     return false;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean equals(ImagePreset preset) {
+        if (preset == null) {
+            return false;
+        }
+
+        if (preset.mFilters.size() != mFilters.size()) {
+            return false;
+        }
+
+        if (mDoApplyGeometry != preset.mDoApplyGeometry) {
+            return false;
+        }
+
+        if (mDoApplyFilters != preset.mDoApplyFilters) {
+            if (mFilters.size() > 0 || preset.mFilters.size() > 0) {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < preset.mFilters.size(); i++) {
+            FilterRepresentation a = preset.mFilters.elementAt(i);
+            FilterRepresentation b = mFilters.elementAt(i);
+
+            if (!a.equals(b)) {
+                return false;
             }
         }
 
@@ -476,7 +508,11 @@ public class ImagePreset {
                     // TODO: might be worth getting rid of applyBorder.
                     continue;
                 }
+                Bitmap tmp = bitmap;
                 bitmap = environment.applyRepresentation(representation, bitmap);
+                if (tmp != bitmap) {
+                    environment.cache(tmp);
+                }
                 if (environment.getQuality() == FilterEnvironment.QUALITY_FINAL) {
                     UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
                             "SaveFilter", representation.getSerializationName(), 1);

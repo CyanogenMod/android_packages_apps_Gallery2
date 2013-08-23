@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
@@ -209,7 +210,19 @@ public final class GeometryMathUtils {
         return q;
     }
 
-    private static void concatMirrorMatrix(Matrix m, Mirror type) {
+    private static void concatMirrorMatrix(Matrix m, GeometryHolder holder) {
+        Mirror type = holder.mirror;
+        if (type == Mirror.HORIZONTAL) {
+            if (holder.rotation.value() == 90
+                    || holder.rotation.value() == 270) {
+                type = Mirror.VERTICAL;
+            }
+        } else if (type == Mirror.VERTICAL) {
+            if (holder.rotation.value() == 90
+                    || holder.rotation.value() == 270) {
+                type = Mirror.HORIZONTAL;
+            }
+        }
         if (type == Mirror.HORIZONTAL) {
             m.postScale(-1, 1);
         } else if (type == Mirror.VERTICAL) {
@@ -299,7 +312,8 @@ public final class GeometryMathUtils {
         crop.roundOut(frame);
         Matrix m = getCropSelectionToScreenMatrix(null, holder, width, height, frame.width(),
                 frame.height());
-        Bitmap temp = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.ARGB_8888);
+        BitmapCache bitmapCache = MasterImage.getImage().getBitmapCache();
+        Bitmap temp = bitmapCache.getBitmap(frame.width(), frame.height());
         Canvas canvas = new Canvas(temp);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -345,7 +359,7 @@ public final class GeometryMathUtils {
         compensation.postRotate(angle, cx, cy);
         compensation.postRotate(rotation, cx, cy);
         compensation.postTranslate(-cx, -cy);
-        concatMirrorMatrix(compensation, holder.mirror);
+        concatMirrorMatrix(compensation, holder);
         compensation.postTranslate(cx, cy);
         return compensation;
     }
@@ -371,6 +385,10 @@ public final class GeometryMathUtils {
         // If there are geometry changes, apply them to the image
         if (!holder.isNil()) {
             bmap = applyFullGeometryMatrix(bmap, holder);
+            if (bmap != image) {
+                BitmapCache cache = MasterImage.getImage().getBitmapCache();
+                cache.cache(image);
+            }
         }
         return bmap;
     }
@@ -410,7 +428,7 @@ public final class GeometryMathUtils {
         Matrix m = new Matrix();
         m.setTranslate(-centerX, -centerY);
         m.postRotate(holder.straighten + holder.rotation.value());
-        concatMirrorMatrix(m, holder.mirror);
+        concatMirrorMatrix(m, holder);
         return m;
     }
 
