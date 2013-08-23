@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_camera_storage_title">Stockage</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12.8 Mpx</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11.5 Mpx</string>
     <string name="pref_camera_picturesize_entry_9mp">9 Mpx</string>
@@ -30,4 +31,10 @@
     <string name="pref_camera_picturesize_entry_svga">SVGA</string>
     <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
     <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">Amplification des basses</string>
+    <string name="virtualizer_strength">Effets 3D</string>
+    <string name="audio_effects">Effets audio</string>
+    <string name="headset_plug">Connecter un casque pour ces effets.</string>
+    <string name="fail_trim">Désolé, cette vidéo ne peut être égalisée</string>
+    <string name="can_not_trim">Seuls les fichiers mp4 peuvent être égalisés</string>
 </resources>
