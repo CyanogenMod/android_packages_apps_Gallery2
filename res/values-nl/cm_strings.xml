@@ -16,6 +16,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="filtershow_undo_toast">Herstellen</string>
+
+    <string name="pref_camera_storage_title">Opslag</string>
+
     <string name="pref_camera_picturesize_entry_12_8mp">12,8 megapixel</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11,5 megapixel</string>
     <string name="pref_camera_picturesize_entry_9mp">9 megapixel</string>
@@ -32,4 +35,11 @@
     <string name="pref_camera_picturesize_entry_svga">SVGA</string>
     <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
     <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+
+    <string name="bass_boost_strength">Basversterking</string>
+    <string name="virtualizer_strength">3D-effect</string>
+    <string name="audio_effects">Geluidseffecten</string>
+    <string name="headset_plug">Sluit een koptelefoon aan voor deze effecten.</string>
+    <string name="fail_trim">Kan deze video niet bijsnijden</string>
+    <string name="can_not_trim">Alleen mp4-bestanden kunnen worden bijgesneden</string>
 </resources>
