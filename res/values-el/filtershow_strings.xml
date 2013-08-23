@@ -18,6 +18,8 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_activity_filter_show" msgid="2036539130684382763">"Επεξεργασία φωτογραφιών"</string>
     <string name="cannot_load_image" msgid="5023634941212959976">"Δεν είναι δυνατή η φόρτωση της εικόνας!"</string>
+    <!-- no translation found for cannot_edit_original (5890293845882609388) -->
+    <skip />
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"Ορισμός ταπετσαρίας…"</string>
@@ -112,6 +114,14 @@
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Μαρκαδόρος"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Πιτσιλιές"</string>
     <string name="draw_clear" msgid="6728155515454921052">"Διαγραφή"</string>
+    <!-- no translation found for color_border_size (8745307483517793073) -->
+    <skip />
+    <!-- no translation found for color_border_corner_size (7637235159438869979) -->
+    <skip />
+    <!-- no translation found for color_border_color (8765458414425980711) -->
+    <skip />
+    <!-- no translation found for color_border_clear (4418261191091091722) -->
+    <skip />
     <string name="color_pick_select" msgid="734312818059057394">"Επιλογή προσαρμ.χρώματος"</string>
     <string name="color_pick_title" msgid="6195567431995308876">"Επιλογή χρώματος"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"Επιλογή μεγέθους"</string>
