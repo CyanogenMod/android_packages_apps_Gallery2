@@ -436,11 +436,4 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d foto"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d fotos"</item>
   </plurals>
-    <string name="bass_boost_strength">Ganho de grave</string>
-    <string name="virtualizer_strength">Efeito 3D</string>
-    <string name="audio_effects">Efeitos de áudio</string>
-    <string name="headset_plug">Conecte os fones de ouvido para estes efeitos.</string>
-    <string name="audio_effects_dialog_title">Snapdragon Áudio+</string>
-    <string name="fail_trim">Desculpe, mas este vídeo não pode ser cortado</string>
-    <string name="can_not_trim">Somente arquivo mp4 pode ser cortado</string>
 </resources>
