@@ -46,11 +46,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:id="@+id/audio_effects_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/audio_effects"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="30dp" />
+            android:layout_margin="10dp" />
 
         <LinearLayout
             android:id="@+id/aEffectsPanel"

@@ -355,7 +355,7 @@ public class MovieActivity extends Activity {
 
             mEffectDialog = new AlertDialog.Builder(MovieActivity.this,
                     AlertDialog.THEME_HOLO_DARK)
-                .setTitle(R.string.audio_effects_dialog_title)
+                .setTitle(R.string.audio_effects)
                 .setView(content)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
