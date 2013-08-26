@@ -104,9 +104,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
     <string name="headset_plug">Plug in headphones for these effects.</string>
 
-    <!-- The title of the audio effects dialog. -->
-    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
-
     <!-- Toast message for share items -->
     <string name="cannot_share_items">Max selected items for share is 300</string>
 
