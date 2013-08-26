@@ -19,6 +19,7 @@ package com.android.gallery3d.filtershow.editors;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,12 +97,11 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         mFilterTitle = stateButton;
         mButton = editTitle;
         MasterImage.getImage().resetGeometryImages(false);
-        setMenuIcon(true);
         setUtilityPanelUI(actionButton, editControl);
     }
 
     public boolean showsPopupIndicator() {
-        return true;
+        return false;
     }
 
     /**
@@ -127,12 +127,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         }
 
         if (mButton != null) {
-            if (showsPopupIndicator()) {
-                mButton.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0,
-                        R.drawable.filtershow_menu_marker, 0);
-            } else {
-                mButton.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
-            }
+            setMenuIcon(showsPopupIndicator());
         }
     }
 
@@ -282,7 +277,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     }
 
     public void openUtilityPanel(LinearLayout mAccessoryViewList) {
-        setMenuIcon(false);
+        setMenuIcon(showsPopupIndicator());
         if (mImageShow != null) {
             mImageShow.openUtilityPanel(mAccessoryViewList);
         }
