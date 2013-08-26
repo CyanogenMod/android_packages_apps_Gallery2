@@ -122,6 +122,8 @@ public class EditorChanSat extends ParametricEditor implements OnSeekBarChangeLi
             FilterChanSatRepresentation csrep = getChanSatRep();
             String menuString = mContext.getString(mMenuStrings[0]);
             switchToMode(csrep, FilterChanSatRepresentation.MODE_MASTER, menuString);
+        } else {
+            mButton.setText(mContext.getString(R.string.saturation));
         }
     }
 
