@@ -185,30 +185,20 @@ public class DialogDetailsView implements DetailsViewContainer {
                     }
                     case MediaDetails.INDEX_WIDTH:
                         mWidthIndex = mItems.size();
-                        value = detail.getValue().toString();
-                        try {
-                            value = toLocalNumber(Integer.parseInt(value));
-                        } catch (NumberFormatException ex) {
-                            // Just keep the current "value" if we cannot parse
-                            // it as a fallback.
-                        }
-                        if (value.equalsIgnoreCase("0")) {
+                        if (detail.getValue().toString().equalsIgnoreCase("0")) {
                             value = context.getString(R.string.unknown);
                             resolutionIsValid = false;
+                        } else {
+                            value = toLocalInteger(detail.getValue());
                         }
                         break;
                     case MediaDetails.INDEX_HEIGHT: {
                         mHeightIndex = mItems.size();
-                        value = detail.getValue().toString();
-                        try {
-                            value = toLocalNumber(Integer.parseInt(value));
-                        } catch (NumberFormatException ex) {
-                            // Just keep the current "value" if we cannot parse
-                            // it as a fallback.
-                        }
-                        if (value.equalsIgnoreCase("0")) {
+                        if (detail.getValue().toString().equalsIgnoreCase("0")) {
                             value = context.getString(R.string.unknown);
                             resolutionIsValid = false;
+                        } else {
+                            value = toLocalInteger(detail.getValue());
                         }
                         break;
                     }
@@ -227,6 +217,9 @@ public class DialogDetailsView implements DetailsViewContainer {
                     case MediaDetails.INDEX_FOCAL_LENGTH:
                         double focalLength = Double.parseDouble(detail.getValue().toString());
                         value = toLocalNumber(focalLength);
+                        break;
+                    case MediaDetails.INDEX_ORIENTATION:
+                        value = toLocalInteger(detail.getValue());
                         break;
                     default: {
                         Object valueObj = detail.getValue();
@@ -311,6 +304,25 @@ public class DialogDetailsView implements DetailsViewContainer {
             mItems.set(mWidthIndex, String.valueOf(widthString));
             mItems.set(mHeightIndex, String.valueOf(heightString));
             notifyDataSetChanged();
+        }
+
+        /**
+         * Converts the given integer (given as String or Integer object) to a
+         * localized String version.
+         */
+        private String toLocalInteger(Object valueObj) {
+            if (valueObj instanceof Integer) {
+                return toLocalNumber((Integer) valueObj);
+            } else {
+                String value = valueObj.toString();
+                try {
+                    value = toLocalNumber(Integer.parseInt(value));
+                } catch (NumberFormatException ex) {
+                    // Just keep the current "value" if we cannot
+                    // parse it as a fallback.
+                }
+                return value;
+            }
         }
 
         /** Converts the given integer to a localized String version. */
