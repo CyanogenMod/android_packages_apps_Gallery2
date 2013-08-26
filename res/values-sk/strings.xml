@@ -436,4 +436,11 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d fotografia"</item>
     <item quantity="other" msgid="3813306834113858135">"Fotografie: %1$d"</item>
   </plurals>
+    <string name="bass_boost_strength">Zosilnenie basov</string>
+    <string name="virtualizer_strength">3D efekt</string>
+    <string name="audio_effects">Zvukové efekty</string>
+    <string name="headset_plug">Pripojte slúchadlá pre tieto efekty.</string>
+    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+    <string name="fail_trim">Prepáčte, tento súbor videa nemožno orezať</string>
+    <string name="can_not_trim">Len súbory typu mp4 môžu byť orezané</string>
 </resources>
