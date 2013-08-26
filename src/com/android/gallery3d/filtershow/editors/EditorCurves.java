@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.editors;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.android.gallery3d.R;
@@ -39,6 +40,11 @@ public class EditorCurves extends Editor {
     }
 
     @Override
+    public boolean showsPopupIndicator() {
+        return true;
+    }
+
+    @Override
     public void createEditor(Context context, FrameLayout frameLayout) {
         super.createEditor(context, frameLayout);
         mView = mImageShow = mImageCurves = new ImageCurves(context);
@@ -53,6 +59,11 @@ public class EditorCurves extends Editor {
             FilterCurvesRepresentation drawRep = (FilterCurvesRepresentation) rep;
             mImageCurves.setFilterDrawRepresentation(drawRep);
         }
+    }
+    @Override
+    public void setUtilityPanelUI(View actionButton, View editControl) {
+        super.setUtilityPanelUI(actionButton,editControl);
+        setMenuIcon(true);
     }
 
     @Override
