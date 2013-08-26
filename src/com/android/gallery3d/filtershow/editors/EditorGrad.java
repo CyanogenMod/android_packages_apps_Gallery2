@@ -111,16 +111,20 @@ public class EditorGrad extends ParametricEditor
     @Override
     public void openUtilityPanel(final LinearLayout accessoryViewList) {
         Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
-        view.setText(mContext.getString(R.string.editor_grad_brightness));
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                showPopupMenu(accessoryViewList);
-            }
-        });
+        if (useCompact(mContext)) {
+            view.setText(mContext.getString(R.string.editor_grad_brightness));
+            view.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    showPopupMenu(accessoryViewList);
+                }
+            });
 
-        setUpPopupMenu(view);
-        setEffectName();
+            setUpPopupMenu(view);
+            setEffectName();
+        } else {
+            view.setText(mContext.getString(R.string.grad));
+        }
     }
 
     private void updateMenuItems(FilterGradRepresentation rep) {
@@ -167,6 +171,7 @@ public class EditorGrad extends ParametricEditor
                 fireRightAction();
             }
         });
+        setMenuIcon(false);
     }
 
     public void updateParameters() {
@@ -206,11 +211,26 @@ public class EditorGrad extends ParametricEditor
             FilterGradRepresentation rep = getGradRepresentation();
             int value = progress + mMin;
             rep.setParameter(mMode, value);
-            mSliderMode = mMode;
-            mEffectName = "";
+            if (mSliderMode != mMode) {
+                mSliderMode = mMode;
+                mEffectName = mContext.getResources().getString(getModeNameid(mMode));
+                mEffectName = mEffectName.toUpperCase();
+            }
             mTextView.setText(Integer.toString(value));
             mView.invalidate();
             commitLocalRepresentation();
+        }
+
+        private int getModeNameid(int mode) {
+            switch (mode) {
+                case MODE_CONTRAST:
+                    return R.string.editor_grad_contrast;
+                case MODE_BRIGHTNESS:
+                    return R.string.editor_grad_brightness;
+                case MODE_SATURATION:
+                    return R.string.editor_grad_saturation;
+            }
+            return 0;
         }
 
         @Override

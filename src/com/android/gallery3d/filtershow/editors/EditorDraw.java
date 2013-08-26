@@ -130,14 +130,18 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     @Override
     public void openUtilityPanel(final LinearLayout accessoryViewList) {
         Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
-        view.setText(mContext.getString(R.string.draw_hue));
-        view.setOnClickListener(new OnClickListener() {
+        if (useCompact(mContext)) {
+            view.setText(mContext.getString(R.string.draw_hue));
+            view.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View arg0) {
-                showPopupMenu(accessoryViewList);
-            }
-        });
+                @Override
+                public void onClick(View arg0) {
+                    showPopupMenu(accessoryViewList);
+                }
+            });
+        } else {
+            view.setText(mContext.getString(R.string.imageDraw));
+        }
     }
 
     @Override
@@ -224,6 +228,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
                 R.layout.filtershow_draw_ui, (ViewGroup) editControl, true);
 
         mTabletUI = new EditorDrawTabletUI(this, mContext, lp);
+        setMenuIcon(false);
 
     }
 
