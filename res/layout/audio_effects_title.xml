@@ -36,7 +36,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:gravity="left|center_vertical">
 
     <TextView
-        android:text="@string/audio_effects_dialog_title"
+        android:text="@string/audio_effects"
         android:gravity="left|center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
