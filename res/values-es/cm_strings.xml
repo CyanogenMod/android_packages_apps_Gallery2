@@ -14,7 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
+    <string name="pref_camera_storage_title">Almacenamiento</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12,8 MP</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11,5 MP</string>
     <string name="pref_camera_picturesize_entry_9mp">9 MP</string>
@@ -31,4 +32,10 @@
     <string name="pref_camera_picturesize_entry_svga">SVGA</string>
     <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
     <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">Refuerzo de graves</string>
+    <string name="virtualizer_strength">Efecto 3D</string>
+    <string name="audio_effects">Efectos de sonido</string>
+    <string name="headset_plug">Conecta los auriculares para habilitar estos efectos.</string>
+    <string name="fail_trim">Este tipo de archivo no puede ser recortado</string>
+    <string name="can_not_trim">Solo los archivos mp4 pueden ser recortados</string>
 </resources>
