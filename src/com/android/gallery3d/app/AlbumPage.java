@@ -538,6 +538,27 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         mSlotView.invalidate();
     }
 
+    private boolean canDoSlideShow() {
+        if (mMediaSet == null) {
+            return false;
+        }
+
+        final int[] count = new int[]{0};
+        mMediaSet.enumerateMediaItems(new MediaSet.ItemConsumer() {
+            @Override
+            public void consume(int index, MediaItem item) {
+                if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+                    count[0]++;
+                }
+            }
+        });
+
+        if (count[0] < 2) { // you must have 2 pictures to go into slide show
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected boolean onCreateActionBar(Menu menu) {
         GalleryActionBar actionBar = mActivity.getGalleryActionBar();
@@ -553,6 +574,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
             FilterUtils.setupMenuItems(actionBar, mMediaSetPath, true);
 
+            menu.findItem(R.id.action_slideshow).setVisible(canDoSlideShow());
             menu.findItem(R.id.action_group_by).setVisible(mShowClusterMenu);
             menu.findItem(R.id.action_camera).setVisible(
                     MediaSetUtils.isCameraSource(mMediaSetPath)
