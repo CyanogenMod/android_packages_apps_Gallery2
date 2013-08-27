@@ -45,7 +45,7 @@ public class EditorPlaceHolder {
         }
 
         editor.createEditor(mActivity, mContainer);
-        editor.getImageShow().bindAsImageLoadListener();
+        editor.getImageShow().attach();
         mContainer.setVisibility(View.VISIBLE);
         mContainer.removeAllViews();
         View eview = editor.getTopLevelView();
