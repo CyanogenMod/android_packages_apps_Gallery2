@@ -75,7 +75,7 @@ public class BitmapCache {
 
     public synchronized Bitmap getBitmap(int w, int h) {
         Long key = calcKey(w, h);
-        WeakReference<Bitmap> ref = null; //mBitmapCache.remove(key);
+        WeakReference<Bitmap> ref = null;
         ArrayList<WeakReference<Bitmap>> list = mBitmapCache.get(key);
         if (list != null && list.size() > 0) {
             ref = list.remove(0);

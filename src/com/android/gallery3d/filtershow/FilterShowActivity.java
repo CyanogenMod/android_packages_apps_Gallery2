@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -66,6 +67,7 @@ import com.android.gallery3d.data.LocalAlbum;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.category.Action;
 import com.android.gallery3d.filtershow.category.CategoryAdapter;
+import com.android.gallery3d.filtershow.category.CategorySelected;
 import com.android.gallery3d.filtershow.category.CategoryView;
 import com.android.gallery3d.filtershow.category.MainPanel;
 import com.android.gallery3d.filtershow.category.SwipableView;
@@ -136,6 +138,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private View mSaveButton = null;
 
     private EditorPlaceHolder mEditorPlaceHolder = new EditorPlaceHolder(this);
+    private Editor mCurrentEditor = null;
 
     private static final int SELECT_PICTURE = 1;
     private static final String LOGTAG = "FilterShowActivity";
@@ -364,6 +367,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.filtershow_actionbar);
+        actionBar.setBackgroundDrawable(new ColorDrawable(
+                getResources().getColor(R.color.background_screen)));
 
         mSaveButton = actionBar.getCustomView();
         mSaveButton.setOnClickListener(new OnClickListener() {
@@ -600,6 +605,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             && MasterImage.getImage().getCurrentFilterRepresentation() == filterRepresentation) {
             return;
         }
+        if (filterRepresentation instanceof FilterUserPresetRepresentation
+                || filterRepresentation instanceof FilterRotateRepresentation
+                || filterRepresentation instanceof FilterMirrorRepresentation) {
+            MasterImage.getImage().onNewLook(filterRepresentation);
+        }
         ImagePreset oldPreset = MasterImage.getImage().getPreset();
         ImagePreset copy = new ImagePreset(oldPreset);
         FilterRepresentation representation = copy.getRepresentation(filterRepresentation);
@@ -639,7 +649,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         useFilterRepresentation(representation);
 
         // show representation
-        Editor mCurrentEditor = mEditorPlaceHolder.showEditor(representation.getEditorId());
+        if (mCurrentEditor != null) {
+            mCurrentEditor.detach();
+        }
+        mCurrentEditor = mEditorPlaceHolder.showEditor(representation.getEditorId());
         loadEditorPanel(representation, mCurrentEditor);
         hideInformationPanel();
     }
@@ -1357,5 +1370,28 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             return true;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    public void startTouchAnimation(View target, float x, float y) {
+        final CategorySelected hint =
+                (CategorySelected) findViewById(R.id.categorySelectedIndicator);
+        int location[] = new int[2];
+        target.getLocationOnScreen(location);
+        int locationHint[] = new int[2];
+        ((View)hint.getParent()).getLocationOnScreen(locationHint);
+        int dx = (int) (x - (hint.getWidth())/2);
+        int dy = (int) (y - (hint.getHeight())/2);
+        hint.setTranslationX(location[0] - locationHint[0] + dx);
+        hint.setTranslationY(location[1] - locationHint[1] + dy);
+        hint.setVisibility(View.VISIBLE);
+        hint.animate().scaleX(2).scaleY(2).alpha(0).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                hint.setVisibility(View.INVISIBLE);
+                hint.setScaleX(1);
+                hint.setScaleY(1);
+                hint.setAlpha(1);
+            }
+        });
     }
 }

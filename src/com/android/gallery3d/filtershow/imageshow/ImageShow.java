@@ -19,13 +19,15 @@ package com.android.gallery3d.filtershow.imageshow;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -38,12 +40,14 @@ import android.widget.LinearLayout;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ImageShow extends View implements OnGestureListener,
@@ -74,6 +78,7 @@ public class ImageShow extends View implements OnGestureListener,
     private NinePatchDrawable mShadow = null;
     private Rect mShadowBounds = new Rect();
     private int mShadowMargin = 15; // not scaled, fixed in the asset
+    private boolean mShadowDrawn = false;
 
     private Point mTouchDown = new Point();
     private Point mTouch = new Point();
@@ -92,6 +97,21 @@ public class ImageShow extends View implements OnGestureListener,
         MOVE
     }
     InteractionMode mInteractionMode = InteractionMode.NONE;
+
+    private static Bitmap sMask;
+    private Paint mMaskPaint = new Paint();
+    private Matrix mShaderMatrix = new Matrix();
+
+    private static Bitmap convertToAlphaMask(Bitmap b) {
+        Bitmap a = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ALPHA_8);
+        Canvas c = new Canvas(a);
+        c.drawBitmap(b, 0.0f, 0.0f, null);
+        return a;
+    }
+
+    private static Shader createShader(Bitmap b) {
+        return new BitmapShader(b, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+    }
 
     private FilterShowActivity mActivity = null;
 
@@ -138,7 +158,20 @@ public class ImageShow extends View implements OnGestureListener,
         mShadow = (NinePatchDrawable) res.getDrawable(R.drawable.geometry_shadow);
         setupGestureDetector(context);
         mActivity = (FilterShowActivity) context;
+        if (sMask == null) {
+            Bitmap mask = BitmapFactory.decodeResource(res, R.drawable.spot_mask);
+            sMask = convertToAlphaMask(mask);
+        }
+    }
+
+    public void attach() {
         MasterImage.getImage().addObserver(this);
+        bindAsImageLoadListener();
+    }
+
+    public void detach() {
+        MasterImage.getImage().removeObserver(this);
+        mMaskPaint.reset();
     }
 
     public void setupGestureDetector(Context context) {
@@ -206,36 +239,27 @@ public class ImageShow extends View implements OnGestureListener,
         float scaleFactor = MasterImage.getImage().getScaleFactor();
         Point translation = MasterImage.getImage().getTranslation();
 
-        Matrix scalingMatrix = new Matrix();
-        scalingMatrix.postScale(scaleFactor, scaleFactor, cx, cy);
-        scalingMatrix.preTranslate(translation.x, translation.y);
-
-        RectF unscaledClipRect = new RectF(mImageBounds);
-        scalingMatrix.mapRect(unscaledClipRect, unscaledClipRect);
-
         canvas.save();
 
-        boolean enablePartialRendering = false;
-
-        // For now, partial rendering is disabled for all filters,
-        // so no need to clip.
-        if (enablePartialRendering && !unscaledClipRect.isEmpty()) {
-            canvas.clipRect(unscaledClipRect);
-        }
+        mShadowDrawn = false;
 
         canvas.save();
         // TODO: center scale on gesture
         canvas.scale(scaleFactor, scaleFactor, cx, cy);
         canvas.translate(translation.x, translation.y);
-        drawImage(canvas, getFilteredImage(), true);
         Bitmap highresPreview = MasterImage.getImage().getHighresImage();
-        if (highresPreview != null) {
+
+        boolean isDoingNewLookAnimation = MasterImage.getImage().onGoingNewLookAnimation();
+
+        if (!isDoingNewLookAnimation && highresPreview != null) {
             drawImage(canvas, highresPreview, true);
+        } else {
+            drawImage(canvas, getFilteredImage(), true);
         }
         canvas.restore();
 
         Bitmap partialPreview = MasterImage.getImage().getPartialImage();
-        if (partialPreview != null) {
+        if (!isDoingNewLookAnimation && partialPreview != null) {
             canvas.save();
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             Collection<FilterRepresentation> geo = MasterImage.getImage().getPreset()
@@ -274,30 +298,135 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     public void drawImage(Canvas canvas, Bitmap image, boolean updateBounds) {
-        if (image != null) {
-            Rect s = new Rect(0, 0, image.getWidth(),
-                    image.getHeight());
+        if (image == null) {
+            return;
+        }
 
-            float scale = GeometryMathUtils.scale(image.getWidth(), image.getHeight(), getWidth(),
-                    getHeight());
+        Rect d = computeImageBounds(image);
 
-            float w = image.getWidth() * scale;
-            float h = image.getHeight() * scale;
-            float ty = (getHeight() - h) / 2.0f;
-            float tx = (getWidth() - w) / 2.0f;
+        if (updateBounds) {
+            mImageBounds = d;
+        }
 
-            Rect d = new Rect((int) tx + mShadowMargin,
-                    (int) ty + mShadowMargin,
-                    (int) (w + tx) - mShadowMargin,
-                    (int) (h + ty) - mShadowMargin);
-            if (updateBounds) {
-                mImageBounds = d;
+        float centerX = mShadowMargin + (getWidth() - 2 * mShadowMargin) / 2;
+        float centerY = mShadowMargin + (getHeight() - 2 * mShadowMargin) / 2;
+
+        MasterImage master = MasterImage.getImage();
+        canvas.save();
+        if (master.onGoingNewLookAnimation()) {
+            if (master.getCurrentLookAnimation()
+                    == MasterImage.CIRCLE_ANIMATION
+                    && MasterImage.getImage().getPreviousImage() != null) {
+                float maskScale = MasterImage.getImage().getMaskScale();
+                if (maskScale > 1.0f) {
+                    float maskW = sMask.getWidth() / 2.0f;
+                    float maskH = sMask.getHeight() / 2.0f;
+                    float x = centerX - maskW * maskScale;
+                    float y = centerY - maskH * maskScale;
+
+                    // Prepare the shader
+                    mShaderMatrix.reset();
+                    mShaderMatrix.setScale(1.0f / maskScale, 1.0f / maskScale);
+                    mShaderMatrix.preTranslate(-x + d.left, -y + d.top);
+                    float scaleImageX = d.width() / (float) image.getWidth();
+                    float scaleImageY = d.height() / (float) image.getHeight();
+                    mShaderMatrix.preScale(scaleImageX, scaleImageY);
+                    mMaskPaint.reset();
+                    mMaskPaint.setShader(createShader(image));
+                    mMaskPaint.getShader().setLocalMatrix(mShaderMatrix);
+
+                    drawImage(canvas, MasterImage.getImage().getPreviousImage());
+                    canvas.translate(x, y);
+                    canvas.scale(maskScale, maskScale);
+                    canvas.drawBitmap(sMask, 0, 0, mMaskPaint);
+                } else {
+                    drawImage(canvas, image);
+                }
+            } else if (master.getCurrentLookAnimation()
+                    == MasterImage.ROTATE_ANIMATION) {
+                Rect d2 = computeImageBounds(master.getPreviousImage());
+                float finalScale = d.width() / (float) d2.height();
+                finalScale = (1.0f * (1.0f - master.getAnimFraction()))
+                        + (finalScale * master.getAnimFraction());
+                canvas.rotate(master.getAnimRotationValue(), centerX, centerY);
+                canvas.scale(finalScale, finalScale, centerX, centerY);
+                drawImage(canvas, master.getPreviousImage());
+            } else if (master.getCurrentLookAnimation()
+                    == MasterImage.MIRROR_ANIMATION) {
+                if (master.getCurrentFilterRepresentation()
+                        instanceof FilterMirrorRepresentation) {
+                    FilterMirrorRepresentation rep =
+                            (FilterMirrorRepresentation) master.getCurrentFilterRepresentation();
+
+                    ImagePreset preset = master.getPreset();
+                    ArrayList<FilterRepresentation> geometry =
+                            (ArrayList<FilterRepresentation>) preset.getGeometryFilters();
+                    GeometryMathUtils.GeometryHolder holder = null;
+                    holder = GeometryMathUtils.unpackGeometry(geometry);
+
+                    if (holder.rotation.value() == 90 || holder.rotation.value() == 270) {
+                        if (rep.isHorizontal() && !rep.isVertical()) {
+                            canvas.scale(1, master.getAnimRotationValue(), centerX, centerY);
+                        } else if (rep.isVertical() && !rep.isHorizontal()) {
+                            canvas.scale(1, master.getAnimRotationValue(), centerX, centerY);
+                        } else if (rep.isHorizontal() && rep.isVertical()) {
+                            canvas.scale(master.getAnimRotationValue(), 1, centerX, centerY);
+                        } else {
+                            canvas.scale(master.getAnimRotationValue(), 1, centerX, centerY);
+                        }
+                    } else {
+                        if (rep.isHorizontal() && !rep.isVertical()) {
+                            canvas.scale(master.getAnimRotationValue(), 1, centerX, centerY);
+                        } else if (rep.isVertical() && !rep.isHorizontal()) {
+                            canvas.scale(master.getAnimRotationValue(), 1, centerX, centerY);
+                        } else  if (rep.isHorizontal() && rep.isVertical()) {
+                            canvas.scale(1, master.getAnimRotationValue(), centerX, centerY);
+                        } else {
+                            canvas.scale(1, master.getAnimRotationValue(), centerX, centerY);
+                        }
+                    }
+                }
+                drawImage(canvas, master.getPreviousImage());
             }
+        } else {
+            drawImage(canvas, image);
+        }
+        canvas.restore();
+    }
+
+    private void drawImage(Canvas canvas, Bitmap image) {
+        Rect d = computeImageBounds(image);
+        float scaleImageX = d.width() / (float) image.getWidth();
+        float scaleImageY = d.height() / (float) image.getHeight();
+        Matrix imageMatrix = new Matrix();
+        imageMatrix.postScale(scaleImageX, scaleImageY);
+        imageMatrix.postTranslate(d.left, d.top);
+        drawShadow(canvas, d);
+        canvas.clipRect(d);
+        canvas.drawBitmap(image, imageMatrix, mPaint);
+    }
+
+    private Rect computeImageBounds(Bitmap image) {
+        float scale = GeometryMathUtils.scale(image.getWidth(), image.getHeight(),
+                getWidth(), getHeight());
+
+        float w = image.getWidth() * scale;
+        float h = image.getHeight() * scale;
+        float ty = (getHeight() - h) / 2.0f;
+        float tx = (getWidth() - w) / 2.0f;
+        return new Rect((int) tx + mShadowMargin,
+                (int) ty + mShadowMargin,
+                (int) (w + tx) - mShadowMargin,
+                (int) (h + ty) - mShadowMargin);
+    }
+
+    private void drawShadow(Canvas canvas, Rect d) {
+        if (!mShadowDrawn) {
             mShadowBounds.set(d.left - mShadowMargin, d.top - mShadowMargin,
                     d.right + mShadowMargin, d.bottom + mShadowMargin);
             mShadow.setBounds(mShadowBounds);
             mShadow.draw(canvas);
-            canvas.drawBitmap(image, s, d, mPaint);
+            mShadowDrawn = true;
         }
     }
 
