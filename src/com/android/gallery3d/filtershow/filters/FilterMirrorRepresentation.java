@@ -23,8 +23,12 @@ import android.util.Log;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.EditorMirror;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
+import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FilterMirrorRepresentation extends FilterRepresentation {
     public static final String SERIALIZATION_NAME = "MIRROR";
@@ -108,18 +112,34 @@ public class FilterMirrorRepresentation extends FilterRepresentation {
         mMirror = mirror;
     }
 
+    public boolean isHorizontal() {
+        if (mMirror == Mirror.BOTH
+                || mMirror == Mirror.HORIZONTAL) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isVertical() {
+        if (mMirror == Mirror.BOTH
+                || mMirror == Mirror.VERTICAL) {
+            return true;
+        }
+        return false;
+    }
+
     public void cycle() {
         switch (mMirror) {
             case NONE:
                 mMirror = Mirror.HORIZONTAL;
                 break;
             case HORIZONTAL:
-                mMirror = Mirror.VERTICAL;
-                break;
-            case VERTICAL:
                 mMirror = Mirror.BOTH;
                 break;
             case BOTH:
+                mMirror = Mirror.VERTICAL;
+                break;
+            case VERTICAL:
                 mMirror = Mirror.NONE;
                 break;
         }

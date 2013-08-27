@@ -16,6 +16,8 @@
 
 package com.android.gallery3d.filtershow.imageshow;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -24,12 +26,16 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
 import com.android.gallery3d.filtershow.history.HistoryItem;
 import com.android.gallery3d.filtershow.history.HistoryManager;
@@ -77,6 +83,16 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mFiltersOnlyBitmap = null;
     private Bitmap mPartialBitmap = null;
     private Bitmap mHighresBitmap = null;
+    private Bitmap mPreviousImage = null;
+
+    private float mMaskScale = 1;
+    private boolean mOnGoingNewLookAnimation = false;
+    private float mAnimRotationValue = 0;
+    private float mAnimFraction = 0;
+    private int mCurrentLookAnimation = 0;
+    public static final int CIRCLE_ANIMATION = 1;
+    public static final int ROTATE_ANIMATION = 2;
+    public static final int MIRROR_ANIMATION = 3;
 
     private HistoryManager mHistory = null;
     private StateAdapter mState = null;
@@ -205,6 +221,10 @@ public class MasterImage implements RenderingRequestCaller {
         mObservers.add(observer);
     }
 
+    public void removeObserver(ImageShow observer) {
+        mObservers.remove(observer);
+    }
+
     public void setActivity(FilterShowActivity activity) {
         mActivity = activity;
     }
@@ -328,6 +348,103 @@ public class MasterImage implements RenderingRequestCaller {
         return mHighresBitmap;
     }
 
+    public Bitmap getPreviousImage() {
+        return mPreviousImage;
+    }
+
+    public float getMaskScale() {
+        return mMaskScale;
+    }
+
+    public void setMaskScale(float scale) {
+        mMaskScale = scale;
+        notifyObservers();
+    }
+
+    public float getAnimRotationValue() {
+        return mAnimRotationValue;
+    }
+
+    public void setAnimRotation(float rotation) {
+        mAnimRotationValue = rotation;
+        notifyObservers();
+    }
+
+    public void setAnimFraction(float fraction) {
+        mAnimFraction = fraction;
+    }
+
+    public float getAnimFraction() {
+        return mAnimFraction;
+    }
+
+    public boolean onGoingNewLookAnimation() {
+        return mOnGoingNewLookAnimation;
+    }
+
+    public int getCurrentLookAnimation() {
+        return mCurrentLookAnimation;
+    }
+
+    public void onNewLook(FilterRepresentation newRepresentation) {
+        getBitmapCache().cache(mPreviousImage);
+        mPreviousImage = getBitmapCache().getBitmapCopy(getFilteredImage());
+        ValueAnimator animator = null;
+        if (newRepresentation instanceof FilterUserPresetRepresentation) {
+            mCurrentLookAnimation = CIRCLE_ANIMATION;
+            animator = ValueAnimator.ofFloat(1, 20);
+        }
+        if (newRepresentation instanceof FilterRotateRepresentation) {
+            mCurrentLookAnimation = ROTATE_ANIMATION;
+            animator = ValueAnimator.ofFloat(0, 90);
+        }
+        if (newRepresentation instanceof FilterMirrorRepresentation) {
+            mCurrentLookAnimation = MIRROR_ANIMATION;
+            animator = ValueAnimator.ofFloat(1, 0, -1);
+        }
+        animator.setDuration(400);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (mCurrentLookAnimation == CIRCLE_ANIMATION) {
+                    Log.v(LOGTAG, "circle animation " + animation.getAnimatedValue());
+                    setMaskScale((Float) animation.getAnimatedValue());
+                } else if (mCurrentLookAnimation == ROTATE_ANIMATION
+                        || mCurrentLookAnimation == MIRROR_ANIMATION) {
+                    setAnimRotation((Float) animation.getAnimatedValue());
+                    setAnimFraction(animation.getAnimatedFraction());
+                }
+            }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mOnGoingNewLookAnimation = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBitmapCache.cache(mPreviousImage);
+                mPreviousImage = null;
+                mOnGoingNewLookAnimation = false;
+                setMaskScale(1);
+                setAnimRotation(0);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+        notifyObservers();
+    }
+
     public void notifyObservers() {
         for (ImageShow observer : mObservers) {
             observer.invalidate();
@@ -339,9 +456,9 @@ public class MasterImage implements RenderingRequestCaller {
         newPresetGeometryOnly.setDoApplyFilters(false);
         newPresetGeometryOnly.setDoApplyGeometry(true);
         if (force || mGeometryOnlyPreset == null
-                || !newPresetGeometryOnly.same(mGeometryOnlyPreset)) {
+                || !newPresetGeometryOnly.equals(mGeometryOnlyPreset)) {
             mGeometryOnlyPreset = newPresetGeometryOnly;
-            RenderingRequest.post(mActivity, getOriginalBitmapLarge(),
+            RenderingRequest.post(mActivity, null,
                     mGeometryOnlyPreset, RenderingRequest.GEOMETRY_RENDERING, this);
         }
         ImagePreset newPresetFiltersOnly = new ImagePreset(mPreset);
@@ -350,7 +467,7 @@ public class MasterImage implements RenderingRequestCaller {
         if (force || mFiltersOnlyPreset == null
                 || !newPresetFiltersOnly.same(mFiltersOnlyPreset)) {
             mFiltersOnlyPreset = newPresetFiltersOnly;
-            RenderingRequest.post(mActivity, MasterImage.getImage().getOriginalBitmapLarge(),
+            RenderingRequest.post(mActivity, null,
                     mFiltersOnlyPreset, RenderingRequest.FILTERS_RENDERING, this);
         }
     }
@@ -474,10 +591,12 @@ public class MasterImage implements RenderingRequestCaller {
 
         boolean needsCheckModification = false;
         if (request.getType() == RenderingRequest.GEOMETRY_RENDERING) {
+            mBitmapCache.cache(mGeometryOnlyBitmap);
             mGeometryOnlyBitmap = request.getBitmap();
             needsCheckModification = true;
         }
         if (request.getType() == RenderingRequest.FILTERS_RENDERING) {
+            mBitmapCache.cache(mFiltersOnlyBitmap);
             mFiltersOnlyBitmap = request.getBitmap();
             notifyObservers();
             needsCheckModification = true;

@@ -221,18 +221,64 @@ public class CachingPipeline implements PipelineInterface {
             Bitmap bmp = preset.apply(bitmap, mEnvironment);
             if (!mEnvironment.needsStop()) {
                 request.setBitmap(bmp);
+            } else {
+                mEnvironment.cache(bmp);
+            }
+            mFiltersManager.freeFilterResources(preset);
+        }
+    }
+
+    public void renderGeometry(RenderingRequest request) {
+        synchronized (CachingPipeline.class) {
+            if (getRenderScriptContext() == null) {
+                return;
+            }
+            ImagePreset preset = request.getImagePreset();
+            setupEnvironment(preset, false);
+            Bitmap bitmap = MasterImage.getImage().getOriginalBitmapHighres();
+            if (bitmap == null) {
+                return;
+            }
+            bitmap = mEnvironment.getBitmapCopy(bitmap);
+            bitmap = preset.applyGeometry(bitmap, mEnvironment);
+            if (!mEnvironment.needsStop()) {
+                request.setBitmap(bitmap);
+            } else {
+                mEnvironment.cache(bitmap);
+            }
+            mFiltersManager.freeFilterResources(preset);
+        }
+    }
+
+    public void renderFilters(RenderingRequest request) {
+        synchronized (CachingPipeline.class) {
+            if (getRenderScriptContext() == null) {
+                return;
+            }
+            ImagePreset preset = request.getImagePreset();
+            setupEnvironment(preset, false);
+            Bitmap bitmap = MasterImage.getImage().getOriginalBitmapHighres();
+            if (bitmap == null) {
+                return;
+            }
+            bitmap = mEnvironment.getBitmapCopy(bitmap);
+            bitmap = preset.apply(bitmap, mEnvironment);
+            if (!mEnvironment.needsStop()) {
+                request.setBitmap(bitmap);
+            } else {
+                mEnvironment.cache(bitmap);
             }
             mFiltersManager.freeFilterResources(preset);
         }
     }
 
     public synchronized void render(RenderingRequest request) {
+        // TODO: cleanup/remove GEOMETRY / FILTERS paths
         synchronized (CachingPipeline.class) {
             if (getRenderScriptContext() == null) {
                 return;
             }
-            if (((request.getType() != RenderingRequest.PARTIAL_RENDERING
-                    && request.getType() != RenderingRequest.HIGHRES_RENDERING)
+            if (((request.getType() != RenderingRequest.PARTIAL_RENDERING)
                     && request.getBitmap() == null)
                     || request.getImagePreset() == null) {
                 return;
@@ -244,8 +290,7 @@ public class CachingPipeline implements PipelineInterface {
 
             Bitmap bitmap = request.getBitmap();
             ImagePreset preset = request.getImagePreset();
-            setupEnvironment(preset,
-                    request.getType() != RenderingRequest.HIGHRES_RENDERING);
+            setupEnvironment(preset, true);
             mFiltersManager.freeFilterResources(preset);
 
             if (request.getType() == RenderingRequest.PARTIAL_RENDERING) {
@@ -257,13 +302,6 @@ public class CachingPipeline implements PipelineInterface {
                 if (bitmap == null) {
                     Log.w(LOGTAG, "could not get bitmap for: " + getType(request));
                     return;
-                }
-            }
-
-            if (request.getType() == RenderingRequest.HIGHRES_RENDERING) {
-                bitmap = MasterImage.getImage().getOriginalBitmapHighres();
-                if (bitmap != null) {
-                    bitmap = preset.applyGeometry(bitmap, mEnvironment);
                 }
             }
 
@@ -290,7 +328,6 @@ public class CachingPipeline implements PipelineInterface {
                     || request.getType() == RenderingRequest.FILTERS_RENDERING
                     || request.getType() == RenderingRequest.ICON_RENDERING
                     || request.getType() == RenderingRequest.PARTIAL_RENDERING
-                    || request.getType() == RenderingRequest.HIGHRES_RENDERING
                     || request.getType() == RenderingRequest.STYLE_ICON_RENDERING) {
 
                 if (request.getType() == RenderingRequest.ICON_RENDERING) {
@@ -351,6 +388,7 @@ public class CachingPipeline implements PipelineInterface {
         Vector<FilterRepresentation> filters = preset.getFilters();
         Bitmap result = mCachedProcessing.process(mOriginalBitmap, filters, mEnvironment);
         buffer.setProducer(result);
+        mEnvironment.cache(result);
     }
 
     public synchronized void computeOld(SharedBuffer buffer, ImagePreset preset, int type) {
