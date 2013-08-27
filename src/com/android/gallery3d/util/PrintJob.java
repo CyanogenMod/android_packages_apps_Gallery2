@@ -18,9 +18,7 @@ package com.android.gallery3d.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,10 +28,10 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
-import android.print.pdf.PdfDocument;
-import com.android.gallery3d.app.AbstractGalleryActivity;
+import android.print.pdf.PdfDocument.Page;
+import android.print.pdf.PrintedPdfDocument;
+
 import com.android.gallery3d.filtershow.cache.ImageLoader;
-import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -41,42 +39,31 @@ import java.io.FileOutputStream;
 public class PrintJob {
     private final static int MAX_PRINT_SIZE = 2048;
 
-    public static void printBitmap(Context context, final String jobName, final Bitmap bitmap) {
+    public static void printBitmap(final Context context, final String jobName,
+            final Bitmap bitmap) {
         if (bitmap == null) {
             return;
         }
         PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
-        android.print.PrintJob printJob = printManager.print(jobName,
+        printManager.print(jobName,
                 new PrintDocumentAdapter() {
-                    private Rect mPageRect;
-                    private Matrix mPrintMatrix;
-                    private float mDensity;
+                    private PrintAttributes mAttributes;
+
                     @Override
                     public void onLayout(PrintAttributes oldPrintAttributes,
                                          PrintAttributes newPrintAttributes,
                                          CancellationSignal cancellationSignal,
-                                         LayoutResultCallback layoutResultCallback, Bundle bundle) {
+                                         LayoutResultCallback layoutResultCallback,
+                                         Bundle bundle) {
 
-                        mDensity = Math.max(newPrintAttributes.getResolution().getHorizontalDpi(),
-                                newPrintAttributes.getResolution().getVerticalDpi());
+                        mAttributes = newPrintAttributes;
 
-                        float MILS_PER_INCH = 1000f;
-
-                        int pageWidth = (int) (mDensity
-                                * newPrintAttributes.getMediaSize().getWidthMils() / MILS_PER_INCH);
-                        int pageHeight = (int) (mDensity
-                                * newPrintAttributes.getMediaSize().getWidthMils() / MILS_PER_INCH);
-
-                        mPageRect = new Rect(0, 0, pageWidth, pageHeight);
-                        if (newPrintAttributes.getOrientation()
-                                == PrintAttributes.ORIENTATION_LANDSCAPE) {
-                            mPageRect = new Rect(0, 0, pageHeight, pageWidth);
-                        }
-
-                        PrintDocumentInfo info = new PrintDocumentInfo.Builder(jobName)
+                        PrintDocumentInfo info = new PrintDocumentInfo
+                                .Builder(jobName, newPrintAttributes)
                                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
                                 .setPageCount(1)
                                 .create();
+
                         layoutResultCallback.onLayoutFinished(info, false);
                     }
 
@@ -84,24 +71,86 @@ public class PrintJob {
                     public void onWrite(PageRange[] pageRanges, FileDescriptor fileDescriptor,
                                         CancellationSignal cancellationSignal,
                                         WriteResultCallback writeResultCallback) {
-                        PdfDocument mPdfDocument = PdfDocument.open();
-                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
-                                mPageRect, 1).create();
-                        PdfDocument.Page page = mPdfDocument.startPage(pageInfo);
-                        mPrintMatrix = new Matrix();
-                        mPrintMatrix.setRectToRect(
-                                new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
-                                new RectF(mPageRect),
-                                Matrix.ScaleToFit.CENTER);
-                        page.getCanvas().drawBitmap(bitmap, mPrintMatrix, null);
-                        mPdfDocument.finishPage(page);
-                        mPdfDocument.writeTo(new FileOutputStream(fileDescriptor));
-                        mPdfDocument.close();
-                        writeResultCallback.onWriteFinished(
-                                new PageRange[] { PageRange.ALL_PAGES });
+                        try {
+                            PrintedPdfDocument pdfDocument = PrintedPdfDocument.open(context,
+                                    mAttributes);
+                            Page page = pdfDocument.startPage(1);
+
+                            RectF content = new RectF(page.getInfo().getContentSize());
+                            Matrix matrix = new Matrix();
+
+                            // Handle orientation.
+                            if (mAttributes.getOrientation()
+                                    == PrintAttributes.ORIENTATION_LANDSCAPE) {
+                                // Compute and apply scale based on fitting mode.
+                                final float scale;
+                                switch (mAttributes.getFittingMode()) {
+                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FILL: {
+                                        scale = Math.max(content.width() / bitmap.getHeight(),
+                                                content.height() / bitmap.getWidth());
+                                    } break;
+
+                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FIT: {
+                                        scale = Math.min(content.width() / bitmap.getHeight(),
+                                                content.height() / bitmap.getWidth());
+                                    } break;
+
+                                    default: {
+                                        scale = 1.0f;
+                                    }
+                                }
+                                matrix.postScale(scale, scale);
+
+                                // Apply the rotation.
+                                matrix.postRotate(90);
+                                matrix.postTranslate(bitmap.getHeight() * scale, 0);
+
+                                // Center the content.
+                                final float translateX = (content.width()
+                                        - bitmap.getHeight() * scale) / 2;
+                                final float translateY = (content.height()
+                                        - bitmap.getWidth() * scale) / 2;
+                                matrix.postTranslate(translateX, translateY);
+                            } else {
+                                // Compute and apply scale based on fitting mode.
+                                float scale = 1.0f;
+                                switch (mAttributes.getFittingMode()) {
+                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FILL: {
+                                        scale = Math.max(content.width() / bitmap.getWidth(),
+                                                content.height() / bitmap.getHeight());
+                                    } break;
+
+                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FIT: {
+                                        scale = Math.min(content.width() / bitmap.getWidth(),
+                                                content.height() / bitmap.getHeight());
+                                    } break;
+                                }
+                                matrix.postScale(scale, scale);
+
+                                // Center the content.
+                                final float translateX = (content.width()
+                                        - bitmap.getWidth() * scale) / 2;
+                                final float translateY = (content.height()
+                                        - bitmap.getHeight() * scale) / 2;
+                                matrix.postTranslate(translateX, translateY);
+                            }
+
+                            // Draw the bitmap.
+                            page.getCanvas().drawBitmap(bitmap, matrix, null);
+
+                            // Write the document.
+                            pdfDocument.finishPage(page);
+                            pdfDocument.writeTo(new FileOutputStream(fileDescriptor));
+                            pdfDocument.close();
+
+                            // Done.
+                            writeResultCallback.onWriteFinished(
+                                    new PageRange[] { PageRange.ALL_PAGES });
+                        } finally {
+                            writeResultCallback.onWriteFailed(null);
+                        }
                     }
                 }, new PrintAttributes.Builder().create());
-
     }
 
     public static void printBitmapAtUri(Context context, String imagePrint, Uri uri) {
