@@ -69,6 +69,7 @@ public class SelectionManager {
     public void selectAll() {
         mInverseSelection = true;
         mClickedSet.clear();
+        mTotal = -1;
         enterSelectionMode();
         if (mListener != null) mListener.onSelectionModeChange(SELECT_ALL_MODE);
     }
