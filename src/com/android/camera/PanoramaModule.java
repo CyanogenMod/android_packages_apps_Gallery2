@@ -914,12 +914,11 @@ public class PanoramaModule implements CameraModule,
             ExifInterface exif = new ExifInterface();
             try {
                 exif.readExif(jpegData);
-                exif.addGpsDateTimeStampTag(mTimeTaken);
                 exif.addDateTimeStampTag(ExifInterface.TAG_DATE_TIME, mTimeTaken,
                         TimeZone.getDefault());
                 exif.setTag(exif.buildTag(ExifInterface.TAG_ORIENTATION,
                         ExifInterface.getOrientationValueForRotation(orientation)));
-                writeLocation(loc, exif);
+                writeLocation(loc, mTimeTaken, exif);
                 exif.writeExif(jpegData, filepath);
             } catch (IOException e) {
                 Log.e(TAG, "Cannot set exif for " + filepath, e);
@@ -932,11 +931,12 @@ public class PanoramaModule implements CameraModule,
         return null;
     }
 
-    private static void writeLocation(Location location, ExifInterface exif) {
+    private static void writeLocation(Location location, long timestamp, ExifInterface exif) {
         if (location == null) {
             return;
         }
         exif.addGpsTags(location.getLatitude(), location.getLongitude());
+        exif.addGpsDateTimeStampTag(timestamp);
         exif.setTag(exif.buildTag(ExifInterface.TAG_GPS_PROCESSING_METHOD, location.getProvider()));
     }
 
