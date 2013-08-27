@@ -154,6 +154,11 @@ public class CategoryView extends IconView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean ret = super.onTouchEvent(event);
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            activity.startTouchAnimation(this, event.getX(), event.getY());
+        }
         if (!canBeRemoved()) {
             return ret;
         }
@@ -171,7 +176,6 @@ public class CategoryView extends IconView
                 delta = event.getX() - mStartTouchX;
             }
             if (Math.abs(delta) > mDeleteSlope) {
-                FilterShowActivity activity = (FilterShowActivity) getContext();
                 activity.setHandlesSwipeForView(this, mStartTouchX, mStartTouchY);
             }
         }

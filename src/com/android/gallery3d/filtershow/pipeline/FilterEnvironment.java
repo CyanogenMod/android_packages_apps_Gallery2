@@ -133,6 +133,9 @@ public class FilterEnvironment {
         filter.useRepresentation(representation);
         filter.setEnvironment(this);
         Bitmap ret = filter.apply(bitmap, mScaleFactor, mQuality);
+        if (bitmap != ret) {
+            cache(bitmap);
+        }
         filter.setGeneralParameters();
         filter.setEnvironment(null);
         return ret;

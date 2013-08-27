@@ -170,9 +170,11 @@ public class CacheProcessing {
                     + mSteps.size() + " cacheBitmap: " + cacheBitmap);
         }
 
+        Bitmap originalCopy = null;
         for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
             if (i == -1 || cacheBitmap == null) {
                 cacheBitmap = environment.getBitmapCopy(originalBitmap);
+                originalCopy = cacheBitmap;
                 if (DEBUG) {
                     Log.v(LOGTAG, "i: " + i + " cacheBitmap: " + cacheBitmap + " w: "
                             + cacheBitmap.getWidth() + " h: " + cacheBitmap.getHeight()
@@ -189,12 +191,12 @@ public class CacheProcessing {
                     Log.v(LOGTAG, "i: " + i + " get new copy for cacheBitmap "
                             + cacheBitmap + " apply...");
                 }
-                environment.cache(step.cache);
                 cacheBitmap = environment.getBitmapCopy(cacheBitmap);
                 cacheBitmap = step.apply(environment, cacheBitmap);
                 step.cache = cacheBitmap;
             }
         }
+        environment.cache(originalCopy);
 
         if (DEBUG) {
             Log.v(LOGTAG, "now let's cleanup the cache...");
