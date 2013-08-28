@@ -709,6 +709,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                         / (float) MasterImage.getImage().getOriginalBounds().width();
                 mBoundService.setHighresPreviewScaleFactor(highResPreviewScale);
             }
+            MasterImage.getImage().warnListeners();
         }
     }
 
@@ -796,6 +797,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
             LoadHighresBitmapTask highresLoad = new LoadHighresBitmapTask();
             highresLoad.execute();
+            MasterImage.getImage().warnListeners();
             super.onPostExecute(result);
         }
 

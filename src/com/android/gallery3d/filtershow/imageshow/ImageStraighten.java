@@ -200,6 +200,7 @@ public class ImageStraighten extends ImageShow {
         MasterImage master = MasterImage.getImage();
         Bitmap image = master.getFiltersOnlyImage();
         if (image == null) {
+            MasterImage.getImage().invalidateFiltersOnly();
             return;
         }
         GeometryMathUtils.initializeHolder(mDrawHolder, mLocalRep);
