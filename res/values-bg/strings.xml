@@ -205,15 +205,15 @@
     <string name="trim_too_short" msgid="751593965620665326">"Не може да се отреже: Целевият видеоклип е твърде кратък"</string>
     <string name="pano_progress_text" msgid="1586851614586678464">"Панорамата се изобразява"</string>
     <string name="save" msgid="613976532235060516">"Запазване"</string>
-    <string name="ingest_scanning" msgid="1062957108473988971">"Съдържанието се сканира..."</string>
+    <string name="ingest_scanning" msgid="1062957108473988971">"Scanning content..."</string>
   <plurals name="ingest_number_of_items_scanned">
-    <item quantity="zero" msgid="2623289390474007396">"Сканирани са %1$d елемента"</item>
-    <item quantity="one" msgid="4340019444460561648">"Сканиран е %1$d елемент"</item>
-    <item quantity="other" msgid="3138021473860555499">"Сканирани са %1$d елемента"</item>
+    <item quantity="zero" msgid="2623289390474007396">"%1$d items scanned"</item>
+    <item quantity="one" msgid="4340019444460561648">"%1$d item scanned"</item>
+    <item quantity="other" msgid="3138021473860555499">"%1$d items scanned"</item>
   </plurals>
-    <string name="ingest_sorting" msgid="1028652103472581918">"Сортира се..."</string>
-    <string name="ingest_scanning_done" msgid="8911916277034483430">"Сканирането завърши"</string>
-    <string name="ingest_importing" msgid="7456633398378527611">"Импортира се..."</string>
+    <string name="ingest_sorting" msgid="1028652103472581918">"Sorting..."</string>
+    <string name="ingest_scanning_done" msgid="8911916277034483430">"Scanning done"</string>
+    <string name="ingest_importing" msgid="7456633398378527611">"Importing..."</string>
     <string name="ingest_empty_device" msgid="2010470482779872622">"Няма съдържание, налично за импортиране на това устройство."</string>
     <string name="ingest_no_device" msgid="3054128223131382122">"Няма свързано устройство, поддържащо MTP"</string>
     <string name="camera_error_title" msgid="6484667504938477337">"Грешка в камерата"</string>
@@ -358,7 +358,7 @@
     <string name="accessibility_zoom_control" msgid="1339909363226825709">"Контрола за промяна на мащаба"</string>
     <string name="accessibility_decrement" msgid="1411194318538035666">"Намаляване на %1$s"</string>
     <string name="accessibility_increment" msgid="8447850530444401135">"Увеличаване на %1$s"</string>
-    <string name="accessibility_check_box" msgid="7317447218256584181">"Квадратче за отметка за %1$s"</string>
+    <string name="accessibility_check_box" msgid="7317447218256584181">"%1$s check box"</string>
     <string name="accessibility_switch_to_camera" msgid="5951340774212969461">"Превключване към фотоапарат"</string>
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"Превключване към видео"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"Превключване към панорама"</string>
