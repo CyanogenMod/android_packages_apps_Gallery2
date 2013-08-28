@@ -154,6 +154,17 @@
     <string name="curvesRGB">Curves</string>
     <!--  Label for the image vignette filter (darkens photo around edges) button [CHAR LIMIT=10] -->
     <string name="vignette">Vignette</string>
+    <!--  Label for the image vignette main parameter ui [CHAR LIMIT=15] -->
+    <string name="vignette_main">Vignette</string>
+    <!--  Label for the image vignette exposure parameter ui [CHAR LIMIT=15] -->
+    <string name="vignette_exposure">Exposure</string>
+    <!--  Label for the image vignette saturation parameter ui [CHAR LIMIT=15] -->
+    <string name="vignette_saturation">Saturation</string>
+    <!--  Label for the image vignette contrast fparameter ui [CHAR LIMIT=15] -->
+    <string name="vignette_contrast">Contrast</string>
+    <!--  Label for the image vignette Falloff rate parameter ui [CHAR LIMIT=15] -->
+    <string name="vignette_falloff">Falloff</string>
+
     <!--  Label for the image effect that removes redeye. [CHAR LIMIT=10] -->
     <string name="redeye">Red Eye</string>
     <!--  Label for the that allows drawing on Image [CHAR LIMIT=10] -->
