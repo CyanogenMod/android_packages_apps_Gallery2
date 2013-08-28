@@ -19,26 +19,24 @@ package com.android.gallery3d.filtershow.filters;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-
-import com.android.gallery3d.app.Log;
 
 public class ImageFilterColorBorder extends ImageFilter {
     private static final String LOGTAG = "ImageFilterColorBorder";
     private FilterColorBorderRepresentation mParameters = null;
     Paint mPaint = new Paint();
-    RectF mRect = new RectF();
+    RectF mBounds = new RectF();
+    RectF mInsideBounds = new RectF();
+    Path mBorderPath = new Path();
 
     public ImageFilterColorBorder() {
         mName = "Border";
-        mPaint.setStyle(Paint.Style.STROKE);
     }
 
     public FilterRepresentation getDefaultRepresentation() {
-        return new FilterColorBorderRepresentation(Color.WHITE, 4, 4);
+        return new FilterColorBorderRepresentation(Color.WHITE, 3, 2);
     }
 
     public void useRepresentation(FilterRepresentation representation) {
@@ -55,17 +53,31 @@ public class ImageFilterColorBorder extends ImageFilter {
         if (getParameters() == null) {
             return;
         }
-        mRect.set(0, 0, w, h);
-        mPaint.setColor(getParameters().getColor());
         float size = getParameters().getBorderSize();
         float radius = getParameters().getBorderRadius();
-        Matrix m = getOriginalToScreenMatrix(w, h);
-        radius = m.mapRadius(radius);
-        size = m.mapRadius(size);
-        mPaint.setStrokeWidth(size);
-        canvas.drawRoundRect(mRect, radius, radius, mPaint);
-        mRect.set(0 - radius, -radius, w + radius, h + radius);
-        canvas.drawRoundRect(mRect, 0, 0, mPaint);
+
+        mPaint.reset();
+        mPaint.setColor(getParameters().getColor());
+        mPaint.setAntiAlias(true);
+        mBounds.set(0, 0, w, h);
+        mBorderPath.reset();
+        mBorderPath.moveTo(0, 0);
+
+        float bs = size / 100.f * mBounds.width();
+        float r = radius / 100.f * mBounds.width();
+
+        mInsideBounds.set(mBounds.left + bs,
+                mBounds.top + bs, mBounds.right - bs,
+                mBounds.bottom - bs);
+
+        mBorderPath.moveTo(mBounds.left, mBounds.top);
+        mBorderPath.lineTo(mBounds.right, mBounds.top);
+        mBorderPath.lineTo(mBounds.right, mBounds.bottom);
+        mBorderPath.lineTo(mBounds.left, mBounds.bottom);
+        mBorderPath.addRoundRect(mInsideBounds,
+                r, r, Path.Direction.CCW);
+
+        canvas.drawPath(mBorderPath, mPaint);
     }
 
     @Override

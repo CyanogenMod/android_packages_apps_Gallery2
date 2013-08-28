@@ -17,6 +17,8 @@
 package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Color;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.BasicParameterInt;
@@ -25,6 +27,9 @@ import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.controller.ParameterColor;
 import com.android.gallery3d.filtershow.editors.EditorColorBorder;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class FilterColorBorderRepresentation extends FilterRepresentation {
     private static final String LOGTAG = "FilterColorBorderRepresentation";
@@ -38,8 +43,8 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
     public static int DEFAULT_MENU_COLOR3 = Color.GRAY;
     public static int DEFAULT_MENU_COLOR4 = 0xFFFFCCAA;
     public static int DEFAULT_MENU_COLOR5 = 0xFFAAAAAA;
-    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
-    private BasicParameterInt mParamRadius = new BasicParameterInt(PARAM_RADIUS, 4, 2, 300);
+    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 4, 2, 30);
+    private BasicParameterInt mParamRadius = new BasicParameterInt(PARAM_RADIUS, 4, 2, 100);
     private ParameterColor mParamColor = new ParameterColor(PARAM_COLOR, DEFAULT_MENU_COLOR1);
 
     private Parameter[] mAllParam = {
@@ -59,7 +64,7 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
         setFilterClass(ImageFilterColorBorder.class);
         mParamColor.setValue(color);
         mParamSize.setValue(size);
-        mParamColor.setValue(radius);
+        mParamRadius.setValue(radius);
     }
 
     public String toString() {
@@ -154,5 +159,37 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
 
     public String getValueString() {
         return "";
+    }
+
+    // Serialization...
+
+    public void serializeRepresentation(JsonWriter writer) throws IOException {
+        writer.beginObject();
+        {
+            writer.name("size");
+            writer.value(mParamSize.getValue());
+            writer.name("radius");
+            writer.value(mParamRadius.getValue());
+            writer.name("color");
+            writer.value(mParamColor.getValue());
+        }
+        writer.endObject();
+    }
+
+    public void deSerializeRepresentation(JsonReader reader) throws IOException {
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equalsIgnoreCase("size")) {
+                mParamSize.setValue(reader.nextInt());
+            } else if (name.equalsIgnoreCase("radius")) {
+                mParamRadius.setValue(reader.nextInt());
+            } else if (name.equalsIgnoreCase("color")) {
+                mParamColor.setValue(reader.nextInt());
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
     }
 }
