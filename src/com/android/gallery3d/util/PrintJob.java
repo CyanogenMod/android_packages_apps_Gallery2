@@ -86,7 +86,7 @@ public class PrintJob {
                                         WriteResultCallback writeResultCallback) {
                         PdfDocument mPdfDocument = PdfDocument.open();
                         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
-                                mPageRect, 1, (int) mDensity).create();
+                                mPageRect, 1).create();
                         PdfDocument.Page page = mPdfDocument.startPage(pageInfo);
                         mPrintMatrix = new Matrix();
                         mPrintMatrix.setRectToRect(
