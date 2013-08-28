@@ -255,6 +255,9 @@ public class ImageCrop extends ImageShow {
     @Override
     public void onDraw(Canvas canvas) {
         Bitmap bitmap = MasterImage.getImage().getFiltersOnlyImage();
+        if (bitmap == null) {
+            MasterImage.getImage().invalidateFiltersOnly();
+        }
         if (!mValidDraw || bitmap == null) {
             return;
         }

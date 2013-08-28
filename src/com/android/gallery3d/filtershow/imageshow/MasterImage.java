@@ -137,6 +137,9 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public Bitmap getOriginalBitmapHighres() {
+        if (mOriginalBitmapHighres == null) {
+            return mOriginalBitmapLarge;
+        }
         return mOriginalBitmapHighres;
     }
 
@@ -345,6 +348,9 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public Bitmap getHighresImage() {
+        if (mHighresBitmap == null) {
+            return getFilteredImage();
+        }
         return mHighresBitmap;
     }
 
@@ -489,6 +495,7 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void invalidateFiltersOnly() {
         mFiltersOnlyPreset = null;
+        resetGeometryImages(false);
         invalidatePreview();
     }
 
