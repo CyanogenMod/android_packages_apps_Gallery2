@@ -192,33 +192,38 @@ public class VideoUtils {
         int trackIndex = -1;
         ByteBuffer dstBuf = ByteBuffer.allocate(bufferSize);
         BufferInfo bufferInfo = new BufferInfo();
-
-        muxer.start();
-        while (true) {
-            bufferInfo.offset = offset;
-            bufferInfo.size = extractor.readSampleData(dstBuf, offset);
-            if (bufferInfo.size < 0) {
-                Log.d(LOGTAG, "Saw input EOS.");
-                bufferInfo.size = 0;
-                break;
-            } else {
-                bufferInfo.presentationTimeUs = extractor.getSampleTime();
-                if (endMs > 0 && bufferInfo.presentationTimeUs > (endMs * 1000)) {
-                    Log.d(LOGTAG, "The current sample is over the trim end time.");
+        try {
+            muxer.start();
+            while (true) {
+                bufferInfo.offset = offset;
+                bufferInfo.size = extractor.readSampleData(dstBuf, offset);
+                if (bufferInfo.size < 0) {
+                    Log.d(LOGTAG, "Saw input EOS.");
+                    bufferInfo.size = 0;
                     break;
                 } else {
-                    bufferInfo.flags = extractor.getSampleFlags();
-                    trackIndex = extractor.getSampleTrackIndex();
+                    bufferInfo.presentationTimeUs = extractor.getSampleTime();
+                    if (endMs > 0 && bufferInfo.presentationTimeUs > (endMs * 1000)) {
+                        Log.d(LOGTAG, "The current sample is over the trim end time.");
+                        break;
+                    } else {
+                        bufferInfo.flags = extractor.getSampleFlags();
+                        trackIndex = extractor.getSampleTrackIndex();
 
-                    muxer.writeSampleData(indexMap.get(trackIndex), dstBuf,
-                            bufferInfo);
-                    extractor.advance();
+                        muxer.writeSampleData(indexMap.get(trackIndex), dstBuf,
+                                bufferInfo);
+                        extractor.advance();
+                    }
                 }
             }
-        }
 
-        muxer.stop();
-        muxer.release();
+            muxer.stop();
+        } catch (IllegalStateException e) {
+            // Swallow the exception due to malformed source.
+            Log.w(LOGTAG, "The source video file is malformed");
+        } finally {
+            muxer.release();
+        }
         return;
     }
 
