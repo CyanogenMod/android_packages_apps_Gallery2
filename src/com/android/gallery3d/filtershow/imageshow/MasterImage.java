@@ -388,6 +388,9 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void onNewLook(FilterRepresentation newRepresentation) {
         getBitmapCache().cache(mPreviousImage);
+        if (getFilteredImage() == null) {
+            return;
+        }
         mPreviousImage = getBitmapCache().getBitmapCopy(getFilteredImage());
         ValueAnimator animator = null;
         if (newRepresentation instanceof FilterUserPresetRepresentation) {
