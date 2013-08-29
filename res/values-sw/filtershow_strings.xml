@@ -16,7 +16,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="title_activity_filter_show" msgid="2036539130684382763">"Uhariri Picha"</string>
+    <string name="title_activity_filter_show" msgid="2036539130684382763">"Zana ya Kuhariri Picha"</string>
     <string name="cannot_load_image" msgid="5023634941212959976">"Haiwezi kupakia picha!"</string>
     <string name="cannot_edit_original" msgid="5890293845882609388">"Haiwezi kubadilisha asili"</string>
     <!-- no translation found for original_picture_text (3076213290079909698) -->
