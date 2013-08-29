@@ -114,7 +114,7 @@
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Prskanje"</string>
     <string name="draw_clear" msgid="6728155515454921052">"Izbriši"</string>
     <string name="color_border_size" msgid="8745307483517793073">"debljina"</string>
-    <string name="color_border_corner_size" msgid="7637235159438869979">"Veličina ugla"</string>
+    <string name="color_border_corner_size" msgid="7637235159438869979">"Veličina kuta"</string>
     <string name="color_border_color" msgid="8765458414425980711">"Boja"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"Izbriši"</string>
     <string name="color_pick_select" msgid="734312818059057394">"Odabir prilagođene boje"</string>
