@@ -23,6 +23,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CancellationSignal;
+import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -33,8 +34,8 @@ import android.print.pdf.PrintedPdfDocument;
 
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PrintJob {
     private final static int MAX_PRINT_SIZE = 2048;
@@ -61,6 +62,7 @@ public class PrintJob {
                         PrintDocumentInfo info = new PrintDocumentInfo
                                 .Builder(jobName, newPrintAttributes)
                                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
+                                .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
                                 .setPageCount(1)
                                 .create();
 
@@ -68,7 +70,7 @@ public class PrintJob {
                     }
 
                     @Override
-                    public void onWrite(PageRange[] pageRanges, FileDescriptor fileDescriptor,
+                    public void onWrite(PageRange[] pageRanges, ParcelFileDescriptor fileDescriptor,
                                         CancellationSignal cancellationSignal,
                                         WriteResultCallback writeResultCallback) {
                         try {
@@ -140,13 +142,21 @@ public class PrintJob {
 
                             // Write the document.
                             pdfDocument.finishPage(page);
-                            pdfDocument.writeTo(new FileOutputStream(fileDescriptor));
+                            pdfDocument.writeTo(new FileOutputStream(
+                                    fileDescriptor.getFileDescriptor()));
                             pdfDocument.close();
 
                             // Done.
                             writeResultCallback.onWriteFinished(
                                     new PageRange[] { PageRange.ALL_PAGES });
                         } finally {
+                            if (fileDescriptor != null) {
+                                try {
+                                    fileDescriptor.close();
+                                } catch (IOException ioe) {
+                                    /* ignore */
+                                }
+                            }
                             writeResultCallback.onWriteFailed(null);
                         }
                     }
