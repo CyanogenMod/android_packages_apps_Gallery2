@@ -16,19 +16,48 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.util.JsonReader;
+import android.util.JsonWriter;
+
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.controller.BasicParameterInt;
+import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.editors.EditorVignette;
 import com.android.gallery3d.filtershow.imageshow.Oval;
 
-public class FilterVignetteRepresentation extends FilterBasicRepresentation implements Oval {
+import java.io.IOException;
+
+public class FilterVignetteRepresentation extends FilterRepresentation implements Oval {
     private static final String LOGTAG = "FilterVignetteRepresentation";
-    private float mCenterX = Float.NaN;
-    private float mCenterY;
-    private float mRadiusX = Float.NaN;
-    private float mRadiusY;
+
+    private float mCenterX = .5f;
+    private float mCenterY = .5f;
+    private float mRadiusX = .5f;
+    private float mRadiusY = .5f;
+    public static final int MODE_VIGNETTE = 0;
+    public static final int MODE_EXPOSURE = 1;
+    public static final int MODE_SATURATION = 2;
+    public static final int MODE_CONTRAST = 3;
+    public static final int MODE_FALLOFF = 4;
+    private static int MIN = -100;
+    private static int MAX = 100;
+    private static int MAXFALLOF = 200;
+
+    private BasicParameterInt mParamVignette = new BasicParameterInt(MODE_VIGNETTE, 0, MIN, MAX);
+    private BasicParameterInt mParamExposure = new BasicParameterInt(MODE_EXPOSURE, 0, MIN, MAX);
+    private BasicParameterInt mParamSaturation = new BasicParameterInt(MODE_SATURATION, 0, MIN, MAX);
+    private BasicParameterInt mParamContrast = new BasicParameterInt(MODE_CONTRAST, 0, MIN, MAX);
+    private BasicParameterInt mParamFalloff = new BasicParameterInt(MODE_FALLOFF, 40, 0, MAXFALLOF);
+    private BasicParameterInt[] mAllParam = {
+            mParamVignette,
+            mParamExposure,
+            mParamSaturation,
+            mParamContrast,
+            mParamFalloff};
+    private int mParameterMode;
 
     public FilterVignetteRepresentation() {
-        super("Vignette", -100, 50, 100);
+        super("Vignette");
         setSerializationName("VIGNETTE");
         setShowParameterValue(true);
         setFilterType(FilterRepresentation.TYPE_VIGNETTE);
@@ -36,18 +65,29 @@ public class FilterVignetteRepresentation extends FilterBasicRepresentation impl
         setEditorId(EditorVignette.ID);
         setName("Vignette");
         setFilterClass(ImageFilterVignette.class);
-        setMinimum(-100);
-        setMaximum(100);
-        setDefaultValue(0);
     }
 
     @Override
     public void useParametersFrom(FilterRepresentation a) {
         super.useParametersFrom(a);
-        mCenterX = ((FilterVignetteRepresentation) a).mCenterX;
-        mCenterY = ((FilterVignetteRepresentation) a).mCenterY;
-        mRadiusX = ((FilterVignetteRepresentation) a).mRadiusX;
-        mRadiusY = ((FilterVignetteRepresentation) a).mRadiusY;
+        FilterVignetteRepresentation rep = (FilterVignetteRepresentation) a;
+        mCenterX = rep.mCenterX;
+        mCenterY = rep.mCenterY;
+        mRadiusX = rep.mRadiusX;
+        mRadiusY = rep.mRadiusY;
+        mParamVignette.setValue(rep.mParamVignette.getValue());
+        mParamExposure.setValue(rep.mParamExposure.getValue());
+        mParamSaturation.setValue(rep.mParamSaturation.getValue());
+        mParamContrast.setValue(rep.mParamContrast.getValue());
+        mParamFalloff.setValue(rep.mParamFalloff.getValue());
+    }
+
+    public int getValue(int mode) {
+        return mAllParam[mode].getValue();
+    }
+
+    public void setValue(int mode, int value) {
+        mAllParam[mode].setValue(value);
     }
 
     @Override
@@ -116,7 +156,7 @@ public class FilterVignetteRepresentation extends FilterBasicRepresentation impl
 
     @Override
     public boolean isNil() {
-        return getValue() == 0;
+        return false;
     }
 
     @Override
@@ -126,6 +166,10 @@ public class FilterVignetteRepresentation extends FilterBasicRepresentation impl
         }
         if (representation instanceof FilterVignetteRepresentation) {
             FilterVignetteRepresentation rep = (FilterVignetteRepresentation) representation;
+            for (int i = 0; i < mAllParam.length; i++) {
+                if (mAllParam[i].getValue() != rep.mAllParam[i].getValue())
+                    return false;
+            }
             if (rep.getCenterX() == getCenterX()
                     && rep.getCenterY() == getCenterY()
                     && rep.getRadiusX() == getRadiusX()
@@ -136,43 +180,87 @@ public class FilterVignetteRepresentation extends FilterBasicRepresentation impl
         return false;
     }
 
-    private static final String[] sParams = {
-            "Name", "value", "mCenterX", "mCenterY", "mRadiusX",
-            "mRadiusY"
-    };
-
+    private static final String ELLIPSE = "ellipse";
+    private static final String ARGS = "adjust";
     @Override
-    public String[][] serializeRepresentation() {
-        String[][] ret = {
-                { sParams[0], getName() },
-                { sParams[1], Integer.toString(getValue()) },
-                { sParams[2], Float.toString(mCenterX) },
-                { sParams[3], Float.toString(mCenterY) },
-                { sParams[4], Float.toString(mRadiusX) },
-                { sParams[5], Float.toString(mRadiusY) }
-        };
-        return ret;
+    public void serializeRepresentation(JsonWriter writer) throws IOException {
+        writer.beginObject();
+        writer.name(ELLIPSE);
+        writer.beginArray();
+        writer.value(mCenterX);
+        writer.value(mCenterY);
+        writer.value(mRadiusX);
+        writer.value(mRadiusY);
+        writer.endArray();
+
+        writer.name(ARGS);
+        writer.beginArray();
+        writer.value(mParamVignette.getValue());
+        writer.value(mParamExposure.getValue());
+        writer.value(mParamSaturation.getValue());
+        writer.value(mParamContrast.getValue());
+        writer.value(mParamFalloff.getValue());
+        writer.endArray();
+        writer.endObject();
     }
 
+
     @Override
-    public void deSerializeRepresentation(String[][] rep) {
-        super.deSerializeRepresentation(rep);
-        for (int i = 0; i < rep.length; i++) {
-            String key = rep[i][0];
-            String value = rep[i][1];
-            if (sParams[0].equals(key)) {
-                setName(value);
-            } else if (sParams[1].equals(key)) {
-               setValue(Integer.parseInt(value));
-            } else if (sParams[2].equals(key)) {
-                mCenterX = Float.parseFloat(value);
-            } else if (sParams[3].equals(key)) {
-                mCenterY = Float.parseFloat(value);
-            } else if (sParams[4].equals(key)) {
-                mRadiusX = Float.parseFloat(value);
-            } else if (sParams[5].equals(key)) {
-                mRadiusY = Float.parseFloat(value);
+    public void deSerializeRepresentation(JsonReader sreader) throws IOException {
+        sreader.beginObject();
+
+        while (sreader.hasNext()) {
+            String name = sreader.nextName();
+            if (name.startsWith(ELLIPSE)) {
+                sreader.beginArray();
+                sreader.hasNext();
+                mCenterX = (float) sreader.nextDouble();
+                sreader.hasNext();
+                mCenterY = (float) sreader.nextDouble();
+                sreader.hasNext();
+                mRadiusX = (float) sreader.nextDouble();
+                sreader.hasNext();
+                mRadiusY = (float) sreader.nextDouble();
+                sreader.hasNext();
+                sreader.endArray();
+            } else if (name.startsWith(ARGS)) {
+                sreader.beginArray();
+                sreader.hasNext();
+                mParamVignette.setValue(sreader.nextInt());
+                sreader.hasNext();
+                mParamExposure.setValue(sreader.nextInt());
+                sreader.hasNext();
+                mParamSaturation.setValue(sreader.nextInt());
+                sreader.hasNext();
+                mParamContrast.setValue(sreader.nextInt());
+                sreader.hasNext();
+                mParamFalloff.setValue(sreader.nextInt());
+                sreader.hasNext();
+                sreader.endArray();
+            } else  {
+                sreader.skipValue();
             }
         }
+        sreader.endObject();
     }
+    public int getParameterMode() {
+        return mParameterMode;
+    }
+
+    public void setParameterMode(int parameterMode) {
+        mParameterMode = parameterMode;
+    }
+
+    public int getCurrentParameter() {
+        return getValue(mParameterMode);
+    }
+
+    public void setCurrentParameter(int value) {
+        setValue(mParameterMode, value);
+    }
+
+    public BasicParameterInt getFilterParameter(int index) {
+        return mAllParam[index];
+    }
+
 }

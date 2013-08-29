@@ -48,6 +48,8 @@ public class ImageVignette extends ImageShow {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int w = MasterImage.getImage().getOriginalBounds().width();
+        int h = MasterImage.getImage().getOriginalBounds().height();
         int mask = event.getActionMasked();
         if (mActiveHandle == -1) {
             if (MotionEvent.ACTION_DOWN != mask) {
@@ -77,11 +79,11 @@ public class ImageVignette extends ImageShow {
         boolean didComputeEllipses = false;
         switch (mask) {
             case (MotionEvent.ACTION_DOWN):
-                mElipse.actionDown(x, y, mVignetteRep);
+                mElipse.actionDown2(x, y, w, h, mVignetteRep);
                 break;
             case (MotionEvent.ACTION_UP):
             case (MotionEvent.ACTION_MOVE):
-                mElipse.actionMove(mActiveHandle, x, y, mVignetteRep);
+                mElipse.actionMove2(mActiveHandle, x, y, w, h, mVignetteRep);
                 setRepresentation(mVignetteRep);
                 didComputeEllipses = true;
                 break;
@@ -102,19 +104,21 @@ public class ImageVignette extends ImageShow {
         if (mVignetteRep == null) {
             return;
         }
+        float w = MasterImage.getImage().getOriginalBounds().width();
+        float h = MasterImage.getImage().getOriginalBounds().height();
         Matrix toImg = getScreenToImageMatrix(false);
         Matrix toScr = new Matrix();
         toImg.invert(toScr);
 
         float[] c = new float[] {
-                mVignetteRep.getCenterX(), mVignetteRep.getCenterY() };
+                mVignetteRep.getCenterX() * w, mVignetteRep.getCenterY() * h};
         if (Float.isNaN(c[0])) {
-            float cx = MasterImage.getImage().getOriginalBounds().width() / 2;
-            float cy = MasterImage.getImage().getOriginalBounds().height() / 2;
+            float cx = w / 2;
+            float cy = h / 2;
             float rx = Math.min(cx, cy) * .8f;
             float ry = rx;
-            mVignetteRep.setCenter(cx, cy);
-            mVignetteRep.setRadius(rx, ry);
+            mVignetteRep.setCenter(cx / w, cy / h);
+            mVignetteRep.setRadius(rx / w, ry / h);
 
             c[0] = cx;
             c[1] = cy;
@@ -128,8 +132,8 @@ public class ImageVignette extends ImageShow {
             toScr.mapPoints(c);
 
             mElipse.setCenter(c[0], c[1]);
-            mElipse.setRadius(toScr.mapRadius(mVignetteRep.getRadiusX()),
-                    toScr.mapRadius(mVignetteRep.getRadiusY()));
+            mElipse.setRadius(toScr.mapRadius(mVignetteRep.getRadiusX() * w),
+                    toScr.mapRadius(mVignetteRep.getRadiusY() * h));
         }
         mEditorVignette.commitLocalRepresentation();
     }
@@ -150,15 +154,17 @@ public class ImageVignette extends ImageShow {
         if (mVignetteRep == null) {
             return;
         }
+        float w = MasterImage.getImage().getOriginalBounds().width();
+        float h = MasterImage.getImage().getOriginalBounds().height();
         Matrix toImg = getScreenToImageMatrix(false);
         Matrix toScr = new Matrix();
         toImg.invert(toScr);
         float[] c = new float[] {
-                mVignetteRep.getCenterX(), mVignetteRep.getCenterY() };
+                mVignetteRep.getCenterX() * w, mVignetteRep.getCenterY() * h };
         toScr.mapPoints(c);
         mElipse.setCenter(c[0], c[1]);
-        mElipse.setRadius(toScr.mapRadius(mVignetteRep.getRadiusX()),
-                toScr.mapRadius(mVignetteRep.getRadiusY()));
+        mElipse.setRadius(toScr.mapRadius(mVignetteRep.getRadiusX() * w),
+                toScr.mapRadius(mVignetteRep.getRadiusY() * h));
 
         mElipse.draw(canvas);
     }
