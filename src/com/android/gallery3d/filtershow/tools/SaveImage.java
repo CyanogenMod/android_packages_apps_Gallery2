@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
@@ -79,6 +80,7 @@ public class SaveImage {
     private final Callback mCallback;
     private final File mDestinationFile;
     private final Uri mSelectedImageUri;
+    private final Bitmap mPreviewImage;
 
     private int mCurrentProcessingStep = 1;
 
@@ -126,10 +128,11 @@ public class SaveImage {
      * @return the newSourceUri
      */
     public SaveImage(Context context, Uri sourceUri, Uri selectedImageUri,
-                     File destination, Callback callback)  {
+                     File destination, Bitmap previewImage, Callback callback)  {
         mContext = context;
         mSourceUri = sourceUri;
         mCallback = callback;
+        mPreviewImage = previewImage;
         if (destination == null) {
             mDestinationFile = getNewFile(context, selectedImageUri);
         } else {
@@ -332,6 +335,33 @@ public class SaveImage {
             newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile);
         }
 
+        Uri savedUri = mSelectedImageUri;
+        if (mPreviewImage != null) {
+            Object xmp = getPanoramaXMPData(newSourceUri, preset);
+            ExifInterface exif = getExifData(newSourceUri);
+            // Set tags
+            long time = System.currentTimeMillis();
+            exif.addDateTimeStampTag(ExifInterface.TAG_DATE_TIME, time,
+                    TimeZone.getDefault());
+            exif.setTag(exif.buildTag(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.Orientation.TOP_LEFT));
+            // Remove old thumbnail
+            exif.removeCompressedThumbnail();
+            // If we succeed in writing the bitmap as a jpeg, return a uri.
+            if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
+                putPanoramaXMPData(mDestinationFile, xmp);
+                // mDestinationFile will save the newSourceUri info in the XMP.
+                XmpPresets.writeFilterXMP(mContext, newSourceUri,
+                        mDestinationFile, preset);
+
+                // After this call, mSelectedImageUri will be actually
+                // pointing at the new file mDestinationFile.
+                savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
+                        mDestinationFile, time, doAuxBackup);
+            }
+            Toast.makeText(mContext, "Computing high resolution image...", Toast.LENGTH_LONG);
+        }
+
         // Stopgap fix for low-memory devices.
         while (noBitmap) {
             try {
@@ -377,10 +407,7 @@ public class SaveImage {
                     XmpPresets.writeFilterXMP(mContext, newSourceUri,
                             mDestinationFile, preset);
 
-                    // After this call, mSelectedImageUri will be actually
-                    // pointing at the new file mDestinationFile.
-                    uri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
-                            mDestinationFile, time, doAuxBackup);
+                    uri = updateFile(mContext, savedUri, mDestinationFile, time);
                 }
                 updateProgress();
 
@@ -605,40 +632,7 @@ public class SaveImage {
     public static Uri linkNewFileToUri(Context context, Uri sourceUri,
             File file, long time, boolean deleteOriginal) {
         File oldSelectedFile = getLocalFileFromUri(context, sourceUri);
-        final ContentValues values = new ContentValues();
-
-        time /= 1000;
-        values.put(Images.Media.TITLE, file.getName());
-        values.put(Images.Media.DISPLAY_NAME, file.getName());
-        values.put(Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(Images.Media.DATE_TAKEN, time);
-        values.put(Images.Media.DATE_MODIFIED, time);
-        values.put(Images.Media.DATE_ADDED, time);
-        values.put(Images.Media.ORIENTATION, 0);
-        values.put(Images.Media.DATA, file.getAbsolutePath());
-        values.put(Images.Media.SIZE, file.length());
-
-        final String[] projection = new String[] {
-                ImageColumns.DATE_TAKEN,
-                ImageColumns.LATITUDE, ImageColumns.LONGITUDE,
-        };
-        SaveImage.querySource(context, sourceUri, projection,
-                new SaveImage.ContentResolverQueryCallback() {
-
-                    @Override
-                    public void onCursorResult(Cursor cursor) {
-                        values.put(Images.Media.DATE_TAKEN, cursor.getLong(0));
-
-                        double latitude = cursor.getDouble(1);
-                        double longitude = cursor.getDouble(2);
-                        // TODO: Change || to && after the default location
-                        // issue is fixed.
-                        if ((latitude != 0f) || (longitude != 0f)) {
-                            values.put(Images.Media.LATITUDE, latitude);
-                            values.put(Images.Media.LONGITUDE, longitude);
-                        }
-                    }
-                });
+        final ContentValues values = getContentValues(context, sourceUri, file, time);
 
         Uri result = sourceUri;
 
@@ -656,6 +650,52 @@ public class SaveImage {
             }
         }
         return result;
+    }
+
+    public static Uri updateFile(Context context, Uri sourceUri, File file, long time) {
+        final ContentValues values = getContentValues(context, sourceUri, file, time);
+        context.getContentResolver().update(sourceUri, values, null, null);
+        return sourceUri;
+    }
+
+    private static ContentValues getContentValues(Context context, Uri sourceUri,
+                                                  File file, long time) {
+        final ContentValues values = new ContentValues();
+
+        time /= 1000;
+        values.put(Images.Media.TITLE, file.getName());
+        values.put(Images.Media.DISPLAY_NAME, file.getName());
+        values.put(Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(Images.Media.DATE_TAKEN, time);
+        values.put(Images.Media.DATE_MODIFIED, time);
+        values.put(Images.Media.DATE_ADDED, time);
+        values.put(Images.Media.ORIENTATION, 0);
+        values.put(Images.Media.DATA, file.getAbsolutePath());
+        values.put(Images.Media.SIZE, file.length());
+
+        final String[] projection = new String[] {
+                ImageColumns.DATE_TAKEN,
+                ImageColumns.LATITUDE, ImageColumns.LONGITUDE,
+        };
+
+        SaveImage.querySource(context, sourceUri, projection,
+                new ContentResolverQueryCallback() {
+
+                    @Override
+                    public void onCursorResult(Cursor cursor) {
+                        values.put(Images.Media.DATE_TAKEN, cursor.getLong(0));
+
+                        double latitude = cursor.getDouble(1);
+                        double longitude = cursor.getDouble(2);
+                        // TODO: Change || to && after the default location
+                        // issue is fixed.
+                        if ((latitude != 0f) || (longitude != 0f)) {
+                            values.put(Images.Media.LATITUDE, latitude);
+                            values.put(Images.Media.LONGITUDE, longitude);
+                        }
+                    }
+                });
+        return values;
     }
 
     /**
