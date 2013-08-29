@@ -30,6 +30,7 @@ import android.provider.MediaStore.Images.ImageColumns;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -359,7 +360,6 @@ public class SaveImage {
                 savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
                         mDestinationFile, time, doAuxBackup);
             }
-            Toast.makeText(mContext, "Computing high resolution image...", Toast.LENGTH_LONG);
         }
 
         // Stopgap fix for low-memory devices.
@@ -515,6 +515,12 @@ public class SaveImage {
         filterShowActivity.startService(processIntent);
 
         if (!filterShowActivity.isSimpleEditAction()) {
+            String toastMessage = filterShowActivity.getResources().getString(
+                    R.string.save_and_processing);
+            Toast.makeText(filterShowActivity,
+                    toastMessage,
+                    Toast.LENGTH_SHORT).show();
+
             // terminate for now
             filterShowActivity.completeSaveImage(selectedImageUri);
         }
