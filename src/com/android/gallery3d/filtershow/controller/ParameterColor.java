@@ -18,6 +18,8 @@ package com.android.gallery3d.filtershow.controller;
 
 import android.graphics.Color;
 
+import java.util.Arrays;
+
 public class ParameterColor implements Parameter {
     public static String sParameterType = "ParameterColor";
     protected Control mControl;
@@ -26,6 +28,13 @@ public class ParameterColor implements Parameter {
     String mParameterName;
     int mValue;
     public final int ID;
+    int[] mBasColors = {
+            Color.RED & 0x80FFFFFF,
+            Color.GREEN & 0x80FFFFFF,
+            Color.BLUE & 0x80FFFFFF,
+            Color.BLACK & 0x80FFFFFF,
+            Color.WHITE & 0x80FFFFFF
+    };
 
     public ParameterColor(int id, int defaultColor) {
         ID = id;
@@ -90,5 +99,17 @@ public class ParameterColor implements Parameter {
     @Override
     public void setFilterView(FilterView editor) {
         mEditor = editor;
+    }
+
+    public void copyPalletFrom(ParameterColor parameterColor) {
+        System.arraycopy(parameterColor.mBasColors,0,mBasColors,0,mBasColors.length);
+    }
+
+    public void setColorpalette(int[] palette) {
+        mBasColors = Arrays.copyOf(palette, palette.length);
+    }
+
+    public int[] getColorPalette() {
+        return mBasColors;
     }
 }

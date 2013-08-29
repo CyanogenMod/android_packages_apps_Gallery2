@@ -22,14 +22,11 @@ import android.util.JsonWriter;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.BasicParameterInt;
-import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.controller.ParameterColor;
 import com.android.gallery3d.filtershow.editors.EditorColorBorder;
-import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class FilterColorBorderRepresentation extends FilterRepresentation {
     private static final String LOGTAG = "FilterColorBorderRepresentation";
@@ -43,8 +40,8 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
     public static int DEFAULT_MENU_COLOR3 = Color.GRAY;
     public static int DEFAULT_MENU_COLOR4 = 0xFFFFCCAA;
     public static int DEFAULT_MENU_COLOR5 = 0xFFAAAAAA;
-    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 4, 2, 30);
-    private BasicParameterInt mParamRadius = new BasicParameterInt(PARAM_RADIUS, 4, 2, 100);
+    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 3, 2, 30);
+    private BasicParameterInt mParamRadius = new BasicParameterInt(PARAM_RADIUS, 2, 0, 100);
     private ParameterColor mParamColor = new ParameterColor(PARAM_COLOR, DEFAULT_MENU_COLOR1);
 
     private Parameter[] mAllParam = {
@@ -65,6 +62,12 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
         mParamColor.setValue(color);
         mParamSize.setValue(size);
         mParamRadius.setValue(radius);
+        mParamColor.setColorpalette(new int[]{
+                DEFAULT_MENU_COLOR1,
+                DEFAULT_MENU_COLOR2,
+                DEFAULT_MENU_COLOR3,
+                DEFAULT_MENU_COLOR4,
+                DEFAULT_MENU_COLOR5});
     }
 
     public String toString() {
@@ -90,6 +93,7 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
             FilterColorBorderRepresentation representation = (FilterColorBorderRepresentation) a;
             setName(representation.getName());
             setColor(representation.getColor());
+            mParamColor.copyPalletFrom(representation.mParamColor);
             setBorderSize(representation.getBorderSize());
             setBorderRadius(representation.getBorderRadius());
         }

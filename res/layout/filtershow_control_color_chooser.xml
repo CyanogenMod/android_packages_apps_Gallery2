@@ -73,9 +73,8 @@
             </HorizontalScrollView>
     <Button
             android:id="@+id/draw_color_popupbutton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="@dimen/draw_style_icon_dim"
+            android:layout_height="@dimen/draw_style_icon_dim"
             android:background="@android:drawable/ic_menu_more"
             android:layout_margin="1dp"
             />

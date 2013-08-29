@@ -16,19 +16,14 @@
 
 package com.android.gallery3d.filtershow.editors;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -39,7 +34,6 @@ import com.android.gallery3d.filtershow.colorpicker.ColorListener;
 import com.android.gallery3d.filtershow.colorpicker.ColorOpacityView;
 import com.android.gallery3d.filtershow.colorpicker.ColorSVRectView;
 import com.android.gallery3d.filtershow.controller.BasicParameterInt;
-import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
 import com.android.gallery3d.filtershow.controller.ParameterColor;
 import com.android.gallery3d.filtershow.filters.FilterColorBorderRepresentation;
 
@@ -47,12 +41,10 @@ import java.util.Arrays;
 
 public class EditorColorBorderTabletUI {
     private EditorColorBorder mEditorDraw;
-    private int[] mBrushIcons;
     private static int sIconDim = 120;
     private int mSelectedColorButton;
     private FilterColorBorderRepresentation mRep;
     private Button[] mColorButton;
-    private ImageButton[] mStyleButton;
     private ColorHueView mHueView;
     private ColorSVRectView mSatValView;
     private ColorOpacityView mOpacityView;
@@ -87,13 +79,13 @@ public class EditorColorBorderTabletUI {
 
         ParameterColor color;
         color = (ParameterColor) mRep.getParam(FilterColorBorderRepresentation.PARAM_COLOR);
+        mBasColors = color.getColorPalette();
         color.setValue(mBasColors[mSelectedColorButton]);
     }
 
     public EditorColorBorderTabletUI(EditorColorBorder editorDraw, Context context, View base) {
         mEditorDraw = editorDraw;
         mBasColors = editorDraw.mBasColors;
-        mBrushIcons = editorDraw.brushIcons;
         LayoutInflater inflater =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout lp = (LinearLayout) inflater.inflate(

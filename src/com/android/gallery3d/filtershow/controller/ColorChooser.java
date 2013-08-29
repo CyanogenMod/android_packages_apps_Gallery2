@@ -39,13 +39,7 @@ public class ColorChooser implements Control {
             R.id.draw_color_button05,
     };
     private Button[] mButton = new Button[mButtonsID.length];
-    int[] mBasColors = {
-            Color.RED & 0x80FFFFFF,
-            Color.GREEN & 0x80FFFFFF,
-            Color.BLUE & 0x80FFFFFF,
-            Color.BLACK & 0x80FFFFFF,
-            Color.WHITE & 0x80FFFFFF
-    };
+
     int mSelectedButton = 0;
 
     @Override
@@ -56,6 +50,7 @@ public class ColorChooser implements Control {
         mSelected    = res.getColor(R.color.color_chooser_slected_border);
         mEditor = editor;
         mContext = container.getContext();
+        int iconDim = res.getDimensionPixelSize(R.dimen.draw_style_icon_dim);
         mParameter = (ParameterColor) parameter;
         LayoutInflater inflater =
                 (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,18 +59,17 @@ public class ColorChooser implements Control {
         mTopView.setVisibility(View.VISIBLE);
 
         mIconButton.clear();
-        LayoutParams lp = new LayoutParams(120, 120);
-
+        LayoutParams lp = new LayoutParams(iconDim, iconDim);
+        int [] palette = mParameter.getColorPalette();
         for (int i = 0; i < mButtonsID.length; i++) {
             final Button button = (Button) mTopView.findViewById(mButtonsID[i]);
             mButton[i] = button;
             float[] hsvo = new float[4];
-            Color.colorToHSV(mBasColors[i], hsvo);
-            hsvo[OPACITY_OFFSET] = (0xFF & (mBasColors[i] >> 24)) / (float) 255;
+            Color.colorToHSV(palette[i], hsvo);
+            hsvo[OPACITY_OFFSET] = (0xFF & (palette[i] >> 24)) / (float) 255;
             button.setTag(hsvo);
             GradientDrawable sd = ((GradientDrawable) button.getBackground());
-
-            sd.setColor(mBasColors[i]);
+            sd.setColor(palette[i]);
             sd.setStroke(3, (mSelectedButton == i) ? mSelected : mTransparent);
 
             final int buttonNo = i;
@@ -98,28 +92,29 @@ public class ColorChooser implements Control {
     }
 
     public void setColorSet(int[] basColors) {
-        for (int i = 0; i < mBasColors.length; i++) {
-            mBasColors[i] = basColors[i];
+        int []palette = mParameter.getColorPalette();
+        for (int i = 0; i < palette.length; i++) {
+            palette[i] = basColors[i];
             float[] hsvo = new float[4];
-            Color.colorToHSV(mBasColors[i], hsvo);
-            hsvo[OPACITY_OFFSET] = (0xFF & (mBasColors[i] >> 24)) / (float) 255;
+            Color.colorToHSV(palette[i], hsvo);
+            hsvo[OPACITY_OFFSET] = (0xFF & (palette[i] >> 24)) / (float) 255;
             mButton[i].setTag(hsvo);
             GradientDrawable sd = ((GradientDrawable) mButton[i].getBackground());
-            sd.setColor(mBasColors[i]);
+            sd.setColor(palette[i]);
         }
 
     }
 
     public int[] getColorSet() {
-        return mBasColors;
+        return  mParameter.getColorPalette();
     }
 
     private void resetBorders() {
+        int []palette = mParameter.getColorPalette();
         for (int i = 0; i < mButtonsID.length; i++) {
             final Button button = mButton[i];
-
             GradientDrawable sd = ((GradientDrawable) button.getBackground());
-            sd.setColor(mBasColors[i]);
+            sd.setColor(palette[i]);
             sd.setStroke(3, (mSelectedButton == i) ? mSelected : mTransparent);
         }
     }
@@ -129,6 +124,7 @@ public class ColorChooser implements Control {
         float[] hsvo = (float[]) button.getTag();
         mParameter.setValue(Color.HSVToColor((int) (hsvo[OPACITY_OFFSET] * 255), hsvo));
         resetBorders();
+        mEditor.commitLocalRepresentation();
     }
 
     @Override
@@ -150,14 +146,15 @@ public class ColorChooser implements Control {
     }
 
     public void changeSelectedColor(float[] hsvo) {
+        int []palette = mParameter.getColorPalette();
         int c = Color.HSVToColor((int) (hsvo[3] * 255), hsvo);
         final Button button = mButton[mSelectedButton];
-
         GradientDrawable sd = ((GradientDrawable) button.getBackground());
         sd.setColor(c);
-        mBasColors[mSelectedButton] = c;
+        palette[mSelectedButton] = c;
         mParameter.setValue(Color.HSVToColor((int) (hsvo[OPACITY_OFFSET] * 255), hsvo));
         button.setTag(hsvo);
+        mEditor.commitLocalRepresentation();
         button.invalidate();
     }
 
