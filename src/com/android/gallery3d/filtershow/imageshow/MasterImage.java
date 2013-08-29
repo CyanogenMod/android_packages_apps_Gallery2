@@ -24,9 +24,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -84,10 +81,13 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mPartialBitmap = null;
     private Bitmap mHighresBitmap = null;
     private Bitmap mPreviousImage = null;
+    private ImagePreset mPreviousPreset = null;
 
+    private ValueAnimator mAnimator = null;
     private float mMaskScale = 1;
     private boolean mOnGoingNewLookAnimation = false;
     private float mAnimRotationValue = 0;
+    private float mCurrentAnimRotationStartValue = 0;
     private float mAnimFraction = 0;
     private int mCurrentLookAnimation = 0;
     public static final int CIRCLE_ANIMATION = 1;
@@ -358,6 +358,14 @@ public class MasterImage implements RenderingRequestCaller {
         return mPreviousImage;
     }
 
+    public ImagePreset getPreviousPreset() {
+        return mPreviousPreset;
+    }
+
+    public ImagePreset getCurrentPreset() {
+        return getPreviewBuffer().getConsumer().getPreset();
+    }
+
     public float getMaskScale() {
         return mMaskScale;
     }
@@ -372,7 +380,7 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public void setAnimRotation(float rotation) {
-        mAnimRotationValue = rotation;
+        mAnimRotationValue = mCurrentAnimRotationStartValue + rotation;
         notifyObservers();
     }
 
@@ -392,31 +400,44 @@ public class MasterImage implements RenderingRequestCaller {
         return mCurrentLookAnimation;
     }
 
+    public void resetAnimBitmap() {
+        mBitmapCache.cache(mPreviousImage);
+        mPreviousImage = null;
+    }
+
     public void onNewLook(FilterRepresentation newRepresentation) {
         getBitmapCache().cache(mPreviousImage);
         if (getFilteredImage() == null) {
             return;
         }
-        mPreviousImage = getBitmapCache().getBitmapCopy(getFilteredImage());
-        ValueAnimator animator = null;
+        if (mAnimator != null) {
+            mAnimator.cancel();
+            if (mCurrentLookAnimation == ROTATE_ANIMATION) {
+                mCurrentAnimRotationStartValue += 90;
+            }
+        } else {
+            mPreviousImage = getBitmapCache().getBitmapCopy(getFilteredImage());
+        }
+        mPreviousPreset = getPreviewBuffer().getConsumer().getPreset();
         if (newRepresentation instanceof FilterUserPresetRepresentation) {
             mCurrentLookAnimation = CIRCLE_ANIMATION;
-            animator = ValueAnimator.ofFloat(1, 20);
+            mAnimator = ValueAnimator.ofFloat(0, 20);
+            mAnimator.setDuration(500);
         }
         if (newRepresentation instanceof FilterRotateRepresentation) {
             mCurrentLookAnimation = ROTATE_ANIMATION;
-            animator = ValueAnimator.ofFloat(0, 90);
+            mAnimator = ValueAnimator.ofFloat(0, 90);
+            mAnimator.setDuration(500);
         }
         if (newRepresentation instanceof FilterMirrorRepresentation) {
             mCurrentLookAnimation = MIRROR_ANIMATION;
-            animator = ValueAnimator.ofFloat(1, 0, -1);
+            mAnimator = ValueAnimator.ofFloat(1, 0, -1);
+            mAnimator.setDuration(500);
         }
-        animator.setDuration(400);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (mCurrentLookAnimation == CIRCLE_ANIMATION) {
-                    Log.v(LOGTAG, "circle animation " + animation.getAnimatedValue());
                     setMaskScale((Float) animation.getAnimatedValue());
                 } else if (mCurrentLookAnimation == ROTATE_ANIMATION
                         || mCurrentLookAnimation == MIRROR_ANIMATION) {
@@ -425,7 +446,7 @@ public class MasterImage implements RenderingRequestCaller {
                 }
             }
         });
-        animator.addListener(new Animator.AnimatorListener() {
+        mAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 mOnGoingNewLookAnimation = true;
@@ -433,11 +454,9 @@ public class MasterImage implements RenderingRequestCaller {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mBitmapCache.cache(mPreviousImage);
-                mPreviousImage = null;
                 mOnGoingNewLookAnimation = false;
-                setMaskScale(1);
-                setAnimRotation(0);
+                mCurrentAnimRotationStartValue = 0;
+                mAnimator = null;
             }
 
             @Override
@@ -450,7 +469,7 @@ public class MasterImage implements RenderingRequestCaller {
 
             }
         });
-        animator.start();
+        mAnimator.start();
         notifyObservers();
     }
 
