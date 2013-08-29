@@ -114,7 +114,7 @@
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"ነጠብጣብ"</string>
     <string name="draw_clear" msgid="6728155515454921052">"አጽዳ"</string>
     <string name="color_border_size" msgid="8745307483517793073">"ውፍረት"</string>
-    <string name="color_border_corner_size" msgid="7637235159438869979">"የጥግ መጠን"</string>
+    <string name="color_border_corner_size" msgid="7637235159438869979">"የማዕዘን መጠን"</string>
     <string name="color_border_color" msgid="8765458414425980711">"ቀለም"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"አጽዳ"</string>
     <string name="color_pick_select" msgid="734312818059057394">"ብጁ ቀለም ይምረጡ"</string>
