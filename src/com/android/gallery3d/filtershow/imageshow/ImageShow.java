@@ -101,6 +101,7 @@ public class ImageShow extends View implements OnGestureListener,
     private static Bitmap sMask;
     private Paint mMaskPaint = new Paint();
     private Matrix mShaderMatrix = new Matrix();
+    private boolean mDidStartAnimation = false;
 
     private static Bitmap convertToAlphaMask(Bitmap b) {
         Bitmap a = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ALPHA_8);
@@ -302,7 +303,7 @@ public class ImageShow extends View implements OnGestureListener,
             return;
         }
 
-        Rect d = computeImageBounds(image);
+        Rect d = computeImageBounds(image.getWidth(), image.getHeight());
 
         if (updateBounds) {
             mImageBounds = d;
@@ -313,12 +314,14 @@ public class ImageShow extends View implements OnGestureListener,
 
         MasterImage master = MasterImage.getImage();
         canvas.save();
-        if (master.onGoingNewLookAnimation()) {
+        if (master.onGoingNewLookAnimation()
+                || mDidStartAnimation) {
+            mDidStartAnimation = true;
             if (master.getCurrentLookAnimation()
                     == MasterImage.CIRCLE_ANIMATION
                     && MasterImage.getImage().getPreviousImage() != null) {
                 float maskScale = MasterImage.getImage().getMaskScale();
-                if (maskScale > 1.0f) {
+                if (maskScale > 0.0f) {
                     float maskW = sMask.getWidth() / 2.0f;
                     float maskH = sMask.getHeight() / 2.0f;
                     float x = centerX - maskW * maskScale;
@@ -344,8 +347,11 @@ public class ImageShow extends View implements OnGestureListener,
                 }
             } else if (master.getCurrentLookAnimation()
                     == MasterImage.ROTATE_ANIMATION) {
-                Rect d2 = computeImageBounds(master.getPreviousImage());
-                float finalScale = d.width() / (float) d2.height();
+                Rect d1 = computeImageBounds(master.getPreviousImage().getHeight(),
+                        master.getPreviousImage().getWidth());
+                Rect d2 = computeImageBounds(master.getPreviousImage().getWidth(),
+                        master.getPreviousImage().getHeight());
+                float finalScale = d1.width() / (float) d2.height();
                 finalScale = (1.0f * (1.0f - master.getAnimFraction()))
                         + (finalScale * master.getAnimFraction());
                 canvas.rotate(master.getAnimRotationValue(), centerX, centerY);
@@ -391,11 +397,18 @@ public class ImageShow extends View implements OnGestureListener,
         } else {
             drawImage(canvas, image);
         }
+
+        if (!master.onGoingNewLookAnimation()
+                && mDidStartAnimation
+                && !master.getPreviousPreset().equals(master.getCurrentPreset())) {
+            mDidStartAnimation = false;
+            MasterImage.getImage().resetAnimBitmap();
+        }
         canvas.restore();
     }
 
     private void drawImage(Canvas canvas, Bitmap image) {
-        Rect d = computeImageBounds(image);
+        Rect d = computeImageBounds(image.getWidth(), image.getHeight());
         float scaleImageX = d.width() / (float) image.getWidth();
         float scaleImageY = d.height() / (float) image.getHeight();
         Matrix imageMatrix = new Matrix();
@@ -406,12 +419,12 @@ public class ImageShow extends View implements OnGestureListener,
         canvas.drawBitmap(image, imageMatrix, mPaint);
     }
 
-    private Rect computeImageBounds(Bitmap image) {
-        float scale = GeometryMathUtils.scale(image.getWidth(), image.getHeight(),
+    private Rect computeImageBounds(int imageWidth, int imageHeight) {
+        float scale = GeometryMathUtils.scale(imageWidth, imageHeight,
                 getWidth(), getHeight());
 
-        float w = image.getWidth() * scale;
-        float h = image.getHeight() * scale;
+        float w = imageWidth * scale;
+        float h = imageHeight * scale;
         float ty = (getHeight() - h) / 2.0f;
         float tx = (getWidth() - w) / 2.0f;
         return new Rect((int) tx + mShadowMargin,
