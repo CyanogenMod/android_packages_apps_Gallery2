@@ -32,6 +32,7 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
+import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
@@ -209,6 +210,7 @@ public class ProcessingService extends Service {
             mNeedsAlive = false;
             mSaving = true;
             handleSaveRequest(sourceUri, selectedUri, destinationFile, preset,
+                    MasterImage.getImage().getHighresImage(),
                     flatten, quality, sizeFactor);
         }
         return START_REDELIVER_INTENT;
@@ -227,8 +229,8 @@ public class ProcessingService extends Service {
     }
 
     public void handleSaveRequest(Uri sourceUri, Uri selectedUri,
-            File destinationFile, ImagePreset preset, boolean flatten,
-            int quality, float sizeFactor) {
+            File destinationFile, ImagePreset preset, Bitmap previewImage,
+            boolean flatten, int quality, float sizeFactor) {
         mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         mNotificationId++;
@@ -246,7 +248,7 @@ public class ProcessingService extends Service {
         // Process the image
 
         mImageSavingTask.saveImage(sourceUri, selectedUri, destinationFile,
-                preset, flatten, quality, sizeFactor);
+                preset, previewImage, flatten, quality, sizeFactor);
     }
 
     public void updateNotificationWithBitmap(Bitmap bitmap) {
