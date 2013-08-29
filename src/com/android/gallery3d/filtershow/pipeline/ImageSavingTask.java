@@ -37,6 +37,7 @@ public class ImageSavingTask extends ProcessingTask {
         boolean flatten;
         int quality;
         float sizeFactor;
+        Bitmap previewImage;
     }
 
     static class UpdateBitmap implements Update {
@@ -57,7 +58,8 @@ public class ImageSavingTask extends ProcessingTask {
     }
 
     public void saveImage(Uri sourceUri, Uri selectedUri,
-                          File destinationFile, ImagePreset preset, boolean flatten,
+                          File destinationFile, ImagePreset preset,
+                          Bitmap previewImage, boolean flatten,
                           int quality, float sizeFactor) {
         SaveRequest request = new SaveRequest();
         request.sourceUri = sourceUri;
@@ -67,6 +69,7 @@ public class ImageSavingTask extends ProcessingTask {
         request.flatten = flatten;
         request.quality = quality;
         request.sizeFactor = sizeFactor;
+        request.previewImage = previewImage;
         postRequest(request);
     }
 
@@ -75,6 +78,7 @@ public class ImageSavingTask extends ProcessingTask {
         Uri sourceUri = request.sourceUri;
         Uri selectedUri = request.selectedUri;
         File destinationFile = request.destinationFile;
+        Bitmap previewImage = request.previewImage;
         ImagePreset preset = request.preset;
         boolean flatten = request.flatten;
         // We create a small bitmap showing the result that we can
@@ -83,7 +87,7 @@ public class ImageSavingTask extends ProcessingTask {
         updateBitmap.bitmap = createNotificationBitmap(sourceUri, preset);
         postUpdate(updateBitmap);
         SaveImage saveImage = new SaveImage(mProcessingService, sourceUri,
-                selectedUri, destinationFile,
+                selectedUri, destinationFile, previewImage,
                 new SaveImage.Callback() {
                     @Override
                     public void onProgress(int max, int current) {
