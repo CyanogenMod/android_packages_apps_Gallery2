@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,17 +41,10 @@ import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.ImageFilterColorBorder;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
 
-public class EditorColorBorder extends ParametricEditor implements FilterView {
+public class EditorColorBorder extends ParametricEditor  {
     private static final String LOGTAG = "EditorColorBorder";
     public static final int ID = R.id.editorColorBorder;
 
-    int[] brushIcons = {
-            R.drawable.brush_flat,
-            R.drawable.brush_round,
-            R.drawable.brush_gauss,
-            R.drawable.brush_marker,
-            R.drawable.brush_spatter
-    };
 
     int[] mBasColors = {
             FilterColorBorderRepresentation.DEFAULT_MENU_COLOR1,
@@ -98,11 +92,13 @@ public class EditorColorBorder extends ParametricEditor implements FilterView {
                 if (mTabletUI != null) {
                     mTabletUI.setColorBorderRepresentation(cbRep);
                 }
-                return;
+
             }
-            cbRep.setPramMode(FilterColorBorderRepresentation.PARAM_COLOR);
-            mParameterString = mContext.getString(R.string.color_border_color);
-            control(cbRep.getCurrentParam(), mEditControl);
+            cbRep.setPramMode(FilterColorBorderRepresentation.PARAM_SIZE);
+            mParameterString = mContext.getString(R.string.color_border_size);
+            if (mEditControl != null) {
+                control(cbRep.getCurrentParam(), mEditControl);
+            }
         }
     }
 
@@ -176,6 +172,7 @@ public class EditorColorBorder extends ParametricEditor implements FilterView {
             ColorChooser c = (ColorChooser) mControl;
             c.setColorSet(mBasColors);
         }
+        updateText();
         mControl.updateUI();
         mView.invalidate();
     }
@@ -207,14 +204,5 @@ public class EditorColorBorder extends ParametricEditor implements FilterView {
         return null;
     }
 
-    @Override
-    public void computeIcon(int index, BitmapCaller caller) {
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), brushIcons[index]);
-        caller.available(bitmap);
-    }
-
-    public int getBrushIcon(int type) {
-        return brushIcons[type];
-    }
 
 }
