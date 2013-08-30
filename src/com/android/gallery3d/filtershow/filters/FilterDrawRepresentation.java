@@ -205,6 +205,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     public void useParametersFrom(FilterRepresentation a) {
         if (a instanceof FilterDrawRepresentation) {
             FilterDrawRepresentation representation = (FilterDrawRepresentation) a;
+            mParamColor.copyPalletFrom(representation.mParamColor);
             try {
                 if (representation.mCurrent != null) {
                     mCurrent = (StrokeData) representation.mCurrent.clone();
