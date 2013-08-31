@@ -174,7 +174,7 @@ public class MenuExecutor {
         mHandler.sendMessage(mHandler.obtainMessage(MSG_TASK_COMPLETE, result, 0, listener));
     }
 
-    public static void updateMenuOperation(Menu menu, int supported) {
+    public static void updateMenuOperation(Context context, Menu menu, int supported) {
         boolean supportDelete = (supported & MediaObject.SUPPORT_DELETE) != 0;
         boolean supportRotate = (supported & MediaObject.SUPPORT_ROTATE) != 0;
         boolean supportCrop = (supported & MediaObject.SUPPORT_CROP) != 0;
@@ -182,7 +182,8 @@ public class MenuExecutor {
         boolean supportMute = (supported & MediaObject.SUPPORT_MUTE) != 0;
         boolean supportShare = (supported & MediaObject.SUPPORT_SHARE) != 0;
         boolean supportSetAs = (supported & MediaObject.SUPPORT_SETAS) != 0;
-        boolean supportShowOnMap = (supported & MediaObject.SUPPORT_SHOW_ON_MAP) != 0;
+        boolean supportShowOnMap = (supported & MediaObject.SUPPORT_SHOW_ON_MAP) != 0 &
+                                   GalleryUtils.isGeolocationViewAvailable(context);
         boolean supportCache = (supported & MediaObject.SUPPORT_CACHE) != 0;
         boolean supportEdit = (supported & MediaObject.SUPPORT_EDIT) != 0;
         boolean supportInfo = (supported & MediaObject.SUPPORT_INFO) != 0;
