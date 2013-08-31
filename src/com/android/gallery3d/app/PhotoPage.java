@@ -832,7 +832,7 @@ public abstract class PhotoPage extends ActivityState implements
         }
 
         }
-        MenuExecutor.updateMenuOperation(menu, supportedOperations);
+        MenuExecutor.updateMenuOperation(mActivity.getAndroidContext(), menu, supportedOperations);
     }
 
     private boolean canDoSlideShow() {

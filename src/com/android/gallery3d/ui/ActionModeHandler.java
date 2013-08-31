@@ -415,7 +415,8 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             mMenuTask = null;
                             if (jc.isCancelled()) return;
                             // Disable all the operations when no item is selected
-                            MenuExecutor.updateMenuOperation(mMenu, 0);
+                            MenuExecutor.updateMenuOperation(
+                                    mActivity.getAndroidContext(), mMenu, 0);
                         }
                     });
                     return null;
@@ -453,7 +454,8 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                     public void run() {
                         mMenuTask = null;
                         if (jc.isCancelled()) return;
-                        MenuExecutor.updateMenuOperation(mMenu, operation);
+                        MenuExecutor.updateMenuOperation(
+                                mActivity.getAndroidContext(), mMenu, operation);
                         MenuExecutor.updateMenuForPanorama(mMenu,
                                 canSharePanoramas && supportCallback.mAllPanorama360,
                                 canSharePanoramas && supportCallback.mHasPanorama360);

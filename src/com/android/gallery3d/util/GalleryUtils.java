@@ -292,6 +292,33 @@ public class GalleryUtils {
         }
     }
 
+    public static boolean isGeolocationViewAvailable(Context context) {
+        // 1.- GMM with MapView
+        ComponentName gmmCompName = new ComponentName(MAPS_PACKAGE_NAME, MAPS_CLASS_NAME);
+        String gmmUri = formatLatitudeLongitude("http://maps.google.com/maps?f=q&q=(%f,%f)",
+                0.0d, 0.0d);
+        Intent gmmIntent = new Intent();
+        gmmIntent.setComponent(gmmCompName);
+        gmmIntent.setData(Uri.parse(gmmUri));
+        gmmIntent.setAction(Intent.ACTION_VIEW);
+
+        // 2.- Geolocation content provider
+        String geoUri = formatLatitudeLongitude("geo:%f,%f", 0.0d, 0.0d);
+        Intent geoIntent = new Intent();
+        geoIntent.setData(Uri.parse(geoUri));
+        geoIntent.setAction(Intent.ACTION_VIEW);
+
+        // Should be one of: gmm or geo content provider
+        return isIntentResolved(context, gmmIntent) || isIntentResolved(context, geoIntent);
+    }
+
+    private static boolean isIntentResolved(Context context, Intent intent) {
+        final PackageManager pckMgr = context.getPackageManager();
+        List<ResolveInfo> infos = pckMgr.queryIntentActivities (intent,
+                                       PackageManager.GET_RESOLVED_FILTER);
+        return infos != null && infos.size() > 0;
+    }
+
     public static void setViewPointMatrix(
             float matrix[], float x, float y, float z) {
         // The matrix is
