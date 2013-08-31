@@ -430,7 +430,8 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                     public void run() {
                         mMenuTask = null;
                         if (jc.isCancelled()) return;
-                        MenuExecutor.updateMenuOperation(mMenu, operation);
+                        MenuExecutor.updateMenuOperation(
+                                mActivity.getAndroidContext(), mMenu, operation);
                         MenuExecutor.updateMenuForPanorama(mMenu, supportCallback.mAllPanorama360,
                                 supportCallback.mHasPanorama360);
                         if (mSharePanoramaMenuItem != null) {

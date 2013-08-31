@@ -789,7 +789,7 @@ public class PhotoPage extends ActivityState implements
         } else if (!mHaveImageEditor) {
             supportedOperations &= ~MediaObject.SUPPORT_EDIT;
         }
-        MenuExecutor.updateMenuOperation(menu, supportedOperations);
+        MenuExecutor.updateMenuOperation(mActivity.getAndroidContext(), menu, supportedOperations);
         mCurrentPhoto.getPanoramaSupport(mUpdatePanoramaMenuItemsCallback);
     }
 
