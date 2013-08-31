@@ -160,6 +160,9 @@ public class Util {
     // Do not change the focus mode when TTF is used
     private static boolean sNoFocusModeChangeForTouch;
 
+    // Disable touch snapshot in video recording
+    private static boolean sDisableTouchSnapshot;
+
     private Util() {
     }
 
@@ -188,6 +191,8 @@ public class Util {
 
         sNoFocusModeChangeForTouch = context.getResources().getBoolean(
                 R.bool.useContinuosFocusForTouch);
+
+        sDisableTouchSnapshot = context.getResources().getBoolean(R.bool.disableTouchSnapshot);
 
     }
 
@@ -224,6 +229,10 @@ public class Util {
 
     public static boolean noFocusModeChangeForTouch() {
         return sNoFocusModeChangeForTouch;
+    }
+
+    public static boolean disableTouchSnapshot() {
+        return sDisableTouchSnapshot;
     }
 
     // Rotates the bitmap by the specified degree.
