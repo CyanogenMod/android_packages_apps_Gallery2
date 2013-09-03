@@ -28,6 +28,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.android.gallery3d.app.Log;
 import com.android.gallery3d.filtershow.editors.EditorStraighten;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
@@ -175,12 +176,25 @@ public class ImageStraighten extends ImageShow {
 
     private void updateCurrentCrop(Matrix m, GeometryHolder h, RectF tmp, int imageWidth,
             int imageHeight, int viewWidth, int viewHeight) {
+        tmp.set(0, 0, imageHeight, imageWidth);
+        m.mapRect(tmp);
+        float top = tmp.top;
+        float bottom = tmp.bottom;
+        float left = tmp.left;
+        float right = tmp.right;
+        m.mapRect(tmp);
+        int iw,ih;
         if (GeometryMathUtils.needsDimensionSwap(h.rotation)) {
             tmp.set(0, 0, imageHeight, imageWidth);
+            iw = imageHeight;
+            ih = imageWidth;
         } else {
             tmp.set(0, 0, imageWidth, imageHeight);
+            iw = imageWidth;
+            ih = imageHeight;
         }
-        float scale = GeometryMathUtils.scale(imageWidth, imageHeight, viewWidth, viewHeight);
+        float scale = GeometryMathUtils.scale(iw, ih, viewWidth, viewHeight);
+        scale *= GeometryMathUtils.SHOW_SCALE;
         GeometryMathUtils.scaleRect(tmp, scale);
         getUntranslatedStraightenCropBounds(tmp, mAngle);
         tmp.offset(viewWidth / 2f - tmp.centerX(), viewHeight / 2f - tmp.centerY());

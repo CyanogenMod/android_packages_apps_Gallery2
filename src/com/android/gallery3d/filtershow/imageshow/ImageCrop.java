@@ -282,6 +282,22 @@ public class ImageCrop extends ImageShow {
             // Scale min side and tolerance by display matrix scale factor
             mCropObj.setMinInnerSideSize(mDisplayMatrixInverse.mapRadius(mMinSideSize));
             mCropObj.setTouchTolerance(mDisplayMatrixInverse.mapRadius(mTouchTolerance));
+            // drive Crop engine to clamp to crop bounds
+            int[] sides = {CropObject.MOVE_TOP,
+                    CropObject.MOVE_BOTTOM,
+                    CropObject.MOVE_LEFT,
+                    CropObject.MOVE_RIGHT};
+            int delta = Math.min(canvas.getWidth(), canvas.getHeight()) / 4;
+            int[] dy = {delta, -delta, 0, 0};
+            int[] dx = {0, 0, delta, -delta};
+
+            for (int i = 0; i < sides.length; i++) {
+                mCropObj.selectEdge(sides[i]);
+
+                mCropObj.moveCurrentSelection(dx[i], dy[i]);
+                mCropObj.moveCurrentSelection(-dx[i], -dy[i]);
+            }
+            mCropObj.selectEdge(CropObject.MOVE_NONE);
         }
         // Draw actual bitmap
         mPaint.reset();
