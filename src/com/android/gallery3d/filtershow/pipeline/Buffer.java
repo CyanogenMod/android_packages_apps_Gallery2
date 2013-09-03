@@ -33,9 +33,7 @@ public class Buffer {
     public Buffer(Bitmap bitmap) {
         RenderScript rs = CachingPipeline.getRenderScriptContext();
         if (bitmap != null) {
-            BitmapCache cache = MasterImage.getImage().getBitmapCache();
-            cache.cache(mBitmap);
-            mBitmap = cache.getBitmapCopy(bitmap);
+            mBitmap = bitmap;
         }
         if (mUseAllocation) {
             // TODO: recreate the allocation when the RS context changes

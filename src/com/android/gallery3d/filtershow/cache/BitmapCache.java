@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 import com.android.gallery3d.filtershow.pipeline.Buffer;
+import com.android.gallery3d.filtershow.pipeline.CacheProcessing;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -31,6 +32,12 @@ public class BitmapCache {
             mBitmapCache = new HashMap<Long, ArrayList<WeakReference<Bitmap>>>();
     private final int mMaxItemsPerKey = 4;
 
+    private CacheProcessing mCacheProcessing;
+
+    public void setCacheProcessing(CacheProcessing cache) {
+        mCacheProcessing = cache;
+    }
+
     public void cache(Buffer buffer) {
         if (buffer == null) {
             return;
@@ -41,6 +48,10 @@ public class BitmapCache {
 
     public synchronized void cache(Bitmap bitmap) {
         if (bitmap == null) {
+            return;
+        }
+        if (mCacheProcessing != null && mCacheProcessing.contains(bitmap)) {
+            Log.e(LOGTAG, "Trying to cache a bitmap still used in the pipeline");
             return;
         }
         Long key = calcKey(bitmap.getWidth(), bitmap.getHeight());
