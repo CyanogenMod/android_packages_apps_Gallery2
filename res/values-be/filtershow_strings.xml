@@ -50,6 +50,8 @@
     <string name="unsaved" msgid="8704442449002374375">"Існуюць незахаваныя змяненні ў гэтай выяве."</string>
     <string name="save_before_exit" msgid="2680660633675916712">"Жадаеце захавацца перад выхадам?"</string>
     <string name="save_and_exit" msgid="3628425023766687419">"Захаваць і выйсці"</string>
+    <!-- no translation found for save_and_processing (6371565035837463194) -->
+    <skip />
     <string name="exit" msgid="242642957038770113">"Выйсці"</string>
     <string name="history" msgid="455767361472692409">"Гісторыя"</string>
     <string name="reset" msgid="9013181350779592937">"Скінуць"</string>
@@ -84,6 +86,16 @@
     <string name="highlight_recovery" msgid="8262208470735204243">"Блікі"</string>
     <string name="curvesRGB" msgid="915010781090477550">"Пэндзаль"</string>
     <string name="vignette" msgid="934721068851885390">"Віньетка"</string>
+    <!-- no translation found for vignette_main (6046495605390665423) -->
+    <skip />
+    <!-- no translation found for vignette_exposure (6862058227309534094) -->
+    <skip />
+    <!-- no translation found for vignette_saturation (1617055207565719771) -->
+    <skip />
+    <!-- no translation found for vignette_contrast (955732121756799897) -->
+    <skip />
+    <!-- no translation found for vignette_falloff (690918055030064199) -->
+    <skip />
     <string name="redeye" msgid="4508883127049472069">"Чырвонае вока"</string>
     <string name="imageDraw" msgid="6918552177844486656">"Намаляваць"</string>
     <string name="straighten" msgid="26025591664983528">"Выраўнаваць"</string>
