@@ -70,4 +70,9 @@
     <!-- The tips of trimming video -->
     <string name="fail_trim">This video file can not be trimmed</string>
     <string name="can_not_trim">Only mp4 files can be trimmed</string>
+
+    <!-- Red eye flash mode title -->
+    <string name="pref_camera_flashmode_entry_redeye">Red eye</string>
+
+    <string name="pref_camera_flashmode_label_redeye">RED EYE</string>
 </resources>
