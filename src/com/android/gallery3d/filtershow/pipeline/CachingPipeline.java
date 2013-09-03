@@ -388,7 +388,6 @@ public class CachingPipeline implements PipelineInterface {
         Vector<FilterRepresentation> filters = preset.getFilters();
         Bitmap result = mCachedProcessing.process(mOriginalBitmap, filters, mEnvironment);
         buffer.setProducer(result);
-        mEnvironment.cache(result);
     }
 
     public synchronized void computeOld(SharedBuffer buffer, ImagePreset preset, int type) {
