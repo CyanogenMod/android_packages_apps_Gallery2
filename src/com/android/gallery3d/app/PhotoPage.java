@@ -35,6 +35,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.DetailsHelper.DetailsSource;
+import com.android.gallery3d.ui.GLRootView;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.MenuExecutor;
 import com.android.gallery3d.ui.PhotoView;
@@ -179,6 +181,8 @@ public abstract class PhotoPage extends ActivityState implements
 
     private final MyMenuVisibilityListener mMenuVisibilityListener =
             new MyMenuVisibilityListener();
+
+    private int mLastSystemUiVis = 0;
 
     private final PanoramaSupportCallback mUpdatePanoramaMenuItemsCallback = new PanoramaSupportCallback() {
         @Override
@@ -542,6 +546,19 @@ public abstract class PhotoPage extends ActivityState implements
                 mBottomControls = new PhotoPageBottomControls(this, mActivity, galleryRoot);
             }
         }
+
+        ((GLRootView) mActivity.getGLRoot()).setOnSystemUiVisibilityChangeListener(
+                new View.OnSystemUiVisibilityChangeListener() {
+                @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        int diff = mLastSystemUiVis ^ visibility;
+                        mLastSystemUiVis = visibility;
+                        if ((diff & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
+                                && (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            showBars();
+                        }
+                    }
+                });
     }
 
     @Override
