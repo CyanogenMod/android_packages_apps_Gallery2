@@ -41,6 +41,7 @@
     <string name="unsaved" msgid="8704442449002374375">"Ada perubahan yang belum tersimpan pada gambar ini."</string>
     <string name="save_before_exit" msgid="2680660633675916712">"Ingin menyimpan sebelum keluar?"</string>
     <string name="save_and_exit" msgid="3628425023766687419">"Simpan dan Keluar"</string>
+    <string name="save_and_processing" msgid="6371565035837463194">"Memproses gambar resolusi penuh..."</string>
     <string name="exit" msgid="242642957038770113">"Keluar"</string>
     <string name="history" msgid="455767361472692409">"Riwayat"</string>
     <string name="reset" msgid="9013181350779592937">"Setel Ulang"</string>
@@ -75,6 +76,11 @@
     <string name="highlight_recovery" msgid="8262208470735204243">"Sorotan"</string>
     <string name="curvesRGB" msgid="915010781090477550">"Kurva"</string>
     <string name="vignette" msgid="934721068851885390">"Vinyet"</string>
+    <string name="vignette_main" msgid="6046495605390665423">"Vinyet"</string>
+    <string name="vignette_exposure" msgid="6862058227309534094">"Pencahayaan"</string>
+    <string name="vignette_saturation" msgid="1617055207565719771">"Saturasi"</string>
+    <string name="vignette_contrast" msgid="955732121756799897">"Kontras"</string>
+    <string name="vignette_falloff" msgid="690918055030064199">"Falloff"</string>
     <string name="redeye" msgid="4508883127049472069">"Mata Merah"</string>
     <string name="imageDraw" msgid="6918552177844486656">"Gambar"</string>
     <string name="straighten" msgid="26025591664983528">"Luruskan"</string>
