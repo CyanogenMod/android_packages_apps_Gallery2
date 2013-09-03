@@ -227,4 +227,7 @@
     <string name="pref_camera_burst_entry_15">15 shots</string>
     <string name="pref_camera_burst_entry_20">20 shots</string>
 
+    <!-- Red eye flash mode title -->
+    <string name="pref_camera_flashmode_entry_redeye">Red eye</string>
+    <string name="pref_camera_flashmode_label_redeye">RED EYE</string>
 </resources>
