@@ -168,4 +168,7 @@ public class FilterEnvironment {
         generalParameters.put(id, value);
     }
 
+    public BitmapCache getBimapCache() {
+        return mBitmapCache;
+    }
 }

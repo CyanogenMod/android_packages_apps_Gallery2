@@ -119,6 +119,8 @@ public class CacheProcessing {
             return environment.getBitmapCopy(originalBitmap);
         }
 
+        environment.getBimapCache().setCacheProcessing(this);
+
         if (DEBUG) {
             displayFilters(filters);
         }
@@ -145,9 +147,9 @@ public class CacheProcessing {
             if (similar) {
                 similarUpToIndex = i;
             } else {
-                environment.cache(cacheStep.cache);
                 mSteps.remove(i);
                 mSteps.insertElementAt(newStep, i);
+                environment.cache(cacheStep.cache);
             }
         }
         if (DEBUG) {
@@ -171,6 +173,7 @@ public class CacheProcessing {
         }
 
         Bitmap originalCopy = null;
+        int lastPositionCached = -1;
         for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
             if (i == -1 || cacheBitmap == null) {
                 cacheBitmap = environment.getBitmapCopy(originalBitmap);
@@ -194,6 +197,7 @@ public class CacheProcessing {
                 cacheBitmap = environment.getBitmapCopy(cacheBitmap);
                 cacheBitmap = step.apply(environment, cacheBitmap);
                 step.cache = cacheBitmap;
+                lastPositionCached = i;
             }
         }
         environment.cache(originalCopy);
@@ -214,7 +218,19 @@ public class CacheProcessing {
             Log.v(LOGTAG, "cleanup done...");
             displayNbBitmapsInCache();
         }
+        if (lastPositionCached != -1) {
+            mSteps.elementAt(lastPositionCached).cache = null;
+        }
         return cacheBitmap;
+    }
+
+    public boolean contains(Bitmap bitmap) {
+        for (int i = 0; i < mSteps.size(); i++) {
+            if (mSteps.elementAt(i).cache == bitmap) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void displayFilters(Vector<FilterRepresentation> filters) {
