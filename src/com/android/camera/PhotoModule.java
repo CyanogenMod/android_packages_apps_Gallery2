@@ -1372,6 +1372,10 @@ public class PhotoModule
     }
 
     private void resizeForPreviewAspectRatio() {
+        if ( mCameraDevice == null || mParameters == null) {
+            Log.e(TAG, "Camera not yet initialized");
+            return;
+        }
         setPreviewFrameLayoutCameraOrientation();
         Size size = mParameters.getPictureSize();
         Log.e(TAG,"Width = "+ size.width+ "Height = "+size.height);
