@@ -41,6 +41,7 @@
     <string name="unsaved" msgid="8704442449002374375">"Det er ulagrede endringer i dette bildet."</string>
     <string name="save_before_exit" msgid="2680660633675916712">"Vil du lagre før du avslutter?"</string>
     <string name="save_and_exit" msgid="3628425023766687419">"Lagre og avslutt"</string>
+    <string name="save_and_processing" msgid="6371565035837463194">"Behandler bilde i full oppløsning ..."</string>
     <string name="exit" msgid="242642957038770113">"Avslutt"</string>
     <string name="history" msgid="455767361472692409">"Logg"</string>
     <string name="reset" msgid="9013181350779592937">"Tilbakestill"</string>
@@ -75,6 +76,11 @@
     <string name="highlight_recovery" msgid="8262208470735204243">"Lyse punkter"</string>
     <string name="curvesRGB" msgid="915010781090477550">"Kurver"</string>
     <string name="vignette" msgid="934721068851885390">"Vignettering"</string>
+    <string name="vignette_main" msgid="6046495605390665423">"Vignett"</string>
+    <string name="vignette_exposure" msgid="6862058227309534094">"Eksponering"</string>
+    <string name="vignette_saturation" msgid="1617055207565719771">"Fargemetning"</string>
+    <string name="vignette_contrast" msgid="955732121756799897">"Kontrast"</string>
+    <string name="vignette_falloff" msgid="690918055030064199">"Falloff"</string>
     <string name="redeye" msgid="4508883127049472069">"Røde øyne"</string>
     <string name="imageDraw" msgid="6918552177844486656">"Tegn"</string>
     <string name="straighten" msgid="26025591664983528">"Rett opp"</string>
