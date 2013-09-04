@@ -32,6 +32,7 @@ import android.view.ViewStub;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.Toast;
+import android.graphics.Canvas;
 
 import com.android.camera.CameraPreference.OnPreferenceChangedListener;
 import com.android.camera.FocusOverlayManager.FocusUI;
@@ -690,6 +691,22 @@ public class PhotoUI implements PieListener,
     @Override
     public void onFaceDetection(Face[] faces, android.hardware.Camera camera) {
         mFaceView.setFaces(faces);
+    }
+
+
+    public boolean onScaleStepResize(boolean direction)
+    {
+        if(mGestures != null){
+            return mGestures.onScaleStepResize(direction);
+        }
+        return false;
+    }
+
+    public void onScaleChangeDraw(Canvas canvas)
+    {
+        if(mGestures != null){
+            mGestures.onScaleChangeDraw(canvas);
+        }
     }
 
     @Override
