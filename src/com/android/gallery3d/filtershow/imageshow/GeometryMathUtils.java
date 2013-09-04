@@ -22,6 +22,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
@@ -38,6 +39,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public final class GeometryMathUtils {
+    private static final String TAG = "GeometryMathUtils";
+    public static final float SHOW_SCALE = .9f;
+
     private GeometryMathUtils() {};
 
     // Holder class for Geometry data.
@@ -434,7 +438,15 @@ public final class GeometryMathUtils {
 
     public static Matrix getFullGeometryToScreenMatrix(GeometryHolder holder, int bitmapWidth,
             int bitmapHeight, int viewWidth, int viewHeight) {
-        float scale = GeometryMathUtils.scale(bitmapWidth, bitmapHeight, viewWidth, viewHeight);
+        int bh = bitmapHeight;
+        int bw = bitmapWidth;
+        if (GeometryMathUtils.needsDimensionSwap(holder.rotation)) {
+            bh = bitmapWidth;
+            bw = bitmapHeight;
+        }
+        float scale = GeometryMathUtils.scale(bw, bh, viewWidth, viewHeight);
+        scale *= SHOW_SCALE;
+        float s = Math.min(viewWidth / (float) bitmapWidth, viewHeight / (float) bitmapHeight);
         Matrix m = getFullGeometryMatrix(holder, bitmapWidth, bitmapHeight);
         m.postScale(scale, scale);
         m.postTranslate(viewWidth / 2f, viewHeight / 2f);
