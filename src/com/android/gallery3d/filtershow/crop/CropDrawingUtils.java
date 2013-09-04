@@ -54,6 +54,24 @@ public abstract class CropDrawingUtils {
         canvas.drawRect(bounds, p);
     }
 
+    public static void drawShade(Canvas canvas, RectF bounds) {
+        int w = canvas.getWidth();
+        int h = canvas.getHeight();
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.FILL);
+        p.setColor(Color.BLACK & 0x88000000);
+
+        RectF r = new RectF();
+        r.set(0,0,w,bounds.top);
+        canvas.drawRect(r, p);
+        r.set(0,bounds.top,bounds.left,h);
+        canvas.drawRect(r, p);
+        r.set(bounds.left,bounds.bottom,w,h);
+        canvas.drawRect(r, p);
+        r.set(bounds.right,bounds.top,w,bounds.bottom);
+        canvas.drawRect(r, p);
+    }
+
     public static void drawIndicator(Canvas canvas, Drawable indicator, int indicatorSize,
             float centerX, float centerY) {
         int left = (int) centerX - indicatorSize / 2;

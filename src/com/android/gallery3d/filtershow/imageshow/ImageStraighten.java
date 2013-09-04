@@ -28,7 +28,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.android.gallery3d.app.Log;
+import com.android.gallery3d.filtershow.crop.CropDrawingUtils;
 import com.android.gallery3d.filtershow.editors.EditorStraighten;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
@@ -44,6 +44,7 @@ public class ImageStraighten extends ImageShow {
     private float mBaseAngle = 0;
     private float mAngle = 0;
     private float mInitialAngle = 0;
+    private static final int NBLINES = 16;
     private boolean mFirstDrawSinceUp = false;
     private EditorStraighten mEditorStraighten;
     private FilterStraightenRepresentation mLocalRep = new FilterStraightenRepresentation();
@@ -243,15 +244,15 @@ public class ImageStraighten extends ImageShow {
             mLocalRep.setStraighten(mAngle);
             mFirstDrawSinceUp = false;
         }
-
+        CropDrawingUtils.drawShade(canvas, mDrawRect);
         // Draw the grid
         if (mState == MODES.MOVE) {
             canvas.save();
             canvas.clipRect(mDrawRect);
-            int n = 16;
-            float step = viewWidth / n;
+
+            float step = Math.max(viewWidth,viewWidth) / NBLINES;
             float p = 0;
-            for (int i = 1; i < n; i++) {
+            for (int i = 1; i < NBLINES; i++) {
                 p = i * step;
                 mPaint.setAlpha(60);
                 canvas.drawLine(p, 0, p, viewHeight, mPaint);
@@ -264,6 +265,8 @@ public class ImageStraighten extends ImageShow {
         mPaint.setStyle(Style.STROKE);
         mPaint.setStrokeWidth(3);
         mDrawPath.reset();
+
+
         mDrawPath.addRect(mDrawRect, Path.Direction.CW);
         canvas.drawPath(mDrawPath, mPaint);
     }

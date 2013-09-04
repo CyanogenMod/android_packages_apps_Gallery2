@@ -313,6 +313,7 @@ public class ImageCrop extends ImageShow {
         if (mDisplayCropMatrix.mapRect(mScreenCropBounds)) {
             // Draw crop rect and markers
             CropDrawingUtils.drawCropRect(canvas, mScreenCropBounds);
+            CropDrawingUtils.drawShade(canvas, mScreenCropBounds);
             CropDrawingUtils.drawRuleOfThird(canvas, mScreenCropBounds);
             CropDrawingUtils.drawIndicators(canvas, mCropIndicator, mIndicatorSize,
                     mScreenCropBounds, mCropObj.isFixedAspect(),
