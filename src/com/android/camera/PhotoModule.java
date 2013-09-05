@@ -1592,7 +1592,24 @@ public class PhotoModule
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_UP:
+            if (mParameters.isZoomSupported()) {
+                int value = mZoomValue + 1;
+                int zoomMax = mParameters.getMaxZoom();
+                if (value <= zoomMax) {
+                    onZoomChanged(value);
+                }
+                return true;
+            }
+            return false;
         case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (mParameters.isZoomSupported()) {
+                int value = mZoomValue - 1;
+                if (value >= 0) {
+                    onZoomChanged(value);
+                }
+                return true;
+            }
+            return false;
         case KeyEvent.KEYCODE_FOCUS:
             if (mActivity.isInCameraApp() && mFirstTimeInitialized) {
                 if (event.getRepeatCount() == 0) {
@@ -1627,8 +1644,7 @@ public class PhotoModule
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_UP:
         case KeyEvent.KEYCODE_VOLUME_DOWN:
-            if (mActivity.isInCameraApp() && mFirstTimeInitialized) {
-                onShutterButtonClick();
+            if (mParameters.isZoomSupported()) {
                 return true;
             }
             return false;
