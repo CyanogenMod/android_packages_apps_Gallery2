@@ -14,38 +14,42 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/default_background"
-   >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorOpacityView
-            android:id="@+id/colorOpacityView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:id="@+id/RelativeLayout1"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@color/default_background">
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorSVRectView
-        android:id="@+id/colorRectView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:layout_marginRight="1dp" />
+        <com.android.gallery3d.filtershow.colorpicker.ColorOpacityView
+                android:id="@+id/colorOpacityView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorHueView
-        android:id="@+id/ColorHueView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <com.android.gallery3d.filtershow.colorpicker.ColorSVRectView
+                android:id="@+id/colorRectView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:layout_marginRight="1dp"/>
 
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/color_pick_select"  />
+        <com.android.gallery3d.filtershow.colorpicker.ColorHueView
+                android:id="@+id/ColorHueView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
+        <Button
+                android:id="@+id/btnSelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/color_pick_select"
+                android:layout_margin="14dp"/>
+
+    </LinearLayout>
 </LinearLayout>

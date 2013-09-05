@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ToggleButton;
@@ -44,6 +45,7 @@ public class ColorPickerDialog extends Dialog   {
         int height = metrics.heightPixels*8/10;
         int width = metrics.widthPixels*8/10;
         getWindow().setLayout(width, height);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.filtershow_color_picker);
         mColorHueView = (ColorHueView) findViewById(R.id.ColorHueView);
         mColorSVRectView = (ColorSVRectView) findViewById(R.id.colorRectView);
