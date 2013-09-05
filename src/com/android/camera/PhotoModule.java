@@ -148,6 +148,7 @@ public class PhotoModule
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
 
     private int mZoomValue;  // The current zoom value.
+    private int mZoomMax;
 
     private Parameters mInitialParams;
     private boolean mFocusAreaSupported;
@@ -1592,7 +1593,23 @@ public class PhotoModule
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_UP:
+            if (mParameters.isZoomSupported()) {
+                int value = mZoomValue + 1;
+                if (value <= mZoomMax) {
+                    onZoomChanged(value);
+                }
+                return true;
+            }
+            return false;
         case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (mParameters.isZoomSupported()) {
+                int value = mZoomValue - 1;
+                if (value >= 0) {
+                    onZoomChanged(value);
+                }
+                return true;
+            }
+            return false;
         case KeyEvent.KEYCODE_FOCUS:
             if (mActivity.isInCameraApp() && mFirstTimeInitialized) {
                 if (event.getRepeatCount() == 0) {
@@ -1627,8 +1644,7 @@ public class PhotoModule
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_UP:
         case KeyEvent.KEYCODE_VOLUME_DOWN:
-            if (mActivity.isInCameraApp() && mFirstTimeInitialized) {
-                onShutterButtonClick();
+            if (mParameters.isZoomSupported()) {
                 return true;
             }
             return false;
@@ -1776,6 +1792,7 @@ public class PhotoModule
         // Set zoom.
         if (mParameters.isZoomSupported()) {
             mParameters.setZoom(mZoomValue);
+            mZoomMax = mParameters.getMaxZoom();
         }
     }
 

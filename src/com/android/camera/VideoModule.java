@@ -185,6 +185,7 @@ public class VideoModule implements CameraModule,
     private int mOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;
 
     private int mZoomValue;  // The current zoom value.
+    private int mZoomMax;
 
     private boolean mRestoreFlash;  // This is used to check if we need to restore the flash
                                     // status when going back from gallery.
@@ -1074,6 +1075,24 @@ public class VideoModule implements CameraModule,
             case KeyEvent.KEYCODE_MENU:
                 if (mMediaRecorderRecording) return true;
                 break;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (mParameters.isZoomSupported()) {
+                    int value = mZoomValue + 1;
+                    if (value <= mZoomMax) {
+                        onZoomChanged(value);
+                    }
+                    return true;
+                }
+                return false;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (mParameters.isZoomSupported()) {
+                    int value = mZoomValue - 1;
+                    if (value >= 0) {
+                        onZoomChanged(value);
+                    }
+                    return true;
+                }
+                return false;
         }
         return false;
     }
@@ -1081,6 +1100,12 @@ public class VideoModule implements CameraModule,
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (mParameters.isZoomSupported()) {
+                    return true;
+                }
+                return false;
             case KeyEvent.KEYCODE_CAMERA:
                 mUI.pressShutter(false);
                 return true;
@@ -1866,6 +1891,7 @@ public class VideoModule implements CameraModule,
         // Set zoom.
         if (mParameters.isZoomSupported()) {
             mParameters.setZoom(mZoomValue);
+            mZoomMax = mParameters.getMaxZoom();
         }
 
         // Set continuous autofocus.
