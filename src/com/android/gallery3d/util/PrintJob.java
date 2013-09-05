@@ -59,10 +59,8 @@ public class PrintJob {
 
                         mAttributes = newPrintAttributes;
 
-                        PrintDocumentInfo info = new PrintDocumentInfo
-                                .Builder(jobName, newPrintAttributes)
+                        PrintDocumentInfo info = new PrintDocumentInfo.Builder(jobName)
                                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
-                                .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
                                 .setPageCount(1)
                                 .create();
 
@@ -81,61 +79,17 @@ public class PrintJob {
                             RectF content = new RectF(page.getInfo().getContentSize());
                             Matrix matrix = new Matrix();
 
-                            // Handle orientation.
-                            if (mAttributes.getOrientation()
-                                    == PrintAttributes.ORIENTATION_LANDSCAPE) {
-                                // Compute and apply scale based on fitting mode.
-                                final float scale;
-                                switch (mAttributes.getFittingMode()) {
-                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FILL: {
-                                        scale = Math.max(content.width() / bitmap.getHeight(),
-                                                content.height() / bitmap.getWidth());
-                                    } break;
+                            // Compute and apply scale to fill the page.
+                            float scale = Math.max(content.width() / bitmap.getWidth(),
+                                            content.height() / bitmap.getHeight());
+                            matrix.postScale(scale, scale);
 
-                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FIT: {
-                                        scale = Math.min(content.width() / bitmap.getHeight(),
-                                                content.height() / bitmap.getWidth());
-                                    } break;
-
-                                    default: {
-                                        scale = 1.0f;
-                                    }
-                                }
-                                matrix.postScale(scale, scale);
-
-                                // Apply the rotation.
-                                matrix.postRotate(90);
-                                matrix.postTranslate(bitmap.getHeight() * scale, 0);
-
-                                // Center the content.
-                                final float translateX = (content.width()
-                                        - bitmap.getHeight() * scale) / 2;
-                                final float translateY = (content.height()
-                                        - bitmap.getWidth() * scale) / 2;
-                                matrix.postTranslate(translateX, translateY);
-                            } else {
-                                // Compute and apply scale based on fitting mode.
-                                float scale = 1.0f;
-                                switch (mAttributes.getFittingMode()) {
-                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FILL: {
-                                        scale = Math.max(content.width() / bitmap.getWidth(),
-                                                content.height() / bitmap.getHeight());
-                                    } break;
-
-                                    case PrintAttributes.FITTING_MODE_SCALE_TO_FIT: {
-                                        scale = Math.min(content.width() / bitmap.getWidth(),
-                                                content.height() / bitmap.getHeight());
-                                    } break;
-                                }
-                                matrix.postScale(scale, scale);
-
-                                // Center the content.
-                                final float translateX = (content.width()
-                                        - bitmap.getWidth() * scale) / 2;
-                                final float translateY = (content.height()
-                                        - bitmap.getHeight() * scale) / 2;
-                                matrix.postTranslate(translateX, translateY);
-                            }
+                            // Center the content.
+                            final float translateX = (content.width()
+                                    - bitmap.getWidth() * scale) / 2;
+                            final float translateY = (content.height()
+                                    - bitmap.getHeight() * scale) / 2;
+                            matrix.postTranslate(translateX, translateY);
 
                             // Draw the bitmap.
                             page.getCanvas().drawBitmap(bitmap, matrix, null);
@@ -157,10 +111,9 @@ public class PrintJob {
                                     /* ignore */
                                 }
                             }
-                            writeResultCallback.onWriteFailed(null);
                         }
                     }
-                }, new PrintAttributes.Builder().create());
+                }, null);
     }
 
     public static void printBitmapAtUri(Context context, String imagePrint, Uri uri) {
