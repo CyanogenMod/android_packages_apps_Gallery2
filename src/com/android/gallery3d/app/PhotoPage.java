@@ -794,7 +794,8 @@ public abstract class PhotoPage extends ActivityState implements
         mMediaSet.enumerateMediaItems(new MediaSet.ItemConsumer() {
             @Override
             public void consume(int index, MediaItem item) {
-                if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+                if (item != null
+                        && item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
                     count[0]++;
                 }
             }
