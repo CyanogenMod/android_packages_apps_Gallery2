@@ -108,36 +108,26 @@ public class EclipseControl {
         return (!mImageBounds.contains((int) x1, (int) y1));
     }
 
-    public void actionDown2(float x, float y, int iw, int ih, Oval oval) {
+    public void actionDown(float x, float y, Oval oval)  {
         float[] point = new float[]{
                 x, y};
         mScrToImg.mapPoints(point);
         mDownX = point[0];
         mDownY = point[1];
-        mDownCenterX = oval.getCenterX() * iw;
-        mDownCenterY = oval.getCenterY() * ih;
-        mDownRadiusX = oval.getRadiusX() * iw;
-        mDownRadiusY = oval.getRadiusY() * ih;
+        mDownCenterX = oval.getCenterX();
+        mDownCenterY = oval.getCenterY();
+        mDownRadiusX = oval.getRadiusX();
+        mDownRadiusY = oval.getRadiusY();
     }
 
-    public void actionDown(float x, float y, Oval oval) {
-        actionDown2(x, y, 1, 1, oval);
-    }
 
     public void actionMove(int handle, float x, float y, Oval oval) {
-        actionMove2(handle, x, y, 1, 1, oval);
-    }
-
-    public void actionMove2(int handle, float x, float y, int w, int h, Oval oval) {
         float[] point = new float[]{
                 x, y};
         mScrToImg.mapPoints(point);
         x = point[0];
         y = point[1];
-        if (w == 0) {
-            w = 1;
-            h = 1;
-        }
+
         // Test if the matrix is swapping x and y
         point[0] = 0;
         point[1] = 1;
@@ -152,7 +142,7 @@ public class EclipseControl {
                 if (centerIsOutside(x - ctrdx, y - ctrdy)) {
                     break;
                 }
-                oval.setCenter((x - ctrdx) / w, (y - ctrdy) / h);
+                oval.setCenter((x - ctrdx), (y - ctrdy));
                 // setRepresentation(mVignetteRep);
                 break;
             case HAN_NORTH:
@@ -160,10 +150,10 @@ public class EclipseControl {
             case HAN_SOUTH:
                 if (swapxy) {
                     float raddx = mDownRadiusY - Math.abs(mDownX - mDownCenterY);
-                    oval.setRadiusY(Math.abs(x - oval.getCenterY() * h + sign * raddx)/h);
+                    oval.setRadiusY(Math.abs(x - oval.getCenterY() + sign * raddx));
                 } else {
                     float raddy = mDownRadiusY - Math.abs(mDownY - mDownCenterY);
-                    oval.setRadiusY(Math.abs(y - oval.getCenterY() * h + sign * raddy)/h);
+                    oval.setRadiusY(Math.abs(y - oval.getCenterY() + sign * raddy));
                 }
                 break;
             case HAN_EAST:
@@ -171,10 +161,10 @@ public class EclipseControl {
             case HAN_WEST:
                 if (swapxy) {
                     float raddy = mDownRadiusX - Math.abs(mDownY - mDownCenterX);
-                    oval.setRadiusX(Math.abs(y - oval.getCenterX() * w + sign * raddy)/w);
+                    oval.setRadiusX(Math.abs(y - oval.getCenterX() + sign * raddy));
                 } else {
                     float raddx = mDownRadiusX - Math.abs(mDownX - mDownCenterX);
-                    oval.setRadiusX(Math.abs(x - oval.getCenterX() * w - sign * raddx)/w);
+                    oval.setRadiusX(Math.abs(x - oval.getCenterX() -  sign * raddx));
                 }
                 break;
             case HAN_SE:
@@ -186,13 +176,13 @@ public class EclipseControl {
                 float ctr_dx = mDownX - mDownCenterX;
                 float ctr_dy = mDownY - mDownCenterY;
                 float downRad = Math.abs(ctr_dx) + Math.abs(ctr_dy) - dr;
-                float rx = oval.getRadiusX() * w;
-                float ry = oval.getRadiusY() * h;
+                float rx = oval.getRadiusX();
+                float ry = oval.getRadiusY();
                 float r = (Math.abs(rx) + Math.abs(ry)) * sin45;
-                float dx = x - oval.getCenterX() * w;
-                float dy = y - oval.getCenterY() * h;
+                float dx = x - oval.getCenterX();
+                float dy = y - oval.getCenterY();
                 float nr = Math.abs(Math.abs(dx) + Math.abs(dy) - downRad);
-                oval.setRadius((rx * nr / r) / w, (ry * nr / r) / h);
+                oval.setRadius((rx * nr / r), (ry * nr / r));
 
                 break;
         }
