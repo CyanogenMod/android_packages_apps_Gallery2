@@ -19,8 +19,10 @@ package com.android.gallery3d.filtershow.filters;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
@@ -91,15 +93,22 @@ public class ImageFilterVignette extends ImageFilterRS {
         float r = calcRadius(cx, cy, w, h);
         float rx = r;
         float ry = r;
+
+        float[]c = new float[2];
         if (mParameters.isCenterSet()) {
-
-            cx = mParameters.getCenterX() * w;
-            cy = mParameters.getCenterY() * h;
-
-            rx = mParameters.getRadiusX() * w;
-            ry = mParameters.getRadiusY() * h;
+            Matrix m = getOriginalToScreenMatrix(w, h);
+            Rect bounds = MasterImage.getImage().getOriginalBounds();
+            c[0] = bounds.right * mParameters.getCenterX();
+            c[1] = bounds.bottom * mParameters.getCenterY();
+            m.mapPoints(c);
+            cx = c[0];
+            cy = c[1];
+            c[0] = bounds.right * mParameters.getRadiusX();
+            c[1] = bounds.bottom * mParameters.getRadiusY();
+            m.mapVectors(c);
+            rx = c[0];
+            ry = c[1];
         }
-
 
         mScript.set_inputWidth(w);
         mScript.set_inputHeight(h);
@@ -115,7 +124,6 @@ public class ImageFilterVignette extends ImageFilterRS {
         mScript.set_strength(mParameters.getValue(MODE_FALLOFF)/10.f);
         mScript.invoke_setupVignetteParams();
         mScript.forEach_vignette(getInPixelsAllocation(), getOutPixelsAllocation());
-
     }
 
     @Override
