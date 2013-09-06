@@ -83,7 +83,7 @@ public class CropActivity extends Activity {
      * sure the intent stays below 1MB.We should consider just returning a byte
      * array instead of a Bitmap instance to avoid overhead.
      */
-    public static final int MAX_BMAP_IN_INTENT = 750000;
+    public static final int MAX_BMAP_IN_INTENT = 520000;
 
     // Flags
     private static final int DO_SET_WALLPAPER = 1;
