@@ -300,9 +300,9 @@ public class FaceView extends View
                  if (face.mouth != null) {
                    Log.e(TAG, "smile: " + face.getSmileDegree() + "," + face.getSmileScore());
                    if (face.getSmileDegree() < smile_threashold_no_smile) {
-                     point[0] = face.mouth.x + dx;
+                     point[0] = face.mouth.x;
                      point[1] = face.mouth.y-delta_y +dy;
-                     point[2] = face.mouth.x + dx;
+                     point[2] = face.mouth.x;
                      point[3] = face.mouth.y+delta_y + dy;
                      mMatrix.mapPoints (point);
                      canvas.drawLine(point[0] + dx, point[1] + dy, point[2] +
