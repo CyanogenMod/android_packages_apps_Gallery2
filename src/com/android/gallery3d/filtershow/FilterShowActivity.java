@@ -1206,6 +1206,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillCategories();
         loadMainPanel();
 
+        mShowingInformationPanel = false;
+
         // mLoadBitmapTask==null implies you have looked at the intent
         if (!mShowingTinyPlanet && (mLoadBitmapTask == null)) {
             mCategoryFiltersAdapter.removeTinyPlanet();
