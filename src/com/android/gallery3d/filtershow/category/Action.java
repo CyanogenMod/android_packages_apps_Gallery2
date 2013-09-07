@@ -24,8 +24,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+
+import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.pipeline.RenderingRequest;
 import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
@@ -48,26 +52,30 @@ public class Action implements RenderingRequestCaller {
     private int mType = CROP_VIEW;
     private Bitmap mPortraitImage;
     private Bitmap mOverlayBitmap;
-    private Context mContext;
+    private FilterShowActivity mContext;
     private boolean mCanBeRemoved = false;
+    private int mTextSize = 32;
 
-    public Action(Context context, FilterRepresentation representation, int type,
+    public Action(FilterShowActivity context, FilterRepresentation representation, int type,
                   boolean canBeRemoved) {
         this(context, representation, type);
         mCanBeRemoved = canBeRemoved;
+        mTextSize = context.getResources().getDimensionPixelSize(
+                R.dimen.category_panel_text_size);
     }
 
-    public Action(Context context, FilterRepresentation representation, int type) {
+    public Action(FilterShowActivity context, FilterRepresentation representation, int type) {
         this(context, type);
         setRepresentation(representation);
     }
 
-    public Action(Context context, int type) {
+    public Action(FilterShowActivity context, int type) {
         mContext = context;
         setType(type);
+        mContext.registerAction(this);
     }
 
-    public Action(Context context, FilterRepresentation representation) {
+    public Action(FilterShowActivity context, FilterRepresentation representation) {
         this(context, representation, CROP_VIEW);
     }
 
@@ -100,19 +108,19 @@ public class Action implements RenderingRequestCaller {
         if (mImageFrame != null && mImageFrame.equals(imageFrame)) {
             return;
         }
-        Bitmap bitmap = MasterImage.getImage().getLargeThumbnailBitmap();
+        if (getType() == Action.ADD_ACTION) {
+            return;
+        }
+        Bitmap temp = MasterImage.getImage().getTemporaryThumbnailBitmap();
+        if (temp != null) {
+            mImage = temp;
+        }
+        Bitmap bitmap = MasterImage.getImage().getThumbnailBitmap();
         if (bitmap != null) {
             mImageFrame = imageFrame;
             int w = mImageFrame.width();
             int h = mImageFrame.height();
-            if (orientation == CategoryView.VERTICAL
-                && mType == CROP_VIEW) {
-                w /= 2;
-            }
-            Bitmap bitmapCrop = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            drawCenteredImage(bitmap, bitmapCrop, true);
-
-            postNewIconRenderRequest(bitmapCrop);
+            postNewIconRenderRequest(w, h);
         }
     }
 
@@ -132,40 +140,37 @@ public class Action implements RenderingRequestCaller {
         mType = type;
     }
 
-    private void postNewIconRenderRequest(Bitmap bitmap) {
-        if (bitmap != null && mRepresentation != null) {
+    private void postNewIconRenderRequest(int w, int h) {
+        if (mRepresentation != null) {
             ImagePreset preset = new ImagePreset();
             preset.addFilter(mRepresentation);
-            RenderingRequest.post(mContext, bitmap,
-                    preset, RenderingRequest.ICON_RENDERING, this);
+            RenderingRequest.postIconRequest(mContext, w, h, preset, this);
         }
     }
 
     private void drawCenteredImage(Bitmap source, Bitmap destination, boolean scale) {
-        RectF image = new RectF(0, 0, source.getWidth(), source.getHeight());
-        int border = 0;
-        if (!scale) {
-            border = destination.getWidth() - destination.getHeight();
-            if (border < 0) {
-                border = 0;
-            }
-        }
-        RectF frame = new RectF(border, 0,
-                destination.getWidth() - border,
-                destination.getHeight());
+        int minSide = Math.min(destination.getWidth(), destination.getHeight());
         Matrix m = new Matrix();
-        m.setRectToRect(frame, image, Matrix.ScaleToFit.CENTER);
-        image.set(frame);
-        m.mapRect(image);
-        m.setRectToRect(image, frame, Matrix.ScaleToFit.FILL);
+        float scaleFactor = minSide / (float) Math.min(source.getWidth(), source.getHeight());
+
+        float dx = (destination.getWidth() - source.getWidth() * scaleFactor) / 2.0f;
+        float dy = (destination.getHeight() - source.getHeight() * scaleFactor) / 2.0f;
+        if (mImageFrame.height() > mImageFrame.width()) {
+            // if portrait
+            dy -= mTextSize;
+        }
+        m.setScale(scaleFactor, scaleFactor);
+        m.postTranslate(dx, dy);
         Canvas canvas = new Canvas(destination);
         canvas.drawBitmap(source, m, new Paint(Paint.FILTER_BITMAP_FLAG));
     }
 
     @Override
     public void available(RenderingRequest request) {
+        clearBitmap();
         mImage = request.getBitmap();
         if (mImage == null) {
+            mImageFrame = null;
             return;
         }
         if (mRepresentation.getOverlayId() != 0 && mOverlayBitmap == null) {
@@ -203,5 +208,13 @@ public class Action implements RenderingRequestCaller {
 
     public void setOverlayBitmap(Bitmap overlayBitmap) {
         mOverlayBitmap = overlayBitmap;
+    }
+
+    public void clearBitmap() {
+        if (mImage != null
+                && mImage != MasterImage.getImage().getTemporaryThumbnailBitmap()) {
+            MasterImage.getImage().getBitmapCache().cache(mImage);
+        }
+        mImage = null;
     }
 }

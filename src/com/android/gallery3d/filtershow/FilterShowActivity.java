@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
@@ -164,6 +165,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private Uri mSelectedImageUri = null;
 
+    private ArrayList<Action> mActions = new ArrayList<Action>();
     private UserPresetsManager mUserPresetsManager = null;
     private UserPresetsAdapter mUserPresetsAdapter = null;
     private CategoryAdapter mCategoryLooksAdapter = null;
@@ -250,7 +252,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     public void updateUIAfterServiceStarted() {
         fillCategories();
         loadMainPanel();
-        setDefaultPreset();
         extractXMPData();
         processIntent();
     }
@@ -384,7 +385,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         setupEditors();
 
         mEditorPlaceHolder.hide();
-        mImageShow.bindAsImageLoadListener();
+        mImageShow.attach();
 
         setupStatePanel();
     }
@@ -403,8 +404,25 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     private void fillVersions() {
+        if (mCategoryVersionsAdapter != null) {
+            mCategoryVersionsAdapter.clear();
+        }
         mCategoryVersionsAdapter = new CategoryAdapter(this);
         mCategoryVersionsAdapter.setShowAddButton(true);
+    }
+
+    public void registerAction(Action action) {
+        if (mActions.contains(action)) {
+            return;
+        }
+        mActions.add(action);
+    }
+
+    private void loadActions() {
+        for (int i = 0; i < mActions.size(); i++) {
+            Action action = mActions.get(i);
+            action.setImageFrame(new Rect(0, 0, 96, 96), 0);
+        }
     }
 
     public void updateVersions() {
@@ -455,6 +473,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private void fillEffects() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getEffects();
+        if (mCategoryFiltersAdapter != null) {
+            mCategoryFiltersAdapter.clear();
+        }
         mCategoryFiltersAdapter = new CategoryAdapter(this);
         for (FilterRepresentation representation : filtersRepresentations) {
             if (representation.getTextId() != 0) {
@@ -467,6 +488,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private void fillTools() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getTools();
+        if (mCategoryGeometryAdapter != null) {
+            mCategoryGeometryAdapter.clear();
+        }
         mCategoryGeometryAdapter = new CategoryAdapter(this);
         for (FilterRepresentation representation : filtersRepresentations) {
             mCategoryGeometryAdapter.add(new Action(this, representation));
@@ -549,6 +573,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
         }
 
+        if (mCategoryBordersAdapter != null) {
+            mCategoryBordersAdapter.clear();
+        }
         mCategoryBordersAdapter = new CategoryAdapter(this);
         for (FilterRepresentation representation : borders) {
             if (representation.getTextId() != 0) {
@@ -713,6 +740,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    public void stopLoadingIndicator() {
+        final View loading = findViewById(R.id.loading);
+        loading.setVisibility(View.GONE);
+    }
+
     private class LoadBitmapTask extends AsyncTask<Uri, Boolean, Boolean> {
         int mBitmapSize;
 
@@ -764,14 +796,12 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 Log.v(LOGTAG,"RenderScript context destroyed during load");
                 return;
             }
-            final View loading = findViewById(R.id.loading);
-            loading.setVisibility(View.GONE);
             final View imageShow = findViewById(R.id.imageShow);
             imageShow.setVisibility(View.VISIBLE);
 
+
             Bitmap largeBitmap = MasterImage.getImage().getOriginalBitmapLarge();
             mBoundService.setOriginalBitmap(largeBitmap);
-            MasterImage.getImage().resetGeometryImages(true);
 
             float previewScale = (float) largeBitmap.getWidth()
                     / (float) MasterImage.getImage().getOriginalBounds().width();
@@ -785,12 +815,19 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mCategoryFiltersAdapter.imageLoaded();
             mLoadBitmapTask = null;
 
+            MasterImage.getImage().warnListeners();
+            loadActions();
+
             if (mOriginalPreset != null) {
                 MasterImage.getImage().setLoadedPreset(mOriginalPreset);
                 MasterImage.getImage().setPreset(mOriginalPreset,
                         mOriginalPreset.getLastRepresentation(), true);
                 mOriginalPreset = null;
+            } else {
+                setDefaultPreset();
             }
+
+            MasterImage.getImage().resetGeometryImages(true);
 
             if (mAction == TINY_PLANET_ACTION) {
                 showRepresentation(mCategoryFiltersAdapter.getTinyPlanet());
@@ -1087,6 +1124,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getLooks();
 
+        if (mCategoryLooksAdapter != null) {
+            mCategoryLooksAdapter.clear();
+        }
         mCategoryLooksAdapter = new CategoryAdapter(this);
         int verticalItemHeight = (int) getResources().getDimension(R.dimen.action_item_height);
         mCategoryLooksAdapter.setItemHeight(verticalItemHeight);
@@ -1170,8 +1210,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (!mShowingTinyPlanet && (mLoadBitmapTask == null)) {
             mCategoryFiltersAdapter.removeTinyPlanet();
         }
-        final View loading = findViewById(R.id.loading);
-        loading.setVisibility(View.GONE);
+        stopLoadingIndicator();
     }
 
     public void setupMasterImage() {
@@ -1183,6 +1222,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mMasterImage.setHistoryManager(historyManager);
         mMasterImage.setStateAdapter(imageStateAdapter);
         mMasterImage.setActivity(this);
+        mMasterImage.setFirstLoad(true);
 
         if (Runtime.getRuntime().maxMemory() > LIMIT_SUPPORTS_HIGHRES) {
             mMasterImage.setSupportsHighRes(true);
@@ -1374,11 +1414,23 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         return super.dispatchTouchEvent(ev);
     }
 
+    public Point mHintTouchPoint = new Point();
+
+    public Point hintTouchPoint(View view) {
+        int location[] = new int[2];
+        view.getLocationOnScreen(location);
+        int x = mHintTouchPoint.x - location[0];
+        int y = mHintTouchPoint.y - location[1];
+        return new Point(x, y);
+    }
+
     public void startTouchAnimation(View target, float x, float y) {
         final CategorySelected hint =
                 (CategorySelected) findViewById(R.id.categorySelectedIndicator);
         int location[] = new int[2];
         target.getLocationOnScreen(location);
+        mHintTouchPoint.x = (int) (location[0] + x);
+        mHintTouchPoint.y = (int) (location[1] + y);
         int locationHint[] = new int[2];
         ((View)hint.getParent()).getLocationOnScreen(locationHint);
         int dx = (int) (x - (hint.getWidth())/2);

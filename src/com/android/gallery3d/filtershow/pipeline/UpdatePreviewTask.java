@@ -17,10 +17,12 @@
 package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
+
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
 public class UpdatePreviewTask extends ProcessingTask {
+    private static final String LOGTAG = "UpdatePreviewTask";
     private CachingPipeline mPreviewPipeline = null;
     private boolean mHasUnhandledPreviewRequest = false;
     private boolean mPipelineIsOn = false;
