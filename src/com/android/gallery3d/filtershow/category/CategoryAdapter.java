@@ -49,6 +49,15 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         this(context, 0);
     }
 
+    @Override
+    public void clear() {
+        for (int i = 0; i < getCount(); i++) {
+            Action action = getItem(i);
+            action.clearBitmap();
+        }
+        super.clear();
+    }
+
     public void setItemHeight(int height) {
         mItemHeight = height;
     }

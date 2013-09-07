@@ -109,9 +109,8 @@ public class CategoryView extends IconView
                 drawSpacer(canvas);
                 return;
             }
-            if (mAction.getImage() == null) {
-                mAction.setImageFrame(new Rect(0, 0, getWidth(), getHeight()), getOrientation());
-            } else {
+            mAction.setImageFrame(new Rect(0, 0, getWidth(), getHeight()), getOrientation());
+            if (mAction.getImage() != null) {
                 setBitmap(mAction.getImage());
             }
         }

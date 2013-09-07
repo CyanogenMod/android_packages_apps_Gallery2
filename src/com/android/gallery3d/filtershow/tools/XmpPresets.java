@@ -116,7 +116,7 @@ public class XmpPresets {
                 Uri srcUri = Uri.parse(strSrcUri);
                 ret.originalimage = srcUri;
 
-                ret.preset = new ImagePreset(mMasterImage.getPreset());
+                ret.preset = new ImagePreset();
                 ret.presetString = filterString;
                 boolean ok = ret.preset.readJsonFromString(filterString);
                 if (!ok) {

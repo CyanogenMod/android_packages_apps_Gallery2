@@ -193,6 +193,7 @@ public class IconView extends View {
     public void onDraw(Canvas canvas) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
+        mPaint.setFilterBitmap(true);
         canvas.drawColor(mBackgroundColor);
         computeBitmapBounds();
         computeTextPosition(getText());

@@ -34,6 +34,7 @@ public class RenderingRequest {
     private float mScaleFactor = 1.0f;
     private Rect mBounds = null;
     private Rect mDestination = null;
+    private Rect mIconBounds = null;
     private int mType = FULL_RENDERING;
     public static final int FULL_RENDERING = 0;
     public static final int FILTERS_RENDERING = 1;
@@ -87,6 +88,25 @@ public class RenderingRequest {
         request.setImagePreset(passedPreset);
         request.setType(type);
         request.setCaller(caller);
+        request.post(context);
+    }
+
+    public static void postIconRequest(Context context, int w, int h,
+                                       ImagePreset preset,
+                                       RenderingRequestCaller caller) {
+        if (preset == null || caller == null) {
+            Log.v(LOGTAG, "something null, preset: "
+                    + preset + " or caller: " + caller);
+            return;
+        }
+        RenderingRequest request = new RenderingRequest();
+        ImagePreset passedPreset = new ImagePreset(preset);
+        request.setOriginalImagePreset(preset);
+        request.setScaleFactor(MasterImage.getImage().getScaleFactor());
+        request.setImagePreset(passedPreset);
+        request.setType(RenderingRequest.ICON_RENDERING);
+        request.setCaller(caller);
+        request.setIconBounds(new Rect(0, 0, w, h));
         request.post(context);
     }
 
@@ -164,6 +184,14 @@ public class RenderingRequest {
 
     public void setDestination(Rect destination) {
         mDestination = destination;
+    }
+
+    public void setIconBounds(Rect bounds) {
+        mIconBounds = bounds;
+    }
+
+    public Rect getIconBounds() {
+        return mIconBounds;
     }
 
     public ImagePreset getOriginalImagePreset() {
