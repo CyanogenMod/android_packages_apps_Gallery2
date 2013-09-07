@@ -19,6 +19,11 @@ package com.android.gallery3d.filtershow.pipeline;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
@@ -177,6 +182,9 @@ public class CachingPipeline implements PipelineInterface {
     }
 
     private synchronized boolean updateOriginalAllocation(ImagePreset preset) {
+        if (preset == null) {
+            return false;
+        }
         Bitmap originalBitmap = mOriginalBitmap;
 
         if (originalBitmap == null) {
@@ -278,7 +286,8 @@ public class CachingPipeline implements PipelineInterface {
             if (getRenderScriptContext() == null) {
                 return;
             }
-            if (((request.getType() != RenderingRequest.PARTIAL_RENDERING)
+            if ((request.getType() != RenderingRequest.PARTIAL_RENDERING
+                  && request.getType() != RenderingRequest.ICON_RENDERING
                     && request.getBitmap() == null)
                     || request.getImagePreset() == null) {
                 return;
@@ -311,7 +320,7 @@ public class CachingPipeline implements PipelineInterface {
                 updateOriginalAllocation(preset);
             }
 
-            if (DEBUG) {
+            if (DEBUG && bitmap != null) {
                 Log.v(LOGTAG, "after update, req bitmap (" + bitmap.getWidth() + "x" + bitmap.getHeight()
                         + " ? resizeOriginal (" + mResizedOriginalBitmap.getWidth() + "x"
                         + mResizedOriginalBitmap.getHeight());
@@ -336,6 +345,28 @@ public class CachingPipeline implements PipelineInterface {
                     mEnvironment.setQuality(FilterEnvironment.QUALITY_PREVIEW);
                 }
 
+                if (request.getType() == RenderingRequest.ICON_RENDERING) {
+                    Rect iconBounds = request.getIconBounds();
+                    Bitmap source = MasterImage.getImage().getThumbnailBitmap();
+                    if (iconBounds.width() > source.getWidth() * 2) {
+                        source = MasterImage.getImage().getLargeThumbnailBitmap();
+                    }
+                    if (iconBounds != null) {
+                        bitmap = mEnvironment.getBitmap(iconBounds.width(), iconBounds.height());
+                        Canvas canvas = new Canvas(bitmap);
+                        Matrix m = new Matrix();
+                        float minSize = Math.min(source.getWidth(), source.getHeight());
+                        float maxSize = Math.max(iconBounds.width(), iconBounds.height());
+                        float scale = maxSize / minSize;
+                        m.setScale(scale, scale);
+                        float dx = (iconBounds.width() - (source.getWidth() * scale))/2.0f;
+                        float dy = (iconBounds.height() - (source.getHeight() * scale))/2.0f;
+                        m.postTranslate(dx, dy);
+                        canvas.drawBitmap(source, m, new Paint(Paint.FILTER_BITMAP_FLAG));
+                    } else {
+                        bitmap = mEnvironment.getBitmapCopy(source);
+                    }
+                }
                 Bitmap bmp = preset.apply(bitmap, mEnvironment);
                 if (!mEnvironment.needsStop()) {
                     request.setBitmap(bmp);
