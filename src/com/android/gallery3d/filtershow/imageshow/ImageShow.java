@@ -30,6 +30,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -91,6 +92,7 @@ public class ImageShow extends View implements OnGestureListener,
     Point mOriginalTranslation = new Point();
     float mOriginalScale;
     float mStartFocusX, mStartFocusY;
+
     private enum InteractionMode {
         NONE,
         SCALE,
@@ -235,6 +237,19 @@ public class ImageShow extends View implements OnGestureListener,
                 getWidth() - 2*mShadowMargin,
                 getHeight() - 2*mShadowMargin);
 
+        MasterImage img = MasterImage.getImage();
+        // Hide the loading indicator as needed
+        if (img.isFirstLoad() && getFilteredImage() != null) {
+            if ((img.getLoadedPreset() == null)
+                    || (img.getLoadedPreset() != null
+                    && img.getLoadedPreset().equals(img.getCurrentPreset()))) {
+                img.setFirstLoad(false);
+                mActivity.stopLoadingIndicator();
+            } else if (img.getLoadedPreset() != null) {
+                return;
+            }
+        }
+
         float cx = canvas.getWidth()/2.0f;
         float cy = canvas.getHeight()/2.0f;
         float scaleFactor = MasterImage.getImage().getScaleFactor();
@@ -326,6 +341,10 @@ public class ImageShow extends View implements OnGestureListener,
                     float maskH = sMask.getHeight() / 2.0f;
                     float x = centerX - maskW * maskScale;
                     float y = centerY - maskH * maskScale;
+
+                    Point point = mActivity.hintTouchPoint(this);
+                    x = point.x - maskW * maskScale;
+                    y = point.y - maskH * maskScale;
 
                     // Prepare the shader
                     mShaderMatrix.reset();
@@ -472,6 +491,17 @@ public class ImageShow extends View implements OnGestureListener,
 
             Rect d = new Rect(mImageBounds.left, mImageBounds.top,
                     mImageBounds.left + px, mImageBounds.top + py);
+            if (mShowOriginalDirection == UNVEIL_HORIZONTAL) {
+                if (mTouchDown.x - mTouch.x > 0) {
+                    d.set(mImageBounds.left + px, mImageBounds.top,
+                            mImageBounds.right, mImageBounds.top + py);
+                }
+            } else {
+                if (mTouchDown.y - mTouch.y > 0) {
+                    d.set(mImageBounds.left, mImageBounds.top + py,
+                            mImageBounds.left + px, mImageBounds.bottom);
+                }
+            }
             canvas.clipRect(d);
             drawImage(canvas, image, false);
             Paint paint = new Paint();

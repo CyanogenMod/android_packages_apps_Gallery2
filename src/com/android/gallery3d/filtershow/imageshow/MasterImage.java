@@ -19,11 +19,13 @@ package com.android.gallery3d.filtershow.imageshow;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -70,6 +72,7 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mOriginalBitmapSmall = null;
     private Bitmap mOriginalBitmapLarge = null;
     private Bitmap mOriginalBitmapHighres = null;
+    private Bitmap mTemporaryThumbnail = null;
     private int mOrientation;
     private Rect mOriginalBounds;
     private final Vector<ImageShow> mLoadListeners = new Vector<ImageShow>();
@@ -113,6 +116,8 @@ public class MasterImage implements RenderingRequestCaller {
     private List<ExifTag> mEXIF;
     private BitmapCache mBitmapCache = new BitmapCache();
 
+    private boolean mFirstLoad;
+
     private MasterImage() {
     }
 
@@ -126,6 +131,14 @@ public class MasterImage implements RenderingRequestCaller {
             sMasterImage = new MasterImage();
         }
         return sMasterImage;
+    }
+
+    public void setFirstLoad(boolean firstLoad) {
+        mFirstLoad = firstLoad;
+    }
+
+    public boolean isFirstLoad() {
+        return mFirstLoad;
     }
 
     public Bitmap getOriginalBitmapSmall() {
@@ -421,8 +434,8 @@ public class MasterImage implements RenderingRequestCaller {
         mPreviousPreset = getPreviewBuffer().getConsumer().getPreset();
         if (newRepresentation instanceof FilterUserPresetRepresentation) {
             mCurrentLookAnimation = CIRCLE_ANIMATION;
-            mAnimator = ValueAnimator.ofFloat(0, 20);
-            mAnimator.setDuration(500);
+            mAnimator = ValueAnimator.ofFloat(0, 40);
+            mAnimator.setDuration(650);
         }
         if (newRepresentation instanceof FilterRotateRepresentation) {
             mCurrentLookAnimation = ROTATE_ANIMATION;
@@ -535,6 +548,12 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public void invalidatePreview() {
+        if (mPreset == null) {
+            return;
+        }
+        if (mPreset.nbFilters() == 0) {
+            MasterImage.getImage().setFirstLoad(false);
+        }
         mPreviewPreset.enqueuePreset(mPreset);
         mPreviewBuffer.invalidate();
         invalidatePartialPreview();
@@ -698,6 +717,16 @@ public class MasterImage implements RenderingRequestCaller {
         mTranslation.x = 0;
         mTranslation.y = 0;
         needsUpdatePartialPreview();
+    }
+
+    public Bitmap getTemporaryThumbnailBitmap() {
+        if (mTemporaryThumbnail == null
+                && getOriginalBitmapSmall() != null) {
+            mTemporaryThumbnail = getOriginalBitmapSmall().copy(Bitmap.Config.ARGB_8888, true);
+            Canvas canvas = new Canvas(mTemporaryThumbnail);
+            canvas.drawARGB(200, 80, 80, 80);
+        }
+        return mTemporaryThumbnail;
     }
 
     public Bitmap getThumbnailBitmap() {
