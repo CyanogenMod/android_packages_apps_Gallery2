@@ -103,7 +103,10 @@ public class BitmapCache {
     }
 
     public void showBitmapCounts() {
-        Log.v(LOGTAG, "\n showBitmap ---- ");
+        if (!DEBUG) {
+            return;
+        }
+        Log.v(LOGTAG, "\n--- showBitmap --- ");
         for (int i = 0; i < TRACKING_COUNT; i++) {
             if (mTracking[i] != 0) {
                 Log.v(LOGTAG, getTrackingName(i) + " => " + mTracking[i]);
