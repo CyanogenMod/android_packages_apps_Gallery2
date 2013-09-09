@@ -157,7 +157,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             case R.id.done:
                 FilterShowActivity activity = (FilterShowActivity) getActivity();
                 Uri sourceUri = MasterImage.getImage().getUri();
-                File dest = SaveImage.getNewFile(activity, sourceUri);
+                File dest = SaveImage.getNewFile(activity,  activity.getSelectedImageUri());
                 float scaleFactor = mExportWidth / (float) mOriginalBounds.width();
                 Intent processIntent = ProcessingService.getSaveIntent(activity, MasterImage
                         .getImage().getPreset(), dest, activity.getSelectedImageUri(), sourceUri,
