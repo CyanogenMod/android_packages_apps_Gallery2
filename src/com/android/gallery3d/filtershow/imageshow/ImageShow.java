@@ -336,7 +336,7 @@ public class ImageShow extends View implements OnGestureListener,
                     == MasterImage.CIRCLE_ANIMATION
                     && MasterImage.getImage().getPreviousImage() != null) {
                 float maskScale = MasterImage.getImage().getMaskScale();
-                if (maskScale > 0.0f) {
+                if (maskScale >= 0.0f) {
                     float maskW = sMask.getWidth() / 2.0f;
                     float maskH = sMask.getHeight() / 2.0f;
                     float x = centerX - maskW * maskScale;
