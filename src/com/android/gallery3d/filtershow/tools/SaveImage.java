@@ -35,6 +35,7 @@ import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.CachingPipeline;
@@ -314,10 +315,20 @@ public class SaveImage {
         }
     }
 
-    public Uri processAndSaveImage(ImagePreset preset, boolean doAuxBackup,
+    private void updateExifData(ExifInterface exif, long time) {
+        // Set tags
+        exif.addDateTimeStampTag(ExifInterface.TAG_DATE_TIME, time,
+                TimeZone.getDefault());
+        exif.setTag(exif.buildTag(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.Orientation.TOP_LEFT));
+        // Remove old thumbnail
+        exif.removeCompressedThumbnail();
+    }
+
+    public Uri processAndSaveImage(ImagePreset preset, boolean flatten,
                                    int quality, float sizeFactor) {
 
-        Uri uri = resetToOriginalImageIfNeeded(preset, doAuxBackup);
+        Uri uri = resetToOriginalImageIfNeeded(preset, !flatten);
         if (uri != null) {
             return null;
         }
@@ -332,33 +343,44 @@ public class SaveImage {
         // newSourceUri is then pointing to the new location.
         // If no file is moved, newSourceUri will be the same as mSourceUri.
         Uri newSourceUri = mSourceUri;
-        if (doAuxBackup) {
+        if (!flatten) {
             newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile);
         }
 
         Uri savedUri = mSelectedImageUri;
         if (mPreviewImage != null) {
-            Object xmp = getPanoramaXMPData(newSourceUri, preset);
-            ExifInterface exif = getExifData(newSourceUri);
-            // Set tags
-            long time = System.currentTimeMillis();
-            exif.addDateTimeStampTag(ExifInterface.TAG_DATE_TIME, time,
-                    TimeZone.getDefault());
-            exif.setTag(exif.buildTag(ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.Orientation.TOP_LEFT));
-            // Remove old thumbnail
-            exif.removeCompressedThumbnail();
-            // If we succeed in writing the bitmap as a jpeg, return a uri.
-            if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
-                putPanoramaXMPData(mDestinationFile, xmp);
-                // mDestinationFile will save the newSourceUri info in the XMP.
-                XmpPresets.writeFilterXMP(mContext, newSourceUri,
-                        mDestinationFile, preset);
+            if (flatten) {
+                Object xmp = getPanoramaXMPData(newSourceUri, preset);
+                ExifInterface exif = getExifData(newSourceUri);
+                long time = System.currentTimeMillis();
+                updateExifData(exif, time);
+                if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
+                    putPanoramaXMPData(mDestinationFile, xmp);
+                    ContentValues values = getContentValues(mContext, mSelectedImageUri, mDestinationFile, time);
+                    Object result = mContext.getContentResolver().insert(
+                            Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                // After this call, mSelectedImageUri will be actually
-                // pointing at the new file mDestinationFile.
-                savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
-                        mDestinationFile, time, doAuxBackup);
+                }
+
+            } else {
+
+                Object xmp = getPanoramaXMPData(newSourceUri, preset);
+                ExifInterface exif = getExifData(newSourceUri);
+                long time = System.currentTimeMillis();
+                updateExifData(exif, time);
+                // If we succeed in writing the bitmap as a jpeg, return a uri.
+                if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
+                    putPanoramaXMPData(mDestinationFile, xmp);
+                    // mDestinationFile will save the newSourceUri info in the XMP.
+                    if (!flatten) {
+                        XmpPresets.writeFilterXMP(mContext, newSourceUri,
+                                mDestinationFile, preset);
+                    }
+                    // After this call, mSelectedImageUri will be actually
+                    // pointing at the new file mDestinationFile.
+                    savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
+                            mDestinationFile, time, !flatten);
+                }
             }
         }
 
@@ -387,27 +409,27 @@ public class SaveImage {
 
                 Object xmp = getPanoramaXMPData(newSourceUri, preset);
                 ExifInterface exif = getExifData(newSourceUri);
-
-                updateProgress();
-                // Set tags
                 long time = System.currentTimeMillis();
-                exif.addDateTimeStampTag(ExifInterface.TAG_DATE_TIME, time,
-                        TimeZone.getDefault());
-                exif.setTag(exif.buildTag(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.Orientation.TOP_LEFT));
-                // Remove old thumbnail
-                exif.removeCompressedThumbnail();
+                updateProgress();
 
+                updateExifData(exif, time);
                 updateProgress();
 
                 // If we succeed in writing the bitmap as a jpeg, return a uri.
                 if (putExifData(mDestinationFile, exif, bitmap, quality)) {
                     putPanoramaXMPData(mDestinationFile, xmp);
                     // mDestinationFile will save the newSourceUri info in the XMP.
-                    XmpPresets.writeFilterXMP(mContext, newSourceUri,
-                            mDestinationFile, preset);
+                    if (!flatten) {
+                        XmpPresets.writeFilterXMP(mContext, newSourceUri,
+                                mDestinationFile, preset);
+                        uri = updateFile(mContext, savedUri, mDestinationFile, time);
 
-                    uri = updateFile(mContext, savedUri, mDestinationFile, time);
+                    } else {
+
+                        ContentValues values = getContentValues(mContext, mSelectedImageUri, mDestinationFile, time);
+                        Object result = mContext.getContentResolver().insert(
+                                Images.Media.EXTERNAL_CONTENT_URI, values);
+                    }
                 }
                 updateProgress();
 
@@ -508,9 +530,12 @@ public class SaveImage {
             File destination) {
         Uri selectedImageUri = filterShowActivity.getSelectedImageUri();
         Uri sourceImageUri = MasterImage.getImage().getUri();
-
+        boolean flatten = false;
+        if (preset.contains(FilterRepresentation.TYPE_TINYPLANET)){
+            flatten = true;
+        }
         Intent processIntent = ProcessingService.getSaveIntent(filterShowActivity, preset,
-                destination, selectedImageUri, sourceImageUri, false, 90, 1f);
+                destination, selectedImageUri, sourceImageUri, flatten, 90, 1f);
 
         filterShowActivity.startService(processIntent);
 
