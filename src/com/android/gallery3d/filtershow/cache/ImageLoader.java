@@ -253,14 +253,16 @@ public final class ImageLoader {
             if (!r.contains(imageBounds)) {
                 imageBounds.intersect(r);
             }
-            Bitmap reuse = environment.getBitmap(imageBounds.width(), imageBounds.height());
+            Bitmap reuse = environment.getBitmap(imageBounds.width(),
+                    imageBounds.height(), BitmapCache.REGION);
             options.inBitmap = reuse;
             Bitmap bitmap = decoder.decodeRegion(imageBounds, options);
             if (bitmap != reuse) {
                 environment.cache(reuse); // not reused, put back in cache
             }
             if (imageBounds.width() != bounds.width() || imageBounds.height() != bounds.height()) {
-                Bitmap temp = environment.getBitmap(bounds.width(), bounds.height());
+                Bitmap temp = environment.getBitmap(bounds.width(),
+                        bounds.height(), BitmapCache.REGION);
                 Canvas canvas = new Canvas(temp);
                 canvas.drawARGB(0, 0, 0, 0);
                 float dx = imageBounds.left - bounds.left;

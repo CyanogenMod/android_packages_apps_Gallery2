@@ -18,6 +18,8 @@ package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
 
@@ -90,6 +92,7 @@ public class CacheProcessing {
 
         public Bitmap apply(FilterEnvironment environment, Bitmap cacheBitmap) {
             boolean onlyGeometry = true;
+            Bitmap source = cacheBitmap;
             for (FilterRepresentation representation : representations) {
                 if (representation.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
                     onlyGeometry = false;
@@ -107,6 +110,9 @@ public class CacheProcessing {
                     cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
                 }
             }
+            if (cacheBitmap != source) {
+                environment.cache(source);
+            }
             return cacheBitmap;
         }
     }
@@ -116,7 +122,7 @@ public class CacheProcessing {
                           FilterEnvironment environment) {
 
         if (filters.size() == 0) {
-            return environment.getBitmapCopy(originalBitmap);
+            return environment.getBitmapCopy(originalBitmap, BitmapCache.PREVIEW_CACHE_NO_FILTERS);
         }
 
         environment.getBimapCache().setCacheProcessing(this);
@@ -176,7 +182,8 @@ public class CacheProcessing {
         int lastPositionCached = -1;
         for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
             if (i == -1 || cacheBitmap == null) {
-                cacheBitmap = environment.getBitmapCopy(originalBitmap);
+                cacheBitmap = environment.getBitmapCopy(originalBitmap,
+                        BitmapCache.PREVIEW_CACHE_NO_ROOT);
                 originalCopy = cacheBitmap;
                 if (DEBUG) {
                     Log.v(LOGTAG, "i: " + i + " cacheBitmap: " + cacheBitmap + " w: "
@@ -194,7 +201,7 @@ public class CacheProcessing {
                     Log.v(LOGTAG, "i: " + i + " get new copy for cacheBitmap "
                             + cacheBitmap + " apply...");
                 }
-                cacheBitmap = environment.getBitmapCopy(cacheBitmap);
+                cacheBitmap = environment.getBitmapCopy(cacheBitmap, BitmapCache.PREVIEW_CACHE);
                 cacheBitmap = step.apply(environment, cacheBitmap);
                 step.cache = cacheBitmap;
                 lastPositionCached = i;
@@ -210,8 +217,9 @@ public class CacheProcessing {
         // Let's see if we can cleanup the cache for unused bitmaps
         for (int i = 0; i < similarUpToIndex; i++) {
             CacheStep currentStep = mSteps.elementAt(i);
-            environment.cache(currentStep.cache);
+            Bitmap bitmap = currentStep.cache;
             currentStep.cache = null;
+            environment.cache(bitmap);
         }
 
         if (DEBUG) {
@@ -219,7 +227,12 @@ public class CacheProcessing {
             displayNbBitmapsInCache();
         }
         if (lastPositionCached != -1) {
+            Bitmap bitmap = mSteps.elementAt(lastPositionCached).cache;
             mSteps.elementAt(lastPositionCached).cache = null;
+            environment.cache(bitmap);
+        }
+        if (contains(cacheBitmap)) {
+            return environment.getBitmapCopy(cacheBitmap, BitmapCache.PREVIEW_CACHE_NO_APPLY);
         }
         return cacheBitmap;
     }
