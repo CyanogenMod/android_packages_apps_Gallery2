@@ -187,7 +187,7 @@ public class CameraActivity extends ActivityBase
                     mCameraSwitchAnimator.cancel();
                 }
                 mCameraSwitchAnimator = ObjectAnimator.ofFloat(
-                        screenNail, "alpha", screenNail.getAlpha(), 0f);
+                        screenNail, "alpha", screenNail.getAlpha(), 0f).setDuration(5);
                 mCameraSwitchAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -258,8 +258,8 @@ public class CameraActivity extends ActivityBase
         @Override
         public void run() {
             mCameraSwitchAnimator = ObjectAnimator.ofFloat(
-                    getCameraScreenNail(), "alpha", 0f, 1f);
-            mCameraSwitchAnimator.setStartDelay(50);
+                    getCameraScreenNail(), "alpha", 0f, 1f).setDuration(5);
+            mCameraSwitchAnimator.setStartDelay(5);
             mCameraSwitchAnimator.start();
         }
     };
