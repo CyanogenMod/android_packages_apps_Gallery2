@@ -97,7 +97,7 @@ public class ImageSavingTask extends ProcessingTask {
                         postUpdate(updateProgress);
                     }
                 });
-        Uri uri = saveImage.processAndSaveImage(preset, !flatten,
+        Uri uri = saveImage.processAndSaveImage(preset, flatten,
                 request.quality, request.sizeFactor);
         URIResult result = new URIResult();
         result.uri = uri;
