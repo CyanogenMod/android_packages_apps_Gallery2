@@ -30,14 +30,19 @@ public class SharedBuffer {
     private volatile boolean mNeedsRepaint = true;
 
     public void setProducer(Bitmap producer) {
-        synchronized (this) {
-            if (mProducer != null) {
-                mProducer.remove();
-            }
-        }
+        removeProducer();
         Buffer buffer = new Buffer(producer);
         synchronized (this) {
             mProducer = buffer;
+        }
+    }
+
+    public void removeProducer() {
+        synchronized (this) {
+            if (mProducer != null) {
+                mProducer.remove();
+                mProducer = null;
+            }
         }
     }
 

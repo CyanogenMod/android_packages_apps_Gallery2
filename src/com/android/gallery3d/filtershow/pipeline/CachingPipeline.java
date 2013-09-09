@@ -28,6 +28,7 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
 
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
@@ -222,7 +223,7 @@ public class CachingPipeline implements PipelineInterface {
             if (bitmap == null) {
                 return;
             }
-            bitmap = mEnvironment.getBitmapCopy(bitmap);
+            bitmap = mEnvironment.getBitmapCopy(bitmap, BitmapCache.HIGHRES);
             bitmap = preset.applyGeometry(bitmap, mEnvironment);
 
             mEnvironment.setQuality(FilterEnvironment.QUALITY_PREVIEW);
@@ -247,7 +248,7 @@ public class CachingPipeline implements PipelineInterface {
             if (bitmap == null) {
                 return;
             }
-            bitmap = mEnvironment.getBitmapCopy(bitmap);
+            bitmap = mEnvironment.getBitmapCopy(bitmap, BitmapCache.GEOMETRY);
             bitmap = preset.applyGeometry(bitmap, mEnvironment);
             if (!mEnvironment.needsStop()) {
                 request.setBitmap(bitmap);
@@ -269,7 +270,7 @@ public class CachingPipeline implements PipelineInterface {
             if (bitmap == null) {
                 return;
             }
-            bitmap = mEnvironment.getBitmapCopy(bitmap);
+            bitmap = mEnvironment.getBitmapCopy(bitmap, BitmapCache.FILTERS);
             bitmap = preset.apply(bitmap, mEnvironment);
             if (!mEnvironment.needsStop()) {
                 request.setBitmap(bitmap);
@@ -352,7 +353,8 @@ public class CachingPipeline implements PipelineInterface {
                         source = MasterImage.getImage().getLargeThumbnailBitmap();
                     }
                     if (iconBounds != null) {
-                        bitmap = mEnvironment.getBitmap(iconBounds.width(), iconBounds.height());
+                        bitmap = mEnvironment.getBitmap(iconBounds.width(),
+                                iconBounds.height(), BitmapCache.ICON);
                         Canvas canvas = new Canvas(bitmap);
                         Matrix m = new Matrix();
                         float minSize = Math.min(source.getWidth(), source.getHeight());
@@ -364,7 +366,7 @@ public class CachingPipeline implements PipelineInterface {
                         m.postTranslate(dx, dy);
                         canvas.drawBitmap(source, m, new Paint(Paint.FILTER_BITMAP_FLAG));
                     } else {
-                        bitmap = mEnvironment.getBitmapCopy(source);
+                        bitmap = mEnvironment.getBitmapCopy(source, BitmapCache.ICON);
                     }
                 }
                 Bitmap bmp = preset.apply(bitmap, mEnvironment);
@@ -417,6 +419,7 @@ public class CachingPipeline implements PipelineInterface {
         }
         setupEnvironment(preset, false);
         Vector<FilterRepresentation> filters = preset.getFilters();
+        buffer.removeProducer();
         Bitmap result = mCachedProcessing.process(mOriginalBitmap, filters, mEnvironment);
         buffer.setProducer(result);
     }

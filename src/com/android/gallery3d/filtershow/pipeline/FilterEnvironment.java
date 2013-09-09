@@ -67,12 +67,12 @@ public class FilterEnvironment {
         mBitmapCache.cache(bitmap);
     }
 
-    public Bitmap getBitmap(int w, int h) {
-        return mBitmapCache.getBitmap(w, h);
+    public Bitmap getBitmap(int w, int h, int type) {
+        return mBitmapCache.getBitmap(w, h, type);
     }
 
-    public Bitmap getBitmapCopy(Bitmap source) {
-        return mBitmapCache.getBitmapCopy(source);
+    public Bitmap getBitmapCopy(Bitmap source, int type) {
+        return mBitmapCache.getBitmapCopy(source, type);
     }
 
     public void setImagePreset(ImagePreset imagePreset) {
