@@ -181,6 +181,16 @@ public class ImagePreset {
         return false;
     }
 
+    public boolean contains(byte type) {
+        for (FilterRepresentation representation : mFilters) {
+            if (representation.getFilterType() == type
+                    && !representation.isNil()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isPanoramaSafe() {
         for (FilterRepresentation representation : mFilters) {
             if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY
