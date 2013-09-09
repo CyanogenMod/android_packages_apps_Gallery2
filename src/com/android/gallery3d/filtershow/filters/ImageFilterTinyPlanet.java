@@ -23,6 +23,7 @@ import android.graphics.RectF;
 import com.adobe.xmp.XMPException;
 import com.adobe.xmp.XMPMeta;
 import com.android.gallery3d.app.Log;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
@@ -92,7 +93,8 @@ public class ImageFilterTinyPlanet extends SimpleImageFilter {
         }
         while (mBitmapOut == null) {
             try {
-                mBitmapOut = getEnvironment().getBitmap(outputSize, outputSize);
+                mBitmapOut = getEnvironment().getBitmap(outputSize,
+                        outputSize, BitmapCache.TINY_PLANET);
             } catch (java.lang.OutOfMemoryError e) {
                 System.gc();
                 outputSize /= 2;

@@ -317,7 +317,8 @@ public final class GeometryMathUtils {
         Matrix m = getCropSelectionToScreenMatrix(null, holder, width, height, frame.width(),
                 frame.height());
         BitmapCache bitmapCache = MasterImage.getImage().getBitmapCache();
-        Bitmap temp = bitmapCache.getBitmap(frame.width(), frame.height());
+        Bitmap temp = bitmapCache.getBitmap(frame.width(),
+                frame.height(), BitmapCache.UTIL_GEOMETRY);
         Canvas canvas = new Canvas(temp);
         Paint paint = new Paint();
         paint.setAntiAlias(true);

@@ -461,7 +461,12 @@ public class ImagePreset {
         // Apply any transform -- 90 rotate, flip, straighten, crop
         // Returns a new bitmap.
         if (mDoApplyGeometry) {
-            bitmap = GeometryMathUtils.applyGeometryRepresentations(getGeometryFilters(), bitmap);
+            Bitmap bmp = GeometryMathUtils.applyGeometryRepresentations(
+                    getGeometryFilters(), bitmap);
+            if (bmp != bitmap) {
+                environment.cache(bitmap);
+            }
+            return bmp;
         }
         return bitmap;
     }

@@ -71,8 +71,9 @@ public class Buffer {
 
     public void remove() {
         BitmapCache cache = MasterImage.getImage().getBitmapCache();
-        cache.cache(mBitmap);
-        mBitmap = null;
+        if (cache.cache(mBitmap)) {
+            mBitmap = null;
+        }
     }
 }
 
