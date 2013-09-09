@@ -419,7 +419,6 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public void onNewLook(FilterRepresentation newRepresentation) {
-        getBitmapCache().cache(mPreviousImage);
         if (getFilteredImage() == null) {
             return;
         }
@@ -429,7 +428,8 @@ public class MasterImage implements RenderingRequestCaller {
                 mCurrentAnimRotationStartValue += 90;
             }
         } else {
-            mPreviousImage = getBitmapCache().getBitmapCopy(getFilteredImage());
+            resetAnimBitmap();
+            mPreviousImage = mBitmapCache.getBitmapCopy(getFilteredImage(), BitmapCache.NEW_LOOK);
         }
         mPreviousPreset = getPreviewBuffer().getConsumer().getPreset();
         if (newRepresentation instanceof FilterUserPresetRepresentation) {

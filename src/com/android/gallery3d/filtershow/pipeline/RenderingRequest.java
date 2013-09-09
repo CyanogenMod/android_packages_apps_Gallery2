@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import com.android.gallery3d.app.Log;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
@@ -71,7 +72,7 @@ public class RenderingRequest {
         } else if (type != PARTIAL_RENDERING && type != HIGHRES_RENDERING
                 && type != GEOMETRY_RENDERING && type != FILTERS_RENDERING) {
             bitmap = MasterImage.getImage().getBitmapCache().getBitmap(
-                    source.getWidth(), source.getHeight());
+                    source.getWidth(), source.getHeight(), BitmapCache.RENDERING_REQUEST);
         }
 
         request.setBitmap(bitmap);
