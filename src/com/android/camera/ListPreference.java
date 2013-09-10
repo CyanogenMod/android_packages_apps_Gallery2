@@ -147,7 +147,13 @@ public class ListPreference extends CameraPreference {
     }
 
     public String getEntry() {
-        return mEntries[findIndexOfValue(getValue())].toString();
+        int index = findIndexOfValue(getValue());
+        // Avoid the crash if fail to find value.
+        if (index == -1) {
+            Log.e(TAG, "Fail to find value = " + getValue());
+            index = 0;
+        }
+        return mEntries[index].toString();
     }
 
     public String getLabel() {
