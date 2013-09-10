@@ -144,7 +144,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
         switch (mParamMode) {
             case PARAM_COLOR:
                 val = ((ParameterColor) mAllParam[mParamMode]).getValue();
-                return ((val > 0) ? " +" : " ") + colorHexString(val);
+                return "";
             case PARAM_SIZE:
                 val = ((BasicParameterInt) mAllParam[mParamMode]).getValue();
                 return ((val > 0) ? " +" : " ") + val;
