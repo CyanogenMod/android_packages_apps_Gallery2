@@ -124,6 +124,8 @@ public final class ImageLoader {
             // Do nothing
         } catch (IllegalArgumentException e) {
             // Do nothing
+        } catch (IllegalStateException e) {
+            // Do nothing
         } finally {
             Utils.closeSilently(cursor);
         }
