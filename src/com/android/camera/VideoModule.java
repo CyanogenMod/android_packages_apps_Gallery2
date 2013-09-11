@@ -209,6 +209,8 @@ public class VideoModule implements CameraModule,
 
     private StartPreviewThread mStartPreviewThread;
 
+    private boolean mIsFullScreen = true;
+
     private final MediaSaveService.OnMediaSavedListener mOnVideoSavedListener =
             new MediaSaveService.OnMediaSavedListener() {
                 @Override
@@ -742,7 +744,14 @@ public class VideoModule implements CameraModule,
 
     @Override
     public void onShutterButtonFocus(boolean pressed) {
-        mUI.setShutterPressed(pressed);
+        // Sometimes, onShutterButtonFocus(false) may be called after
+        // onFullScreenChanged(false). Thus, we should call
+        // mUI.setShutterPressed(true) to disable the PreviewGestures.
+        if (!mIsFullScreen) {
+            mUI.setShutterPressed(true);
+        } else {
+            mUI.setShutterPressed(pressed);
+        }
     }
 
     private final class AutoFocusCallback
@@ -2540,6 +2549,7 @@ public class VideoModule implements CameraModule,
 
     @Override
     public void onFullScreenChanged(boolean full) {
+        mIsFullScreen = full;
         mUI.onFullScreenChanged(full);
         if (ApiHelper.HAS_SURFACE_TEXTURE) {
             if (mActivity.mCameraScreenNail != null) {
