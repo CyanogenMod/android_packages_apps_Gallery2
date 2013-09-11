@@ -316,7 +316,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     private void onGetContent(final MediaItem item) {
         DataManager dm = mActivity.getDataManager();
         Activity activity = mActivity;
-        if (mData.getString(Gallery.EXTRA_CROP) != null) {
+        if (mData.getString(GalleryActivity.EXTRA_CROP) != null) {
             Uri uri = dm.getContentUri(item.getPath());
             Intent intent = new Intent(CropActivity.CROP_ACTION, uri)
                     .addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
@@ -367,7 +367,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         mUserDistance = GalleryUtils.meterToPixel(USER_DISTANCE_METER);
         initializeViews();
         initializeData(data);
-        mGetContent = data.getBoolean(Gallery.KEY_GET_CONTENT, false);
+        mGetContent = data.getBoolean(GalleryActivity.KEY_GET_CONTENT, false);
         mShowClusterMenu = data.getBoolean(KEY_SHOW_CLUSTER_MENU, false);
         mDetailsSource = new MyDetailsSource();
         Context context = mActivity.getAndroidContext();
@@ -544,7 +544,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         MenuInflater inflator = getSupportMenuInflater();
         if (mGetContent) {
             inflator.inflate(R.menu.pickup, menu);
-            int typeBits = mData.getInt(Gallery.KEY_TYPE_BITS,
+            int typeBits = mData.getInt(GalleryActivity.KEY_TYPE_BITS,
                     DataManager.INCLUDE_IMAGE);
             actionBar.setTitle(GalleryUtils.getSelectionModePrompt(typeBits));
         } else {

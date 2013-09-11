@@ -27,7 +27,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.app.Gallery;
+import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.app.PhotoPage;
 import com.android.gallery3d.common.ApiHelper;
 
@@ -63,7 +63,7 @@ public class WidgetClickHandler extends Activity {
         } else {
             Toast.makeText(this,
                     R.string.no_such_item, Toast.LENGTH_LONG).show();
-            intent = new Intent(this, Gallery.class);
+            intent = new Intent(this, GalleryActivity.class);
         }
         if (tediousBack) {
             intent.setFlags(

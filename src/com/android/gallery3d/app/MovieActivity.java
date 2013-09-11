@@ -199,7 +199,7 @@ public class MovieActivity extends Activity {
             if (mTreatUpAsBack) {
                 finish();
             } else {
-                startActivity(new Intent(this, Gallery.class));
+                startActivity(new Intent(this, GalleryActivity.class));
                 finish();
             }
             return true;
