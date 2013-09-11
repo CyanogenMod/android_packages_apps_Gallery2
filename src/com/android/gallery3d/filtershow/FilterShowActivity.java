@@ -29,6 +29,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -60,6 +61,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
@@ -186,6 +188,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private ProcessingService mBoundService;
     private boolean mIsBound = false;
+    private Menu mMenu;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -242,14 +245,19 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
-    private void setupPipeline() {
-        doBindService();
+    public void updateUIAfterServiceStarted() {
+        MasterImage.setMaster(mMasterImage);
         ImageFilter.setActivityForMemoryToasts(this);
         mUserPresetsManager = new UserPresetsManager(this);
         mUserPresetsAdapter = new UserPresetsAdapter(this);
-    }
 
-    public void updateUIAfterServiceStarted() {
+        setupMasterImage();
+        setupMenu();
+        setDefaultValues();
+        fillEditors();
+        getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        loadXML();
+
         fillCategories();
         loadMainPanel();
         extractXMPData();
@@ -264,16 +272,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (onlyUsePortrait) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        MasterImage.setMaster(mMasterImage);
 
         clearGalleryBitmapPool();
-        setupPipeline();
-
-        setupMasterImage();
-        setDefaultValues();
-        fillEditors();
-
-        loadXML();
+        doBindService();
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+        setContentView(R.layout.filtershow_splashscreen);
         UsageStatistics.onContentViewChanged(UsageStatistics.COMPONENT_EDITOR, "Main");
         UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
                 UsageStatistics.CATEGORY_LIFECYCLE, UsageStatistics.LIFECYCLE_START);
@@ -549,6 +552,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         int curveHandleSize = (int) res.getDimension(R.dimen.crop_indicator_size);
         Spline.setCurveHandle(curveHandle, curveHandleSize);
         Spline.setCurveWidth((int) getPixelsFromDip(3));
+
+        mOriginalImageUri = null;
     }
 
     private void startLoadBitmap(Uri uri) {
@@ -780,7 +785,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
 
             if (!result) {
-                if (!mOriginalImageUri.equals(mSelectedImageUri)) {
+                if (mOriginalImageUri != null
+                        && !mOriginalImageUri.equals(mSelectedImageUri)) {
                     mOriginalImageUri = mSelectedImageUri;
                     mOriginalPreset = null;
                     Toast.makeText(FilterShowActivity.this,
@@ -953,12 +959,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 .getActionProvider();
         mShareActionProvider.setShareIntent(getDefaultShareIntent());
         mShareActionProvider.setOnShareTargetSelectedListener(this);
-
-        MenuItem undoItem = menu.findItem(R.id.undoButton);
-        MenuItem redoItem = menu.findItem(R.id.redoButton);
-        MenuItem resetItem = menu.findItem(R.id.resetHistoryButton);
-        mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
+        mMenu = menu;
         return true;
+    }
+
+    private void setupMenu(){
+        MenuItem undoItem = mMenu.findItem(R.id.undoButton);
+        MenuItem redoItem = mMenu.findItem(R.id.redoButton);
+        MenuItem resetItem = mMenu.findItem(R.id.resetHistoryButton);
+        mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
     }
 
     @Override
