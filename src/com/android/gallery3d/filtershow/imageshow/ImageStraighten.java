@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.filtershow.imageshow;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -56,6 +57,11 @@ public class ImageStraighten extends ImageShow {
         NONE, MOVE
     }
     private MODES mState = MODES.NONE;
+    private ValueAnimator mAnimator = null;
+    private int mDefaultGridAlpha = 60;
+    private float mGridAlpha = 1f;
+    private int mOnStartAnimDelay = 1000;
+    private int mAnimDelay = 500;
     private static final float MAX_STRAIGHTEN_ANGLE
         = FilterStraightenRepresentation.MAX_STRAIGHTEN_ANGLE;
     private static final float MIN_STRAIGHTEN_ANGLE
@@ -73,6 +79,27 @@ public class ImageStraighten extends ImageShow {
 
     public ImageStraighten(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        mGridAlpha = 1f;
+        hidesGrid(mOnStartAnimDelay);
+    }
+
+    private void hidesGrid(int delay) {
+        mAnimator = ValueAnimator.ofFloat(1, 0);
+        mAnimator.setStartDelay(delay);
+        mAnimator.setDuration(mAnimDelay);
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mGridAlpha = ((Float) animation.getAnimatedValue());
+                invalidate();
+            }
+        });
+        mAnimator.start();
     }
 
     public void setFilterStraightenRepresentation(FilterStraightenRepresentation rep) {
@@ -112,6 +139,7 @@ public class ImageStraighten extends ImageShow {
                     mCurrentY = y;
                     computeValue();
                     mFirstDrawSinceUp = true;
+                    hidesGrid(0);
                 }
                 break;
             case (MotionEvent.ACTION_MOVE):
@@ -246,15 +274,19 @@ public class ImageStraighten extends ImageShow {
         }
         CropDrawingUtils.drawShade(canvas, mDrawRect);
         // Draw the grid
-        if (mState == MODES.MOVE) {
+        if (mState == MODES.MOVE || mGridAlpha > 0) {
             canvas.save();
             canvas.clipRect(mDrawRect);
 
-            float step = Math.max(viewWidth,viewWidth) / NBLINES;
+            float step = Math.max(viewWidth, viewHeight) / NBLINES;
             float p = 0;
             for (int i = 1; i < NBLINES; i++) {
                 p = i * step;
-                mPaint.setAlpha(60);
+                int alpha = (int) (mDefaultGridAlpha * mGridAlpha);
+                if (alpha == 0 && mState == MODES.MOVE) {
+                    alpha = mDefaultGridAlpha;
+                }
+                mPaint.setAlpha(alpha);
                 canvas.drawLine(p, 0, p, viewHeight, mPaint);
                 canvas.drawLine(0, p, viewHeight, p, mPaint);
             }
