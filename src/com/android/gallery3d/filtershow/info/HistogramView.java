@@ -27,15 +27,15 @@ import android.graphics.PorterDuffXfermode;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
-import com.android.gallery3d.filtershow.imageshow.Spline;
 
 public class HistogramView extends View {
 
     private Bitmap mBitmap;
-    int[] redHistogram = new int[256];
-    int[] greenHistogram = new int[256];
-    int[] blueHistogram = new int[256];
-    Path gHistoPath = new Path();
+    private Paint mPaint = new Paint();
+    private int[] redHistogram = new int[256];
+    private int[] greenHistogram = new int[256];
+    private int[] blueHistogram = new int[256];
+    private Path mHistoPath = new Path();
 
     class ComputeHistogramTask extends AsyncTask<Bitmap, Void, int[]> {
         @Override
@@ -85,28 +85,29 @@ public class HistogramView extends View {
                 max = histogram[i];
             }
         }
-        float w = getWidth() - Spline.curveHandleSize();
-        float h = getHeight() - Spline.curveHandleSize() / 2.0f;
-        float dx = Spline.curveHandleSize() / 2.0f;
+        float w = getWidth(); // - Spline.curveHandleSize();
+        float h = getHeight(); // - Spline.curveHandleSize() / 2.0f;
+        float dx = 0; // Spline.curveHandleSize() / 2.0f;
         float wl = w / histogram.length;
         float wh = h / max;
-        Paint paint = new Paint();
-        paint.setARGB(100, 255, 255, 255);
-        paint.setStrokeWidth((int) Math.ceil(wl));
+
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setARGB(100, 255, 255, 255);
+        mPaint.setStrokeWidth((int) Math.ceil(wl));
 
         // Draw grid
-        paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(dx, 0, dx + w, h, paint);
-        canvas.drawLine(dx + w / 3, 0, dx + w / 3, h, paint);
-        canvas.drawLine(dx + 2 * w / 3, 0, dx + 2 * w / 3, h, paint);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect(dx, 0, dx + w, h, mPaint);
+        canvas.drawLine(dx + w / 3, 0, dx + w / 3, h, mPaint);
+        canvas.drawLine(dx + 2 * w / 3, 0, dx + 2 * w / 3, h, mPaint);
 
-        Paint paint2 = new Paint();
-        paint2.setColor(color);
-        paint2.setStrokeWidth(6);
-        paint2.setXfermode(new PorterDuffXfermode(mode));
-        gHistoPath.reset();
-        gHistoPath.moveTo(dx, h);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(color);
+        mPaint.setStrokeWidth(6);
+        mPaint.setXfermode(new PorterDuffXfermode(mode));
+        mHistoPath.reset();
+        mHistoPath.moveTo(dx, h);
         boolean firstPointEncountered = false;
         float prev = 0;
         float last = 0;
@@ -116,22 +117,22 @@ public class HistogramView extends View {
             if (l != 0) {
                 float v = h - (l + prev) / 2.0f;
                 if (!firstPointEncountered) {
-                    gHistoPath.lineTo(x, h);
+                    mHistoPath.lineTo(x, h);
                     firstPointEncountered = true;
                 }
-                gHistoPath.lineTo(x, v);
+                mHistoPath.lineTo(x, v);
                 prev = l;
                 last = x;
             }
         }
-        gHistoPath.lineTo(last, h);
-        gHistoPath.lineTo(w, h);
-        gHistoPath.close();
-        canvas.drawPath(gHistoPath, paint2);
-        paint2.setStrokeWidth(2);
-        paint2.setStyle(Paint.Style.STROKE);
-        paint2.setARGB(255, 200, 200, 200);
-        canvas.drawPath(gHistoPath, paint2);
+        mHistoPath.lineTo(last, h);
+        mHistoPath.lineTo(w, h);
+        mHistoPath.close();
+        canvas.drawPath(mHistoPath, mPaint);
+        mPaint.setStrokeWidth(2);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setARGB(255, 200, 200, 200);
+        canvas.drawPath(mHistoPath, mPaint);
     }
 
     public void onDraw(Canvas canvas) {
