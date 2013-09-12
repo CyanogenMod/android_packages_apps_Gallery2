@@ -31,6 +31,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -596,7 +597,6 @@ public class ImageShow extends View implements OnGestureListener,
                 Point translation = MasterImage.getImage().getTranslation();
                 translation.x = (int) (originalTranslation.x + translateX);
                 translation.y = (int) (originalTranslation.y + translateY);
-                constrainTranslation(translation, scaleFactor);
                 MasterImage.getImage().setTranslation(translation);
                 mTouchShowOriginal = false;
             } else if (enableComparison() && !mOriginalDisabled
@@ -607,18 +607,25 @@ public class ImageShow extends View implements OnGestureListener,
             }
         }
 
-        if (action == MotionEvent.ACTION_UP) {
+        if (action == MotionEvent.ACTION_UP
+                || action == MotionEvent.ACTION_CANCEL
+                || action == MotionEvent.ACTION_OUTSIDE) {
             mInteractionMode = InteractionMode.NONE;
             mTouchShowOriginal = false;
             mTouchDown.x = 0;
             mTouchDown.y = 0;
             mTouch.x = 0;
             mTouch.y = 0;
+            float scaleFactor = MasterImage.getImage().getScaleFactor();
+            Point translation = MasterImage.getImage().getTranslation();
+            constrainTranslation(translation, scaleFactor);
+            MasterImage.getImage().setTranslation(translation);
             if (MasterImage.getImage().getScaleFactor() <= 1) {
                 MasterImage.getImage().setScaleFactor(1);
                 MasterImage.getImage().resetTranslation();
             }
         }
+
         invalidate();
         return true;
     }
@@ -649,15 +656,25 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     private void constrainTranslation(Point translation, float scale) {
-        float maxTranslationX = getWidth() / scale;
-        float maxTranslationY = getHeight() / scale;
-        if (Math.abs(translation.x) > maxTranslationX) {
-            translation.x = (int) (Math.signum(translation.x) *
-                    maxTranslationX);
-            if (Math.abs(translation.y) > maxTranslationY) {
-                translation.y = (int) (Math.signum(translation.y) *
-                        maxTranslationY);
-            }
+        Matrix originalToScreen = MasterImage.getImage().originalImageToScreen();
+        Matrix screenToOriginal = new Matrix();
+        originalToScreen.invert(screenToOriginal);
+        Rect originalBounds = MasterImage.getImage().getOriginalBounds();
+        RectF screenPos = new RectF(originalBounds);
+        originalToScreen.mapRect(screenPos);
+        if (screenPos.right < getWidth() - mShadowMargin) {
+            float tx = mImageBounds.right - translation.x * scale;
+            translation.x = (int) ((getWidth() - mShadowMargin - tx) / scale);
+        } else if (screenPos.left > mShadowMargin) {
+            float tx = mImageBounds.left - translation.x * scale;
+            translation.x = (int) ((mShadowMargin - tx) / scale);
+        }
+        if (screenPos.bottom < getHeight() - mShadowMargin) {
+            float ty = mImageBounds.bottom - translation.y * scale;
+            translation.y = (int) ((getHeight() - mShadowMargin - ty) / scale);
+        } else if (screenPos.top > mShadowMargin) {
+            float ty = mImageBounds.top - translation.y * scale;
+            translation.y = (int) ((mShadowMargin - ty) / scale);
         }
     }
 
@@ -733,9 +750,7 @@ public class ImageShow extends View implements OnGestureListener,
         Point translation = MasterImage.getImage().getTranslation();
         translation.x = (int) (mOriginalTranslation.x + translateX);
         translation.y = (int) (mOriginalTranslation.y + translateY);
-        constrainTranslation(translation, scaleFactor);
         MasterImage.getImage().setTranslation(translation);
-
         invalidate();
         return true;
     }
