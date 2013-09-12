@@ -16,51 +16,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
+              android:minWidth="340dp"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="#3a4e56">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#222">
-
-        <ImageButton
-                android:id="@+id/cancelInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_gravity="left|center_vertical"
-                android:background="@android:color/transparent"
-                android:layout_weight=".1"
-                android:gravity="left"
-                android:src="@drawable/ic_menu_cancel_holo_light"
-                android:textSize="18dip"/>
-
-        <ImageView
-                android:layout_width="2dp"
-                android:layout_height="fill_parent"
-                android:src="@drawable/filtershow_vertical_bar"/>
-
-        <TextView
-                style="?android:textAppearanceLarge"
-                android:textStyle="bold"
-                android:textColor="#fff"
-                android:layout_weight="1"
-                android:layout_gravity="left|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dip"
-                android:text="@string/filtershow_show_info_panel"/>
-
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:background="#3a4e56"
-                  android:padding="16dp">
+              android:background="@color/background_main_toolbar"
+              android:padding="16dp">
 
     <ScrollView
             android:layout_width="match_parent"
@@ -74,87 +34,78 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
-                <LinearLayout
+                <TextView
+                        android:id="@+id/imageName"
+                        style="?android:textAppearanceSmall"
+                        android:textStyle="bold"
+                        android:textColor="#80ffffff"
+                        android:layout_gravity="start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"/>
+
+                <TextView
+                        android:id="@+id/imageSize"
+                        style="?android:textAppearanceSmall"
+                        android:textAllCaps="true"
+                        android:textColor="#80ffffff"
+                        android:textStyle="bold"
+                        android:layout_gravity="end"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="end"/>
 
-                    <TextView
-                            style="?android:textAppearanceLarge"
-                            android:textStyle="bold"
-                            android:textColor="#fff"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/filtershow_show_info_panel_name"/>
+            </LinearLayout>
 
-                    <TextView
-                            android:id="@+id/imageName"
-                            style="?android:textAppearanceSmall"
-                            android:textStyle="bold"
-                            android:textColor="#80ffffff"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                    <TextView
-                            style="?android:textAppearanceLarge"
-                            android:textStyle="bold"
-                            android:textColor="#fff"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/filtershow_show_info_panel_size"/>
-
-                    <TextView
-                            android:id="@+id/imageSize"
-                            style="?android:textAppearanceSmall"
-                            android:textAllCaps="true"
-                            android:textColor="#80ffffff"
-                            android:textStyle="bold"
-                            android:lineSpacingMultiplier="1.2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    >
 
                 <ImageView
                         android:id="@+id/imageThumbnail"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:scaleType="centerInside"
+                        android:layout_weight="0.3"
+                        android:layout_width="0dp"
+                        android:layout_height="196dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginRight="16dp"
                         android:background="@null"
-                        android:layout_weight="1"
+
                         />
+
+                <com.android.gallery3d.filtershow.info.HistogramView
+                        android:id="@+id/histogramView"
+                        android:layout_weight="0.7"
+                        android:layout_width="0dp"
+                        android:layout_height="196dp"
+                        android:layout_margin="0dp"/>
             </LinearLayout>
 
             <TextView
                     style="?android:textAppearanceLarge"
+                    android:id="@+id/exifLabel"
                     android:textStyle="bold"
                     android:textColor="#fff"
-                    android:layout_width="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/filtershow_show_info_panel_histogram"/>
-
-            <com.android.gallery3d.filtershow.info.HistogramView
-                    android:id="@+id/histogramView"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_margin="16dp"/>
-
-            <TextView
-                    style="?android:textAppearanceLarge"
-                    android:textStyle="bold"
-                    android:textColor="#fff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:text="@string/filtershow_show_info_panel_exif"/>
 
             <TextView
                     android:id="@+id/exifData"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="start"
+                    />
         </LinearLayout>
     </ScrollView>
-    </LinearLayout>
+
 </LinearLayout>
