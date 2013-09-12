@@ -20,11 +20,12 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,13 +33,12 @@ import android.widget.TextView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.exif.ExifTag;
-import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 
 import java.util.List;
 
-public class InfoPanel extends Fragment {
+public class InfoPanel extends DialogFragment {
     public static final String FRAGMENT_TAG = "InfoPanel";
     private static final String LOGTAG = FRAGMENT_TAG;
     private LinearLayout mMainView;
@@ -46,7 +46,6 @@ public class InfoPanel extends Fragment {
     private TextView mImageName;
     private TextView mImageSize;
     private TextView mExifData;
-    private ImageButton mHideButton;
 
     private String createStringFromIfFound(ExifTag exifTag, int tag, int str) {
         String exifString = "";
@@ -63,6 +62,9 @@ public class InfoPanel extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getDialog() != null) {
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        }
 
         mMainView = (LinearLayout) inflater.inflate(
                 R.layout.filtershow_info_panel, null, false);
@@ -74,19 +76,11 @@ public class InfoPanel extends Fragment {
         mImageName = (TextView) mMainView.findViewById(R.id.imageName);
         mImageSize = (TextView) mMainView.findViewById(R.id.imageSize);
         mExifData = (TextView) mMainView.findViewById(R.id.exifData);
-        mHideButton =(ImageButton) mMainView.findViewById(R.id.cancelInfo);
+        TextView exifLabel = (TextView) mMainView.findViewById(R.id.exifLabel);
 
         HistogramView histogramView = (HistogramView) mMainView.findViewById(R.id.histogramView);
-
         histogramView.setBitmap(bitmap);
 
-        mHideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterShowActivity activity = (FilterShowActivity)getActivity();
-                activity.toggleInformationPanel();
-            }
-        });
         Uri uri = MasterImage.getImage().getUri();
         String path = ImageLoader.getLocalPathFromUri(getActivity(), uri);
         Uri localUri = null;
@@ -102,6 +96,7 @@ public class InfoPanel extends Fragment {
 
         List<ExifTag> exif = MasterImage.getImage().getEXIF();
         String exifString = "";
+        boolean hasExifData = false;
         if (exif != null) {
             for (ExifTag tag : exif) {
                 exifString += createStringFromIfFound(tag,
@@ -131,9 +126,15 @@ public class InfoPanel extends Fragment {
                 exifString += createStringFromIfFound(tag,
                         ExifInterface.TAG_COPYRIGHT,
                         R.string.filtershow_exif_copyright);
+                hasExifData = true;
             }
         }
-        mExifData.setText(Html.fromHtml(exifString));
+        if (hasExifData) {
+            exifLabel.setVisibility(View.VISIBLE);
+            mExifData.setText(Html.fromHtml(exifString));
+        } else {
+            exifLabel.setVisibility(View.GONE);
+        }
         return mMainView;
     }
 }
