@@ -126,7 +126,10 @@ public class FilterColorBorderRepresentation extends FilterRepresentation {
 
     @Override
     public int getTextId() {
-        return R.string.borders;
+        if (super.getTextId() == 0) {
+            return R.string.borders;
+        }
+        return super.getTextId();
     }
 
     public int getColor() {
