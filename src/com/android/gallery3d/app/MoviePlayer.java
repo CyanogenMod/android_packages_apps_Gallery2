@@ -27,6 +27,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Virtualizer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,6 +68,7 @@ public class MoviePlayer implements
     private static final String CMDNAME = "command";
     private static final String CMDPAUSE = "pause";
 
+    private static final String VIRTUALIZE_EXTRA = "virtualize";
     private static final long BLACK_TIMEOUT = 500;
 
     // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
@@ -91,6 +94,8 @@ public class MoviePlayer implements
 
     // If the time bar is visible.
     private boolean mShowing;
+
+    private Virtualizer mVirtualizer;
 
     private final Runnable mPlayingChecker = new Runnable() {
         @Override
@@ -127,6 +132,18 @@ public class MoviePlayer implements
         mVideoView.setOnErrorListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setVideoURI(mUri);
+
+        Intent ai = movieActivity.getIntent();
+        boolean virtualize = ai.getBooleanExtra(VIRTUALIZE_EXTRA, false);
+        if (virtualize) {
+            int session = mVideoView.getAudioSessionId();
+            if (session != 0) {
+                mVirtualizer = new Virtualizer(0, session);
+                mVirtualizer.setEnabled(true);
+            } else {
+                Log.w(TAG, "no audio session to virtualize");
+            }
+        }
         mVideoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -280,6 +297,10 @@ public class MoviePlayer implements
     }
 
     public void onDestroy() {
+        if (mVirtualizer != null) {
+            mVirtualizer.release();
+            mVirtualizer = null;
+        }
         mVideoView.stopPlayback();
         mAudioBecomingNoisyReceiver.unregister();
     }
