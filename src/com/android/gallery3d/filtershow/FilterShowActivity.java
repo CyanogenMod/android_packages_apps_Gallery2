@@ -935,10 +935,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mShareActionProvider.setShareIntent(getDefaultShareIntent());
         mShareActionProvider.setOnShareTargetSelectedListener(this);
         mMenu = menu;
+        setupMenu();
         return true;
     }
 
     private void setupMenu(){
+        if (mMenu == null || mMasterImage == null) {
+            return;
+        }
         MenuItem undoItem = mMenu.findItem(R.id.undoButton);
         MenuItem redoItem = mMenu.findItem(R.id.redoButton);
         MenuItem resetItem = mMenu.findItem(R.id.resetHistoryButton);
