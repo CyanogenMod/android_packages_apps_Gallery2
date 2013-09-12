@@ -45,7 +45,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     public static final int PARAM_SIZE = 0;
     public static final int PARAM_STYLE = 1;
     public static final int PARAM_COLOR = 2;
-    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 20, 2, 300);
+    private BasicParameterInt mParamSize = new BasicParameterInt(PARAM_SIZE, 30, 2, 300);
     private BasicParameterStyle mParamStyle = new BasicParameterStyle(PARAM_STYLE, 5);
     public static int DEFAULT_MENU_COLOR1 = Color.RED & 0x80FFFFFF;
     public static int DEFAULT_MENU_COLOR2 = Color.GREEN & 0x80FFFFFF;

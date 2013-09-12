@@ -86,6 +86,11 @@ public class ColorSVRectView extends View implements ColorListener {
         fillBitmap();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
+
     void fillBitmap() {
         int w = mBitmap.getWidth();
         int h = mBitmap.getHeight();

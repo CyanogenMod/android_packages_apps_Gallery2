@@ -32,6 +32,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.colorpicker.ColorCompareView;
 import com.android.gallery3d.filtershow.colorpicker.ColorHueView;
 import com.android.gallery3d.filtershow.colorpicker.ColorListener;
 import com.android.gallery3d.filtershow.colorpicker.ColorOpacityView;
@@ -55,6 +56,7 @@ public class EditorDrawTabletUI {
     private ColorHueView mHueView;
     private ColorSVRectView mSatValView;
     private ColorOpacityView mOpacityView;
+    private ColorCompareView mColorCompareView;
 
     private int[] mBasColors;
     private int mSelected;
@@ -72,8 +74,9 @@ public class EditorDrawTabletUI {
         mRep = rep;
         BasicParameterInt size;
         size = (BasicParameterInt) mRep.getParam(FilterDrawRepresentation.PARAM_SIZE);
-        mdrawSizeSeekBar.setProgress(size.getDefaultValue());
         mdrawSizeSeekBar.setMax(size.getMaximum() - size.getMinimum());
+        mdrawSizeSeekBar.setProgress(size.getValue());
+
         ParameterColor color;
         color = (ParameterColor) mRep.getParam(FilterDrawRepresentation.PARAM_COLOR);
         color.setValue(mBasColors[mSelectedColorButton]);
@@ -183,7 +186,7 @@ public class EditorDrawTabletUI {
                 public void onClick(View arg0) {
 
                     mSelectedColorButton = buttonNo;
-                    float[] hsvo = Arrays.copyOf((float[]) mColorButton[buttonNo].getTag(),4);
+                    float[] hsvo = Arrays.copyOf((float[]) mColorButton[buttonNo].getTag(), 4);
                     resetBorders();
                     if (mRep == null) {
                         return;
@@ -195,18 +198,33 @@ public class EditorDrawTabletUI {
                     mHueView.setColor(hsvo);
                     mSatValView.setColor(hsvo);
                     mOpacityView.setColor(hsvo);
+                    mColorCompareView.setColor(hsvo);
+                    mColorCompareView.setOrigColor(hsvo);
                 }
             });
         }
+
         mHueView = (ColorHueView) lp.findViewById(R.id.ColorHueView);
         mSatValView = (ColorSVRectView) lp.findViewById(R.id.colorRectView);
         mOpacityView = (ColorOpacityView) lp.findViewById(R.id.colorOpacityView);
-        mHueView.addColorListener(mSatValView);
-        mSatValView.addColorListener(mHueView);
-        mHueView.addColorListener(mOpacityView);
-        mSatValView.addColorListener(mOpacityView);
-        mOpacityView.addColorListener(mSatValView);
-        mOpacityView.addColorListener(mHueView);
+        mColorCompareView = (ColorCompareView) lp.findViewById(R.id.btnSelect);
+
+        float[] hsvo = new float[4];
+        Color.colorToHSV(mBasColors[0], hsvo);
+        hsvo[3] = (0xFF & (mBasColors[0] >> 24)) / (float) 255;
+
+        mColorCompareView.setOrigColor(hsvo);
+        ColorListener[] colorViews = {mHueView, mSatValView, mOpacityView, mColorCompareView};
+        for (int i = 0; i < colorViews.length; i++) {
+            colorViews[i].setColor(hsvo);
+
+            for (int j = 0; j < colorViews.length; j++) {
+                if (i == j) {
+                    continue;
+                }
+                colorViews[i].addColorListener(colorViews[j]);
+            }
+        }
         ColorListener colorListener = new ColorListener() {
 
             @Override
@@ -214,7 +232,7 @@ public class EditorDrawTabletUI {
                 int color = Color.HSVToColor((int) (hsvo[3] * 255), hsvo);
                 Button b = mColorButton[mSelectedColorButton];
                 float[] f = (float[]) b.getTag();
-                System.arraycopy(hsvo,0,f,0,4);
+                System.arraycopy(hsvo, 0, f, 0, 4);
                 mBasColors[mSelectedColorButton] = color;
                 GradientDrawable sd = ((GradientDrawable) b.getBackground());
                 sd.setColor(color);
@@ -224,10 +242,16 @@ public class EditorDrawTabletUI {
                 pram.setValue(color);
                 mEditorDraw.commitLocalRepresentation();
             }
+
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         };
-        mHueView.addColorListener(colorListener);
-        mSatValView.addColorListener(colorListener);
-        mOpacityView.addColorListener(colorListener);
+
+        for (int i = 0; i < colorViews.length; i++) {
+            colorViews[i].addColorListener(colorListener);
+        }
+
     }
 
     public void resetStyle() {

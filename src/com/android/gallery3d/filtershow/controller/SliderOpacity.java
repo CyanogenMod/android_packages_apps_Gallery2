@@ -53,6 +53,9 @@ public class SliderOpacity implements Control {
                 mParameter.setValue((int) (255 * hsvo[3]));
                 mEditor.commitLocalRepresentation();
             }
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         });
     }
 
