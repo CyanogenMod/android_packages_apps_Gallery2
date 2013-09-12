@@ -306,7 +306,7 @@ public class CachingPipeline implements PipelineInterface {
             if (request.getType() == RenderingRequest.PARTIAL_RENDERING) {
                 MasterImage master = MasterImage.getImage();
                 bitmap = ImageLoader.getScaleOneImageForPreset(master.getActivity(),
-                        mEnvironment,
+                        mEnvironment.getBimapCache(),
                         master.getUri(), request.getBounds(),
                         request.getDestination());
                 if (bitmap == null) {
