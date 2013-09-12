@@ -27,10 +27,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -49,7 +49,6 @@ import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class ImageShow extends View implements OnGestureListener,
         ScaleGestureDetector.OnScaleGestureListener,
@@ -233,6 +232,9 @@ public class ImageShow extends View implements OnGestureListener,
 
     @Override
     public void onDraw(Canvas canvas) {
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setFilterBitmap(true);
         MasterImage.getImage().setImageShowSize(
                 getWidth() - 2*mShadowMargin,
                 getHeight() - 2*mShadowMargin);
@@ -248,53 +250,43 @@ public class ImageShow extends View implements OnGestureListener,
             } else if (img.getLoadedPreset() != null) {
                 return;
             }
+            mActivity.stopLoadingIndicator();
         }
-
-        float cx = canvas.getWidth()/2.0f;
-        float cy = canvas.getHeight()/2.0f;
-        float scaleFactor = MasterImage.getImage().getScaleFactor();
-        Point translation = MasterImage.getImage().getTranslation();
 
         canvas.save();
 
         mShadowDrawn = false;
 
-        canvas.save();
-        // TODO: center scale on gesture
-        canvas.scale(scaleFactor, scaleFactor, cx, cy);
-        canvas.translate(translation.x, translation.y);
         Bitmap highresPreview = MasterImage.getImage().getHighresImage();
+        Bitmap fullHighres = MasterImage.getImage().getPartialImage();
 
         boolean isDoingNewLookAnimation = MasterImage.getImage().onGoingNewLookAnimation();
 
-        if (!isDoingNewLookAnimation && highresPreview != null) {
-            drawImage(canvas, highresPreview, true);
+        if (highresPreview == null || isDoingNewLookAnimation) {
+            drawImageAndAnimate(canvas, getFilteredImage());
         } else {
-            drawImage(canvas, getFilteredImage(), true);
-        }
-        canvas.restore();
-
-        Bitmap partialPreview = MasterImage.getImage().getPartialImage();
-        if (!isDoingNewLookAnimation && partialPreview != null) {
-            canvas.save();
-            Rect originalBounds = MasterImage.getImage().getOriginalBounds();
-            Collection<FilterRepresentation> geo = MasterImage.getImage().getPreset()
-                    .getGeometryFilters();
-
-            Matrix compensation = GeometryMathUtils.getPartialToScreenMatrix(geo,
-                    originalBounds, getWidth(), getHeight(),
-                    partialPreview.getWidth(), partialPreview.getHeight());
-            canvas.drawBitmap(partialPreview, compensation, null);
-            canvas.restore();
+            drawImageAndAnimate(canvas, highresPreview);
         }
 
-        canvas.save();
-        canvas.scale(scaleFactor, scaleFactor, cx, cy);
-        canvas.translate(translation.x, translation.y);
-        drawPartialImage(canvas, getGeometryOnlyImage());
-        canvas.restore();
+        drawHighresImage(canvas, fullHighres);
+        drawCompareImage(canvas, getGeometryOnlyImage());
 
         canvas.restore();
+    }
+
+    private void drawHighresImage(Canvas canvas, Bitmap fullHighres) {
+        Matrix originalToScreen = MasterImage.getImage().originalImageToScreen();
+        if (fullHighres != null && originalToScreen != null) {
+            Matrix screenToOriginal = new Matrix();
+            originalToScreen.invert(screenToOriginal);
+            Rect rBounds = new Rect();
+            rBounds.set(MasterImage.getImage().getPartialBounds());
+            if (fullHighres != null) {
+                originalToScreen.preTranslate(rBounds.left, rBounds.top);
+                canvas.clipRect(mImageBounds);
+                canvas.drawBitmap(fullHighres, originalToScreen, mPaint);
+            }
+        }
     }
 
     public void resetImageCaches(ImageShow caller) {
@@ -313,56 +305,68 @@ public class ImageShow extends View implements OnGestureListener,
         return MasterImage.getImage().getFilteredImage();
     }
 
-    public void drawImage(Canvas canvas, Bitmap image, boolean updateBounds) {
+    public void drawImageAndAnimate(Canvas canvas,
+                                    Bitmap image) {
         if (image == null) {
             return;
         }
-
-        Rect d = computeImageBounds(image.getWidth(), image.getHeight());
-
-        if (updateBounds) {
-            mImageBounds = d;
+        Matrix m = MasterImage.getImage().computeImageToScreen(image, 0, false);
+        if (m == null) {
+            return;
         }
 
-        float centerX = mShadowMargin + (getWidth() - 2 * mShadowMargin) / 2;
-        float centerY = mShadowMargin + (getHeight() - 2 * mShadowMargin) / 2;
-
-        MasterImage master = MasterImage.getImage();
         canvas.save();
+        MasterImage master = MasterImage.getImage();
+
+        RectF d = new RectF(0, 0, image.getWidth(), image.getHeight());
+        m.mapRect(d);
+        d.roundOut(mImageBounds);
+
         if (master.onGoingNewLookAnimation()
                 || mDidStartAnimation) {
             mDidStartAnimation = true;
+            canvas.save();
+
+            // Animation uses the image before the change
+            Bitmap previousImage = master.getPreviousImage();
+            Matrix mp = MasterImage.getImage().computeImageToScreen(previousImage, 0, false);
+            RectF dp = new RectF(0, 0, previousImage.getWidth(), previousImage.getHeight());
+            mp.mapRect(dp);
+            Rect previousBounds = new Rect();
+            dp.roundOut(previousBounds);
+            float centerX = dp.centerX();
+            float centerY = dp.centerY();
+            boolean needsToDrawImage = true;
+
             if (master.getCurrentLookAnimation()
-                    == MasterImage.CIRCLE_ANIMATION
-                    && MasterImage.getImage().getPreviousImage() != null) {
+                    == MasterImage.CIRCLE_ANIMATION) {
                 float maskScale = MasterImage.getImage().getMaskScale();
                 if (maskScale >= 0.0f) {
                     float maskW = sMask.getWidth() / 2.0f;
                     float maskH = sMask.getHeight() / 2.0f;
-                    float x = centerX - maskW * maskScale;
-                    float y = centerY - maskH * maskScale;
 
                     Point point = mActivity.hintTouchPoint(this);
-                    x = point.x - maskW * maskScale;
-                    y = point.y - maskH * maskScale;
+                    float x = point.x - maskW * maskScale;
+                    float y = point.y - maskH * maskScale;
 
                     // Prepare the shader
                     mShaderMatrix.reset();
                     mShaderMatrix.setScale(1.0f / maskScale, 1.0f / maskScale);
-                    mShaderMatrix.preTranslate(-x + d.left, -y + d.top);
-                    float scaleImageX = d.width() / (float) image.getWidth();
-                    float scaleImageY = d.height() / (float) image.getHeight();
+                    mShaderMatrix.preTranslate(-x + mImageBounds.left, -y + mImageBounds.top);
+                    float scaleImageX = mImageBounds.width() / (float) image.getWidth();
+                    float scaleImageY = mImageBounds.height() / (float) image.getHeight();
                     mShaderMatrix.preScale(scaleImageX, scaleImageY);
                     mMaskPaint.reset();
                     mMaskPaint.setShader(createShader(image));
                     mMaskPaint.getShader().setLocalMatrix(mShaderMatrix);
 
-                    drawImage(canvas, MasterImage.getImage().getPreviousImage());
+                    drawShadow(canvas, mImageBounds); // as needed
+                    canvas.drawBitmap(previousImage, m, mPaint);
+                    canvas.clipRect(mImageBounds);
                     canvas.translate(x, y);
                     canvas.scale(maskScale, maskScale);
                     canvas.drawBitmap(sMask, 0, 0, mMaskPaint);
-                } else {
-                    drawImage(canvas, image);
+                    needsToDrawImage = false;
                 }
             } else if (master.getCurrentLookAnimation()
                     == MasterImage.ROTATE_ANIMATION) {
@@ -375,7 +379,6 @@ public class ImageShow extends View implements OnGestureListener,
                         + (finalScale * master.getAnimFraction());
                 canvas.rotate(master.getAnimRotationValue(), centerX, centerY);
                 canvas.scale(finalScale, finalScale, centerX, centerY);
-                drawImage(canvas, master.getPreviousImage());
             } else if (master.getCurrentLookAnimation()
                     == MasterImage.MIRROR_ANIMATION) {
                 if (master.getCurrentFilterRepresentation()
@@ -411,10 +414,17 @@ public class ImageShow extends View implements OnGestureListener,
                         }
                     }
                 }
-                drawImage(canvas, master.getPreviousImage());
             }
+
+            if (needsToDrawImage) {
+                drawShadow(canvas, previousBounds); // as needed
+                canvas.drawBitmap(previousImage, mp, mPaint);
+            }
+
+            canvas.restore();
         } else {
-            drawImage(canvas, image);
+            drawShadow(canvas, mImageBounds); // as needed
+            canvas.drawBitmap(image, m, mPaint);
         }
 
         if (!master.onGoingNewLookAnimation()
@@ -423,19 +433,8 @@ public class ImageShow extends View implements OnGestureListener,
             mDidStartAnimation = false;
             MasterImage.getImage().resetAnimBitmap();
         }
-        canvas.restore();
-    }
 
-    private void drawImage(Canvas canvas, Bitmap image) {
-        Rect d = computeImageBounds(image.getWidth(), image.getHeight());
-        float scaleImageX = d.width() / (float) image.getWidth();
-        float scaleImageY = d.height() / (float) image.getHeight();
-        Matrix imageMatrix = new Matrix();
-        imageMatrix.postScale(scaleImageX, scaleImageY);
-        imageMatrix.postTranslate(d.left, d.top);
-        drawShadow(canvas, d);
-        canvas.clipRect(d);
-        canvas.drawBitmap(image, imageMatrix, mPaint);
+        canvas.restore();
     }
 
     private Rect computeImageBounds(int imageWidth, int imageHeight) {
@@ -462,7 +461,7 @@ public class ImageShow extends View implements OnGestureListener,
         }
     }
 
-    public void drawPartialImage(Canvas canvas, Bitmap image) {
+    public void drawCompareImage(Canvas canvas, Bitmap image) {
         boolean showsOriginal = MasterImage.getImage().showsOriginal();
         if (!showsOriginal && !mTouchShowOriginal)
             return;
@@ -503,7 +502,8 @@ public class ImageShow extends View implements OnGestureListener,
                 }
             }
             canvas.clipRect(d);
-            drawImage(canvas, image, false);
+            Matrix m = MasterImage.getImage().computeImageToScreen(image, 0, false);
+            canvas.drawBitmap(image, m, mPaint);
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(3);
@@ -658,7 +658,6 @@ public class ImageShow extends View implements OnGestureListener,
                 translation.y = (int) (Math.signum(translation.y) *
                         maxTranslationY);
             }
-
         }
     }
 

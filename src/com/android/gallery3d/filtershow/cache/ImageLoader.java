@@ -65,7 +65,7 @@ public final class ImageLoader {
     public static final int ORI_TRANSVERSE = ExifInterface.Orientation.LEFT_BOTTOM;
 
     private static final int BITMAP_LOAD_BACKOUT_ATTEMPTS = 5;
-
+    private static final float OVERDRAW_ZOOM = 1.2f;
     private ImageLoader() {}
 
     /**
@@ -235,7 +235,7 @@ public final class ImageLoader {
      * if it is a subset of the bitmap stored at uri.  Otherwise returns
      * null.
      */
-    public static Bitmap loadRegionBitmap(Context context, FilterEnvironment environment,
+    public static Bitmap loadRegionBitmap(Context context, BitmapCache cache,
                                           Uri uri, BitmapFactory.Options options,
                                           Rect bounds) {
         InputStream is = null;
@@ -254,23 +254,15 @@ public final class ImageLoader {
             // return null if bounds are not entirely within the bitmap
             if (!r.contains(imageBounds)) {
                 imageBounds.intersect(r);
+                bounds.left = imageBounds.left;
+                bounds.top = imageBounds.top;
             }
-            Bitmap reuse = environment.getBitmap(imageBounds.width(),
+            Bitmap reuse = cache.getBitmap(imageBounds.width(),
                     imageBounds.height(), BitmapCache.REGION);
             options.inBitmap = reuse;
             Bitmap bitmap = decoder.decodeRegion(imageBounds, options);
             if (bitmap != reuse) {
-                environment.cache(reuse); // not reused, put back in cache
-            }
-            if (imageBounds.width() != bounds.width() || imageBounds.height() != bounds.height()) {
-                Bitmap temp = environment.getBitmap(bounds.width(),
-                        bounds.height(), BitmapCache.REGION);
-                Canvas canvas = new Canvas(temp);
-                canvas.drawARGB(0, 0, 0, 0);
-                float dx = imageBounds.left - bounds.left;
-                float dy = imageBounds.top - bounds.top;
-                canvas.drawBitmap(bitmap, dx, dy, null);
-                return temp;
+                cache.cache(reuse); // not reused, put back in cache
             }
             return bitmap;
         } catch (FileNotFoundException e) {
@@ -404,24 +396,24 @@ public final class ImageLoader {
     }
 
     public static Bitmap getScaleOneImageForPreset(Context context,
-                                                   FilterEnvironment environment,
+                                                   BitmapCache cache,
                                                    Uri uri, Rect bounds,
                                                    Rect destination) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
         if (destination != null) {
-            if (bounds.width() > destination.width()) {
+            int thresholdWidth = (int) (destination.width() * OVERDRAW_ZOOM);
+            if (bounds.width() > thresholdWidth) {
                 int sampleSize = 1;
                 int w = bounds.width();
-                while (w > destination.width()) {
+                while (w > thresholdWidth) {
                     sampleSize *= 2;
                     w /= sampleSize;
                 }
                 options.inSampleSize = sampleSize;
             }
         }
-        Bitmap bmp = loadRegionBitmap(context, environment, uri, options, bounds);
-        return bmp;
+        return loadRegionBitmap(context, cache, uri, options, bounds);
     }
 
     /**
