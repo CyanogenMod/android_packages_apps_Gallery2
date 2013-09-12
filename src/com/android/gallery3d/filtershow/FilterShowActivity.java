@@ -149,7 +149,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private boolean mShowingTinyPlanet = false;
     private boolean mShowingImageStatePanel = false;
     private boolean mShowingVersionsPanel = false;
-    private boolean mShowingInformationPanel = false;
 
     private final Vector<ImageShow> mImageViews = new Vector<ImageShow>();
 
@@ -334,35 +333,12 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
-    public void hideInformationPanel() {
-        FrameLayout infoLayout = (FrameLayout) findViewById(R.id.central_panel_container);
-        infoLayout.setVisibility(View.GONE);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(InfoPanel.FRAGMENT_TAG);
-        if (fragment != null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.remove(fragment);
-            transaction.commit();
-        }
-        mShowingInformationPanel = false;
-    }
-
     public void toggleInformationPanel() {
-        mShowingInformationPanel = !mShowingInformationPanel;
-        if (!mShowingInformationPanel) {
-            hideInformationPanel();
-            showDefaultImageView();
-            return;
-        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-        FrameLayout infoLayout = (FrameLayout) findViewById(R.id.central_panel_container);
-        infoLayout.setVisibility(View.VISIBLE);
-        mEditorPlaceHolder.hide();
-        mImageShow.setVisibility(View.GONE);
 
         InfoPanel panel = new InfoPanel();
-        transaction.replace(R.id.central_panel_container, panel, InfoPanel.FRAGMENT_TAG);
-        transaction.commit();
+        panel.show(transaction, InfoPanel.FRAGMENT_TAG);
     }
 
     private void loadXML() {
@@ -686,7 +662,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
         mCurrentEditor = mEditorPlaceHolder.showEditor(representation.getEditorId());
         loadEditorPanel(representation, mCurrentEditor);
-        hideInformationPanel();
     }
 
     public Editor getEditor(int editorID) {
@@ -1215,8 +1190,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillCategories();
         loadMainPanel();
 
-        mShowingInformationPanel = false;
-
         // mLoadBitmapTask==null implies you have looked at the intent
         if (!mShowingTinyPlanet && (mLoadBitmapTask == null)) {
             mCategoryFiltersAdapter.removeTinyPlanet();
@@ -1253,7 +1226,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void showDefaultImageView() {
-        hideInformationPanel();
         mEditorPlaceHolder.hide();
         mImageShow.setVisibility(View.VISIBLE);
         MasterImage.getImage().setCurrentFilter(null);
