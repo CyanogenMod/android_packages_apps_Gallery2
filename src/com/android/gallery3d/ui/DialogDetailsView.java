@@ -87,7 +87,7 @@ public class DialogDetailsView implements DetailsViewContainer {
         mAdapter = new DetailsAdapter(details);
         String title = String.format(
                 mActivity.getAndroidContext().getString(R.string.details_title),
-                mIndex, mSource.size()-1);
+                mIndex + 1, mSource.size());
         ListView detailsList = (ListView) LayoutInflater.from(mActivity.getAndroidContext()).inflate(
                 R.layout.details_list, null, false);
         detailsList.setAdapter(mAdapter);
