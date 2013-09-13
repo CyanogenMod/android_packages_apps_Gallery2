@@ -127,7 +127,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class FilterShowActivity extends FragmentActivity implements OnItemClickListener,
-        OnShareTargetSelectedListener {
+        OnShareTargetSelectedListener, DialogInterface.OnShowListener,
+        DialogInterface.OnDismissListener{
 
     private String mAction = "";
     MasterImage mMasterImage = null;
@@ -188,6 +189,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private ProcessingService mBoundService;
     private boolean mIsBound = false;
     private Menu mMenu;
+    private DialogInterface mCurrentDialog = null;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -684,6 +686,16 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public View getMainStatePanelContainer(int id) {
         return findViewById(id);
+    }
+
+    @Override
+    public void onShow(DialogInterface dialog) {
+        mCurrentDialog = dialog;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        mCurrentDialog = null;
     }
 
     private class LoadHighresBitmapTask extends AsyncTask<Void, Void, Boolean> {
@@ -1194,6 +1206,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillCategories();
         loadMainPanel();
 
+        if (mCurrentDialog != null) {
+            mCurrentDialog.dismiss();
+            mCurrentDialog = null;
+        }
         // mLoadBitmapTask==null implies you have looked at the intent
         if (!mShowingTinyPlanet && (mLoadBitmapTask == null)) {
             mCategoryFiltersAdapter.removeTinyPlanet();
