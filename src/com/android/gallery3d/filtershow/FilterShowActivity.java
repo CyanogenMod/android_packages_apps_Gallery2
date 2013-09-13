@@ -191,6 +191,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private boolean mIsBound = false;
     private Menu mMenu;
     private DialogInterface mCurrentDialog = null;
+    private boolean mLoadingVisible = true;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -546,10 +547,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     private void startLoadBitmap(Uri uri) {
-        final View loading = findViewById(R.id.loading);
         final View imageShow = findViewById(R.id.imageShow);
         imageShow.setVisibility(View.INVISIBLE);
-        loading.setVisibility(View.VISIBLE);
+        startLoadingIndicator();
         mShowingTinyPlanet = false;
         mLoadBitmapTask = new LoadBitmapTask();
         mLoadBitmapTask.execute(uri);
@@ -755,9 +755,20 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    public boolean isLoadingVisible() {
+        return mLoadingVisible;
+    }
+
+    public void startLoadingIndicator() {
+        final View loading = findViewById(R.id.loading);
+        mLoadingVisible = true;
+        loading.setVisibility(View.VISIBLE);
+    }
+
     public void stopLoadingIndicator() {
         final View loading = findViewById(R.id.loading);
         loading.setVisibility(View.GONE);
+        mLoadingVisible = false;
     }
 
     private class LoadBitmapTask extends AsyncTask<Uri, Boolean, Boolean> {
@@ -1224,7 +1235,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
+
         setDefaultValues();
+        if (mMasterImage == null) {
+            return;
+        }
         loadXML();
         fillCategories();
         loadMainPanel();
@@ -1249,7 +1264,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mMasterImage.setHistoryManager(historyManager);
         mMasterImage.setStateAdapter(imageStateAdapter);
         mMasterImage.setActivity(this);
-        mMasterImage.setFirstLoad(true);
 
         if (Runtime.getRuntime().maxMemory() > LIMIT_SUPPORTS_HIGHRES) {
             mMasterImage.setSupportsHighRes(true);
