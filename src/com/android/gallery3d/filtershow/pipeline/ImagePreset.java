@@ -268,8 +268,20 @@ public class ImagePreset {
         for (int i = 0; i < preset.mFilters.size(); i++) {
             FilterRepresentation a = preset.mFilters.elementAt(i);
             FilterRepresentation b = mFilters.elementAt(i);
-
-            if (!a.equals(b)) {
+            boolean isGeometry = false;
+            if (a instanceof FilterRotateRepresentation
+                    || a instanceof FilterMirrorRepresentation
+                    || a instanceof FilterCropRepresentation
+                    || a instanceof FilterStraightenRepresentation) {
+                isGeometry = true;
+            }
+            boolean evaluate = true;
+            if (!isGeometry && mDoApplyGeometry && !mDoApplyFilters) {
+                evaluate = false;
+            } else if (isGeometry && !mDoApplyGeometry && mDoApplyFilters) {
+                evaluate = false;
+            }
+            if (evaluate && !a.equals(b)) {
                 return false;
             }
         }
