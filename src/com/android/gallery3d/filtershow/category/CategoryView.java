@@ -49,6 +49,8 @@ public class CategoryView extends IconView
     private int mSelectionColor = Color.WHITE;
     private int mSpacerColor = Color.WHITE;
     private boolean mCanBeRemoved = false;
+    private long mDoubleActionLast = 0;
+    private long mDoubleTapDelay = 150;
 
     public CategoryView(Context context) {
         super(context);
@@ -109,6 +111,9 @@ public class CategoryView extends IconView
                 drawSpacer(canvas);
                 return;
             }
+            if (mAction.isDoubleAction()) {
+                return;
+            }
             mAction.setImageFrame(new Rect(0, 0, getWidth(), getHeight()), getOrientation());
             if (mAction.getImage() != null) {
                 setBitmap(mAction.getImage());
@@ -145,7 +150,15 @@ public class CategoryView extends IconView
         if (mAction.getType() == Action.ADD_ACTION) {
             activity.addNewPreset();
         } else if (mAction.getType() != Action.SPACER) {
-            activity.showRepresentation(mAction.getRepresentation());
+            if (mAction.isDoubleAction()) {
+                long current = System.currentTimeMillis() - mDoubleActionLast;
+                if (current < mDoubleTapDelay) {
+                    activity.showRepresentation(mAction.getRepresentation());
+                }
+                mDoubleActionLast = System.currentTimeMillis();
+            } else {
+                activity.showRepresentation(mAction.getRepresentation());
+            }
             mAdapter.setSelected(this);
         }
     }

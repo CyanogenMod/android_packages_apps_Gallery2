@@ -43,7 +43,7 @@ public class FilterVignetteRepresentation extends FilterRepresentation implement
     private static int MAX = 100;
     private static int MAXFALLOF = 200;
 
-    private BasicParameterInt mParamVignette = new BasicParameterInt(MODE_VIGNETTE, 0, MIN, MAX);
+    private BasicParameterInt mParamVignette = new BasicParameterInt(MODE_VIGNETTE, 50, MIN, MAX);
     private BasicParameterInt mParamExposure = new BasicParameterInt(MODE_EXPOSURE, 0, MIN, MAX);
     private BasicParameterInt mParamSaturation = new BasicParameterInt(MODE_SATURATION, 0, MIN, MAX);
     private BasicParameterInt mParamContrast = new BasicParameterInt(MODE_CONTRAST, 0, MIN, MAX);
