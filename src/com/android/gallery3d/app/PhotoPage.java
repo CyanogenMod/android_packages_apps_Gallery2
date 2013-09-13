@@ -777,31 +777,14 @@ public abstract class PhotoPage extends ActivityState implements
                 supportedOperations &= ~MediaObject.SUPPORT_EDIT;
             }
         }
-
         MenuExecutor.updateMenuOperation(menu, supportedOperations);
     }
 
     private boolean canDoSlideShow() {
-
         if (mMediaSet == null || mCurrentPhoto == null) {
             return false;
         }
         if (mCurrentPhoto.getMediaType() != MediaObject.MEDIA_TYPE_IMAGE) {
-            return false;
-        }
-        final int[] count = new int[]{0};
-
-        mMediaSet.enumerateMediaItems(new MediaSet.ItemConsumer() {
-            @Override
-            public void consume(int index, MediaItem item) {
-                if (item != null
-                        && item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
-                    count[0]++;
-                }
-            }
-        });
-
-        if (count[0] < 2) { // you must have 3 pictures to go into slide show
             return false;
         }
         return true;
