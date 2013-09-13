@@ -62,7 +62,7 @@ public class PrintJob {
                         PrintDocumentInfo info = new PrintDocumentInfo.Builder(jobName)
                                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
                                 .setPageCount(1)
-                                .create();
+                                .build();
 
                         layoutResultCallback.onLayoutFinished(info, false);
                     }
