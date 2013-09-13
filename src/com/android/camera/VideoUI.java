@@ -30,9 +30,12 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.View.OnLayoutChangeListener;
 
 import com.android.camera.CameraPreference.OnPreferenceChangedListener;
+import com.android.camera.FocusOverlayManager.FocusUI;
 import com.android.camera.ui.AbstractSettingPopup;
+import com.android.camera.ui.FocusIndicator;
 import com.android.camera.ui.PieRenderer;
 import com.android.camera.ui.PreviewSurfaceView;
 import com.android.camera.ui.RenderOverlay;
@@ -45,7 +48,8 @@ import java.util.List;
 
 public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
         PreviewGestures.SingleTapListener,
-        PreviewGestures.SwipeListener {
+        PreviewGestures.SwipeListener,
+        FocusUI {
     private final static String TAG = "CAM_VideoUI";
     // module fields
     private CameraActivity mActivity;
@@ -78,6 +82,9 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
     private List<Integer> mZoomRatios;
     private View mPreviewThumb;
 
+    private int mPreviewWidth = 0;
+    private int mPreviewHeight = 0;
+
     public VideoUI(CameraActivity activity, VideoController controller, View parent) {
         mActivity = activity;
         mController = controller;
@@ -89,6 +96,27 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
         initializeControlByIntent();
         initializeOverlay();
     }
+
+	private OnLayoutChangeListener mLayoutListener = new OnLayoutChangeListener() {
+        @Override
+        public void onLayoutChange(View v, int left, int top, int right,
+                int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            int width = right - left;
+            int height = bottom - top;
+            // Full-screen screennail
+            int w = width;
+            int h = height;
+            if (Util.getDisplayRotation(mActivity) % 180 != 0) {
+                w = height;
+                h = width;
+            }
+            if (mPreviewWidth != width || mPreviewHeight != height) {
+                mPreviewWidth = width;
+                mPreviewHeight = height;
+                mController.onScreenSizeChanged(width, height, w, h);
+            }
+        }
+    };
 
     private void initializeControlByIntent() {
         mBlocker = mActivity.findViewById(R.id.blocker);
@@ -236,6 +264,8 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
                 mActivity.gotoGallery();
             }
         });
+
+        mRootView.addOnLayoutChangeListener(mLayoutListener);
     }
 
     public void setPrefChangedListener(OnPreferenceChangedListener listener) {
@@ -521,6 +551,50 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
         @Override
         public void onZoomEnd() {
         }
+    }
+
+    // implement focusUI interface
+    private FocusIndicator getFocusIndicator() {
+        return mPieRenderer;
+    }
+
+    @Override
+    public boolean hasFaces() {
+        return false;
+    }
+
+    @Override
+    public void clearFocus() {
+        FocusIndicator indicator = getFocusIndicator();
+        if (indicator != null) indicator.clear();
+    }
+
+    @Override
+    public void setFocusPosition(int x, int y) {
+        mPieRenderer.setFocus(x, y);
+    }
+
+    @Override
+    public void onFocusStarted(){
+        getFocusIndicator().showStart();
+    }
+
+    @Override
+    public void onFocusSucceeded(boolean timeOut) {
+        getFocusIndicator().showSuccess(timeOut);
+    }
+
+    @Override
+    public void onFocusFailed(boolean timeOut) {
+        getFocusIndicator().showFail(timeOut);
+    }
+
+    @Override
+    public void pauseFaceDetection() {
+    }
+
+    @Override
+    public void resumeFaceDetection() {
     }
 
     @Override
