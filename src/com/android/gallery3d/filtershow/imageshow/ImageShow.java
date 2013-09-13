@@ -170,6 +170,7 @@ public class ImageShow extends View implements OnGestureListener,
     public void attach() {
         MasterImage.getImage().addObserver(this);
         bindAsImageLoadListener();
+        MasterImage.getImage().resetGeometryImages(false);
     }
 
     public void detach() {

@@ -499,6 +499,9 @@ public class MasterImage implements RenderingRequestCaller {
     }
 
     public void resetGeometryImages(boolean force) {
+        if (mPreset == null) {
+            return;
+        }
         ImagePreset newPresetGeometryOnly = new ImagePreset(mPreset);
         newPresetGeometryOnly.setDoApplyFilters(false);
         newPresetGeometryOnly.setDoApplyGeometry(true);
@@ -533,7 +536,6 @@ public class MasterImage implements RenderingRequestCaller {
 
     public void invalidateFiltersOnly() {
         mFiltersOnlyPreset = null;
-        resetGeometryImages(false);
         invalidatePreview();
     }
 
