@@ -18,23 +18,29 @@ package com.android.gallery3d.filtershow.colorpicker;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.photos.views.GalleryThumbnailView;
 
 public class ColorPickerDialog extends Dialog   {
     ToggleButton mSelectedButton;
-    GradientDrawable mSelectRect;
     ColorHueView mColorHueView;
     ColorSVRectView mColorSVRectView;
     ColorOpacityView mColorOpacityView;
+    ColorCompareView mColorCompareView;
+
     float[] mHSVO = new float[4]; // hue=0..360, sat & val opacity = 0...1
 
     public ColorPickerDialog(Context context, final ColorListener cl) {
@@ -50,48 +56,56 @@ public class ColorPickerDialog extends Dialog   {
         mColorHueView = (ColorHueView) findViewById(R.id.ColorHueView);
         mColorSVRectView = (ColorSVRectView) findViewById(R.id.colorRectView);
         mColorOpacityView = (ColorOpacityView) findViewById(R.id.colorOpacityView);
+        mColorCompareView = (ColorCompareView) findViewById(R.id.btnSelect);
+
         float[] hsvo = new float[] {
                 123, .9f, 1, 1 };
 
-        mSelectRect = (GradientDrawable) getContext()
-                .getResources().getDrawable(R.drawable.filtershow_color_picker_roundrect);
-        Button selButton = (Button) findViewById(R.id.btnSelect);
-        selButton.setCompoundDrawablesWithIntrinsicBounds(null, null, mSelectRect, null);
-        Button sel = (Button) findViewById(R.id.btnSelect);
+        ImageButton apply = (ImageButton) findViewById(R.id.applyColorPick);
+        ImageButton cancel = (ImageButton) findViewById(R.id.cancelColorPick);
 
-        sel.setOnClickListener(new View.OnClickListener() {
+        apply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                cl.setColor(mHSVO);
                 ColorPickerDialog.this.dismiss();
-                if (cl != null) {
-                    cl.setColor(mHSVO);
-                }
             }
         });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorPickerDialog.this.dismiss();
+            }
+        });
+        ColorListener [] c = {mColorCompareView,mColorSVRectView,mColorOpacityView,mColorHueView};
+        for (int i = 0; i < c.length; i++) {
+            c[i].setColor(hsvo);
+            for (int j = 0; j < c.length; j++) {
+                if (i==j) {
+                     continue;
+                }
+               c[i].addColorListener(c[j]);
+            }
+        }
 
-        mColorSVRectView.setColor(hsvo);
-        mColorOpacityView.setColor(hsvo);
-        mColorHueView.setColor(hsvo);
-        mColorHueView.addColorListener(mColorSVRectView);
-        mColorSVRectView.addColorListener(mColorHueView);
-        mColorHueView.addColorListener(mColorOpacityView);
-        mColorSVRectView.addColorListener(mColorOpacityView);
-        mColorOpacityView.addColorListener(mColorSVRectView);
-        mColorOpacityView.addColorListener(mColorHueView);
         ColorListener colorListener = new ColorListener(){
-
             @Override
             public void setColor(float[] hsvo) {
                 System.arraycopy(hsvo, 0, mHSVO, 0, mHSVO.length);
                 int color = Color.HSVToColor(hsvo);
-                mSelectRect.setColor(color);
                 setButtonColor(mSelectedButton, hsvo);
             }
-        };
-        mColorOpacityView.addColorListener(colorListener);
-        mColorHueView.addColorListener(colorListener);
-        mColorSVRectView.addColorListener(colorListener);
 
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
+        };
+
+        for (int i = 0; i < c.length; i++) {
+            c[i].addColorListener(colorListener);
+        }
+        setOnShowListener((FilterShowActivity) context);
+        setOnDismissListener((FilterShowActivity) context);
     }
 
     void toggleClick(ToggleButton v, int[] buttons, boolean isChecked) {
@@ -118,11 +132,15 @@ public class ColorPickerDialog extends Dialog   {
         csv.setColor(hsv);
     }
 
+    public void setOrigColor(float[] hsvo) {
+        mColorCompareView.setOrigColor(hsvo);
+    }
 
     public void setColor(float[] hsvo) {
         mColorOpacityView.setColor(hsvo);
         mColorHueView.setColor(hsvo);
         mColorSVRectView.setColor(hsvo);
+        mColorCompareView.setColor(hsvo);
     }
 
     private void setButtonColor(ToggleButton button, float[] hsv) {

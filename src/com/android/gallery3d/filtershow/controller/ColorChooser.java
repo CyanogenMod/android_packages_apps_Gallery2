@@ -164,10 +164,14 @@ public class ColorChooser implements Control {
             public void setColor(float[] hsvo) {
                 changeSelectedColor(hsvo);
             }
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         };
         ColorPickerDialog cpd = new ColorPickerDialog(mContext, cl);
         float[] c = (float[]) mButton[mSelectedButton].getTag();
         cpd.setColor(Arrays.copyOf(c, 4));
+        cpd.setOrigColor(Arrays.copyOf(c, 4));
         cpd.show();
     }
 }

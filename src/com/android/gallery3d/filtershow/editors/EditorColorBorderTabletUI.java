@@ -29,6 +29,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.colorpicker.ColorCompareView;
 import com.android.gallery3d.filtershow.colorpicker.ColorHueView;
 import com.android.gallery3d.filtershow.colorpicker.ColorListener;
 import com.android.gallery3d.filtershow.colorpicker.ColorOpacityView;
@@ -48,6 +49,7 @@ public class EditorColorBorderTabletUI {
     private ColorHueView mHueView;
     private ColorSVRectView mSatValView;
     private ColorOpacityView mOpacityView;
+    private ColorCompareView mColorCompareView;
 
     private int[] mBasColors;
     private int mSelected;
@@ -98,6 +100,7 @@ public class EditorColorBorderTabletUI {
         mCBCornerSizeSeekBar = (SeekBar) lp.findViewById(R.id.colorBorderCornerSizeSeekBar);
         mCBCornerSizeValue = (TextView) lp.findViewById(R.id.colorBorderCornerValue);
         mCBSizeSeekBar = (SeekBar) lp.findViewById(R.id.colorBorderSizeSeekBar);
+
         mCBSizeValue = (TextView) lp.findViewById(R.id.colorBorderSizeValue);
         setupClearButton(lp);
         setupCBSizeSeekBar(lp);
@@ -200,18 +203,32 @@ public class EditorColorBorderTabletUI {
                     mHueView.setColor(hsvo);
                     mSatValView.setColor(hsvo);
                     mOpacityView.setColor(hsvo);
+                    mColorCompareView.setOrigColor(hsvo);
+
                 }
             });
         }
         mHueView = (ColorHueView) lp.findViewById(R.id.ColorHueView);
         mSatValView = (ColorSVRectView) lp.findViewById(R.id.colorRectView);
         mOpacityView = (ColorOpacityView) lp.findViewById(R.id.colorOpacityView);
-        mHueView.addColorListener(mSatValView);
-        mSatValView.addColorListener(mHueView);
-        mHueView.addColorListener(mOpacityView);
-        mSatValView.addColorListener(mOpacityView);
-        mOpacityView.addColorListener(mSatValView);
-        mOpacityView.addColorListener(mHueView);
+        mColorCompareView = (ColorCompareView) lp.findViewById(R.id.btnSelect);
+
+        float[] hsvo = new float[4];
+        Color.colorToHSV(mBasColors[0], hsvo);
+        hsvo[3] = (0xFF & (mBasColors[0] >> 24)) / (float) 255;
+        mColorCompareView.setOrigColor(hsvo);
+
+        ColorListener[] colorViews = {mHueView, mSatValView, mOpacityView, mColorCompareView};
+        for (int i = 0; i < colorViews.length; i++) {
+            colorViews[i].setColor(hsvo);
+            for (int j = 0; j < colorViews.length; j++) {
+                if (i == j) {
+                    continue;
+                }
+                colorViews[i].addColorListener(colorViews[j]);
+            }
+        }
+
         ColorListener colorListener = new ColorListener() {
             @Override
             public void setColor(float[] hsvo) {
@@ -228,10 +245,14 @@ public class EditorColorBorderTabletUI {
                 pram.setValue(color);
                 mEditorDraw.commitLocalRepresentation();
             }
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         };
-        mHueView.addColorListener(colorListener);
-        mSatValView.addColorListener(colorListener);
-        mOpacityView.addColorListener(colorListener);
+
+        for (int i = 0; i < colorViews.length; i++) {
+            colorViews[i].addColorListener(colorListener);
+        }
     }
 
     private void resetBorders() {

@@ -63,6 +63,9 @@ public class SliderHue implements Control {
                 mParameter.setValue((int)(360* hsvo[3]));
                 mEditor.commitLocalRepresentation();
             }
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         });
     }
 

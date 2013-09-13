@@ -29,4 +29,7 @@
 
     <!-- Category Panel Text Size -->
     <dimen name="category_panel_margin">4dip</dimen>
+
+    <!-- draw check UI size  -->
+    <dimen name="draw_ui_width">350dip</dimen>
 </resources>

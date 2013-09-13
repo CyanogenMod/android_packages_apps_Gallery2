@@ -22,9 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.RadialGradient;
+import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -35,58 +34,45 @@ import com.android.gallery3d.R;
 
 import java.util.ArrayList;
 
-public class ColorOpacityView extends View implements ColorListener {
+public class ColorCompareView extends View implements ColorListener {
 
     private float mRadius;
     private float mWidth;
     private Paint mBarPaint1;
-    private Paint mLinePaint1;
-    private Paint mLinePaint2;
+    private Paint mOrigBarPaint1;
     private Paint mCheckPaint;
 
     private float mHeight;
-    private Paint mDotPaint;
+
     private int mBgcolor = 0;
 
-    private float mDotRadius;
     private float mBorder;
 
     private float[] mHSVO = new float[4];
-    private int mSliderColor;
-    private float mDotX = mBorder;
-    private float mDotY = mBorder;
-    private final static float DOT_SIZE = ColorHueView.DOT_SIZE;
-    public final static float BORDER_SIZE = 20;;
-    private  int mCheckDim = 8;
-    public ColorOpacityView(Context ctx, AttributeSet attrs) {
+    private float[] mOrigHSVO = new float[4];
+    private Path mRegion;
+    private Path mOrigRegion;
+
+    public final static float BORDER_SIZE = 0;
+    private int mCheckDim = 8;
+
+    public ColorCompareView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         DisplayMetrics metrics = ctx.getResources().getDisplayMetrics();
         float mDpToPix = metrics.density;
-        mDotRadius = DOT_SIZE * mDpToPix;
         mBorder = BORDER_SIZE * mDpToPix;
         mBarPaint1 = new Paint();
-
-        mDotPaint = new Paint();
-
-        mDotPaint.setStyle(Paint.Style.FILL);
+        mOrigBarPaint1 = new Paint();
         Resources res = ctx.getResources();
         mCheckDim = res.getDimensionPixelSize(R.dimen.draw_color_check_dim);
-        mDotPaint.setColor(res.getColor(R.color.slider_dot_color));
-        mSliderColor = res.getColor(R.color.slider_line_color);
-
         mBarPaint1.setStyle(Paint.Style.FILL);
-
-        mLinePaint1 = new Paint();
-        mLinePaint1.setColor(Color.GRAY);
-        mLinePaint2 = new Paint();
-        mLinePaint2.setColor(mSliderColor);
-        mLinePaint2.setStrokeWidth(4);
+        mOrigBarPaint1.setStyle(Paint.Style.FILL);
 
         makeCheckPaint();
     }
 
-    private void makeCheckPaint(){
-        int imgdim = mCheckDim*2;
+    private void makeCheckPaint() {
+        int imgdim = mCheckDim * 2;
         int[] colors = new int[imgdim * imgdim];
         for (int i = 0; i < colors.length; i++) {
             int y = i / (imgdim * mCheckDim);
@@ -105,61 +91,47 @@ public class ColorOpacityView extends View implements ColorListener {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float ox = mDotX;
-        float oy = mDotY;
-
+        if (event.getAction() != MotionEvent.ACTION_UP) {
+            return true;
+        }
         float x = event.getX();
         float y = event.getY();
-
-        mDotX = x;
-
-        if (mDotX < mBorder) {
-            mDotX = mBorder;
+        if (x> mWidth-2*mHeight) {
+            resetToOriginal();
         }
-
-        if (mDotX > mWidth - mBorder) {
-            mDotX = mWidth - mBorder;
-        }
-        mHSVO[3] = (mDotX - mBorder) / (mWidth - mBorder * 2);
-        notifyColorListeners(mHSVO);
-        setupButton();
-        invalidate((int) (ox - mDotRadius), (int) (oy - mDotRadius), (int) (ox + mDotRadius),
-                (int) (oy + mDotRadius));
-        invalidate(
-                (int) (mDotX - mDotRadius), (int) (mDotY - mDotRadius), (int) (mDotX + mDotRadius),
-                (int) (mDotY + mDotRadius));
-
         return true;
     }
 
-    private void setupButton() {
-        float pos = mHSVO[3] * (mWidth - mBorder * 2);
-        mDotX = pos + mBorder;
-
-        int[] colors3 = new int[] {
-                mSliderColor, mSliderColor, 0x66000000, 0 };
-        RadialGradient g = new RadialGradient(mDotX, mDotY, mDotRadius, colors3, new float[] {
-                0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
-        mDotPaint.setShader(g);
+    public void resetToOriginal(){
+        System.arraycopy(mOrigHSVO, 0, mHSVO, 0, mOrigHSVO.length);
+        updatePaint();
+        notifyColorListeners(mHSVO);
+        invalidate();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mWidth = w;
         mHeight = h;
-        mDotY = mHeight / 2;
         updatePaint();
-        setupButton();
     }
 
     private void updatePaint() {
+        int color = Color.HSVToColor((int) (mHSVO[3] * 255), mHSVO);
+        mBarPaint1.setColor(color);
+        int origColor = Color.HSVToColor((int) (mOrigHSVO[3] * 255), mOrigHSVO);
+        mOrigBarPaint1.setColor(origColor);
+        mOrigRegion = new Path();
+        mOrigRegion.moveTo(mWidth, 0);
+        mOrigRegion.lineTo(mWidth, mHeight);
+        mOrigRegion.lineTo(mWidth - mHeight * 2, mHeight);
+        mOrigRegion.lineTo(mWidth - mHeight, 0);
 
-        int color2 = Color.HSVToColor(mHSVO);
-        int color1 = color2 & 0xFFFFFF;
-
-        Shader sg = new LinearGradient(
-                mBorder, mBorder, mWidth - mBorder, mBorder, color1, color2, Shader.TileMode.CLAMP);
-        mBarPaint1.setShader(sg);
+        mRegion = new Path();
+        mRegion.moveTo(0, 0);
+        mRegion.lineTo(mWidth - mHeight, 0);
+        mRegion.lineTo(mWidth - mHeight * 2, mHeight);
+        mRegion.lineTo(0, mHeight);
 
     }
 
@@ -167,21 +139,22 @@ public class ColorOpacityView extends View implements ColorListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(mBgcolor);
-        canvas.drawRect(mBorder, 0, mWidth - mBorder, mHeight, mCheckPaint);
-        canvas.drawRect(mBorder, 0, mWidth - mBorder, mHeight, mBarPaint1);
-        canvas.drawLine(mDotX, mDotY, mWidth - mBorder, mDotY, mLinePaint1);
-        canvas.drawLine(mBorder, mDotY, mDotX, mDotY, mLinePaint2);
-        if (mDotX != Float.NaN) {
-            canvas.drawCircle(mDotX, mDotY, mDotRadius, mDotPaint);
-        }
+        canvas.drawRect(mBorder, 0, mWidth, mHeight, mCheckPaint);
+        canvas.drawPath(mRegion, mBarPaint1);
+        canvas.drawPath(mOrigRegion, mOrigBarPaint1);
+    }
+
+    public void setOrigColor(float[] hsv) {
+        System.arraycopy(hsv, 0, mOrigHSVO, 0, mOrigHSVO.length);
+        int color2 = Color.HSVToColor((int) (mOrigHSVO[3] * 255), mOrigHSVO);
+        mOrigBarPaint1.setColor(color2);
+        updatePaint();
     }
 
     @Override
     public void setColor(float[] hsv) {
         System.arraycopy(hsv, 0, mHSVO, 0, mHSVO.length);
-
         updatePaint();
-        setupButton();
         invalidate();
     }
 
@@ -201,3 +174,4 @@ public class ColorOpacityView extends View implements ColorListener {
         mColorListeners.remove(l);
     }
 }
+
