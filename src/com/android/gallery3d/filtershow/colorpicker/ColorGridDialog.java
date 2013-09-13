@@ -92,6 +92,9 @@ public class ColorGridDialog extends Dialog {
                 c |= alpha << 24;
                 mCallback.setColor(c);
             }
+            @Override
+            public void addColorListener(ColorListener l) {
+            }
         };
         ColorPickerDialog cpd = new ColorPickerDialog(this.getContext(), cl);
         cpd.show();

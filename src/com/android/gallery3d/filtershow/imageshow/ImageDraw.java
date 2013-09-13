@@ -244,20 +244,11 @@ public class ImageDraw extends ImageShow {
         byte type = mTmpStrokData.mType;
         float radius = mTmpStrokData.mRadius;
         mFRep.fillStrokeParameters(mTmpStrokData);
-        if (type != mTmpStrokData.mType || radius != mTmpStrokData.mRadius) {
-            mBitmap = getBrush(mEditorDraw.getBrushIcon(mTmpStrokData.mType));
-            float size = mRotateToScreen.mapRadius(mTmpStrokData.mRadius) * 2;
-            mBitmap = createScaledBitmap(mBitmap, (int) size, (int) size, true);
-        }
 
-        if (color == mTmpStrokData.mColor
-                && type == mTmpStrokData.mType
-                && radius == mTmpStrokData.mRadius) {
-            return;
+        if (radius != mTmpStrokData.mRadius) {
+            mTimeout = DISPLAY_TIME + System.currentTimeMillis();
+            scheduleWakeup(DISPLAY_TIME);
         }
-
-        mTimeout = DISPLAY_TIME + System.currentTimeMillis();
-        scheduleWakeup(DISPLAY_TIME);
     }
 
     public void drawLook(Canvas canvas) {
@@ -269,28 +260,22 @@ public class ImageDraw extends ImageShow {
         int centerx = cw / 2;
         int centery = ch / 2;
 
-        mFRep.fillStrokeParameters(mTmpStrokData);
+//        mFRep.fillStrokeParameters(mTmpStrokData);
         mIconPaint.setAntiAlias(true);
-        mIconPaint.setColor(mTmpStrokData.mColor);
-
-        mIconPaint.setColorFilter(new PorterDuffColorFilter(mTmpStrokData.mColor,
-                PorterDuff.Mode.MULTIPLY));
+        mIconPaint.setStyle(Paint.Style.STROKE);
         float rad = mRotateToScreen.mapRadius(mTmpStrokData.mRadius);
+
         RectF rec = new RectF();
-        rec.set(centerx - mDisplayBorder - rad,
-                centery - mDisplayBorder - rad,
-                centerx + mDisplayBorder + rad,
-                centery + mDisplayBorder + rad);
-        mShadow.setBounds((int) (mBorderShadowSize + rec.left),
-                (int) (mBorderShadowSize + rec.top),
-                (int) (mBorderShadowSize + rec.right),
-                (int) (mBorderShadowSize + rec.bottom));
-        mShadow.draw(canvas);
-        canvas.drawRoundRect(rec, mDisplayRound, mDisplayRound, mCheckerdPaint);
-        canvas.drawRoundRect(rec, mDisplayRound, mDisplayRound, mBorderPaint);
-        canvas.drawBitmap(mBitmap,
-                centerx - mBitmap.getWidth() / 2,
-                centery - mBitmap.getHeight() / 2, mIconPaint);
+        rec.set(centerx - rad,
+                centery - rad,
+                centerx + rad,
+                centery + rad);
+        mIconPaint.setColor(Color.BLACK);
+        mIconPaint.setStrokeWidth(5);
+        canvas.drawArc(rec, 0, 360, true, mIconPaint);
+        mIconPaint.setColor(Color.WHITE);
+        mIconPaint.setStrokeWidth(3);
+        canvas.drawArc(rec, 0, 360, true, mIconPaint);
     }
 
     @Override

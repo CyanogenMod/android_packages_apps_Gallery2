@@ -81,8 +81,8 @@ public class ColorHueView extends View implements ColorListener {
         mLinePaint2.setColor(mSliderColor);
         mLinePaint2.setStrokeWidth(4);
 
-        mBitmap = Bitmap.createBitmap(256, 7, Bitmap.Config.ARGB_8888);
-        mTmpBuff = new int[256 * 7];
+        mBitmap = Bitmap.createBitmap(256, 2, Bitmap.Config.ARGB_8888);
+        mTmpBuff = new int[mBitmap.getWidth() * mBitmap.getHeight()];
         mPaint.setAntiAlias(true);
         mPaint.setFilterBitmap(true);
         fillBitmap();
@@ -96,20 +96,13 @@ public class ColorHueView extends View implements ColorListener {
         for (int x = 0; x < w; x++) {
             float hue = 360 * (x) / (float) w;
 
-
-            int color = Color.HSVToColor((int)(mHSVO[3]*255),mHSVO);
-            mTmpBuff[x + w * 2] = color;
-            mTmpBuff[x + w * 3] = color;
-            mTmpBuff[x + w * 4] = color;
-
             mTmpHSV[0] = hue;
             mTmpHSV[1] = 1;
             mTmpHSV[2] = 1;
-            color = Color.HSVToColor(mTmpHSV);
+            int color = Color.HSVToColor(mTmpHSV);
             mTmpBuff[x] = color;
             mTmpBuff[x + w] = color;
-            mTmpBuff[x + w * 5] = color;
-            mTmpBuff[x + w * 6] = color;
+
         }
 
         mBitmap.setPixels(mTmpBuff, 0, w, 0, 0, w, h);
@@ -192,10 +185,12 @@ public class ColorHueView extends View implements ColorListener {
     }
 
     private void makeCheckPaint(){
-        int[] colors = new int[16 * 16];
+        int block = 16;
+        int checkdim = block*2;
+        int[] colors = new int[checkdim * checkdim];
         for (int i = 0; i < colors.length; i++) {
-            int y = i / (16 * 8);
-            int x = (i / 8) % 2;
+            int y = i / (checkdim * block);
+            int x = (i / block) % 2;
             colors[i] = (x == y) ? 0xFFAAAAAA : 0xFF444444;
         }
         Bitmap bitmap = Bitmap.createBitmap(colors, 16, 16, Bitmap.Config.ARGB_8888);
