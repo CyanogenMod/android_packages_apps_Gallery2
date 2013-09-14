@@ -83,7 +83,7 @@
     <item quantity="one" msgid="5030162638216034260">"%1$d चयनित"</item>
     <item quantity="other" msgid="3512041363942842738">"%1$d चयनित"</item>
   </plurals>
-    <string name="show_on_map" msgid="6157544221201750980">"मानचित्र पर दिखाएं"</string>
+    <string name="show_on_map" msgid="6157544221201750980">"नक्शे पर दिखाएं"</string>
     <string name="rotate_left" msgid="5888273317282539839">"बाएं घुमाएं"</string>
     <string name="rotate_right" msgid="6776325835923384839">"दाएं घुमाएं"</string>
     <string name="no_such_item" msgid="5315144556325243400">"आइटम नहीं ढूंढा जा सका."</string>
