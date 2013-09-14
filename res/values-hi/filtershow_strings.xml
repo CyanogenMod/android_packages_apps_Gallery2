@@ -26,6 +26,8 @@
     <string name="original" msgid="3524493791230430897">"मूल"</string>
     <string name="saved" msgid="6678827180814174711">"सहेजा गया"</string>
     <string name="borders" msgid="2067345080568684614">"बॉर्डर"</string>
+    <!-- no translation found for custom_border (8679893731790931871) -->
+    <skip />
     <string name="filtershow_undo" msgid="6781743189243585101">"पूर्ववत करें"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"फिर से करें"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"लागू प्रभाव दिखाएं"</string>
@@ -93,7 +95,7 @@
     <string name="kmeans" msgid="2080952022674981541">"पोस्टराइज़ करें"</string>
     <string name="downsample" msgid="3552938534146980104">"डाउनसेंपल"</string>
     <string name="grad" msgid="546774853424848655">"ग्रेजुएटेड"</string>
-    <string name="editor_grad_brightness" msgid="5937316734380235741">"चमक"</string>
+    <string name="editor_grad_brightness" msgid="5937316734380235741">"स्क्रीन की रोशनी"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"कंट्रास्ट"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"संतृप्तता"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"मुख्‍य"</string>
