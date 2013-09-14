@@ -285,7 +285,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     protected void setMenuIcon(boolean on) {
         mEditTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0, 0, 0, on ? R.drawable.filtershow_menu_marker : 0);
+                0, 0, on ? R.drawable.filtershow_menu_marker : 0, 0);
     }
 
     protected void createMenu(int[] strId, View button) {
