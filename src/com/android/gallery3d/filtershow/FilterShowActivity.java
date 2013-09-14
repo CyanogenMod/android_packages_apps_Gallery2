@@ -90,6 +90,7 @@ import com.android.gallery3d.filtershow.editors.EditorRotate;
 import com.android.gallery3d.filtershow.editors.EditorStraighten;
 import com.android.gallery3d.filtershow.editors.EditorTinyPlanet;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
@@ -473,8 +474,18 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mCategoryGeometryAdapter.clear();
         }
         mCategoryGeometryAdapter = new CategoryAdapter(this);
+        boolean found = false;
         for (FilterRepresentation representation : filtersRepresentations) {
             mCategoryGeometryAdapter.add(new Action(this, representation));
+            if (representation instanceof FilterDrawRepresentation) {
+                found = true;
+            }
+        }
+        if (!found) {
+            FilterRepresentation representation = new FilterDrawRepresentation();
+            Action action = new Action(this, representation);
+            action.setIsDoubleAction(true);
+            mCategoryGeometryAdapter.add(action);
         }
     }
 
@@ -655,6 +666,18 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (representation instanceof FilterMirrorRepresentation) {
             FilterMirrorRepresentation r = (FilterMirrorRepresentation) representation;
             r.cycle();
+        }
+        if (representation.isBooleanFilter()) {
+            ImagePreset preset = MasterImage.getImage().getPreset();
+            if (preset.getRepresentation(representation) != null) {
+                // remove
+                ImagePreset copy = new ImagePreset(preset);
+                copy.removeFilter(representation);
+                FilterRepresentation filterRepresentation = representation.copy();
+                MasterImage.getImage().setPreset(copy, filterRepresentation, true);
+                MasterImage.getImage().setCurrentFilterRepresentation(null);
+                return;
+            }
         }
         useFilterRepresentation(representation);
 

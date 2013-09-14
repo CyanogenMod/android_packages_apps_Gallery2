@@ -38,6 +38,7 @@ public class FilterRepresentation {
     private int mOverlayId = 0;
     private boolean mOverlayOnly = false;
     private boolean mShowParameterValue = true;
+    private boolean mIsBooleanFilter = false;
     private String mSerializationName;
     public static final byte TYPE_BORDER = 1;
     public static final byte TYPE_FX = 2;
@@ -69,7 +70,7 @@ public class FilterRepresentation {
         representation.setOverlayOnly(getOverlayOnly());
         representation.setShowParameterValue(showParameterValue());
         representation.mSerializationName = mSerializationName;
-
+        representation.setIsBooleanFilter(isBooleanFilter());
     }
 
     public boolean equals(FilterRepresentation representation) {
@@ -87,10 +88,19 @@ public class FilterRepresentation {
                 && representation.mButtonId == mButtonId
                 && representation.mOverlayId == mOverlayId
                 && representation.mOverlayOnly == mOverlayOnly
-                && representation.mShowParameterValue == mShowParameterValue) {
+                && representation.mShowParameterValue == mShowParameterValue
+                && representation.mIsBooleanFilter == mIsBooleanFilter) {
             return true;
         }
         return false;
+    }
+
+    public boolean isBooleanFilter() {
+        return mIsBooleanFilter;
+    }
+
+    public void setIsBooleanFilter(boolean value) {
+        mIsBooleanFilter = value;
     }
 
     @Override

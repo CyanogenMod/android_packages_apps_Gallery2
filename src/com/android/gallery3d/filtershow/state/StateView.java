@@ -27,9 +27,12 @@ import android.view.ViewParent;
 import android.widget.LinearLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.category.SwipableView;
+import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
-public class StateView extends View {
+public class StateView extends View implements SwipableView {
 
     private static final String LOGTAG = "StateView";
     private Path mPath = new Path();
@@ -51,6 +54,10 @@ public class StateView extends View {
     private static int sMargin = 16;
     private static int sArrowHeight = 16;
     private static int sArrowWidth = 8;
+    private float mStartTouchX = 0;
+    private float mStartTouchY = 0;
+    private float mDeleteSlope = 20;
+
     private int mOrientation = LinearLayout.VERTICAL;
     private int mDirection = DOWN;
     private boolean mDuplicateButton;
@@ -102,24 +109,6 @@ public class StateView extends View {
             mDuplicateButton = false;
         }
         invalidate();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            ViewParent parent = getParent();
-            if (parent instanceof PanelTrack) {
-                ((PanelTrack) getParent()).onTouch(event, this);
-            }
-            if (mType == BEGIN) {
-                MasterImage.getImage().setShowsOriginal(true);
-            }
-        }
-        if (event.getActionMasked() == MotionEvent.ACTION_UP
-                || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            MasterImage.getImage().setShowsOriginal(false);
-        }
-        return true;
     }
 
     public void drawText(Canvas canvas) {
@@ -287,5 +276,55 @@ public class StateView extends View {
 
     public boolean isDraggable() {
         return mState.isDraggable();
+    }
+
+    @Override
+    public void delete() {
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+        FilterRepresentation representation = getState().getFilterRepresentation();
+        activity.removeFilterRepresentation(representation);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean ret = super.onTouchEvent(event);
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            activity.startTouchAnimation(this, event.getX(), event.getY());
+        }
+        if (mType == BEGIN) {
+            return ret;
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            mStartTouchY = event.getY();
+            mStartTouchX = event.getX();
+            if (mType == BEGIN) {
+                MasterImage.getImage().setShowsOriginal(true);
+            }
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            setTranslationX(0);
+            setTranslationY(0);
+            MasterImage.getImage().setShowsOriginal(false);
+            setSelected(true);
+            FilterRepresentation representation = getState().getFilterRepresentation();
+            MasterImage image = MasterImage.getImage();
+            ImagePreset preset = image != null ? image.getCurrentPreset() : null;
+            if (getTranslationY() == 0
+                    && image != null && preset != null
+                    && representation != image.getCurrentFilterRepresentation()
+                    && preset.getRepresentation(representation) != null) {
+                activity.showRepresentation(representation);
+                setSelected(false);
+            }
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            float delta = event.getY() - mStartTouchY;
+            if (Math.abs(delta) > mDeleteSlope) {
+                activity.setHandlesSwipeForView(this, mStartTouchX, mStartTouchY);
+            }
+        }
+        return true;
     }
 }
