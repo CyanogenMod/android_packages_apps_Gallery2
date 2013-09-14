@@ -243,11 +243,10 @@ public class ImageShow extends View implements OnGestureListener,
 
         MasterImage img = MasterImage.getImage();
         // Hide the loading indicator as needed
-        if (img.isFirstLoad() && getFilteredImage() != null) {
+        if (mActivity.isLoadingVisible() && getFilteredImage() != null) {
             if ((img.getLoadedPreset() == null)
                     || (img.getLoadedPreset() != null
                     && img.getLoadedPreset().equals(img.getCurrentPreset()))) {
-                img.setFirstLoad(false);
                 mActivity.stopLoadingIndicator();
             } else if (img.getLoadedPreset() != null) {
                 return;
