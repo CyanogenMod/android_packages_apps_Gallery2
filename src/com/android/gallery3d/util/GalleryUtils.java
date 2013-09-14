@@ -281,7 +281,7 @@ public class GalleryUtils {
         // The q=(lat, lng) syntax is suggested by geo-team.
         ComponentName gmmCompName = new ComponentName(MAPS_PACKAGE_NAME, MAPS_CLASS_NAME);
         String gmmUri = formatLatitudeLongitude("http://maps.google.com/maps?f=q&q=(%f,%f)",
-                0.0d, 0.0d);
+                latitude, longitude);
         Intent gmmIntent = new Intent();
         gmmIntent.setComponent(gmmCompName);
         gmmIntent.setData(Uri.parse(gmmUri));
@@ -293,7 +293,7 @@ public class GalleryUtils {
 
         // 2.- Geolocation content provider
         Log.w(TAG, "GMM activity not found! Trying with geo scheme");
-        String geoUri = formatLatitudeLongitude("geo:%f,%f", 0.0d, 0.0d);
+        String geoUri = formatLatitudeLongitude("geo:%f,%f", latitude, longitude);
         Intent geoIntent = new Intent();
         geoIntent.setData(Uri.parse(geoUri));
         geoIntent.setAction(Intent.ACTION_VIEW);
