@@ -26,6 +26,8 @@
     <string name="original" msgid="3524493791230430897">"Original"</string>
     <string name="saved" msgid="6678827180814174711">"Spremljeno"</string>
     <string name="borders" msgid="2067345080568684614">"Obrubi"</string>
+    <!-- no translation found for custom_border (8679893731790931871) -->
+    <skip />
     <string name="filtershow_undo" msgid="6781743189243585101">"Poništi"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Ponovi"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Prikaži primijenjene efekte"</string>
