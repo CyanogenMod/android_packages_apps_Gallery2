@@ -19,11 +19,8 @@ package com.android.gallery3d.filtershow.state;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -293,9 +290,6 @@ public class StateView extends View implements SwipableView {
         if (event.getActionMasked() == MotionEvent.ACTION_UP) {
             activity.startTouchAnimation(this, event.getX(), event.getY());
         }
-        if (mType == BEGIN) {
-            return ret;
-        }
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             mStartTouchY = event.getY();
             mStartTouchX = event.getX();
@@ -303,23 +297,26 @@ public class StateView extends View implements SwipableView {
                 MasterImage.getImage().setShowsOriginal(true);
             }
         }
-        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+        if (event.getActionMasked() == MotionEvent.ACTION_UP
+            || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
             setTranslationX(0);
             setTranslationY(0);
             MasterImage.getImage().setShowsOriginal(false);
-            setSelected(true);
-            FilterRepresentation representation = getState().getFilterRepresentation();
-            MasterImage image = MasterImage.getImage();
-            ImagePreset preset = image != null ? image.getCurrentPreset() : null;
-            if (getTranslationY() == 0
-                    && image != null && preset != null
-                    && representation != image.getCurrentFilterRepresentation()
-                    && preset.getRepresentation(representation) != null) {
-                activity.showRepresentation(representation);
-                setSelected(false);
+            if (mType != BEGIN && event.getActionMasked() == MotionEvent.ACTION_UP) {
+                setSelected(true);
+                FilterRepresentation representation = getState().getFilterRepresentation();
+                MasterImage image = MasterImage.getImage();
+                ImagePreset preset = image != null ? image.getCurrentPreset() : null;
+                if (getTranslationY() == 0
+                        && image != null && preset != null
+                        && representation != image.getCurrentFilterRepresentation()
+                        && preset.getRepresentation(representation) != null) {
+                    activity.showRepresentation(representation);
+                    setSelected(false);
+                }
             }
         }
-        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+        if (mType != BEGIN && event.getActionMasked() == MotionEvent.ACTION_MOVE) {
             float delta = event.getY() - mStartTouchY;
             if (Math.abs(delta) > mDeleteSlope) {
                 activity.setHandlesSwipeForView(this, mStartTouchX, mStartTouchY);
