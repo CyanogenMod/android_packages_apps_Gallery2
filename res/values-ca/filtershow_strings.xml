@@ -26,6 +26,8 @@
     <string name="original" msgid="3524493791230430897">"Original"</string>
     <string name="saved" msgid="6678827180814174711">"S\'ha desat"</string>
     <string name="borders" msgid="2067345080568684614">"Vores"</string>
+    <!-- no translation found for custom_border (8679893731790931871) -->
+    <skip />
     <string name="filtershow_undo" msgid="6781743189243585101">"Desfés"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Refés"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Mostra els efectes aplicats"</string>
@@ -124,7 +126,7 @@
     <string name="color_border_color" msgid="8765458414425980711">"Color"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"Esborra"</string>
     <string name="color_pick_select" msgid="734312818059057394">"Tria un color personalitzat"</string>
-    <string name="color_pick_title" msgid="6195567431995308876">"Selecció del color"</string>
+    <string name="color_pick_title" msgid="6195567431995308876">"Selecciona el color"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"Selecció de la mida"</string>
     <string name="draw_size_accept" msgid="6781529716526190028">"D\'acord"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"Original"</string>

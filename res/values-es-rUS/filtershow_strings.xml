@@ -26,6 +26,7 @@
     <string name="original" msgid="3524493791230430897">"Original"</string>
     <string name="saved" msgid="6678827180814174711">"Guardada"</string>
     <string name="borders" msgid="2067345080568684614">"Bordes"</string>
+    <string name="custom_border" msgid="8679893731790931871">"Personalizado"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Deshacer"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Rehacer"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Mostrar efectos aplicados"</string>
