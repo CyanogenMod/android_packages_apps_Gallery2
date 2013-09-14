@@ -30,6 +30,7 @@ import android.widget.ListAdapter;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.pipeline.RenderingRequest;
 import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
@@ -55,6 +56,7 @@ public class Action implements RenderingRequestCaller {
     private FilterShowActivity mContext;
     private boolean mCanBeRemoved = false;
     private int mTextSize = 32;
+    private boolean mIsDoubleAction = false;
 
     public Action(FilterShowActivity context, FilterRepresentation representation, int type,
                   boolean canBeRemoved) {
@@ -79,6 +81,14 @@ public class Action implements RenderingRequestCaller {
         this(context, representation, CROP_VIEW);
     }
 
+    public boolean isDoubleAction() {
+        return mIsDoubleAction;
+    }
+
+    public void setIsDoubleAction(boolean value) {
+        mIsDoubleAction = value;
+    }
+
     public boolean canBeRemoved() {
         return mCanBeRemoved;
     }
@@ -94,6 +104,9 @@ public class Action implements RenderingRequestCaller {
     public void setRepresentation(FilterRepresentation representation) {
         mRepresentation = representation;
         mName = representation.getName();
+        if (mRepresentation instanceof FilterDrawRepresentation) {
+            setIsDoubleAction(true);
+        }
     }
 
     public String getName() {
