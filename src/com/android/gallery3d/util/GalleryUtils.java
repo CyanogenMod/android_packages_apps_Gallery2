@@ -271,25 +271,37 @@ public class GalleryUtils {
     }
 
     public static void showOnMap(Context context, double latitude, double longitude) {
-        try {
-            // We don't use "geo:latitude,longitude" because it only centers
-            // the MapView to the specified location, but we need a marker
-            // for further operations (routing to/from).
-            // The q=(lat, lng) syntax is suggested by geo-team.
-            String uri = formatLatitudeLongitude("http://maps.google.com/maps?f=q&q=(%f,%f)",
-                    latitude, longitude);
-            ComponentName compName = new ComponentName(MAPS_PACKAGE_NAME,
-                    MAPS_CLASS_NAME);
-            Intent mapsIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(uri)).setComponent(compName);
-            context.startActivity(mapsIntent);
-        } catch (ActivityNotFoundException e) {
-            // Use the "geo intent" if no GMM is installed
-            Log.e(TAG, "GMM activity not found!", e);
-            String url = formatLatitudeLongitude("geo:%f,%f", latitude, longitude);
-            Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            context.startActivity(mapsIntent);
+        // We use isIntentResolved here, because startActivity could derive in ProxyLauncher
+        // invocation, which makes an startActivity, and if the intent not exists we get a FC.
+
+        // 1.- GMM with MapView
+        // We don't use "geo:latitude,longitude" because it only centers
+        // the MapView to the specified location, but we need a marker
+        // for further operations (routing to/from).
+        // The q=(lat, lng) syntax is suggested by geo-team.
+        ComponentName gmmCompName = new ComponentName(MAPS_PACKAGE_NAME, MAPS_CLASS_NAME);
+        String gmmUri = formatLatitudeLongitude("http://maps.google.com/maps?f=q&q=(%f,%f)",
+                0.0d, 0.0d);
+        Intent gmmIntent = new Intent();
+        gmmIntent.setComponent(gmmCompName);
+        gmmIntent.setData(Uri.parse(gmmUri));
+        gmmIntent.setAction(Intent.ACTION_VIEW);
+        if (isIntentResolved(context, gmmIntent)) {
+            context.startActivity(gmmIntent);
+            return;
         }
+
+        // 2.- Geolocation content provider
+        Log.w(TAG, "GMM activity not found! Trying with geo scheme");
+        String geoUri = formatLatitudeLongitude("geo:%f,%f", 0.0d, 0.0d);
+        Intent geoIntent = new Intent();
+        geoIntent.setData(Uri.parse(geoUri));
+        geoIntent.setAction(Intent.ACTION_VIEW);
+        if (isIntentResolved(context, geoIntent)) {
+            context.startActivity(geoIntent);
+        }
+
+        // No maps. Why isGeolocationViewAvailable method not working?
     }
 
     public static boolean isGeolocationViewAvailable(Context context) {
