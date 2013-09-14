@@ -117,8 +117,6 @@ public class MasterImage implements RenderingRequestCaller {
     private List<ExifTag> mEXIF;
     private BitmapCache mBitmapCache = new BitmapCache();
 
-    private boolean mFirstLoad;
-
     private MasterImage() {
     }
 
@@ -132,14 +130,6 @@ public class MasterImage implements RenderingRequestCaller {
             sMasterImage = new MasterImage();
         }
         return sMasterImage;
-    }
-
-    public void setFirstLoad(boolean firstLoad) {
-        mFirstLoad = firstLoad;
-    }
-
-    public boolean isFirstLoad() {
-        return mFirstLoad;
     }
 
     public Bitmap getOriginalBitmapSmall() {
@@ -559,9 +549,7 @@ public class MasterImage implements RenderingRequestCaller {
         if (mPreset == null) {
             return;
         }
-        if (mPreset.nbFilters() == 0) {
-            MasterImage.getImage().setFirstLoad(false);
-        }
+
         mPreviewPreset.enqueuePreset(mPreset);
         mPreviewBuffer.invalidate();
         invalidatePartialPreview();
