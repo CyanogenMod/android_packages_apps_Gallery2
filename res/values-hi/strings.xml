@@ -83,7 +83,7 @@
     <item quantity="one" msgid="5030162638216034260">"%1$d चयनित"</item>
     <item quantity="other" msgid="3512041363942842738">"%1$d चयनित"</item>
   </plurals>
-    <string name="show_on_map" msgid="6157544221201750980">"मानचित्र पर दिखाएं"</string>
+    <string name="show_on_map" msgid="6157544221201750980">"नक्शे पर दिखाएं"</string>
     <string name="rotate_left" msgid="5888273317282539839">"बाएं घुमाएं"</string>
     <string name="rotate_right" msgid="6776325835923384839">"दाएं घुमाएं"</string>
     <string name="no_such_item" msgid="5315144556325243400">"आइटम नहीं ढूंढा जा सका."</string>
@@ -423,7 +423,7 @@
     <string name="set_duration" msgid="5578035312407161304">"अवधि को सेकंड में सेट करें"</string>
     <string name="count_down_title_text" msgid="4976386810910453266">"फ़ोटो लेने के लिए उल्टी गिनती कर रहा है"</string>
     <string name="remember_location_title" msgid="9060472929006917810">"फ़ोटो के स्थान याद रखना हैं?"</string>
-    <string name="remember_location_prompt" msgid="724592331305808098">"अपने फ़ोटो और वीडियो को उन स्थानों के साथ टैग करें जहां वे लिए गए हैं.\n\nअन्य एप्लिकेशन आपके सहेजे गए चित्रों सहित इस जानकारी का उपयोग कर सकते हैं."</string>
+    <string name="remember_location_prompt" msgid="724592331305808098">"अपने फ़ोटो और वीडियो को उन स्थानों के साथ टैग करें जहां वे लिए गए हैं.\n\nअन्य एप्स आपके सहेजे गए चित्रों सहित इस जानकारी का उपयोग कर सकते हैं."</string>
     <string name="remember_location_no" msgid="7541394381714894896">"नहीं, धन्‍यवाद"</string>
     <string name="remember_location_yes" msgid="862884269285964180">"हां"</string>
     <string name="menu_camera" msgid="3476709832879398998">"कैमरा"</string>
