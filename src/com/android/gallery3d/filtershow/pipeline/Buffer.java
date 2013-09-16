@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
@@ -33,7 +34,8 @@ public class Buffer {
     public Buffer(Bitmap bitmap) {
         RenderScript rs = CachingPipeline.getRenderScriptContext();
         if (bitmap != null) {
-            mBitmap = bitmap;
+            BitmapCache cache = MasterImage.getImage().getBitmapCache();
+            mBitmap = cache.getBitmapCopy(bitmap, BitmapCache.PREVIEW_CACHE);
         }
         if (mUseAllocation) {
             // TODO: recreate the allocation when the RS context changes
@@ -43,7 +45,23 @@ public class Buffer {
         }
     }
 
-    public Bitmap getBitmap() {
+    public boolean isSameSize(Bitmap bitmap) {
+        if (mBitmap == null || bitmap == null) {
+            return false;
+        }
+        if (mBitmap.getWidth() == bitmap.getWidth()
+                && mBitmap.getHeight() == bitmap.getHeight()) {
+            return true;
+        }
+        return false;
+    }
+
+    public synchronized void useBitmap(Bitmap bitmap) {
+        Canvas canvas = new Canvas(mBitmap);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+    }
+
+    public synchronized Bitmap getBitmap() {
         return mBitmap;
     }
 
