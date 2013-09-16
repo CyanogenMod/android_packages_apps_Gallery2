@@ -112,6 +112,7 @@ public abstract class PhotoPage extends ActivityState implements
     public static final String KEY_RETURN_INDEX_HINT = "return-index-hint";
     public static final String KEY_SHOW_WHEN_LOCKED = "show_when_locked";
     public static final String KEY_IN_CAMERA_ROLL = "in_camera_roll";
+    public static final String KEY_READONLY = "read-only";
 
     public static final String KEY_ALBUMPAGE_TRANSITION = "albumpage-transition";
     public static final int MSG_ALBUMPAGE_NONE = 0;
@@ -151,6 +152,7 @@ public abstract class PhotoPage extends ActivityState implements
     private boolean mShowSpinner;
     private String mSetPathString;
     // This is the original mSetPathString before adding the camera preview item.
+    private boolean mReadOnlyView = false;
     private String mOriginalSetPathString;
     private AppBridge mAppBridge;
     private SnailItem mScreenNailItem;
@@ -379,6 +381,7 @@ public abstract class PhotoPage extends ActivityState implements
         };
 
         mSetPathString = data.getString(KEY_MEDIA_SET_PATH);
+        mReadOnlyView = data.getBoolean(KEY_READONLY);
         mOriginalSetPathString = mSetPathString;
         setupNfcBeamPush();
         String itemPathString = data.getString(KEY_MEDIA_ITEM_PATH);
@@ -582,7 +585,7 @@ public abstract class PhotoPage extends ActivityState implements
         }
         switch(control) {
             case R.id.photopage_bottom_control_edit:
-                return mHaveImageEditor && mShowBars
+                return mHaveImageEditor && mShowBars && !mReadOnlyView
                         && !mPhotoView.getFilmMode()
                         && (mCurrentPhoto.getSupportedOperations() & MediaItem.SUPPORT_EDIT) != 0
                         && mCurrentPhoto.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE;
@@ -769,6 +772,9 @@ public abstract class PhotoPage extends ActivityState implements
         if (mCurrentPhoto == null) return;
 
         int supportedOperations = mCurrentPhoto.getSupportedOperations();
+        if (mReadOnlyView) {
+            supportedOperations ^= MediaObject.SUPPORT_EDIT;
+        }
         if (mSecureAlbum != null) {
             supportedOperations &= MediaObject.SUPPORT_DELETE;
         } else {
