@@ -24,6 +24,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -76,6 +77,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     private EditorDrawTabletUI mTabletUI;
     private String mParameterString;
     private int mSelectedColorButton;
+    private String mDrawString = null;
 
     public EditorDraw() {
         super(ID);
@@ -84,8 +86,15 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     @Override
     public String calculateUserMessage(Context context, String effectName, Object parameterValue) {
         FilterDrawRepresentation rep = getDrawRep();
+        if (mDrawString != null) {
+            mImageDraw.displayDrawLook();
+            return mDrawString;
+        }
         if (rep == null) {
             return "";
+        }
+        if (!ParametricEditor.useCompact(mContext)) {
+
         }
         if (mParameterString == null) {
             mParameterString = "";
@@ -130,18 +139,16 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     @Override
     public void openUtilityPanel(final LinearLayout accessoryViewList) {
         Button view = (Button) accessoryViewList.findViewById(R.id.applyEffect);
-        if (useCompact(mContext)) {
-            view.setText(mContext.getString(R.string.draw_color));
-            view.setOnClickListener(new OnClickListener() {
 
-                @Override
-                public void onClick(View arg0) {
-                    showPopupMenu(accessoryViewList);
-                }
-            });
-        } else {
-            view.setText(mContext.getString(R.string.imageDraw));
-        }
+        view.setText(mContext.getString(R.string.draw_color));
+        view.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                showPopupMenu(accessoryViewList);
+            }
+        });
+
     }
 
     @Override
@@ -157,14 +164,33 @@ public class EditorDraw extends ParametricEditor implements FilterView {
         }
         final PopupMenu popupMenu = new PopupMenu(mImageShow.getActivity(), button);
         popupMenu.getMenuInflater().inflate(R.menu.filtershow_menu_draw, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                selectMenuItem(item);
-                return true;
+        if (!ParametricEditor.useCompact(mContext)) {
+            Menu menu = popupMenu.getMenu();
+            int count = menu.size();
+            for (int i = 0; i < count; i++) {
+                MenuItem item = menu.getItem(i);
+                if (item.getItemId() != R.id.draw_menu_clear) {
+                    item.setVisible(false);
+                }
             }
-        });
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    clearDrawing();
+                    return true;
+                }
+            });
+        } else {
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    selectMenuItem(item);
+                    return true;
+                }
+            });
+        }
         popupMenu.show();
 
     }
@@ -219,6 +245,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             super.setUtilityPanelUI(actionButton, editControl);
             return;
         }
+
         mSeekBar = (SeekBar) editControl.findViewById(R.id.primarySeekBar);
         if (mSeekBar != null) {
             mSeekBar.setVisibility(View.GONE);
@@ -229,7 +256,8 @@ public class EditorDraw extends ParametricEditor implements FilterView {
                 R.layout.filtershow_draw_ui, (ViewGroup) editControl, true);
 
         mTabletUI = new EditorDrawTabletUI(this, mContext, lp);
-        setMenuIcon(false);
+        mDrawString = mContext.getResources().getString(R.string.imageDraw).toUpperCase();
+        setMenuIcon(true);
 
     }
 
