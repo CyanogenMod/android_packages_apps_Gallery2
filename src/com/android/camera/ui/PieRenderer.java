@@ -65,7 +65,7 @@ public class PieRenderer extends OverlayRenderer
     private static final int DISAPPEAR_TIMEOUT = 200;
     private static final int DIAL_HORIZONTAL = 157;
     // fade out timings
-    private static final int PIE_FADE_OUT_DURATION = 600;
+    private static final int PIE_FADE_OUT_DURATION = 100;
 
     private static final long PIE_FADE_IN_DURATION = 200;
     private static final long PIE_XFADE_DURATION = 200;
