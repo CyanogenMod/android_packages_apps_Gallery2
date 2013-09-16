@@ -206,6 +206,7 @@ public final class Gallery extends AbstractGalleryActivity implements OnCancelLi
                 Path albumPath = dm.getDefaultSetOf(itemPath);
 
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, itemPath.toString());
+                data.putBoolean(PhotoPage.KEY_READONLY, true);
 
                 // TODO: Make the parameter "SingleItemOnly" public so other
                 //       activities can reference it.
