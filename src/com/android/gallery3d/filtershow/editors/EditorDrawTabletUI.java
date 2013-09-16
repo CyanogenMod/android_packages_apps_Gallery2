@@ -57,6 +57,7 @@ public class EditorDrawTabletUI {
     private ColorSVRectView mSatValView;
     private ColorOpacityView mOpacityView;
     private ColorCompareView mColorCompareView;
+    private TextView mDrawSizeValue;
 
     private int[] mBasColors;
     private int mSelected;
@@ -94,7 +95,7 @@ public class EditorDrawTabletUI {
         LinearLayout buttonContainer = (LinearLayout) lp.findViewById(R.id.listStyles);
 
         mdrawSizeSeekBar = (SeekBar) lp.findViewById(R.id.drawSizeSeekBar);
-        TextView drawSizeValue = (TextView) lp.findViewById(R.id.drawSizeValue);
+        mDrawSizeValue = (TextView) lp.findViewById(R.id.drawSizeValue);
 
         Button clearButton = (Button) lp.findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +121,8 @@ public class EditorDrawTabletUI {
                 size = (BasicParameterInt) mRep.getParam(FilterDrawRepresentation.PARAM_SIZE);
                 size.setValue(progress + size.getMinimum());
                 mEditorDraw.commitLocalRepresentation();
+                int val  = progress + size.getMinimum();
+                mDrawSizeValue.setText(((val>0)?"+":"")+val);
             }
         });
 
