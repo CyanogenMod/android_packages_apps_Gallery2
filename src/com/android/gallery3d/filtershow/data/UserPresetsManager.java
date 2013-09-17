@@ -89,7 +89,7 @@ public class UserPresetsManager implements Handler.Callback {
     public void save(ImagePreset preset, String name) {
         Message msg = mProcessingHandler.obtainMessage(SAVE);
         SaveOperation op = new SaveOperation();
-        op.json = preset.getJsonString(mActivity.getString(R.string.saved));
+        op.json = preset.getJsonString(ImagePreset.JASON_SAVED);
         op.name = name;
         msg.obj = op;
         mProcessingHandler.sendMessage(msg);
