@@ -34,8 +34,6 @@
     <string name="download_failure">Could not download photo. Network unavailable.</string>
     <!--  Text for original image [CHAR LIMIT=20] -->
     <string name="original">Original</string>
-    <!--  Text for original image [CHAR LIMIT=20] -->
-    <string name="saved">Saved</string>
     <!--  Text for filters that apply a border to a picture [CHAR LIMIT=20] -->
     <string name="borders" msgid="4461692156695893616">Borders</string>
     <!-- Text for the custom border filter [CHAR LIMIT=20] -->
@@ -216,7 +214,7 @@
     <string name="editor_chan_sat_magenta">Magenta</string>
     <!--  Label for the image graduated filter effect  [CHAR LIMIT=20] -->
     <string name="editor_grad_style">Style</string>
-    <!--  Label for the image new grad layer  [CHAR LIMIT=20] -->
+    <!-- new virtual graduated neutral density filter  [CHAR LIMIT=20] -->
     <string name="editor_grad_new">new</string>
 
 

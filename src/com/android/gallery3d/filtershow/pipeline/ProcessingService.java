@@ -152,7 +152,7 @@ public class ProcessingService extends Service {
             processIntent.putExtra(ProcessingService.DESTINATION_FILE, destination.toString());
         }
         processIntent.putExtra(ProcessingService.PRESET,
-                preset.getJsonString(context.getString(R.string.saved)));
+                preset.getJsonString(ImagePreset.JASON_SAVED));
         processIntent.putExtra(ProcessingService.SAVING, true);
         if (doFlatten) {
             processIntent.putExtra(ProcessingService.FLATTEN, true);
