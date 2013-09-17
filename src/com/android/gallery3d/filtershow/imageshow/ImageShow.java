@@ -30,6 +30,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
+import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -92,6 +93,14 @@ public class ImageShow extends View implements OnGestureListener,
     Point mOriginalTranslation = new Point();
     float mOriginalScale;
     float mStartFocusX, mStartFocusY;
+
+    private EdgeEffectCompat mEdgeEffect = null;
+    private static final int EDGE_LEFT = 1;
+    private static final int EDGE_TOP = 2;
+    private static final int EDGE_RIGHT = 3;
+    private static final int EDGE_BOTTOM = 4;
+    private int mCurrentEdgeEffect = 0;
+    private int mEdgeSize = 100;
 
     private enum InteractionMode {
         NONE,
@@ -165,6 +174,8 @@ public class ImageShow extends View implements OnGestureListener,
             Bitmap mask = BitmapFactory.decodeResource(res, R.drawable.spot_mask);
             sMask = convertToAlphaMask(mask);
         }
+        mEdgeEffect = new EdgeEffectCompat(context);
+        mEdgeSize = res.getDimensionPixelSize(R.dimen.edge_glow_size);
     }
 
     public void attach() {
@@ -273,6 +284,30 @@ public class ImageShow extends View implements OnGestureListener,
         drawCompareImage(canvas, getGeometryOnlyImage());
 
         canvas.restore();
+
+        if (!mEdgeEffect.isFinished()) {
+            canvas.save();
+            float dx = (getHeight() - getWidth()) / 2f;
+            if (getWidth() > getHeight()) {
+                dx = - (getWidth() - getHeight()) / 2f;
+            }
+            if (mCurrentEdgeEffect == EDGE_BOTTOM) {
+                canvas.rotate(180, getWidth()/2, getHeight()/2);
+            } else if (mCurrentEdgeEffect == EDGE_RIGHT) {
+                canvas.rotate(90, getWidth()/2, getHeight()/2);
+                canvas.translate(0, dx);
+            } else if (mCurrentEdgeEffect == EDGE_LEFT) {
+                canvas.rotate(270, getWidth()/2, getHeight()/2);
+                canvas.translate(0, dx);
+            }
+            if (mCurrentEdgeEffect != 0) {
+                mEdgeEffect.draw(canvas);
+            }
+            canvas.restore();
+            invalidate();
+        } else {
+            mCurrentEdgeEffect = 0;
+        }
     }
 
     private void drawHighresImage(Canvas canvas, Bitmap fullHighres) {
@@ -616,15 +651,16 @@ public class ImageShow extends View implements OnGestureListener,
             mTouchDown.y = 0;
             mTouch.x = 0;
             mTouch.y = 0;
-            float scaleFactor = MasterImage.getImage().getScaleFactor();
-            Point translation = MasterImage.getImage().getTranslation();
-            constrainTranslation(translation, scaleFactor);
-            MasterImage.getImage().setTranslation(translation);
             if (MasterImage.getImage().getScaleFactor() <= 1) {
                 MasterImage.getImage().setScaleFactor(1);
                 MasterImage.getImage().resetTranslation();
             }
         }
+
+        float scaleFactor = MasterImage.getImage().getScaleFactor();
+        Point translation = MasterImage.getImage().getTranslation();
+        constrainTranslation(translation, scaleFactor);
+        MasterImage.getImage().setTranslation(translation);
 
         invalidate();
         return true;
@@ -656,25 +692,63 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     private void constrainTranslation(Point translation, float scale) {
+        int currentEdgeEffect = 0;
+        if (scale <= 1) {
+            mCurrentEdgeEffect = 0;
+            return;
+        }
+
         Matrix originalToScreen = MasterImage.getImage().originalImageToScreen();
-        Matrix screenToOriginal = new Matrix();
-        originalToScreen.invert(screenToOriginal);
         Rect originalBounds = MasterImage.getImage().getOriginalBounds();
         RectF screenPos = new RectF(originalBounds);
         originalToScreen.mapRect(screenPos);
-        if (screenPos.right < getWidth() - mShadowMargin) {
-            float tx = mImageBounds.right - translation.x * scale;
-            translation.x = (int) ((getWidth() - mShadowMargin - tx) / scale);
-        } else if (screenPos.left > mShadowMargin) {
-            float tx = mImageBounds.left - translation.x * scale;
-            translation.x = (int) ((mShadowMargin - tx) / scale);
+
+        boolean rightConstraint = screenPos.right < getWidth() - mShadowMargin;
+        boolean leftConstraint = screenPos.left > mShadowMargin;
+        boolean topConstraint = screenPos.top > mShadowMargin;
+        boolean bottomConstraint = screenPos.bottom < getHeight() - mShadowMargin;
+
+        if (screenPos.width() > getWidth()) {
+            if (rightConstraint && !leftConstraint) {
+                float tx = screenPos.right - translation.x * scale;
+                translation.x = (int) ((getWidth() - mShadowMargin - tx) / scale);
+                currentEdgeEffect = EDGE_RIGHT;
+            } else if (leftConstraint && !rightConstraint) {
+                float tx = screenPos.left - translation.x * scale;
+                translation.x = (int) ((mShadowMargin - tx) / scale);
+                currentEdgeEffect = EDGE_LEFT;
+            }
+        } else {
+            float tx = screenPos.right - translation.x * scale;
+            float dx = (getWidth() - 2 * mShadowMargin - screenPos.width()) / 2f;
+            translation.x = (int) ((getWidth() - mShadowMargin - tx - dx) / scale);
         }
-        if (screenPos.bottom < getHeight() - mShadowMargin) {
-            float ty = mImageBounds.bottom - translation.y * scale;
-            translation.y = (int) ((getHeight() - mShadowMargin - ty) / scale);
-        } else if (screenPos.top > mShadowMargin) {
-            float ty = mImageBounds.top - translation.y * scale;
-            translation.y = (int) ((mShadowMargin - ty) / scale);
+
+        if (screenPos.height() > getHeight()) {
+            if (bottomConstraint && !topConstraint) {
+                float ty = screenPos.bottom - translation.y * scale;
+                translation.y = (int) ((getHeight() - mShadowMargin - ty) / scale);
+                currentEdgeEffect = EDGE_BOTTOM;
+            } else if (topConstraint && !bottomConstraint) {
+                float ty = screenPos.top - translation.y * scale;
+                translation.y = (int) ((mShadowMargin - ty) / scale);
+                currentEdgeEffect = EDGE_TOP;
+            }
+        } else {
+            float ty = screenPos.bottom - translation.y * scale;
+            float dy = (getHeight()- 2 * mShadowMargin - screenPos.height()) / 2f;
+            translation.y = (int) ((getHeight() - mShadowMargin - ty - dy) / scale);
+        }
+
+        if (mCurrentEdgeEffect != currentEdgeEffect) {
+            if (mCurrentEdgeEffect == 0 || currentEdgeEffect != 0) {
+                mCurrentEdgeEffect = currentEdgeEffect;
+            }
+            mEdgeEffect.finish();
+            mEdgeEffect.setSize(getWidth(), mEdgeSize);
+            mEdgeEffect.onPull(mEdgeSize);
+        } else {
+            mEdgeEffect.onPull(mEdgeSize);
         }
     }
 
