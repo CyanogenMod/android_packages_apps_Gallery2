@@ -323,6 +323,9 @@ public class CameraActivity extends ActivityBase
 
     @Override
     public void onPause() {
+        if (mCameraSwitchAnimator != null && mCameraSwitchAnimator.isRunning()) {
+            mCameraSwitchAnimator.cancel();
+        }
         mPaused = true;
         mOrientationListener.disable();
         mCurrentModule.onPauseBeforeSuper();
