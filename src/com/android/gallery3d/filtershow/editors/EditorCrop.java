@@ -143,6 +143,12 @@ public class EditorCrop extends Editor implements EditorInfo {
     }
 
     @Override
+    public void setUtilityPanelUI(View actionButton, View editControl) {
+        super.setUtilityPanelUI(actionButton,editControl);
+        setMenuIcon(true);
+    }
+
+    @Override
     public boolean showsSeekBar() {
         return false;
     }
