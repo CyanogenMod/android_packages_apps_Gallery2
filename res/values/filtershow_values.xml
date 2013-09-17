@@ -62,4 +62,7 @@
 
     <!-- draw check UI size  -->
     <dimen name="draw_ui_width">192dip</dimen>
+
+    <!-- Glow effect size -->
+    <dimen name="edge_glow_size">50dip</dimen>
 </resources>
