@@ -26,8 +26,7 @@
     <string name="original" msgid="3524493791230430897">"元の画像"</string>
     <string name="saved" msgid="6678827180814174711">"保存済み"</string>
     <string name="borders" msgid="2067345080568684614">"境界"</string>
-    <!-- no translation found for custom_border (8679893731790931871) -->
-    <skip />
+    <string name="custom_border" msgid="8679893731790931871">"カスタム"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"元に戻す"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"やり直し"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"適用済みの効果を表示"</string>
