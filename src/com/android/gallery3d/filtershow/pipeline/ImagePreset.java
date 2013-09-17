@@ -347,12 +347,22 @@ public class ImagePreset {
     public void addFilter(FilterRepresentation representation) {
         if (representation instanceof FilterUserPresetRepresentation) {
             ImagePreset preset = ((FilterUserPresetRepresentation) representation).getImagePreset();
-            // user preset replace everything but geometry
-            mFilters.clear();
-            for (int i = 0; i < preset.nbFilters(); i++) {
-                addFilter(preset.getFilterRepresentation(i));
+            if (preset.nbFilters() == 1
+                && preset.contains(FilterRepresentation.TYPE_FX)) {
+                FilterRepresentation rep = preset.getFilterRepresentationForType(
+                        FilterRepresentation.TYPE_FX);
+                removeFilter(rep);
+                if (!isNoneBorderFilter(rep)) {
+                    mFilters.add(rep);
+                }
+            } else {
+                // user preset replaces everything
+                mFilters.clear();
+                for (int i = 0; i < preset.nbFilters(); i++) {
+                    addFilter(preset.getFilterRepresentation(i));
+                }
+                mFilters.add(representation);
             }
-            mFilters.add(representation);
         } else if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
             // Add geometry filter, removing duplicates and do-nothing operations.
             for (int i = 0; i < mFilters.size(); i++) {
@@ -425,6 +435,20 @@ public class ImagePreset {
             }
         } else {
             mFilters.add(representation);
+        }
+        // Enforces Filter type ordering for borders
+        FilterRepresentation border = null;
+        for (int i = 0; i < mFilters.size();) {
+            FilterRepresentation rep = mFilters.elementAt(i);
+            if (rep.getFilterType() == FilterRepresentation.TYPE_BORDER) {
+                border = rep;
+                mFilters.remove(i);
+                continue;
+            }
+            i++;
+        }
+        if (border != null) {
+            mFilters.add(border);
         }
     }
 
