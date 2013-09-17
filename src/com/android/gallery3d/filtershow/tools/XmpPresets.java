@@ -77,7 +77,7 @@ public class XmpPresets {
             xmpMeta.setProperty(XMP_GOOGLE_FILTER_NAMESPACE,
                     XMP_SRC_FILE_URI, srcUri.toString());
             xmpMeta.setProperty(XMP_GOOGLE_FILTER_NAMESPACE,
-                    XMP_FILTERSTACK, ImagePreset.JASON_SAVED);
+                    XMP_FILTERSTACK, preset.getJsonString(ImagePreset.JASON_SAVED));
         } catch (XMPException e) {
             Log.v(LOGTAG, "Write XMP meta to file failed:" + dstFile.getAbsolutePath());
             return;

@@ -728,6 +728,7 @@ public class ImagePreset {
             }
             reader.close();
         } catch (Exception e) {
+            Log.e(LOGTAG, "\""+filterString+"\"");
             Log.e(LOGTAG, "parsing the filter parameters:", e);
             return false;
         }
