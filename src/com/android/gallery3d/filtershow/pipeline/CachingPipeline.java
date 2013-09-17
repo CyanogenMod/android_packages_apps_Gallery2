@@ -424,57 +424,6 @@ public class CachingPipeline implements PipelineInterface {
         mEnvironment.cache(result);
     }
 
-    public synchronized void computeOld(SharedBuffer buffer, ImagePreset preset, int type) {
-        synchronized (CachingPipeline.class) {
-            if (getRenderScriptContext() == null) {
-                return;
-            }
-            if (DEBUG) {
-                Log.v(LOGTAG, "compute preset " + preset);
-                preset.showFilters();
-            }
-
-            String thread = Thread.currentThread().getName();
-            long time = System.currentTimeMillis();
-            setupEnvironment(preset, false);
-            mFiltersManager.freeFilterResources(preset);
-
-            Bitmap resizedOriginalBitmap = mResizedOriginalBitmap;
-            if (updateOriginalAllocation(preset) || buffer.getProducer() == null) {
-                resizedOriginalBitmap = mResizedOriginalBitmap;
-                buffer.setProducer(resizedOriginalBitmap);
-                mEnvironment.cache(buffer.getProducer());
-            }
-
-            Bitmap bitmap = buffer.getProducer().getBitmap();
-            long time2 = System.currentTimeMillis();
-
-            if (bitmap == null || (bitmap.getWidth() != resizedOriginalBitmap.getWidth())
-                    || (bitmap.getHeight() != resizedOriginalBitmap.getHeight())) {
-                mEnvironment.cache(buffer.getProducer());
-                buffer.setProducer(resizedOriginalBitmap);
-                bitmap = buffer.getProducer().getBitmap();
-            }
-            mOriginalAllocation.copyTo(bitmap);
-
-            Bitmap tmpbitmap = preset.apply(bitmap, mEnvironment);
-            if (tmpbitmap != bitmap) {
-                mEnvironment.cache(buffer.getProducer());
-                buffer.setProducer(tmpbitmap);
-            }
-
-            mFiltersManager.freeFilterResources(preset);
-
-            time = System.currentTimeMillis() - time;
-            time2 = System.currentTimeMillis() - time2;
-            if (DEBUG) {
-                Log.v(LOGTAG, "Applying type " + type + " filters to bitmap "
-                        + bitmap + " (" + bitmap.getWidth() + " x " + bitmap.getHeight()
-                        + ") took " + time + " ms, " + time2 + " ms for the filter, on thread " + thread);
-            }
-        }
-    }
-
     public boolean needsRepaint() {
         SharedBuffer buffer = MasterImage.getImage().getPreviewBuffer();
         return buffer.checkRepaintNeeded();
