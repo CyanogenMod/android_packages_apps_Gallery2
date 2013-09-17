@@ -53,6 +53,7 @@ import java.util.Vector;
 public class ImagePreset {
 
     private static final String LOGTAG = "ImagePreset";
+    public static final String JASON_SAVED = "Saved";
 
     private Vector<FilterRepresentation> mFilters = new Vector<FilterRepresentation>();
 

@@ -39,6 +39,7 @@ public class XmpPresets {
     public static final String XMP_GOOGLE_FILTER_PREFIX = "AFltr";
     public static final String XMP_SRC_FILE_URI = "SourceFileUri";
     public static final String XMP_FILTERSTACK = "filterstack";
+
     private static final String LOGTAG = "XmpPresets";
 
     public static class XMresults {
@@ -76,7 +77,7 @@ public class XmpPresets {
             xmpMeta.setProperty(XMP_GOOGLE_FILTER_NAMESPACE,
                     XMP_SRC_FILE_URI, srcUri.toString());
             xmpMeta.setProperty(XMP_GOOGLE_FILTER_NAMESPACE,
-                    XMP_FILTERSTACK, preset.getJsonString(context.getString(R.string.saved)));
+                    XMP_FILTERSTACK, ImagePreset.JASON_SAVED);
         } catch (XMPException e) {
             Log.v(LOGTAG, "Write XMP meta to file failed:" + dstFile.getAbsolutePath());
             return;
