@@ -1032,7 +1032,7 @@ public class VideoModule implements CameraModule,
     }
 
     private void onPreviewStarted() {
-        mUI.enableShutter(true);
+        mHandler.sendEmptyMessage(ENABLE_SHUTTER_BUTTON);
         mHandler.sendEmptyMessage(START_PREVIEW_DONE);
     }
 
