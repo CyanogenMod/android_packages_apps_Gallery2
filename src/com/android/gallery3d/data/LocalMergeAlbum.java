@@ -117,7 +117,7 @@ public class LocalMergeAlbum extends MediaSet implements ContentListener {
     }
 
     @Override
-    public ArrayList<MediaItem> getMediaItem(int start, int count) {
+    public synchronized ArrayList<MediaItem> getMediaItem(int start, int count) {
 
         // First find the nearest mark position <= start.
         SortedMap<Integer, int[]> head = mIndex.headMap(start + 1);
