@@ -114,7 +114,7 @@ public class FilterGradRepresentation extends FilterRepresentation
         p.yPos1 = 100;
         p.xPos2 = -1;
         p.yPos2 = 100;
-        p.brightness = 40;
+        p.brightness = -50;
         p.contrast = 0;
         p.saturation = 0;
         mBands.add(0, p);
