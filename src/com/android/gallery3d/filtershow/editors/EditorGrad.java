@@ -191,13 +191,13 @@ public class EditorGrad extends ParametricEditor
         public ParamAdapter(int seekId, int textId, LinearLayout layout, int mode) {
             mSlider = (SeekBar) layout.findViewById(seekId);
             mTextView = (TextView) layout.findViewById(textId);
-            mSlider.setOnSeekBarChangeListener(this);
             mSlider.setMax(mMax - mMin);
             mMode = mode;
             FilterGradRepresentation rep = getGradRepresentation();
             if (rep != null){
                 updateValues(rep);
             }
+            mSlider.setOnSeekBarChangeListener(this);
         }
 
         public void updateValues(FilterGradRepresentation rep) {
@@ -428,5 +428,4 @@ public class EditorGrad extends ParametricEditor
     public void copyFrom(Parameter src) {
 
     }
-
 }
