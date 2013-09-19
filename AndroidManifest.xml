@@ -177,9 +177,9 @@
         <activity android:name="com.android.camera.CameraActivity"
             android:icon="@mipmap/ic_launcher_camera"
             android:label="@string/camera_label"
+            android:taskAffinity="com.android.camera.CameraActivity"
             android:theme="@style/android:Theme.NoDisplay" />
         <activity-alias android:name="com.android.camera.CameraLauncher"
-            android:excludeFromRecents="true"
             android:label="@string/camera_label"
             android:targetActivity="com.android.camera.CameraActivity">
             <intent-filter>
