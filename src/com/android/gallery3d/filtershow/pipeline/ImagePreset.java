@@ -41,7 +41,6 @@ import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.State;
 import com.android.gallery3d.filtershow.state.StateAdapter;
-import com.android.gallery3d.util.UsageStatistics;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -525,8 +524,6 @@ public class ImagePreset {
         if (border != null && mDoApplyGeometry) {
             bitmap = environment.applyRepresentation(border, bitmap);
             if (environment.getQuality() == FilterEnvironment.QUALITY_FINAL) {
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        "SaveBorder", border.getSerializationName(), 1);
             }
         }
         return bitmap;
@@ -544,10 +541,6 @@ public class ImagePreset {
             if (to == -1) {
                 to = mFilters.size();
             }
-            if (environment.getQuality() == FilterEnvironment.QUALITY_FINAL) {
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        "SaveFilters", "Total", to - from + 1);
-            }
             for (int i = from; i < to; i++) {
                 FilterRepresentation representation = mFilters.elementAt(i);
                 if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
@@ -564,10 +557,6 @@ public class ImagePreset {
                 bitmap = environment.applyRepresentation(representation, bitmap);
                 if (tmp != bitmap) {
                     environment.cache(tmp);
-                }
-                if (environment.getQuality() == FilterEnvironment.QUALITY_FINAL) {
-                    UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                            "SaveFilter", representation.getSerializationName(), 1);
                 }
                 if (environment.needsStop()) {
                     return bitmap;
