@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"正在設定桌布"</string>
     <string name="download_failure" msgid="5923323939788582895">"目前沒有網路連線，因此無法下載相片。"</string>
     <string name="original" msgid="3524493791230430897">"原始"</string>
-    <string name="saved" msgid="6678827180814174711">"已儲存"</string>
     <string name="borders" msgid="2067345080568684614">"邊框"</string>
     <string name="custom_border" msgid="8679893731790931871">"自訂"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"復原"</string>

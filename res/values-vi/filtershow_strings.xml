@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Đang đặt hình nền"</string>
     <string name="download_failure" msgid="5923323939788582895">"Không thể tải xuống ảnh. Không có mạng."</string>
     <string name="original" msgid="3524493791230430897">"Gốc"</string>
-    <string name="saved" msgid="6678827180814174711">"Đã lưu"</string>
     <string name="borders" msgid="2067345080568684614">"Đường viền"</string>
     <string name="custom_border" msgid="8679893731790931871">"Tùy chỉnh"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Hoàn tác"</string>

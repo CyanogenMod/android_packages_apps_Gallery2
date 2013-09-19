@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"ការ​កំណត់​ផ្ទាំង​រូបភាព"</string>
     <string name="download_failure" msgid="5923323939788582895">"មិន​អាច​ផ្ទុក​រូបថត​ឡើង។ មិន​មានការ​ត​​បណ្ដាញ។"</string>
     <string name="original" msgid="3524493791230430897">"ដើម"</string>
-    <string name="saved" msgid="6678827180814174711">"បាន​រក្សា​ទុក"</string>
     <string name="borders" msgid="2067345080568684614">"ស៊ុម"</string>
     <string name="custom_border" msgid="8679893731790931871">"តាម​តម្រូវ​ការ"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"មិន​ធ្វើវិញ"</string>
