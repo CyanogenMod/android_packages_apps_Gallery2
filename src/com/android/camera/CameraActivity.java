@@ -27,7 +27,10 @@ public class CameraActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Intent intent = CameraHelper.CAMERA_LAUNCHER_INTENT;
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Since this is being launched from a homescreen shorcut,
+        // it's already in a new task. Start Camera activity and
+        // reset the task to its initial state if needed.
+        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         startActivity(intent);
         finish();
     }
