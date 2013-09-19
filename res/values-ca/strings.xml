@@ -366,7 +366,7 @@
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"Canvia a vídeo"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"Canvia a panorama"</string>
     <string name="accessibility_switch_to_new_panorama" msgid="8116783308051524188">"Canvia al panorama nou"</string>
-    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Canvia a l\'opció per tornar a enfocar"</string>
+    <string name="accessibility_switch_to_refocus" msgid="4539294619557299903">"Canvia a reenfocament"</string>
     <string name="accessibility_review_cancel" msgid="9070531914908644686">"Cancel·la en mode de revisió"</string>
     <string name="accessibility_review_ok" msgid="7793302834271343168">"Fet en mode de revisió"</string>
     <string name="accessibility_review_retake" msgid="659300290054705484">"Revisa la foto o el vídeo nou"</string>
@@ -426,7 +426,7 @@
     <string name="set_duration" msgid="5578035312407161304">"Configuració de la durada en segons"</string>
     <string name="count_down_title_text" msgid="4976386810910453266">"Compte enrere per fer una foto"</string>
     <string name="remember_location_title" msgid="9060472929006917810">"Vols que es recordin les ubicacions de les fotos?"</string>
-    <string name="remember_location_prompt" msgid="724592331305808098">"Etiqueta les teves fotos i els teus vídeos amb les ubicacions des de les quals es fan.\n\nAltres aplicacions podran accedir a aquesta informació juntament amb les imatges desades."</string>
+    <string name="remember_location_prompt" msgid="724592331305808098">"Etiqueta les teves fotos i els teus vídeos amb les ubicacions on s\'han fet.\n\nAltres aplicacions podran accedir a aquesta informació i a les imatges desades."</string>
     <string name="remember_location_no" msgid="7541394381714894896">"No, gràcies"</string>
     <string name="remember_location_yes" msgid="862884269285964180">"Sí"</string>
     <string name="menu_camera" msgid="3476709832879398998">"Càmera"</string>
