@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Angir bakgrunn …"</string>
     <string name="download_failure" msgid="5923323939788582895">"Kunne ikke laste ned bildet. Nettverket er utilgjengelig."</string>
     <string name="original" msgid="3524493791230430897">"Original"</string>
-    <string name="saved" msgid="6678827180814174711">"Lagret"</string>
     <string name="borders" msgid="2067345080568684614">"Kantlinjer"</string>
     <string name="custom_border" msgid="8679893731790931871">"Spesialtilpasset"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Angre"</string>

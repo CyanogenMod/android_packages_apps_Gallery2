@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Ορισμός ταπετσαρίας…"</string>
     <string name="download_failure" msgid="5923323939788582895">"Δεν ήταν δυνατή η λήψη φωτογραφιών. Το δίκτυο δεν είναι διαθέσιμο."</string>
     <string name="original" msgid="3524493791230430897">"Αρχική"</string>
-    <string name="saved" msgid="6678827180814174711">"Αποθηκεύτηκε"</string>
     <string name="borders" msgid="2067345080568684614">"Σύνορα"</string>
     <string name="custom_border" msgid="8679893731790931871">"Προσαρμοσμένο"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Αναίρεση"</string>

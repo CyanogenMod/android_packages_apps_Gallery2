@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"वॉलपेपर सेट हो रहा है"</string>
     <string name="download_failure" msgid="5923323939788582895">"फ़ोटो डाउनलोड नहीं किया जा सका. नेटवर्क अनुपलब्ध है."</string>
     <string name="original" msgid="3524493791230430897">"मूल"</string>
-    <string name="saved" msgid="6678827180814174711">"सहेजा गया"</string>
     <string name="borders" msgid="2067345080568684614">"बॉर्डर"</string>
     <string name="custom_border" msgid="8679893731790931871">"कस्टम"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"पूर्ववत करें"</string>

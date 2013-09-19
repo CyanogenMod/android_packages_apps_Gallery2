@@ -24,9 +24,8 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Ханын зураг тохируулж байна"</string>
     <string name="download_failure" msgid="5923323939788582895">"Зургийг татаж авч чадсангүй. Сүлжээ боломжгүй."</string>
     <string name="original" msgid="3524493791230430897">"Эх хувь"</string>
-    <string name="saved" msgid="6678827180814174711">"Хадгалагдсан"</string>
     <string name="borders" msgid="2067345080568684614">"Ирмэг"</string>
-    <string name="custom_border" msgid="8679893731790931871">"Тааруулсан"</string>
+    <string name="custom_border" msgid="8679893731790931871">"Тусгай"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Буцаах"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Дахин хийх"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Ашигласан эффект харуулах"</string>
