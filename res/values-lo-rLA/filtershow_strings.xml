@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"ກຳລັງຕັ້ງພາບພື້ນຫຼັງ"</string>
     <string name="download_failure" msgid="5923323939788582895">"ບໍ່ສາມາດດາວໂຫລດຮູບໄດ້. ເຄືອຂ່າຍບໍ່ສາມາດນຳໃຊ້ໄດ້."</string>
     <string name="original" msgid="3524493791230430897">"ຕົ້ນສະບັບ"</string>
-    <string name="saved" msgid="6678827180814174711">"ບັນທຶກແລ້ວ"</string>
     <string name="borders" msgid="2067345080568684614">"ຂອບ"</string>
     <string name="custom_border" msgid="8679893731790931871">"ກຳນົດເອງ"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"ຍົກເລີກ"</string>

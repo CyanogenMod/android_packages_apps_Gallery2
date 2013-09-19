@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Itinatakda ang wallpaper"</string>
     <string name="download_failure" msgid="5923323939788582895">"Hindi ma-download ang larawan. Hindi available ang network."</string>
     <string name="original" msgid="3524493791230430897">"Orihinal"</string>
-    <string name="saved" msgid="6678827180814174711">"Na-save"</string>
     <string name="borders" msgid="2067345080568684614">"Mga Border"</string>
     <string name="custom_border" msgid="8679893731790931871">"Custom"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"I-undo"</string>
