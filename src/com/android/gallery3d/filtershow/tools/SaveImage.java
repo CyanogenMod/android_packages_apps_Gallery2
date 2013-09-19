@@ -41,7 +41,6 @@ import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.CachingPipeline;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.pipeline.ProcessingService;
-import com.android.gallery3d.util.UsageStatistics;
 import com.android.gallery3d.util.XmpUtilHelper;
 
 import java.io.File;
@@ -434,8 +433,6 @@ public class SaveImage {
                 updateProgress();
 
                 noBitmap = false;
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        "SaveComplete", null);
             } catch (OutOfMemoryError e) {
                 // Try 5 times before failing for good.
                 if (++num_tries >= 5) {

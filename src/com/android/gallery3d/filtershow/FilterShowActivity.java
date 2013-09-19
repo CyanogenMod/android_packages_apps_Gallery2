@@ -117,7 +117,6 @@ import com.android.gallery3d.filtershow.ui.ExportDialog;
 import com.android.gallery3d.filtershow.ui.FramedTextButton;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.PrintJob;
-import com.android.gallery3d.util.UsageStatistics;
 import com.android.photos.data.GalleryBitmapPool;
 
 import java.io.File;
@@ -280,9 +279,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         doBindService();
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
         setContentView(R.layout.filtershow_splashscreen);
-        UsageStatistics.onContentViewChanged(UsageStatistics.COMPONENT_EDITOR, "Main");
-        UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                UsageStatistics.CATEGORY_LIFECYCLE, UsageStatistics.LIFECYCLE_START);
     }
 
     public boolean isShowingImageStatePanel() {
@@ -1020,8 +1016,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 mMasterImage.onHistoryItemClick(position);
                 backToMain();
                 invalidateViews();
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        UsageStatistics.CATEGORY_BUTTON_PRESS, "Undo");
                 return true;
             }
             case R.id.redoButton: {
@@ -1029,21 +1023,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 int position = adapter.redo();
                 mMasterImage.onHistoryItemClick(position);
                 invalidateViews();
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        UsageStatistics.CATEGORY_BUTTON_PRESS, "Redo");
                 return true;
             }
             case R.id.resetHistoryButton: {
                 resetHistory();
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        UsageStatistics.CATEGORY_BUTTON_PRESS, "ResetHistory");
                 return true;
             }
             case R.id.showImageStateButton: {
                 toggleImageStatePanel();
-                UsageStatistics.onEvent(UsageStatistics.COMPONENT_EDITOR,
-                        UsageStatistics.CATEGORY_BUTTON_PRESS,
-                        mShowingImageStatePanel ? "ShowPanel" : "HidePanel");
                 return true;
             }
             case R.id.exportFlattenButton: {
