@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.graphics.pdf.PdfDocument.Page;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -29,7 +30,6 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
-import android.print.pdf.PdfDocument.Page;
 import android.print.pdf.PrintedPdfDocument;
 
 import com.android.gallery3d.filtershow.cache.ImageLoader;
@@ -38,6 +38,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class PrintJob {
+    private static final String LOG_TAG = "PrintJob";
+
     // will be <= 300 dpi on A4 (8.3×11.7) paper
     // with a worst case of 150 dpi
     private final static int MAX_PRINT_SIZE = 3500;
@@ -73,12 +75,12 @@ public class PrintJob {
                     public void onWrite(PageRange[] pageRanges, ParcelFileDescriptor fileDescriptor,
                                         CancellationSignal cancellationSignal,
                                         WriteResultCallback writeResultCallback) {
+                        PrintedPdfDocument pdfDocument = new PrintedPdfDocument(context,
+                                mAttributes);
                         try {
-                            PrintedPdfDocument pdfDocument = PrintedPdfDocument.open(context,
-                                    mAttributes);
                             Page page = pdfDocument.startPage(1);
 
-                            RectF content = new RectF(page.getInfo().getContentSize());
+                            RectF content = new RectF(page.getInfo().getContentRect());
                             Matrix matrix = new Matrix();
 
                             // Compute and apply scale to fill the page.
@@ -96,16 +98,25 @@ public class PrintJob {
                             // Draw the bitmap.
                             page.getCanvas().drawBitmap(bitmap, matrix, null);
 
-                            // Write the document.
+                            // Finish the page.
                             pdfDocument.finishPage(page);
-                            pdfDocument.writeTo(new FileOutputStream(
-                                    fileDescriptor.getFileDescriptor()));
-                            pdfDocument.close();
 
-                            // Done.
-                            writeResultCallback.onWriteFinished(
-                                    new PageRange[] { PageRange.ALL_PAGES });
+                            try {
+                                // Write the document.
+                                pdfDocument.writeTo(new FileOutputStream(
+                                        fileDescriptor.getFileDescriptor()));
+                                // Done.
+                                writeResultCallback.onWriteFinished(
+                                        new PageRange[] { PageRange.ALL_PAGES });
+                            } catch (IOException ioe) {
+                                // Failed.
+                                Log.e(LOG_TAG, "Error writing printed content", ioe);
+                                writeResultCallback.onWriteFailed(null);
+                            }
                         } finally {
+                            if (pdfDocument != null) {
+                                pdfDocument.close();
+                            }
                             if (fileDescriptor != null) {
                                 try {
                                     fileDescriptor.close();
