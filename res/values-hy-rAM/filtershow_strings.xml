@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Պաստառը տեղադրվում է"</string>
     <string name="download_failure" msgid="5923323939788582895">"Չհաջողվեց ներբեռնել լուսանկարը: Ցանցն անհասանելի է:"</string>
     <string name="original" msgid="3524493791230430897">"Բնօրինակ"</string>
-    <string name="saved" msgid="6678827180814174711">"Պահված է"</string>
     <string name="borders" msgid="2067345080568684614">"Սահմանները"</string>
     <string name="custom_border" msgid="8679893731790931871">"Հատուկ"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Հետարկել"</string>

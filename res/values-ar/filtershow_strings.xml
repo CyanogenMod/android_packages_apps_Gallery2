@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"جارٍ تعيين الخلفية"</string>
     <string name="download_failure" msgid="5923323939788582895">"تعذر تنزيل الصورة. الشبكة غير متاحة."</string>
     <string name="original" msgid="3524493791230430897">"أصلية"</string>
-    <string name="saved" msgid="6678827180814174711">"تم الحفظ"</string>
     <string name="borders" msgid="2067345080568684614">"حدود"</string>
     <string name="custom_border" msgid="8679893731790931871">"تخصيص"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"تراجع"</string>

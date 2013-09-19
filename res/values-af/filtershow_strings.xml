@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Stel muurpapier"</string>
     <string name="download_failure" msgid="5923323939788582895">"Kon nie foto aflaai nie. Netwerk nie beskikbaar nie."</string>
     <string name="original" msgid="3524493791230430897">"Oorspronklike"</string>
-    <string name="saved" msgid="6678827180814174711">"Gestoor"</string>
     <string name="borders" msgid="2067345080568684614">"Grense"</string>
     <string name="custom_border" msgid="8679893731790931871">"Gepasmaakte"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Ontdoen"</string>

@@ -24,7 +24,6 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Definindo plano de fundo"</string>
     <string name="download_failure" msgid="5923323939788582895">"Não foi possível fazer o download da foto. Rede indisponível."</string>
     <string name="original" msgid="3524493791230430897">"Original"</string>
-    <string name="saved" msgid="6678827180814174711">"Salvo"</string>
     <string name="borders" msgid="2067345080568684614">"Bordas"</string>
     <string name="custom_border" msgid="8679893731790931871">"Personalizado"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Desfazer"</string>
@@ -71,7 +70,7 @@
     <string name="vibrance" msgid="3326744578577835915">"Vibração"</string>
     <string name="saturation" msgid="7026791551032438585">"Saturação"</string>
     <string name="bwfilter" msgid="8927492494576933793">"Filtro P&amp;B"</string>
-    <string name="wbalance" msgid="6346581563387083613">"Cor automática"</string>
+    <string name="wbalance" msgid="6346581563387083613">"Cor auto."</string>
     <string name="hue" msgid="6231252147971086030">"Matiz"</string>
     <string name="shadow_recovery" msgid="3928572915300287152">"Sombras"</string>
     <string name="highlight_recovery" msgid="8262208470735204243">"Destaques"</string>
@@ -91,7 +90,7 @@
     <string name="negative" msgid="6998313764388022201">"Negativo"</string>
     <string name="none" msgid="6633966646410296520">"Nenhum"</string>
     <string name="edge" msgid="7036064886242147551">"Bordas"</string>
-    <string name="kmeans" msgid="2080952022674981541">"Alto contraste"</string>
+    <string name="kmeans" msgid="2080952022674981541">"+Contraste"</string>
     <string name="downsample" msgid="3552938534146980104">"Diminuir"</string>
     <string name="grad" msgid="546774853424848655">"Graduado"</string>
     <string name="editor_grad_brightness" msgid="5937316734380235741">"Brilho"</string>
@@ -132,16 +131,16 @@
     <string name="state_panel_result" msgid="318640531123298676">"Resultado"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"Salvando imagem"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"Processando…"</string>
-    <string name="filtershow_save_preset" msgid="3933550455577927439">"Salvar predefinição atual"</string>
-    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gerenciar predef. do usuário"</string>
-    <string name="filtershow_new_preset" msgid="8923930134923416617">"Nova predefinição"</string>
-    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nome da predefinição"</string>
+    <string name="filtershow_save_preset" msgid="3933550455577927439">"Salvar versão atual"</string>
+    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gerenciar versões do usuário"</string>
+    <string name="filtershow_new_preset" msgid="8923930134923416617">"Nova versão"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nome da versão"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informações"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Nome da imagem"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Tamanho da imagem"</string>
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"Histograma"</string>
     <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"Dados EXIF"</string>
-    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Predefinição"</string>
+    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Versão"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Versão"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"Original"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"Atual"</string>
