@@ -38,7 +38,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class PrintJob {
-    private final static int MAX_PRINT_SIZE = 2048;
+    // will be <= 300 dpi on A4 (8.3×11.7) paper
+    // with a worst case of 150 dpi
+    private final static int MAX_PRINT_SIZE = 3500;
 
     public static void printBitmap(final Context context, final String jobName,
             final Bitmap bitmap) {
