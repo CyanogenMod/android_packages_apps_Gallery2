@@ -252,7 +252,7 @@
 
 
     <!--  Label for the with of the border[CHAR LIMIT=14] -->
-    <string name="color_border_size">thickness</string>
+    <string name="color_border_size">Thickness</string>
     <!--  Label for the border corner size (or rounding) [CHAR LIMIT=14] -->
     <string name="color_border_corner_size">Corner Size</string>
     <!--  Label for selecting the border color [CHAR LIMIT=14] -->
