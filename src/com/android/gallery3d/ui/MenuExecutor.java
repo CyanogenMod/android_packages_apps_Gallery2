@@ -177,6 +177,7 @@ public class MenuExecutor {
         boolean supportCache = (supported & MediaObject.SUPPORT_CACHE) != 0;
         boolean supportEdit = (supported & MediaObject.SUPPORT_EDIT) != 0;
         boolean supportInfo = (supported & MediaObject.SUPPORT_INFO) != 0;
+        boolean supportPrint = (supported & MediaObject.SUPPORT_PRINT) != 0;
 
         setMenuItemVisible(menu, R.id.action_delete, supportDelete);
         setMenuItemVisible(menu, R.id.action_rotate_ccw, supportRotate);
@@ -192,7 +193,7 @@ public class MenuExecutor {
         setMenuItemVisible(menu, R.id.action_edit, supportEdit);
         // setMenuItemVisible(menu, R.id.action_simple_edit, supportEdit);
         setMenuItemVisible(menu, R.id.action_details, supportInfo);
-        setMenuItemVisible(menu, R.id.print, supportEdit);
+        setMenuItemVisible(menu, R.id.print, supportPrint);
     }
 
     public static void updateMenuForPanorama(Menu menu, boolean shareAsPanorama360,

@@ -211,10 +211,10 @@ public class UriImage extends MediaItem {
 
     @Override
     public int getSupportedOperations() {
-        int supported = SUPPORT_EDIT | SUPPORT_SETAS;
+        int supported = SUPPORT_PRINT | SUPPORT_SETAS;
         if (isSharable()) supported |= SUPPORT_SHARE;
         if (BitmapUtils.isSupportedByRegionDecoder(mContentType)) {
-            supported |= SUPPORT_FULL_IMAGE;
+            supported |= SUPPORT_EDIT | SUPPORT_FULL_IMAGE;
         }
         return supported;
     }
