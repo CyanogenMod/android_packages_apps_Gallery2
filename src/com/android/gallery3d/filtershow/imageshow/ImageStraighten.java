@@ -288,7 +288,7 @@ public class ImageStraighten extends ImageShow {
                 }
                 mPaint.setAlpha(alpha);
                 canvas.drawLine(p, 0, p, viewHeight, mPaint);
-                canvas.drawLine(0, p, viewHeight, p, mPaint);
+                canvas.drawLine(0, p, viewWidth, p, mPaint);
             }
             canvas.restore();
         }
