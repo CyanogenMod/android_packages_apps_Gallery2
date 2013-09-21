@@ -35,7 +35,7 @@ public class FilterCropRepresentation extends FilterRepresentation {
     RectF mCrop = getNil();
 
     public FilterCropRepresentation(RectF crop) {
-        super(FilterCropRepresentation.class.getSimpleName());
+        super(SERIALIZATION_NAME);
         setSerializationName(SERIALIZATION_NAME);
         setShowParameterValue(true);
         setFilterClass(FilterCropRepresentation.class);
@@ -48,6 +48,7 @@ public class FilterCropRepresentation extends FilterRepresentation {
 
     public FilterCropRepresentation(FilterCropRepresentation m) {
         this(m.mCrop);
+        setName(m.getName());
     }
 
     public FilterCropRepresentation() {
