@@ -351,17 +351,13 @@ public class ImagePreset {
                 && preset.contains(FilterRepresentation.TYPE_FX)) {
                 FilterRepresentation rep = preset.getFilterRepresentationForType(
                         FilterRepresentation.TYPE_FX);
-                removeFilter(rep);
-                if (!isNoneBorderFilter(rep)) {
-                    mFilters.add(rep);
-                }
+                addFilter(rep);
             } else {
                 // user preset replaces everything
                 mFilters.clear();
                 for (int i = 0; i < preset.nbFilters(); i++) {
                     addFilter(preset.getFilterRepresentation(i));
                 }
-                mFilters.add(representation);
             }
         } else if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
             // Add geometry filter, removing duplicates and do-nothing operations.
@@ -386,52 +382,20 @@ public class ImagePreset {
                 mFilters.add(representation);
             }
         } else if (representation.getFilterType() == FilterRepresentation.TYPE_FX) {
-            boolean found = false;
+            boolean replaced = false;
             for (int i = 0; i < mFilters.size(); i++) {
                 FilterRepresentation current = mFilters.elementAt(i);
-                int type = current.getFilterType();
-                if (found) {
-                    if (type != FilterRepresentation.TYPE_VIGNETTE) {
-                        mFilters.remove(i);
-                        continue;
+                if (current.getFilterType() == FilterRepresentation.TYPE_FX) {
+                    mFilters.remove(i);
+                    replaced = true;
+                    if (!isNoneBorderFilter(representation)) {
+                        mFilters.add(i, representation);
                     }
-                }
-                if (type == FilterRepresentation.TYPE_FX) {
-                    if (current instanceof FilterUserPresetRepresentation) {
-                        ImagePreset preset = ((FilterUserPresetRepresentation) current)
-                                .getImagePreset();
-                        // If we had an existing user preset, let's remove all the presets that
-                        // were added by it
-                        for (int j = 0; j < preset.nbFilters(); j++) {
-                            FilterRepresentation rep = preset.getFilterRepresentation(j);
-                            int pos = getPositionForRepresentation(rep);
-                            if (pos != -1) {
-                                mFilters.remove(pos);
-                            }
-                        }
-                        int pos = getPositionForRepresentation(current);
-                        if (pos != -1) {
-                            mFilters.remove(pos);
-                        } else {
-                            pos = 0;
-                        }
-                        if (!isNoneFxFilter(representation)) {
-                            mFilters.add(pos, representation);
-                        }
-
-                    } else {
-                        mFilters.remove(i);
-                        if (!isNoneFxFilter(representation)) {
-                            mFilters.add(i, representation);
-                        }
-                    }
-                    found = true;
+                    break;
                 }
             }
-            if (!found) {
-                if (!isNoneFxFilter(representation)) {
-                    mFilters.add(representation);
-                }
+            if (!replaced) {
+                mFilters.add(0, representation);
             }
         } else {
             mFilters.add(representation);

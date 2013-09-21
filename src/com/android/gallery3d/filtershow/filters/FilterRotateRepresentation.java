@@ -62,7 +62,7 @@ public class FilterRotateRepresentation extends FilterRepresentation {
     }
 
     public FilterRotateRepresentation(Rotation rotation) {
-        super(FilterRotateRepresentation.class.getSimpleName());
+        super(SERIALIZATION_NAME);
         setSerializationName(SERIALIZATION_NAME);
         setShowParameterValue(false);
         setFilterClass(FilterRotateRepresentation.class);
@@ -75,6 +75,7 @@ public class FilterRotateRepresentation extends FilterRepresentation {
 
     public FilterRotateRepresentation(FilterRotateRepresentation r) {
         this(r.getRotation());
+        setName(r.getName());
     }
 
     public FilterRotateRepresentation() {

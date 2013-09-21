@@ -66,7 +66,7 @@ public class FilterMirrorRepresentation extends FilterRepresentation {
     }
 
     public FilterMirrorRepresentation(Mirror mirror) {
-        super(FilterMirrorRepresentation.class.getSimpleName());
+        super(SERIALIZATION_NAME);
         setSerializationName(SERIALIZATION_NAME);
         setShowParameterValue(false);
         setFilterClass(FilterMirrorRepresentation.class);
@@ -79,6 +79,7 @@ public class FilterMirrorRepresentation extends FilterRepresentation {
 
     public FilterMirrorRepresentation(FilterMirrorRepresentation m) {
         this(m.getMirror());
+        setName(m.getName());
     }
 
     public FilterMirrorRepresentation() {
