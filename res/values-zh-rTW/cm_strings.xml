@@ -14,9 +14,28 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <string name="bass_boost_strength">"低音加強"</string>
-    <string name="virtualizer_strength">"3D 效果"</string>
-    <string name="audio_effects">"音效"</string>
-    <string name="headset_plug">此类音效需插入耳機。</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_camera_storage_title">儲存空間</string>
+    <string name="pref_camera_picturesize_entry_12_8mp">1280 萬像素</string>
+    <string name="pref_camera_picturesize_entry_11_5mp">1150 萬像素</string>
+    <string name="pref_camera_picturesize_entry_9mp">900 萬像素</string>
+    <string name="pref_camera_picturesize_entry_6_4mp">640 萬像素</string>
+    <string name="pref_camera_picturesize_entry_6mp">600 萬像素</string>
+    <string name="pref_camera_picturesize_entry_4_5mp">450 萬像素</string>
+    <string name="pref_camera_picturesize_entry_3_7mp">370 萬像素</string>
+    <string name="pref_camera_picturesize_entry_2_5mp">250 萬像素</string>
+    <string name="pref_camera_picturesize_entry_2_1mp">210 萬像素</string>
+    <string name="pref_camera_picturesize_entry_1_9mp">190 萬像素</string>
+    <string name="pref_camera_picturesize_entry_1_5mp">150 萬像素</string>
+    <string name="pref_camera_picturesize_entry_wxga">WXGA</string>
+    <string name="pref_camera_picturesize_entry_xga">XGA</string>
+    <string name="pref_camera_picturesize_entry_svga">SVGA</string>
+    <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
+    <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">低音強化</string>
+    <string name="virtualizer_strength">3D 效果</string>
+    <string name="audio_effects">音訊效果</string>
+    <string name="headset_plug">插入耳機以使用音訊效果。</string>
+    <string name="fail_trim">此影片檔無法被修剪</string>
+    <string name="can_not_trim">只有 mp4 檔才能被修剪</string>
 </resources>
