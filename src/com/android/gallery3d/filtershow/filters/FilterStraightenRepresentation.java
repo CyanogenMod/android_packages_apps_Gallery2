@@ -35,7 +35,7 @@ public class FilterStraightenRepresentation extends FilterRepresentation {
     float mStraighten;
 
     public FilterStraightenRepresentation(float straighten) {
-        super(FilterStraightenRepresentation.class.getSimpleName());
+        super(SERIALIZATION_NAME);
         setSerializationName(SERIALIZATION_NAME);
         setShowParameterValue(true);
         setFilterClass(FilterStraightenRepresentation.class);
@@ -48,6 +48,7 @@ public class FilterStraightenRepresentation extends FilterRepresentation {
 
     public FilterStraightenRepresentation(FilterStraightenRepresentation s) {
         this(s.getStraighten());
+        setName(s.getName());
     }
 
     public FilterStraightenRepresentation() {
