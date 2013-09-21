@@ -20,7 +20,7 @@
 
     <!--  String shown when we cannot load the image when starting the activity [CHAR LIMIT=NONE] -->
     <string name="cannot_load_image">Cannot load the image!</string>
-    <!--  String shown when we cannot load the original to edit [CHAR LIMIT=NONE] -->
+    <!--  String shown when cannot load the original image. We will edit selected image [CHAR LIMIT=NONE] -->
     <string name="cannot_edit_original">Cannot edit original</string>
     <!--  String displayed when showing the original image [CHAR LIMIT=NONE] -->
     <string name="original_picture_text">@string/original</string>
@@ -164,7 +164,7 @@
     <string name="vignette_saturation">Saturation</string>
     <!--  Label for the image vignette contrast fparameter ui [CHAR LIMIT=15] -->
     <string name="vignette_contrast">Contrast</string>
-    <!--  Label for the image vignette Falloff rate parameter ui [CHAR LIMIT=15] -->
+    <!--  Label for the rate of change in brightness as it goes to the edge [CHAR LIMIT=15] -->
     <string name="vignette_falloff">Falloff</string>
 
     <!--  Label for the image effect that removes redeye. [CHAR LIMIT=10] -->
