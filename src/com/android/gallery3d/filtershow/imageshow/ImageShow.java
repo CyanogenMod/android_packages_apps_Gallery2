@@ -16,6 +16,8 @@
 
 package com.android.gallery3d.filtershow.imageshow;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,7 +34,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -101,6 +102,12 @@ public class ImageShow extends View implements OnGestureListener,
     private static final int EDGE_BOTTOM = 4;
     private int mCurrentEdgeEffect = 0;
     private int mEdgeSize = 100;
+
+    private static final int mAnimationSnapDelay = 200;
+    private static final int mAnimationZoomDelay = 400;
+    private ValueAnimator mAnimatorScale = null;
+    private ValueAnimator mAnimatorTranslateX = null;
+    private ValueAnimator mAnimatorTranslateY = null;
 
     private enum InteractionMode {
         NONE,
@@ -346,13 +353,13 @@ public class ImageShow extends View implements OnGestureListener,
         if (image == null) {
             return;
         }
-        Matrix m = MasterImage.getImage().computeImageToScreen(image, 0, false);
+        MasterImage master = MasterImage.getImage();
+        Matrix m = master.computeImageToScreen(image, 0, false);
         if (m == null) {
             return;
         }
 
         canvas.save();
-        MasterImage master = MasterImage.getImage();
 
         RectF d = new RectF(0, 0, image.getWidth(), image.getHeight());
         m.mapRect(d);
@@ -365,7 +372,7 @@ public class ImageShow extends View implements OnGestureListener,
 
             // Animation uses the image before the change
             Bitmap previousImage = master.getPreviousImage();
-            Matrix mp = MasterImage.getImage().computeImageToScreen(previousImage, 0, false);
+            Matrix mp = master.computeImageToScreen(previousImage, 0, false);
             RectF dp = new RectF(0, 0, previousImage.getWidth(), previousImage.getHeight());
             mp.mapRect(dp);
             Rect previousBounds = new Rect();
@@ -498,7 +505,8 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     public void drawCompareImage(Canvas canvas, Bitmap image) {
-        boolean showsOriginal = MasterImage.getImage().showsOriginal();
+        MasterImage master = MasterImage.getImage();
+        boolean showsOriginal = master.showsOriginal();
         if (!showsOriginal && !mTouchShowOriginal)
             return;
         canvas.save();
@@ -538,7 +546,7 @@ public class ImageShow extends View implements OnGestureListener,
                 }
             }
             canvas.clipRect(d);
-            Matrix m = MasterImage.getImage().computeImageToScreen(image, 0, false);
+            Matrix m = master.computeImageToScreen(image, 0, false);
             canvas.drawBitmap(image, m, mPaint);
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
@@ -666,6 +674,57 @@ public class ImageShow extends View implements OnGestureListener,
         return true;
     }
 
+    private void startAnimTranslation(int fromX, int toX,
+                                      int fromY, int toY, int delay) {
+        if (fromX == toX && fromY == toY) {
+            return;
+        }
+        if (mAnimatorTranslateX != null) {
+            mAnimatorTranslateX.cancel();
+        }
+        if (mAnimatorTranslateY != null) {
+            mAnimatorTranslateY.cancel();
+        }
+        mAnimatorTranslateX = ValueAnimator.ofInt(fromX, toX);
+        mAnimatorTranslateY = ValueAnimator.ofInt(fromY, toY);
+        mAnimatorTranslateX.setDuration(delay);
+        mAnimatorTranslateY.setDuration(delay);
+        mAnimatorTranslateX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Point translation = MasterImage.getImage().getTranslation();
+                translation.x = (Integer) animation.getAnimatedValue();
+                MasterImage.getImage().setTranslation(translation);
+                invalidate();
+            }
+        });
+        mAnimatorTranslateY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Point translation = MasterImage.getImage().getTranslation();
+                translation.y = (Integer) animation.getAnimatedValue();
+                MasterImage.getImage().setTranslation(translation);
+                invalidate();
+            }
+        });
+        mAnimatorTranslateX.start();
+        mAnimatorTranslateY.start();
+    }
+
+    private void applyTranslationConstraints() {
+        float scaleFactor = MasterImage.getImage().getScaleFactor();
+        Point translation = MasterImage.getImage().getTranslation();
+        int x = translation.x;
+        int y = translation.y;
+        constrainTranslation(translation, scaleFactor);
+
+        if (x != translation.x || y != translation.y) {
+            startAnimTranslation(x, translation.x,
+                                 y, translation.y,
+                                 mAnimationSnapDelay);
+        }
+    }
+
     protected boolean enableComparison() {
         return true;
     }
@@ -674,19 +733,67 @@ public class ImageShow extends View implements OnGestureListener,
     public boolean onDoubleTap(MotionEvent arg0) {
         mZoomIn = !mZoomIn;
         float scale = 1.0f;
+        final float x = arg0.getX();
+        final float y = arg0.getY();
         if (mZoomIn) {
             scale = MasterImage.getImage().getMaxScaleFactor();
         }
         if (scale != MasterImage.getImage().getScaleFactor()) {
-            MasterImage.getImage().setScaleFactor(scale);
-            float translateX = (getWidth() / 2 - arg0.getX());
-            float translateY = (getHeight() / 2 - arg0.getY());
+            if (mAnimatorScale != null) {
+                mAnimatorScale.cancel();
+            }
+            mAnimatorScale = ValueAnimator.ofFloat(
+                    MasterImage.getImage().getScaleFactor(),
+                    scale
+            );
+            float translateX = (getWidth() / 2 - x);
+            float translateY = (getHeight() / 2 - y);
             Point translation = MasterImage.getImage().getTranslation();
-            translation.x = (int) (mOriginalTranslation.x + translateX);
-            translation.y = (int) (mOriginalTranslation.y + translateY);
+            int startTranslateX = translation.x;
+            int startTranslateY = translation.y;
+            if (scale != 1.0f) {
+                translation.x = (int) (mOriginalTranslation.x + translateX);
+                translation.y = (int) (mOriginalTranslation.y + translateY);
+            } else {
+                translation.x = 0;
+                translation.y = 0;
+            }
             constrainTranslation(translation, scale);
-            MasterImage.getImage().setTranslation(translation);
-            invalidate();
+
+            startAnimTranslation(startTranslateX, translation.x,
+                                 startTranslateY, translation.y,
+                                 mAnimationZoomDelay);
+            mAnimatorScale.setDuration(mAnimationZoomDelay);
+            mAnimatorScale.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    MasterImage.getImage().setScaleFactor((Float) animation.getAnimatedValue());
+                    invalidate();
+                }
+            });
+            mAnimatorScale.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    applyTranslationConstraints();
+                    MasterImage.getImage().needsUpdatePartialPreview();
+                    invalidate();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            mAnimatorScale.start();
         }
         return true;
     }
@@ -695,6 +802,7 @@ public class ImageShow extends View implements OnGestureListener,
         int currentEdgeEffect = 0;
         if (scale <= 1) {
             mCurrentEdgeEffect = 0;
+            mEdgeEffect.finish();
             return;
         }
 
@@ -743,11 +851,11 @@ public class ImageShow extends View implements OnGestureListener,
         if (mCurrentEdgeEffect != currentEdgeEffect) {
             if (mCurrentEdgeEffect == 0 || currentEdgeEffect != 0) {
                 mCurrentEdgeEffect = currentEdgeEffect;
+                mEdgeEffect.finish();
             }
-            mEdgeEffect.finish();
             mEdgeEffect.setSize(getWidth(), mEdgeSize);
-            mEdgeEffect.onPull(mEdgeSize);
-        } else {
+        }
+        if (currentEdgeEffect != 0) {
             mEdgeEffect.onPull(mEdgeSize);
         }
     }
@@ -812,8 +920,8 @@ public class ImageShow extends View implements OnGestureListener,
         if (scaleFactor > MasterImage.getImage().getMaxScaleFactor()) {
             scaleFactor = MasterImage.getImage().getMaxScaleFactor();
         }
-        if (scaleFactor < 0.5) {
-            scaleFactor = 0.5f;
+        if (scaleFactor < 1.0f) {
+            scaleFactor = 1.0f;
         }
         MasterImage.getImage().setScaleFactor(scaleFactor);
         scaleFactor = img.getScaleFactor();

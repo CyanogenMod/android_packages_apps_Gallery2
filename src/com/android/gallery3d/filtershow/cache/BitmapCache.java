@@ -137,6 +137,10 @@ public class BitmapCache {
         if (DEBUG) {
             untrack(bitmap);
         }
+        if (!bitmap.isMutable()) {
+            Log.e(LOGTAG, "Trying to cache a non mutable bitmap");
+            return true;
+        }
         Long key = calcKey(bitmap.getWidth(), bitmap.getHeight());
         ArrayList<WeakReference<Bitmap>> list = mBitmapCache.get(key);
         if (list == null) {
