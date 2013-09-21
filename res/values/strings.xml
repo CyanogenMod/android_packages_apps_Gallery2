@@ -345,7 +345,7 @@
     <string name="ffx_original">Original</string>
     <!-- String for brown-colored old-fashion looking filter (filtershow_fx_0000_vintage) [CHAR LIMIT=10] -->
     <string name="ffx_vintage">Vintage</string>
-    <!-- String for filter that brightens colors (filtershow_fx_0001_instant) [CHAR LIMIT=10] -->
+    <!-- String for filter that brightens colors like instant cameras(filtershow_fx_0001_instant) [CHAR LIMIT=10] -->
     <string name="ffx_instant">Instant</string>
     <!-- String for filter that washes out colors (filtershow_fx_0002_bleach) [CHAR LIMIT=10] -->
     <string name="ffx_bleach">Bleach</string>
