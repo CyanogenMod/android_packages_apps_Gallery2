@@ -238,9 +238,7 @@ public class GalleryUtils {
         ComponentName name = new ComponentName(context, CAMERA_LAUNCHER_NAME);
         int state = pm.getComponentEnabledSetting(name);
         sCameraAvailableInitialized = true;
-        sCameraAvailable =
-            (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
-             || (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+        sCameraAvailable = (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
         return sCameraAvailable;
     }
 
