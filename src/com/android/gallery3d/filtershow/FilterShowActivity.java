@@ -138,6 +138,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public static final String TINY_PLANET_ACTION = "com.android.camera.action.TINY_PLANET";
     public static final String LAUNCH_FULLSCREEN = "launch-fullscreen";
+    public static final boolean RESET_TO_LOADED = false;
     private ImageShow mImageShow = null;
 
     private View mSaveButton = null;
@@ -1264,8 +1265,17 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         HistoryManager adapter = mMasterImage.getHistory();
         adapter.reset();
         HistoryItem historyItem = adapter.getItem(0);
-        ImagePreset original = new ImagePreset(historyItem.getImagePreset());
-        mMasterImage.setPreset(original, historyItem.getFilterRepresentation(), true);
+        ImagePreset original = null;
+        if (RESET_TO_LOADED) {
+            original = new ImagePreset(historyItem.getImagePreset());
+        } else {
+            original = new ImagePreset();
+        }
+        FilterRepresentation rep = null;
+        if (historyItem != null) {
+            rep = historyItem.getFilterRepresentation();
+        }
+        mMasterImage.setPreset(original, rep, true);
         invalidateViews();
         backToMain();
     }
