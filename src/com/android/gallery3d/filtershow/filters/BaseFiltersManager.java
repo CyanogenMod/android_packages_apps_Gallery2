@@ -271,7 +271,18 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         }
 
         //mTools.add(getRepresentation(ImageFilterRedEye.class));
-        //mTools.add(getRepresentation(ImageFilterDraw.class));
+        mTools.add(getRepresentation(ImageFilterDraw.class));
+    }
+
+    public void removeRepresentation(ArrayList<FilterRepresentation> list,
+                                          FilterRepresentation representation) {
+        for (int i = 0; i < list.size(); i++) {
+            FilterRepresentation r = list.get(i);
+            if (r.getFilterClass() == representation.getFilterClass()) {
+                list.remove(i);
+                break;
+            }
+        }
     }
 
     public void setFilterResources(Resources resources) {

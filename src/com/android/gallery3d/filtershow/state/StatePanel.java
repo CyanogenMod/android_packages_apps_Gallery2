@@ -49,6 +49,11 @@ public class StatePanel extends Fragment {
         track = (StatePanelTrack) panel;
         track.setAdapter(MasterImage.getImage().getState());
         mToggleVersionsPanel = (ImageButton) mMainView.findViewById(R.id.toggleVersionsPanel);
+        if (mToggleVersionsPanel.getVisibility() == View.GONE
+                || mToggleVersionsPanel.getVisibility() == View.INVISIBLE) {
+            mToggleVersionsPanel.setVisibility(View.VISIBLE);
+            mToggleVersionsPanel.setImageBitmap(null);
+        }
         if (mMainPanel != null) {
             mMainPanel.setToggleVersionsPanelButton(mToggleVersionsPanel);
         } else if (mToggleVersionsPanel != null) {
