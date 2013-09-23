@@ -166,22 +166,42 @@ public class StateView extends View implements SwipableView {
     }
 
     private void drawHorizontalPath(float w, float h, float r, float d) {
-        mPath.moveTo(0, 0);
-        if (mType == END) {
-            mPath.lineTo(w, 0);
+        if (this.getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            mPath.moveTo(w, 0);
+            if (mType == END) {
+                mPath.lineTo(0, 0);
+                mPath.lineTo(0, h);
+            } else {
+                mPath.lineTo(d, 0);
+                mPath.lineTo(d, r);
+                mPath.lineTo(0, r + d);
+                mPath.lineTo(d, r + d + r);
+                mPath.lineTo(d, h);
+            }
             mPath.lineTo(w, h);
+            if (mType != BEGIN) {
+                mPath.lineTo(w, r + d + r);
+                mPath.lineTo(w - d, r + d);
+                mPath.lineTo(w, r);
+            }
         } else {
-            mPath.lineTo(w - d, 0);
-            mPath.lineTo(w - d, r);
-            mPath.lineTo(w, r + d);
-            mPath.lineTo(w - d, r + d + r);
-            mPath.lineTo(w - d, h);
-        }
-        mPath.lineTo(0, h);
-        if (mType != BEGIN) {
-            mPath.lineTo(0, r + d + r);
-            mPath.lineTo(d, r + d);
-            mPath.lineTo(0, r);
+            mPath.moveTo(0, 0);
+            if (mType == END) {
+                mPath.lineTo(w, 0);
+                mPath.lineTo(w, h);
+            } else {
+                mPath.lineTo(w - d, 0);
+                mPath.lineTo(w - d, r);
+                mPath.lineTo(w, r + d);
+                mPath.lineTo(w - d, r + d + r);
+                mPath.lineTo(w - d, h);
+            }
+            mPath.lineTo(0, h);
+            if (mType != BEGIN) {
+                mPath.lineTo(0, r + d + r);
+                mPath.lineTo(d, r + d);
+                mPath.lineTo(0, r);
+            }
         }
         mPath.close();
     }
