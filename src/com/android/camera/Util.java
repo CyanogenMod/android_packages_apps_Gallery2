@@ -602,6 +602,54 @@ public class Util {
         return optimalSize;
     }
 
+    public static Size getPanelPreviewSize(Activity currentActivity,
+            List<Size> sizes) {
+        // Use a very small tolerance because we want an exact match.
+        final double ASPECT_TOLERANCE = 0.001;
+        if (sizes == null) return null;
+
+        Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+
+        // Because of bugs of overlay and layout, we sometimes will try to
+        // layout the viewfinder in the portrait orientation and thus get the
+        // wrong size of preview surface. When we change the preview size, the
+        // new overlay will be created before the old one closed, which causes
+        // an exception. For now, just get the screen size.
+        Point point = getDefaultDisplaySize(currentActivity, new Point());
+        int targetHeight = Math.min(point.x, point.y);
+        int targetWidth = Math.max(point.x, point.y);
+        double panelRatio =  (double) targetWidth / targetHeight;
+
+
+        // Try to find an size match aspect ratio and size
+        for (Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+
+
+            if (Math.abs(ratio - panelRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+
+            }
+        }
+        // Cannot find the one match the aspect ratio. This should not happen.
+        // Ignore the requirement.
+        if (optimalSize == null) {
+            Log.w(TAG, "No preview size match the aspect ratio");
+            minDiff = Double.MAX_VALUE;
+            for (Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
+    }
+
     // Returns the largest picture size which matches the given aspect ratio.
     public static Size getOptimalVideoSnapshotPictureSize(
             List<Size> sizes, double targetRatio) {
