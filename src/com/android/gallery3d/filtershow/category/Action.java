@@ -104,9 +104,6 @@ public class Action implements RenderingRequestCaller {
     public void setRepresentation(FilterRepresentation representation) {
         mRepresentation = representation;
         mName = representation.getName();
-        if (mRepresentation instanceof FilterDrawRepresentation) {
-            setIsDoubleAction(true);
-        }
     }
 
     public String getName() {
