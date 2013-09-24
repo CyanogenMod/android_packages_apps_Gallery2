@@ -42,6 +42,9 @@ public class HistoryManager {
     }
 
     public HistoryItem getItem(int position) {
+        if (position > mHistoryItems.size() - 1) {
+            return null;
+        }
         return mHistoryItems.elementAt(position);
     }
 
@@ -58,7 +61,7 @@ public class HistoryManager {
     }
 
     public boolean canReset() {
-        if (getCount() <= 1) {
+        if (getCount() <= 0) {
             return false;
         }
         return true;
@@ -108,9 +111,7 @@ public class HistoryManager {
         if (getCount() == 0) {
             return;
         }
-        HistoryItem first = getItem(getCount() - 1);
         clear();
-        addHistoryItem(first);
         updateMenuItems();
     }
 
