@@ -102,20 +102,9 @@ public class EditorColorBorderTabletUI {
         mCBSizeSeekBar = (SeekBar) lp.findViewById(R.id.colorBorderSizeSeekBar);
 
         mCBSizeValue = (TextView) lp.findViewById(R.id.colorBorderSizeValue);
-        setupClearButton(lp);
         setupCBSizeSeekBar(lp);
         setupCBCornerSizeSeekBar(lp);
         setupColor(lp, res);
-    }
-
-    private void setupClearButton(LinearLayout lp) {
-        Button clearButton = (Button) lp.findViewById(R.id.clearButton);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mEditorDraw.clearFrame();
-            }
-        });
     }
 
     private void setupCBSizeSeekBar(LinearLayout lp) {

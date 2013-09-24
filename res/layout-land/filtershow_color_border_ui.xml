@@ -37,13 +37,6 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-            <Button
-                    android:id="@+id/clearButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/color_border_clear"/>
-
             <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -174,68 +167,79 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp">
 
-        <HorizontalScrollView
-                android:id="@+id/scrollList"
-                android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp">
 
             <LinearLayout
                     android:id="@+id/listColors"
+                    android:layout_weight="5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                 <Button
                         android:id="@+id/draw_color_button01"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_margin="2dp"/>
+                        android:layout_marginRight="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button02"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_margin="2dp"/>
+                        android:layout_marginRight="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button03"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_margin="2dp"/>
+                        android:layout_marginRight="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button04"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_margin="2dp"/>
+                        android:layout_marginRight="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button05"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_margin="2dp"/>
+                        android:layout_marginRight="4dp"/>
 
             </LinearLayout>
-        </HorizontalScrollView>
+            <FrameLayout
+                    android:background="@color/background_main_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                <Button
+                        android:id="@+id/draw_color_popupbutton"
+                        android:layout_width="48dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_action_overflow"
+                        />
+            </FrameLayout>
+        </LinearLayout>
 
-        <Button
-                android:id="@+id/draw_color_popupbutton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:drawable/ic_menu_more"
-                android:layout_margin="1dp"/>
+
+
     </LinearLayout>
 </LinearLayout>
