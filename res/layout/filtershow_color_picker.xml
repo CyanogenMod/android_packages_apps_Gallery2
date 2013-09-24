@@ -24,7 +24,7 @@
                   android:id="@+id/RelativeLayout1"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:background="@color/default_background">
+                  android:background="@color/background_main_toolbar">
 
         <com.android.gallery3d.filtershow.colorpicker.ColorCompareView
                 android:id="@+id/btnSelect"
@@ -32,7 +32,7 @@
                 android:layout_height="32dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="0dp"
                 />
         <com.android.gallery3d.filtershow.colorpicker.ColorSVRectView
