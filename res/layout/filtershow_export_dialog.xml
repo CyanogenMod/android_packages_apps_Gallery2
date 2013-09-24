@@ -40,7 +40,8 @@
 
         <TextView
                 android:text="@string/size"
-                android:layout_gravity="right|center_vertical"/>
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="start|center_vertical"/>
 
         <EditText
                 android:id="@+id/editableWidth"
@@ -60,27 +61,41 @@
 
         <TextView
                 android:id="@+id/estimadedSize"
-                android:layout_gravity="center"/>
+                android:layout_marginRight="8dp"
+                android:layout_gravity="end|center_vertical"/>
 
-        <TextView
+        <LinearLayout
+                android:layout_columnSpan="5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
                 android:text="@string/quality"
-                android:layout_margin="7dp"
-                android:layout_gravity="right|center_vertical" />
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_margin="8dp" />
 
-        <SeekBar
+            <SeekBar
                 android:id="@+id/qualitySeekBar"
-                android:layout_margin="7dp"
+                android:layout_margin="8dp"
                 android:layout_gravity="center"
                 android:max="100"
                 android:progress="100"
-                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_columnSpan="3"
-                android:minWidth="250dp"/>
+                android:minWidth="250dp" />
 
-        <TextView
+            <TextView
                 android:id="@+id/qualityTextView"
-                android:layout_margin="7dp"
-                android:layout_gravity="left|center_vertical"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="end|center_vertical" />
+
+        </LinearLayout>
+
 
     </GridLayout>
 
