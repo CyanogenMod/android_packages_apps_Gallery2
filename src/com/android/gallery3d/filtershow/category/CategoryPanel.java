@@ -54,29 +54,39 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
         switch (adapter) {
             case MainPanel.LOOKS: {
                 mAdapter = activity.getCategoryLooksAdapter();
-                mAdapter.initializeSelection(MainPanel.LOOKS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.LOOKS);
+                }
                 activity.updateCategories();
                 break;
             }
             case MainPanel.BORDERS: {
                 mAdapter = activity.getCategoryBordersAdapter();
-                mAdapter.initializeSelection(MainPanel.BORDERS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.BORDERS);
+                }
                 activity.updateCategories();
                 break;
             }
             case MainPanel.GEOMETRY: {
                 mAdapter = activity.getCategoryGeometryAdapter();
-                mAdapter.initializeSelection(MainPanel.GEOMETRY);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.GEOMETRY);
+                }
                 break;
             }
             case MainPanel.FILTERS: {
                 mAdapter = activity.getCategoryFiltersAdapter();
-                mAdapter.initializeSelection(MainPanel.FILTERS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.FILTERS);
+                }
                 break;
             }
             case MainPanel.VERSIONS: {
                 mAdapter = activity.getCategoryVersionsAdapter();
-                mAdapter.initializeSelection(MainPanel.VERSIONS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.VERSIONS);
+                }
                 break;
             }
         }
@@ -104,10 +114,12 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
         View panelView = main.findViewById(R.id.listItems);
         if (panelView instanceof CategoryTrack) {
             CategoryTrack panel = (CategoryTrack) panelView;
-            mAdapter.setOrientation(CategoryView.HORIZONTAL);
-            panel.setAdapter(mAdapter);
-            mAdapter.setContainer(panel);
-        } else {
+            if (mAdapter != null) {
+                mAdapter.setOrientation(CategoryView.HORIZONTAL);
+                panel.setAdapter(mAdapter);
+                mAdapter.setContainer(panel);
+            }
+        } else if (mAdapter != null) {
             ListView panel = (ListView) main.findViewById(R.id.listItems);
             panel.setAdapter(mAdapter);
             mAdapter.setContainer(panel);
