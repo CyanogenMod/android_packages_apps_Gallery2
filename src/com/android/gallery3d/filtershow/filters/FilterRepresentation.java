@@ -271,7 +271,8 @@ public class FilterRepresentation {
     }
 
     public boolean canMergeWith(FilterRepresentation representation) {
-        if (representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
+        if (getFilterType() == FilterRepresentation.TYPE_GEOMETRY
+            && representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
             return true;
         }
         return false;
