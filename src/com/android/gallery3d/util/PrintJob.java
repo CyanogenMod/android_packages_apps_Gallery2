@@ -39,7 +39,7 @@ import java.io.IOException;
 
 public class PrintJob {
     private static final String LOG_TAG = "PrintJob";
-
+    private static final boolean CROP_TO_FILL_PAGE = true;
     // will be <= 300 dpi on A4 (8.3×11.7) paper
     // with a worst case of 150 dpi
     private final static int MAX_PRINT_SIZE = 3500;
@@ -67,8 +67,8 @@ public class PrintJob {
                                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_PHOTO)
                                 .setPageCount(1)
                                 .build();
-
-                        layoutResultCallback.onLayoutFinished(info, false);
+                        boolean changed = !newPrintAttributes.equals(oldPrintAttributes);
+                        layoutResultCallback.onLayoutFinished(info, changed);
                     }
 
                     @Override
@@ -84,8 +84,12 @@ public class PrintJob {
                             Matrix matrix = new Matrix();
 
                             // Compute and apply scale to fill the page.
-                            float scale = Math.max(content.width() / bitmap.getWidth(),
-                                            content.height() / bitmap.getHeight());
+                            float scale = content.width() / bitmap.getWidth();
+                            if (CROP_TO_FILL_PAGE) {
+                                scale = Math.max(scale, content.height() / bitmap.getHeight());
+                            } else {
+                                scale = Math.min(scale, content.height() / bitmap.getHeight());
+                            }
                             matrix.postScale(scale, scale);
 
                             // Center the content.
