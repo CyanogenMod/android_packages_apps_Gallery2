@@ -34,6 +34,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -365,8 +366,7 @@ public class ImageShow extends View implements OnGestureListener,
         m.mapRect(d);
         d.roundOut(mImageBounds);
 
-        if (master.onGoingNewLookAnimation()
-                || mDidStartAnimation) {
+        if (master.onGoingNewLookAnimation()) {
             mDidStartAnimation = true;
             canvas.save();
 
@@ -387,8 +387,10 @@ public class ImageShow extends View implements OnGestureListener,
                 if (maskScale >= 0.0f) {
                     float maskW = sMask.getWidth() / 2.0f;
                     float maskH = sMask.getHeight() / 2.0f;
-
                     Point point = mActivity.hintTouchPoint(this);
+                    float maxMaskScale = 2 * Math.max(getWidth(), getHeight())
+                            / Math.min(maskW, maskH);
+                    maskScale = maskScale * maxMaskScale;
                     float x = point.x - maskW * maskScale;
                     float y = point.y - maskH * maskScale;
 
@@ -475,6 +477,7 @@ public class ImageShow extends View implements OnGestureListener,
                 && !master.getPreviousPreset().equals(master.getCurrentPreset())) {
             mDidStartAnimation = false;
             MasterImage.getImage().resetAnimBitmap();
+            invalidate();
         }
 
         canvas.restore();

@@ -50,7 +50,7 @@ public class CategoryView extends IconView
     private int mSpacerColor = Color.WHITE;
     private boolean mCanBeRemoved = false;
     private long mDoubleActionLast = 0;
-    private long mDoubleTapDelay = 150;
+    private long mDoubleTapDelay = 250;
 
     public CategoryView(Context context) {
         super(context);
