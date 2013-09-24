@@ -38,7 +38,7 @@
     <string name="saving_image" msgid="7270334453636349407">"正在保存照片..."</string>
     <string name="filtershow_saving_image" msgid="6659463980581993016">"正在将照片保存到“<xliff:g id="ALBUM_NAME">%1$s</xliff:g>”…"</string>
     <string name="save_error" msgid="6857408774183654970">"无法保存经过裁剪的图片。"</string>
-    <string name="crop_label" msgid="521114301871349328">"修剪照片"</string>
+    <string name="crop_label" msgid="521114301871349328">"剪裁照片"</string>
     <string name="trim_label" msgid="274203231381209979">"剪辑视频"</string>
     <string name="select_image" msgid="7841406150484742140">"选择照片"</string>
     <string name="select_video" msgid="4859510992798615076">"选择视频"</string>
@@ -91,7 +91,7 @@
     <string name="simple_edit" msgid="2792835918347498211">"简单编辑"</string>
     <string name="process_caching_requests" msgid="8722939570307386071">"正在处理缓存请求"</string>
     <string name="caching_label" msgid="4521059045896269095">"正在缓存..."</string>
-    <string name="crop_action" msgid="3427470284074377001">"修剪"</string>
+    <string name="crop_action" msgid="3427470284074377001">"剪裁"</string>
     <string name="trim_action" msgid="703098114452883524">"修剪"</string>
     <string name="mute_action" msgid="5296241754753306251">"静音"</string>
     <string name="set_as" msgid="3636764710790507868">"设置为"</string>
@@ -423,7 +423,7 @@
     <string name="set_duration" msgid="5578035312407161304">"设置倒数时间（秒）"</string>
     <string name="count_down_title_text" msgid="4976386810910453266">"拍照倒计时中"</string>
     <string name="remember_location_title" msgid="9060472929006917810">"是否记住照片拍摄地点？"</string>
-    <string name="remember_location_prompt" msgid="724592331305808098">"为您的照片和视频标明拍摄地点。\n\n其他应用在查看您保存的图片时将可以访问这些信息。"</string>
+    <string name="remember_location_prompt" msgid="724592331305808098">"为您的照片和视频标明拍摄地点。\n\n其他应用在查看您保存的照片和视频时将可以使用这些信息。"</string>
     <string name="remember_location_no" msgid="7541394381714894896">"不用了"</string>
     <string name="remember_location_yes" msgid="862884269285964180">"好"</string>
     <string name="menu_camera" msgid="3476709832879398998">"相机"</string>
