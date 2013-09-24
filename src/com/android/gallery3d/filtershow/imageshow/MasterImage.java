@@ -429,7 +429,7 @@ public class MasterImage implements RenderingRequestCaller {
         mPreviousPreset = getPreviewBuffer().getConsumer().getPreset();
         if (newRepresentation instanceof FilterUserPresetRepresentation) {
             mCurrentLookAnimation = CIRCLE_ANIMATION;
-            mAnimator = ValueAnimator.ofFloat(0, 40);
+            mAnimator = ValueAnimator.ofFloat(0, 1);
             mAnimator.setDuration(650);
         }
         if (newRepresentation instanceof FilterRotateRepresentation) {
