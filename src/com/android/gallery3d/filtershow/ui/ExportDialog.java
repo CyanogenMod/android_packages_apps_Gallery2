@@ -170,6 +170,9 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
 
     public void updateCompressionFactor() {
         Bitmap bitmap = MasterImage.getImage().getFilteredImage();
+        if (bitmap == null) {
+            return;
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, mQuality, out);
         mCompressedSize = out.size();
