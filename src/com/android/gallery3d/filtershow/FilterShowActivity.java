@@ -700,6 +700,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void updateCategories() {
+        if (mMasterImage == null) {
+            return;
+        }
         ImagePreset preset = mMasterImage.getPreset();
         mCategoryLooksAdapter.reflectImagePreset(preset);
         mCategoryBordersAdapter.reflectImagePreset(preset);
