@@ -56,7 +56,7 @@
 
     <!-- Export Dialog-->
 
-    <!--  Text for the dialog title to export a flattened photo[CHAR LIMIT=30] -->
+    <!--  Text for the dialog title to export a flattened photo[CHAR LIMIT=25] -->
     <string name="export_flattened">Export Flattened Image</string>
     <!--  Text for selecting export image quality [CHAR LIMIT=100] -->
     <string name="select_output_settings">The exported image will be a copy, without the history.</string>
