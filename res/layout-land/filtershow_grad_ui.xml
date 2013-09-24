@@ -102,18 +102,19 @@
                 android:layout_gravity="fill_horizontal"
                 style="@style/FilterShowSlider" />
     </GridLayout>
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp" >
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
 
-    <ImageButton
+
+        <ImageButton
             android:id="@+id/gradAddButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
+            android:layout_gravity="start|center_vertical"
+            android:gravity="start"
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
@@ -121,16 +122,24 @@
             android:paddingBottom="8dp"
             android:layout_marginLeft="48dp" />
 
-    <ImageButton
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="8dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
             android:id="@+id/gradDelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
+            android:layout_gravity="end|center_vertical"
+            android:gravity="end"
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
             android:src="@drawable/ic_menu_trash_holo_light"
             android:paddingBottom="8dp"
             android:layout_marginRight="48dp" />
-    </GridLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
