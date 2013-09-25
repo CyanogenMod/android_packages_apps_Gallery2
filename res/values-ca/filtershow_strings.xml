@@ -33,7 +33,7 @@
     <string name="export_image" msgid="3202835713172222134">"Exporta"</string>
     <string name="print_image" msgid="1942989216591621413">"Imprimeix"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Exporta la imatge aplanada"</string>
-    <string name="select_output_settings" msgid="1268532018080310748">"La imatge exportada serà una còpia, sense l\'historial."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"La imatge exportada serà una còpia i no inclourà l\'historial."</string>
     <string name="quality" msgid="179292110309050529">"Qualitat"</string>
     <string name="size" msgid="4639404642236356037">"Mida"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
@@ -119,8 +119,7 @@
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Marcador"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Esquitx"</string>
     <string name="draw_clear" msgid="6728155515454921052">"Esborra"</string>
-    <!-- no translation found for color_border_size (1086895807615869290) -->
-    <skip />
+    <string name="color_border_size" msgid="1086895807615869290">"Gruix"</string>
     <string name="color_border_corner_size" msgid="7637235159438869979">"Mida extrem"</string>
     <string name="color_border_color" msgid="8765458414425980711">"Color"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"Esborra"</string>
