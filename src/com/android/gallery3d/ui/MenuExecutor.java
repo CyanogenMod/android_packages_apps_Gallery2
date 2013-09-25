@@ -39,6 +39,7 @@ import com.android.gallery3d.data.Path;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.PrintJob;
 import com.android.gallery3d.util.ThreadPool.Job;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
@@ -178,6 +179,7 @@ public class MenuExecutor {
         boolean supportEdit = (supported & MediaObject.SUPPORT_EDIT) != 0;
         boolean supportInfo = (supported & MediaObject.SUPPORT_INFO) != 0;
         boolean supportPrint = (supported & MediaObject.SUPPORT_PRINT) != 0;
+        supportPrint &= PrintJob.systemSupportsPrint();
 
         setMenuItemVisible(menu, R.id.action_delete, supportDelete);
         setMenuItemVisible(menu, R.id.action_rotate_ccw, supportRotate);

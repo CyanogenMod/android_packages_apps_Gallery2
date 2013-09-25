@@ -22,6 +22,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.pdf.PdfDocument.Page;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
@@ -43,6 +44,13 @@ public class PrintJob {
     // will be <= 300 dpi on A4 (8.3×11.7) paper
     // with a worst case of 150 dpi
     private final static int MAX_PRINT_SIZE = 3500;
+
+    /**
+     * @return true if the system supports print
+     */
+    public static boolean systemSupportsPrint() {
+        return (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2);
+    }
 
     public static void printBitmap(final Context context, final String jobName,
             final Bitmap bitmap) {
