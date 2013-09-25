@@ -119,8 +119,7 @@
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"نشانگر"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"سبک پاشش"</string>
     <string name="draw_clear" msgid="6728155515454921052">"پاک کردن"</string>
-    <!-- no translation found for color_border_size (1086895807615869290) -->
-    <skip />
+    <string name="color_border_size" msgid="1086895807615869290">"ضخامت"</string>
     <string name="color_border_corner_size" msgid="7637235159438869979">"اندازه گوشه"</string>
     <string name="color_border_color" msgid="8765458414425980711">"رنگ"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"پاک کردن"</string>

@@ -119,8 +119,7 @@
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Zvýrazňovač"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Cákance"</string>
     <string name="draw_clear" msgid="6728155515454921052">"Vymazat"</string>
-    <!-- no translation found for color_border_size (1086895807615869290) -->
-    <skip />
+    <string name="color_border_size" msgid="1086895807615869290">"Tloušťka"</string>
     <string name="color_border_corner_size" msgid="7637235159438869979">"Velikost rohu"</string>
     <string name="color_border_color" msgid="8765458414425980711">"Barva"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"Vymazat"</string>

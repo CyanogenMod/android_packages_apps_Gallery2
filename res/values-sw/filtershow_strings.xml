@@ -28,12 +28,12 @@
     <string name="custom_border" msgid="8679893731790931871">"Maalum"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Tendua"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Rudia"</string>
-    <string name="show_imagestate_panel" msgid="281932769701043015">"Onyesha Athari ambazo Zimetekelezwa"</string>
+    <string name="show_imagestate_panel" msgid="281932769701043015">"Onyesha Athari Zilizotumika"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ficha Athari ambazo Zimetekelezwa"</string>
     <string name="export_image" msgid="3202835713172222134">"Hamisha"</string>
     <string name="print_image" msgid="1942989216591621413">"Chapa"</string>
     <string name="export_flattened" msgid="9046192331465915411">"Tuma Picha Bapa"</string>
-    <string name="select_output_settings" msgid="1268532018080310748">"Picha iliyopelekwa itakuwa nakala, bila historia."</string>
+    <string name="select_output_settings" msgid="1268532018080310748">"Picha itakayohamishwa itakuwa nakala, bila historia."</string>
     <string name="quality" msgid="179292110309050529">"Ubora"</string>
     <string name="size" msgid="4639404642236356037">"Ukubwa"</string>
     <string name="x" msgid="6810256999024563662">"x"</string>
