@@ -82,7 +82,7 @@
     <string name="vignette_contrast" msgid="955732121756799897">"Контрастность"</string>
     <string name="vignette_falloff" msgid="690918055030064199">"Уровень"</string>
     <string name="redeye" msgid="4508883127049472069">"Красные глаза"</string>
-    <string name="imageDraw" msgid="6918552177844486656">"Подмалевок"</string>
+    <string name="imageDraw" msgid="6918552177844486656">"Рисование"</string>
     <string name="straighten" msgid="26025591664983528">"Выровнять"</string>
     <string name="crop" msgid="5781263790107850771">"Кадрировать"</string>
     <string name="rotate" msgid="2796802553793795371">"Повернуть"</string>
