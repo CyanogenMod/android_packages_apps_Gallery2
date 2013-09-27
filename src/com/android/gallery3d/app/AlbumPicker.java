@@ -32,7 +32,7 @@ public class AlbumPicker extends PickerActivity {
         Bundle extras = intent.getExtras();
         Bundle data = extras == null ? new Bundle() : new Bundle(extras);
 
-        data.putBoolean(Gallery.KEY_GET_ALBUM, true);
+        data.putBoolean(GalleryActivity.KEY_GET_ALBUM, true);
         data.putString(AlbumSetPage.KEY_MEDIA_PATH,
                 getDataManager().getTopSetPath(DataManager.INCLUDE_IMAGE));
         getStateManager().startState(AlbumSetPage.class, data);
