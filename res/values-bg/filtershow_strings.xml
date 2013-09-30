@@ -82,12 +82,12 @@
     <string name="vignette_contrast" msgid="955732121756799897">"Контраст"</string>
     <string name="vignette_falloff" msgid="690918055030064199">"Потъмняване"</string>
     <string name="redeye" msgid="4508883127049472069">"Червени очи"</string>
-    <string name="imageDraw" msgid="6918552177844486656">"Draw"</string>
+    <string name="imageDraw" msgid="6918552177844486656">"Рисуване"</string>
     <string name="straighten" msgid="26025591664983528">"Изправяне"</string>
     <string name="crop" msgid="5781263790107850771">"Подрязване"</string>
     <string name="rotate" msgid="2796802553793795371">"Завъртане"</string>
     <string name="mirror" msgid="5482518108154883096">"Огледало"</string>
-    <string name="negative" msgid="6998313764388022201">"Negative"</string>
+    <string name="negative" msgid="6998313764388022201">"Негатив"</string>
     <string name="none" msgid="6633966646410296520">"Без"</string>
     <string name="edge" msgid="7036064886242147551">"Edges"</string>
     <string name="kmeans" msgid="2080952022674981541">"Плакат"</string>
