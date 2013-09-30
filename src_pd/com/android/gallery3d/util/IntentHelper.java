@@ -17,8 +17,11 @@ package com.android.gallery3d.util;
 
 import android.content.Intent;
 
-public class CameraHelper {
+public class IntentHelper {
 
     public static final Intent CAMERA_LAUNCHER_INTENT = new Intent(Intent.ACTION_MAIN)
         .setClassName("com.android.camera2", "com.android.camera.CameraActivity");
+
+    public static final Intent GALLERY_LAUNCHER_INTENT = new Intent(Intent.ACTION_MAIN)
+        .setClassName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity");
 }

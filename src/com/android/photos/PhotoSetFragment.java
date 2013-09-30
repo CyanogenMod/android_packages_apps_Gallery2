@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.android.gallery3d.app.Gallery;
+import com.android.gallery3d.app.GalleryActivity;
 import com.android.photos.adapters.PhotoThumbnailAdapter;
 import com.android.photos.data.PhotoSetLoader;
 import com.android.photos.shims.LoaderCompatShim;
@@ -74,7 +74,7 @@ public class PhotoSetFragment extends MultiSelectGridFragment implements LoaderC
         Cursor item = (Cursor) getItemAtPosition(position);
         Uri uri = mLoaderCompatShim.uriForItem(item);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(getActivity(), Gallery.class);
+        intent.setClass(getActivity(), GalleryActivity.class);
         startActivity(intent);
     }
 
