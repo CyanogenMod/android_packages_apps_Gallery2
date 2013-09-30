@@ -164,8 +164,6 @@ public abstract class PhotoPage extends ActivityState implements
     private boolean mHasCameraScreennailOrPlaceholder = false;
     private boolean mRecenterCameraOnResume = true;
 
-    private int mGalleryMode = GalleryActionBar.ALBUM_FILMSTRIP_MODE_SELECTED;
-
     // These are only valid after the panorama callback
     private boolean mIsPanorama;
     private boolean mIsPanorama360;
@@ -604,6 +602,13 @@ public abstract class PhotoPage extends ActivityState implements
     @Override
     public boolean canDisplayBottomControls() {
         return mIsActive && !mPhotoView.canUndo();
+    }
+
+    /**
+     * Returns the start source index of the album
+     */
+    protected int getStartSourceIndex() {
+        return 0;
     }
 
     @Override
@@ -1505,26 +1510,18 @@ public abstract class PhotoPage extends ActivityState implements
 
         @Override
         public int size() {
-            if (mMediaSet == null) {
-                return 1;
-            }
-            return (mGalleryMode == GalleryActionBar.ALBUM_GRID_MODE_SELECTED)
-                        ? mMediaSet.getMediaItemCount()
-                        : mMediaSet.getMediaItemCount() - 1;
+            return mMediaSet != null ? mMediaSet.getMediaItemCount() - getStartSourceIndex() : 1;
         }
 
         @Override
         public int setIndex() {
-            return (mGalleryMode == GalleryActionBar.ALBUM_GRID_MODE_SELECTED)
-                        ? mModel.getCurrentIndex()
-                        : mModel.getCurrentIndex() - 1;
+            return mModel.getCurrentIndex() - getStartSourceIndex();
         }
     }
 
     @Override
     public void onAlbumModeSelected(int mode) {
-        mGalleryMode = mode;
-        if (mGalleryMode == GalleryActionBar.ALBUM_GRID_MODE_SELECTED) {
+        if (mode == GalleryActionBar.ALBUM_GRID_MODE_SELECTED) {
             switchToGrid();
         }
     }
