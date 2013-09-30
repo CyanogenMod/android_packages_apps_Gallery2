@@ -44,16 +44,27 @@ public class PrintJob {
     // will be <= 300 dpi on A4 (8.3×11.7) paper
     // with a worst case of 150 dpi
     private final static int MAX_PRINT_SIZE = 3500;
+    static Boolean sNoPrint = null;
 
     /**
      * @return true if the system supports print
      */
     public static boolean systemSupportsPrint() {
-        return (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2);
+        // TODO change the code to call a support library
+        if (sNoPrint != null) {
+            return sNoPrint;
+        }
+        try {
+            Class c = Class.forName("android.print.PrintManager");
+            sNoPrint = true;
+        } catch (ClassNotFoundException e) {
+            sNoPrint = false;
+        }
+        return sNoPrint;
     }
 
     public static void printBitmap(final Context context, final String jobName,
-            final Bitmap bitmap) {
+                                   final Bitmap bitmap) {
         if (bitmap == null) {
             return;
         }
@@ -119,7 +130,7 @@ public class PrintJob {
                                         fileDescriptor.getFileDescriptor()));
                                 // Done.
                                 writeResultCallback.onWriteFinished(
-                                        new PageRange[] { PageRange.ALL_PAGES });
+                                        new PageRange[]{PageRange.ALL_PAGES});
                             } catch (IOException ioe) {
                                 // Failed.
                                 Log.e(LOG_TAG, "Error writing printed content", ioe);
