@@ -22,7 +22,7 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.android.gallery3d.app.Gallery;
+import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.data.MediaSet.ItemConsumer;
 
@@ -130,7 +130,7 @@ class LocalSource extends MediaSource {
 
     private Path getAlbumPath(Uri uri, int defaultType) {
         int mediaType = getMediaType(
-                uri.getQueryParameter(Gallery.KEY_MEDIA_TYPES),
+                uri.getQueryParameter(GalleryActivity.KEY_MEDIA_TYPES),
                 defaultType);
         String bucketId = uri.getQueryParameter(KEY_BUCKET_ID);
         int id = 0;

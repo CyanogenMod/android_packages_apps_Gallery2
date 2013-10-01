@@ -37,7 +37,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.app.Gallery;
+import com.android.gallery3d.app.GalleryActivity;
 import com.android.gallery3d.app.PackagesMonitor;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
@@ -250,7 +250,7 @@ public class GalleryUtils {
     }
 
     public static void startGalleryActivity(Context context) {
-        Intent intent = new Intent(context, Gallery.class)
+        Intent intent = new Intent(context, GalleryActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
