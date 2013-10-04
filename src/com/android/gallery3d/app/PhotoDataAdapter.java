@@ -374,6 +374,7 @@ public class PhotoDataAdapter implements PhotoPage.Model {
             if (entry.fullImageTask != null) entry.fullImageTask.cancel();
             if (entry.screenNailTask != null) entry.screenNailTask.cancel();
             if (entry.screenNail != null) entry.screenNail.recycle();
+            if (entry.fullImage != null) entry.fullImage.recycle();
         }
         mImageCache.clear();
         mTileProvider.clear();
