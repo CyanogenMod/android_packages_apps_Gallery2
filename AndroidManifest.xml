@@ -93,18 +93,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_GALLERY" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.GET_CONTENT" />
-                <category android:name="android.intent.category.OPENABLE" />
-                <data android:mimeType="vnd.android.cursor.dir/image" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.GET_CONTENT" />
-                <category android:name="android.intent.category.OPENABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-                <data android:mimeType="video/*" />
-            </intent-filter>
             <!-- We do NOT support the PICK intent, we add these intent-filter for
                  backward compatibility. Handle it as GET_CONTENT. -->
             <intent-filter>
@@ -171,6 +159,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- This activity alias is added so that GET_CONTENT intent-filter
+             can be disabled for KLP+ builds. -->
+        <activity-alias android:name="com.android.gallery3d.app.GalleryPicker"
+                android:targetActivity="com.android.gallery3d.app.Gallery"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:label="@string/app_name"
+                android:enabled="@bool/atMostJellyBeanMR2">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.OPENABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- we add this activity-alias for shortcut backward compatibility -->
         <!-- Note: The alias must put after the target activity -->
