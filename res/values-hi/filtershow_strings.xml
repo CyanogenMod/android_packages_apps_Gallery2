@@ -93,7 +93,7 @@
     <string name="kmeans" msgid="2080952022674981541">"पोस्टराइज़ करें"</string>
     <string name="downsample" msgid="3552938534146980104">"डाउनसेंपल"</string>
     <string name="grad" msgid="546774853424848655">"ग्रेजुएटेड"</string>
-    <string name="editor_grad_brightness" msgid="5937316734380235741">"स्क्रीन की रोशनी"</string>
+    <string name="editor_grad_brightness" msgid="5937316734380235741">"चमक"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"कंट्रास्ट"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"संतृप्तता"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"मुख्‍य"</string>
