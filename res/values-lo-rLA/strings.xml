@@ -233,7 +233,7 @@
     <string name="pref_camera_id_title" msgid="4040791582294635851">"ເລືອກກ້ອງ"</string>
     <string name="pref_camera_id_entry_back" msgid="5142699735103692485">"ກັບ"</string>
     <string name="pref_camera_id_entry_front" msgid="5668958706828733669">"ໜ້າ"</string>
-    <string name="pref_camera_recordlocation_title" msgid="371208839215448917">"ສະຖານທີ່ຈັດເກັບ"</string>
+    <string name="pref_camera_recordlocation_title" msgid="371208839215448917">"ບັນທຶກສະຖານທີ່"</string>
     <string name="pref_camera_location_label" msgid="2254270920298609161">"ສະຖານທີ່"</string>
     <string name="pref_camera_timer_title" msgid="3105232208281893389">"ໂຕນັບເວລາຖອຍຫຼັງ"</string>
   <plurals name="pref_camera_timer_entry">
@@ -286,7 +286,7 @@
     <string name="pref_camera_whitebalance_entry_fluorescent" msgid="2435332872847454032">"ໄຟຟລູອໍເຣສເຊນ"</string>
     <string name="pref_camera_whitebalance_entry_cloudy" msgid="3531996716997959326">"ຟ້າຄຶ້ມ"</string>
     <string name="pref_camera_whitebalance_label_auto" msgid="1479694362310491429">"ອັດຕະໂນມັດ"</string>
-    <string name="pref_camera_whitebalance_label_incandescent" msgid="7427628260209908900">"ແສງກ້າ"</string>
+    <string name="pref_camera_whitebalance_label_incandescent" msgid="7427628260209908900">"ຫຼອດໄຟສົ້ມ"</string>
     <string name="pref_camera_whitebalance_label_daylight" msgid="1859710806141461399">"ກາງເວັນ"</string>
     <string name="pref_camera_whitebalance_label_fluorescent" msgid="5173251749161337707">"ໄຟຟລູອໍເຣສເຊນ"</string>
     <string name="pref_camera_whitebalance_label_cloudy" msgid="8230173517179285320">"ຟ້າບົດ"</string>
