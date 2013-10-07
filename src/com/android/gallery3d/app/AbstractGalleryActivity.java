@@ -32,6 +32,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.print.PrintHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -45,12 +46,12 @@ import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLRootView;
 import com.android.gallery3d.util.PanoramaViewHelper;
-import com.android.gallery3d.util.PrintJob;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.photos.data.GalleryBitmapPool;
 
+import java.io.FileNotFoundException;
+
 public class AbstractGalleryActivity extends Activity implements GalleryContext {
-    @SuppressWarnings("unused")
     private static final String TAG = "AbstractGalleryActivity";
     private GLRootView mGLRootView;
     private StateManager mStateManager;
@@ -357,6 +358,11 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         } else {
             path = uri.getLastPathSegment();
         }
-        PrintJob.printBitmapAtUri(this, path, uri);
+        PrintHelper printer = new PrintHelper(this);
+        try {
+            printer.printBitmap(path, uri);
+        } catch (FileNotFoundException fnfe) {
+            Log.e(TAG, "Error printing an image", fnfe);
+        }
     }
 }

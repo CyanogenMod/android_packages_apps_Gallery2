@@ -46,6 +46,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.print.PrintHelper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -117,7 +118,6 @@ import com.android.gallery3d.filtershow.tools.XmpPresets.XMresults;
 import com.android.gallery3d.filtershow.ui.ExportDialog;
 import com.android.gallery3d.filtershow.ui.FramedTextButton;
 import com.android.gallery3d.util.GalleryUtils;
-import com.android.gallery3d.util.PrintJob;
 import com.android.photos.data.GalleryBitmapPool;
 
 import java.io.File;
@@ -994,7 +994,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         MenuItem redoItem = mMenu.findItem(R.id.redoButton);
         MenuItem resetItem = mMenu.findItem(R.id.resetHistoryButton);
         MenuItem printItem = mMenu.findItem(R.id.printButton);
-        if (!PrintJob.systemSupportsPrint()) {
+        if (!PrintHelper.systemSupportsPrint()) {
             printItem.setVisible(false);
         }
         mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
@@ -1068,7 +1068,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public void print() {
         Bitmap bitmap = MasterImage.getImage().getHighresImage();
-        PrintJob.printBitmap(this, "ImagePrint", bitmap);
+        PrintHelper printer = new PrintHelper(this);
+        printer.printBitmap("ImagePrint", bitmap);
     }
 
     public void addNewPreset() {
