@@ -74,6 +74,8 @@
                 <data android:mimeType="video/x-ms-wmv" />
                 <data android:mimeType="video/x-matroska" />
                 <data android:mimeType="application/sdp" />
+                <data android:mimeType="video/x-msvideo"/>
+                <data android:mimeType="video/divx" />
              </intent-filter>
              <intent-filter>
                 <!-- HTTP live support -->
