@@ -2206,7 +2206,10 @@ public class PhotoModule
 
     @Override
     public void onCameraPickerClicked(int cameraId) {
-        if (mPaused || mPendingSwitchCameraId != -1) return;
+        if (mPaused || mPendingSwitchCameraId != -1
+            || mCameraState != IDLE) {
+            return;
+        }
 
         mPendingSwitchCameraId = cameraId;
         if (ApiHelper.HAS_SURFACE_TEXTURE) {
