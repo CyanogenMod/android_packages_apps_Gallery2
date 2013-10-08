@@ -192,7 +192,6 @@
             android:taskAffinity="com.android.camera.CameraActivity"
             android:theme="@style/android:Theme.NoDisplay" />
         <activity-alias android:name="com.android.camera.CameraLauncher"
-            android:enabled="true"
             android:label="@string/camera_label"
             android:targetActivity="com.android.camera.CameraActivity">
             <intent-filter>
