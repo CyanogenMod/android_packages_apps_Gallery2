@@ -65,7 +65,7 @@
     <string name="deselect_all" msgid="5758897506061723684">"Auswahl für alle aufheben"</string>
     <string name="slideshow" msgid="4355906903247112975">"Diashow"</string>
     <string name="details" msgid="8415120088556445230">"Details"</string>
-    <string name="details_title" msgid="2611396603977441273">"%1$d von %2$d Elementen:"</string>
+    <string name="details_title" msgid="2611396603977441273">"Element %1$d von %2$d:"</string>
     <string name="close" msgid="5585646033158453043">"Schließen"</string>
     <string name="switch_to_camera" msgid="7280111806675169992">"Zu Kamera wechseln"</string>
   <plurals name="number_of_items_selected">
@@ -119,7 +119,7 @@
     <string name="make_available_offline" msgid="5157950985488297112">"Offline bereitstellen"</string>
     <string name="sync_picasa_albums" msgid="8522572542111169872">"Aktualisieren"</string>
     <string name="done" msgid="217672440064436595">"Fertig"</string>
-    <string name="sequence_in_set" msgid="7235465319919457488">"%1$d von %2$d Elementen:"</string>
+    <string name="sequence_in_set" msgid="7235465319919457488">"Element %1$d von %2$d:"</string>
     <string name="title" msgid="7622928349908052569">"Titel"</string>
     <string name="description" msgid="3016729318096557520">"Beschreibung"</string>
     <string name="time" msgid="1367953006052876956">"Uhrzeit"</string>
@@ -137,7 +137,7 @@
     <string name="aperture" msgid="5920657630303915195">"Blende"</string>
     <string name="focal_length" msgid="1291383769749877010">"Brennweite"</string>
     <string name="white_balance" msgid="1582509289994216078">"Weißabgleich"</string>
-    <string name="exposure_time" msgid="3990163680281058826">"Einblendungsdauer"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"Belichtungszeit"</string>
     <string name="iso" msgid="5028296664327335940">"ISO"</string>
     <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
     <string name="manual" msgid="6608905477477607865">"Manuell"</string>
