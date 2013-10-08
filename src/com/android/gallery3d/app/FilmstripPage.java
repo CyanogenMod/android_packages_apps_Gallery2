@@ -16,11 +16,14 @@
 
 package com.android.gallery3d.app;
 
+import android.os.Parcelable;
+
 public class FilmstripPage extends PhotoPage {
 
     @Override
     protected int getStartSourceIndex() {
-        // The camera itself
-        return 1;
+        // Detect when the camera tile is present
+        Parcelable parcelable = getData().getParcelable(KEY_APP_BRIDGE);
+        return parcelable != null && parcelable instanceof AppBridge ? 1 : 0;
     }
 }
