@@ -284,6 +284,7 @@ public final class ImageLoader {
      */
     public static Rect loadBitmapBounds(Context context, Uri uri) {
         BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
         loadBitmap(context, uri, o);
         return new Rect(0, 0, o.outWidth, o.outHeight);
     }
