@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.ImageCrop;
@@ -140,6 +141,7 @@ public class EditorCrop extends Editor implements EditorInfo {
             }
         });
         popupMenu.show();
+        ((FilterShowActivity)mContext).onShowMenu(popupMenu);
     }
 
     @Override
