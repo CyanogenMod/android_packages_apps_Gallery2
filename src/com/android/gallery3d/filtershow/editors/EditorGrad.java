@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.controller.Control;
 import com.android.gallery3d.filtershow.controller.FilterView;
 import com.android.gallery3d.filtershow.controller.Parameter;
@@ -254,6 +255,7 @@ public class EditorGrad extends ParametricEditor
             setUpPopupMenu(button);
         }
         mPopupMenu.show();
+        ((FilterShowActivity)mContext).onShowMenu(mPopupMenu);
     }
 
     private void setUpPopupMenu(Button button) {

@@ -33,6 +33,7 @@ import android.widget.PopupMenu;
 import android.widget.SeekBar;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.controller.BitmapCaller;
 import com.android.gallery3d.filtershow.controller.ColorChooser;
 import com.android.gallery3d.filtershow.controller.FilterView;
@@ -138,6 +139,7 @@ public class EditorColorBorder extends ParametricEditor  {
             }
         });
         popupMenu.show();
+        ((FilterShowActivity)mContext).onShowMenu(popupMenu);
     }
 
     protected void selectMenuItem(MenuItem item) {
