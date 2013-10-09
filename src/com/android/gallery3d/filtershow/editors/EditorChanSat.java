@@ -30,6 +30,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import android.widget.TextView;
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
 import com.android.gallery3d.filtershow.controller.BitmapCaller;
 import com.android.gallery3d.filtershow.controller.FilterView;
@@ -115,6 +116,7 @@ public class EditorChanSat extends ParametricEditor implements OnSeekBarChangeLi
                 @Override
                 public void onClick(View arg0) {
                     popupMenu.show();
+                    ((FilterShowActivity)mContext).onShowMenu(popupMenu);
                 }
             });
             mButton.setListener(this);
