@@ -60,6 +60,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Spinner;
@@ -129,7 +130,7 @@ import java.util.Vector;
 
 public class FilterShowActivity extends FragmentActivity implements OnItemClickListener,
         OnShareTargetSelectedListener, DialogInterface.OnShowListener,
-        DialogInterface.OnDismissListener{
+        DialogInterface.OnDismissListener, PopupMenu.OnDismissListener{
 
     private String mAction = "";
     MasterImage mMasterImage = null;
@@ -192,6 +193,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private boolean mIsBound = false;
     private Menu mMenu;
     private DialogInterface mCurrentDialog = null;
+    private PopupMenu mCurrentMenu = null;
     private boolean mLoadingVisible = true;
 
     public ProcessingService getProcessingService() {
@@ -710,6 +712,20 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public View getMainStatePanelContainer(int id) {
         return findViewById(id);
+    }
+
+    public void onShowMenu(PopupMenu menu) {
+        mCurrentMenu = menu;
+        menu.setOnDismissListener(this);
+    }
+
+    @Override
+    public void onDismiss(PopupMenu popupMenu){
+        if (mCurrentMenu == null) {
+            return;
+        }
+        mCurrentMenu.setOnDismissListener(null);
+        mCurrentMenu = null;
     }
 
     @Override
@@ -1241,6 +1257,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillCategories();
         loadMainPanel();
 
+        if (mCurrentMenu != null) {
+            mCurrentMenu.dismiss();
+            mCurrentMenu = null;
+        }
         if (mCurrentDialog != null) {
             mCurrentDialog.dismiss();
             mCurrentDialog = null;

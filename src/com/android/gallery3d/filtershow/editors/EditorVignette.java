@@ -29,6 +29,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.controller.BasicParameterInt;
 import com.android.gallery3d.filtershow.controller.Parameter;
 import com.android.gallery3d.filtershow.filters.FilterVignetteRepresentation;
@@ -173,6 +174,7 @@ public class EditorVignette extends ParametricEditor {
                 @Override
                 public void onClick(View arg0) {
                     popupMenu.show();
+                    ((FilterShowActivity)mContext).onShowMenu(popupMenu);
                 }
             });
             mButton.setListener(this);
