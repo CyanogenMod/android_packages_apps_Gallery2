@@ -172,11 +172,41 @@ public class PhotoMenu extends PieController
             more.addItem(item);
         }
         // scene mode
-        if (group.findPreference(CameraSettings.KEY_SCENE_MODE) != null) {
-            IconListPreference pref = (IconListPreference) group.findPreference(
-                    CameraSettings.KEY_SCENE_MODE);
-            pref.setUseSingleIcon(true);
-            item = makeItem(CameraSettings.KEY_SCENE_MODE);
+        final ListPreference scenePref = group.findPreference(CameraSettings.KEY_SCENE_MODE);
+        if (scenePref != null) {
+            item = makeItem(R.drawable.ic_sce);
+            item.setLabel(res.getString(R.string.pref_camera_scenemode_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup = (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(scenePref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mUI.showPopup(mPopup);
+                }
+            });
+            more.addItem(item);
+        }
+        // focus mode
+        final ListPreference focusPref = group.findPreference(CameraSettings.KEY_FOCUS_MODE);
+        if (scenePref != null) {
+            item = makeItem(R.drawable.ic_focus);
+            item.setLabel(res.getString(R.string.pref_camera_focusmode_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup = (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(focusPref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mUI.showPopup(mPopup);
+                }
+            });
             more.addItem(item);
         }
     }
