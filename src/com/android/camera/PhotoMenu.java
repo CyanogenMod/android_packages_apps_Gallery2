@@ -110,13 +110,15 @@ public class PhotoMenu extends PieController
         }
         // countdown timer
         final ListPreference ctpref = group.findPreference(CameraSettings.KEY_TIMER);
-        final ListPreference beeppref = group.findPreference(CameraSettings.KEY_TIMER_SOUND_EFFECTS);
+        final ListPreference beeppref =
+                group.findPreference(CameraSettings.KEY_TIMER_SOUND_EFFECTS);
         item = makeItem(R.drawable.ic_timer);
         item.setLabel(res.getString(R.string.pref_camera_timer_title).toUpperCase(locale));
         item.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(PieItem item) {
-                CountdownTimerPopup timerPopup = (CountdownTimerPopup) mActivity.getLayoutInflater().inflate(
+                CountdownTimerPopup timerPopup =
+                        (CountdownTimerPopup) mActivity.getLayoutInflater().inflate(
                         R.layout.countdown_setting_popup, null, false);
                 timerPopup.initialize(ctpref, beeppref);
                 timerPopup.setSettingChangedListener(PhotoMenu.this);
@@ -130,11 +132,13 @@ public class PhotoMenu extends PieController
         final ListPreference sizePref = group.findPreference(CameraSettings.KEY_PICTURE_SIZE);
         if (sizePref != null) {
             item = makeItem(R.drawable.ic_imagesize);
-            item.setLabel(res.getString(R.string.pref_camera_picturesize_title).toUpperCase(locale));
+            item.setLabel(res.getString(
+                    R.string.pref_camera_picturesize_title).toUpperCase(locale));
             item.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(PieItem item) {
-                    ListPrefSettingPopup popup = (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                    ListPrefSettingPopup popup =
+                            (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
                             R.layout.list_pref_setting_popup, null, false);
                     popup.initialize(sizePref);
                     popup.setSettingChangedListener(PhotoMenu.this);
@@ -172,11 +176,43 @@ public class PhotoMenu extends PieController
             more.addItem(item);
         }
         // scene mode
-        if (group.findPreference(CameraSettings.KEY_SCENE_MODE) != null) {
-            IconListPreference pref = (IconListPreference) group.findPreference(
-                    CameraSettings.KEY_SCENE_MODE);
-            pref.setUseSingleIcon(true);
-            item = makeItem(CameraSettings.KEY_SCENE_MODE);
+        final ListPreference scenePref = group.findPreference(CameraSettings.KEY_SCENE_MODE);
+        if (scenePref != null) {
+            item = makeItem(R.drawable.ic_sce);
+            item.setLabel(res.getString(R.string.pref_camera_scenemode_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup =
+                            (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(scenePref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mUI.showPopup(mPopup);
+                }
+            });
+            more.addItem(item);
+        }
+        // focus mode
+        final ListPreference focusPref = group.findPreference(CameraSettings.KEY_FOCUS_MODE);
+        if (focusPref != null) {
+            item = makeItem(R.drawable.ic_focus);
+            item.setLabel(res.getString(R.string.pref_camera_focusmode_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup =
+                            (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(focusPref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mUI.showPopup(mPopup);
+                }
+            });
             more.addItem(item);
         }
     }
