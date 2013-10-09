@@ -38,6 +38,7 @@ import android.widget.PopupMenu;
 import android.widget.SeekBar;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.colorpicker.ColorHueView;
 import com.android.gallery3d.filtershow.colorpicker.ColorListener;
 import com.android.gallery3d.filtershow.colorpicker.ColorOpacityView;
@@ -192,7 +193,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
             });
         }
         popupMenu.show();
-
+        ((FilterShowActivity)mContext).onShowMenu(popupMenu);
     }
 
     protected void selectMenuItem(MenuItem item) {
