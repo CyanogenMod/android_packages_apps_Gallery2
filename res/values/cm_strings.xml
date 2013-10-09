@@ -90,4 +90,55 @@
 
     <!-- Video HDR default value -->
     <string name="pref_camera_video_hdr_default" translatable="false">off</string>
+
+    <!-- Settings screen, scene mode -->
+    <string name="pref_camera_scenemode_entry_antimotionblur">Motion blur reduction</string>
+    <string name="pref_camera_scenemode_entry_aqua">Aqua</string>
+    <string name="pref_camera_scenemode_entry_ar">Augmented reality</string>
+    <string name="pref_camera_scenemode_entry_asd">Best shot</string>
+    <string name="pref_camera_scenemode_entry_baby">Baby</string>
+    <string name="pref_camera_scenemode_entry_backgroundblur">Background blur</string>
+    <string name="pref_camera_scenemode_entry_backlight">Backlight</string>
+    <string name="pref_camera_scenemode_entry_backlightportrait">Backlight portrait</string>
+    <string name="pref_camera_scenemode_entry_barcode">Barcode</string>
+    <string name="pref_camera_scenemode_entry_beach">Beach</string>
+    <string name="pref_camera_scenemode_entry_beauty">Beauty</string>
+    <string name="pref_camera_scenemode_entry_candlelight">Candlelight</string>
+    <string name="pref_camera_scenemode_entry_cine">Cine</string>
+    <string name="pref_camera_scenemode_entry_closeup">Closeup</string>
+    <string name="pref_camera_scenemode_entry_dark">Dark</string>
+    <string name="pref_camera_scenemode_entry_dish">Dish</string>
+    <string name="pref_camera_scenemode_entry_duskdawn">Duskdawn</string>
+    <string name="pref_camera_scenemode_entry_document">Document</string>
+    <string name="pref_camera_scenemode_entry_fallcolor">Fallcolor</string>
+    <string name="pref_camera_scenemode_entry_fireworks">Fireworks</string>
+    <string name="pref_camera_scenemode_entry_flowers">Flowers</string>
+    <string name="pref_camera_scenemode_entry_handheldtwilight">Handheld twilight</string>
+    <string name="pref_camera_scenemode_entry_highsensitivity">High sensivity</string>
+    <string name="pref_camera_scenemode_entry_landscape">Landscape</string>
+    <string name="pref_camera_scenemode_entry_mood">Mood</string>
+    <string name="pref_camera_scenemode_entry_nightportrait">Night portrait</string>
+    <string name="pref_camera_scenemode_entry_nightindoor">Night indoor</string>
+    <string name="pref_camera_scenemode_entry_oldfilm">Old film</string>
+    <string name="pref_camera_scenemode_entry_pet">Pet</string>
+    <string name="pref_camera_scenemode_entry_portrait">Portrait</string>
+    <string name="pref_camera_scenemode_entry_snow">Snow</string>
+    <string name="pref_camera_scenemode_entry_softskin">Soft skin</string>
+    <string name="pref_camera_scenemode_entry_sports">Sports</string>
+    <string name="pref_camera_scenemode_entry_spotlight">Spotlight</string>
+    <string name="pref_camera_scenemode_entry_steadyphoto">Steady photo</string>
+    <string name="pref_camera_scenemode_entry_supernight">Dark night</string>
+    <string name="pref_camera_scenemode_entry_sweepstitch">Sweep stitch</string>
+    <string name="pref_camera_scenemode_entry_text">Text</string>
+    <string name="pref_camera_scenemode_entry_theatre">Theatre</string>
+    <string name="pref_camera_scenemode_entry_whiteboard">Whiteboard</string>
+
+    <!-- Settings screen, focus mode -->
+    <string name="pref_camera_focusmode_entry_continuouspicture">Continuous picture</string>
+    <string name="pref_camera_focusmode_entry_extended">Extended</string>
+    <string name="pref_camera_focusmode_entry_facedetect">Face detect</string>
+    <string name="pref_camera_focusmode_entry_facepriority">Face priority</string>
+    <string name="pref_camera_focusmode_entry_fixed">Fixed</string>
+    <string name="pref_camera_focusmode_entry_portrait">Portrait</string>
+    <string name="pref_camera_focusmode_entry_hyperfocal">Hyperfocal</string>
 </resources>
