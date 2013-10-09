@@ -206,10 +206,9 @@ public class CameraSettings {
                     flashMode, mParameters.getSupportedFlashModes());
         }
         if (focusMode != null) {
-            if (!Util.isFocusAreaSupported(mParameters)) {
-                filterUnsupportedOptions(group,
-                        focusMode, mParameters.getSupportedFocusModes());
-            } else if (!mContext.getResources().getBoolean(R.bool.wantsFocusModes)) {
+            filterUnsupportedOptions(group,
+                    focusMode, mParameters.getSupportedFocusModes());
+            if (!mContext.getResources().getBoolean(R.bool.wantsFocusModes)) {
                 // Remove the focus mode if we can use tap-to-focus.
                 removePreference(group, focusMode.getKey());
             }

@@ -176,6 +176,7 @@
         <item>@string/pref_camera_picturesize_entry_5mp</item>
         <item>@string/pref_camera_picturesize_entry_4_5mp</item>
         <item>@string/pref_camera_picturesize_entry_4mp</item>
+        <item>@string/pref_camera_picturesize_entry_4mp</item>
         <item>@string/pref_camera_picturesize_entry_3_7mp</item>
         <item>@string/pref_camera_picturesize_entry_3mp</item>
         <item>@string/pref_camera_picturesize_entry_2_5mp</item>
@@ -219,6 +220,7 @@
         <item>2560x1920</item>
         <item>2592x1728</item>
         <item>2688x1520</item>
+        <item>2560x1536</item>
         <item>2560x1440</item>
         <item>2048x1536</item>
         <item>2048x1232</item>
@@ -241,14 +243,28 @@
     <!-- Camera Preferences focus mode dialog box entries -->
     <string-array name="pref_camera_focusmode_entries" translatable="false">
         <item>@string/pref_camera_focusmode_entry_auto</item>
+        <item>@string/pref_camera_focusmode_entry_continuouspicture</item>
+        <item>@string/pref_camera_focusmode_entry_extended</item>
+        <item>@string/pref_camera_focusmode_entry_facedetect</item>
+        <item>@string/pref_camera_focusmode_entry_facepriority</item>
+        <item>@string/pref_camera_focusmode_entry_fixed</item>
         <item>@string/pref_camera_focusmode_entry_infinity</item>
         <item>@string/pref_camera_focusmode_entry_macro</item>
+        <item>@string/pref_camera_focusmode_entry_portrait</item>
+        <item>@string/pref_camera_focusmode_entry_hyperfocal</item>
     </string-array>
 
     <string-array name="pref_camera_focusmode_entryvalues" translatable="false">
         <item>auto</item>
+        <item>continuous-picture</item>
+        <item>extended</item>
+        <item>facedetect</item>
+        <item>face-priority</item>
+        <item>fixed</item>
         <item>infinity</item>
         <item>macro</item>
+        <item>portrait</item>
+        <item>hyperfocal</item>
     </string-array>
 
     <string-array name="pref_camera_focusmode_labels" translatable="false">
@@ -395,6 +411,51 @@
         <item>@string/pref_camera_scenemode_entry_auto</item>
         <item>@string/pref_camera_scenemode_entry_sunset</item>
         <item>@string/pref_camera_scenemode_entry_party</item>
+        <item>@string/pref_camera_scenemode_entry_antimotionblur</item>
+        <item>@string/pref_camera_scenemode_entry_aqua</item>
+        <item>@string/pref_camera_scenemode_entry_ar</item>
+        <item>@string/pref_camera_scenemode_entry_asd</item>
+        <item>@string/pref_camera_scenemode_entry_baby</item>
+        <item>@string/pref_camera_scenemode_entry_backgroundblur</item>
+        <item>@string/pref_camera_scenemode_entry_backlight</item>
+        <item>@string/pref_camera_scenemode_entry_backlight</item>
+        <item>@string/pref_camera_scenemode_entry_backlightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_backlightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_barcode</item>
+        <item>@string/pref_camera_scenemode_entry_beach</item>
+        <item>@string/pref_camera_scenemode_entry_beauty</item>
+        <item>@string/pref_camera_scenemode_entry_candlelight</item>
+        <item>@string/pref_camera_scenemode_entry_cine</item>
+        <item>@string/pref_camera_scenemode_entry_closeup</item>
+        <item>@string/pref_camera_scenemode_entry_dark</item>
+        <item>@string/pref_camera_scenemode_entry_dish</item>
+        <item>@string/pref_camera_scenemode_entry_duskdawn</item>
+        <item>@string/pref_camera_scenemode_entry_document</item>
+        <item>@string/pref_camera_scenemode_entry_fallcolor</item>
+        <item>@string/pref_camera_scenemode_entry_fireworks</item>
+        <item>@string/pref_camera_scenemode_entry_flowers</item>
+        <item>@string/pref_camera_scenemode_entry_handheldtwilight</item>
+        <item>@string/pref_camera_scenemode_entry_highsensitivity</item>
+        <item>@string/pref_camera_scenemode_entry_landscape</item>
+        <item>@string/pref_camera_scenemode_entry_mood</item>
+        <item>@string/pref_camera_scenemode_entry_night</item>
+        <item>@string/pref_camera_scenemode_entry_nightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_nightportrait</item>
+        <item>@string/pref_camera_scenemode_entry_nightindoor</item>
+        <item>@string/pref_camera_scenemode_entry_oldfilm</item>
+        <item>@string/pref_camera_scenemode_entry_pet</item>
+        <item>@string/pref_camera_scenemode_entry_portrait</item>
+        <item>@string/pref_camera_scenemode_entry_snow</item>
+        <item>@string/pref_camera_scenemode_entry_softskin</item>
+        <item>@string/pref_camera_scenemode_entry_sports</item>
+        <item>@string/pref_camera_scenemode_entry_spotlight</item>
+        <item>@string/pref_camera_scenemode_entry_steadyphoto</item>
+        <item>@string/pref_camera_scenemode_entry_sunset</item>
+        <item>@string/pref_camera_scenemode_entry_supernight</item>
+        <item>@string/pref_camera_scenemode_entry_sweepstitch</item>
+        <item>@string/pref_camera_scenemode_entry_text</item>
+        <item>@string/pref_camera_scenemode_entry_theatre</item>
+        <item>@string/pref_camera_scenemode_entry_whiteboard</item>
     </string-array>
 
     <string-array name="pref_camera_scenemode_labels">
@@ -419,6 +480,52 @@
         <item>auto</item>
         <item>sunset</item>
         <item>party</item>
+        <item>anti-motion-blur</item>
+        <item>aqua</item>
+        <item>AR</item>
+        <item>asd</item>
+        <item>baby</item>
+        <item>background-blur</item>
+        <item>back-light</item>
+        <item>backlight</item>
+        <item>backlight_portrait</item>
+        <item>backlight-portrait</item>
+        <item>barcode</item>
+        <item>beach</item>
+        <item>beauty-mode</item>
+        <item>candlelight</item>
+        <item>cine</item>
+        <item>closeup</item>
+        <item>dark</item>
+        <item>dish</item>
+        <item>dusk-dawn</item>
+        <item>document</item>
+        <item>fall-color</item>
+        <item>fireworks</item>
+        <item>flowers</item>
+        <item>handheld-twilight</item>
+        <item>hdr</item>
+        <item>high-sensitivity</item>
+        <item>landscape</item>
+        <item>mood</item>
+        <item>night</item>
+        <item>night-portrait</item>
+        <item>nightportrait</item>
+        <item>night-indoor</item>
+        <item>old-film</item>
+        <item>pet</item>
+        <item>portrait</item>
+        <item>snow</item>
+        <item>soft-skin</item>
+        <item>sports</item>
+        <item>spot-light</item>
+        <item>steadyphoto</item>
+        <item>sunset</item>
+        <item>super-night</item>
+        <item>sweep-stitch</item>
+        <item>text</item>
+        <item>theatre</item>
+        <item>white-board</item>
     </string-array>
 
     <array name="camera_id_entries" translatable="false">
