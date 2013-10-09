@@ -97,8 +97,7 @@ public class Wallpaper extends Activity {
             }
             case STATE_PHOTO_PICKED: {
                 Intent cropAndSetWallpaperIntent;
-                if ("KeyLimePie".equals(Build.VERSION.CODENAME)
-                        || Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     WallpaperManager wpm = WallpaperManager.getInstance(getApplicationContext());
                     cropAndSetWallpaperIntent = wpm.getCropAndSetWallpaperIntent(mPickedItem);
                 } else {
