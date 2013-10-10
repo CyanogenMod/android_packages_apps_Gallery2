@@ -267,6 +267,9 @@ public class MtpDeviceIndex {
                 break;
             }
         }
+        if (mBuckets.length == 0 || mUnifiedLookupIndex.length == 0) {
+            return -1;
+        }
         int mappedPos = mBuckets[bucketNumber].unifiedStartIndex
                 + position - mBuckets[bucketNumber].itemsStartIndex;
         if (order == SortOrder.Descending) {
@@ -283,6 +286,9 @@ public class MtpDeviceIndex {
             return bucket.itemsStartIndex + position - 1 - bucket.unifiedStartIndex;
         } else {
             int zeroIndex = mUnifiedLookupIndex.length - 1 - position;
+            if (mBuckets.length == 0 || mUnifiedLookupIndex.length == 0) {
+                return -1;
+            }
             DateBucket bucket = mBuckets[mUnifiedLookupIndex[zeroIndex]];
             if (bucket.unifiedEndIndex == zeroIndex) zeroIndex--;
             return mMtpObjects.length - 1 - bucket.itemsStartIndex
