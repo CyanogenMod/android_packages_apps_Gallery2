@@ -29,6 +29,7 @@ import java.util.Vector;
 public class CacheProcessing {
     private static final String LOGTAG = "CacheProcessing";
     private static final boolean DEBUG = false;
+    private static final boolean NO_CACHING = false;
     private Vector<CacheStep> mSteps = new Vector<CacheStep>();
 
     static class CacheStep {
@@ -104,14 +105,24 @@ public class CacheProcessing {
                 for (FilterRepresentation representation : representations) {
                     geometry.add(representation);
                 }
+                if (DEBUG) {
+                    Log.v(LOGTAG, "Apply geometry to bitmap " + cacheBitmap);
+                }
                 cacheBitmap = GeometryMathUtils.applyGeometryRepresentations(geometry, cacheBitmap);
             } else {
                 for (FilterRepresentation representation : representations) {
+                    if (DEBUG) {
+                        Log.v(LOGTAG, "Apply " + representation.getSerializationName()
+                                + " to bitmap " + cacheBitmap);
+                    }
                     cacheBitmap = environment.applyRepresentation(representation, cacheBitmap);
                 }
             }
             if (cacheBitmap != source) {
                 environment.cache(source);
+            }
+            if (DEBUG) {
+                Log.v(LOGTAG, "Apply returns bitmap " + cacheBitmap);
             }
             return cacheBitmap;
         }
@@ -178,6 +189,20 @@ public class CacheProcessing {
                     + mSteps.size() + " cacheBitmap: " + cacheBitmap);
         }
 
+        if (NO_CACHING) {
+            cacheBitmap = environment.getBitmapCopy(originalBitmap,
+                    BitmapCache.PREVIEW_CACHE_NO_ROOT);
+            for (int i = 0; i < mSteps.size(); i++) {
+                CacheStep step = mSteps.elementAt(i);
+                Bitmap prev = cacheBitmap;
+                cacheBitmap = step.apply(environment, cacheBitmap);
+                if (prev != cacheBitmap) {
+                    environment.cache(prev);
+                }
+            }
+            return cacheBitmap;
+        }
+
         Bitmap originalCopy = null;
         int lastPositionCached = -1;
         for (int i = findBaseImageIndex; i < mSteps.size(); i++) {
@@ -227,9 +252,8 @@ public class CacheProcessing {
             displayNbBitmapsInCache();
         }
         if (lastPositionCached != -1) {
-            Bitmap bitmap = mSteps.elementAt(lastPositionCached).cache;
+            // The last element will never be reused, remove it from the cache.
             mSteps.elementAt(lastPositionCached).cache = null;
-            environment.cache(bitmap);
         }
         if (contains(cacheBitmap)) {
             return environment.getBitmapCopy(cacheBitmap, BitmapCache.PREVIEW_CACHE_NO_APPLY);
