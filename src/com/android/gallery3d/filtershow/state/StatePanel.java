@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.category.MainPanel;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.util.FilterShowHelper;
 
 public class StatePanel extends Fragment {
     private static final String LOGTAG = "StatePanel";
@@ -49,14 +50,18 @@ public class StatePanel extends Fragment {
         track = (StatePanelTrack) panel;
         track.setAdapter(MasterImage.getImage().getState());
         mToggleVersionsPanel = (ImageButton) mMainView.findViewById(R.id.toggleVersionsPanel);
-        if (mToggleVersionsPanel.getVisibility() == View.GONE
-                || mToggleVersionsPanel.getVisibility() == View.INVISIBLE) {
-            mToggleVersionsPanel.setVisibility(View.VISIBLE);
-            mToggleVersionsPanel.setImageBitmap(null);
-        }
-        if (mMainPanel != null) {
-            mMainPanel.setToggleVersionsPanelButton(mToggleVersionsPanel);
-        } else if (mToggleVersionsPanel != null) {
+        if (FilterShowHelper.shouldUseVersions()) {
+            if (mToggleVersionsPanel.getVisibility() == View.GONE
+                    || mToggleVersionsPanel.getVisibility() == View.INVISIBLE) {
+                mToggleVersionsPanel.setVisibility(View.VISIBLE);
+                mToggleVersionsPanel.setImageBitmap(null);
+            }
+            if (mMainPanel != null) {
+                mMainPanel.setToggleVersionsPanelButton(mToggleVersionsPanel);
+            } else if (mToggleVersionsPanel != null) {
+                mToggleVersionsPanel.setVisibility(View.GONE);
+            }
+        } else {
             mToggleVersionsPanel.setVisibility(View.GONE);
         }
         return mMainView;
