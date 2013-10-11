@@ -388,7 +388,7 @@ public class ImagePreset {
                 if (current.getFilterType() == FilterRepresentation.TYPE_FX) {
                     mFilters.remove(i);
                     replaced = true;
-                    if (!isNoneBorderFilter(representation)) {
+                    if (!isNoneFxFilter(representation)) {
                         mFilters.add(i, representation);
                     }
                     break;
