@@ -46,7 +46,6 @@ public class EditorColorBorder extends ParametricEditor  {
     private static final String LOGTAG = "EditorColorBorder";
     public static final int ID = R.id.editorColorBorder;
 
-
     int[] mBasColors = {
             FilterColorBorderRepresentation.DEFAULT_MENU_COLOR1,
             FilterColorBorderRepresentation.DEFAULT_MENU_COLOR2,
@@ -169,7 +168,9 @@ public class EditorColorBorder extends ParametricEditor  {
             ColorChooser c = (ColorChooser) mControl;
             mBasColors = c.getColorSet();
         }
-        control(rep.getCurrentParam(), mEditControl);
+        if (mEditControl != null) {
+            control(rep.getCurrentParam(), mEditControl);
+        }
         if (mControl instanceof ColorChooser) {
             ColorChooser c = (ColorChooser) mControl;
             c.setColorSet(mBasColors);
