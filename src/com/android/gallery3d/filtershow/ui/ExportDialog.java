@@ -161,7 +161,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
                 float scaleFactor = mExportWidth / (float) mOriginalBounds.width();
                 Intent processIntent = ProcessingService.getSaveIntent(activity, MasterImage
                         .getImage().getPreset(), dest, activity.getSelectedImageUri(), sourceUri,
-                        true, mSeekBar.getProgress(), scaleFactor);
+                        true, mSeekBar.getProgress(), scaleFactor, false);
                 activity.startService(processIntent);
                 dismiss();
                 break;
