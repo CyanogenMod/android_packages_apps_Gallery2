@@ -49,6 +49,10 @@ public class ImageSavingTask extends ProcessingTask {
         int current;
     }
 
+    static class UpdatePreviewSaved implements Update {
+        Uri uri;
+    }
+
     static class URIResult implements Result {
         Uri uri;
     }
@@ -84,11 +88,18 @@ public class ImageSavingTask extends ProcessingTask {
         // We create a small bitmap showing the result that we can
         // give to the notification
         UpdateBitmap updateBitmap = new UpdateBitmap();
-        updateBitmap.bitmap = createNotificationBitmap(sourceUri, preset);
+        updateBitmap.bitmap = createNotificationBitmap(previewImage, sourceUri, preset);
         postUpdate(updateBitmap);
         SaveImage saveImage = new SaveImage(mProcessingService, sourceUri,
                 selectedUri, destinationFile, previewImage,
                 new SaveImage.Callback() {
+                    @Override
+                    public void onPreviewSaved(Uri uri){
+                        UpdatePreviewSaved previewSaved = new UpdatePreviewSaved();
+                        previewSaved.uri = uri;
+                        postUpdate(previewSaved);
+                    }
+
                     @Override
                     public void onProgress(int max, int current) {
                         UpdateProgress updateProgress = new UpdateProgress();
@@ -112,6 +123,10 @@ public class ImageSavingTask extends ProcessingTask {
 
     @Override
     public void onUpdate(Update message) {
+        if (message instanceof UpdatePreviewSaved){
+            Uri uri = ((UpdatePreviewSaved) message).uri;
+            mProcessingService.completePreviewSaveImage(uri);
+        }
         if (message instanceof UpdateBitmap) {
             Bitmap bitmap = ((UpdateBitmap) message).bitmap;
             mProcessingService.updateNotificationWithBitmap(bitmap);
@@ -122,9 +137,13 @@ public class ImageSavingTask extends ProcessingTask {
         }
     }
 
-    private Bitmap createNotificationBitmap(Uri sourceUri, ImagePreset preset) {
+    private Bitmap createNotificationBitmap(Bitmap preview, Uri sourceUri, ImagePreset preset) {
         int notificationBitmapSize = Resources.getSystem().getDimensionPixelSize(
                 android.R.dimen.notification_large_icon_width);
+        if (preview != null) {
+            return Bitmap.createScaledBitmap(preview,
+                    notificationBitmapSize, notificationBitmapSize, true);
+        }
         Bitmap bitmap = ImageLoader.loadConstrainedBitmap(sourceUri, getContext(),
                 notificationBitmapSize, null, true);
         CachingPipeline pipeline = new CachingPipeline(FiltersManager.getManager(), "Thumb");

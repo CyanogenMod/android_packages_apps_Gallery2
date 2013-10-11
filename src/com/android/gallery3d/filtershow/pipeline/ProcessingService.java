@@ -261,6 +261,12 @@ public class ProcessingService extends Service {
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
+    public void completePreviewSaveImage(Uri result) {
+        if (!mNeedsAlive && !mFiltershowActivity.isSimpleEditAction()) {
+            mFiltershowActivity.completeSaveImage(result);
+        }
+    }
+
     public void completeSaveImage(Uri result) {
         if (SHOW_IMAGE) {
             // TODO: we should update the existing image in Gallery instead
