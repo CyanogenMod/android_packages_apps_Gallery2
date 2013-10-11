@@ -89,7 +89,7 @@
                         android:background="@android:color/transparent"
                         android:text="@string/apply_effect"
                         android:textSize="18dip"
-                        android:drawableRight="@drawable/filtershow_menu_marker"
+                        android:drawableEnd="@drawable/filtershow_menu_marker_rtl"
                         android:textAllCaps="true"
                         />
 
