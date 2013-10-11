@@ -17,6 +17,7 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.android.gallery3d.R;
@@ -35,6 +36,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     protected ArrayList<FilterRepresentation> mBorders = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mTools = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mEffects = new ArrayList<FilterRepresentation>();
+    private static int mImageBorderSize = 4; // in percent
 
     protected void init() {
         mFilters = new HashMap<Class, ImageFilter>();
@@ -157,6 +159,73 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     }
 
     public void addBorders(Context context) {
+
+        // Do not localize
+        String[] serializationNames = {
+                "FRAME_4X5",
+                "FRAME_BRUSH",
+                "FRAME_GRUNGE",
+                "FRAME_SUMI_E",
+                "FRAME_TAPE",
+                "FRAME_BLACK",
+                "FRAME_BLACK_ROUNDED",
+                "FRAME_WHITE",
+                "FRAME_WHITE_ROUNDED",
+                "FRAME_CREAM",
+                "FRAME_CREAM_ROUNDED"
+        };
+
+        // The "no border" implementation
+        int i = 0;
+        FilterRepresentation rep = new FilterImageBorderRepresentation(0);
+        mBorders.add(rep);
+
+        // Regular borders
+        ArrayList <FilterRepresentation> borderList = new ArrayList<FilterRepresentation>();
+
+
+        rep = new FilterImageBorderRepresentation(R.drawable.filtershow_border_4x5);
+        borderList.add(rep);
+
+        rep = new FilterImageBorderRepresentation(R.drawable.filtershow_border_brush);
+        borderList.add(rep);
+
+        rep = new FilterImageBorderRepresentation(R.drawable.filtershow_border_grunge);
+        borderList.add(rep);
+
+        rep = new FilterImageBorderRepresentation(R.drawable.filtershow_border_sumi_e);
+        borderList.add(rep);
+
+        rep = new FilterImageBorderRepresentation(R.drawable.filtershow_border_tape);
+        borderList.add(rep);
+
+        rep = new FilterColorBorderRepresentation(Color.BLACK, mImageBorderSize, 0);
+        borderList.add(rep);
+
+        rep = new FilterColorBorderRepresentation(Color.BLACK, mImageBorderSize,
+                mImageBorderSize);
+        borderList.add(rep);
+
+        rep = new FilterColorBorderRepresentation(Color.WHITE, mImageBorderSize, 0);
+        borderList.add(rep);
+
+        rep = new FilterColorBorderRepresentation(Color.WHITE, mImageBorderSize,
+                mImageBorderSize);
+        borderList.add(rep);
+
+        int creamColor = Color.argb(255, 237, 237, 227);
+        rep = new FilterColorBorderRepresentation(creamColor, mImageBorderSize, 0);
+        borderList.add(rep);
+
+        rep = new FilterColorBorderRepresentation(creamColor, mImageBorderSize,
+                mImageBorderSize);
+        borderList.add(rep);
+
+        for (FilterRepresentation filter : borderList) {
+            filter.setSerializationName(serializationNames[i++]);
+            addRepresentation(filter);
+            mBorders.add(filter);
+        }
 
     }
 
