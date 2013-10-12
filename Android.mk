@@ -23,7 +23,7 @@ LOCAL_RENDERSCRIPT_SKIP_INSTALL := $(prev_compiled_rs_files)
 LOCAL_SRC_FILES := $(call all-java-files-under, src) $(prev_compiled_rs_files)
 LOCAL_SRC_FILES += $(call all-java-files-under, src_pd)
 
-LOCAL_RESOURCE_DIR += $(LOCAL_PATH)/res
+LOCAL_RESOURCE_DIR += $(addprefix $(LOCAL_PATH)/, res-override res)
 
 LOCAL_AAPT_FLAGS := --auto-add-overlay
 

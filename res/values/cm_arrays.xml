@@ -15,6 +15,16 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="pref_switch_entryvalues" translatable="false">
+        <item>off</item>
+        <item>on</item>
+    </string-array>
+
+    <array name="pref_switch_entries" translatable="false">
+        <item>@string/setting_off</item>
+        <item>@string/setting_on</item>
+    </array>
+
     <!-- Camera Preferences ISO dialog box entries -->
     <string-array name="pref_camera_iso_entries" translatable="false">
         <item>@string/pref_camera_iso_entry_auto</item>
