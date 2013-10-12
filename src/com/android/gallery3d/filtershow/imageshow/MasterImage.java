@@ -83,7 +83,6 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mPartialBitmap = null;
     private Bitmap mHighresBitmap = null;
     private Bitmap mPreviousImage = null;
-    private ImagePreset mPreviousPreset = null;
     private int mShadowMargin = 15; // not scaled, fixed in the asset
     private Rect mPartialBounds = new Rect();
 
@@ -366,10 +365,6 @@ public class MasterImage implements RenderingRequestCaller {
         return mPreviousImage;
     }
 
-    public ImagePreset getPreviousPreset() {
-        return mPreviousPreset;
-    }
-
     public ImagePreset getCurrentPreset() {
         return getPreviewBuffer().getConsumer().getPreset();
     }
@@ -426,7 +421,6 @@ public class MasterImage implements RenderingRequestCaller {
             resetAnimBitmap();
             mPreviousImage = mBitmapCache.getBitmapCopy(getFilteredImage(), BitmapCache.NEW_LOOK);
         }
-        mPreviousPreset = getPreviewBuffer().getConsumer().getPreset();
         if (newRepresentation instanceof FilterUserPresetRepresentation) {
             mCurrentLookAnimation = CIRCLE_ANIMATION;
             mAnimator = ValueAnimator.ofFloat(0, 1);
