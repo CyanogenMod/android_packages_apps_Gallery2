@@ -63,6 +63,7 @@ public class SaveImage {
      * Callback for updates
      */
     public interface Callback {
+        void onPreviewSaved(Uri uri);
         void onProgress(int max, int current);
     }
 
@@ -381,6 +382,9 @@ public class SaveImage {
                             mDestinationFile, time, !flatten);
                 }
             }
+            if (mCallback != null) {
+                mCallback.onPreviewSaved(savedUri);
+            }
         }
 
         // Stopgap fix for low-memory devices.
@@ -542,9 +546,6 @@ public class SaveImage {
             Toast.makeText(filterShowActivity,
                     toastMessage,
                     Toast.LENGTH_SHORT).show();
-
-            // terminate for now
-            filterShowActivity.completeSaveImage(selectedImageUri);
         }
     }
 
