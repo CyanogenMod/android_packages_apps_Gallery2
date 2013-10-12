@@ -366,8 +366,21 @@ public class ImageShow extends View implements OnGestureListener,
         m.mapRect(d);
         d.roundOut(mImageBounds);
 
-        if (master.onGoingNewLookAnimation()) {
+        boolean showAnimatedImage = master.onGoingNewLookAnimation();
+        if (!showAnimatedImage && mDidStartAnimation) {
+            // animation ended, but do we have the correct image to show?
+            if (master.getPreset().equals(master.getCurrentPreset())) {
+                // we do, let's stop showing the animated image
+                mDidStartAnimation = false;
+                MasterImage.getImage().resetAnimBitmap();
+            } else {
+                showAnimatedImage = true;
+            }
+        } else if (showAnimatedImage) {
             mDidStartAnimation = true;
+        }
+
+        if (showAnimatedImage) {
             canvas.save();
 
             // Animation uses the image before the change
@@ -470,14 +483,6 @@ public class ImageShow extends View implements OnGestureListener,
         } else {
             drawShadow(canvas, mImageBounds); // as needed
             canvas.drawBitmap(image, m, mPaint);
-        }
-
-        if (!master.onGoingNewLookAnimation()
-                && mDidStartAnimation
-                && !master.getPreviousPreset().equals(master.getCurrentPreset())) {
-            mDidStartAnimation = false;
-            MasterImage.getImage().resetAnimBitmap();
-            invalidate();
         }
 
         canvas.restore();
