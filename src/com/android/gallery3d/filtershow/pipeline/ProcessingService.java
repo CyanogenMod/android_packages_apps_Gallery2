@@ -52,6 +52,7 @@ public class ProcessingService extends Service {
     private static final String SAVING = "saving";
     private static final String FLATTEN = "flatten";
     private static final String SIZE_FACTOR = "sizeFactor";
+    private static final String EXIT = "exit";
 
     private ProcessingTaskController mProcessingTaskController;
     private ImageSavingTask mImageSavingTask;
@@ -140,7 +141,8 @@ public class ProcessingService extends Service {
     }
 
     public static Intent getSaveIntent(Context context, ImagePreset preset, File destination,
-            Uri selectedImageUri, Uri sourceImageUri, boolean doFlatten, int quality, float sizeFactor) {
+            Uri selectedImageUri, Uri sourceImageUri, boolean doFlatten, int quality,
+            float sizeFactor, boolean needsExit) {
         Intent processIntent = new Intent(context, ProcessingService.class);
         processIntent.putExtra(ProcessingService.SOURCE_URI,
                 sourceImageUri.toString());
@@ -154,6 +156,7 @@ public class ProcessingService extends Service {
         processIntent.putExtra(ProcessingService.PRESET,
                 preset.getJsonString(ImagePreset.JASON_SAVED));
         processIntent.putExtra(ProcessingService.SAVING, true);
+        processIntent.putExtra(ProcessingService.EXIT, needsExit);
         if (doFlatten) {
             processIntent.putExtra(ProcessingService.FLATTEN, true);
         }
@@ -196,6 +199,7 @@ public class ProcessingService extends Service {
             int quality = intent.getIntExtra(QUALITY, 100);
             float sizeFactor = intent.getFloatExtra(SIZE_FACTOR, 1);
             boolean flatten = intent.getBooleanExtra(FLATTEN, false);
+            boolean exit = intent.getBooleanExtra(EXIT, false);
             Uri sourceUri = Uri.parse(source);
             Uri selectedUri = null;
             if (selected != null) {
@@ -211,7 +215,7 @@ public class ProcessingService extends Service {
             mSaving = true;
             handleSaveRequest(sourceUri, selectedUri, destinationFile, preset,
                     MasterImage.getImage().getHighresImage(),
-                    flatten, quality, sizeFactor);
+                    flatten, quality, sizeFactor, exit);
         }
         return START_REDELIVER_INTENT;
     }
@@ -230,10 +234,9 @@ public class ProcessingService extends Service {
 
     public void handleSaveRequest(Uri sourceUri, Uri selectedUri,
             File destinationFile, ImagePreset preset, Bitmap previewImage,
-            boolean flatten, int quality, float sizeFactor) {
+            boolean flatten, int quality, float sizeFactor, boolean exit) {
         mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        mNotificationId++;
+        mNotifyMgr.cancelAll();
 
         mBuilder =
                 new Notification.Builder(this)
@@ -248,7 +251,7 @@ public class ProcessingService extends Service {
         // Process the image
 
         mImageSavingTask.saveImage(sourceUri, selectedUri, destinationFile,
-                preset, previewImage, flatten, quality, sizeFactor);
+                preset, previewImage, flatten, quality, sizeFactor, exit);
     }
 
     public void updateNotificationWithBitmap(Bitmap bitmap) {
@@ -261,18 +264,24 @@ public class ProcessingService extends Service {
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
-    public void completePreviewSaveImage(Uri result) {
-        if (!mNeedsAlive && !mFiltershowActivity.isSimpleEditAction()) {
+    public void completePreviewSaveImage(Uri result, boolean exit) {
+        if (exit && !mNeedsAlive && !mFiltershowActivity.isSimpleEditAction()) {
             mFiltershowActivity.completeSaveImage(result);
         }
     }
 
-    public void completeSaveImage(Uri result) {
+    public void completeSaveImage(Uri result, boolean exit) {
         if (SHOW_IMAGE) {
             // TODO: we should update the existing image in Gallery instead
             Intent viewImage = new Intent(Intent.ACTION_VIEW, result);
             viewImage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(viewImage);
+        }
+        mNotifyMgr.cancel(mNotificationId);
+        if (!exit) {
+            stopForeground(true);
+            stopSelf();
+            return;
         }
         stopForeground(true);
         stopSelf();
