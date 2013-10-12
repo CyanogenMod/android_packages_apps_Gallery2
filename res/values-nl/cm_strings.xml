@@ -42,4 +42,5 @@
     <string name="headset_plug">Sluit een koptelefoon aan voor deze effecten.</string>
     <string name="fail_trim">Kan deze video niet bijsnijden</string>
     <string name="can_not_trim">Alleen mp4-bestanden kunnen worden bijgesneden</string>
+
 </resources>
