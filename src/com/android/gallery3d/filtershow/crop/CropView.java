@@ -290,6 +290,12 @@ public class CropView extends View {
         if (mBitmap == null) {
             return;
         }
+        RectF mOriginalScreenBounds = new RectF(mScreenBounds);
+        mOriginalScreenBounds.inset(-mMargin, -mMargin);
+        if (mOriginalScreenBounds.width() != canvas.getWidth()
+                || mOriginalScreenBounds.height() != canvas.getHeight()) {
+            mDirty = true;
+        }
         if (mDirty) {
             mDirty = false;
             clearDisplay();
