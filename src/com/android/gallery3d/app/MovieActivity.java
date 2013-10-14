@@ -109,7 +109,6 @@ public class MovieActivity extends Activity {
         WindowManager.LayoutParams winParams = win.getAttributes();
         winParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
         winParams.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        winParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
         win.setAttributes(winParams);
 
         // We set the background in the theme to have the launching animation.
