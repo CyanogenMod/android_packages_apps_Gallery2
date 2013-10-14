@@ -326,9 +326,12 @@ public class SaveImage {
     }
 
     public Uri processAndSaveImage(ImagePreset preset, boolean flatten,
-                                   int quality, float sizeFactor) {
+                                   int quality, float sizeFactor, boolean exit) {
 
-        Uri uri = resetToOriginalImageIfNeeded(preset, !flatten);
+        Uri uri = null;
+        if (exit) {
+            uri = resetToOriginalImageIfNeeded(preset, !flatten);
+        }
         if (uri != null) {
             return null;
         }
@@ -361,9 +364,7 @@ public class SaveImage {
                             Images.Media.EXTERNAL_CONTENT_URI, values);
 
                 }
-
             } else {
-
                 Object xmp = getPanoramaXMPData(newSourceUri, preset);
                 ExifInterface exif = getExifData(newSourceUri);
                 long time = System.currentTimeMillis();
@@ -536,7 +537,7 @@ public class SaveImage {
             flatten = true;
         }
         Intent processIntent = ProcessingService.getSaveIntent(filterShowActivity, preset,
-                destination, selectedImageUri, sourceImageUri, flatten, 90, 1f);
+                destination, selectedImageUri, sourceImageUri, flatten, 90, 1f, true);
 
         filterShowActivity.startService(processIntent);
 
