@@ -64,6 +64,8 @@ public class ImageVignette extends ImageShow {
             mToImage = toImage;
             mImgWidth = imgWidth;
             mImgHeight = imgHeight;
+            mTmpRadiusX = getRadiusX();
+            mTmpRadiusY = getRadiusY();
         }
 
         @Override
