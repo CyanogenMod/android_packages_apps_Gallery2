@@ -103,6 +103,8 @@ public class Wallpaper extends Activity {
                     try {
                         cropAndSetWallpaperIntent = wpm.getCropAndSetWallpaperIntent(mPickedItem);
                         startActivity(cropAndSetWallpaperIntent);
+                        finish();
+                        return;
                     } catch (ActivityNotFoundException anfe) {
                         // ignored; fallthru to existing crop activity
                     }
