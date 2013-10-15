@@ -1894,6 +1894,7 @@ public class PhotoModule
                 mCameraDevice.sendMagicSamsungZSLCommand();
             }
             // Switch on ZSL mode
+            mParameters.set("zsl", "on");
             mParameters.set("camera-mode", "1");
         }
 
