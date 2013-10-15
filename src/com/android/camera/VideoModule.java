@@ -1139,6 +1139,7 @@ public class VideoModule implements CameraModule,
             mReceiver = null;
         }
         resetScreenOn();
+        mUI.onPause();
 
         if (mLocationManager != null) mLocationManager.recordLocation(false);
 

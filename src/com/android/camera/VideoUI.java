@@ -373,6 +373,10 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
         }
     }
 
+    public void onPause() {
+        mRootView.removeOnLayoutChangeListener(mLayoutListener);
+    }
+
     // PieListener
     @Override
     public void onPieOpened(int centerX, int centerY) {
