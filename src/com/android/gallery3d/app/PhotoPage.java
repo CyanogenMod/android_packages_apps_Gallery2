@@ -862,6 +862,7 @@ public abstract class PhotoPage extends ActivityState implements
 
     @Override
     protected void onBackPressed() {
+        showBars();
         if (mShowDetails) {
             hideDetails();
         } else if (mAppBridge == null || !switchWithCaptureAnimation(-1)) {
