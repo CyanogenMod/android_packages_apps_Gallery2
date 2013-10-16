@@ -143,7 +143,7 @@ public class MainPanel extends Fragment {
             transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
         }
         transaction.replace(R.id.category_panel_container, category, CategoryPanel.FRAGMENT_TAG);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     public void loadCategoryLookPanel(boolean force) {
