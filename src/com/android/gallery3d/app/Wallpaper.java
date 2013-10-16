@@ -31,6 +31,8 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.filtershow.crop.CropExtras;
 
+import java.lang.IllegalArgumentException;
+
 /**
  * Wallpaper picker for the gallery application. This just redirects to the
  * standard pick action.
@@ -106,6 +108,8 @@ public class Wallpaper extends Activity {
                         finish();
                         return;
                     } catch (ActivityNotFoundException anfe) {
+                        // ignored; fallthru to existing crop activity
+                    } catch (IllegalArgumentException iae) {
                         // ignored; fallthru to existing crop activity
                     }
                 }
