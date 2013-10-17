@@ -88,4 +88,6 @@
     <!-- HFR video size -->
     <string name="pref_video_quality_entry_hfr">WVGA High Frame Rate</string>
 
+    <!-- Video HDR default value -->
+    <string name="pref_camera_video_hdr_default" translatable="false">off</string>
 </resources>
