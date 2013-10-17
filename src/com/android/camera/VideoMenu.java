@@ -56,6 +56,11 @@ public class VideoMenu extends PieController
         mPopup = null;
         mPopupStatus = POPUP_NONE;
         PieItem item = null;
+        // hdr
+        if (group.findPreference(CameraSettings.KEY_VIDEO_HDR) != null) {
+            item = makeSwitchItem(CameraSettings.KEY_VIDEO_HDR, true);
+            mRenderer.addItem(item);
+        }
         // white balance
         if (group.findPreference(CameraSettings.KEY_WHITE_BALANCE) != null) {
             item = makeItem(CameraSettings.KEY_WHITE_BALANCE);
