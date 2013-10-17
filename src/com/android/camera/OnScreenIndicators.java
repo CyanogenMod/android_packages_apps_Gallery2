@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -176,6 +177,22 @@ public class OnScreenIndicators {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_hdr);
         } else {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_on);
+        }
+    }
+
+    /**
+     * Reuse the scene indicator for video HDR mode.
+     *
+     * @param value of video HDR mode
+     */
+    public void updateVideoHDROnScreenIndicator(String value) {
+        if (mSceneIndicator == null) {
+            return;
+        }
+        if (value != null && "on".equals(value)) {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_hdr);
+        } else {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
         }
     }
 

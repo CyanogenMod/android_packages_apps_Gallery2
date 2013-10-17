@@ -69,6 +69,7 @@ public class CameraSettings {
     public static final String KEY_VIDEO_FIRST_USE_HINT_SHOWN = "pref_video_first_use_hint_shown_key";
     public static final String KEY_PHOTOSPHERE_PICTURESIZE = "pref_photosphere_picturesize_key";
     public static final String KEY_STORAGE = "pref_camera_storage_key";
+    public static final String KEY_VIDEO_HDR = "pref_camera_video_hdr_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
 
@@ -179,6 +180,7 @@ public class CameraSettings {
         ListPreference videoEffect = group.findPreference(KEY_VIDEO_EFFECT);
         ListPreference cameraHdr = group.findPreference(KEY_CAMERA_HDR);
         ListPreference storage = group.findPreference(KEY_STORAGE);
+        ListPreference videoHdr = group.findPreference(KEY_VIDEO_HDR);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -237,6 +239,12 @@ public class CameraSettings {
         if (cameraHdr != null && (!ApiHelper.HAS_CAMERA_HDR
                     || !Util.isCameraHdrSupported(mParameters))) {
             removePreference(group, cameraHdr.getKey());
+        }
+        if (videoHdr != null) {
+            if (!mContext.getResources().getBoolean(R.bool.enableVideoHDR)) {
+                removePreference(group, videoHdr.getKey());
+            }
+            filterUnsupportedOptions(group, videoHdr, mParameters.getSupportedVideoHDRModes());
         }
         if (storage != null) {
             buildStorage(group, storage);

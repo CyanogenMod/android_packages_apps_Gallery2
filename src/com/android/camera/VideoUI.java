@@ -261,6 +261,7 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
     }
 
     public void updateOnScreenIndicators(Parameters param, ComboPreferences prefs) {
+      mOnScreenIndicators.updateVideoHDROnScreenIndicator(param.getVideoHDRMode());
       mOnScreenIndicators.updateFlashOnScreenIndicator(param.getFlashMode());
       boolean location = RecordLocationPreference.get(
               prefs, mActivity.getContentResolver());
