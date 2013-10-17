@@ -193,6 +193,8 @@ public class VideoModule implements CameraModule,
     private int mVideoWidth;
     private int mVideoHeight;
 
+    private boolean mEnableHFR = false;
+
     private StartPreviewThread mStartPreviewThread;
 
     private final MediaSaveService.OnMediaSavedListener mOnVideoSavedListener =
@@ -667,6 +669,9 @@ public class VideoModule implements CameraModule,
                 mPreferences.getString(CameraSettings.KEY_VIDEO_QUALITY,
                         defaultQuality);
         int quality = Integer.valueOf(videoQuality);
+
+        // Enable HFR mode for WVGA
+        mEnableHFR = quality == CamcorderProfile.QUALITY_WVGA;
 
         // Set video quality.
         Intent intent = mActivity.getIntent();
@@ -1935,13 +1940,19 @@ public class VideoModule implements CameraModule,
                     optimalSize.height);
         } else {
             // At least one device will get bus overflows if we set this too high
-            mParameters.setPictureSize(mDesiredPreviewWidth, mDesiredPreviewHeight);
+            mParameters.setPictureSize(mProfile.videoFrameWidth, mProfile.videoFrameHeight);
         }
 
         // Set JPEG quality.
         int jpegQuality = CameraProfile.getJpegEncodingQualityParameter(mCameraId,
                 CameraProfile.QUALITY_HIGH);
         mParameters.setJpegQuality(jpegQuality);
+
+        // Enable HFR mode for WVGA
+        List<String> hfrModes = mParameters.getSupportedVideoHighFrameRateModes();
+        if (hfrModes.size() > 0) {
+            mParameters.setVideoHighFrameRate(mEnableHFR ? hfrModes.get(hfrModes.size() - 1) : "off");
+        }
 
         Util.dumpParameters(mParameters);
 
