@@ -1954,6 +1954,19 @@ public class VideoModule implements CameraModule,
             mParameters.setVideoHighFrameRate(mEnableHFR ? hfrModes.get(hfrModes.size() - 1) : "off");
         }
 
+        // Set Video HDR.
+        if (mActivity.getResources().getBoolean(R.bool.enableVideoHDR)) {
+            String videoHDR = mPreferences.getString(
+                    CameraSettings.KEY_VIDEO_HDR,
+                    mActivity.getString(R.string.pref_camera_video_hdr_default));
+            Log.v(TAG, "Video HDR Setting =" + videoHDR);
+            if (isSupported(videoHDR, mParameters.getSupportedVideoHDRModes())) {
+                mParameters.setVideoHDRMode(videoHDR);
+            } else {
+                mParameters.setVideoHDRMode("off");
+            }
+        }
+
         Util.dumpParameters(mParameters);
 
         mActivity.mCameraDevice.setParameters(mParameters);
