@@ -630,6 +630,13 @@ public class CameraSettings {
         if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_480P)) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
         }
+        if (CamcorderProfile.hasProfile(mCameraId, CamcorderProfile.QUALITY_WVGA)) {
+            for (Size size : mParameters.getSupportedHfrSizes()) {
+                if (size.width == 800 && size.height == 480) {
+                    supported.add(Integer.toString(CamcorderProfile.QUALITY_WVGA));
+                }
+            }
+        }
     }
 
     /**

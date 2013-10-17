@@ -84,4 +84,8 @@
     <!-- The tips of trimming video -->
     <string name="fail_trim">This video file can not be trimmed</string>
     <string name="can_not_trim">Only mp4 files can be trimmed</string>
+
+    <!-- HFR video size -->
+    <string name="pref_video_quality_entry_hfr">WVGA High Frame Rate</string>
+
 </resources>
