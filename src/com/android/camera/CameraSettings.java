@@ -658,7 +658,8 @@ public class CameraSettings {
             params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
         }
     }
-     /**
+
+    /**
      * Enable video mode for certain cameras.
      *
      * @param params
@@ -670,6 +671,12 @@ public class CameraSettings {
         }
         if (Util.useHTCCamMode()) {
             params.set("cam-mode", on ? "1" : "0");
+        }
+    }
+
+    public static void setReducePurple(Parameters params, boolean on) {
+        if (params.get("reduce-purple") != null) {
+            params.set("reduce-purple", on ? "on" : "off");
         }
     }
 

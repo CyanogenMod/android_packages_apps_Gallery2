@@ -1972,6 +1972,9 @@ public class VideoModule implements CameraModule,
         // Set video mode
         CameraSettings.setVideoMode(mParameters, true);
 
+        // Reduce purple noise
+        CameraSettings.setReducePurple(mParameters, true);
+
         // Set flash mode.
         String flashMode;
         if (mActivity.mShowCameraAppView) {
