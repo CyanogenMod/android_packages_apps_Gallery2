@@ -263,7 +263,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
                 "LUT3D_INSTANT",
                 "LUT3D_WASHOUT",
                 "LUT3D_BLUECRUSH",
-                "LUT3D_WASHOUT",
+                "LUT3D_WASHOUT_COLOR",
                 "LUT3D_XPROCESS"
         };
 
