@@ -2056,7 +2056,7 @@ public class VideoModule implements CameraModule,
 
         // Enable HFR mode for WVGA
         List<String> hfrModes = mParameters.getSupportedVideoHighFrameRateModes();
-        if (hfrModes.size() > 0) {
+        if (hfrModes != null) {
             mParameters.setVideoHighFrameRate(mEnableHFR ? hfrModes.get(hfrModes.size() - 1) : "off");
         }
 
