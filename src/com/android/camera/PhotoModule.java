@@ -1767,6 +1767,8 @@ public class PhotoModule
             mParameters.setPreviewFrameRate(max);
         }
 
+        CameraSettings.setReducePurple(mParameters, true);
+
         mParameters.set(Util.RECORDING_HINT, Util.FALSE);
 
         // Disable video stabilization. Convenience methods not available in API
