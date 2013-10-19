@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +73,8 @@ public class VideoMenu extends PieController
                 CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
-                CameraSettings.KEY_STORAGE
+                CameraSettings.KEY_STORAGE,
+                CameraSettings.KEY_POWER_SHUTTER
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(mActivity.getResources().getString(R.string.camera_menu_settings_label));
