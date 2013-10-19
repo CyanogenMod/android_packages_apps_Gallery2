@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -414,6 +415,9 @@ public class VideoModule implements CameraModule,
         mActivity.mNumberOfCameras = CameraHolder.instance().getNumberOfCameras();
         mPrefVideoEffectDefault = mActivity.getString(R.string.pref_video_effect_default);
         resetEffect();
+
+        // Power shutter
+        mActivity.initPowerShutter(mPreferences);
 
         /*
          * To reduce startup time, we start the preview in another thread.
@@ -1247,6 +1251,11 @@ public class VideoModule implements CameraModule,
         switch (keyCode) {
             case KeyEvent.KEYCODE_CAMERA:
                 mUI.pressShutter(false);
+                return true;
+            case KeyEvent.KEYCODE_POWER:
+                if (ActivityBase.mPowerShutter) {
+                    onShutterButtonClick();
+                }
                 return true;
         }
         return false;
@@ -2304,6 +2313,7 @@ public class VideoModule implements CameraModule,
                 setCameraParameters();
             }
             mUI.updateOnScreenIndicators(mParameters, mPreferences);
+            mActivity.initPowerShutter(mPreferences);
         }
     }
 
@@ -2455,6 +2465,9 @@ public class VideoModule implements CameraModule,
     @Override
     public void updateCameraAppView() {
         if (!mPreviewing || mParameters.getFlashMode() == null) return;
+
+        // Setup Power shutter
+        mActivity.initPowerShutter(mPreferences);
 
         // When going to and back from gallery, we need to turn off/on the flash.
         if (!mActivity.mShowCameraAppView) {

@@ -211,7 +211,8 @@ public class PhotoMenu extends PieController
         }
         // extra settings popup
         mOtherKeys = new String[] {
-                CameraSettings.KEY_FOCUS_MODE
+                CameraSettings.KEY_FOCUS_MODE,
+                CameraSettings.KEY_POWER_SHUTTER
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
         item.setLabel(res.getString(R.string.camera_menu_more_label).toUpperCase(locale));
