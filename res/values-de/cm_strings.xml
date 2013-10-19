@@ -17,20 +17,24 @@
 <resources>
     <string name="pref_camera_storage_title">Speicherort</string>
     <string name="filtershow_undo_toast">Rückgängig</string>
-    <string name="pref_camera_picturesize_entry_20_7mp">20,7 MP</string>
-    <string name="pref_camera_picturesize_entry_18mp">18 MP</string>
-    <string name="pref_camera_picturesize_entry_12_8mp">12,8 MP</string>
-    <string name="pref_camera_picturesize_entry_11_5mp">11,5 MP</string>
-    <string name="pref_camera_picturesize_entry_9mp">9 MP</string>
-    <string name="pref_camera_picturesize_entry_8_2mp">8,2 MP</string>
-    <string name="pref_camera_picturesize_entry_6_4mp">6,4 MP</string>
-    <string name="pref_camera_picturesize_entry_6mp">6 MP</string>
-    <string name="pref_camera_picturesize_entry_4_5mp">4,5 MP</string>
-    <string name="pref_camera_picturesize_entry_3_7mp">3,7 MP</string>
-    <string name="pref_camera_picturesize_entry_2_5mp">2,5 MPs</string>
-    <string name="pref_camera_picturesize_entry_2_1mp">2,1 MP</string>
-    <string name="pref_camera_picturesize_entry_1_9mp">1,9 MP</string>
     <string name="pref_camera_picturesize_entry_1_5mp">1,5 MP</string>
+    <string name="pref_camera_picturesize_entry_1_9mp">1,9 MP</string>
+    <string name="pref_camera_picturesize_entry_2_1mp">2,1 MP</string>
+    <string name="pref_camera_picturesize_entry_2_5mp">2,5 MP</string>
+    <string name="pref_camera_picturesize_entry_3_7mp">3,7 MP</string>
+    <string name="pref_camera_picturesize_entry_4_5mp">4,5 MP</string>
+    <string name="pref_camera_picturesize_entry_6mp">6 MP</string>
+    <string name="pref_camera_picturesize_entry_6_4mp">6,4 MP</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7,7 MP (4:3)</string>
+    <string name="pref_camera_picturesize_entry_8_2mp">8,2 MP</string>
+    <string name="pref_camera_picturesize_entry_9mp">9 MP</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10,4 MP</string>
+    <string name="pref_camera_picturesize_entry_11_5mp">11,5 MP</string>
+    <string name="pref_camera_picturesize_entry_12mp">12 MP (4:3)</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12,7 MP</string>
+    <string name="pref_camera_picturesize_entry_12_8mp">12,8 MP</string>
+    <string name="pref_camera_picturesize_entry_18mp">18 MP</string>
+    <string name="pref_camera_picturesize_entry_20_7mp">20,7 MP</string>
     <string name="pref_camera_picturesize_entry_wxga">WXGA</string>
     <string name="pref_camera_picturesize_entry_xga">XGA</string>
     <string name="pref_camera_picturesize_entry_svga">SVGA</string>
@@ -42,4 +46,5 @@
     <string name="headset_plug">Kopfhörer einstecken, um diese Effekte nutzen zu können</string>
     <string name="fail_trim">Videodatei kann nicht beschnitten werden</string>
     <string name="can_not_trim">Nur Dateien im MP4-Format können beschnitten werden</string>
+    <string name="pref_video_quality_entry_hfr">WVGA (Hohe Bildrate)</string>
 </resources>
