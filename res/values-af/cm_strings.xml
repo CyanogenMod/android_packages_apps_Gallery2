@@ -19,9 +19,15 @@
     <string name="filtershow_redo_toast">@string/filtershow_redo</string>
     <string name="pref_camera_storage_title">Stoor</string>
     <string name="pref_camera_picturesize_entry_20_7mp">20.7M pixels</string>
+    <string name="pref_camera_picturesize_entry_18mp">18M pixels</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12.8M pixels</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12.7M pixels</string>
+    <string name="pref_camera_picturesize_entry_12mp">12M pixels (4x3)</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11.5M pixels</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10.4M pixels</string>
     <string name="pref_camera_picturesize_entry_9mp">9M pixels</string>
+    <string name="pref_camera_picturesize_entry_8_2mp">8.2M pixels</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7.7M pixels (4x3)</string>
     <string name="pref_camera_picturesize_entry_6_4mp">6.4M pixels</string>
     <string name="pref_camera_picturesize_entry_6mp">6M pixels</string>
     <string name="pref_camera_picturesize_entry_4_5mp">4.5M pixels</string>
@@ -41,4 +47,5 @@
     <string name="headset_plug">Prop in oorfone vir hierdie effekte.</string>
     <string name="fail_trim">Hierdie video lêer kan nie gesnoei word nie</string>
     <string name="can_not_trim">Slegs mp4 lêers kan gesnoei word</string>
+    <string name="pref_video_quality_entry_hfr">WVGA Hoë raam spoed</string>
 </resources>
