@@ -528,6 +528,12 @@ public class CameraSettings {
         return 0;
     }
 
+    public static void resetSceneMode(Parameters params) {
+        if (params.getSupportedSceneModes() != null) {
+            params.setSceneMode(Parameters.SCENE_MODE_AUTO);
+        }
+    }
+
     public static int readEffectType(SharedPreferences pref) {
         String effectSelection = pref.getString(KEY_VIDEO_EFFECT, "none");
         if (effectSelection.equals("none")) {

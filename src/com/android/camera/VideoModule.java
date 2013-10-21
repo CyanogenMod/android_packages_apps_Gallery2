@@ -2019,6 +2019,9 @@ public class VideoModule implements CameraModule,
         // Reduce purple noise
         CameraSettings.setReducePurple(mParameters, true);
 
+        // Clear any previously set scene mode values
+        CameraSettings.resetSceneMode(mParameters);
+
         // Set flash mode.
         String flashMode;
         if (mActivity.mShowCameraAppView) {
