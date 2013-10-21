@@ -394,7 +394,7 @@ public class ImagePreset {
                     break;
                 }
             }
-            if (!replaced) {
+            if (!replaced && !isNoneFxFilter(representation)) {
                 mFilters.add(0, representation);
             }
         } else {
