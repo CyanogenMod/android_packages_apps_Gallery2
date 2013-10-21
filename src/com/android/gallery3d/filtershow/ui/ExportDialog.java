@@ -202,8 +202,8 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             return;
         }
         mEditing = true;
-        int width = 0;
-        int height = 0;
+        int width = 1;
+        int height = 1;
         if (text.getId() == R.id.editableWidth) {
             if (mWidthText.getText() != null) {
                 String value = String.valueOf(mWidthText.getText());
@@ -211,6 +211,10 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
                     width = Integer.parseInt(value);
                     if (width > mOriginalBounds.width()) {
                         width = mOriginalBounds.width();
+                        mWidthText.setText("" + width);
+                    }
+                    if (width <= 0) {
+                        width = (int) Math.ceil(mRatio);
                         mWidthText.setText("" + width);
                     }
                     height = (int) (width / mRatio);
@@ -224,6 +228,10 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
                     height = Integer.parseInt(value);
                     if (height > mOriginalBounds.height()) {
                         height = mOriginalBounds.height();
+                        mHeightText.setText("" + height);
+                    }
+                    if (height <= 0) {
+                        height = 1;
                         mHeightText.setText("" + height);
                     }
                     width = (int) (height * mRatio);
