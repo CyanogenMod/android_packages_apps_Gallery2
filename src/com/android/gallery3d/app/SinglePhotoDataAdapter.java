@@ -95,6 +95,13 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = BitmapUtils.computeSampleSize(
                     (float) SIZE_BACKUP / Math.max(width, height));
+            // if inSampleSize is bigger than height/width of the image
+            // then decoded bitmap width, height, config returns invalid values
+            // if that is the case, just try with inSampleSize as 1
+            if (options.inSampleSize > Math.min(width, height)) {
+                options.inSampleSize = 1;
+            }
+
             Bitmap bitmap = decoder.decodeRegion(new Rect(0, 0, width, height), options);
             mHandler.sendMessage(mHandler.obtainMessage(
                     MSG_UPDATE_IMAGE, new ImageBundle(decoder, bitmap)));
