@@ -1814,12 +1814,6 @@ public class PhotoModule
         if ("true".equals(vstabSupported)) {
             mParameters.set("video-stabilization", "false");
         }
-
-        // Enable face detection if needed
-        List<String> faceSupported = mParameters.getSupportedFaceDetectionModes();
-        if (faceSupported != null && faceSupported.contains("on")) {
-            mParameters.setFaceDetectionMode("on");
-        }
     }
 
     private void updateCameraParametersZoom() {
@@ -1920,6 +1914,7 @@ public class PhotoModule
         if (Util.isSupported(mSceneMode, mParameters.getSupportedSceneModes())) {
             if (!mParameters.getSceneMode().equals(mSceneMode)) {
                 mParameters.setSceneMode(mSceneMode);
+
                 // Setting scene mode will change the settings of flash mode,
                 // white balance, and focus mode. Here we read back the
                 // parameters, so we can know those settings.
