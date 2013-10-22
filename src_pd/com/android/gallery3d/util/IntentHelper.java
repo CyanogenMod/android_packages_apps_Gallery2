@@ -22,7 +22,7 @@ public class IntentHelper {
 
     public static Intent getCameraIntent(Context context) {
         return new Intent(Intent.ACTION_MAIN)
-            .setClassName("com.android.camera2", "com.android.camera.CameraActivity");
+            .setClassName("com.android.camera2", "com.android.camera.CameraLauncher");
     }
 
     public static Intent getGalleryIntent(Context context) {
