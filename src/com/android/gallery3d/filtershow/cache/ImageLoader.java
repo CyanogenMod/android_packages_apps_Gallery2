@@ -129,36 +129,52 @@ public final class ImageLoader {
         } finally {
             Utils.closeSilently(cursor);
         }
-
-        // Fall back to checking EXIF tags in file.
-        if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
-            String mimeType = getMimeType(uri);
-            if (!JPEG_MIME_TYPE.equals(mimeType)) {
-                return ORI_NORMAL;
-            }
-            String path = uri.getPath();
-            ExifInterface exif = new ExifInterface();
-            try {
+        ExifInterface exif = new ExifInterface();
+        InputStream is = null;
+        // Fall back to checking EXIF tags in file or input stream.
+        try {
+            if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
+                String mimeType = getMimeType(uri);
+                if (!JPEG_MIME_TYPE.equals(mimeType)) {
+                    return ORI_NORMAL;
+                }
+                String path = uri.getPath();
                 exif.readExif(path);
-                Integer tagval = exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
-                if (tagval != null) {
-                    int orientation = tagval;
-                    switch(orientation) {
-                        case ORI_NORMAL:
-                        case ORI_ROTATE_90:
-                        case ORI_ROTATE_180:
-                        case ORI_ROTATE_270:
-                        case ORI_FLIP_HOR:
-                        case ORI_FLIP_VERT:
-                        case ORI_TRANSPOSE:
-                        case ORI_TRANSVERSE:
-                            return orientation;
-                        default:
-                            return ORI_NORMAL;
-                    }
+            } else {
+                is = context.getContentResolver().openInputStream(uri);
+                exif.readExif(is);
+            }
+            return parseExif(exif);
+        } catch (IOException e) {
+            Log.w(LOGTAG, "Failed to read EXIF orientation", e);
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
                 }
             } catch (IOException e) {
-                Log.w(LOGTAG, "Failed to read EXIF orientation", e);
+                Log.w(LOGTAG, "Failed to close InputStream", e);
+            }
+        }
+        return ORI_NORMAL;
+    }
+
+    private static int parseExif(ExifInterface exif){
+        Integer tagval = exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
+        if (tagval != null) {
+            int orientation = tagval;
+            switch(orientation) {
+                case ORI_NORMAL:
+                case ORI_ROTATE_90:
+                case ORI_ROTATE_180:
+                case ORI_ROTATE_270:
+                case ORI_FLIP_HOR:
+                case ORI_FLIP_VERT:
+                case ORI_TRANSPOSE:
+                case ORI_TRANSVERSE:
+                    return orientation;
+                default:
+                    return ORI_NORMAL;
             }
         }
         return ORI_NORMAL;
