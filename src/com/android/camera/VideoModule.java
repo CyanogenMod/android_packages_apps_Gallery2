@@ -1863,7 +1863,9 @@ public class VideoModule implements CameraModule,
                 mActivity.mCameraDevice.lock();
                 mActivity.mCameraDevice.waitDone();
                 if ((ApiHelper.HAS_SURFACE_TEXTURE &&
-                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING)) {
+                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING) ||
+                    mActivity.getResources().getBoolean(
+                        R.bool.useVideoSnapshotWorkaround)) {
                     stopPreview();
                     // Switch back to use SurfaceTexture for preview.
                     ((CameraScreenNail) mActivity.mCameraScreenNail).setOneTimeOnFrameDrawnListener(
