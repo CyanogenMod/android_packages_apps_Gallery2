@@ -43,6 +43,7 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.ui.TiledScreenNail;
+import com.android.gallery3d.util.IntentHelper;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
@@ -235,12 +236,10 @@ public class GalleryUtils {
     public static boolean isCameraAvailable(Context context) {
         if (sCameraAvailableInitialized) return sCameraAvailable;
         PackageManager pm = context.getPackageManager();
-        ComponentName name = new ComponentName(context, CAMERA_LAUNCHER_NAME);
-        int state = pm.getComponentEnabledSetting(name);
+        Intent cameraIntent = IntentHelper.getCameraIntent(context);
+        List<ResolveInfo> apps = pm.queryIntentActivities(cameraIntent, 0);
         sCameraAvailableInitialized = true;
-        sCameraAvailable =
-           (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
-           || (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+        sCameraAvailable = !apps.isEmpty();
         return sCameraAvailable;
     }
 
