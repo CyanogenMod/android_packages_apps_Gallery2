@@ -19,8 +19,10 @@ package com.android.camera;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import com.android.camera.ui.LayoutChangeHelper;
 import com.android.camera.ui.LayoutChangeNotifier;
@@ -69,8 +71,9 @@ public class PreviewFrameLayout extends RelativeLayout implements LayoutChangeNo
     public void setAspectRatio(double ratio) {
         if (ratio <= 0.0) throw new IllegalArgumentException();
 
-        if (getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_PORTRAIT) {
+        int rotation = ((WindowManager) mContext.getSystemService(
+                Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
             ratio = 1 / ratio;
         }
 
