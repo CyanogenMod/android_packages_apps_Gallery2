@@ -155,7 +155,7 @@ public class PanoramaModule implements CameraModule,
 
     // Prefer FOCUS_MODE_INFINITY to FOCUS_MODE_CONTINUOUS_VIDEO because of
     // getting a better image quality by the former.
-    private String mTargetFocusMode = Parameters.FOCUS_MODE_INFINITY;
+    private String mTargetFocusMode = Parameters.FOCUS_MODE_CONTINUOUS_VIDEO;
 
     private PanoOrientationEventListener mOrientationEventListener;
     // The value could be 0, 90, 180, 270 for the 4 different orientations measured in clockwise
