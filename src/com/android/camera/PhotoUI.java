@@ -103,12 +103,12 @@ public class PhotoUI implements PieListener,
                 int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
             int width = right - left;
             int height = bottom - top;
-            // Full-screen screennail
-            int w = width;
-            int h = height;
+            // Get screennail size from mPreviewFrameLayout
+            int w = mPreviewFrameLayout.getWidth();
+            int h = mPreviewFrameLayout.getHeight();
             if (Util.getDisplayRotation(mActivity) % 180 != 0) {
-                w = height;
-                h = width;
+                w = mPreviewFrameLayout.getHeight();
+                h = mPreviewFrameLayout.getWidth();
             }
             if (mPreviewWidth != width || mPreviewHeight != height) {
                 mPreviewWidth = width;
