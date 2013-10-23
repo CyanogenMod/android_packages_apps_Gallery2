@@ -162,7 +162,6 @@ public class PanoramaModule implements CameraModule,
     private int mDeviceOrientation;
     private int mDeviceOrientationAtCapture;
     private int mCameraOrientation;
-    private int mPanoAngle;
     private int mOrientationCompensation;
 
     private RotateDialogController mRotateDialog;
@@ -657,9 +656,7 @@ public class PanoramaModule implements CameraModule,
                 (Math.abs(mProgressAngle[0]) > Math.abs(mProgressAngle[1]))
                 ? (int) mProgressAngle[0]
                 : (int) mProgressAngle[1];
-        //need to flip the direction if mPanoAngle is larger than 180
-        mPanoProgressBar.setProgress(mPanoAngle >= 180 ?
-            (0 - angleInMajorDirection) : angleInMajorDirection);
+        mPanoProgressBar.setProgress((angleInMajorDirection));
     }
 
     private void setViews(Resources appRes) {
@@ -794,9 +791,9 @@ public class PanoramaModule implements CameraModule,
         if (mUsingFrontCamera) {
             // mCameraOrientation is negative with respect to the front facing camera.
             // See document of android.hardware.Camera.Parameters.setRotation.
-            orientation = (mDeviceOrientationAtCapture - mCameraOrientation - mPanoAngle + 360) % 360;
+            orientation = (mDeviceOrientationAtCapture - mCameraOrientation + 360) % 360;
         } else {
-            orientation = (mDeviceOrientationAtCapture + mCameraOrientation - mPanoAngle) % 360;
+            orientation = (mDeviceOrientationAtCapture + mCameraOrientation) % 360;
         }
         return orientation;
     }
@@ -1165,12 +1162,7 @@ public class PanoramaModule implements CameraModule,
             // Set the display orientation to 0, so that the underlying mosaic
             // library can always get undistorted mPreviewWidth x mPreviewHeight
             // image data from SurfaceTexture.
-
-            // as Panoroma will add 90 degree rotation compensation during
-            // postprocessing, we need to consider both camera mount angle and
-            // this compensation angle
-            mPanoAngle = (mCameraOrientation - 90 + 360) % 360;
-            mCameraDevice.setDisplayOrientation(mPanoAngle);
+            mCameraDevice.setDisplayOrientation(0);
 
             if (mCameraTexture != null) mCameraTexture.setOnFrameAvailableListener(this);
             mCameraDevice.setPreviewTextureAsync(mCameraTexture);
