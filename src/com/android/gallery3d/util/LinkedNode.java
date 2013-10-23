@@ -18,8 +18,8 @@ package com.android.gallery3d.util;
 
 
 public class LinkedNode {
-    private LinkedNode mPrev;
-    private LinkedNode mNext;
+    /* package */ LinkedNode mPrev;
+    /* package */ LinkedNode mNext;
 
     public LinkedNode() {
         mPrev = mNext = this;
