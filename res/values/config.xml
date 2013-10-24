@@ -54,4 +54,6 @@
     <bool name="useVideoSnapshotWorkaround">false</bool>
     <!-- Video HDR mode. Aggressively crashes on some hardware -->
     <bool name="enableVideoHDR">false</bool>
+    <!-- Panorama focus mode.  Use FOCUS_MODE_INFINITY by default -->
+    <bool name="useInfinityFocus">true</bool>
 </resources>
