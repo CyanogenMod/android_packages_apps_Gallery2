@@ -18,9 +18,13 @@
     <string name="pref_camera_picturesize_entry_20_7mp">20,7 megapixel</string>
     <string name="pref_camera_picturesize_entry_18mp">18 megapixel</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12,8 megapixel</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12,7 megapixel</string>
+    <string name="pref_camera_picturesize_entry_12mp">12 megapixel (4:3)</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11,5 megapixel</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10,4 megapixel</string>
     <string name="pref_camera_picturesize_entry_9mp">9 megapixel</string>
     <string name="pref_camera_picturesize_entry_8_2mp">8,2 megapixel</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7,7 megapixel</string>
     <string name="pref_camera_picturesize_entry_6_4mp">6,4 megapixel</string>
     <string name="pref_camera_picturesize_entry_6mp">6 megapixel</string>
     <string name="pref_camera_picturesize_entry_4_5mp">4,5 megapixel</string>
@@ -40,4 +44,5 @@
     <string name="headset_plug">Ezekhez az effektekhez csatlakoztasson fülhallgatót.</string>
     <string name="fail_trim">Ez a videófájl nem vágható</string>
     <string name="can_not_trim">Csak mp4 fájlok vághatóak</string>
+    <string name="pref_video_quality_entry_hfr">WVGA magas képkockasebesség</string>
 </resources>
