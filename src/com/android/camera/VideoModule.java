@@ -937,7 +937,7 @@ public class VideoModule implements CameraModule,
             mStartPreviewThread.start();
         } else {
             // preview already started
-            mUI.enableShutter(true);
+            mHandler.sendEmptyMessage(ENABLE_SHUTTER_BUTTON);
         }
 
         // Initializing it here after the preview is started.
