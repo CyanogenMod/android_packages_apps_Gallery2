@@ -153,11 +153,10 @@ public class PanoramaModule implements CameraModule,
     private float mHorizontalViewAngle;
     private float mVerticalViewAngle;
 
-    // Prefer FOCUS_MODE_INFINITY to FOCUS_MODE_CONTINUOUS_VIDEO because of
-    // getting a better image quality by the former.
-    private String mTargetFocusMode = Parameters.FOCUS_MODE_INFINITY;
+    private String mTargetFocusMode;
 
     private PanoOrientationEventListener mOrientationEventListener;
+
     // The value could be 0, 90, 180, 270 for the 4 different orientations measured in clockwise
     // respectively.
     private int mDeviceOrientation;
@@ -364,6 +363,11 @@ public class PanoramaModule implements CameraModule,
         mCameraDevice = Util.openCamera(mActivity, cameraId);
         mCameraOrientation = Util.getCameraOrientation(cameraId);
         if (cameraId == CameraHolder.instance().getFrontCameraId()) mUsingFrontCamera = true;
+        if (mActivity.getResources().getBoolean(R.bool.useInfinityFocus)) {
+            mTargetFocusMode = Parameters.FOCUS_MODE_INFINITY;
+        } else {
+            mTargetFocusMode = Parameters.FOCUS_MODE_CONTINUOUS_VIDEO;
+        }
     }
 
     private boolean findBestPreviewSize(List<Size> supportedSizes, boolean need4To3,
