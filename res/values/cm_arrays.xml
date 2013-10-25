@@ -172,4 +172,26 @@
         <item>10000</item>
         <item>5000</item>
     </string-array>
+
+    <!-- Slow shutter feature -->
+    <string-array name="pref_camera_slow_shutter_entries" translatable="false">
+        <item>@string/pref_camera_slow_shutter_entry_off</item>
+        <item>@string/pref_camera_slow_shutter_entry_auto</item>
+        <item>@string/pref_camera_slow_shutter_entry_half_second</item>
+        <item>@string/pref_camera_slow_shutter_entry_1s</item>
+        <item>@string/pref_camera_slow_shutter_entry_2s</item>
+        <item>@string/pref_camera_slow_shutter_entry_4s</item>
+        <item>@string/pref_camera_slow_shutter_entry_8s</item>
+    </string-array>
+
+    <string-array name="pref_camera_slow_shutter_entryvalues" translatable="false">
+        <item>slow-shutter-off</item>
+        <item>slow-shutter-auto</item>
+        <item>slow-shutter-1/2s</item>
+        <item>slow-shutter-1s</item>
+        <item>slow-shutter-2s</item>
+        <item>slow-shutter-4s</item>
+        <item>slow-shutter-8s</item>
+    </string-array>
+
 </resources>
