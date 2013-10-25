@@ -18,9 +18,13 @@
     <string name="pref_camera_picturesize_entry_20_7mp">20,7 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_18mp">18 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12,8 Мпикс.</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12,7 Мпикс.</string>
+    <string name="pref_camera_picturesize_entry_12mp">12 Мпикс. (4:3)</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11,5 Мпикс.</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10,4 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_9mp">9 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_8_2mp">8,2 Мпикс.</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7,7 Мпикс. (4:3)</string>
     <string name="pref_camera_picturesize_entry_6_4mp">6,4 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_6mp">6 Мпикс.</string>
     <string name="pref_camera_picturesize_entry_4_5mp">4,5 Мпикс.</string>
@@ -35,4 +39,5 @@
     <string name="headset_plug">Подключите наушники для звуковых эффектов.</string>
     <string name="fail_trim">Это видео не может быть обрезано</string>
     <string name="can_not_trim">Могут быть обрезаны файлы только формата mp4</string>
+    <string name="pref_video_quality_entry_hfr">WVGA Ускоренная съёмка</string>
 </resources>
