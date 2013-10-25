@@ -1978,6 +1978,8 @@ public class PhotoModule
             }
         }
 
+        CameraSettings.enableSceneDetection(mParameters);
+
         if (Util.isZSLEnabled()) {
             if (Util.sendMagicSamsungZSLCommand()) {
                 mCameraDevice.sendMagicSamsungZSLCommand();
