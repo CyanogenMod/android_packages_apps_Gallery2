@@ -79,6 +79,7 @@ public class CameraSettings {
     public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
     public static final String KEY_VIDEOCAMERA_COLOR_EFFECT = "pref_camera_video_coloreffect_key";
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
+    public static final String KEY_BEAUTY_MODE = "pref_camera_beauty_mode";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
@@ -697,6 +698,25 @@ public class CameraSettings {
     public static void setEarlyVideoSize(Parameters params, CamcorderProfile profile) {
         if (Util.needsEarlyVideoSize()) {
             params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
+        }
+    }
+
+    /**
+     * Beauty mode
+     */
+    public static void setBeautyMode(Parameters params, boolean enable) {
+        if ("true".equals(params.get("recording-hint"))) {
+            params.set("video-skinbeauty-mode", enable ? "on" : "off");
+        } else {
+            params.set("face-beautify", enable ? "1" : "0");
+        }
+    }
+
+    public static boolean isBeautyModeEnabled(Parameters params) {
+        if ("true".equals(params.get("recording-hint"))) {
+            return "on".equals(params.get("video-skinbeauty-mode"));
+        } else {
+            return "1".equals(params.get("face-beautify"));
         }
     }
 

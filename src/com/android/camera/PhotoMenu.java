@@ -213,6 +213,7 @@ public class PhotoMenu extends PieController
         mOtherKeys = new String[] {
                 CameraSettings.KEY_FOCUS_MODE,
                 CameraSettings.KEY_FOCUS_TIME,
+                CameraSettings.KEY_BEAUTY_MODE,
                 CameraSettings.KEY_POWER_SHUTTER,
                 CameraSettings.KEY_ISO_MODE,
                 CameraSettings.KEY_JPEG,
