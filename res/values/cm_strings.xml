@@ -115,7 +115,9 @@
     <string name="pref_camera_scenemode_entry_flowers">Flowers</string>
     <string name="pref_camera_scenemode_entry_handheldtwilight">Handheld twilight</string>
     <string name="pref_camera_scenemode_entry_highsensitivity">High sensivity</string>
+    <string name="pref_camera_scenemode_entry_indoor">Indoor</string>
     <string name="pref_camera_scenemode_entry_landscape">Landscape</string>
+    <string name="pref_camera_scenemode_entry_mix_illuminant">Mixed lighting</string>
     <string name="pref_camera_scenemode_entry_mood">Mood</string>
     <string name="pref_camera_scenemode_entry_nightportrait">Night portrait</string>
     <string name="pref_camera_scenemode_entry_nightindoor">Night indoor</string>

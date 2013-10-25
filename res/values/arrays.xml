@@ -411,15 +411,15 @@
 
     <!-- Camera Preferences Scene Mode dialog box entries -->
     <string-array name="pref_camera_scenemode_entries" translatable="false">
+        <item>@string/pref_camera_scenemode_entry_auto</item>
+        <item>@string/pref_camera_scenemode_entry_asd</item>
         <item>@string/pref_camera_scenemode_entry_action</item>
         <item>@string/pref_camera_scenemode_entry_night</item>
-        <item>@string/pref_camera_scenemode_entry_auto</item>
         <item>@string/pref_camera_scenemode_entry_sunset</item>
         <item>@string/pref_camera_scenemode_entry_party</item>
         <item>@string/pref_camera_scenemode_entry_antimotionblur</item>
         <item>@string/pref_camera_scenemode_entry_aqua</item>
         <item>@string/pref_camera_scenemode_entry_ar</item>
-        <item>@string/pref_camera_scenemode_entry_asd</item>
         <item>@string/pref_camera_scenemode_entry_baby</item>
         <item>@string/pref_camera_scenemode_entry_backgroundblur</item>
         <item>@string/pref_camera_scenemode_entry_backlight</item>
@@ -441,7 +441,9 @@
         <item>@string/pref_camera_scenemode_entry_flowers</item>
         <item>@string/pref_camera_scenemode_entry_handheldtwilight</item>
         <item>@string/pref_camera_scenemode_entry_highsensitivity</item>
+        <item>@string/pref_camera_scenemode_entry_indoor</item>
         <item>@string/pref_camera_scenemode_entry_landscape</item>
+        <item>@string/pref_camera_scenemode_entry_mix_illuminant</item>
         <item>@string/pref_camera_scenemode_entry_mood</item>
         <item>@string/pref_camera_scenemode_entry_night</item>
         <item>@string/pref_camera_scenemode_entry_nightportrait</item>
@@ -480,15 +482,15 @@
     </array>
 
     <string-array name="pref_camera_scenemode_entryvalues" translatable="false">
+        <item>auto</item>
+        <item>asd</item>
         <item>action</item>
         <item>night</item>
-        <item>auto</item>
         <item>sunset</item>
         <item>party</item>
         <item>anti-motion-blur</item>
         <item>aqua</item>
         <item>AR</item>
-        <item>asd</item>
         <item>baby</item>
         <item>background-blur</item>
         <item>back-light</item>
@@ -509,9 +511,10 @@
         <item>fireworks</item>
         <item>flowers</item>
         <item>handheld-twilight</item>
-        <item>hdr</item>
         <item>high-sensitivity</item>
+        <item>indoor</item>
         <item>landscape</item>
+        <item>mix-illuminant</item>
         <item>mood</item>
         <item>night</item>
         <item>night-portrait</item>
