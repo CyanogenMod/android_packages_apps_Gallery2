@@ -79,6 +79,7 @@ public class CameraSettings {
     public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
     public static final String KEY_VIDEOCAMERA_COLOR_EFFECT = "pref_camera_video_coloreffect_key";
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
+    public static final String KEY_BEAUTY_MODE = "pref_camera_beauty_mode";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
@@ -195,6 +196,7 @@ public class CameraSettings {
         ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
         ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
+        ListPreference beautyMode = group.findPreference(KEY_BEAUTY_MODE);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -270,6 +272,11 @@ public class CameraSettings {
         if (videoColorEffect != null) {
             filterUnsupportedOptions(group,
                     videoColorEffect, mParameters.getSupportedColorEffects());
+        }
+        if (beautyMode != null) {
+            if (!isBeautyModeSupported(mParameters)) {
+                removePreference(group, beautyMode.getKey());
+            }
         }
         if (storage != null) {
             buildStorage(group, storage);
@@ -688,6 +695,20 @@ public class CameraSettings {
         if (Util.needsEarlyVideoSize()) {
             params.set("video-size", profile.videoFrameWidth + "x" + profile.videoFrameHeight);
         }
+    }
+
+    /**
+     * Beauty mode
+     */
+    public static void setBeautyMode(Parameters params, boolean enable) {
+        if (isBeautyModeSupported(params)) {
+            params.set("video-skinbeauty-mode", enable ? "on" : "off");
+            params.set("face-beautify", enable ? "3" : "0");
+        }
+    }
+
+    public static boolean isBeautyModeSupported(Parameters params) {
+        return params.get("face-beautify") != null;
     }
 
     /**
