@@ -135,6 +135,7 @@ public class PhotoMenu extends PieController
                 timerPopup.setSettingChangedListener(PhotoMenu.this);
                 mUI.dismissPopup();
                 mPopup = timerPopup;
+                mPopupStatus = POPUP_SECOND_LEVEL;
                 mUI.showPopup(mPopup);
             }
         });
