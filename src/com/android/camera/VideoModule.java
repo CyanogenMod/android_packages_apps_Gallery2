@@ -1886,9 +1886,7 @@ public class VideoModule implements CameraModule,
                 mActivity.mCameraDevice.lock();
                 mActivity.mCameraDevice.waitDone();
                 if ((ApiHelper.HAS_SURFACE_TEXTURE &&
-                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING) ||
-                    mActivity.getResources().getBoolean(
-                        R.bool.useVideoSnapshotWorkaround)) {
+                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING)) {
                     stopPreview();
                     // Switch back to use SurfaceTexture for preview.
                     ((CameraScreenNail) mActivity.mCameraScreenNail).setOneTimeOnFrameDrawnListener(
@@ -2041,9 +2039,6 @@ public class VideoModule implements CameraModule,
         // Set video mode
         CameraSettings.setVideoMode(mParameters, true);
 
-        // Reduce purple noise
-        CameraSettings.setReducePurple(mParameters, true);
-
         // Clear any previously set scene mode values
         CameraSettings.resetSceneMode(mParameters);
 
@@ -2105,20 +2100,15 @@ public class VideoModule implements CameraModule,
         // The logic here is different from the logic in still-mode camera.
         // There we determine the preview size based on the picture size, but
         // here we determine the picture size based on the preview size.
-        if (!mActivity.getResources().getBoolean(R.bool.useVideoSnapshotWorkaround)) {
-            List<Size> supported = mParameters.getSupportedPictureSizes();
-            Size optimalSize = Util.getOptimalVideoSnapshotPictureSize(supported,
-                    (double) mDesiredPreviewWidth / mDesiredPreviewHeight);
-            Size original = mParameters.getPictureSize();
-            if (!original.equals(optimalSize)) {
-                mParameters.setPictureSize(optimalSize.width, optimalSize.height);
-            }
-            Log.v(TAG, "Video snapshot size is " + optimalSize.width + "x" +
-                    optimalSize.height);
-        } else {
-            // At least one device will get bus overflows if we set this too high
-            mParameters.setPictureSize(mProfile.videoFrameWidth, mProfile.videoFrameHeight);
+        List<Size> supported = mParameters.getSupportedPictureSizes();
+        Size optimalSize = Util.getOptimalVideoSnapshotPictureSize(supported,
+                (double) mDesiredPreviewWidth / mDesiredPreviewHeight);
+        Size original = mParameters.getPictureSize();
+        if (!original.equals(optimalSize)) {
+            mParameters.setPictureSize(optimalSize.width, optimalSize.height);
         }
+        Log.v(TAG, "Video snapshot size is " + optimalSize.width + "x" +
+                optimalSize.height);
 
         // Set JPEG quality.
         int jpegQuality = Integer.parseInt(mPreferences.getString(
