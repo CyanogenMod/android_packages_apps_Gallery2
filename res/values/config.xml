@@ -56,4 +56,6 @@
     <bool name="enableVideoHDR">false</bool>
     <!-- Panorama focus mode.  Use FOCUS_MODE_INFINITY by default -->
     <bool name="useInfinityFocus">true</bool>
+    <!-- Whether the device support the orientation resize by aspect ratio -->
+    <bool name="config_deviceSupportOrientationResizePreview">true</bool>
 </resources>

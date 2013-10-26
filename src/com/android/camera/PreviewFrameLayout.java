@@ -46,6 +46,7 @@ public class PreviewFrameLayout extends RelativeLayout implements LayoutChangeNo
     private View mBorder;
     private OnSizeChangedListener mListener;
     private LayoutChangeHelper mLayoutChangeHelper;
+    private final boolean mUseOrientationResize;
     private boolean mOrientationResize;
     private boolean mPrevOrientationResize;
     private PieRenderer mPieRenderer;
@@ -56,6 +57,8 @@ public class PreviewFrameLayout extends RelativeLayout implements LayoutChangeNo
         mLayoutChangeHelper = new LayoutChangeHelper(this);
         mOrientationResize = false;
         mPrevOrientationResize = false;
+        mUseOrientationResize = context.getResources().getBoolean(
+                R.bool.config_deviceSupportOrientationResizePreview);
     }
 
     @Override
@@ -136,7 +139,7 @@ public class PreviewFrameLayout extends RelativeLayout implements LayoutChangeNo
             previewHeight += vPadding;
         }
 
-        if (mOrientationResize) {
+        if (mUseOrientationResize && mOrientationResize) {
             previewHeight = (int) (previewWidth * mAspectRatio);
 
             if (previewHeight > originalHeight) {
