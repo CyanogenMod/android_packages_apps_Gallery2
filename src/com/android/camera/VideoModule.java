@@ -1886,9 +1886,7 @@ public class VideoModule implements CameraModule,
                 mActivity.mCameraDevice.lock();
                 mActivity.mCameraDevice.waitDone();
                 if ((ApiHelper.HAS_SURFACE_TEXTURE &&
-                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING) ||
-                    mActivity.getResources().getBoolean(
-                        R.bool.useVideoSnapshotWorkaround)) {
+                    !ApiHelper.HAS_SURFACE_TEXTURE_RECORDING)) {
                     stopPreview();
                     // Switch back to use SurfaceTexture for preview.
                     ((CameraScreenNail) mActivity.mCameraScreenNail).setOneTimeOnFrameDrawnListener(
@@ -2040,9 +2038,6 @@ public class VideoModule implements CameraModule,
         CameraSettings.setEarlyVideoSize(mParameters, mProfile);
         // Set video mode
         CameraSettings.setVideoMode(mParameters, true);
-
-        // Reduce purple noise
-        CameraSettings.setReducePurple(mParameters, true);
 
         // Clear any previously set scene mode values
         CameraSettings.resetSceneMode(mParameters);
