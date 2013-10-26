@@ -50,8 +50,6 @@
     <!-- Stay in continuous focus even if touch-to-focus is used
          This option doesn't make sense if wantsFocusModes is on -->
     <bool name="useContinuosFocusForTouch">false</bool>
-    <!-- A certain beefy device has issues with video snapshots -->
-    <bool name="useVideoSnapshotWorkaround">false</bool>
     <!-- Video HDR mode. Aggressively crashes on some hardware -->
     <bool name="enableVideoHDR">false</bool>
     <!-- Panorama focus mode.  Use FOCUS_MODE_INFINITY by default -->

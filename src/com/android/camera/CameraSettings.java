@@ -559,16 +559,6 @@ public class CameraSettings {
         }
     }
 
-    public static void enableSceneDetection(Parameters params) {
-        if (Util.isSupported(Parameters.SCENE_DETECT_ON, params.getSupportedSceneDetectModes())) {
-            if (Parameters.SCENE_MODE_ASD.equals(params.getSceneMode())) {
-                params.setSceneDetectMode(Parameters.SCENE_DETECT_ON);
-            } else {
-                params.setSceneDetectMode(Parameters.SCENE_DETECT_OFF);
-            }
-        }
-    }
-
     public static int readEffectType(SharedPreferences pref) {
         String effectSelection = pref.getString(KEY_VIDEO_EFFECT, "none");
         if (effectSelection.equals("none")) {
@@ -712,12 +702,6 @@ public class CameraSettings {
         }
         if (Util.useHTCCamMode()) {
             params.set("cam-mode", on ? "1" : "0");
-        }
-    }
-
-    public static void setReducePurple(Parameters params, boolean on) {
-        if (params.get("reduce-purple") != null) {
-            params.set("reduce-purple", on ? "on" : "off");
         }
     }
 
