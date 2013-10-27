@@ -858,7 +858,8 @@ public class PhotoModule
             boolean isSamsungHDR =
                     (mSceneMode == Util.SCENE_MODE_HDR && Util.needSamsungHDRFormat());
 
-            if (!mIsImageCaptureIntent && (!Util.isZSLEnabled() || isSamsungHDR)) {
+            if (!mIsImageCaptureIntent && (!Util.isZSLEnabled() ||
+                   mSceneMode == Util.SCENE_MODE_HDR)) {
                 if (ApiHelper.CAN_START_PREVIEW_IN_JPEG_CALLBACK) {
                     setupPreview();
                 } else {
@@ -1900,6 +1901,19 @@ public class PhotoModule
         }
     }
 
+    private void toggleZSLState(boolean state) {
+        String newState = state ? "on" : "off";
+        if (mParameters.get("zsl") == null ||
+               mParameters.get("zsl").equals(newState))
+            return;
+
+        // One does not simply change ZSL states without pausing
+        // the preview
+        mParameters.set("zsl", newState);
+        mParameters.set("camera-mode", state ? "1" : "0");
+        mRestartPreview = true;
+    }
+
     private void updateCameraParametersPreference() {
         setAutoExposureLockIfSupported();
         setAutoWhiteBalanceLockIfSupported();
@@ -1976,14 +1990,8 @@ public class PhotoModule
             }
         }
 
-        if (Util.isZSLEnabled()) {
-            if (Util.sendMagicSamsungZSLCommand()) {
-                mCameraDevice.sendMagicSamsungZSLCommand();
-            }
-            // Switch on ZSL mode
-            mParameters.set("zsl", "on");
-            mParameters.set("camera-mode", "1");
-        }
+        // Flip ZSL at the next opportunity
+        mHandler.sendEmptyMessage(SET_CAMERA_PARAMETERS_WHEN_IDLE);
 
         // Set JPEG quality.
         int jpegQuality = Integer.parseInt(mPreferences.getString(CameraSettings.KEY_JPEG,
@@ -2109,11 +2117,26 @@ public class PhotoModule
             mUpdateSet = 0;
             return;
         } else if (isCameraIdle()) {
+
+            if (Util.isZSLEnabled()) {
+                if (mSceneMode.equals(Util.SCENE_MODE_HDR)) {
+                    // Switch off ZSL mode
+                    toggleZSLState(false);
+                } else {
+                    if (Util.sendMagicSamsungZSLCommand()) {
+                        mCameraDevice.sendMagicSamsungZSLCommand();
+                    }
+                    // Switch on ZSL mode
+                    toggleZSLState(true);
+                }
+            }
+
             if (mRestartPreview) {
                 Log.d(TAG, "Restarting preview");
                 resizeForPreviewAspectRatio();
                 startPreview();
                 mRestartPreview = false;
+                mHandler.sendEmptyMessage(START_PREVIEW_DONE);
             }
             setCameraParameters(mUpdateSet);
             updateSceneMode();
