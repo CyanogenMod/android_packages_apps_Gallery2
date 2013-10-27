@@ -1977,12 +1977,18 @@ public class PhotoModule
         }
 
         if (Util.isZSLEnabled()) {
-            if (Util.sendMagicSamsungZSLCommand()) {
-                mCameraDevice.sendMagicSamsungZSLCommand();
+            if (mSceneMode.equals(Util.SCENE_MODE_HDR)) {
+                // Switch off ZSL mode
+                mParameters.set("zsl", "off");
+                mParameters.set("camera-mode", "0");
+            } else {
+                if (Util.sendMagicSamsungZSLCommand()) {
+                    mCameraDevice.sendMagicSamsungZSLCommand();
+                }
+                // Switch on ZSL mode
+                mParameters.set("zsl", "on");
+                mParameters.set("camera-mode", "1");
             }
-            // Switch on ZSL mode
-            mParameters.set("zsl", "on");
-            mParameters.set("camera-mode", "1");
         }
 
         // Set JPEG quality.
