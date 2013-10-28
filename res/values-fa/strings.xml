@@ -138,7 +138,7 @@
     <string name="focal_length" msgid="1291383769749877010">"فاصله کانونی"</string>
     <string name="white_balance" msgid="1582509289994216078">"توازن سفیدی"</string>
     <string name="exposure_time" msgid="3990163680281058826">"زمان نوردهی"</string>
-    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="iso" msgid="5028296664327335940">"سرعت ISO"</string>
     <string name="unit_mm" msgid="1125768433254329136">"میلیمتر"</string>
     <string name="manual" msgid="6608905477477607865">"دستی"</string>
     <string name="auto" msgid="4296941368722892821">"خودکار"</string>
