@@ -2130,6 +2130,16 @@ public class VideoModule implements CameraModule,
             Log.v(TAG, "Video HDR Setting =" + videoHDR);
             if (isSupported(videoHDR, mParameters.getSupportedVideoHDRModes())) {
                 mParameters.setVideoHDRMode(videoHDR);
+                if (videoHDR.equals("on")) {
+                    mUI.overrideSettings(CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
+                            mParameters.getFlashMode());
+                } else {
+                    mUI.overrideSettings(CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
+                            null);
+                    mParameters.setFlashMode(mPreferences.getString(
+                                CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
+                                mActivity.getString(R.string.pref_camera_video_hdr_default)));
+                }
             } else {
                 mParameters.setVideoHDRMode("off");
             }
