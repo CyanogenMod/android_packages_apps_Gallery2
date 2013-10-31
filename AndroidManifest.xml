@@ -164,7 +164,6 @@
         <!-- This activity acts as a trampoline to the new Gallery activity,
              so that existing shortcuts are preserved. -->
         <activity android:name="com.android.gallery3d.app.Gallery"
-            android:excludeFromRecents="true"
             android:theme="@style/android:Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
