@@ -850,6 +850,7 @@ public class PhotoModule
                 // Finish capture animation
                 mHandler.removeMessages(CAPTURE_ANIMATION_DONE);
                 ((CameraScreenNail) mActivity.mCameraScreenNail).animateSlide();
+                mUI.enablePreviewThumb(true);
                 mHandler.sendEmptyMessageDelayed(CAPTURE_ANIMATION_DONE,
                         CaptureAnimManager.getAnimationDuration());
             }
@@ -1063,9 +1064,6 @@ public class PhotoModule
                 && mActivity.mShowCameraAppView) {
             // Start capture animation.
             ((CameraScreenNail) mActivity.mCameraScreenNail).animateFlash(mDisplayRotation);
-            mUI.enablePreviewThumb(true);
-            mHandler.sendEmptyMessageDelayed(CAPTURE_ANIMATION_DONE,
-                    CaptureAnimManager.getAnimationDuration());
         }
     }
 
