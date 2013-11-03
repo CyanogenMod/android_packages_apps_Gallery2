@@ -67,17 +67,54 @@ public class PhotoMenu extends PieController
         Locale locale = res.getConfiguration().locale;
         // the order is from left to right in the menu
 
-        // hdr
-        if (group.findPreference(CameraSettings.KEY_CAMERA_HDR) != null) {
-            item = makeSwitchItem(CameraSettings.KEY_CAMERA_HDR, true);
-            mRenderer.addItem(item);
-        }
         // exposure compensation
         if (group.findPreference(CameraSettings.KEY_EXPOSURE) != null) {
             item = makeItem(CameraSettings.KEY_EXPOSURE);
             item.setLabel(res.getString(R.string.pref_exposure_label));
             mRenderer.addItem(item);
         }
+        // enhance
+        PieItem enhance = makeItem(R.drawable.ic_enhance);
+        enhance.setLabel(res.getString(R.string.camera_menu_enhance_label));
+        mRenderer.addItem(enhance);
+        // hdr
+        if (group.findPreference(CameraSettings.KEY_CAMERA_HDR) != null) {
+            item = makeSwitchItem(CameraSettings.KEY_CAMERA_HDR, true);
+            enhance.addItem(item);
+        }
+        // beautify
+        if (group.findPreference(CameraSettings.KEY_BEAUTY_MODE) != null) {
+            item = makeSwitchItem(CameraSettings.KEY_BEAUTY_MODE, true);
+            enhance.addItem(item);
+        }
+        // slow shutter
+        if (group.findPreference(CameraSettings.KEY_SLOW_SHUTTER) != null) {
+            item = makeSwitchItem(CameraSettings.KEY_SLOW_SHUTTER, true);
+            enhance.addItem(item);
+        }
+        // color effect
+        final ListPreference colorPref = group.findPreference(CameraSettings.KEY_COLOR_EFFECT);
+        if (colorPref != null) {
+            item = makeItem(R.drawable.ic_tint);
+            item.setLabel(res.getString(
+                    R.string.pref_camera_coloreffect_title).toUpperCase(locale));
+            item.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(PieItem item) {
+                    ListPrefSettingPopup popup =
+                            (ListPrefSettingPopup) mActivity.getLayoutInflater().inflate(
+                            R.layout.list_pref_setting_popup, null, false);
+                    popup.initialize(colorPref);
+                    popup.setSettingChangedListener(PhotoMenu.this);
+                    mUI.dismissPopup();
+                    mPopup = popup;
+                    mPopupStatus = POPUP_SECOND_LEVEL;
+                    mUI.showPopup(mPopup);
+                }
+            });
+            enhance.addItem(item);
+        }
+
         // more settings
         PieItem more = makeItem(R.drawable.ic_settings_holo_light);
         more.setLabel(res.getString(R.string.camera_menu_settings_label));
@@ -187,19 +224,16 @@ public class PhotoMenu extends PieController
                     mUI.showPopup(mPopup);
                 }
             });
-            more.addItem(item);
+            enhance.addItem(item);
         }
         // extra settings popup
         mOtherKeys = new String[] {
                 CameraSettings.KEY_STORAGE,
+                CameraSettings.KEY_POWER_SHUTTER,
                 CameraSettings.KEY_FOCUS_MODE,
                 CameraSettings.KEY_FOCUS_TIME,
-                CameraSettings.KEY_BEAUTY_MODE,
-                CameraSettings.KEY_SLOW_SHUTTER,
-                CameraSettings.KEY_POWER_SHUTTER,
                 CameraSettings.KEY_ISO_MODE,
                 CameraSettings.KEY_JPEG,
-                CameraSettings.KEY_COLOR_EFFECT,
                 CameraSettings.KEY_BURST_MODE
         };
         item = makeItem(R.drawable.ic_settings_holo_light);
@@ -223,7 +257,7 @@ public class PhotoMenu extends PieController
     }
 
     @Override
-    // Hit when an item in a popup gets selected
+    // Hit when an item in the second-level popup gets selected
     public void onListPrefChanged(ListPreference pref) {
         if (mPopup != null) {
             if (mPopupStatus == POPUP_SECOND_LEVEL) {
@@ -234,7 +268,7 @@ public class PhotoMenu extends PieController
     }
 
     public void popupDismissed() {
-        // the popup gets dismissed
+        // if the 2nd level popup gets dismissed
         if (mPopup != null) {
             if (mPopupStatus == POPUP_SECOND_LEVEL) {
                 mPopup = null;
@@ -258,11 +292,20 @@ public class PhotoMenu extends PieController
     @Override
     public void onSettingChanged(ListPreference pref) {
         // Reset the scene mode if HDR is set to on. Reset HDR if scene mode is
-        // set to non-auto.
+        // set to non-auto. Also disable beautify when HDR is active.
         if (notSame(pref, CameraSettings.KEY_CAMERA_HDR, mSettingOff)) {
             setPreference(CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO);
+            setPreference(CameraSettings.KEY_BEAUTY_MODE, mSettingOff);
+            setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
         } else if (notSame(pref, CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO)) {
             setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
+            setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
+        } else if (notSame(pref, CameraSettings.KEY_BEAUTY_MODE, mSettingOff)) {
+            setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
+            setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
+        } else if (notSame(pref, CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off")) {
+            setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
+            setPreference(CameraSettings.KEY_BEAUTY_MODE, mSettingOff);
         }
         super.onSettingChanged(pref);
     }
