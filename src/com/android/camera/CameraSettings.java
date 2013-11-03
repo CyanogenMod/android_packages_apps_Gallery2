@@ -721,6 +721,10 @@ public class CameraSettings {
         return params.get("face-beautify") != null;
     }
 
+    public static boolean isBeautyModeEnabled(Parameters params) {
+        return isBeautyModeSupported(params) && (Integer.valueOf(params.get("face-beautify")) > 0);
+    }
+
     public static List<String> getSupportedSlowShutter(Parameters params) {
         String p = params.get("slow-shutter-values");
         if (p != null) {
@@ -733,6 +737,11 @@ public class CameraSettings {
         if (getSupportedSlowShutter(params) != null) {
             params.set("slow-shutter", value);
         }
+    }
+
+    public static boolean isSlowShutterEnabled(Parameters params) {
+        return (getSupportedSlowShutter(params) != null) &&
+                !"slow-shutter-off".equals(params.get("slow-shutter"));
     }
 
     /**
