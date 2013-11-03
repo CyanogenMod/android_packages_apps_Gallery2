@@ -336,6 +336,10 @@ public class VideoUI implements SurfaceHolder.Callback, PieRenderer.PieListener,
         mGestures.addTouchReceiver(mPopup);
     }
 
+    public void dismissPopup() {
+        dismissPopup(false, true);
+    }
+
     public void dismissPopup(boolean topLevelOnly) {
         dismissPopup(topLevelOnly, true);
     }
