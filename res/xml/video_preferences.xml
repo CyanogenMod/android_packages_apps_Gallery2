@@ -79,6 +79,7 @@
             camera:icons="@array/camera_recordlocation_icons"
             camera:largeIcons="@array/camera_recordlocation_largeicons"
             camera:entries="@array/pref_switch_entries"
+            camera:labelList="@array/pref_camera_recordlocation_labels"
             camera:entryValues="@array/pref_switch_entryvalues" />
     <IconListPreference
             camera:key="pref_camera_video_hdr_key"
