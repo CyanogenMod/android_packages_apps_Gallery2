@@ -177,21 +177,45 @@
     <string-array name="pref_camera_slow_shutter_entries" translatable="false">
         <item>@string/pref_camera_slow_shutter_entry_off</item>
         <item>@string/pref_camera_slow_shutter_entry_auto</item>
+        <!--
         <item>@string/pref_camera_slow_shutter_entry_half_second</item>
         <item>@string/pref_camera_slow_shutter_entry_1s</item>
         <item>@string/pref_camera_slow_shutter_entry_2s</item>
         <item>@string/pref_camera_slow_shutter_entry_4s</item>
         <item>@string/pref_camera_slow_shutter_entry_8s</item>
+        -->
     </string-array>
 
     <string-array name="pref_camera_slow_shutter_entryvalues" translatable="false">
         <item>slow-shutter-off</item>
         <item>slow-shutter-auto</item>
+        <!--
         <item>slow-shutter-1/2s</item>
         <item>slow-shutter-1s</item>
         <item>slow-shutter-2s</item>
         <item>slow-shutter-4s</item>
         <item>slow-shutter-8s</item>
+       -->
+    </string-array>
+
+    <string-array name="pref_camera_slow_shutter_icons" translatable="false">
+        <item>@drawable/ic_slowshutter</item>
+        <item>@drawable/ic_slowshutter</item>
+    </string-array>
+
+    <string-array name="pref_camera_beauty_mode_icons" translatable="false">
+        <item>@drawable/ic_beautify</item>
+        <item>@drawable/ic_beautify</item>
+    </string-array>
+
+    <string-array name="pref_camera_beauty_mode_labels" translatable="false">
+        <item>@string/camera_menu_beauty_mode_label</item>
+        <item>@string/camera_menu_beauty_mode_label</item>
+    </string-array>
+
+    <string-array name="pref_camera_slow_shutter_labels" translatable="false">
+        <item>@string/camera_menu_slow_shutter_label</item>
+        <item>@string/camera_menu_slow_shutter_label</item>
     </string-array>
 
 </resources>

@@ -173,7 +173,13 @@ public class OnScreenIndicators {
         if (mSceneIndicator == null) {
             return;
         }
-        if ((value == null) || Parameters.SCENE_MODE_AUTO.equals(value)) {
+        if (value == null) {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
+        } else if ("beauty".equals(value)) {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_beautify);
+        } else if ("slow".equals(value)) {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_slowshutter);
+        } else if (Parameters.SCENE_MODE_AUTO.equals(value)) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
         } else if (Parameters.SCENE_MODE_HDR.equals(value)) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_hdr);
