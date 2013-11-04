@@ -36,7 +36,6 @@ public class ImageFilterSharpen extends ImageFilterRS {
         representation.setFilterClass(ImageFilterSharpen.class);
         representation.setTextId(R.string.sharpness);
         representation.setOverlayId(R.drawable.filtershow_button_colors_sharpen);
-        representation.setEditorId(R.id.imageShow);
         representation.setSupportsPartialRendering(true);
         return representation;
     }
