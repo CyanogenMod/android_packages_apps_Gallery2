@@ -195,6 +195,7 @@ public class PhotoMenu extends PieController
                 CameraSettings.KEY_FOCUS_MODE,
                 CameraSettings.KEY_FOCUS_TIME,
                 CameraSettings.KEY_POWER_SHUTTER,
+                CameraSettings.KEY_VOLUME_SHUTTER,
                 CameraSettings.KEY_ISO_MODE,
                 CameraSettings.KEY_JPEG,
                 CameraSettings.KEY_COLOR_EFFECT,

@@ -83,8 +83,10 @@ public abstract class ActivityBase extends AbstractGalleryActivity
     protected boolean mPaused;
     protected GalleryActionBar mActionBar;
 
-    // Keep track of powershutter state
+    // Keep track of power shutter state
     public static boolean mPowerShutter = false;
+    // Keep track of volume shutter state
+    public static boolean mVolumeShutter = false;
 
     // multiple cameras support
     protected int mNumberOfCameras;
@@ -239,6 +241,12 @@ public abstract class ActivityBase extends AbstractGalleryActivity
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.PREVENT_POWER_KEY);
         }
+    }
+
+    protected void initVolumeShutter(ComboPreferences prefs) {
+        String val = prefs.getString(CameraSettings.KEY_VOLUME_SHUTTER,
+                getResources().getString(R.string.pref_camera_volume_shutter_default));
+        mVolumeShutter = val.equals(CameraSettings.VALUE_ON);
     }
 
     @Override

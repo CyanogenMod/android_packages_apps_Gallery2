@@ -1419,8 +1419,10 @@ public class PhotoModule
 
     @Override
     public void updateCameraAppView() {
-        // Setup Power shutter
+        // Setup power shutter
         mActivity.initPowerShutter(mPreferences);
+        // Setup volume shutter
+        mActivity.initVolumeShutter(mPreferences);
     }
 
     @Override
@@ -1521,6 +1523,8 @@ public class PhotoModule
 
         // Load the power shutter
         mActivity.initPowerShutter(mPreferences);
+        // Load the volume shutter
+        mActivity.initVolumeShutter(mPreferences);
 
         mNamedImages = null;
 
@@ -1661,13 +1665,21 @@ public class PhotoModule
         case KeyEvent.KEYCODE_VOLUME_UP:
             if (mActivity.isInCameraApp() && mFirstTimeInitialized
                 && (mUI.mMenuInitialized)) {
-                mUI.onScaleStepResize(true);
+                if (ActivityBase.mVolumeShutter) {
+                    onShutterButtonFocus(true);
+                } else {
+                    mUI.onScaleStepResize(true);
+                }
             }
             return true;
         case KeyEvent.KEYCODE_VOLUME_DOWN:
             if (mActivity.isInCameraApp() && mFirstTimeInitialized
                 && (mUI.mMenuInitialized)) {
-                mUI.onScaleStepResize(false);
+                if (ActivityBase.mVolumeShutter) {
+                    onShutterButtonFocus(true);
+                } else {
+                    mUI.onScaleStepResize(true);
+                }
             }
             return true;
         case KeyEvent.KEYCODE_FOCUS:
@@ -1715,7 +1727,14 @@ public class PhotoModule
         }
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_UP:
+            if (ActivityBase.mVolumeShutter) {
+                onShutterButtonClick();
+            }
+            return true;
         case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (ActivityBase.mVolumeShutter) {
+                onShutterButtonClick();
+            }
             return true;
         case KeyEvent.KEYCODE_FOCUS:
             if (mFirstTimeInitialized) {
@@ -2176,6 +2195,7 @@ public class PhotoModule
             mUI.updateOnScreenIndicators(mParameters, mPreferenceGroup,
                 mPreferences);
             mActivity.initPowerShutter(mPreferences);
+            mActivity.initVolumeShutter(mPreferences);
         } else {
             mHandler.sendEmptyMessage(SET_PHOTO_UI_PARAMS);
         }
