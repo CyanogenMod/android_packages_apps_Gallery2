@@ -1258,11 +1258,30 @@ public class PanoramaModule implements CameraModule,
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                return true;
+            case KeyEvent.KEYCODE_CAMERA:
+                if (event.getRepeatCount() == 0) {
+                    // Only capture when in full screen capture mode
+                    if (mActivity.isInCameraApp() &&
+                            mShutterButton.getVisibility() == View.VISIBLE) {
+                        onShutterButtonClick();
+                    }
+                }
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                return true;
+        }
         return false;
     }
 
