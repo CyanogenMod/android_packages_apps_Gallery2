@@ -144,9 +144,13 @@
     <string name="pref_camera_focusmode_entry_portrait">Portrait</string>
     <string name="pref_camera_focusmode_entry_hyperfocal">Hyperfocal</string>
 
-    <!-- More Settings screen, power button title -->
+    <!-- More Settings screen, power shutter title -->
     <string name="pref_camera_power_shutter_title">Power shutter</string>
     <string name="pref_camera_power_shutter_default" translatable="false">off</string>
+
+    <!-- More Settings screen, volume shutter title -->
+    <string name="pref_camera_volume_shutter_title">Volume shutter</string>
+    <string name="pref_camera_volume_shutter_default" translatable="false">off</string>
 
     <!-- Settings screen, ISO -->
     <string name="pref_camera_iso_title" translatable="false">ISO</string>
