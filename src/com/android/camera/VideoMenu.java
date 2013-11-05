@@ -80,6 +80,7 @@ public class VideoMenu extends PieController
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_STORAGE,
                 CameraSettings.KEY_POWER_SHUTTER,
+                CameraSettings.KEY_VOLUME_SHUTTER,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
                 CameraSettings.KEY_VIDEOCAMERA_JPEG
         };
