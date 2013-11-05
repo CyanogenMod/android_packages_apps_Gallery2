@@ -265,6 +265,7 @@ public class ImageCrop extends ImageShow {
         mImageBounds.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
         // If display matrix doesn't exist, create it and its dependencies
         if (mDisplayCropMatrix == null || mDisplayMatrix == null || mDisplayMatrixInverse == null) {
+            mCropObj.unsetAspectRatio();
             mDisplayMatrix = GeometryMathUtils.getFullGeometryToScreenMatrix(mGeometry,
                     bitmap.getWidth(), bitmap.getHeight(), canvas.getWidth(), canvas.getHeight());
             float straighten = mGeometry.straighten;
