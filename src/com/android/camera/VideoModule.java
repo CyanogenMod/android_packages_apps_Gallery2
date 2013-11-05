@@ -418,6 +418,8 @@ public class VideoModule implements CameraModule,
 
         // Power shutter
         mActivity.initPowerShutter(mPreferences);
+        // Volume shutter
+        mActivity.initVolumeShutter(mPreferences);
 
         // we need to reset exposure for the preview
         resetExposureCompensation();
@@ -1241,20 +1243,35 @@ public class VideoModule implements CameraModule,
         }
 
         switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (event.getRepeatCount() == 0 && ActivityBase.mVolumeShutter) {
+                    mUI.clickShutter();
+                }
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (event.getRepeatCount() == 0 && ActivityBase.mVolumeShutter) {
+                    mUI.clickShutter();
+                }
+                return true;
             case KeyEvent.KEYCODE_CAMERA:
                 if (event.getRepeatCount() == 0) {
                     mUI.clickShutter();
-                    return true;
                 }
-                break;
+                return true;
             case KeyEvent.KEYCODE_DPAD_CENTER:
                 if (event.getRepeatCount() == 0) {
                     mUI.clickShutter();
+                }
+                return true;
+            case KeyEvent.KEYCODE_POWER:
+                if (event.getRepeatCount() == 0 && ActivityBase.mPowerShutter) {
+                    mUI.clickShutter();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MENU:
+                if (mMediaRecorderRecording) {
                     return true;
                 }
-                break;
-            case KeyEvent.KEYCODE_MENU:
-                if (mMediaRecorderRecording) return true;
                 break;
         }
         return false;
@@ -1263,12 +1280,22 @@ public class VideoModule implements CameraModule,
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (ActivityBase.mVolumeShutter) {
+                    mUI.pressShutter(false);
+                }
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (ActivityBase.mVolumeShutter) {
+                    mUI.pressShutter(false);
+                }
+                return true;
             case KeyEvent.KEYCODE_CAMERA:
                 mUI.pressShutter(false);
                 return true;
             case KeyEvent.KEYCODE_POWER:
                 if (ActivityBase.mPowerShutter) {
-                    onShutterButtonClick();
+                    mUI.pressShutter(false);
                 }
                 return true;
         }
@@ -2337,6 +2364,7 @@ public class VideoModule implements CameraModule,
             }
             mUI.updateOnScreenIndicators(mParameters, mPreferences);
             mActivity.initPowerShutter(mPreferences);
+            mActivity.initVolumeShutter(mPreferences);
         }
     }
 
@@ -2489,8 +2517,10 @@ public class VideoModule implements CameraModule,
     public void updateCameraAppView() {
         if (!mPreviewing || mParameters.getFlashMode() == null) return;
 
-        // Setup Power shutter
+        // Setup power shutter
         mActivity.initPowerShutter(mPreferences);
+        // Setup volume shutter
+        mActivity.initVolumeShutter(mPreferences);
 
         // When going to and back from gallery, we need to turn off/on the flash.
         if (!mActivity.mShowCameraAppView) {

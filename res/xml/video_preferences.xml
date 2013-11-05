@@ -96,6 +96,12 @@
             camera:entries="@array/pref_switch_entries"
             camera:entryValues="@array/pref_switch_entryvalues" />
     <ListPreference
+            camera:key="pref_volume_shutter"
+            camera:defaultValue="@string/pref_camera_volume_shutter_default"
+            camera:title="@string/pref_camera_volume_shutter_title"
+            camera:entries="@array/pref_switch_entries"
+            camera:entryValues="@array/pref_switch_entryvalues" />
+    <ListPreference
             camera:key="pref_camera_video_coloreffect_key"
             camera:defaultValue="@string/pref_camera_coloreffect_default"
             camera:title="@string/pref_camera_coloreffect_title"
