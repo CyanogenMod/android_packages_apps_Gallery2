@@ -93,6 +93,9 @@ public class Util {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
+    // Hardware camera key mask
+    private static final int KEY_MASK_CAMERA = 0x20;
+
     public static boolean isSupported(String value, List<String> supported) {
         return supported == null ? false : supported.indexOf(value) >= 0;
     }
@@ -112,6 +115,10 @@ public class Util {
     public static boolean isCameraHdrSupported(Parameters params) {
         List<String> supported = params.getSupportedSceneModes();
         return (supported != null) && supported.contains(SCENE_MODE_HDR);
+    }
+
+    public static boolean hasCameraKey() {
+        return (sDeviceKeysPresent & KEY_MASK_CAMERA) != 0;
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -164,6 +171,9 @@ public class Util {
     // Do not change the focus mode when TTF is used
     private static boolean sNoFocusModeChangeForTouch;
 
+    // Get available hardware keys
+    private static int sDeviceKeysPresent;
+
     private Util() {
     }
 
@@ -192,6 +202,9 @@ public class Util {
 
         sNoFocusModeChangeForTouch = context.getResources().getBoolean(
                 R.bool.useContinuosFocusForTouch);
+
+        sDeviceKeysPresent = context.getResources().getInteger(
+                com.android.internal.R.integer.config_deviceHardwareKeys);
 
     }
 

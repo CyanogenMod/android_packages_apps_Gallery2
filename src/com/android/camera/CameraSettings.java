@@ -195,6 +195,7 @@ public class CameraSettings {
         ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
         ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
+        ListPreference powerShutter = group.findPreference(KEY_POWER_SHUTTER);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -270,6 +271,9 @@ public class CameraSettings {
         if (videoColorEffect != null) {
             filterUnsupportedOptions(group,
                     videoColorEffect, mParameters.getSupportedColorEffects());
+        }
+        if (powerShutter != null && Util.hasCameraKey()) {
+            removePreference(group, powerShutter.getKey());
         }
         if (storage != null) {
             buildStorage(group, storage);
