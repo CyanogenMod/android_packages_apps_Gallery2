@@ -159,4 +159,5 @@
     <string name="camera_menu_beauty_mode_label">EMBELEZAR</string>
     <string name="camera_menu_colorize_label">COLORIZAR</string>
     <string name="camera_menu_effects_label">EFEITOS</string>
+    <string name="camera_menu_asd_label">CENA AUTOMÁTICA</string>
 </resources>
