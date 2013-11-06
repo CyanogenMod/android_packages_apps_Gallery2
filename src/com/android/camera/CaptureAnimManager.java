@@ -118,8 +118,15 @@ public class CaptureAnimManager {
         mDrawHeight = h;
         mX = x;
         mY = y;
-        mHoldW = mSize;
-        mHoldH = mSize;
+        if (h > w) {
+            // portrait
+            mHoldW = (int) (mSize * ((float) w / (float) h)) * 2;
+            mHoldH = mSize * 2;
+        } else {
+            // landscape
+            mHoldW = mSize * 2;
+            mHoldH = (int) (mSize * ((float) h / (float) w)) * 2;
+        }
         switch (mAnimOrientation) {
             case 0:  // Preview is on the left.
                 mHoldX = x + w - mMarginRight - mSize;
