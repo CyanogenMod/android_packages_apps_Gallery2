@@ -1154,18 +1154,20 @@ public class PhotoModule
         // focus mode, instead, we read it from driver
         if (!Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
             overrideCameraSettings(mParameters.getFlashMode(),
-                    mParameters.getWhiteBalance(), mParameters.getFocusMode());
+                    mParameters.getWhiteBalance(), mParameters.getFocusMode(),
+                    mParameters.getAutoExposure());
         } else {
-            overrideCameraSettings(null, null, null);
+            overrideCameraSettings(null, null, null, null);
         }
     }
 
     private void overrideCameraSettings(final String flashMode,
-            final String whiteBalance, final String focusMode) {
+            final String whiteBalance, final String focusMode, final String autoExposure) {
         mUI.overrideSettings(
                 CameraSettings.KEY_FLASH_MODE, flashMode,
                 CameraSettings.KEY_WHITE_BALANCE, whiteBalance,
-                CameraSettings.KEY_FOCUS_MODE, focusMode);
+                CameraSettings.KEY_FOCUS_MODE, focusMode,
+                CameraSettings.KEY_AUTOEXPOSURE, autoExposure);
         if (Util.needSamsungHDRFormat()){
             if (mSceneMode == Util.SCENE_MODE_HDR) {
                 mUI.overrideSettings(CameraSettings.KEY_EXPOSURE,
@@ -2027,6 +2029,13 @@ public class PhotoModule
         // Slow shutter
         CameraSettings.setSlowShutter(mParameters, mPreferences.getString(CameraSettings.KEY_SLOW_SHUTTER,
                 mActivity.getString(R.string.pref_camera_slow_shutter_default)));
+
+        // Set auto exposure mode.
+        String autoExposure = mPreferences.getString(CameraSettings.KEY_AUTOEXPOSURE,
+                mActivity.getString(R.string.pref_camera_autoexposure_default));
+        if (Util.isSupported(autoExposure, mParameters.getSupportedAutoexposure())) {
+            mParameters.setAutoExposure(autoExposure);
+        }
 
         // Set exposure compensation
         int value = CameraSettings.readExposure(mPreferences);
