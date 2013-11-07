@@ -146,4 +146,13 @@
     <string name="pref_camera_focustime_entry_infinite">Infinita</string>
     <string name="pref_camera_flashmode_entry_redeye">Ojos rojos</string>
     <string name="pref_camera_flashmode_label_redeye">OJOS ROJOS</string>
+    <string name="pref_camera_beauty_mode_title">Modo belleza</string>
+    <string name="pref_camera_slow_shutter_title">Obturador lento</string>
+    <string name="pref_camera_slow_shutter_entry_off">Apagado</string>
+    <string name="pref_camera_slow_shutter_entry_auto">Automático</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">0,5 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 segundo</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 segundos</string>
 </resources>
