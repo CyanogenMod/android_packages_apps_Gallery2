@@ -145,7 +145,7 @@
     <string name="filtershow_version_original" msgid="1413894292200912828">"Оригинал"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"Актуелно"</string>
     <string name="filtershow_exif_model" msgid="3543206476046267466">"Модел"</string>
-    <string name="filtershow_exif_aperture" msgid="5076571522763604380">"Отвор за светло"</string>
+    <string name="filtershow_exif_aperture" msgid="5076571522763604380">"Отвор бленде"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"Жижна даљина"</string>
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
     <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"Удаљеност субјекта"</string>
