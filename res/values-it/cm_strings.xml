@@ -136,7 +136,7 @@
     <string name="pref_camera_focustime_entry_20">20s</string>
     <string name="pref_camera_focustime_entry_30">30s</string>
     <string name="pref_camera_focustime_entry_infinite">Infinito</string>
-    <string name="bass_boost_strength">Bass boost</string>
+    <string name="bass_boost_strength">Incremento bassi</string>
     <string name="virtualizer_strength">Effetto 3D</string>
     <string name="audio_effects">Effetti audio</string>
     <string name="headset_plug">Collega le cuffie per questi effetti.</string>
@@ -154,4 +154,9 @@
     <string name="pref_camera_slow_shutter_entry_2s">2 secondi</string>
     <string name="pref_camera_slow_shutter_entry_4s">4 secondi</string>
     <string name="pref_camera_slow_shutter_entry_8s">8 secondi</string>
+    <string name="camera_menu_enhance_label">MIGLIORA</string>
+    <string name="camera_menu_slow_shutter_label">OTTURATORE LENTO</string>
+    <string name="camera_menu_beauty_mode_label">ABBELLISCI</string>
+    <string name="camera_menu_colorize_label">COLORA</string>
+    <string name="camera_menu_effects_label">EFFETTI</string>
 </resources>
