@@ -414,9 +414,6 @@
         <item>@string/pref_camera_scenemode_entry_auto</item>
         <item>@string/pref_camera_scenemode_entry_asd</item>
         <item>@string/pref_camera_scenemode_entry_action</item>
-        <item>@string/pref_camera_scenemode_entry_night</item>
-        <item>@string/pref_camera_scenemode_entry_sunset</item>
-        <item>@string/pref_camera_scenemode_entry_party</item>
         <item>@string/pref_camera_scenemode_entry_antimotionblur</item>
         <item>@string/pref_camera_scenemode_entry_aqua</item>
         <item>@string/pref_camera_scenemode_entry_ar</item>
@@ -443,6 +440,7 @@
         <item>@string/pref_camera_scenemode_entry_highsensitivity</item>
         <item>@string/pref_camera_scenemode_entry_indoor</item>
         <item>@string/pref_camera_scenemode_entry_landscape</item>
+        <item>@string/pref_camera_focusmode_entry_macro</item>
         <item>@string/pref_camera_scenemode_entry_mix_illuminant</item>
         <item>@string/pref_camera_scenemode_entry_mood</item>
         <item>@string/pref_camera_scenemode_entry_night</item>
@@ -450,6 +448,7 @@
         <item>@string/pref_camera_scenemode_entry_nightportrait</item>
         <item>@string/pref_camera_scenemode_entry_nightindoor</item>
         <item>@string/pref_camera_scenemode_entry_oldfilm</item>
+        <item>@string/pref_camera_scenemode_entry_party</item>
         <item>@string/pref_camera_scenemode_entry_pet</item>
         <item>@string/pref_camera_scenemode_entry_portrait</item>
         <item>@string/pref_camera_scenemode_entry_snow</item>
@@ -485,9 +484,6 @@
         <item>auto</item>
         <item>asd</item>
         <item>action</item>
-        <item>night</item>
-        <item>sunset</item>
-        <item>party</item>
         <item>anti-motion-blur</item>
         <item>aqua</item>
         <item>AR</item>
@@ -514,6 +510,7 @@
         <item>high-sensitivity</item>
         <item>indoor</item>
         <item>landscape</item>
+        <item>macro</item>
         <item>mix-illuminant</item>
         <item>mood</item>
         <item>night</item>
@@ -521,6 +518,7 @@
         <item>nightportrait</item>
         <item>night-indoor</item>
         <item>old-film</item>
+        <item>party</item>
         <item>pet</item>
         <item>portrait</item>
         <item>snow</item>
