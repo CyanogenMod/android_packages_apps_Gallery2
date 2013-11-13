@@ -66,6 +66,8 @@ public class FaceView extends View
     private Paint mPaint;
     private volatile boolean mBlocked;
 
+    private final boolean mFaceScoreIsError;
+
     private int mUncroppedWidth;
     private int mUncroppedHeight;
 
@@ -103,6 +105,8 @@ public class FaceView extends View
         mPaint.setDither(true);
         mPaint.setColor(Color.WHITE);//setColor(0xFFFFFF00);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        mFaceScoreIsError = context.getResources().getBoolean(R.bool.faceScoreIsError);
     }
 
     public void setFaces(Face[] faces) {
@@ -220,7 +224,10 @@ public class FaceView extends View
             canvas.rotate(-mOrientation); // rotate is counter-clockwise (for canvas)
             for (int i = 0; i < mFaces.length; i++) {
               // Filter out false positives.
-              if (mFaces[i].score < 50) continue;
+              if (!mFaceScoreIsError && mFaces[i].score < 50)
+                  continue;
+              if (mFaceScoreIsError && mFaces[i].score > 0)
+                  continue;
 
               // Transform the coordinates.
               mRect.set(mFaces[i].rect);

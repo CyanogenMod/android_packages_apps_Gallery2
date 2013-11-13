@@ -54,4 +54,6 @@
     <bool name="enableVideoHDR">false</bool>
     <!-- Panorama focus mode.  Use FOCUS_MODE_INFINITY by default -->
     <bool name="useInfinityFocus">true</bool>
+    <!-- Face detection score is an error code -->
+    <bool name="faceScoreIsError">false</bool>
 </resources>
