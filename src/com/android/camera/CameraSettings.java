@@ -757,6 +757,9 @@ public class CameraSettings {
         if (Util.useHTCCamMode()) {
             params.set("cam-mode", on ? "1" : "0");
         }
+        if (params.get("oppo-app") != null) {
+            params.set("oppo-app", "1");
+        }
     }
 
     private void initVideoEffect(PreferenceGroup group, ListPreference videoEffect) {
