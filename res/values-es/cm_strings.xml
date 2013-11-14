@@ -155,4 +155,9 @@
     <string name="pref_camera_slow_shutter_entry_2s">2 segundos</string>
     <string name="pref_camera_slow_shutter_entry_4s">4 segundos</string>
     <string name="pref_camera_slow_shutter_entry_8s">8 segundos</string>
+    <string name="camera_menu_enhance_label">MEJORAS</string>
+    <string name="camera_menu_slow_shutter_label">OBTURADOR LENTO</string>
+    <string name="camera_menu_beauty_mode_label">EMBELLECER</string>
+    <string name="camera_menu_colorize_label">COLOREAR</string>
+    <string name="camera_menu_effects_label">EFECTOS</string>
 </resources>
