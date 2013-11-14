@@ -68,6 +68,7 @@ import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.MediaSetUtils;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class AlbumPage extends ActivityState implements GalleryActionBar.ClusterRunner,
@@ -131,6 +132,8 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
     private Handler mHandler;
     private static final int MSG_PICK_PHOTO = 0;
+
+    private Menu mActionMenu;
 
     private PhotoFallbackEffect mResumeEffect;
 
@@ -618,6 +621,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
     @Override
     protected boolean onCreateActionBar(Menu menu) {
+        mActionMenu = menu;
         //GalleryActionBar actionBar = mActivity.getGalleryActionBar();
         MenuInflater inflator = getSupportMenuInflater();
         if (mGetContent) {
@@ -639,6 +643,26 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
         }
         //actionBar.setSubtitle(null);
+        // remove slideshow if all are videos
+        if (allVideoFiles() && !mGetContent){
+            menu.findItem(R.id.action_slideshow).setVisible(false);
+        }
+        return true;
+    }
+
+    private boolean allVideoFiles() {
+        if (mMediaSet == null)
+            return false;
+        int count = mMediaSet.getMediaItemCount();
+        MediaItem item;
+        for (int i = 0; i < count; i++) {
+            item = mMediaSet.getMediaItem(i, 1).get(0);
+            if (item == null) {
+                continue;
+            }
+            if (item.getMimeType().trim().startsWith("image/"))
+                return false;
+        }
         return true;
     }
 
@@ -755,6 +779,12 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         }
     }
 
+    private void updateMenuItem() {
+        if (allVideoFiles() && !mGetContent) {
+            mActionMenu.findItem(R.id.action_slideshow).setVisible(false);
+        }
+    }
+
     @Override
     public void onSelectionModeChange(int mode) {
         switch (mode) {
@@ -766,6 +796,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             case SelectionManager.LEAVE_SELECTION_MODE: {
                 mActionModeHandler.finishActionMode();
                 mRootPane.invalidate();
+                updateMenuItem();
                 break;
             }
             case SelectionManager.SELECT_ALL_MODE: {
