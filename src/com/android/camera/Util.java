@@ -174,6 +174,9 @@ public class Util {
     // Get available hardware keys
     private static int sDeviceKeysPresent;
 
+    // Aspect tolerance
+    private static int sAspectTolerance;
+
     private Util() {
     }
 
@@ -206,6 +209,8 @@ public class Util {
         sDeviceKeysPresent = context.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
 
+        sAspectTolerance = 1 / context.getResources().getInteger(
+                R.integer.aspect_tolerance_value);
     }
 
     public static int dpToPixel(int dp) {
@@ -578,7 +583,7 @@ public class Util {
     public static Size getOptimalPreviewSize(Activity currentActivity,
             List<Size> sizes, double targetRatio) {
         // Use a very small tolerance because we want an exact match.
-        final double ASPECT_TOLERANCE = 0.001;
+        final double ASPECT_TOLERANCE = sAspectTolerance;
         if (sizes == null) return null;
 
         Size optimalSize = null;
@@ -619,7 +624,7 @@ public class Util {
     public static Size getOptimalVideoSnapshotPictureSize(
             List<Size> sizes, double targetRatio) {
         // Use a very small tolerance because we want an exact match.
-        final double ASPECT_TOLERANCE = 0.001;
+        final double ASPECT_TOLERANCE = sAspectTolerance;
         if (sizes == null) return null;
 
         Size optimalSize = null;

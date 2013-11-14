@@ -56,4 +56,7 @@
     <bool name="useInfinityFocus">true</bool>
     <!-- Face detection score is an error code -->
     <bool name="faceScoreIsError">false</bool>
+    <!-- Aspect Tolerance level, computed as (1/value). Fixes green lines on some cameras -->
+    <integer name="aspect_tolerance_level">1000</dimen>
+
 </resources>
