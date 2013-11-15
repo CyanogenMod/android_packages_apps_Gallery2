@@ -147,7 +147,7 @@
     <string name="pref_camera_focustime_entry_infinite">Oneindig</string>
     <string name="pref_camera_flashmode_entry_redeye">Rode ogen</string>
     <string name="pref_camera_flashmode_label_redeye">RODE OGEN</string>
-    <string name="pref_camera_beauty_mode_title">Schoonheidsmodus</string>
+    <string name="pref_camera_beauty_mode_title">Verfraaien</string>
     <string name="pref_camera_slow_shutter_title">Trage sluiter</string>
     <string name="pref_camera_slow_shutter_entry_off">Uit</string>
     <string name="pref_camera_slow_shutter_entry_auto">Automatisch</string>
@@ -156,4 +156,9 @@
     <string name="pref_camera_slow_shutter_entry_2s">2 sec.</string>
     <string name="pref_camera_slow_shutter_entry_4s">4 sec.</string>
     <string name="pref_camera_slow_shutter_entry_8s">8 sec.</string>
+    <string name="camera_menu_enhance_label">VERBETEREN</string>
+    <string name="camera_menu_slow_shutter_label">TRAGE SLUITER</string>
+    <string name="camera_menu_beauty_mode_label">VERFRAAIEN</string>
+    <string name="camera_menu_colorize_label">KLEUREFFECT</string>
+    <string name="camera_menu_effects_label">EFFECTEN</string>
 </resources>
