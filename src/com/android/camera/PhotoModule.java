@@ -1150,9 +1150,10 @@ public class PhotoModule
     }
 
     private void updateSceneMode() {
-        // If scene mode is set, we cannot set flash mode, white balance, and
+        // If scene mode or slow shutter is set, we cannot set flash mode, white balance, and
         // focus mode, instead, we read it from driver
-        if (!Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
+        if (!Parameters.SCENE_MODE_AUTO.equals(mSceneMode) ||
+            CameraSettings.isSlowShutterEnabled(mParameters)) {
             overrideCameraSettings(mParameters.getFlashMode(),
                     mParameters.getWhiteBalance(), mParameters.getFocusMode());
         } else {
@@ -1960,6 +1961,14 @@ public class PhotoModule
         }
         Log.v(TAG, "Preview size is " + optimalSize.width + "x" + optimalSize.height);
 
+        // Beauty mode
+        CameraSettings.setBeautyMode(mParameters, mPreferences.getString(CameraSettings.KEY_BEAUTY_MODE,
+                mActivity.getString(R.string.pref_camera_beauty_mode_default)).equals("on"));
+
+        // Slow shutter
+        CameraSettings.setSlowShutter(mParameters, mPreferences.getString(CameraSettings.KEY_SLOW_SHUTTER,
+                mActivity.getString(R.string.pref_camera_slow_shutter_default)));
+
         // Since changing scene mode may change supported values, set scene mode
         // first. HDR is a scene mode. To promote it in UI, it is stored in a
         // separate preference.
@@ -1973,7 +1982,8 @@ public class PhotoModule
                 mActivity.getString(R.string.pref_camera_scenemode_default));
         }
         if (Util.isSupported(mSceneMode, mParameters.getSupportedSceneModes())) {
-            if (!mParameters.getSceneMode().equals(mSceneMode)) {
+            if (!mParameters.getSceneMode().equals(mSceneMode) ||
+                CameraSettings.isSlowShutterEnabled(mParameters)) {
                 mParameters.setSceneMode(mSceneMode);
 
                 // Setting scene mode will change the settings of flash mode,
@@ -2020,14 +2030,6 @@ public class PhotoModule
             mParameters.setColorEffect(colorEffect);
         }
 
-        // Beauty mode
-        CameraSettings.setBeautyMode(mParameters, mPreferences.getString(CameraSettings.KEY_BEAUTY_MODE,
-                mActivity.getString(R.string.pref_camera_beauty_mode_default)).equals("on"));
-
-        // Slow shutter
-        CameraSettings.setSlowShutter(mParameters, mPreferences.getString(CameraSettings.KEY_SLOW_SHUTTER,
-                mActivity.getString(R.string.pref_camera_slow_shutter_default)));
-
         // Set exposure compensation
         int value = CameraSettings.readExposure(mPreferences);
         int max = mParameters.getMaxExposureCompensation();
@@ -2040,7 +2042,8 @@ public class PhotoModule
             Log.w(TAG, "invalid exposure range: " + value);
         }
 
-        if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode)) {
+        if (Parameters.SCENE_MODE_AUTO.equals(mSceneMode) &&
+            !CameraSettings.isSlowShutterEnabled(mParameters)) {
             // Set flash mode.
             String flashMode = mPreferences.getString(
                     CameraSettings.KEY_FLASH_MODE,
