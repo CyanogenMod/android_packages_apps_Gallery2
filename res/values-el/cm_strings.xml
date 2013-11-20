@@ -146,4 +146,18 @@
     <string name="pref_camera_focustime_entry_infinite">Απεριόριστο</string>
     <string name="pref_camera_flashmode_entry_redeye">Κόκκινα μάτια</string>
     <string name="pref_camera_flashmode_label_redeye">ΚΟΚΚΙΝΑ ΜΑΤΙΑ</string>
+    <string name="pref_camera_beauty_mode_title">Λειτουργία ομορφιάς</string>
+    <string name="pref_camera_slow_shutter_title">Αργό κλείστρο</string>
+    <string name="pref_camera_slow_shutter_entry_off">Ανενεργό</string>
+    <string name="pref_camera_slow_shutter_entry_auto">Αυτόματο</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">1/2 δευτ.</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 δευτ.</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 δευτ.</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 δευτ.</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 δευτ.</string>
+    <string name="camera_menu_enhance_label">ΒΕΛΤΙΩΣΗ</string>
+    <string name="camera_menu_slow_shutter_label">ΑΡΓΟ ΚΛΕΙΣΤΡΟ</string>
+    <string name="camera_menu_beauty_mode_label">ΟΜΟΡΦΙΑ</string>
+    <string name="camera_menu_colorize_label">ΧΡΩΜΑΤΙΣΜΟΣ</string>
+    <string name="camera_menu_effects_label">ΕΦΕ</string>
 </resources>
