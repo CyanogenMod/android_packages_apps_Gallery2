@@ -219,6 +219,9 @@ public class CameraHolder {
                 throw new CameraHardwareException(e);
             }
             mParameters = mCameraDevice.getParameters();
+            //refresh to guarantee new copy is given
+            //in next getParameters call
+            mCameraDevice.refreshParameters();
         } else {
             try {
                 mCameraDevice.reconnect();
