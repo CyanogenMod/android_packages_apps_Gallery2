@@ -199,12 +199,12 @@
     </string-array>
 
     <string-array name="pref_camera_slow_shutter_icons" translatable="false">
-        <item>@drawable/ic_slowshutter</item>
+        <item>@drawable/ic_slowshutter_off</item>
         <item>@drawable/ic_slowshutter</item>
     </string-array>
 
     <string-array name="pref_camera_beauty_mode_icons" translatable="false">
-        <item>@drawable/ic_beautify</item>
+        <item>@drawable/ic_beautify_off</item>
         <item>@drawable/ic_beautify</item>
     </string-array>
 
@@ -216,6 +216,41 @@
     <string-array name="pref_camera_slow_shutter_labels" translatable="false">
         <item>@string/camera_menu_slow_shutter_label</item>
         <item>@string/camera_menu_slow_shutter_label</item>
+    </string-array>
+
+    <string-array name="camera_asd_values" translatable="false">
+        <item>indoor</item>
+        <item>landscape</item>
+        <item>macro</item>
+        <item>mix_illuminant</item>
+        <item>night</item>
+        <item>portrait</item>
+        <item>sports</item>
+    </string-array>
+
+    <string-array name="camera_asd_icons" translatable="false">
+        <item>@drawable/smart_scene_indoor</item>
+        <item>@drawable/smart_scene_landscape</item>
+        <item>@drawable/smart_scene_macro</item>
+        <item>@drawable/smart_scene_mix_illuminant</item>
+        <item>@drawable/smart_scene_night</item>
+        <item>@drawable/smart_scene_portrait</item>
+        <item>@drawable/smart_scene_sports</item>
+    </string-array>
+
+    <string-array name="pref_camera_asd_labels" translatable="false">
+        <item>@string/camera_menu_asd_label</item>
+        <item>@string/camera_menu_asd_label</item>
+    </string-array>
+
+    <string-array name="pref_camera_asd_icons" translatable="false">
+        <item>@drawable/ic_asd_off</item>
+        <item>@drawable/ic_asd</item>
+    </string-array>
+
+    <string-array name="pref_camera_asd_entryvalues" translatable="false">
+        <item>@string/setting_off_value</item>
+        <item>@string/setting_on_value</item>
     </string-array>
 
 </resources>
