@@ -17,6 +17,8 @@
 
 package com.android.camera;
 
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.hardware.Camera;
 import android.hardware.Camera.Face;
 import android.hardware.Camera.FaceDetectionListener;
@@ -31,8 +33,8 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import android.widget.Toast;
-import android.graphics.Canvas;
 
 import com.android.camera.CameraPreference.OnPreferenceChangedListener;
 import com.android.camera.FocusOverlayManager.FocusUI;
@@ -44,6 +46,7 @@ import com.android.camera.ui.FocusIndicator;
 import com.android.camera.ui.PieRenderer;
 import com.android.camera.ui.PieRenderer.PieListener;
 import com.android.camera.ui.RenderOverlay;
+import com.android.camera.ui.RotateImageView;
 import com.android.camera.ui.ZoomRenderer;
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
@@ -82,6 +85,8 @@ public class PhotoUI implements PieListener,
     private View mMenuButton;
     private View mBlocker;
     private PhotoMenu mMenu;
+
+    private ImageView mSceneDetectView;
 
     private OnScreenIndicators mOnScreenIndicators;
 
@@ -140,7 +145,7 @@ public class PhotoUI implements PieListener,
                 mFaceView = (FaceView) mRootView.findViewById(R.id.face_view);
             }
         }
-
+        mSceneDetectView = (ImageView) mRootView.findViewById(R.id.scene_detect_icon);
     }
 
     public View getRootView() {
@@ -724,4 +729,23 @@ public class PhotoUI implements PieListener,
         }
     }
 
+    public void updateSceneDetectionIcon(String scene) {
+        if (scene == null) {
+            mSceneDetectView.setVisibility(View.GONE);
+            return;
+        }
+        String[] values = mActivity.getResources().getStringArray(R.array.camera_asd_values);
+        int i = 0;
+        for (i = 0; i < values.length; i++) {
+            if (values[i].equals(scene)) {
+                break;
+            }
+        }
+        if (i < values.length) {
+            TypedArray imgs = mActivity.getResources().obtainTypedArray(R.array.camera_asd_icons);
+            mSceneDetectView.setImageResource(imgs.getResourceId(i, -1));
+        }
+        mSceneDetectView.setVisibility(View.VISIBLE);
+    }
 }
+
