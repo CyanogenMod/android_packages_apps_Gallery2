@@ -145,4 +145,18 @@
     <string name="pref_camera_focustime_entry_infinite">Végtelen</string>
     <string name="pref_camera_flashmode_entry_redeye">Vörösszem</string>
     <string name="pref_camera_flashmode_label_redeye">VÖRÖSSZEM</string>
+    <string name="pref_camera_beauty_mode_title">Szépség</string>
+    <string name="pref_camera_slow_shutter_title">Hosszú záridő</string>
+    <string name="pref_camera_slow_shutter_entry_off">Ki</string>
+    <string name="pref_camera_slow_shutter_entry_auto">Automatikus</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">1/2 másodperc</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 másodperc</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 másodperc</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 másodperc</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 másodperc</string>
+    <string name="camera_menu_enhance_label">KIEMELÉS</string>
+    <string name="camera_menu_slow_shutter_label">HOSSZÚ ZÁRIDŐ</string>
+    <string name="camera_menu_beauty_mode_label">EFFEKTEK</string>
+    <string name="camera_menu_colorize_label">SZÍNEZÉS</string>
+    <string name="camera_menu_effects_label">EFFEKTEK</string>
 </resources>
