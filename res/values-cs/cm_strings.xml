@@ -96,7 +96,7 @@
     <string name="pref_camera_focusmode_entry_portrait">Portrét</string>
     <string name="pref_camera_focusmode_entry_hyperfocal">Hyperfokální</string>
 
-    <string name="pref_camera_power_shutter_title">Spoušť uzávěrky</string>
+    <string name="pref_camera_power_shutter_title">Spoušť závěrky</string>
 
     <string name="pref_camera_iso_entry_isosports">Sporty</string>
     <string name="pref_camera_iso_entry_isonight">Noc</string>
@@ -149,4 +149,21 @@
 
     <string name="pref_camera_flashmode_entry_redeye">Červené oči</string>
     <string name="pref_camera_flashmode_label_redeye">ČERVENÉ OČI</string>
+
+    <string name="pref_camera_beauty_mode_title">Režim krásy</string>
+
+    <string name="pref_camera_slow_shutter_title">Pomalá závěrka</string>
+    <string name="pref_camera_slow_shutter_entry_off">Vypnuto</string>
+    <string name="pref_camera_slow_shutter_entry_auto">Automaticky</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">1/2 sekundy</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 sekunda</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 sekundy</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 sekundy</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 sekund</string>
+
+    <string name="camera_menu_enhance_label">ZLEPŠIT</string>
+    <string name="camera_menu_slow_shutter_label">POMALÁ ZÁVĚRKA</string>
+    <string name="camera_menu_beauty_mode_label">ZKRÁŠLENÍ</string>
+    <string name="camera_menu_colorize_label">OBARVENÍ</string>
+    <string name="camera_menu_effects_label">EFEKTY</string>
 </resources>
