@@ -183,6 +183,8 @@ public class OnScreenIndicators {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_off);
         } else if (Parameters.SCENE_MODE_HDR.equals(value)) {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_hdr);
+        } else if ("asd".equals(value)) {
+            mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_asd);
         } else {
             mSceneIndicator.setImageResource(R.drawable.ic_indicator_sce_on);
         }

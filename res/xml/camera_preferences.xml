@@ -150,5 +150,14 @@
             camera:labelList="@array/pref_camera_slow_shutter_labels"
             camera:entries="@array/pref_camera_slow_shutter_entries"
             camera:entryValues="@array/pref_camera_slow_shutter_entryvalues" />
+    <IconListPreference
+            camera:key="pref_camera_asd"
+            camera:defaultValue="@string/pref_camera_asd_default"
+            camera:title="@string/pref_camera_scenemode_entry_asd"
+            camera:entries="@array/pref_switch_entries"
+            camera:icons="@array/pref_camera_asd_icons"
+            camera:largeIcons="@array/pref_camera_asd_icons"
+            camera:labelList="@array/pref_camera_asd_labels"
+            camera:entryValues="@array/pref_switch_entryvalues" />
 
 </PreferenceGroup>
