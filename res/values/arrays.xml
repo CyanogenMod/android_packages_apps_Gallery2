@@ -412,7 +412,6 @@
     <!-- Camera Preferences Scene Mode dialog box entries -->
     <string-array name="pref_camera_scenemode_entries" translatable="false">
         <item>@string/pref_camera_scenemode_entry_auto</item>
-        <item>@string/pref_camera_scenemode_entry_asd</item>
         <item>@string/pref_camera_scenemode_entry_action</item>
         <item>@string/pref_camera_scenemode_entry_antimotionblur</item>
         <item>@string/pref_camera_scenemode_entry_aqua</item>
@@ -482,7 +481,6 @@
 
     <string-array name="pref_camera_scenemode_entryvalues" translatable="false">
         <item>auto</item>
-        <item>asd</item>
         <item>action</item>
         <item>anti-motion-blur</item>
         <item>aqua</item>

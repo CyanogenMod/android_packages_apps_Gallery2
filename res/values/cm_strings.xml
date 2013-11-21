@@ -260,9 +260,13 @@
     <string name="pref_camera_slow_shutter_entry_4s">4 seconds</string>
     <string name="pref_camera_slow_shutter_entry_8s">8 seconds</string>
 
+    <!-- ASD -->
+    <string name="pref_camera_asd_default">@string/setting_off_value</string>
+
     <string name="camera_menu_enhance_label">ENHANCE</string>
     <string name="camera_menu_slow_shutter_label">SLOW SHUTTER</string>
     <string name="camera_menu_beauty_mode_label">BEAUTIFY</string>
     <string name="camera_menu_colorize_label">COLORIZE</string>
     <string name="camera_menu_effects_label">EFFECTS</string>
+    <string name="camera_menu_asd_label">SMART SCENE</string>
 </resources>
