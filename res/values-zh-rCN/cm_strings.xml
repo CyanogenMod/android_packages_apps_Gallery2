@@ -141,4 +141,18 @@
     <string name="pref_camera_focustime_entry_infinite">无限</string>
     <string name="pref_camera_flashmode_entry_redeye">红眼</string>
     <string name="pref_camera_flashmode_label_redeye">红眼</string>
+    <string name="pref_camera_beauty_mode_title">优雅模式</string>
+    <string name="pref_camera_slow_shutter_title">慢速快门</string>
+    <string name="pref_camera_slow_shutter_entry_off">关闭</string>
+    <string name="pref_camera_slow_shutter_entry_auto">自动</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">0.5 秒</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 秒</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 秒</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 秒</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 秒</string>
+    <string name="camera_menu_enhance_label">强化</string>
+    <string name="camera_menu_slow_shutter_label">慢速快门</string>
+    <string name="camera_menu_beauty_mode_label">优雅</string>
+    <string name="camera_menu_colorize_label">着色</string>
+    <string name="camera_menu_effects_label">效果</string>
 </resources>
