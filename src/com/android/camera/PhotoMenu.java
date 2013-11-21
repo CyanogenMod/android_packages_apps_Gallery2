@@ -92,6 +92,11 @@ public class PhotoMenu extends PieController
             item = makeSwitchItem(CameraSettings.KEY_SLOW_SHUTTER, true);
             enhance.addItem(item);
         }
+        // auto scene detection
+        if (group.findPreference(CameraSettings.KEY_ASD) != null) {
+            item = makeSwitchItem(CameraSettings.KEY_ASD, true);
+            enhance.addItem(item);
+        }
         // color effect
         final ListPreference colorPref = group.findPreference(CameraSettings.KEY_COLOR_EFFECT);
         if (colorPref != null) {
@@ -297,14 +302,21 @@ public class PhotoMenu extends PieController
             setPreference(CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO);
             setPreference(CameraSettings.KEY_BEAUTY_MODE, mSettingOff);
             setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
-        } else if (notSame(pref, CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO)) {
+            setPreference(CameraSettings.KEY_ASD, mSettingOff);
+        } else if (notSame(pref, CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO) ||
+                   notSame(pref, CameraSettings.KEY_ASD, mSettingOff)) {
             setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
             setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
+            if (!notSame(pref, CameraSettings.KEY_ASD, mSettingOff)) {
+                setPreference(CameraSettings.KEY_ASD, mSettingOff);
+            }
         } else if (notSame(pref, CameraSettings.KEY_BEAUTY_MODE, mSettingOff)) {
             setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
             setPreference(CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off");
         } else if (notSame(pref, CameraSettings.KEY_SLOW_SHUTTER, "slow-shutter-off")) {
             setPreference(CameraSettings.KEY_CAMERA_HDR, mSettingOff);
+            setPreference(CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO);
+            setPreference(CameraSettings.KEY_ASD, mSettingOff);
             setPreference(CameraSettings.KEY_BEAUTY_MODE, mSettingOff);
         }
         super.onSettingChanged(pref);

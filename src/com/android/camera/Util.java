@@ -90,6 +90,7 @@ public class Util {
     private static final String AUTO_WHITE_BALANCE_LOCK_SUPPORTED = "auto-whitebalance-lock-supported";
     private static final String VIDEO_SNAPSHOT_SUPPORTED = "video-snapshot-supported";
     public static final String SCENE_MODE_HDR = "hdr";
+    public static final String SCENE_MODE_ASD = "asd";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
@@ -115,6 +116,11 @@ public class Util {
     public static boolean isCameraHdrSupported(Parameters params) {
         List<String> supported = params.getSupportedSceneModes();
         return (supported != null) && supported.contains(SCENE_MODE_HDR);
+    }
+
+    public static boolean isAutoSceneDetectionSupported(Parameters params) {
+        List<String> supported = params.getSupportedSceneModes();
+        return (supported != null) && supported.contains(SCENE_MODE_ASD) && (params.get("asd-mode") != null);
     }
 
     public static boolean hasCameraKey() {
