@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.editors;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,12 +33,14 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.controller.Control;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
-import com.android.gallery3d.filtershow.presets.ImagePreset;
+import com.android.gallery3d.filtershow.pipeline.ImagePreset;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Base class for Editors Must contain a mImageShow and a top level view
@@ -52,6 +55,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     protected Button mFilterTitle;
     protected int mID;
     private final String LOGTAG = "Editor";
+    protected boolean mChangesGeometry = false;
     protected FilterRepresentation mLocalRepresentation = null;
     protected byte mShowParameter = SHOW_VALUE_UNDEFINED;
     private Button mButton;
@@ -92,12 +96,12 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         mEditTitle = editTitle;
         mFilterTitle = stateButton;
         mButton = editTitle;
-        setMenuIcon(true);
+        MasterImage.getImage().resetGeometryImages(false);
         setUtilityPanelUI(actionButton, editControl);
     }
 
     public boolean showsPopupIndicator() {
-        return true;
+        return false;
     }
 
     /**
@@ -114,21 +118,16 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
                 R.layout.filtershow_seekbar, (ViewGroup) editControl, true);
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
         mSeekBar.setOnSeekBarChangeListener(this);
-
-        if (showsSeekBar()) {
-            mSeekBar.setOnSeekBarChangeListener(this);
-            mSeekBar.setVisibility(View.VISIBLE);
-        } else {
-            mSeekBar.setVisibility(View.INVISIBLE);
+        mSeekBar.setVisibility(View.GONE);
+        if (context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT) {
+            if (showsSeekBar()) {
+               mSeekBar.setVisibility(View.VISIBLE);
+            }
         }
 
         if (mButton != null) {
-            if (showsPopupIndicator()) {
-                mButton.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0,
-                        R.drawable.filtershow_menu_marker, 0);
-            } else {
-                mButton.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
-            }
+            setMenuIcon(showsPopupIndicator());
         }
     }
 
@@ -141,7 +140,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     }
 
-    public void createEditor(Context context,FrameLayout frameLayout) {
+    public void createEditor(Context context, FrameLayout frameLayout) {
         mContext = context;
         mFrameLayout = frameLayout;
         mLocalRepresentation = null;
@@ -189,10 +188,6 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         return mImageShow;
     }
 
-    public void setImageLoader(ImageLoader imageLoader) {
-        mImageShow.setImageLoader(imageLoader);
-    }
-
     public void setVisibility(int visible) {
         mView.setVisibility(visible);
     }
@@ -202,7 +197,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
             ImagePreset preset = MasterImage.getImage().getPreset();
             FilterRepresentation filterRepresentation = MasterImage.getImage().getCurrentFilterRepresentation();
             mLocalRepresentation = preset.getFilterRepresentationCopyFrom(filterRepresentation);
-            if (mShowParameter == SHOW_VALUE_UNDEFINED) {
+            if (mShowParameter == SHOW_VALUE_UNDEFINED && filterRepresentation != null) {
                 boolean show = filterRepresentation.showParameterValue();
                 mShowParameter = show ? SHOW_VALUE_INT : SHOW_VALUE_OFF;
             }
@@ -211,12 +206,49 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         return mLocalRepresentation;
     }
 
+    /**
+     * Call this to update the preset in MasterImage with the current representation
+     * returned by getLocalRepresentation.  This causes the preview bitmap to be
+     * regenerated.
+     */
     public void commitLocalRepresentation() {
+        commitLocalRepresentation(getLocalRepresentation());
+    }
+
+    /**
+     * Call this to update the preset in MasterImage with a given representation.
+     * This causes the preview bitmap to be regenerated.
+     */
+    public void commitLocalRepresentation(FilterRepresentation rep) {
+        ArrayList<FilterRepresentation> filter = new ArrayList<FilterRepresentation>(1);
+        filter.add(rep);
+        commitLocalRepresentation(filter);
+    }
+
+    /**
+     * Call this to update the preset in MasterImage with a collection of FilterRepresentations.
+     * This causes the preview bitmap to be regenerated.
+     */
+    public void commitLocalRepresentation(Collection<FilterRepresentation> reps) {
         ImagePreset preset = MasterImage.getImage().getPreset();
-        preset.updateFilterRepresentation(getLocalRepresentation());
+        preset.updateFilterRepresentations(reps);
         if (mButton != null) {
             updateText();
         }
+        if (mChangesGeometry) {
+            // Regenerate both the filtered and the geometry-only bitmaps
+            MasterImage.getImage().resetGeometryImages(true);
+        }
+        // Regenerate the filtered bitmap.
+        MasterImage.getImage().invalidateFiltersOnly();
+        preset.fillImageStateAdapter(MasterImage.getImage().getState());
+    }
+
+    /**
+     * This is called in response to a click to apply and leave the editor.
+     */
+    public void finalApplyCalled() {
+        commitLocalRepresentation();
     }
 
     protected void updateText() {
@@ -245,7 +277,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     }
 
     public void openUtilityPanel(LinearLayout mAccessoryViewList) {
-        setMenuIcon(false);
+        setMenuIcon(showsPopupIndicator());
         if (mImageShow != null) {
             mImageShow.openUtilityPanel(mAccessoryViewList);
         }
@@ -253,7 +285,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     protected void setMenuIcon(boolean on) {
         mEditTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0, 0, on ? R.drawable.filtershow_menu_marker : 0, 0);
+                0, 0, on ? R.drawable.filtershow_menu_marker_rtl : 0, 0);
     }
 
     protected void createMenu(int[] strId, View button) {
@@ -269,6 +301,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     public Control[] getControls() {
         return null;
     }
+
     @Override
     public void onStartTrackingTouch(SeekBar arg0) {
 
@@ -291,7 +324,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     public void detach() {
         if (mImageShow != null) {
-            mImageShow.unselect();
+            mImageShow.detach();
         }
     }
 }

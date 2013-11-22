@@ -2,6 +2,7 @@ package com.android.gallery3d.filtershow.controller;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.cache.RenderingRequest;
-import com.android.gallery3d.filtershow.cache.RenderingRequestCaller;
+import com.android.gallery3d.filtershow.pipeline.RenderingRequest;
+import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
 import com.android.gallery3d.filtershow.editors.Editor;
 
 import java.util.Vector;
@@ -39,7 +40,9 @@ public class StyleChooser implements Control {
         mTopView.setVisibility(View.VISIBLE);
         int n = mParameter.getNumberOfStyles();
         mIconButton.clear();
-        LayoutParams lp = new LayoutParams(120, 120);
+        Resources res = context.getResources();
+        int dim = res.getDimensionPixelSize(R.dimen.draw_style_icon_dim);
+        LayoutParams lp = new LayoutParams(dim, dim);
         for (int i = 0; i < n; i++) {
             final ImageButton button = new ImageButton(context);
             button.setScaleType(ScaleType.CENTER_CROP);
@@ -54,10 +57,10 @@ public class StyleChooser implements Control {
                 }
             });
             mLinearLayout.addView(button);
-            mParameter.getIcon(i, new RenderingRequestCaller() {
+            mParameter.getIcon(i, new BitmapCaller() {
                 @Override
-                public void available(RenderingRequest request) {
-                    Bitmap bmap = request.getBitmap();
+                public void available(Bitmap bmap) {
+
                     if (bmap == null) {
                         return;
                     }

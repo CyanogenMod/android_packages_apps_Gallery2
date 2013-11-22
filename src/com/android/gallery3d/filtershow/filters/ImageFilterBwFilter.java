@@ -23,6 +23,7 @@ import android.graphics.Color;
 
 
 public class ImageFilterBwFilter extends SimpleImageFilter {
+    private static final String SERIALIZATION_NAME = "BWFILTER";
 
     public ImageFilterBwFilter() {
         mName = "BW Filter";
@@ -31,11 +32,12 @@ public class ImageFilterBwFilter extends SimpleImageFilter {
     public FilterRepresentation getDefaultRepresentation() {
         FilterBasicRepresentation representation = (FilterBasicRepresentation) super.getDefaultRepresentation();
         representation.setName("BW Filter");
+        representation.setSerializationName(SERIALIZATION_NAME);
+
         representation.setFilterClass(ImageFilterBwFilter.class);
         representation.setMaximum(180);
         representation.setMinimum(-180);
         representation.setTextId(R.string.bwfilter);
-        representation.setButtonId(R.id.bwfilterButton);
         representation.setSupportsPartialRendering(true);
         return representation;
     }

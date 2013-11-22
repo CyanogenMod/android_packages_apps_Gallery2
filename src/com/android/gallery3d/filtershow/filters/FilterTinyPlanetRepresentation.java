@@ -20,27 +20,34 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.EditorTinyPlanet;
 
 public class FilterTinyPlanetRepresentation extends FilterBasicRepresentation {
+    private static final String SERIALIZATION_NAME = "TINYPLANET";
     private static final String LOGTAG = "FilterTinyPlanetRepresentation";
+    private static final String SERIAL_ANGLE = "Angle";
     private float mAngle = 0;
 
     public FilterTinyPlanetRepresentation() {
         super("TinyPlanet", 0, 50, 100);
+        setSerializationName(SERIALIZATION_NAME);
         setShowParameterValue(true);
         setFilterClass(ImageFilterTinyPlanet.class);
-        setPriority(FilterRepresentation.TYPE_TINYPLANET);
+        setFilterType(FilterRepresentation.TYPE_TINYPLANET);
         setTextId(R.string.tinyplanet);
-        setButtonId(R.id.tinyplanetButton);
         setEditorId(EditorTinyPlanet.ID);
         setMinimum(1);
+        setSupportsPartialRendering(false);
     }
 
     @Override
-    public FilterRepresentation clone() throws CloneNotSupportedException {
-        FilterTinyPlanetRepresentation representation = (FilterTinyPlanetRepresentation) super
-                .clone();
-        representation.mAngle = mAngle;
-        representation.setZoom(getZoom());
+    public FilterRepresentation copy() {
+        FilterTinyPlanetRepresentation representation = new FilterTinyPlanetRepresentation();
+        copyAllParameters(representation);
         return representation;
+    }
+
+    @Override
+    protected void copyAllParameters(FilterRepresentation representation) {
+        super.copyAllParameters(representation);
+        representation.useParametersFrom(this);
     }
 
     @Override
@@ -70,5 +77,36 @@ public class FilterTinyPlanetRepresentation extends FilterBasicRepresentation {
     public boolean isNil() {
         // TinyPlanet always has an effect
         return false;
+    }
+
+    public boolean equals(FilterRepresentation representation) {
+        if (!super.equals(representation)) {
+            return false;
+        }
+        if (mAngle == ((FilterTinyPlanetRepresentation) representation).mAngle) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String[][] serializeRepresentation() {
+        String[][] ret = {
+                {SERIAL_NAME  , getName() },
+                {SERIAL_VALUE , Integer.toString(getValue())},
+                {SERIAL_ANGLE , Float.toString(mAngle)}};
+        return ret;
+    }
+
+    @Override
+    public void deSerializeRepresentation(String[][] rep) {
+        super.deSerializeRepresentation(rep);
+        for (int i = 0; i < rep.length; i++) {
+            if (SERIAL_VALUE.equals(rep[i][0])) {
+                setValue(Integer.parseInt(rep[i][1]));
+            } else if (SERIAL_ANGLE.equals(rep[i][0])) {
+                setAngle(Float.parseFloat(rep[i][1]));
+            }
+        }
     }
 }

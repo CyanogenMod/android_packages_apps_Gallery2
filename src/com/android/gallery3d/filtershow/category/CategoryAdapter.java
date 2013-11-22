@@ -17,19 +17,16 @@
 package com.android.gallery3d.filtershow.category;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
-import com.android.gallery3d.filtershow.filters.ImageFilterTinyPlanet;
-import com.android.gallery3d.filtershow.imageshow.MasterImage;
-import com.android.gallery3d.filtershow.presets.ImagePreset;
-import com.android.gallery3d.filtershow.ui.FilterIconButton;
+import com.android.gallery3d.filtershow.filters.FilterTinyPlanetRepresentation;
+import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
 public class CategoryAdapter extends ArrayAdapter<Action> {
 
@@ -37,9 +34,11 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
     private int mItemHeight;
     private View mContainer;
     private int mItemWidth = ListView.LayoutParams.MATCH_PARENT;
-    private boolean mUseFilterIconButton = false;
     private int mSelectedPosition;
     int mCategory;
+    private int mOrientation;
+    private boolean mShowAddButton = false;
+    private String mAddButtonText;
 
     public CategoryAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -48,6 +47,15 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
 
     public CategoryAdapter(Context context) {
         this(context, 0);
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < getCount(); i++) {
+            Action action = getItem(i);
+            action.clearBitmap();
+        }
+        super.clear();
     }
 
     public void setItemHeight(int height) {
@@ -66,48 +74,45 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
 
     public void initializeSelection(int category) {
         mCategory = category;
-        if (category == MainPanel.LOOKS || category == MainPanel.BORDERS) {
-            ImagePreset preset = MasterImage.getImage().getPreset();
-            if (preset != null) {
-                for (int i = 0; i < getCount(); i++) {
-                    if (preset.historyName().equals(getItem(i).getRepresentation().getName())) {
-                        mSelectedPosition = i;
-                    }
-                }
-            }
-        } else {
-            mSelectedPosition = -1;
+        mSelectedPosition = -1;
+        if (category == MainPanel.LOOKS) {
+            mSelectedPosition = 0;
+            mAddButtonText = getContext().getString(R.string.filtershow_add_button_looks);
+        }
+        if (category == MainPanel.BORDERS) {
+            mSelectedPosition = 0;
+        }
+        if (category == MainPanel.VERSIONS) {
+            mAddButtonText = getContext().getString(R.string.filtershow_add_button_versions);
         }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (mUseFilterIconButton) {
-            if (convertView == null) {
-                LayoutInflater inflater =
-                        (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.filtericonbutton, parent, false);
-            }
-            FilterIconButton view = (FilterIconButton) convertView;
-            Action action = getItem(position);
-            view.setAction(action);
-            view.setup(action.getName(), null, this);
-            view.setLayoutParams(
-                    new ListView.LayoutParams(mItemWidth, mItemHeight));
-            view.setTag(position);
-            if (mCategory == MainPanel.LOOKS || mCategory == MainPanel.BORDERS) {
-                view.setBackgroundResource(0);
-            }
-            return view;
-        }
         if (convertView == null) {
             convertView = new CategoryView(getContext());
         }
         CategoryView view = (CategoryView) convertView;
-        view.setAction(getItem(position), this);
+        view.setOrientation(mOrientation);
+        Action action = getItem(position);
+        view.setAction(action, this);
+        int width = mItemWidth;
+        int height = mItemHeight;
+        if (action.getType() == Action.SPACER) {
+            if (mOrientation == CategoryView.HORIZONTAL) {
+                width = width / 2;
+            } else {
+                height = height / 2;
+            }
+        }
+        if (action.getType() == Action.ADD_ACTION
+                && mOrientation == CategoryView.VERTICAL) {
+            height = height / 2;
+        }
         view.setLayoutParams(
-                new ListView.LayoutParams(mItemWidth, mItemHeight));
+                new ListView.LayoutParams(width, height));
         view.setTag(position);
+        view.invalidate();
         return view;
     }
 
@@ -146,20 +151,12 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         notifyDataSetChanged();
     }
 
-    public void setUseFilterIconButton(boolean useFilterIconButton) {
-        mUseFilterIconButton = useFilterIconButton;
-    }
-
-    public boolean isUseFilterIconButton() {
-        return mUseFilterIconButton;
-    }
-
     public FilterRepresentation getTinyPlanet() {
         for (int i = 0; i < getCount(); i++) {
             Action action = getItem(i);
             if (action.getRepresentation() != null
-                    && action.getRepresentation().getFilterClass()
-                    == ImageFilterTinyPlanet.class) {
+                    && action.getRepresentation()
+                    instanceof FilterTinyPlanetRepresentation) {
                 return action.getRepresentation();
             }
         }
@@ -170,11 +167,78 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         for (int i = 0; i < getCount(); i++) {
             Action action = getItem(i);
             if (action.getRepresentation() != null
-                    && action.getRepresentation().getFilterClass()
-                    == ImageFilterTinyPlanet.class) {
-                remove(action);
+                    && action.getRepresentation()
+                    instanceof FilterTinyPlanetRepresentation) {
+                super.remove(action);
                 return;
             }
         }
+    }
+
+    @Override
+    public void remove(Action action) {
+        if (!(mCategory == MainPanel.VERSIONS
+                || mCategory == MainPanel.LOOKS)) {
+            return;
+        }
+        super.remove(action);
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+        if (mCategory == MainPanel.LOOKS) {
+            activity.removeLook(action);
+        } else if (mCategory == MainPanel.VERSIONS) {
+            activity.removeVersion(action);
+        }
+    }
+
+    public void setOrientation(int orientation) {
+        mOrientation = orientation;
+    }
+
+    public void reflectImagePreset(ImagePreset preset) {
+        if (preset == null) {
+            return;
+        }
+        int selected = 0; // if nothing found, select "none" (first element)
+        FilterRepresentation rep = null;
+        if (mCategory == MainPanel.LOOKS) {
+            int pos = preset.getPositionForType(FilterRepresentation.TYPE_FX);
+            if (pos != -1) {
+                rep = preset.getFilterRepresentation(pos);
+            }
+        } else if (mCategory == MainPanel.BORDERS) {
+            int pos = preset.getPositionForType(FilterRepresentation.TYPE_BORDER);
+            if (pos != -1) {
+                rep = preset.getFilterRepresentation(pos);
+            }
+        }
+        if (rep != null) {
+            for (int i = 0; i < getCount(); i++) {
+                FilterRepresentation itemRep = getItem(i).getRepresentation();
+                if (itemRep == null) {
+                    continue;
+                }
+                if (rep.getName().equalsIgnoreCase(
+                        itemRep.getName())) {
+                    selected = i;
+                    break;
+                }
+            }
+        }
+        if (mSelectedPosition != selected) {
+            mSelectedPosition = selected;
+            this.notifyDataSetChanged();
+        }
+    }
+
+    public boolean showAddButton() {
+        return mShowAddButton;
+    }
+
+    public void setShowAddButton(boolean showAddButton) {
+        mShowAddButton = showAddButton;
+    }
+
+    public String getAddButtonText() {
+        return mAddButtonText;
     }
 }

@@ -19,23 +19,30 @@
               xmlns:custom="http://schemas.android.com/apk/res/com.android.gallery3d"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="@color/filtershow_categoryview_background">
 
     <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:background="@color/background_main_toolbar" >
+            android:layout_weight="1"
+            android:scrollbars="none" >
 
         <com.android.gallery3d.filtershow.category.CategoryTrack
                 android:id="@+id/listItems"
                 android:layout_width="match_parent"
-                android:layout_height="128dip"
-                custom:iconSize="84dip"
+                android:layout_height="@dimen/category_panel_height"
+                custom:iconSize="@dimen/category_panel_icon_size"
                 android:divider="@android:color/transparent"
                 android:dividerPadding="8dip"
                 />
 
     </HorizontalScrollView>
+
+    <com.android.gallery3d.filtershow.category.IconView
+            android:id="@+id/addButton"
+            android:layout_width="@dimen/category_panel_height"
+            android:layout_height="@dimen/category_panel_height"
+            android:src="@drawable/filtershow_add"/>
 
 </LinearLayout>

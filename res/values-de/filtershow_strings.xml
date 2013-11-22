@@ -21,13 +21,14 @@
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"Hintergrund wird festgelegt..."</string>
-    <string name="download_failure" msgid="5923323939788582895">"Foto konnte nicht heruntergeladen werden. Netzwerk ist nicht verfügbar."</string>
     <string name="original" msgid="3524493791230430897">"Original"</string>
     <string name="borders" msgid="2067345080568684614">"Rahmen"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Rückgängig machen"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Wiederholen"</string>
-    <string name="show_imagestate_panel" msgid="281932769701043015">"Angewendete Effekte anzeigen"</string>
-    <string name="hide_imagestate_panel" msgid="7207643485811695257">"Angewendete Effekte ausblenden"</string>
+    <string name="show_history_panel" msgid="7785810372502120090">"Verlauf anzeigen"</string>
+    <string name="hide_history_panel" msgid="2082672248771133871">"Verlauf ausblenden"</string>
+    <string name="show_imagestate_panel" msgid="7132294085840948243">"Bildstatus anzeigen"</string>
+    <string name="hide_imagestate_panel" msgid="1135313661068111161">"Bildstatus ausblenden"</string>
     <string name="menu_settings" msgid="6428291655769260831">"Einstellungen"</string>
     <string name="unsaved" msgid="8704442449002374375">"Dieses Bild weist nicht gespeicherte Änderungen auf."</string>
     <string name="save_before_exit" msgid="2680660633675916712">"Möchten Sie vor dem Schließen speichern?"</string>
@@ -73,7 +74,7 @@
     <string name="rotate" msgid="2796802553793795371">"Drehen"</string>
     <string name="mirror" msgid="5482518108154883096">"Spiegeln"</string>
     <string name="negative" msgid="6998313764388022201">"Negativ"</string>
-    <string name="none" msgid="6633966646410296520">"Kein Filter"</string>
+    <string name="none" msgid="6633966646410296520">"Keines"</string>
     <string name="edge" msgid="7036064886242147551">"Kanten"</string>
     <string name="kmeans" msgid="1630263230946107457">"Warhol"</string>
     <string name="downsample" msgid="3552938534146980104">"Verkleinern"</string>
@@ -92,6 +93,4 @@
     <string name="color_pick_title" msgid="6195567431995308876">"Farbe auswählen"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"Größe auswählen"</string>
     <string name="draw_size_accept" msgid="6781529716526190028">"OK"</string>
-    <string name="state_panel_original" msgid="9069584409934164419">"Original"</string>
-    <string name="state_panel_result" msgid="318640531123298676">"Ergebnis"</string>
 </resources>

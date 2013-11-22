@@ -17,4 +17,19 @@
 <resources>
     <!-- Specify the screen orientation -->
     <bool name="only_use_portrait">false</bool>
+
+    <!-- Category Panel Height -->
+    <dimen name="category_panel_height">106dip</dimen>
+
+    <!-- Category Panel Icon Size -->
+    <dimen name="category_panel_icon_size">84dip</dimen>
+
+    <!-- Category Panel Text Size -->
+    <dimen name="category_panel_text_size">14dip</dimen>
+
+    <!-- Category Panel Text Size -->
+    <dimen name="category_panel_margin">4dip</dimen>
+
+    <!-- draw check UI size  -->
+    <dimen name="draw_ui_width">350dip</dimen>
 </resources>

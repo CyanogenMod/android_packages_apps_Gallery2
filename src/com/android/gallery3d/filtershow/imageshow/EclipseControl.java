@@ -22,8 +22,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.util.Log;
 
 import com.android.gallery3d.R;
 
@@ -33,7 +35,7 @@ public class EclipseControl {
     private float mRadiusX = 200;
     private float mRadiusY = 300;
     private static int MIN_TOUCH_DIST = 80;// should be a resource & in dips
-
+    private static String LOGTAG = "EclipseControl";
     private float[] handlex = new float[9];
     private float[] handley = new float[9];
     private int mSliderColor;
@@ -56,6 +58,7 @@ public class EclipseControl {
     public final static int HAN_SW = 4;
     public final static int HAN_WEST = 5;
     public final static int HAN_NW = 6;
+    private Rect mImageBounds;
 
     public EclipseControl(Context context) {
         mSliderColor = Color.WHITE;
@@ -96,13 +99,18 @@ public class EclipseControl {
         return -1;
     }
 
-    public void setScrToImageMatrix(Matrix scrToImg) {
+    public void setScrImageInfo(Matrix scrToImg, Rect imageBounds) {
         mScrToImg = scrToImg;
+        mImageBounds = new Rect(imageBounds);
     }
 
-    public void actionDown(float x, float y, Oval oval) {
-        float[] point = new float[] {
-                x, y };
+    private boolean centerIsOutside(float x1, float y1) {
+        return (!mImageBounds.contains((int) x1, (int) y1));
+    }
+
+    public void actionDown(float x, float y, Oval oval)  {
+        float[] point = new float[]{
+                x, y};
         mScrToImg.mapPoints(point);
         mDownX = point[0];
         mDownY = point[1];
@@ -112,9 +120,10 @@ public class EclipseControl {
         mDownRadiusY = oval.getRadiusY();
     }
 
+
     public void actionMove(int handle, float x, float y, Oval oval) {
-        float[] point = new float[] {
-                x, y };
+        float[] point = new float[]{
+                x, y};
         mScrToImg.mapPoints(point);
         x = point[0];
         y = point[1];
@@ -130,7 +139,10 @@ public class EclipseControl {
             case HAN_CENTER:
                 float ctrdx = mDownX - mDownCenterX;
                 float ctrdy = mDownY - mDownCenterY;
-                oval.setCenter(x - ctrdx, y - ctrdy);
+                if (centerIsOutside(x - ctrdx, y - ctrdy)) {
+                    break;
+                }
+                oval.setCenter((x - ctrdx), (y - ctrdy));
                 // setRepresentation(mVignetteRep);
                 break;
             case HAN_NORTH:
@@ -152,7 +164,7 @@ public class EclipseControl {
                     oval.setRadiusX(Math.abs(y - oval.getCenterX() + sign * raddy));
                 } else {
                     float raddx = mDownRadiusX - Math.abs(mDownX - mDownCenterX);
-                    oval.setRadiusX(Math.abs(x - oval.getCenterX() - sign * raddx));
+                    oval.setRadiusX(Math.abs(x - oval.getCenterX() -  sign * raddx));
                 }
                 break;
             case HAN_SE:
@@ -170,7 +182,7 @@ public class EclipseControl {
                 float dx = x - oval.getCenterX();
                 float dy = y - oval.getCenterY();
                 float nr = Math.abs(Math.abs(dx) + Math.abs(dy) - downRad);
-                oval.setRadius(rx * nr / r, ry * nr / r);
+                oval.setRadius((rx * nr / r), (ry * nr / r));
 
                 break;
         }
@@ -185,10 +197,10 @@ public class EclipseControl {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLUE);
-        int[] colors3 = new int[] {
-                Color.GRAY, Color.LTGRAY, 0x66000000, 0 };
-        RadialGradient g = new RadialGradient(x, y, mCenterDotSize, colors3, new float[] {
-                0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
+        int[] colors3 = new int[]{
+                Color.GRAY, Color.LTGRAY, 0x66000000, 0};
+        RadialGradient g = new RadialGradient(x, y, mCenterDotSize, colors3, new float[]{
+                0, .3f, .31f, 1}, Shader.TileMode.CLAMP);
         paint.setShader(g);
         canvas.drawCircle(x, y, mCenterDotSize, paint);
     }
@@ -202,10 +214,10 @@ public class EclipseControl {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLUE);
-        int[] colors3 = new int[] {
-                mSliderColor, mSliderColor, 0x66000000, 0 };
-        RadialGradient g = new RadialGradient(x, y, mCenterDotSize, colors3, new float[] {
-                0, .3f, .31f, 1 }, Shader.TileMode.CLAMP);
+        int[] colors3 = new int[]{
+                mSliderColor, mSliderColor, 0x66000000, 0};
+        RadialGradient g = new RadialGradient(x, y, mCenterDotSize, colors3, new float[]{
+                0, .3f, .31f, 1}, Shader.TileMode.CLAMP);
         paint.setShader(g);
         canvas.drawCircle(x, y, mCenterDotSize, paint);
     }

@@ -21,6 +21,7 @@
 
         <View
             android:id="@+id/blocker"
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/switcher_size"
             android:layout_gravity="bottom" />
@@ -58,11 +59,12 @@
             android:scaleType="center"
             android:src="@drawable/btn_new_shutter" />
 
-        <View
+        <ImageView
             android:id="@+id/preview_thumb"
             android:visibility="invisible"
             android:layout_width="@dimen/capture_size"
             android:layout_height="@dimen/capture_size"
+            android:scaleType="centerInside"
             android:layout_gravity="top|right" />
 
 </com.android.camera.ui.CameraControls>

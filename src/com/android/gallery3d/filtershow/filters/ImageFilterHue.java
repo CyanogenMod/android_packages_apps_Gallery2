@@ -22,6 +22,7 @@ import com.android.gallery3d.filtershow.editors.BasicEditor;
 import android.graphics.Bitmap;
 
 public class ImageFilterHue extends SimpleImageFilter {
+    private static final String SERIALIZATION_NAME = "HUE";
     private ColorSpaceMatrix cmatrix = null;
 
     public ImageFilterHue() {
@@ -33,11 +34,11 @@ public class ImageFilterHue extends SimpleImageFilter {
         FilterBasicRepresentation representation =
                 (FilterBasicRepresentation) super.getDefaultRepresentation();
         representation.setName("Hue");
+        representation.setSerializationName(SERIALIZATION_NAME);
         representation.setFilterClass(ImageFilterHue.class);
         representation.setMinimum(-180);
         representation.setMaximum(180);
         representation.setTextId(R.string.hue);
-        representation.setButtonId(R.id.hueButton);
         representation.setEditorId(BasicEditor.ID);
         representation.setSupportsPartialRendering(true);
         return representation;

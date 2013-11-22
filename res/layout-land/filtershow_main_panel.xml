@@ -23,13 +23,6 @@
               android:animateLayoutChanges="true"
               android:visibility="visible" >
 
-    <FrameLayout android:id="@+id/state_panel_container"
-                 android:layout_width="match_parent"
-                 android:layout_height="0dip"
-                 android:visibility="visible"
-                 android:layout_gravity="top"
-                 android:layout_weight="1" />
-
     <FrameLayout android:id="@+id/category_panel_container"
                  android:layout_width="match_parent"
                  android:layout_height="0dip"
@@ -94,5 +87,10 @@
         </LinearLayout>
 
     </com.android.gallery3d.filtershow.CenteredLinearLayout>
+
+    <View
+            android:background="@color/toolbar_separation_line"
+            android:layout_height="1dip"
+            android:layout_width="match_parent"/>
 
 </LinearLayout>

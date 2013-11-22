@@ -39,6 +39,7 @@
     <item type="id" name="imageCurves" />
     <item type="id" name="imageZoom" />
     <item type="id" name="editorDraw" />
+    <item type="id" name="editorColorBorder" />
     <item type="id" name="editorRedEye" />
     <item type="id" name="imageOnlyEditor" />
     <item type="id" name="vignetteEditor" />
@@ -47,4 +48,6 @@
     <item type="id" name="editorRotate" />
     <item type="id" name="editorStraighten" />
     <item type="id" name="editorParametric" />
+    <item type="id" name="editorGrad" />
+    <item type="id" name="editorChanSat" />
 </resources>

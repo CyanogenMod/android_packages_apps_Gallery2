@@ -23,7 +23,7 @@ import android.widget.FrameLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.filters.FilterCurvesRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
-import com.android.gallery3d.filtershow.ui.ImageCurves;
+import com.android.gallery3d.filtershow.imageshow.ImageCurves;
 
 public class EditorCurves extends Editor {
     public static final int ID = R.id.imageCurves;
@@ -31,6 +31,17 @@ public class EditorCurves extends Editor {
 
     public EditorCurves() {
         super(ID);
+        int k =R.menu.filtershow_menu_curves;
+    }
+
+    @Override
+    protected void updateText() {
+
+    }
+
+    @Override
+    public boolean showsPopupIndicator() {
+        return true;
     }
 
     @Override
@@ -48,6 +59,11 @@ public class EditorCurves extends Editor {
             FilterCurvesRepresentation drawRep = (FilterCurvesRepresentation) rep;
             mImageCurves.setFilterDrawRepresentation(drawRep);
         }
+    }
+    @Override
+    public void setUtilityPanelUI(View actionButton, View editControl) {
+        super.setUtilityPanelUI(actionButton,editControl);
+        setMenuIcon(true);
     }
 
     @Override

@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Exif {
-    private static final String TAG = "CameraExif";
+    private static final String TAG = "GalleryExif";
 
-    // Returns the degrees in clockwise. Values are 0, 90, 180, or 270.
+    /**
+     * Returns the degrees in clockwise. Values are 0, 90, 180, or 270.
+     */
     public static int getOrientation(InputStream is) {
         if (is == null) {
             return 0;
@@ -44,5 +46,43 @@ public class Exif {
             Log.w(TAG, "Failed to read EXIF orientation", e);
             return 0;
         }
+    }
+
+    /**
+     * Returns an exif interface instance for the given JPEG image.
+     *
+     * @param jpegData a valid JPEG image containing EXIF data
+     */
+    public static ExifInterface getExif(byte[] jpegData) {
+        ExifInterface exif = new ExifInterface();
+        try {
+            exif.readExif(jpegData);
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to read EXIF data", e);
+        }
+        return exif;
+    }
+
+    /**
+     * Returns the degrees in clockwise. Values are 0, 90, 180, or 270.
+     */
+    public static int getOrientation(ExifInterface exif) {
+        Integer val = exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
+        if (val == null) {
+            return 0;
+        } else {
+            return ExifInterface.getRotationForOrientationValue(val.shortValue());
+        }
+    }
+
+    /**
+     * See {@link #getOrientation(byte[])}, but using the picture bytes instead.
+     */
+    public static int getOrientation(byte[] jpegData) {
+        if (jpegData == null)
+            return 0;
+
+        ExifInterface exif = getExif(jpegData);
+        return getOrientation(exif);
     }
 }

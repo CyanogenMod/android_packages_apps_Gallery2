@@ -43,7 +43,7 @@ public class BasicSlider implements Control {
         LinearLayout lp = (LinearLayout) inflater.inflate(
                 R.layout.filtershow_seekbar, container, true);
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
-
+        mSeekBar.setVisibility(View.VISIBLE);
         updateUI();
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -84,5 +84,4 @@ public class BasicSlider implements Control {
         mSeekBar.setMax(mParameter.getMaximum() - mParameter.getMinimum());
         mSeekBar.setProgress(mParameter.getValue() - mParameter.getMinimum());
     }
-
 }

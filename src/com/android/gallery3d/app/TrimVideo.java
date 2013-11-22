@@ -197,6 +197,8 @@ public class TrimVideo extends Activity implements
             mTrimEndTime = duration;
         }
         mController.setTimes(mVideoPosition, duration, mTrimStartTime, mTrimEndTime);
+        // Enable save if there's modifications
+        mSaveVideoTextView.setEnabled(isModified());
         return mVideoPosition;
     }
 
@@ -307,8 +309,6 @@ public class TrimVideo extends Activity implements
         mTrimStartTime = start;
         mTrimEndTime = end;
         setProgress();
-        // Enable save if there's modifications
-        mSaveVideoTextView.setEnabled(isModified());
     }
 
     @Override

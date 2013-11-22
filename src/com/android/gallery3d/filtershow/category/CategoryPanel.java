@@ -17,23 +17,27 @@
 package com.android.gallery3d.filtershow.category;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 
-public class CategoryPanel extends Fragment {
+public class CategoryPanel extends Fragment implements View.OnClickListener {
 
     public static final String FRAGMENT_TAG = "CategoryPanel";
     private static final String PARAMETER_TAG = "currentPanel";
 
     private int mCurrentAdapter = MainPanel.LOOKS;
     private CategoryAdapter mAdapter;
+    private IconView mAddButton;
 
     public void setAdapter(int value) {
         mCurrentAdapter = value;
@@ -45,30 +49,48 @@ public class CategoryPanel extends Fragment {
         loadAdapter(mCurrentAdapter);
     }
 
-    private void loadAdapter(int adapter) {
+    public void loadAdapter(int adapter) {
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         switch (adapter) {
             case MainPanel.LOOKS: {
                 mAdapter = activity.getCategoryLooksAdapter();
-                mAdapter.initializeSelection(MainPanel.LOOKS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.LOOKS);
+                }
+                activity.updateCategories();
                 break;
             }
             case MainPanel.BORDERS: {
                 mAdapter = activity.getCategoryBordersAdapter();
-                mAdapter.initializeSelection(MainPanel.BORDERS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.BORDERS);
+                }
+                activity.updateCategories();
                 break;
             }
             case MainPanel.GEOMETRY: {
                 mAdapter = activity.getCategoryGeometryAdapter();
-                mAdapter.initializeSelection(MainPanel.GEOMETRY);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.GEOMETRY);
+                }
                 break;
             }
             case MainPanel.FILTERS: {
                 mAdapter = activity.getCategoryFiltersAdapter();
-                mAdapter.initializeSelection(MainPanel.FILTERS);
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.FILTERS);
+                }
+                break;
+            }
+            case MainPanel.VERSIONS: {
+                mAdapter = activity.getCategoryVersionsAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.VERSIONS);
+                }
                 break;
             }
         }
+        updateAddButtonVisibility();
     }
 
     @Override
@@ -92,15 +114,47 @@ public class CategoryPanel extends Fragment {
         View panelView = main.findViewById(R.id.listItems);
         if (panelView instanceof CategoryTrack) {
             CategoryTrack panel = (CategoryTrack) panelView;
-            mAdapter.setUseFilterIconButton(true);
-            panel.setAdapter(mAdapter);
-            mAdapter.setContainer(panel);
-        } else {
+            if (mAdapter != null) {
+                mAdapter.setOrientation(CategoryView.HORIZONTAL);
+                panel.setAdapter(mAdapter);
+                mAdapter.setContainer(panel);
+            }
+        } else if (mAdapter != null) {
             ListView panel = (ListView) main.findViewById(R.id.listItems);
             panel.setAdapter(mAdapter);
             mAdapter.setContainer(panel);
         }
+
+        mAddButton = (IconView) main.findViewById(R.id.addButton);
+        if (mAddButton != null) {
+            mAddButton.setOnClickListener(this);
+            updateAddButtonVisibility();
+        }
         return main;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addButton:
+                FilterShowActivity activity = (FilterShowActivity) getActivity();
+                activity.addCurrentVersion();
+                break;
+        }
+    }
+
+    public void updateAddButtonVisibility() {
+        if (mAddButton == null) {
+            return;
+        }
+        FilterShowActivity activity = (FilterShowActivity) getActivity();
+        if (activity.isShowingImageStatePanel() && mAdapter.showAddButton()) {
+            mAddButton.setVisibility(View.VISIBLE);
+            if (mAdapter != null) {
+                mAddButton.setText(mAdapter.getAddButtonText());
+            }
+        } else {
+            mAddButton.setVisibility(View.GONE);
+        }
+    }
 }

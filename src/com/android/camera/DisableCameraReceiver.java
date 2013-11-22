@@ -28,7 +28,7 @@ import android.util.Log;
 // receiver runs when BOOT_COMPLETED intent is received. After running once
 // this receiver will be disabled, so it will not run again.
 public class DisableCameraReceiver extends BroadcastReceiver {
-    private static final String TAG = "DisableCameraReceiver";
+    private static final String TAG = "G:DisableCameraReceiver";
     private static final boolean CHECK_BACK_CAMERA_ONLY = true;
     private static final String ACTIVITIES[] = {
         "com.android.camera.CameraLauncher",

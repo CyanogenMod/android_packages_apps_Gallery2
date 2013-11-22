@@ -18,8 +18,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainView"
-    android:background="@drawable/filtershow_tiled_background">
+    android:id="@+id/mainView">
 
     <LinearLayout
         android:id="@+id/mainPanel"

@@ -24,7 +24,7 @@ import android.mtp.MtpObjectInfo;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-import com.android.camera.Exif;
+import com.android.gallery3d.data.Exif;
 import com.android.photos.data.GalleryBitmapPool;
 
 public class MtpBitmapFetch {

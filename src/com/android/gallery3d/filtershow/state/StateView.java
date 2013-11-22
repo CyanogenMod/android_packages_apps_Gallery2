@@ -19,17 +19,17 @@ package com.android.gallery3d.filtershow.state;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.category.SwipableView;
+import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
+import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
-public class StateView extends View {
+public class StateView extends View implements SwipableView {
 
     private static final String LOGTAG = "StateView";
     private Path mPath = new Path();
@@ -51,6 +51,10 @@ public class StateView extends View {
     private static int sMargin = 16;
     private static int sArrowHeight = 16;
     private static int sArrowWidth = 8;
+    private float mStartTouchX = 0;
+    private float mStartTouchY = 0;
+    private float mDeleteSlope = 20;
+
     private int mOrientation = LinearLayout.VERTICAL;
     private int mDirection = DOWN;
     private boolean mDuplicateButton;
@@ -102,24 +106,6 @@ public class StateView extends View {
             mDuplicateButton = false;
         }
         invalidate();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            ViewParent parent = getParent();
-            if (parent instanceof PanelTrack) {
-                ((PanelTrack) getParent()).onTouch(event, this);
-            }
-            if (mType == BEGIN) {
-                MasterImage.getImage().setShowsOriginal(true);
-            }
-        }
-        if (event.getActionMasked() == MotionEvent.ACTION_UP
-                || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            MasterImage.getImage().setShowsOriginal(false);
-        }
-        return true;
     }
 
     public void drawText(Canvas canvas) {
@@ -180,22 +166,42 @@ public class StateView extends View {
     }
 
     private void drawHorizontalPath(float w, float h, float r, float d) {
-        mPath.moveTo(0, 0);
-        if (mType == END) {
-            mPath.lineTo(w, 0);
+        if (this.getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            mPath.moveTo(w, 0);
+            if (mType == END) {
+                mPath.lineTo(0, 0);
+                mPath.lineTo(0, h);
+            } else {
+                mPath.lineTo(d, 0);
+                mPath.lineTo(d, r);
+                mPath.lineTo(0, r + d);
+                mPath.lineTo(d, r + d + r);
+                mPath.lineTo(d, h);
+            }
             mPath.lineTo(w, h);
+            if (mType != BEGIN) {
+                mPath.lineTo(w, r + d + r);
+                mPath.lineTo(w - d, r + d);
+                mPath.lineTo(w, r);
+            }
         } else {
-            mPath.lineTo(w - d, 0);
-            mPath.lineTo(w - d, r);
-            mPath.lineTo(w, r + d);
-            mPath.lineTo(w - d, r + d + r);
-            mPath.lineTo(w - d, h);
-        }
-        mPath.lineTo(0, h);
-        if (mType != BEGIN) {
-            mPath.lineTo(0, r + d + r);
-            mPath.lineTo(d, r + d);
-            mPath.lineTo(0, r);
+            mPath.moveTo(0, 0);
+            if (mType == END) {
+                mPath.lineTo(w, 0);
+                mPath.lineTo(w, h);
+            } else {
+                mPath.lineTo(w - d, 0);
+                mPath.lineTo(w - d, r);
+                mPath.lineTo(w, r + d);
+                mPath.lineTo(w - d, r + d + r);
+                mPath.lineTo(w - d, h);
+            }
+            mPath.lineTo(0, h);
+            if (mType != BEGIN) {
+                mPath.lineTo(0, r + d + r);
+                mPath.lineTo(d, r + d);
+                mPath.lineTo(0, r);
+            }
         }
         mPath.close();
     }
@@ -287,5 +293,55 @@ public class StateView extends View {
 
     public boolean isDraggable() {
         return mState.isDraggable();
+    }
+
+    @Override
+    public void delete() {
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+        FilterRepresentation representation = getState().getFilterRepresentation();
+        activity.removeFilterRepresentation(representation);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean ret = super.onTouchEvent(event);
+        FilterShowActivity activity = (FilterShowActivity) getContext();
+
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            activity.startTouchAnimation(this, event.getX(), event.getY());
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            mStartTouchY = event.getY();
+            mStartTouchX = event.getX();
+            if (mType == BEGIN) {
+                MasterImage.getImage().setShowsOriginal(true);
+            }
+        }
+        if (event.getActionMasked() == MotionEvent.ACTION_UP
+            || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+            setTranslationX(0);
+            setTranslationY(0);
+            MasterImage.getImage().setShowsOriginal(false);
+            if (mType != BEGIN && event.getActionMasked() == MotionEvent.ACTION_UP) {
+                setSelected(true);
+                FilterRepresentation representation = getState().getFilterRepresentation();
+                MasterImage image = MasterImage.getImage();
+                ImagePreset preset = image != null ? image.getCurrentPreset() : null;
+                if (getTranslationY() == 0
+                        && image != null && preset != null
+                        && representation != image.getCurrentFilterRepresentation()
+                        && preset.getRepresentation(representation) != null) {
+                    activity.showRepresentation(representation);
+                    setSelected(false);
+                }
+            }
+        }
+        if (mType != BEGIN && event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            float delta = event.getY() - mStartTouchY;
+            if (Math.abs(delta) > mDeleteSlope) {
+                activity.setHandlesSwipeForView(this, mStartTouchX, mStartTouchY);
+            }
+        }
+        return true;
     }
 }

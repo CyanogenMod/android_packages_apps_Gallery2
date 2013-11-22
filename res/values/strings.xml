@@ -345,7 +345,7 @@
     <string name="ffx_original">Original</string>
     <!-- String for brown-colored old-fashion looking filter (filtershow_fx_0000_vintage) [CHAR LIMIT=10] -->
     <string name="ffx_vintage">Vintage</string>
-    <!-- String for filter that brightens colors (filtershow_fx_0001_instant) [CHAR LIMIT=10] -->
+    <!-- String for filter that brightens colors like instant cameras(filtershow_fx_0001_instant) [CHAR LIMIT=10] -->
     <string name="ffx_instant">Instant</string>
     <!-- String for filter that washes out colors (filtershow_fx_0002_bleach) [CHAR LIMIT=10] -->
     <string name="ffx_bleach">Bleach</string>
@@ -492,9 +492,6 @@
     <!-- The title of the menu item which display online help in browser. [CHAR LIMIT=20]-->
     <string name="help">Help</string>
 
-    <!-- Web address for gallery help.  DO NOT TRANSLATE -->
-    <string name="help_url_gallery_main" translatable="false"></string>
-
     <!-- The tilte of a dialog showing there is no external storage. [CHAR LIMIT=20] -->
     <string name="no_external_storage_title">No Storage</string>
 
@@ -571,9 +568,6 @@
 
     <!-- label for the icon meaning 'show me all the images that were taken with the camera' -->
     <string name="camera_label">Camera</string>
-
-    <!-- label for the 'video recording application shown in the top level 'all applications' -->
-    <string name="video_camera_label">Camcorder</string>
 
     <!-- alert to the user to wait for some operation to complete -->
     <string name="wait">Please wait\u2026</string>
@@ -945,6 +939,8 @@
     <string name="accessibility_switch_to_panorama">Switch to panorama</string>
     <!-- The button to switch to new Panorama mode. [CHAR LIMIT = NONE] -->
     <string name="accessibility_switch_to_new_panorama">Switch to new panorama</string>
+    <!-- The button to switch to the Re-Focus mode. [CHAR LIMIT = NONE] -->
+    <string name="accessibility_switch_to_refocus">Switch to Refocus</string>
     <!-- The button in review mode indicating that the photo taking, video recording, and panorama saving session should be canceled [CHAR LIMIT = NONE] -->
     <string name="accessibility_review_cancel">Review cancel</string>
     <!-- The button in review mode indicating that the taken photo/video is OK to be attached/uploaded [CHAR LIMIT = NONE] -->

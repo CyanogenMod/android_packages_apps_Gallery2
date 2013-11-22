@@ -31,6 +31,8 @@ public class FilterBasicRepresentation extends FilterRepresentation implements P
     private int mMaximum;
     private int mDefaultValue;
     private int mPreviewValue;
+    public static final String SERIAL_NAME = "Name";
+    public static final String SERIAL_VALUE = "Value";
     private boolean mLogVerbose = Log.isLoggable(LOGTAG, Log.VERBOSE);
 
     public FilterBasicRepresentation(String name, int minimum, int value, int maximum) {
@@ -46,15 +48,16 @@ public class FilterBasicRepresentation extends FilterRepresentation implements P
     }
 
     @Override
-    public FilterRepresentation clone() throws CloneNotSupportedException {
-        FilterBasicRepresentation representation = (FilterBasicRepresentation) super.clone();
-        representation.setMinimum(getMinimum());
-        representation.setMaximum(getMaximum());
-        representation.setValue(getValue());
-        if (mLogVerbose) {
-            Log.v(LOGTAG, "cloning from <" + this + "> to <" + representation + ">");
-        }
+    public FilterRepresentation copy() {
+        FilterBasicRepresentation representation = new FilterBasicRepresentation(getName(),0,0,0);
+        copyAllParameters(representation);
         return representation;
+    }
+
+    @Override
+    protected void copyAllParameters(FilterRepresentation representation) {
+        super.copyAllParameters(representation);
+        representation.useParametersFrom(this);
     }
 
     @Override
@@ -170,5 +173,24 @@ public class FilterBasicRepresentation extends FilterRepresentation implements P
     @Override
     public void copyFrom(Parameter src) {
         useParametersFrom((FilterBasicRepresentation) src);
+    }
+
+    @Override
+    public String[][] serializeRepresentation() {
+        String[][] ret = {
+                {SERIAL_NAME  , getName() },
+                {SERIAL_VALUE , Integer.toString(mValue)}};
+        return ret;
+    }
+
+    @Override
+    public void deSerializeRepresentation(String[][] rep) {
+        super.deSerializeRepresentation(rep);
+        for (int i = 0; i < rep.length; i++) {
+            if (SERIAL_VALUE.equals(rep[i][0])) {
+                mValue = Integer.parseInt(rep[i][1]);
+                break;
+            }
+        }
     }
 }

@@ -14,45 +14,76 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_main_toolbar">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/default_background"
-    tools:context=".ColorPickerActivity" >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:id="@+id/RelativeLayout1"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@color/background_main_toolbar">
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorRectView
-        android:id="@+id/colorRectView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="1dp"
-        android:layout_above="@+id/colorOpacityView"
-        android:layout_toLeftOf="@+id/colorValueView" />
+        <com.android.gallery3d.filtershow.colorpicker.ColorCompareView
+                android:id="@+id/btnSelect"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="0dp"
+                />
+        <com.android.gallery3d.filtershow.colorpicker.ColorSVRectView
+                android:id="@+id/colorRectView"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"/>
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorValueView
-        android:id="@+id/colorValueView"
-               android:layout_width="90dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentRight = "true"
-        android:layout_above="@+id/colorOpacityView"  />
+        <com.android.gallery3d.filtershow.colorpicker.ColorHueView
+                android:id="@+id/ColorHueView"
+                android:layout_width="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_height="32dp" />
 
-    <com.android.gallery3d.filtershow.colorpicker.ColorOpacityView
-        android:id="@+id/colorOpacityView"
-       android:layout_width="match_parent"
-        android:layout_height="90dp"
-         android:layout_above="@+id/btnSelect" />
+        <com.android.gallery3d.filtershow.colorpicker.ColorOpacityView
+                android:id="@+id/colorOpacityView"
+                android:layout_width="match_parent"
+                android:layout_marginTop="24dp"
+                android:layout_height="32dp" />
 
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/color_pick_select"
-        android:layout_alignParentBottom = "true"
-        />
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginTop="4dp">
+            <ImageButton
+                    android:id="@+id/cancelColorPick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@android:color/transparent"
+                    android:layout_weight=".1"
+                    android:gravity="center"
+                    android:src="@drawable/ic_menu_cancel_holo_light"
+                    android:textSize="18dip"/>
 
-</RelativeLayout>
+            <ImageView
+                    android:layout_width="2dp"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/filtershow_vertical_bar"/>
+            <ImageButton
+                    android:id="@+id/applyColorPick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight=".1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:src="@drawable/ic_menu_done_holo_light"
+                    android:textSize="18dip"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

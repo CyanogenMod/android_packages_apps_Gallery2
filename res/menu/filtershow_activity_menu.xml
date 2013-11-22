@@ -20,8 +20,28 @@
         android:id="@+id/resetHistoryButton"
         android:title="@string/reset"/>
     <item
+        android:id="@+id/showInfoPanel"
+        android:showAsAction="never"
+        android:visible="true"
+        android:title="@string/filtershow_show_info_panel" />
+    <item
         android:id="@+id/showImageStateButton"
         android:showAsAction="never"
         android:visible="true"
         android:title="@string/show_imagestate_panel" />
+    <item
+        android:id="@+id/manageUserPresets"
+        android:showAsAction="never"
+        android:visible="false"
+        android:title="@string/filtershow_manage_preset" />
+    <item
+        android:id="@+id/exportFlattenButton"
+        android:showAsAction="never"
+        android:visible="true"
+        android:title="@string/export_image" />
+    <item
+        android:id="@+id/printButton"
+        android:showAsAction="never"
+        android:visible="true"
+        android:title="@string/print_image"/>
 </menu>

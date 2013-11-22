@@ -29,9 +29,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.app.Log;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation.StrokeData;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
-import com.android.gallery3d.filtershow.presets.ImagePreset;
+import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 
 import java.util.Vector;
 
@@ -52,7 +54,9 @@ public class ImageFilterDraw extends ImageFilter {
     }
 
     DrawStyle[] mDrawingsTypes = new DrawStyle[] {
-            new SimpleDraw(),
+            new SimpleDraw(0),
+            new SimpleDraw(1),
+            new Brush(R.drawable.brush_gauss),
             new Brush(R.drawable.brush_marker),
             new Brush(R.drawable.brush_spatter)
     };
@@ -90,6 +94,11 @@ public class ImageFilterDraw extends ImageFilter {
 
     class SimpleDraw implements DrawStyle {
         byte mType;
+        int mMode;
+
+        public SimpleDraw(int mode) {
+            mMode = mode;
+        }
 
         @Override
         public void setType(byte type) {
@@ -108,6 +117,12 @@ public class ImageFilterDraw extends ImageFilter {
             Paint paint = new Paint();
 
             paint.setStyle(Style.STROKE);
+            if (mMode == 0) {
+                paint.setStrokeCap(Paint.Cap.SQUARE);
+            } else {
+                paint.setStrokeCap(Paint.Cap.ROUND);
+            }
+            paint.setAntiAlias(true);
             paint.setColor(sd.mColor);
             paint.setStrokeWidth(toScrMatrix.mapRadius(sd.mRadius));
 
@@ -127,18 +142,21 @@ public class ImageFilterDraw extends ImageFilter {
         public Brush(int brushID) {
             mBrushID = brushID;
         }
+
         public Bitmap getBrush() {
             if (mBrush == null) {
                 BitmapFactory.Options opt = new BitmapFactory.Options();
                 opt.inPreferredConfig = Bitmap.Config.ALPHA_8;
-                mBrush = MasterImage.getImage().getImageLoader().decodeImage(mBrushID, opt);
+                mBrush = BitmapFactory.decodeResource(MasterImage.getImage().getActivity()
+                        .getResources(), mBrushID, opt);
                 mBrush = mBrush.extractAlpha();
             }
             return mBrush;
         }
 
         @Override
-        public void paint(FilterDrawRepresentation.StrokeData sd, Canvas canvas, Matrix toScrMatrix,
+        public void paint(FilterDrawRepresentation.StrokeData sd, Canvas canvas,
+                Matrix toScrMatrix,
                 int quality) {
             if (sd == null || sd.mPath == null) {
                 return;
@@ -204,7 +222,7 @@ public class ImageFilterDraw extends ImageFilter {
 
     public void drawData(Canvas canvas, Matrix originalRotateToScreen, int quality) {
         Paint paint = new Paint();
-        if (quality == ImagePreset.QUALITY_FINAL) {
+        if (quality == FilterEnvironment.QUALITY_FINAL) {
             paint.setAntiAlias(true);
         }
         paint.setStyle(Style.STROKE);
@@ -212,9 +230,12 @@ public class ImageFilterDraw extends ImageFilter {
         paint.setStrokeWidth(40);
 
         if (mParameters.getDrawing().isEmpty() && mParameters.getCurrentDrawing() == null) {
+            mOverlayBitmap = null;
+            mCachedStrokes = -1;
             return;
         }
-        if (quality == ImagePreset.QUALITY_FINAL) {
+        if (quality == FilterEnvironment.QUALITY_FINAL) {
+
             for (FilterDrawRepresentation.StrokeData strokeData : mParameters.getDrawing()) {
                 paint(strokeData, canvas, originalRotateToScreen, quality);
             }
@@ -248,17 +269,17 @@ public class ImageFilterDraw extends ImageFilter {
         int n = v.size();
 
         for (int i = mCachedStrokes; i < n; i++) {
-            paint(v.get(i), drawCache, originalRotateToScreen, ImagePreset.QUALITY_PREVIEW);
+            paint(v.get(i), drawCache, originalRotateToScreen, FilterEnvironment.QUALITY_PREVIEW);
         }
         mCachedStrokes = n;
     }
 
     public void draw(Canvas canvas, Matrix originalRotateToScreen) {
         for (FilterDrawRepresentation.StrokeData strokeData : mParameters.getDrawing()) {
-            paint(strokeData, canvas, originalRotateToScreen, ImagePreset.QUALITY_PREVIEW);
+            paint(strokeData, canvas, originalRotateToScreen, FilterEnvironment.QUALITY_PREVIEW);
         }
         mDrawingsTypes[mCurrentStyle].paint(
-                null, canvas, originalRotateToScreen, ImagePreset.QUALITY_PREVIEW);
+                null, canvas, originalRotateToScreen, FilterEnvironment.QUALITY_PREVIEW);
     }
 
     @Override

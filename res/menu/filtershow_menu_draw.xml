@@ -15,27 +15,21 @@
      limitations under the License.
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/curves_popupmenu" >
+    <group android:id="@+id/curves_popupmenu">
         <item
-            android:id="@+id/draw_menu_style_line"
-            android:title="@string/draw_style_line" />
-         <item
-            android:id="@+id/draw_menu_style_brush_marker"
-            android:title="@string/draw_style_brush_marker"/>
-         <item
-            android:id="@+id/draw_menu_style_brush_spatter"
-            android:title="@string/draw_style_brush_spatter"/>
-         <item
-            android:id="@+id/draw_menu_size"
-            android:title="@string/draw_size" />
+                android:id="@+id/draw_menu_style"
+                android:title="@string/draw_style"/>
         <item
-            android:id="@+id/draw_menu_color"
-            android:title="@string/draw_color"/>
+                android:id="@+id/draw_menu_size"
+                android:title="@string/draw_size"/>
         <item
-            android:id="@+id/draw_menu_clear"
-            android:title="@string/draw_clear"/>
+                android:id="@+id/draw_menu_color"
+                android:title="@string/draw_color"/>
+        <item
+                android:id="@+id/draw_menu_clear"
+                android:title="@string/draw_clear"/>
     </group>
 
 </menu>

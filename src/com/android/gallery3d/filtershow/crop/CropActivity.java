@@ -44,6 +44,8 @@ import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.tools.SaveImage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -104,17 +106,18 @@ public class CropActivity extends Activity {
         mCropView = (CropView) findViewById(R.id.cropView);
 
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(R.layout.filtershow_actionbar);
+        if (actionBar != null) {
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setCustomView(R.layout.filtershow_actionbar);
 
-        View mSaveButton = actionBar.getCustomView();
-        mSaveButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startFinishOutput();
-            }
-        });
-
+            View mSaveButton = actionBar.getCustomView();
+            mSaveButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startFinishOutput();
+                }
+            });
+        }
         if (intent.getData() != null) {
             mSourceUri = intent.getData();
             startLoadBitmap(mSourceUri);
@@ -261,9 +264,9 @@ public class CropActivity extends Activity {
         @Override
         protected Bitmap doInBackground(Uri... params) {
             Uri uri = params[0];
-            Bitmap bmap = CropLoader.getConstrainedBitmap(uri, mContext, mBitmapSize,
-                    mOriginalBounds);
-            mOrientation = CropLoader.getMetadataRotation(uri, mContext);
+            Bitmap bmap = ImageLoader.loadConstrainedBitmap(uri, mContext, mBitmapSize,
+                    mOriginalBounds, false);
+            mOrientation = ImageLoader.getMetadataRotation(mContext, uri);
             return bmap;
         }
 
@@ -273,7 +276,7 @@ public class CropActivity extends Activity {
         }
     }
 
-    private void startFinishOutput() {
+    protected void startFinishOutput() {
         if (finalIOGuard) {
             return;
         } else {
@@ -297,7 +300,7 @@ public class CropActivity extends Activity {
             }
         }
         if (flags == 0) {
-            destinationUri = CropLoader.makeAndInsertUri(this, mSourceUri);
+            destinationUri = SaveImage.makeAndInsertUri(this, mSourceUri);
             if (destinationUri != null) {
                 flags |= DO_EXTRA_OUTPUT;
             }

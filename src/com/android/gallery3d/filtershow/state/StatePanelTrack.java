@@ -58,6 +58,7 @@ public class StatePanelTrack extends LinearLayout implements PanelTrack {
     private long mTouchTime;
     private int mMaxTouchDelay = 300; // 300ms delay for touch
     private static final boolean ALLOWS_DRAG = false;
+    private static final boolean ALLOWS_DUPLICATES = false;
     private DataSetObserver mObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
@@ -104,6 +105,9 @@ public class StatePanelTrack extends LinearLayout implements PanelTrack {
     }
 
     private void addDuplicate(MotionEvent e) {
+        if (!ALLOWS_DUPLICATES) {
+            return;
+        }
         if (mCurrentSelectedView == null) {
             return;
         }
@@ -115,6 +119,9 @@ public class StatePanelTrack extends LinearLayout implements PanelTrack {
     }
 
     private void longPress(MotionEvent e) {
+        if (!ALLOWS_DUPLICATES) {
+            return;
+        }
         View view = findChildAt((int) e.getX(), (int) e.getY());
         if (view == null) {
             return;

@@ -18,7 +18,6 @@ public class EditorPlaceHolder {
     private FrameLayout mContainer = null;
     private HashMap<Integer, Editor> mEditors = new HashMap<Integer, Editor>();
     private Vector<ImageShow> mOldViews = new Vector<ImageShow>();
-    private ImageLoader mImageLoader = null;
 
     public EditorPlaceHolder(FilterShowActivity activity) {
         mActivity = activity;
@@ -45,26 +44,21 @@ public class EditorPlaceHolder {
             return null;
         }
 
-        try {
-            editor.createEditor(mActivity, mContainer);
-            editor.setImageLoader(mImageLoader);
-            mContainer.setVisibility(View.VISIBLE);
-            mContainer.removeAllViews();
-            View eview = editor.getTopLevelView();
-            ViewParent parent = eview.getParent();
+        editor.createEditor(mActivity, mContainer);
+        editor.getImageShow().attach();
+        mContainer.setVisibility(View.VISIBLE);
+        mContainer.removeAllViews();
+        View eview = editor.getTopLevelView();
+        ViewParent parent = eview.getParent();
 
-            if (parent != null && parent instanceof FrameLayout) {
-                ((FrameLayout) parent).removeAllViews();
-            }
-
-            mContainer.addView(eview);
-            hideOldViews();
-            editor.setVisibility(View.VISIBLE);
-            return editor;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (parent != null && parent instanceof FrameLayout) {
+            ((FrameLayout) parent).removeAllViews();
         }
-        return null;
+
+        mContainer.addView(eview);
+        hideOldViews();
+        editor.setVisibility(View.VISIBLE);
+        return editor;
     }
 
     public void setOldViews(Vector<ImageShow> views) {
@@ -79,10 +73,6 @@ public class EditorPlaceHolder {
         for (View view : mOldViews) {
             view.setVisibility(View.GONE);
         }
-    }
-
-    public void setImageLoader(ImageLoader imageLoader) {
-        mImageLoader = imageLoader;
     }
 
     public Editor getEditor(int editorId) {

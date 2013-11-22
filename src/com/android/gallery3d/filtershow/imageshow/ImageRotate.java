@@ -19,20 +19,18 @@ package com.android.gallery3d.filtershow.imageshow;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
-import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.EditorRotate;
+import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
+import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils.GeometryHolder;
 
-public class ImageRotate extends ImageGeometry {
-
-    private float mBaseAngle = 0;
-    private float mAngle = 0;
-
-    private final boolean mSnapToNinety = true;
+public class ImageRotate extends ImageShow {
     private EditorRotate mEditorRotate;
-    private static final String LOGTAG = "ImageRotate";
+    private static final String TAG = ImageRotate.class.getSimpleName();
+    private FilterRotateRepresentation mLocalRep = new FilterRotateRepresentation();
+    private GeometryHolder mDrawHolder = new GeometryHolder();
 
     public ImageRotate(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,56 +40,39 @@ public class ImageRotate extends ImageGeometry {
         super(context);
     }
 
-    @Override
-    public String getName() {
-        return getContext().getString(R.string.rotate);
-    }
-
-    private static final Paint gPaint = new Paint();
-
-    private void computeValue() {
-        float angle = getCurrentTouchAngle();
-        mAngle = (mBaseAngle - angle) % 360;
+    public void setFilterRotateRepresentation(FilterRotateRepresentation rep) {
+        mLocalRep = (rep == null) ? new FilterRotateRepresentation() : rep;
     }
 
     public void rotate() {
-        mAngle += 90;
-        mAngle = snappedAngle(mAngle);
-        mAngle %= 360;
-        setLocalRotation(mAngle);
+        mLocalRep.rotateCW();
+        invalidate();
+    }
+
+    public FilterRotateRepresentation getFinalRepresentation() {
+        return mLocalRep;
     }
 
     @Override
-    protected void setActionDown(float x, float y) {
-        super.setActionDown(x, y);
-        mBaseAngle = mAngle = getLocalRotation();
+    public boolean onTouchEvent(MotionEvent event) {
+        // Treat event as handled.
+        return true;
     }
 
-    @Override
-    protected void setActionMove(float x, float y) {
-        super.setActionMove(x, y);
-        computeValue();
-        setLocalRotation(mAngle % 360);
-    }
-
-    @Override
-    protected void setActionUp() {
-        super.setActionUp();
-        if (mSnapToNinety) {
-            setLocalRotation(snappedAngle(mAngle % 360));
-        }
-    }
-
-    @Override
     public int getLocalValue() {
-        return constrainedRotation(snappedAngle(getLocalRotation()));
+        return mLocalRep.getRotation().value();
     }
 
     @Override
-    protected void drawShape(Canvas canvas, Bitmap image) {
-        gPaint.setAntiAlias(true);
-        gPaint.setARGB(255, 255, 255, 255);
-        drawTransformedCropped(canvas, image, gPaint);
+    public void onDraw(Canvas canvas) {
+        MasterImage master = MasterImage.getImage();
+        Bitmap image = master.getFiltersOnlyImage();
+        if (image == null) {
+            return;
+        }
+        GeometryMathUtils.initializeHolder(mDrawHolder, mLocalRep);
+        GeometryMathUtils.drawTransformedCropped(mDrawHolder, canvas, image, canvas.getWidth(),
+                canvas.getHeight());
     }
 
     public void setEditor(EditorRotate editorRotate) {

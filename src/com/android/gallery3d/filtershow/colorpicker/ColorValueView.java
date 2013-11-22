@@ -52,6 +52,8 @@ public class ColorValueView extends View implements ColorListener {
     private final static float DOT_SIZE = ColorRectView.DOT_SIZE;
     private final static float BORDER_SIZE = ColorRectView.DOT_SIZE;
 
+    private ArrayList<ColorListener> mColorListeners = new ArrayList<ColorListener>();
+
     public ColorValueView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
         DisplayMetrics metrics = ctx.getResources().getDisplayMetrics();
@@ -161,8 +163,6 @@ public class ColorValueView extends View implements ColorListener {
         invalidate();
 
     }
-
-    ArrayList<ColorListener> mColorListeners = new ArrayList<ColorListener>();
 
     public void notifyColorListeners(float[] hsv) {
         for (ColorListener l : mColorListeners) {

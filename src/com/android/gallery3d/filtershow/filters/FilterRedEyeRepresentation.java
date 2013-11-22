@@ -28,9 +28,23 @@ public class FilterRedEyeRepresentation extends FilterPointRepresentation {
 
     public FilterRedEyeRepresentation() {
         super("RedEye",R.string.redeye,EditorRedEye.ID);
+        setSerializationName("REDEYE");
         setFilterClass(ImageFilterRedEye.class);
         setOverlayId(R.drawable.photoeditor_effect_redeye);
         setOverlayOnly(true);
+    }
+
+    @Override
+    public FilterRepresentation copy() {
+        FilterRedEyeRepresentation representation = new FilterRedEyeRepresentation();
+        copyAllParameters(representation);
+        return representation;
+    }
+
+    @Override
+    protected void copyAllParameters(FilterRepresentation representation) {
+        super.copyAllParameters(representation);
+        representation.useParametersFrom(this);
     }
 
     public void addRect(RectF rect, RectF bounds) {

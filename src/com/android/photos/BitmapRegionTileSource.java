@@ -16,66 +16,133 @@
 
 package com.android.photos;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.util.Log;
+
+import com.android.gallery3d.common.BitmapUtils;
+import com.android.gallery3d.glrenderer.BasicTexture;
+import com.android.gallery3d.glrenderer.BitmapTexture;
 import com.android.photos.views.TiledImageRenderer;
 
 import java.io.IOException;
 
+/**
+ * A {@link com.android.photos.views.TiledImageRenderer.TileSource} using
+ * {@link BitmapRegionDecoder} to wrap a local file
+ */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 public class BitmapRegionTileSource implements TiledImageRenderer.TileSource {
 
+    private static final String TAG = "BitmapRegionTileSource";
+
+    private static final boolean REUSE_BITMAP =
+            Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
+    private static final int GL_SIZE_LIMIT = 2048;
+    // This must be no larger than half the size of the GL_SIZE_LIMIT
+    // due to decodePreview being allowed to be up to 2x the size of the target
+    private static final int MAX_PREVIEW_SIZE = 1024;
+
     BitmapRegionDecoder mDecoder;
+    int mWidth;
+    int mHeight;
+    int mTileSize;
+    private BasicTexture mPreview;
+    private final int mRotation;
 
+    // For use only by getTile
+    private Rect mWantRegion = new Rect();
+    private Rect mOverlapRegion = new Rect();
+    private BitmapFactory.Options mOptions;
+    private Canvas mCanvas;
 
-    public BitmapRegionTileSource(String path) {
+    public BitmapRegionTileSource(Context context, String path, int previewSize, int rotation) {
+        mTileSize = TiledImageRenderer.suggestedTileSize(context);
+        mRotation = rotation;
         try {
             mDecoder = BitmapRegionDecoder.newInstance(path, true);
+            mWidth = mDecoder.getWidth();
+            mHeight = mDecoder.getHeight();
         } catch (IOException e) {
             Log.w("BitmapRegionTileSource", "ctor failed", e);
+        }
+        mOptions = new BitmapFactory.Options();
+        mOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        mOptions.inPreferQualityOverSpeed = true;
+        mOptions.inTempStorage = new byte[16 * 1024];
+        if (previewSize != 0) {
+            previewSize = Math.min(previewSize, MAX_PREVIEW_SIZE);
+            // Although this is the same size as the Bitmap that is likely already
+            // loaded, the lifecycle is different and interactions are on a different
+            // thread. Thus to simplify, this source will decode its own bitmap.
+            Bitmap preview = decodePreview(path, previewSize);
+            if (preview.getWidth() <= GL_SIZE_LIMIT && preview.getHeight() <= GL_SIZE_LIMIT) {
+                mPreview = new BitmapTexture(preview);
+            } else {
+                Log.w(TAG, String.format(
+                        "Failed to create preview of apropriate size! "
+                        + " in: %dx%d, out: %dx%d",
+                        mWidth, mHeight,
+                        preview.getWidth(), preview.getHeight()));
+            }
         }
     }
 
     @Override
     public int getTileSize() {
-        return 256;
+        return mTileSize;
     }
 
     @Override
     public int getImageWidth() {
-        return mDecoder.getWidth();
+        return mWidth;
     }
 
     @Override
     public int getImageHeight() {
-        return mDecoder.getHeight();
+        return mHeight;
+    }
+
+    @Override
+    public BasicTexture getPreview() {
+        return mPreview;
+    }
+
+    @Override
+    public int getRotation() {
+        return mRotation;
     }
 
     @Override
     public Bitmap getTile(int level, int x, int y, Bitmap bitmap) {
         int tileSize = getTileSize();
-        int t = tileSize << level;
+        if (!REUSE_BITMAP) {
+            return getTileWithoutReusingBitmap(level, x, y, tileSize);
+        }
 
-        Rect wantRegion = new Rect(x, y, x + t, y + t);
+        int t = tileSize << level;
+        mWantRegion.set(x, y, x + t, y + t);
 
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.ARGB_8888);
         }
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        options.inPreferQualityOverSpeed = true;
-        options.inSampleSize =  (1 << level);
-        options.inBitmap = bitmap;
+        mOptions.inSampleSize = (1 << level);
+        mOptions.inBitmap = bitmap;
 
         try {
-            // In CropImage, we may call the decodeRegion() concurrently.
-            bitmap = mDecoder.decodeRegion(wantRegion, options);
+            bitmap = mDecoder.decodeRegion(mWantRegion, mOptions);
         } finally {
-            if (options.inBitmap != bitmap && options.inBitmap != null) {
-                options.inBitmap = null;
+            if (mOptions.inBitmap != bitmap && mOptions.inBitmap != null) {
+                mOptions.inBitmap = null;
             }
         }
 
@@ -83,5 +150,69 @@ public class BitmapRegionTileSource implements TiledImageRenderer.TileSource {
             Log.w("BitmapRegionTileSource", "fail in decoding region");
         }
         return bitmap;
+    }
+
+    private Bitmap getTileWithoutReusingBitmap(
+            int level, int x, int y, int tileSize) {
+
+        int t = tileSize << level;
+        mWantRegion.set(x, y, x + t, y + t);
+
+        mOverlapRegion.set(0, 0, mWidth, mHeight);
+
+        mOptions.inSampleSize = (1 << level);
+        Bitmap bitmap = mDecoder.decodeRegion(mOverlapRegion, mOptions);
+
+        if (bitmap == null) {
+            Log.w(TAG, "fail in decoding region");
+        }
+
+        if (mWantRegion.equals(mOverlapRegion)) {
+            return bitmap;
+        }
+
+        Bitmap result = Bitmap.createBitmap(tileSize, tileSize, Config.ARGB_8888);
+        if (mCanvas == null) {
+            mCanvas = new Canvas();
+        }
+        mCanvas.setBitmap(result);
+        mCanvas.drawBitmap(bitmap,
+                (mOverlapRegion.left - mWantRegion.left) >> level,
+                (mOverlapRegion.top - mWantRegion.top) >> level, null);
+        mCanvas.setBitmap(null);
+        return result;
+    }
+
+    /**
+     * Note that the returned bitmap may have a long edge that's longer
+     * than the targetSize, but it will always be less than 2x the targetSize
+     */
+    private Bitmap decodePreview(String file, int targetSize) {
+        float scale = (float) targetSize / Math.max(mWidth, mHeight);
+        mOptions.inSampleSize = BitmapUtils.computeSampleSizeLarger(scale);
+        mOptions.inJustDecodeBounds = false;
+
+        Bitmap result = BitmapFactory.decodeFile(file, mOptions);
+        if (result == null) {
+            return null;
+        }
+
+        // We need to resize down if the decoder does not support inSampleSize
+        // or didn't support the specified inSampleSize (some decoders only do powers of 2)
+        scale = (float) targetSize / (float) (Math.max(result.getWidth(), result.getHeight()));
+
+        if (scale <= 0.5) {
+            result = BitmapUtils.resizeBitmapByScale(result, scale, true);
+        }
+        return ensureGLCompatibleBitmap(result);
+    }
+
+    private static Bitmap ensureGLCompatibleBitmap(Bitmap bitmap) {
+        if (bitmap == null || bitmap.getConfig() != null) {
+            return bitmap;
+        }
+        Bitmap newBitmap = bitmap.copy(Config.ARGB_8888, false);
+        bitmap.recycle();
+        return newBitmap;
     }
 }

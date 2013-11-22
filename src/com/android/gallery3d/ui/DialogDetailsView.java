@@ -39,7 +39,9 @@ import com.android.gallery3d.ui.DetailsHelper.DetailsSource;
 import com.android.gallery3d.ui.DetailsHelper.DetailsViewContainer;
 import com.android.gallery3d.ui.DetailsHelper.ResolutionResolvingListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 public class DialogDetailsView implements DetailsViewContainer {
@@ -117,6 +119,8 @@ public class DialogDetailsView implements DetailsViewContainer {
         implements AddressResolvingListener, ResolutionResolvingListener {
         private final ArrayList<String> mItems;
         private int mLocationIndex;
+        private final Locale mDefaultLocale = Locale.getDefault();
+        private final DecimalFormat mDecimalFormat = new DecimalFormat(".####");
         private int mWidthIndex = -1;
         private int mHeightIndex = -1;
 
@@ -166,37 +170,57 @@ public class DialogDetailsView implements DetailsViewContainer {
                         value = (String) detail.getValue();
                         double time = Double.valueOf(value);
                         if (time < 1.0f) {
-                            value = String.format("1/%d", (int) (0.5f + 1 / time));
+                            value = String.format(mDefaultLocale, "%d/%d", 1,
+                                    (int) (0.5f + 1 / time));
                         } else {
                             int integer = (int) time;
                             time -= integer;
                             value = String.valueOf(integer) + "''";
                             if (time > 0.0001) {
-                                value += String.format(" 1/%d", (int) (0.5f + 1 / time));
+                                value += String.format(mDefaultLocale, " %d/%d", 1,
+                                        (int) (0.5f + 1 / time));
                             }
                         }
                         break;
                     }
                     case MediaDetails.INDEX_WIDTH:
                         mWidthIndex = mItems.size();
-                        value = detail.getValue().toString();
-                        if (value.equalsIgnoreCase("0")) {
+                        if (detail.getValue().toString().equalsIgnoreCase("0")) {
                             value = context.getString(R.string.unknown);
                             resolutionIsValid = false;
+                        } else {
+                            value = toLocalInteger(detail.getValue());
                         }
                         break;
                     case MediaDetails.INDEX_HEIGHT: {
                         mHeightIndex = mItems.size();
-                        value = detail.getValue().toString();
-                        if (value.equalsIgnoreCase("0")) {
+                        if (detail.getValue().toString().equalsIgnoreCase("0")) {
                             value = context.getString(R.string.unknown);
                             resolutionIsValid = false;
+                        } else {
+                            value = toLocalInteger(detail.getValue());
                         }
                         break;
                     }
                     case MediaDetails.INDEX_PATH:
-                        // Get the path and then fall through to the default case
+                        // Prepend the new-line as a) paths are usually long, so
+                        // the formatting is better and b) an RTL UI will see it
+                        // as a separate section and interpret it for what it
+                        // is, rather than trying to make it RTL (which messes
+                        // up the path).
+                        value = "\n" + detail.getValue().toString();
                         path = detail.getValue().toString();
+                        break;
+                    case MediaDetails.INDEX_ISO:
+                        value = toLocalNumber(Integer.parseInt((String) detail.getValue()));
+                        break;
+                    case MediaDetails.INDEX_FOCAL_LENGTH:
+                        double focalLength = Double.parseDouble(detail.getValue().toString());
+                        value = toLocalNumber(focalLength);
+                        break;
+                    case MediaDetails.INDEX_ORIENTATION:
+                        value = toLocalInteger(detail.getValue());
+                        break;
                     default: {
                         Object valueObj = detail.getValue();
                         // This shouldn't happen, log its key to help us diagnose the problem.
@@ -216,9 +240,9 @@ public class DialogDetailsView implements DetailsViewContainer {
                             context, key), value);
                 }
                 mItems.add(value);
-                if (!resolutionIsValid) {
-                    DetailsHelper.resolveResolution(path, this);
-                }
+            }
+            if (!resolutionIsValid) {
+                DetailsHelper.resolveResolution(path, this);
             }
         }
 
@@ -271,13 +295,44 @@ public class DialogDetailsView implements DetailsViewContainer {
             if (width == 0 || height == 0) return;
             // Update the resolution with the new width and height
             Context context = mActivity.getAndroidContext();
-            String widthString = String.format("%s: %d", DetailsHelper.getDetailsName(
-                    context, MediaDetails.INDEX_WIDTH), width);
-            String heightString = String.format("%s: %d", DetailsHelper.getDetailsName(
-                    context, MediaDetails.INDEX_HEIGHT), height);
+            String widthString = String.format(mDefaultLocale, "%s: %d",
+                    DetailsHelper.getDetailsName(
+                            context, MediaDetails.INDEX_WIDTH), width);
+            String heightString = String.format(mDefaultLocale, "%s: %d",
+                    DetailsHelper.getDetailsName(
+                            context, MediaDetails.INDEX_HEIGHT), height);
             mItems.set(mWidthIndex, String.valueOf(widthString));
             mItems.set(mHeightIndex, String.valueOf(heightString));
             notifyDataSetChanged();
+        }
+
+        /**
+         * Converts the given integer (given as String or Integer object) to a
+         * localized String version.
+         */
+        private String toLocalInteger(Object valueObj) {
+            if (valueObj instanceof Integer) {
+                return toLocalNumber((Integer) valueObj);
+            } else {
+                String value = valueObj.toString();
+                try {
+                    value = toLocalNumber(Integer.parseInt(value));
+                } catch (NumberFormatException ex) {
+                    // Just keep the current "value" if we cannot
+                    // parse it as a fallback.
+                }
+                return value;
+            }
+        }
+
+        /** Converts the given integer to a localized String version. */
+        private String toLocalNumber(int n) {
+            return String.format(mDefaultLocale, "%d", n);
+        }
+
+        /** Converts the given double to a localized String version. */
+        private String toLocalNumber(double n) {
+            return mDecimalFormat.format(n);
         }
     }
 

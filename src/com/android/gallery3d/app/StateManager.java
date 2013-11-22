@@ -24,7 +24,6 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.camera.CameraActivity;
 import com.android.gallery3d.anim.StateTransitionAnimation;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.UsageStatistics;
@@ -64,14 +63,10 @@ public class StateManager {
                     StateTransitionAnimation.Transition.Incoming);
             if (mIsResumed) top.onPause();
         }
-        // Ignore the filmstrip used for the root of the camera app
-        boolean ignoreHit = (mActivity instanceof CameraActivity)
-                && mStack.isEmpty();
-        if (!ignoreHit) {
-            UsageStatistics.onContentViewChanged(
-                    UsageStatistics.COMPONENT_GALLERY,
-                    klass.getSimpleName());
-        }
+
+        UsageStatistics.onContentViewChanged(
+                UsageStatistics.COMPONENT_GALLERY,
+                klass.getSimpleName());
         state.initialize(mActivity, data);
 
         mStack.push(new StateEntry(data, state));

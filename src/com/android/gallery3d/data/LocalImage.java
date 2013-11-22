@@ -32,12 +32,11 @@ import android.util.Log;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.app.PanoramaMetadataSupport;
-import com.android.gallery3d.app.StitchingProgressManager;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BitmapUtils;
-import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.exif.ExifTag;
+import com.android.gallery3d.filtershow.tools.SaveImage;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.ThreadPool.Job;
 import com.android.gallery3d.util.ThreadPool.JobContext;
@@ -46,8 +45,6 @@ import com.android.gallery3d.util.UpdateHelper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel.MapMode;
 
 // LocalImage represents an image in the local storage.
 public class LocalImage extends LocalMediaItem {
@@ -175,15 +172,17 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public Job<Bitmap> requestImage(int type) {
-        return new LocalImageRequest(mApplication, mPath, type, filePath);
+        return new LocalImageRequest(mApplication, mPath, dateModifiedInSec,
+                type, filePath);
     }
 
     public static class LocalImageRequest extends ImageCacheRequest {
         private String mLocalFilePath;
 
-        LocalImageRequest(GalleryApp application, Path path, int type,
-                String localFilePath) {
-            super(application, path, type, MediaItem.getTargetSize(type));
+        LocalImageRequest(GalleryApp application, Path path, long timeModified,
+                int type, String localFilePath) {
+            super(application, path, timeModified, type,
+                    MediaItem.getTargetSize(type));
             mLocalFilePath = localFilePath;
         }
 
@@ -237,14 +236,10 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
-        StitchingProgressManager progressManager = mApplication.getStitchingProgressManager();
-        if (progressManager != null && progressManager.getProgress(getContentUri()) != null) {
-            return 0; // doesn't support anything while stitching!
-        }
         int operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
-                | SUPPORT_SETAS | SUPPORT_EDIT | SUPPORT_INFO;
+                | SUPPORT_SETAS | SUPPORT_PRINT | SUPPORT_INFO;
         if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
-            operation |= SUPPORT_FULL_IMAGE;
+            operation |= SUPPORT_FULL_IMAGE | SUPPORT_EDIT;
         }
 
         if (BitmapUtils.isRotationSupported(mimeType)) {
@@ -271,7 +266,9 @@ public class LocalImage extends LocalMediaItem {
     public void delete() {
         GalleryUtils.assertNotInRenderThread();
         Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-        mApplication.getContentResolver().delete(baseUri, "_id=?",
+        ContentResolver contentResolver = mApplication.getContentResolver();
+        SaveImage.deleteAuxFiles(contentResolver, getContentUri());
+        contentResolver.delete(baseUri, "_id=?",
                 new String[]{String.valueOf(id)});
     }
 

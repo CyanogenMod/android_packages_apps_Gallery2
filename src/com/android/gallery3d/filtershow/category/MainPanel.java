@@ -44,8 +44,10 @@ public class MainPanel extends Fragment {
     public static final int BORDERS = 1;
     public static final int GEOMETRY = 2;
     public static final int FILTERS = 3;
+    public static final int VERSIONS = 4;
 
     private int mCurrentSelected = -1;
+    private int mPreviousToggleVersions = -1;
 
     private void selection(int position, boolean value) {
         if (value) {
@@ -141,11 +143,11 @@ public class MainPanel extends Fragment {
             transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
         }
         transaction.replace(R.id.category_panel_container, category, CategoryPanel.FRAGMENT_TAG);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
-    public void loadCategoryLookPanel() {
-        if (mCurrentSelected == LOOKS) {
+    public void loadCategoryLookPanel(boolean force) {
+        if (!force && mCurrentSelected == LOOKS) {
             return;
         }
         boolean fromRight = isRightAnimation(LOOKS);
@@ -196,10 +198,25 @@ public class MainPanel extends Fragment {
         selection(mCurrentSelected, true);
     }
 
+    public void loadCategoryVersionsPanel() {
+        if (mCurrentSelected == VERSIONS) {
+            return;
+        }
+        FilterShowActivity activity = (FilterShowActivity) getActivity();
+        activity.updateVersions();
+        boolean fromRight = isRightAnimation(VERSIONS);
+        selection(mCurrentSelected, false);
+        CategoryPanel categoryPanel = new CategoryPanel();
+        categoryPanel.setAdapter(VERSIONS);
+        setCategoryFragment(categoryPanel, fromRight);
+        mCurrentSelected = VERSIONS;
+        selection(mCurrentSelected, true);
+    }
+
     public void showPanel(int currentPanel) {
         switch (currentPanel) {
             case LOOKS: {
-                loadCategoryLookPanel();
+                loadCategoryLookPanel(false);
                 break;
             }
             case BORDERS: {
@@ -214,18 +231,51 @@ public class MainPanel extends Fragment {
                 loadCategoryFiltersPanel();
                 break;
             }
+            case VERSIONS: {
+                loadCategoryVersionsPanel();
+                break;
+            }
         }
     }
 
-    public void showImageStatePanel(boolean show) {
-        if (mMainView.findViewById(R.id.state_panel_container) == null) {
+    public void setToggleVersionsPanelButton(ImageButton button) {
+        if (button == null) {
             return;
         }
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        final View container = mMainView.findViewById(R.id.state_panel_container);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrentSelected == VERSIONS) {
+                    showPanel(mPreviousToggleVersions);
+                } else {
+                    mPreviousToggleVersions = mCurrentSelected;
+                    showPanel(VERSIONS);
+                }
+            }
+        });
+    }
+
+    public void showImageStatePanel(boolean show) {
+        View container = mMainView.findViewById(R.id.state_panel_container);
+        FragmentTransaction transaction = null;
+        if (container == null) {
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            container = activity.getMainStatePanelContainer(R.id.state_panel_container);
+        } else {
+            transaction = getChildFragmentManager().beginTransaction();
+        }
+        if (container == null) {
+            return;
+        } else {
+            transaction = getFragmentManager().beginTransaction();
+        }
+        int currentPanel = mCurrentSelected;
         if (show) {
             container.setVisibility(View.VISIBLE);
             StatePanel statePanel = new StatePanel();
+            statePanel.setMainPanel(this);
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            activity.updateVersions();
             transaction.replace(R.id.state_panel_container, statePanel, StatePanel.FRAGMENT_TAG);
         } else {
             container.setVisibility(View.GONE);
@@ -233,7 +283,12 @@ public class MainPanel extends Fragment {
             if (statePanel != null) {
                 transaction.remove(statePanel);
             }
+            if (currentPanel == VERSIONS) {
+                currentPanel = LOOKS;
+            }
         }
+        mCurrentSelected = -1;
+        showPanel(currentPanel);
         transaction.commit();
     }
 }

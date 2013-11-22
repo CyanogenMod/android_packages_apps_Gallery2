@@ -15,10 +15,12 @@
 -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval" >
-    <size android:width="20dp" android:height="20dp"/>
+    android:shape="rectangle" >
+    <size android:width="16dp" android:height="16dp"/>
     <corners
-        android:radius="10dp" />
+        android:radius="0dp" />
     <solid android:color="@color/red"/>
+    <stroke android:width="0dp"
+            android:color="#ff000000"/>
 </shape>
 

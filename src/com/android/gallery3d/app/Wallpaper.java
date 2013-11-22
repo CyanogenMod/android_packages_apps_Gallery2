@@ -18,6 +18,8 @@ package com.android.gallery3d.app;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.WallpaperManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
@@ -26,8 +28,10 @@ import android.os.Bundle;
 import android.view.Display;
 
 import com.android.gallery3d.common.ApiHelper;
-import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.filtershow.crop.CropExtras;
+
+import java.lang.IllegalArgumentException;
 
 /**
  * Wallpaper picker for the gallery application. This just redirects to the
@@ -95,24 +99,40 @@ public class Wallpaper extends Activity {
                 // fall-through
             }
             case STATE_PHOTO_PICKED: {
+                Intent cropAndSetWallpaperIntent;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    WallpaperManager wpm = WallpaperManager.getInstance(getApplicationContext());
+                    try {
+                        cropAndSetWallpaperIntent = wpm.getCropAndSetWallpaperIntent(mPickedItem);
+                        startActivity(cropAndSetWallpaperIntent);
+                        finish();
+                        return;
+                    } catch (ActivityNotFoundException anfe) {
+                        // ignored; fallthru to existing crop activity
+                    } catch (IllegalArgumentException iae) {
+                        // ignored; fallthru to existing crop activity
+                    }
+                }
+
                 int width = getWallpaperDesiredMinimumWidth();
                 int height = getWallpaperDesiredMinimumHeight();
                 Point size = getDefaultDisplaySize(new Point());
                 float spotlightX = (float) size.x / width;
                 float spotlightY = (float) size.y / height;
-                Intent request = new Intent(FilterShowActivity.CROP_ACTION)
-                        .setDataAndType(mPickedItem, IMAGE_TYPE)
-                        .addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
-                        .putExtra(CropExtras.KEY_OUTPUT_X, width)
-                        .putExtra(CropExtras.KEY_OUTPUT_Y, height)
-                        .putExtra(CropExtras.KEY_ASPECT_X, width)
-                        .putExtra(CropExtras.KEY_ASPECT_Y, height)
-                        .putExtra(CropExtras.KEY_SPOTLIGHT_X, spotlightX)
-                        .putExtra(CropExtras.KEY_SPOTLIGHT_Y, spotlightY)
-                        .putExtra(CropExtras.KEY_SCALE, true)
-                        .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
-                        .putExtra(CropExtras.KEY_SET_AS_WALLPAPER, true);
-                startActivity(request);
+                cropAndSetWallpaperIntent = new Intent(CropActivity.CROP_ACTION)
+                    .setClass(this, CropActivity.class)
+                    .setDataAndType(mPickedItem, IMAGE_TYPE)
+                    .addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+                    .putExtra(CropExtras.KEY_OUTPUT_X, width)
+                    .putExtra(CropExtras.KEY_OUTPUT_Y, height)
+                    .putExtra(CropExtras.KEY_ASPECT_X, width)
+                    .putExtra(CropExtras.KEY_ASPECT_Y, height)
+                    .putExtra(CropExtras.KEY_SPOTLIGHT_X, spotlightX)
+                    .putExtra(CropExtras.KEY_SPOTLIGHT_Y, spotlightY)
+                    .putExtra(CropExtras.KEY_SCALE, true)
+                    .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
+                    .putExtra(CropExtras.KEY_SET_AS_WALLPAPER, true);
+                startActivity(cropAndSetWallpaperIntent);
                 finish();
             }
         }

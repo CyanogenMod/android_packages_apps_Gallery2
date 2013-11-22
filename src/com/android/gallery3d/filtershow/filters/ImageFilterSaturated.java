@@ -21,7 +21,7 @@ import com.android.gallery3d.R;
 import android.graphics.Bitmap;
 
 public class ImageFilterSaturated extends SimpleImageFilter {
-
+    private static final String SERIALIZATION_NAME = "SATURATED";
     public ImageFilterSaturated() {
         mName = "Saturated";
     }
@@ -31,9 +31,9 @@ public class ImageFilterSaturated extends SimpleImageFilter {
         FilterBasicRepresentation representation =
                 (FilterBasicRepresentation) super.getDefaultRepresentation();
         representation.setName("Saturated");
+        representation.setSerializationName(SERIALIZATION_NAME);
         representation.setFilterClass(ImageFilterSaturated.class);
         representation.setTextId(R.string.saturation);
-        representation.setButtonId(R.id.saturationButton);
         representation.setMinimum(-100);
         representation.setMaximum(100);
         representation.setDefaultValue(0);

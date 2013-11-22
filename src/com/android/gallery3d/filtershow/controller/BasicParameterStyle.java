@@ -17,9 +17,8 @@
 package com.android.gallery3d.filtershow.controller;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.android.gallery3d.filtershow.cache.RenderingRequestCaller;
+import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
 
 public class BasicParameterStyle implements ParameterStyles {
     protected String mParameterName;
@@ -91,7 +90,7 @@ public class BasicParameterStyle implements ParameterStyles {
     }
 
     @Override
-    public void getIcon(int index, RenderingRequestCaller caller) {
+    public void getIcon(int index, BitmapCaller caller) {
         mEditor.computeIcon(index, caller);
     }
 
@@ -109,5 +108,4 @@ public class BasicParameterStyle implements ParameterStyles {
     public void setFilterView(FilterView editor) {
         mEditor = editor;
     }
-
 }

@@ -25,7 +25,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
@@ -133,29 +132,16 @@ public class MoviePlayer implements
         mVideoView.setOnErrorListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setVideoURI(mUri);
-        if (mVirtualizer != null) {
-            mVirtualizer.release();
-            mVirtualizer = null;
-        }
 
         Intent ai = movieActivity.getIntent();
         boolean virtualize = ai.getBooleanExtra(VIRTUALIZE_EXTRA, false);
         if (virtualize) {
             int session = mVideoView.getAudioSessionId();
             if (session != 0) {
-                Virtualizer virt = new Virtualizer(0, session);
-                AudioEffect.Descriptor descriptor = virt.getDescriptor();
-                String uuid = descriptor.uuid.toString();
-                if (uuid.equals("36103c52-8514-11e2-9e96-0800200c9a66") ||
-                        uuid.equals("36103c50-8514-11e2-9e96-0800200c9a66")) {
-                    mVirtualizer = virt;
-                    mVirtualizer.setEnabled(true);
-                } else {
-                    // This is not the audio virtualizer we're looking for
-                    virt.release();
-                }
+                mVirtualizer = new Virtualizer(0, session);
+                mVirtualizer.setEnabled(true);
             } else {
-                Log.w(TAG, "no session");
+                Log.w(TAG, "no audio session to virtualize");
             }
         }
         mVideoView.setOnTouchListener(new View.OnTouchListener() {
@@ -163,6 +149,17 @@ public class MoviePlayer implements
             public boolean onTouch(View v, MotionEvent event) {
                 mController.show();
                 return true;
+            }
+        });
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer player) {
+                if (!mVideoView.canSeekForward() || !mVideoView.canSeekBackward()) {
+                    mController.setSeekable(false);
+                } else {
+                    mController.setSeekable(true);
+                }
+                setProgress();
             }
         });
 

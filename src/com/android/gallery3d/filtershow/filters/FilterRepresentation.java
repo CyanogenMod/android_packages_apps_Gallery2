@@ -16,82 +16,94 @@
 
 package com.android.gallery3d.filtershow.filters;
 
-import com.android.gallery3d.app.Log;
+import android.util.JsonReader;
+import android.util.JsonWriter;
+import android.util.Log;
+
 import com.android.gallery3d.filtershow.editors.BasicEditor;
 
-public class FilterRepresentation implements Cloneable {
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class FilterRepresentation {
     private static final String LOGTAG = "FilterRepresentation";
     private static final boolean DEBUG = false;
     private String mName;
     private int mPriority = TYPE_NORMAL;
-    private Class mFilterClass;
+    private Class<?> mFilterClass;
     private boolean mSupportsPartialRendering = false;
     private int mTextId = 0;
     private int mEditorId = BasicEditor.ID;
     private int mButtonId = 0;
     private int mOverlayId = 0;
     private boolean mOverlayOnly = false;
-    private boolean mShowEditingControls = true;
     private boolean mShowParameterValue = true;
-    private boolean mShowUtilityPanel = true;
-
+    private boolean mIsBooleanFilter = false;
+    private String mSerializationName;
     public static final byte TYPE_BORDER = 1;
     public static final byte TYPE_FX = 2;
     public static final byte TYPE_WBALANCE = 3;
     public static final byte TYPE_VIGNETTE = 4;
     public static final byte TYPE_NORMAL = 5;
     public static final byte TYPE_TINYPLANET = 6;
-
-    private FilterRepresentation mTempRepresentation = null;
+    public static final byte TYPE_GEOMETRY = 7;
+    protected static final String NAME_TAG = "Name";
 
     public FilterRepresentation(String name) {
         mName = name;
     }
 
-    @Override
-    public FilterRepresentation clone() throws CloneNotSupportedException {
-        FilterRepresentation representation = (FilterRepresentation) super.clone();
+    public FilterRepresentation copy(){
+        FilterRepresentation representation = new FilterRepresentation(mName);
+        representation.useParametersFrom(this);
+        return representation;
+    }
+
+    protected void copyAllParameters(FilterRepresentation representation) {
         representation.setName(getName());
-        representation.setPriority(getPriority());
         representation.setFilterClass(getFilterClass());
+        representation.setFilterType(getFilterType());
         representation.setSupportsPartialRendering(supportsPartialRendering());
         representation.setTextId(getTextId());
         representation.setEditorId(getEditorId());
-        representation.setButtonId(getButtonId());
         representation.setOverlayId(getOverlayId());
         representation.setOverlayOnly(getOverlayOnly());
-        representation.setShowEditingControls(showEditingControls());
         representation.setShowParameterValue(showParameterValue());
-        representation.setShowUtilityPanel(showUtilityPanel());
-        representation.mTempRepresentation =
-                mTempRepresentation != null ? mTempRepresentation.clone() : null;
-        if (DEBUG) {
-            Log.v(LOGTAG, "cloning from <" + this + "> to <" + representation + ">");
-        }
-        return representation;
+        representation.mSerializationName = mSerializationName;
+        representation.setIsBooleanFilter(isBooleanFilter());
     }
 
     public boolean equals(FilterRepresentation representation) {
         if (representation == null) {
             return false;
         }
-        if (representation.mFilterClass == representation.mFilterClass
+        if (representation.mFilterClass == mFilterClass
                 && representation.mName.equalsIgnoreCase(mName)
                 && representation.mPriority == mPriority
-                && representation.mSupportsPartialRendering == mSupportsPartialRendering
+                // TODO: After we enable partial rendering, we can switch back
+                // to use member variable here.
+                && representation.supportsPartialRendering() == supportsPartialRendering()
                 && representation.mTextId == mTextId
                 && representation.mEditorId == mEditorId
                 && representation.mButtonId == mButtonId
                 && representation.mOverlayId == mOverlayId
                 && representation.mOverlayOnly == mOverlayOnly
-                && representation.mShowEditingControls == mShowEditingControls
                 && representation.mShowParameterValue == mShowParameterValue
-                && representation.mShowUtilityPanel == mShowUtilityPanel) {
+                && representation.mIsBooleanFilter == mIsBooleanFilter) {
             return true;
         }
         return false;
     }
 
+    public boolean isBooleanFilter() {
+        return mIsBooleanFilter;
+    }
+
+    public void setIsBooleanFilter(boolean value) {
+        mIsBooleanFilter = value;
+    }
+
+    @Override
     public String toString() {
         return mName;
     }
@@ -104,11 +116,19 @@ public class FilterRepresentation implements Cloneable {
         return mName;
     }
 
-    public void setPriority(int priority) {
+    public void setSerializationName(String sname) {
+        mSerializationName = sname;
+    }
+
+    public String getSerializationName() {
+        return mSerializationName;
+    }
+
+    public void setFilterType(int priority) {
         mPriority = priority;
     }
 
-    public int getPriority() {
+    public int getFilterType() {
         return mPriority;
     }
 
@@ -117,7 +137,7 @@ public class FilterRepresentation implements Cloneable {
     }
 
     public boolean supportsPartialRendering() {
-        return false && mSupportsPartialRendering; // disable for now
+        return mSupportsPartialRendering;
     }
 
     public void setSupportsPartialRendering(boolean value) {
@@ -127,40 +147,21 @@ public class FilterRepresentation implements Cloneable {
     public void useParametersFrom(FilterRepresentation a) {
     }
 
-    public void clearTempRepresentation() {
-        mTempRepresentation = null;
-    }
-
-    public synchronized void updateTempParametersFrom(FilterRepresentation representation) {
-        if (mTempRepresentation == null) {
-            try {
-                mTempRepresentation = representation.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            mTempRepresentation.useParametersFrom(representation);
-        }
-    }
-
-    public synchronized void synchronizeRepresentation() {
-        if (mTempRepresentation != null) {
-            useParametersFrom(mTempRepresentation);
-        }
-    }
-
-    public boolean allowsMultipleInstances() {
+    public boolean allowsSingleInstanceOnly() {
         return false;
     }
 
-    public Class getFilterClass() {
+    public Class<?> getFilterClass() {
         return mFilterClass;
     }
 
-    public void setFilterClass(Class filterClass) {
+    public void setFilterClass(Class<?> filterClass) {
         mFilterClass = filterClass;
     }
 
+    // This same() function is different from equals(), basically it checks
+    // whether 2 FilterRepresentations are the same type. It doesn't care about
+    // the values.
     public boolean same(FilterRepresentation b) {
         if (b == null) {
             return false;
@@ -174,14 +175,6 @@ public class FilterRepresentation implements Cloneable {
 
     public void setTextId(int textId) {
         mTextId = textId;
-    }
-
-    public int getButtonId() {
-        return mButtonId;
-    }
-
-    public void setButtonId(int buttonId) {
-        mButtonId = buttonId;
     }
 
     public int getOverlayId() {
@@ -213,14 +206,6 @@ public class FilterRepresentation implements Cloneable {
         mEditorId = editorId;
     }
 
-    public boolean showEditingControls() {
-        return mShowEditingControls;
-    }
-
-    public void setShowEditingControls(boolean showEditingControls) {
-        mShowEditingControls = showEditingControls;
-    }
-
     public boolean showParameterValue() {
         return mShowParameterValue;
     }
@@ -229,16 +214,67 @@ public class FilterRepresentation implements Cloneable {
         mShowParameterValue = showParameterValue;
     }
 
-    public boolean showUtilityPanel() {
-        return mShowUtilityPanel;
-    }
-
-    public void setShowUtilityPanel(boolean showUtilityPanel) {
-        mShowUtilityPanel = showUtilityPanel;
-    }
-
     public String getStateRepresentation() {
         return "";
     }
 
+    /**
+     * Method must "beginObject()" add its info and "endObject()"
+     * @param writer
+     * @throws IOException
+     */
+    public void serializeRepresentation(JsonWriter writer) throws IOException {
+        writer.beginObject();
+        {
+            String[][] rep = serializeRepresentation();
+            for (int k = 0; k < rep.length; k++) {
+                writer.name(rep[k][0]);
+                writer.value(rep[k][1]);
+            }
+        }
+        writer.endObject();
+    }
+
+    // this is the old way of doing this and will be removed soon
+    public String[][] serializeRepresentation() {
+        String[][] ret = {{NAME_TAG, getName()}};
+        return ret;
+    }
+
+    public void deSerializeRepresentation(JsonReader reader) throws IOException {
+        ArrayList<String[]> al = new ArrayList<String[]>();
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String[] kv = {reader.nextName(), reader.nextString()};
+            al.add(kv);
+
+        }
+        reader.endObject();
+        String[][] oldFormat = al.toArray(new String[al.size()][]);
+
+        deSerializeRepresentation(oldFormat);
+    }
+
+    // this is the old way of doing this and will be removed soon
+    public void deSerializeRepresentation(String[][] rep) {
+        for (int i = 0; i < rep.length; i++) {
+            if (NAME_TAG.equals(rep[i][0])) {
+                mName = rep[i][1];
+                break;
+            }
+        }
+    }
+
+    // Override this in subclasses
+    public int getStyle() {
+        return -1;
+    }
+
+    public boolean canMergeWith(FilterRepresentation representation) {
+        if (getFilterType() == FilterRepresentation.TYPE_GEOMETRY
+            && representation.getFilterType() == FilterRepresentation.TYPE_GEOMETRY) {
+            return true;
+        }
+        return false;
+    }
 }

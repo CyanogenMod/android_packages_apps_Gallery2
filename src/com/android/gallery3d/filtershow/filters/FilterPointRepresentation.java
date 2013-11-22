@@ -25,17 +25,18 @@ public abstract class FilterPointRepresentation extends FilterRepresentation {
     public FilterPointRepresentation(String type, int textid, int editorID) {
         super(type);
         setFilterClass(ImageFilterRedEye.class);
-        setPriority(FilterRepresentation.TYPE_NORMAL);
+        setFilterType(FilterRepresentation.TYPE_NORMAL);
         setTextId(textid);
         setEditorId(editorID);
     }
 
     @Override
-    public FilterRepresentation clone() throws CloneNotSupportedException {
-        FilterPointRepresentation representation = (FilterPointRepresentation) super
-                .clone();
-        representation.mCandidates = (Vector<FilterPoint>) mCandidates.clone();
-        return representation;
+    public abstract FilterRepresentation copy();
+
+    @Override
+    protected void copyAllParameters(FilterRepresentation representation) {
+        super.copyAllParameters(representation);
+        representation.useParametersFrom(this);
     }
 
     public boolean hasCandidates() {

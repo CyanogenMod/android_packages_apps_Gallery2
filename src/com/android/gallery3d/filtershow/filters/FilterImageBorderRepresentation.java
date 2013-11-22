@@ -24,14 +24,12 @@ public class FilterImageBorderRepresentation extends FilterRepresentation {
 
     public FilterImageBorderRepresentation(int drawableResource) {
         super("ImageBorder");
-        mDrawableResource = drawableResource;
         setFilterClass(ImageFilterBorder.class);
-        setPriority(FilterRepresentation.TYPE_BORDER);
+        mDrawableResource = drawableResource;
+        setFilterType(FilterRepresentation.TYPE_BORDER);
         setTextId(R.string.borders);
         setEditorId(ImageOnlyEditor.ID);
-        setShowEditingControls(false);
         setShowParameterValue(false);
-        setShowUtilityPanel(false);
     }
 
     public String toString() {
@@ -39,11 +37,17 @@ public class FilterImageBorderRepresentation extends FilterRepresentation {
     }
 
     @Override
-    public FilterRepresentation clone() throws CloneNotSupportedException {
-        FilterImageBorderRepresentation representation = (FilterImageBorderRepresentation) super.clone();
-        representation.setName(getName());
-        representation.setDrawableResource(getDrawableResource());
+    public FilterRepresentation copy() {
+        FilterImageBorderRepresentation representation =
+                new FilterImageBorderRepresentation(mDrawableResource);
+        copyAllParameters(representation);
         return representation;
+    }
+
+    @Override
+    protected void copyAllParameters(FilterRepresentation representation) {
+        super.copyAllParameters(representation);
+        representation.useParametersFrom(this);
     }
 
     public void useParametersFrom(FilterRepresentation a) {
@@ -73,7 +77,7 @@ public class FilterImageBorderRepresentation extends FilterRepresentation {
         return R.string.none;
     }
 
-    public boolean allowsMultipleInstances() {
+    public boolean allowsSingleInstanceOnly() {
         return true;
     }
 

@@ -322,8 +322,8 @@ public class AlbumSetPage extends ActivityState implements
         initializeViews();
         initializeData(data);
         Context context = mActivity.getAndroidContext();
-        mGetContent = data.getBoolean(Gallery.KEY_GET_CONTENT, false);
-        mGetAlbum = data.getBoolean(Gallery.KEY_GET_ALBUM, false);
+        mGetContent = data.getBoolean(GalleryActivity.KEY_GET_CONTENT, false);
+        mGetAlbum = data.getBoolean(GalleryActivity.KEY_GET_ALBUM, false);
         mTitle = data.getString(AlbumSetPage.KEY_SET_TITLE);
         mSubtitle = data.getString(AlbumSetPage.KEY_SET_SUBTITLE);
         mEyePosition = new EyePosition(context, this);
@@ -534,7 +534,7 @@ public class AlbumSetPage extends ActivityState implements
         if (mGetContent) {
             inflater.inflate(R.menu.pickup, menu);
             int typeBits = mData.getInt(
-                    Gallery.KEY_TYPE_BITS, DataManager.INCLUDE_IMAGE);
+                    GalleryActivity.KEY_TYPE_BITS, DataManager.INCLUDE_IMAGE);
             mActionBar.setTitle(GalleryUtils.getSelectionModePrompt(typeBits));
         } else  if (mGetAlbum) {
             inflater.inflate(R.menu.pickup, menu);
@@ -554,7 +554,7 @@ public class AlbumSetPage extends ActivityState implements
 
             FilterUtils.setupMenuItems(mActionBar, mMediaSet.getPath(), false);
 
-            Intent helpIntent = HelpUtils.getHelpIntent(activity, R.string.help_url_gallery_main);
+            Intent helpIntent = HelpUtils.getHelpIntent(activity);
 
             MenuItem helpItem = menu.findItem(R.id.action_general_help);
             helpItem.setVisible(helpIntent != null);

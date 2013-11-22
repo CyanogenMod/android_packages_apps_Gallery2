@@ -16,6 +16,6 @@
 -->
 <bitmap
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:src="@drawable/filtershow_background"
+        android:src="@drawable/filtershow_background_new"
         android:tileMode="repeat"
         android:dither="false" />

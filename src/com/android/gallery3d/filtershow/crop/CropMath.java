@@ -20,7 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
-import com.android.gallery3d.filtershow.imageshow.GeometryMath;
+import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
 
 import java.util.Arrays;
 
@@ -97,8 +97,8 @@ public class CropMath {
         if (array.length < 2)
             return;
         for (int x = 0; x < array.length; x += 2) {
-            array[x] = GeometryMath.clamp(array[x], imageBound.left, imageBound.right);
-            array[x + 1] = GeometryMath.clamp(array[x + 1], imageBound.top, imageBound.bottom);
+            array[x] = GeometryMathUtils.clamp(array[x], imageBound.left, imageBound.right);
+            array[x + 1] = GeometryMathUtils.clamp(array[x + 1], imageBound.top, imageBound.bottom);
         }
     }
 
@@ -119,8 +119,8 @@ public class CropMath {
                     corners[i], corners[(i + 1) % len],
                     corners[(i + 2) % len], corners[(i + 3) % len]
             };
-            float mag = GeometryMath.vectorLength(
-                    GeometryMath.shortestVectorFromPointToLine(point, line));
+            float mag = GeometryMathUtils.vectorLength(
+                    GeometryMathUtils.shortestVectorFromPointToLine(point, line));
             if (mag < oldMag) {
                 oldMag = mag;
                 bestLine = line;
@@ -196,14 +196,13 @@ public class CropMath {
         float finalH = origH;
         if (origA < a) {
             finalH = origW / a;
+            r.top = r.centerY() - finalH / 2;
+            r.bottom = r.top + finalH;
         } else {
             finalW = origH * a;
+            r.left = r.centerX() - finalW / 2;
+            r.right = r.left + finalW;
         }
-        float centX = r.centerX();
-        float centY = r.centerY();
-        float hw = finalW / 2;
-        float hh = finalH / 2;
-        r.set(centX - hw, centY - hh, centX + hw, centY + hh);
     }
 
     /**

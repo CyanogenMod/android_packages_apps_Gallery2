@@ -130,7 +130,8 @@ public class PhotoPageBottomControls implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (mContainerVisible && mControlsVisible.get(view).booleanValue()) {
+        Boolean controlVisible = mControlsVisible.get(view);
+        if (mContainerVisible && controlVisible != null && controlVisible.booleanValue()) {
             mDelegate.onBottomControlClicked(view.getId());
         }
     }

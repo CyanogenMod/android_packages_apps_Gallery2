@@ -28,7 +28,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
-import com.android.gallery3d.filtershow.HistoryAdapter;
+import com.android.gallery3d.filtershow.history.HistoryManager;
 import com.android.gallery3d.filtershow.category.MainPanel;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.StatePanel;
@@ -54,7 +54,7 @@ public class EditorPanel extends Fragment {
 
     public void cancelCurrentFilter() {
         MasterImage masterImage = MasterImage.getImage();
-        HistoryAdapter adapter = masterImage.getHistory();
+        HistoryManager adapter = masterImage.getHistory();
 
         int position = adapter.undo();
         masterImage.onHistoryItemClick(position);
@@ -88,26 +88,24 @@ public class EditorPanel extends Fragment {
                 activity.backToMain();
             }
         });
-        applyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MasterImage.getImage().invalidateFiltersOnly();
-                FilterShowActivity activity = (FilterShowActivity) getActivity();
-                activity.backToMain();
-            }
-        });
 
         Button toggleState = (Button) mMainView.findViewById(R.id.toggle_state);
-
         mEditor = activity.getEditor(mEditorID);
         if (mEditor != null) {
             mEditor.setUpEditorUI(actionControl, editControl, editTitle, toggleState);
-            mEditor.getImageShow().select();
             mEditor.reflectCurrentFilter();
             if (mEditor.useUtilityPanel()) {
                 mEditor.openUtilityPanel((LinearLayout) actionControl);
             }
         }
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FilterShowActivity activity = (FilterShowActivity) getActivity();
+                mEditor.finalApplyCalled();
+                activity.backToMain();
+            }
+        });
 
         showImageStatePanel(activity.isShowingImageStatePanel());
         return mMainView;
@@ -122,20 +120,35 @@ public class EditorPanel extends Fragment {
     }
 
     public void showImageStatePanel(boolean show) {
-        if (mMainView.findViewById(R.id.state_panel_container) == null) {
-            return;
+        View container = mMainView.findViewById(R.id.state_panel_container);
+        FragmentTransaction transaction = null;
+        boolean child = false;
+        if (container == null) {
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            container = activity.getMainStatePanelContainer(R.id.state_panel_container);
+        } else {
+            transaction = getChildFragmentManager().beginTransaction();
+            child = true;
         }
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (container == null) {
+            return;
+        } else {
+            transaction = getFragmentManager().beginTransaction();
+        }
         Fragment panel = getActivity().getSupportFragmentManager().findFragmentByTag(
                 MainPanel.FRAGMENT_TAG);
         if (panel == null || panel instanceof MainPanel) {
             transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         }
         if (show) {
+            container.setVisibility(View.VISIBLE);
             StatePanel statePanel = new StatePanel();
             transaction.replace(R.id.state_panel_container, statePanel, StatePanel.FRAGMENT_TAG);
         } else {
             Fragment statePanel = getChildFragmentManager().findFragmentByTag(StatePanel.FRAGMENT_TAG);
+            if (child) {
+                statePanel = getFragmentManager().findFragmentByTag(StatePanel.FRAGMENT_TAG);
+            }
             if (statePanel != null) {
                 transaction.remove(statePanel);
             }

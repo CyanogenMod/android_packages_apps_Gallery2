@@ -22,6 +22,11 @@
     android:orientation="vertical"
     android:visibility="visible" >
 
+    <View
+            android:background="@color/toolbar_separation_line"
+            android:layout_height="1dip"
+            android:layout_width="match_parent"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +51,7 @@
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dip"
+                android:layout_height="48dip"
                 android:background="@color/background_main_toolbar"
                 android:orientation="horizontal"
                 android:baselineAligned="false"
@@ -82,11 +87,11 @@
                         android:layout_height="fill_parent"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-                        android:gravity="center"
                         android:text="@string/apply_effect"
                         android:textSize="18dip"
-                        android:drawableRight="@drawable/filtershow_menu_marker"
-                        android:textAllCaps="true" />
+                        android:drawableEnd="@drawable/filtershow_menu_marker_rtl"
+                        android:textAllCaps="true"
+                        />
 
             </LinearLayout>
 

@@ -19,7 +19,7 @@ package com.android.gallery3d.filtershow.filters;
 import com.android.gallery3d.R;
 
 public class ImageFilterSharpen extends ImageFilterRS {
-
+    private static final String SERIALIZATION_NAME = "SHARPEN";
     private static final String LOGTAG = "ImageFilterSharpen";
     private ScriptC_convolve3x3 mScript;
 
@@ -31,10 +31,10 @@ public class ImageFilterSharpen extends ImageFilterRS {
 
     public FilterRepresentation getDefaultRepresentation() {
         FilterRepresentation representation = new FilterBasicRepresentation("Sharpen", 0, 0, 100);
+        representation.setSerializationName(SERIALIZATION_NAME);
         representation.setShowParameterValue(true);
         representation.setFilterClass(ImageFilterSharpen.class);
         representation.setTextId(R.string.sharpness);
-        representation.setButtonId(R.id.sharpenButton);
         representation.setOverlayId(R.drawable.filtershow_button_colors_sharpen);
         representation.setEditorId(R.id.imageShow);
         representation.setSupportsPartialRendering(true);
@@ -52,7 +52,7 @@ public class ImageFilterSharpen extends ImageFilterRS {
     }
 
     @Override
-    protected void resetScripts() {
+    public void resetScripts() {
         if (mScript != null) {
             mScript.destroy();
             mScript = null;

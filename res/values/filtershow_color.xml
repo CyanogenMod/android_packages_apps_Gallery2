@@ -24,8 +24,8 @@
     <color name="background_toolbar">#363949</color>
     <color name="background_main_toolbar">#232323</color>
     <color name="toolbar_separation_line">#333333</color>
-    <color name="slider_dot_color">#6464FF</color>
-    <color name="slider_line_color">#33B5E5</color>
+    <color name="slider_dot_color">#646464</color>
+    <color name="slider_line_color">#888888</color>
     <color name="state_panel_separation_line">#232323</color>
     <color name="filtershow_background">#333333</color>
     <color name="filtershow_graphic">#717171</color>
@@ -38,4 +38,16 @@
     <color name="filtershow_categoryview_background">#1a1a1a</color>
     <color name="filtershow_categoryview_text">#a7a7a7</color>
     <color name="filtershow_category_selection">#ffffffff</color>
+    <color name="gradcontrol_point_center">#ffffffff</color>
+    <color name="gradcontrol_point_edge">#ffffffff</color>
+    <color name="gradcontrol_graypoint_center">#888888</color>
+    <color name="gradcontrol_graypoint_edge">#BBBBBB</color>
+    <color name="gradcontrol_point_shadow_start">#66000000</color>
+    <color name="gradcontrol_point_shadow_end">#00000000</color>
+    <color name="gradcontrol_line_color">#FFFFFF</color>
+    <color name="gradcontrol_line_shadow">#000000</color>
+    <color name="draw_rect_border">#888888</color>
+    <color name="color_chooser_unslected_border">#00000000</color>
+    <color name="color_chooser_slected_border">#a7a7a7</color>
+
 </resources>
