@@ -139,7 +139,7 @@
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"نام تصویر"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"اندازه تصویر"</string>
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"هیستوگرام"</string>
-    <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"داده EXIF"</string>
+    <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"‏داده EXIF"</string>
     <string name="filtershow_add_button_looks" msgid="8630823661416925426">"پیش‌تنظیم"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"نسخه"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"اصلی"</string>
@@ -150,7 +150,7 @@
     <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
     <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"فاصله سوژه"</string>
     <string name="filtershow_exif_date" msgid="8882402253732028544">"تاریخ عکس‌برداری"</string>
-    <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"عدد F"</string>
+    <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"‏عدد F"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"زمان نوردهی"</string>
     <string name="filtershow_exif_copyright" msgid="8801875918803737581">"حق نسخه‌برداری"</string>
 </resources>
