@@ -25,7 +25,7 @@
     <string name="loading_image" msgid="1200894415793838191">"טוען תמונה…"</string>
     <string name="loading_account" msgid="928195413034552034">"טוען חשבון..."</string>
     <string name="resume_playing_title" msgid="8996677350649355013">"המשך את הקרנת הווידאו"</string>
-    <string name="resume_playing_message" msgid="5184414518126703481">"להמשיך להפעיל מ-%s?"</string>
+    <string name="resume_playing_message" msgid="5184414518126703481">"‏להמשיך להפעיל מ-%s?"</string>
     <string name="resume_playing_resume" msgid="3847915469173852416">"המשך את ההפעלה"</string>
     <string name="loading" msgid="7038208555304563571">"טוען..."</string>
     <string name="fail_to_load" msgid="8394392853646664505">"לא ניתן להעלות"</string>
@@ -65,23 +65,23 @@
     <string name="deselect_all" msgid="5758897506061723684">"בטל בחירה של הכל"</string>
     <string name="slideshow" msgid="4355906903247112975">"מצגת"</string>
     <string name="details" msgid="8415120088556445230">"פרטים"</string>
-    <string name="details_title" msgid="2611396603977441273">"%1$d מתוך %2$d פריטים:"</string>
+    <string name="details_title" msgid="2611396603977441273">"‏%1$d מתוך %2$d פריטים:"</string>
     <string name="close" msgid="5585646033158453043">"סגור"</string>
     <string name="switch_to_camera" msgid="7280111806675169992">"עבור למצלמה"</string>
   <plurals name="number_of_items_selected">
-    <item quantity="zero" msgid="2142579311530586258">"%1$d נבחרו"</item>
-    <item quantity="one" msgid="2478365152745637768">"%1$d נבחר"</item>
-    <item quantity="other" msgid="754722656147810487">"%1$d נבחרו"</item>
+    <item quantity="zero" msgid="2142579311530586258">"‏%1$d נבחרו"</item>
+    <item quantity="one" msgid="2478365152745637768">"‏%1$d נבחר"</item>
+    <item quantity="other" msgid="754722656147810487">"‏%1$d נבחרו"</item>
   </plurals>
   <plurals name="number_of_albums_selected">
-    <item quantity="zero" msgid="749292746814788132">"%1$d נבחרו"</item>
-    <item quantity="one" msgid="6184377003099987825">"%1$d נבחר"</item>
-    <item quantity="other" msgid="53105607141906130">"%1$d נבחרו"</item>
+    <item quantity="zero" msgid="749292746814788132">"‏%1$d נבחרו"</item>
+    <item quantity="one" msgid="6184377003099987825">"‏%1$d נבחר"</item>
+    <item quantity="other" msgid="53105607141906130">"‏%1$d נבחרו"</item>
   </plurals>
   <plurals name="number_of_groups_selected">
-    <item quantity="zero" msgid="3466388370310869238">"%1$d נבחרו"</item>
-    <item quantity="one" msgid="5030162638216034260">"%1$d נבחרו"</item>
-    <item quantity="other" msgid="3512041363942842738">"%1$d נבחרו"</item>
+    <item quantity="zero" msgid="3466388370310869238">"‏%1$d נבחרו"</item>
+    <item quantity="one" msgid="5030162638216034260">"‏%1$d נבחרו"</item>
+    <item quantity="other" msgid="3512041363942842738">"‏%1$d נבחרו"</item>
   </plurals>
     <string name="show_on_map" msgid="6157544221201750980">"הצג במפה"</string>
     <string name="rotate_left" msgid="5888273317282539839">"סובב שמאלה"</string>
@@ -114,12 +114,12 @@
     <string name="appwidget_empty_text" msgid="1228925628357366957">"אין תמונות."</string>
     <string name="crop_saved" msgid="1595985909779105158">"התמונה שנחתכה נשמרה ב-<xliff:g id="FOLDER_NAME">%s</xliff:g>."</string>
     <string name="no_albums_alert" msgid="4111744447491690896">"אין אלבומים זמינים."</string>
-    <string name="empty_album" msgid="4542880442593595494">"O תמונות/סרטוני וידאו זמינים."</string>
+    <string name="empty_album" msgid="4542880442593595494">"‏O תמונות/סרטוני וידאו זמינים."</string>
     <string name="picasa_posts" msgid="1497721615718760613">"פוסטים"</string>
     <string name="make_available_offline" msgid="5157950985488297112">"הפוך לזמין במצב לא מקוון"</string>
     <string name="sync_picasa_albums" msgid="8522572542111169872">"רענן"</string>
     <string name="done" msgid="217672440064436595">"סיום"</string>
-    <string name="sequence_in_set" msgid="7235465319919457488">"%1$d מתוך %2$d פריטים:"</string>
+    <string name="sequence_in_set" msgid="7235465319919457488">"‏%1$d מתוך %2$d פריטים:"</string>
     <string name="title" msgid="7622928349908052569">"כותרת"</string>
     <string name="description" msgid="3016729318096557520">"תיאור"</string>
     <string name="time" msgid="1367953006052876956">"שעה"</string>
@@ -129,7 +129,7 @@
     <string name="height" msgid="3648885449443787772">"גובה"</string>
     <string name="orientation" msgid="4958327983165245513">"כיוון"</string>
     <string name="duration" msgid="8160058911218541616">"משך"</string>
-    <string name="mimetype" msgid="8024168704337990470">"סוג MIME"</string>
+    <string name="mimetype" msgid="8024168704337990470">"‏סוג MIME"</string>
     <string name="file_size" msgid="8486169301588318915">"גודל הקובץ"</string>
     <string name="maker" msgid="7921835498034236197">"יוצר"</string>
     <string name="model" msgid="8240207064064337366">"דגם"</string>
@@ -138,7 +138,7 @@
     <string name="focal_length" msgid="1291383769749877010">"רוחק מוקד"</string>
     <string name="white_balance" msgid="1582509289994216078">"איזון לבן"</string>
     <string name="exposure_time" msgid="3990163680281058826">"זמן חשיפה"</string>
-    <string name="iso" msgid="5028296664327335940">"מהירות ISO‏"</string>
+    <string name="iso" msgid="5028296664327335940">"‏מהירות ISO‏"</string>
     <string name="unit_mm" msgid="1125768433254329136">"מ\"מ"</string>
     <string name="manual" msgid="6608905477477607865">"ידנית"</string>
     <string name="auto" msgid="4296941368722892821">"אוטומטי"</string>
@@ -152,7 +152,7 @@
     <string name="ffx_blue_crush" msgid="6034283412305561226">"כחול"</string>
     <string name="ffx_bw_contrast" msgid="517988490066217206">"ש/ל"</string>
     <string name="ffx_punch" msgid="1343475517872562639">"פונץ\'"</string>
-    <string name="ffx_x_process" msgid="4779398678661811765">"תהליך X"</string>
+    <string name="ffx_x_process" msgid="4779398678661811765">"‏תהליך X"</string>
     <string name="ffx_washout" msgid="4594160692176642735">"לאטה"</string>
     <string name="ffx_washout_color" msgid="8034075742195795219">"ליתו"</string>
   <plurals name="make_albums_available_offline">
@@ -162,8 +162,8 @@
     <string name="try_to_set_local_album_available_offline" msgid="2184754031896160755">"פריט זה מאוחסן באופן מקומי וזמין במצב לא מקוון."</string>
     <string name="set_label_all_albums" msgid="4581863582996336783">"כל האלבומים"</string>
     <string name="set_label_local_albums" msgid="6698133661656266702">"אלבומים מקומיים"</string>
-    <string name="set_label_mtp_devices" msgid="1283513183744896368">"מכשירי MTP"</string>
-    <string name="set_label_picasa_albums" msgid="5356258354953935895">"אלבומי Google"</string>
+    <string name="set_label_mtp_devices" msgid="1283513183744896368">"‏מכשירי MTP"</string>
+    <string name="set_label_picasa_albums" msgid="5356258354953935895">"‏אלבומי Google"</string>
     <string name="free_space_format" msgid="8766337315709161215">"<xliff:g id="BYTES">%s</xliff:g> של שטח פנוי"</string>
     <string name="size_below" msgid="2074956730721942260">"<xliff:g id="SIZE">%1$s</xliff:g> ומטה"</string>
     <string name="size_above" msgid="5324398253474104087">"<xliff:g id="SIZE">%1$s</xliff:g> ומעלה"</string>
@@ -207,26 +207,26 @@
     <string name="save" msgid="613976532235060516">"שמור"</string>
     <string name="ingest_scanning" msgid="1062957108473988971">"סורק תוכן..."</string>
   <plurals name="ingest_number_of_items_scanned">
-    <item quantity="zero" msgid="2623289390474007396">"%1$d פריטים נסרקו"</item>
-    <item quantity="one" msgid="4340019444460561648">"פריט %1$d נסרק"</item>
-    <item quantity="other" msgid="3138021473860555499">"%1$d פריטים נסרקו"</item>
+    <item quantity="zero" msgid="2623289390474007396">"‏%1$d פריטים נסרקו"</item>
+    <item quantity="one" msgid="4340019444460561648">"‏פריט %1$d נסרק"</item>
+    <item quantity="other" msgid="3138021473860555499">"‏%1$d פריטים נסרקו"</item>
   </plurals>
     <string name="ingest_sorting" msgid="1028652103472581918">"ממיין..."</string>
     <string name="ingest_scanning_done" msgid="8911916277034483430">"הסריקה הסתיימה"</string>
     <string name="ingest_importing" msgid="7456633398378527611">"מייבא..."</string>
     <string name="ingest_empty_device" msgid="2010470482779872622">"אין תוכן זמין לייבוא במכשיר זה."</string>
-    <string name="ingest_no_device" msgid="3054128223131382122">"לא מחובר אף מכשיר MTP"</string>
+    <string name="ingest_no_device" msgid="3054128223131382122">"‏לא מחובר אף מכשיר MTP"</string>
     <string name="camera_error_title" msgid="6484667504938477337">"שגיאת מצלמה"</string>
     <string name="cannot_connect_camera" msgid="955440687597185163">"לא ניתן להתחבר למצלמה."</string>
     <string name="camera_disabled" msgid="8923911090533439312">"המצלמה הושבתה בשל מדיניות אבטחה."</string>
     <string name="camera_label" msgid="6346560772074764302">"מצלמה"</string>
     <string name="wait" msgid="8600187532323801552">"המתן..."</string>
-    <string name="no_storage" product="nosdcard" msgid="7335975356349008814">"טען אחסון USB לפני השימוש במצלמה."</string>
-    <string name="no_storage" product="default" msgid="5137703033746873624">"הכנס כרטיס SD לפני השימוש במצלמה."</string>
-    <string name="preparing_sd" product="nosdcard" msgid="6104019983528341353">"מכין אחסון USB..."</string>
-    <string name="preparing_sd" product="default" msgid="2914969119574812666">"מכין כרטיס SD..."</string>
-    <string name="access_sd_fail" product="nosdcard" msgid="8147993984037859354">"לא ניתן לגשת לאחסון ה-USB."</string>
-    <string name="access_sd_fail" product="default" msgid="1584968646870054352">"לא ניתן לגשת לכרטיס ה-SD."</string>
+    <string name="no_storage" product="nosdcard" msgid="7335975356349008814">"‏טען אחסון USB לפני השימוש במצלמה."</string>
+    <string name="no_storage" product="default" msgid="5137703033746873624">"‏הכנס כרטיס SD לפני השימוש במצלמה."</string>
+    <string name="preparing_sd" product="nosdcard" msgid="6104019983528341353">"‏מכין אחסון USB..."</string>
+    <string name="preparing_sd" product="default" msgid="2914969119574812666">"‏מכין כרטיס SD..."</string>
+    <string name="access_sd_fail" product="nosdcard" msgid="8147993984037859354">"‏לא ניתן לגשת לאחסון ה-USB."</string>
+    <string name="access_sd_fail" product="default" msgid="1584968646870054352">"‏לא ניתן לגשת לכרטיס ה-SD."</string>
     <string name="review_cancel" msgid="8188009385853399254">"ביטול"</string>
     <string name="review_ok" msgid="1156261588693116433">"בוצע"</string>
     <string name="time_lapse_title" msgid="4360632427760662691">"הקלטה של מעבר זמן"</string>
@@ -238,7 +238,7 @@
     <string name="pref_camera_timer_title" msgid="3105232208281893389">"טיימר לספירה לאחור"</string>
   <plurals name="pref_camera_timer_entry">
     <item quantity="one" msgid="1654523400981245448">"שנייה אחת"</item>
-    <item quantity="other" msgid="6455381617076792481">"%d שניות"</item>
+    <item quantity="other" msgid="6455381617076792481">"‏%d שניות"</item>
   </plurals>
     <!-- no translation found for pref_camera_timer_sound_default (7066624532144402253) -->
     <skip />
@@ -258,7 +258,7 @@
     <string name="pref_camera_picturesize_entry_4mp" msgid="933242108272469142">"4 מגה פיקסל"</string>
     <string name="pref_camera_picturesize_entry_3mp" msgid="741415860337400696">"3 מגה פיקסלים"</string>
     <string name="pref_camera_picturesize_entry_2mp" msgid="1753709802245460393">"2 מגה פיקסלים"</string>
-    <string name="pref_camera_picturesize_entry_2mp_wide" msgid="5359490802026616612">"2M פיקסל (16:9)"</string>
+    <string name="pref_camera_picturesize_entry_2mp_wide" msgid="5359490802026616612">"‏2M פיקסל (16:9)"</string>
     <string name="pref_camera_picturesize_entry_1_3mp" msgid="829109608140747258">"1.3 מגה פיקסלים"</string>
     <string name="pref_camera_picturesize_entry_1mp" msgid="1669725616780375066">"מגה פיקסל אחד"</string>
     <string name="pref_camera_picturesize_entry_vga" msgid="806934254162981919">"VGA"</string>
@@ -270,7 +270,7 @@
     <string name="pref_camera_focusmode_label_auto" msgid="8547956917516317183">"אוטומטי"</string>
     <string name="pref_camera_focusmode_label_infinity" msgid="4272904160062531778">"אינסוף"</string>
     <string name="pref_camera_focusmode_label_macro" msgid="8749317592620908054">"מאקרו"</string>
-    <string name="pref_camera_flashmode_title" msgid="2287362477238791017">"מצב Flash"</string>
+    <string name="pref_camera_flashmode_title" msgid="2287362477238791017">"‏מצב Flash"</string>
     <string name="pref_camera_flashmode_label" msgid="7546741624882856171">"מצב מבזק"</string>
     <string name="pref_camera_flashmode_entry_auto" msgid="7288383434237457709">"אוטומטי"</string>
     <string name="pref_camera_flashmode_entry_on" msgid="5330043918845197616">"מופעל"</string>
@@ -317,8 +317,8 @@
     <string name="pref_camera_id_label_back" msgid="8745553500400332333">"מצלמה חזיתית"</string>
     <string name="pref_camera_id_label_front" msgid="8699439330056996709">"מצלמה אחורית"</string>
     <string name="dialog_ok" msgid="6263301364153382152">"אישור"</string>
-    <string name="spaceIsLow_content" product="nosdcard" msgid="4401325203349203177">"אוזל המקום באמצעי האחסון מסוג USB. שנה את הגדרת האיכות או מחק כמה תמונות או קבצים אחרים."</string>
-    <string name="spaceIsLow_content" product="default" msgid="1732882643101247179">"השטח בכרטיס SD אוזל. שנה את הגדרת האיכות או מחק חלק מהתמונות או קבצים אחרים."</string>
+    <string name="spaceIsLow_content" product="nosdcard" msgid="4401325203349203177">"‏אוזל המקום באמצעי האחסון מסוג USB. שנה את הגדרת האיכות או מחק כמה תמונות או קבצים אחרים."</string>
+    <string name="spaceIsLow_content" product="default" msgid="1732882643101247179">"‏השטח בכרטיס SD אוזל. שנה את הגדרת האיכות או מחק חלק מהתמונות או קבצים אחרים."</string>
     <string name="video_reach_size_limit" msgid="6179877322015552390">"הגעת למגבלת הגודל."</string>
     <string name="pano_too_fast_prompt" msgid="2823839093291374709">"מהר מדי"</string>
     <string name="pano_dialog_prepare_preview" msgid="4788441554128083543">"מכין פנורמה"</string>
@@ -356,9 +356,9 @@
     <string name="accessibility_second_level_indicators" msgid="3855951632917627620">"פקדי הגדרות נוספות"</string>
     <string name="accessibility_back_to_first_level" msgid="5234411571109877131">"סגור פקדי הגדרה"</string>
     <string name="accessibility_zoom_control" msgid="1339909363226825709">"פקד \'הגדל/הקטן\'"</string>
-    <string name="accessibility_decrement" msgid="1411194318538035666">"הקטן %1$s"</string>
-    <string name="accessibility_increment" msgid="8447850530444401135">"הגדל %1$s"</string>
-    <string name="accessibility_check_box" msgid="7317447218256584181">"תיבת סימון %1$s"</string>
+    <string name="accessibility_decrement" msgid="1411194318538035666">"‏הקטן %1$s"</string>
+    <string name="accessibility_increment" msgid="8447850530444401135">"‏הגדל %1$s"</string>
+    <string name="accessibility_check_box" msgid="7317447218256584181">"‏תיבת סימון %1$s"</string>
     <string name="accessibility_switch_to_camera" msgid="5951340774212969461">"עבור לצילום תמונות"</string>
     <string name="accessibility_switch_to_video" msgid="4991396355234561505">"עבור לווידאו"</string>
     <string name="accessibility_switch_to_panorama" msgid="604756878371875836">"עבור לפנורמה"</string>
@@ -433,7 +433,7 @@
     <string name="camera_menu_more_label" msgid="6868642182125198710">"אפשרויות נוספות"</string>
     <string name="camera_menu_settings_label" msgid="875454962069404723">"הגדרות"</string>
   <plurals name="number_of_photos">
-    <item quantity="one" msgid="6949174783125614798">"תמונה %1$d"</item>
-    <item quantity="other" msgid="3813306834113858135">"%1$d תמונות"</item>
+    <item quantity="one" msgid="6949174783125614798">"‏תמונה %1$d"</item>
+    <item quantity="other" msgid="3813306834113858135">"‏%1$d תמונות"</item>
   </plurals>
 </resources>
