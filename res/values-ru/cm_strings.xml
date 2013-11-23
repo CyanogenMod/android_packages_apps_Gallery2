@@ -46,7 +46,7 @@
     <string name="pref_camera_scenemode_entry_asd">Лучший снимок</string>
     <string name="pref_camera_scenemode_entry_baby">Ребёнок</string>
     <string name="pref_camera_scenemode_entry_backgroundblur">Размытие фона</string>
-    <string name="pref_camera_scenemode_entry_backlight">Контровый свет</string>
+    <string name="pref_camera_scenemode_entry_backlight">Контровой свет</string>
     <string name="pref_camera_scenemode_entry_backlightportrait">Портрет с контр. светом</string>
     <string name="pref_camera_scenemode_entry_barcode">Штрих-код</string>
     <string name="pref_camera_scenemode_entry_beach">Пляж</string>
@@ -82,6 +82,7 @@
     <string name="pref_camera_scenemode_entry_text">Текст</string>
     <string name="pref_camera_scenemode_entry_theatre">Театр</string>
     <string name="pref_camera_scenemode_entry_whiteboard">Белая доска</string>
+    <string name="pref_camera_focusmode_label_auto">Покадровый автофокус</string>
     <string name="pref_camera_focusmode_entry_continuouspicture">Следящий автофокус</string>
     <string name="pref_camera_focusmode_entry_extended">Расширенный</string>
     <string name="pref_camera_focusmode_entry_facedetect">Обнаружение лиц</string>
@@ -154,5 +155,5 @@
     <string name="camera_menu_beauty_mode_label">АВТОУЛУЧШЕНИЕ</string>
     <string name="camera_menu_colorize_label">ОКРАСКА</string>
     <string name="camera_menu_effects_label">ЭФФЕКТЫ</string>
-
+    <string name="camera_menu_asd_label">ИНТЕЛЛЕКТ. АВТОРЕЖИМ</string>
 </resources>
