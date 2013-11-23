@@ -49,6 +49,6 @@
                 android:layout_alignParentTop="true"
                 android:padding="23dp"
                 android:visibility="gone"
-                android:src="@drawable/smart_scene_sports" />
+                android:src="@null" />
     </com.android.camera.PreviewFrameLayout>
 </merge>
