@@ -161,4 +161,5 @@
     <string name="camera_menu_beauty_mode_label">VERFRAAIEN</string>
     <string name="camera_menu_colorize_label">KLEUREFFECT</string>
     <string name="camera_menu_effects_label">EFFECTEN</string>
+    <string name="camera_menu_asd_label">AUTO-SCENE</string>
 </resources>
