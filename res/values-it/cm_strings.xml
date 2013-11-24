@@ -159,4 +159,5 @@
     <string name="camera_menu_beauty_mode_label">ABBELLISCI</string>
     <string name="camera_menu_colorize_label">COLORA</string>
     <string name="camera_menu_effects_label">EFFETTI</string>
+    <string name="camera_menu_asd_label">SCENA AUTOMATICA</string>
 </resources>
