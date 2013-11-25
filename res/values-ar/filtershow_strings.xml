@@ -147,7 +147,7 @@
     <string name="filtershow_exif_model" msgid="3543206476046267466">"الطراز"</string>
     <string name="filtershow_exif_aperture" msgid="5076571522763604380">"فتحة العدسة"</string>
     <string name="filtershow_exif_focal_length" msgid="5925151469731623706">"البعد البؤري"</string>
-    <string name="filtershow_exif_iso" msgid="5822494416955625317">"ISO"</string>
+    <string name="filtershow_exif_iso" msgid="5822494416955625317">"أيزو"</string>
     <string name="filtershow_exif_subject_distance" msgid="4920632253433906646">"مسافة الهدف"</string>
     <string name="filtershow_exif_date" msgid="8882402253732028544">"تاريخ الالتقاط"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"إيقاف التركيز"</string>
