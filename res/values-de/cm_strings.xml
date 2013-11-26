@@ -161,4 +161,5 @@
     <string name="camera_menu_beauty_mode_label">VERSCHÖNERN</string>
     <string name="camera_menu_colorize_label">EINFÄRBEN</string>
     <string name="camera_menu_effects_label">EFFEKTE</string>
+    <string name="camera_menu_asd_label">AUTOM. SZENE</string>
 </resources>
