@@ -164,4 +164,5 @@
     <string name="camera_menu_beauty_mode_label">FORSKØNNE</string>
     <string name="camera_menu_colorize_label">FARVELÆGGE</string>
     <string name="camera_menu_effects_label">EFFEKTER</string>
+    <string name="camera_menu_asd_label">SMART SCENE</string>
 </resources>
