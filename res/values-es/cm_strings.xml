@@ -160,4 +160,5 @@
     <string name="camera_menu_beauty_mode_label">EMBELLECER</string>
     <string name="camera_menu_colorize_label">COLOREAR</string>
     <string name="camera_menu_effects_label">EFECTOS</string>
+    <string name="camera_menu_asd_label">ESCENA INTELIGENTE</string>
 </resources>
