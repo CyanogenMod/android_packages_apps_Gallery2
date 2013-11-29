@@ -565,7 +565,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         }
         actionBar.setSubtitle(null);
         // remove slideshow if all are videos
-        if (allVideoFiles() && !mGetContent){
+        if (!mGetContent && allVideoFiles()) {
             menu.findItem(R.id.action_slideshow).setVisible(false);
         }
         return true;
@@ -677,7 +677,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     }
 
     private void updateMenuItem() {
-        if (allVideoFiles() && !mGetContent) {
+        if (!mGetContent && allVideoFiles()) {
             mActionMenu.findItem(R.id.action_slideshow).setVisible(false);
         }
     }
