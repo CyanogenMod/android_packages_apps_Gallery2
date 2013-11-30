@@ -265,7 +265,7 @@
     <string name="pref_camera_picturesize_entry_vga" msgid="806934254162981919">"640 х 480 пикс."</string>
     <string name="pref_camera_picturesize_entry_qvga" msgid="8576186463069770133">"320 x 240 пикс."</string>
     <string name="pref_camera_focusmode_title" msgid="2877248921829329127">"Режим фокусировки"</string>
-    <string name="pref_camera_focusmode_entry_auto" msgid="7374820710300362457">"Авто"</string>
+    <string name="pref_camera_focusmode_entry_auto" msgid="7374820710300362457">"Покадровый автофокус"</string>
     <string name="pref_camera_focusmode_entry_infinity" msgid="3413922419264967552">"Бесконечность"</string>
     <string name="pref_camera_focusmode_entry_macro" msgid="4424489110551866161">"Макро"</string>
     <string name="pref_camera_focusmode_label_auto" msgid="8547956917516317183">"АВТО"</string>

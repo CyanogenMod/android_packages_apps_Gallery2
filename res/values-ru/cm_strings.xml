@@ -46,7 +46,7 @@
     <string name="pref_camera_scenemode_entry_asd">Лучший снимок</string>
     <string name="pref_camera_scenemode_entry_baby">Ребёнок</string>
     <string name="pref_camera_scenemode_entry_backgroundblur">Размытие фона</string>
-    <string name="pref_camera_scenemode_entry_backlight">Контровый свет</string>
+    <string name="pref_camera_scenemode_entry_backlight">Контровой свет</string>
     <string name="pref_camera_scenemode_entry_backlightportrait">Портрет с контр. светом</string>
     <string name="pref_camera_scenemode_entry_barcode">Штрих-код</string>
     <string name="pref_camera_scenemode_entry_beach">Пляж</string>
@@ -67,13 +67,13 @@
     <string name="pref_camera_scenemode_entry_landscape">Пейзаж</string>
     <string name="pref_camera_scenemode_entry_mix_illuminant">Комбинированное освещение</string>
     <string name="pref_camera_scenemode_entry_mood">Настроение</string>
-    <string name="pref_camera_scenemode_entry_nightportrait">Портрет ночью</string>
+    <string name="pref_camera_scenemode_entry_nightportrait">Ночной портрет</string>
     <string name="pref_camera_scenemode_entry_nightindoor">В помещении ночью</string>
     <string name="pref_camera_scenemode_entry_oldfilm">Старый фильм</string>
-    <string name="pref_camera_scenemode_entry_pet">Домашнее животное</string>
+    <string name="pref_camera_scenemode_entry_pet">Домашний любимец</string>
     <string name="pref_camera_scenemode_entry_portrait">Портрет</string>
     <string name="pref_camera_scenemode_entry_snow">Снег</string>
-    <string name="pref_camera_scenemode_entry_softskin">Мягкая кожа</string>
+    <string name="pref_camera_scenemode_entry_softskin">Эффект нежной кожи</string>
     <string name="pref_camera_scenemode_entry_sports">Спорт</string>
     <string name="pref_camera_scenemode_entry_spotlight">Направленный свет</string>
     <string name="pref_camera_scenemode_entry_steadyphoto">Стабильный снимок</string>
@@ -101,7 +101,7 @@
     <string name="pref_camera_jpeg_entry_high">Высокое</string>
     <string name="pref_camera_jpeg_entry_medium">Среднее</string>
     <string name="pref_camera_jpeg_entry_low">Низкое</string>
-    <string name="pref_camera_coloreffect_title">Цветовой эффект</string>
+    <string name="pref_camera_coloreffect_title">Графический эффект</string>
     <string name="pref_camera_coloreffect_entry_none">Нет</string>
     <string name="pref_camera_coloreffect_entry_mono">Ч/Б</string>
     <string name="pref_camera_coloreffect_entry_sepia">Сепия</string>
@@ -154,5 +154,5 @@
     <string name="camera_menu_beauty_mode_label">АВТОУЛУЧШЕНИЕ</string>
     <string name="camera_menu_colorize_label">ОКРАСКА</string>
     <string name="camera_menu_effects_label">ЭФФЕКТЫ</string>
-
+    <string name="camera_menu_asd_label">РАСПОЗН. УСЛОВИЙ СЪЕМКИ</string>
 </resources>
