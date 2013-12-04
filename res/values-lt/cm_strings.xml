@@ -46,8 +46,10 @@
     <string name="fail_trim">Šis video failas negali būti sumažintas</string>
     <string name="can_not_trim">Tik mp4 failai gali būti sumažinti</string>
     <string name="pref_video_quality_entry_hfr">WVGA (daug kadrų per sekundę)</string>
+    <string name="pref_camera_scenemode_entry_antimotionblur">Judesių liejimosi mažinimas</string>
     <string name="pref_camera_scenemode_entry_aqua">Vanduo</string>
     <string name="pref_camera_scenemode_entry_asd">Geriausias kadras</string>
+    <string name="pref_camera_scenemode_entry_baby">Kūdikis</string>
     <string name="pref_camera_scenemode_entry_backgroundblur">Fono suliejimas</string>
     <string name="pref_camera_scenemode_entry_backlight">Foninis apšvietimas</string>
     <string name="pref_camera_scenemode_entry_backlightportrait">Portretas su foniniu apšvietimu</string>
@@ -60,6 +62,7 @@
     <string name="pref_camera_scenemode_entry_cine">Kinas</string>
     <string name="pref_camera_scenemode_entry_closeup">Iš arti</string>
     <string name="pref_camera_scenemode_entry_dark">Tamsus</string>
+    <string name="pref_camera_scenemode_entry_dish">Indas</string>
     <string name="pref_camera_scenemode_entry_duskdawn">Saulėlydis</string>
     <string name="pref_camera_scenemode_entry_document">Dokumentas</string>
     <string name="pref_camera_scenemode_entry_fallcolor">Rudens spalvos</string>
@@ -73,12 +76,15 @@
     <string name="pref_camera_scenemode_entry_nightportrait">Naktinis portretas</string>
     <string name="pref_camera_scenemode_entry_nightindoor">Tamsi patalpa</string>
     <string name="pref_camera_scenemode_entry_oldfilm">Senas filmas</string>
+    <string name="pref_camera_scenemode_entry_pet">Gyvūnas</string>
     <string name="pref_camera_scenemode_entry_portrait">Portretas</string>
     <string name="pref_camera_scenemode_entry_snow">Sniegas</string>
+    <string name="pref_camera_scenemode_entry_softskin">Švelni oda</string>
     <string name="pref_camera_scenemode_entry_sports">Sportas</string>
     <string name="pref_camera_scenemode_entry_spotlight">Prožektorius</string>
     <string name="pref_camera_scenemode_entry_steadyphoto">Ilgas išlaikymas</string>
     <string name="pref_camera_scenemode_entry_supernight">Super naktis</string>
+    <string name="pref_camera_scenemode_entry_sweepstitch">Sklandi panorama</string>
     <string name="pref_camera_scenemode_entry_text">Tekstas</string>
     <string name="pref_camera_scenemode_entry_theatre">Teatras</string>
     <string name="pref_camera_scenemode_entry_whiteboard">Lenta</string>
@@ -96,7 +102,7 @@
     <string name="pref_camera_iso_entry_isonight">Naktis</string>
     <string name="pref_camera_iso_entry_isomovie">Filmas</string>
     <string name="pref_camera_jpeg_title">JPEG kokybė</string>
-    <string name="pref_video_jpeg_title">Iškodavimo kokybė</string>
+    <string name="pref_video_jpeg_title">Vaizdo kokybė</string>
     <string name="pref_camera_jpeg_entry_super">Puiki</string>
     <string name="pref_camera_jpeg_entry_high">Aukšta</string>
     <string name="pref_camera_jpeg_entry_medium">Vidutinė</string>
@@ -118,6 +124,12 @@
     <string name="pref_camera_coloreffect_entry_bluetint">Mėlynas atspalvis</string>
     <string name="pref_camera_coloreffect_entry_greentint">Žalias atspalvis</string>
     <string name="pref_camera_coloreffect_entry_washed">Išskalbtas</string>
+    <string name="pref_camera_coloreffect_entry_vintage_warm">Senamadiškas (šiltas)</string>
+    <string name="pref_camera_coloreffect_entry_vintage_cold">Senamadiškas (šaltas)</string>
+    <string name="pref_camera_coloreffect_entry_point_blue">Mėlynas taškas</string>
+    <string name="pref_camera_coloreffect_entry_point_green">Žalias taškas</string>
+    <string name="pref_camera_coloreffect_entry_point_red_yellow">Raudona-geltona taškas</string>
+    <string name="pref_camera_coloreffect_entry_cartoonize">Animacinis filmas</string>
     <string name="pref_camera_burst_title">Greita kadrų serija</string>
     <string name="pref_camera_burst_entry_off">Išjungta</string>
     <string name="pref_camera_burst_entry_5">5 nuotraukos</string>
@@ -148,4 +160,5 @@
     <string name="camera_menu_beauty_mode_label">PAGRAŽINTI</string>
     <string name="camera_menu_colorize_label">SPALVINTI</string>
     <string name="camera_menu_effects_label">EFEKTAI</string>
+    <string name="camera_menu_asd_label">SUMANI SCENA</string>
 </resources>
