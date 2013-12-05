@@ -22,11 +22,12 @@
     <string name="pref_camera_picturesize_entry_12mp">12 MP (4:3)</string>
     <string name="pref_camera_picturesize_entry_11_5mp">11,5 MP</string>
     <string name="pref_camera_picturesize_entry_10_4mp">10,4 MP</string>
+    <string name="pref_camera_picturesize_entry_10mp">10 MP</string>
     <string name="pref_camera_picturesize_entry_9mp">9 MP</string>
     <string name="pref_camera_picturesize_entry_8_2mp">8,2 MP</string>
     <string name="pref_camera_picturesize_entry_7_7mp">7,7 MP (4:3)</string>
     <string name="pref_camera_picturesize_entry_6_4mp">6,4 MP</string>
-    <string name="pref_camera_picturesize_entry_6mp">6 M</string>
+    <string name="pref_camera_picturesize_entry_6mp">6 MP</string>
     <string name="pref_camera_picturesize_entry_4_5mp">4,5 MP</string>
     <string name="pref_camera_picturesize_entry_3_7mp">3,7 MP</string>
     <string name="pref_camera_picturesize_entry_2_5mp">2,5 MP</string>
@@ -137,4 +138,5 @@
     <string name="camera_menu_beauty_mode_label">SKRÁŠLENIE</string>
     <string name="camera_menu_colorize_label">VYFARBENIE</string>
     <string name="camera_menu_effects_label">EFEKTY</string>
+    <string name="camera_menu_asd_label">INTELIGENTNÁ SCÉNA</string>
 </resources>
