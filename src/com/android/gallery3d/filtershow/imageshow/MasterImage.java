@@ -829,4 +829,8 @@ public class MasterImage implements RenderingRequestCaller {
     public BitmapCache getBitmapCache() {
         return mBitmapCache;
     }
+
+    public boolean hasTinyPlanet() {
+        return mPreset.contains(FilterRepresentation.TYPE_TINYPLANET);
+    }
 }

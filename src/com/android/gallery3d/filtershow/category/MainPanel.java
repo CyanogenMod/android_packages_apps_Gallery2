@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.StatePanel;
 
 public class MainPanel extends Fragment {
@@ -174,6 +175,9 @@ public class MainPanel extends Fragment {
 
     public void loadCategoryGeometryPanel() {
         if (mCurrentSelected == GEOMETRY) {
+            return;
+        }
+        if (MasterImage.getImage().hasTinyPlanet()) {
             return;
         }
         boolean fromRight = isRightAnimation(GEOMETRY);
