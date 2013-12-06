@@ -116,7 +116,7 @@
     <string name="no_albums_alert" msgid="4111744447491690896">"Ingen album tilgjengelig."</string>
     <string name="empty_album" msgid="4542880442593595494">"0 bilder/videoer tilgjengelig."</string>
     <string name="picasa_posts" msgid="1497721615718760613">"Innlegg"</string>
-    <string name="make_available_offline" msgid="5157950985488297112">"Gjør tilgjengelig i frakoblet modus"</string>
+    <string name="make_available_offline" msgid="5157950985488297112">"Gjør tilgjengelig uten nett"</string>
     <string name="sync_picasa_albums" msgid="8522572542111169872">"Last inn på nytt"</string>
     <string name="done" msgid="217672440064436595">"Ferdig"</string>
     <string name="sequence_in_set" msgid="7235465319919457488">"%1$d av %2$d elementer:"</string>
@@ -156,10 +156,10 @@
     <string name="ffx_washout" msgid="4594160692176642735">"Latte"</string>
     <string name="ffx_washout_color" msgid="8034075742195795219">"Litografi"</string>
   <plurals name="make_albums_available_offline">
-    <item quantity="one" msgid="2171596356101611086">"Gjør album tilgjengelig i frakoblet modus."</item>
-    <item quantity="other" msgid="4948604338155959389">"Gjør album tilgjengelige i frakoblet modus."</item>
+    <item quantity="one" msgid="2171596356101611086">"Gjør album tilgjengelig uten nett."</item>
+    <item quantity="other" msgid="4948604338155959389">"Gjør album tilgjengelig uten nett."</item>
   </plurals>
-    <string name="try_to_set_local_album_available_offline" msgid="2184754031896160755">"Dette elementet lagres lokalt og er tilgjengelig i frakoblet modus."</string>
+    <string name="try_to_set_local_album_available_offline" msgid="2184754031896160755">"Dette elementet lagres lokalt og er tilgjengelig uten nett."</string>
     <string name="set_label_all_albums" msgid="4581863582996336783">"Alle album"</string>
     <string name="set_label_local_albums" msgid="6698133661656266702">"Lokale album"</string>
     <string name="set_label_mtp_devices" msgid="1283513183744896368">"MTP-enheter"</string>
@@ -172,7 +172,7 @@
     <string name="import_complete" msgid="3875040287486199999">"Importen er fullført"</string>
     <string name="import_fail" msgid="8497942380703298808">"Import mislyktes"</string>
     <string name="camera_connected" msgid="916021826223448591">"Kamera tilkoblet."</string>
-    <string name="camera_disconnected" msgid="2100559901676329496">"Kamera frakoblet."</string>
+    <string name="camera_disconnected" msgid="2100559901676329496">"Kameraet er frakoblet."</string>
     <string name="click_import" msgid="6407959065464291972">"Trykk her for å importere"</string>
     <string name="widget_type_album" msgid="6013045393140135468">"Velg et album"</string>
     <string name="widget_type_shuffle" msgid="8594622705019763768">"Stokk om på bildene"</string>

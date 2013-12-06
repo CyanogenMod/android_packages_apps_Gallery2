@@ -402,6 +402,10 @@ public class SaveImage {
                     // if we have a valid size
                     int w = (int) (bitmap.getWidth() * sizeFactor);
                     int h = (int) (bitmap.getHeight() * sizeFactor);
+                    if (w == 0 || h == 0) {
+                        w = 1;
+                        h = 1;
+                    }
                     bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
                 }
                 updateProgress();
@@ -702,6 +706,9 @@ public class SaveImage {
         values.put(Images.Media.ORIENTATION, 0);
         values.put(Images.Media.DATA, file.getAbsolutePath());
         values.put(Images.Media.SIZE, file.length());
+        // This is a workaround to trigger the MediaProvider to re-generate the
+        // thumbnail.
+        values.put(Images.Media.MINI_THUMB_MAGIC, 0);
 
         final String[] projection = new String[] {
                 ImageColumns.DATE_TAKEN,

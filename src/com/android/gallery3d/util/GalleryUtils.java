@@ -43,6 +43,7 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.ui.TiledScreenNail;
+import com.android.gallery3d.util.IntentHelper;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
@@ -235,12 +236,10 @@ public class GalleryUtils {
     public static boolean isCameraAvailable(Context context) {
         if (sCameraAvailableInitialized) return sCameraAvailable;
         PackageManager pm = context.getPackageManager();
-        ComponentName name = new ComponentName(context, CAMERA_LAUNCHER_NAME);
-        int state = pm.getComponentEnabledSetting(name);
+        Intent cameraIntent = IntentHelper.getCameraIntent(context);
+        List<ResolveInfo> apps = pm.queryIntentActivities(cameraIntent, 0);
         sCameraAvailableInitialized = true;
-        sCameraAvailable =
-           (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
-           || (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+        sCameraAvailable = !apps.isEmpty();
         return sCameraAvailable;
     }
 
@@ -248,7 +247,13 @@ public class GalleryUtils {
         Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // This will only occur if Camera was disabled while Gallery is open
+            // since we cache our availability check. Just abort the attempt.
+            Log.e(TAG, "Camera activity previously detected but cannot be found", e);
+        }
     }
 
     public static void startGalleryActivity(Context context) {
