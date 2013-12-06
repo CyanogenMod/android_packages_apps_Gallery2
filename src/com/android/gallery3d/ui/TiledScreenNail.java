@@ -153,7 +153,7 @@ public class TiledScreenNail implements ScreenNail {
 
     @Override
     public void draw(GLCanvas canvas, int x, int y, int width, int height) {
-        if (mTexture == null || !mTexture.isReady()) {
+        if (mTexture == null) {
             if (mAnimationStartTime == ANIMATION_NOT_NEEDED) {
                 mAnimationStartTime = ANIMATION_NEEDED;
             }
@@ -177,7 +177,7 @@ public class TiledScreenNail implements ScreenNail {
 
     @Override
     public void draw(GLCanvas canvas, RectF source, RectF dest) {
-        if (mTexture == null || !mTexture.isReady()) {
+        if (mTexture == null) {
             canvas.fillRect(dest.left, dest.top, dest.width(), dest.height(),
                     mPlaceholderColor);
             return;
