@@ -86,7 +86,7 @@ public abstract class CropLoader {
             cursor = context.getContentResolver().query(uri,
                     new String[] { MediaStore.Images.ImageColumns.ORIENTATION },
                     null, null, null);
-            if (cursor.moveToNext()) {
+            if (cursor.moveToNext() && !cursor.isNull(0)) {
                 int ori = cursor.getInt(0);
                 return (ori < 0) ? 0 : ori;
             }
