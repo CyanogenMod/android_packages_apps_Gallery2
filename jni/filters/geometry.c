@@ -17,7 +17,7 @@
 #include "filters.h"
 #include <stdio.h>
 
-__inline__ void flipVertical(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void flipVertical(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     //Vertical
     size_t cpy_bytes = sizeof(char) * 4;
     int width = cpy_bytes * srcWidth;
@@ -31,7 +31,7 @@ __inline__ void flipVertical(char * source, int srcWidth, int srcHeight, char * 
     }
 }
 
-__inline__ void flipHorizontal(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void flipHorizontal(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     //Horizontal
     size_t cpy_bytes = sizeof(char) * 4;
     int width = cpy_bytes * srcWidth;
@@ -48,7 +48,7 @@ __inline__ void flipHorizontal(char * source, int srcWidth, int srcHeight, char 
     }
 }
 
-__inline__ void flip_fun(int flip, char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void flip_fun(int flip, char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     int horiz = (flip & 1) != 0;
     int vert = (flip & 2) != 0;
     if (horiz && vert){
@@ -70,7 +70,7 @@ __inline__ void flip_fun(int flip, char * source, int srcWidth, int srcHeight, c
 }
 
 //90 CCW (opposite of what's used in UI?)
-__inline__ void rotate90(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void rotate90(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     size_t cpy_bytes = sizeof(char) * 4;
     int width = cpy_bytes * srcWidth;
     int length = srcHeight;
@@ -86,17 +86,17 @@ __inline__ void rotate90(char * source, int srcWidth, int srcHeight, char * dest
     }
 }
 
-__inline__ void rotate180(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void rotate180(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     flip_fun(3, source, srcWidth, srcHeight, destination, dstWidth, dstHeight);
 }
 
-__inline__ void rotate270(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void rotate270(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     rotate90(source, srcWidth, srcHeight, destination, dstWidth, dstHeight);
     flip_fun(3, destination, dstWidth, dstHeight, destination, dstWidth, dstHeight);
 }
 
 // rotate == 1 is 90 degrees, 2 is 180, 3 is 270 (positive is CCW).
-__inline__ void rotate_fun(int rotate, char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
+static __inline__ void rotate_fun(int rotate, char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     switch( rotate )
     {
         case 1:
@@ -113,7 +113,7 @@ __inline__ void rotate_fun(int rotate, char * source, int srcWidth, int srcHeigh
     }
 }
 
-__inline__ void crop(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight, int offsetWidth, int offsetHeight){
+static __inline__ void crop(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight, int offsetWidth, int offsetHeight){
     size_t cpy_bytes = sizeof(char) * 4;
     int row_width = cpy_bytes * srcWidth;
     int new_row_width = cpy_bytes * dstWidth;
