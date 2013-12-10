@@ -94,7 +94,6 @@ public class VideoModule implements CameraModule,
     private static final int SWITCH_CAMERA_START_ANIMATION = 9;
     private static final int HIDE_SURFACE_VIEW = 10;
     private static final int CAPTURE_ANIMATION_DONE = 11;
-    private static final int START_PREVIEW_DONE = 12;
 
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
 
@@ -207,8 +206,6 @@ public class VideoModule implements CameraModule,
 
     private boolean mEnableHFR = false;
 
-    private StartPreviewThread mStartPreviewThread;
-
     private boolean mIsFullScreen = true;
 
     private final MediaSaveService.OnMediaSavedListener mOnVideoSavedListener =
@@ -240,16 +237,6 @@ public class VideoModule implements CameraModule,
         public void run() {
             openCamera();
             if (mFocusManager == null) initializeFocusManager();
-        }
-    }
-
-    private class StartPreviewThread extends Thread {
-        @Override
-        public void run() {
-            try {
-                startPreview();
-            }catch (Exception e) {
-            }
         }
     }
 
@@ -340,11 +327,6 @@ public class VideoModule implements CameraModule,
 
                 case CAPTURE_ANIMATION_DONE: {
                     mUI.enablePreviewThumb(false);
-                    break;
-                }
-
-                case START_PREVIEW_DONE: {
-                    mStartPreviewThread = null;
                     break;
                 }
 
@@ -457,16 +439,15 @@ public class VideoModule implements CameraModule,
             // ignore
         }
 
-        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-        if (screenNail.getSurfaceTexture() == null) {
-            screenNail.acquireSurfaceTexture();
-        }
 
         readVideoPreferences();
         mUI.setPrefChangedListener(this);
-
-        mStartPreviewThread = new StartPreviewThread();
-        mStartPreviewThread.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startPreview();
+            }
+        }).start();
 
         mQuickCapture = mActivity.getIntent().getBooleanExtra(EXTRA_QUICK_CAPTURE, false);
         mLocationManager = new LocationManager(mActivity, null);
@@ -922,7 +903,7 @@ public class VideoModule implements CameraModule,
         showVideoSnapshotUI(false);
         mUI.enableShutter(false);
 
-        if (!mPreviewing && mStartPreviewThread == null) {
+        if (!mPreviewing) {
             resetEffect();
             resetExposureCompensation();
             openCamera();
@@ -936,14 +917,12 @@ public class VideoModule implements CameraModule,
             }
             readVideoPreferences();
             resizeForPreviewAspectRatio();
-
-            CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-            screenNail.cancelAcquire();
-            if (screenNail.getSurfaceTexture() == null) {
-                screenNail.acquireSurfaceTexture();
-            }
-            mStartPreviewThread = new StartPreviewThread();
-            mStartPreviewThread.start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    startPreview();
+                }
+            }).start();
         } else {
             // preview already started
             mHandler.sendEmptyMessage(ENABLE_SHUTTER_BUTTON);
@@ -1060,7 +1039,6 @@ public class VideoModule implements CameraModule,
 
     private void onPreviewStarted() {
         mHandler.sendEmptyMessage(ENABLE_SHUTTER_BUTTON);
-        mHandler.sendEmptyMessage(START_PREVIEW_DONE);
     }
 
     @Override
@@ -1086,16 +1064,6 @@ public class VideoModule implements CameraModule,
 
     // By default, we want to close the effects as well with the camera.
     private void closeCamera() {
-        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-        screenNail.cancelAcquire();
-        try {
-            if (mStartPreviewThread != null) {
-                mStartPreviewThread.interrupt();
-                mStartPreviewThread.join();
-                mStartPreviewThread = null;
-            }
-        } catch (InterruptedException e) {
-        }
         closeCamera(true);
     }
 
@@ -2227,7 +2195,7 @@ public class VideoModule implements CameraModule,
             mActivity.notifyScreenNailChanged();
         }
 
-        if (mStartPreviewThread == null && screenNail.getSurfaceTexture() == null) {
+        if (screenNail.getSurfaceTexture() == null) {
             screenNail.acquireSurfaceTexture();
         }
 

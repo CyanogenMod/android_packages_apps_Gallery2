@@ -237,15 +237,6 @@ public class CameraScreenNail extends SurfaceTextureScreenNail {
         mListener.requestRender();
     }
 
-    public void cancelAcquire() {
-         synchronized (mLock) {
-            if (mAcquireTexture) {
-                mAcquireTexture = false;
-                mLock.notifyAll();
-            }
-         }
-    }
-
     @Override
     public void releaseSurfaceTexture() {
         synchronized (mLock) {
