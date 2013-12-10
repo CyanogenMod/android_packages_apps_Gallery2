@@ -1010,7 +1010,9 @@ public class MoviePlayer implements
         } else {
             mIsOnlyAudio = true;
         }
-        mOverlayExt.setBottomPanel(mIsOnlyAudio, true);
+        if (mVideoView.isPlaying()) {
+            mOverlayExt.setBottomPanel(mIsOnlyAudio, true);
+        }
         if (LOG) {
             Log.v(TAG, "onVideoSizeChanged(" + width + ", " + height + ") mIsOnlyAudio="
                     + mIsOnlyAudio);
