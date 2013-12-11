@@ -436,4 +436,5 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d foto"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d fotos"</item>
   </plurals>
+    <string name="mute_nosupport">Não é possível colocar em mudo : vídeo não suportado</string>
 </resources>
