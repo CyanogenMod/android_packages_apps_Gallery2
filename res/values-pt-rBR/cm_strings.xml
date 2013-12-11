@@ -16,4 +16,5 @@
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="mute_nosupport">Não é possível colocar em mudo : vídeo não suportado</string>
+    <string name="fail_trim">Desculpe, este arquivo vídeo não pode ser cortado</string>
 </resources>
