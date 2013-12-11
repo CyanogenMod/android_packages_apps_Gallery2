@@ -1173,18 +1173,21 @@ public class PhotoModule
         if (!Parameters.SCENE_MODE_AUTO.equals(mSceneMode) ||
             CameraSettings.isSlowShutterEnabled(mParameters)) {
             overrideCameraSettings(mParameters.getFlashMode(),
-                    mParameters.getWhiteBalance(), mParameters.getFocusMode());
+                    mParameters.getWhiteBalance(), mParameters.getFocusMode(),
+                    mParameters.getColorEffect());
         } else {
-            overrideCameraSettings(null, null, null);
+            overrideCameraSettings(null, null, null, null);
         }
     }
 
     private void overrideCameraSettings(final String flashMode,
-            final String whiteBalance, final String focusMode) {
+            final String whiteBalance, final String focusMode,
+            final String colorEffect) {
         mUI.overrideSettings(
                 CameraSettings.KEY_FLASH_MODE, flashMode,
                 CameraSettings.KEY_WHITE_BALANCE, whiteBalance,
-                CameraSettings.KEY_FOCUS_MODE, focusMode);
+                CameraSettings.KEY_FOCUS_MODE, focusMode,
+                CameraSettings.KEY_COLOR_EFFECT, colorEffect);
         if (Util.needSamsungHDRFormat()){
             if (mSceneMode == Util.SCENE_MODE_HDR) {
                 mUI.overrideSettings(CameraSettings.KEY_EXPOSURE,
