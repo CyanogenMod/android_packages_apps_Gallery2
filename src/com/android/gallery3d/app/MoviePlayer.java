@@ -300,9 +300,16 @@ public class MoviePlayer implements
         } else {
             mTState = TState.PLAYING;
             mFirstBePlayed = true;
-            final BookmarkerInfo bookmark = mBookmarker.getBookmark(mMovieItem.getUri());
-            if (bookmark != null) {
-                showResumeDialog(movieActivity, bookmark);
+            String mUri = mMovieItem.getUri().toString();
+            boolean isLive = mUri.startsWith("rtsp://") && (mUri.contains(".sdp")
+                    || mUri.contains(".smil"));
+            if (!isLive) {
+                final BookmarkerInfo bookmark = mBookmarker.getBookmark(mMovieItem.getUri());
+                if (bookmark != null) {
+                    showResumeDialog(movieActivity, bookmark);
+                } else {
+                    doStartVideo(false, 0, 0);
+                }
             } else {
                 doStartVideo(false, 0, 0);
             }
