@@ -1803,7 +1803,9 @@ public class PhotoModule
 
     // Only called by UI thread.
     private void setupPreview() {
+        Log.d(TAG, "setupPreview!!()");
         mFocusManager.resetTouchFocus();
+        stopFaceDetection();
         startPreview();
         setCameraState(IDLE);
         startFaceDetection();
@@ -1812,6 +1814,7 @@ public class PhotoModule
     // This can be called by UI Thread or CameraStartUpThread. So this should
     // not modify the views.
     private void startPreview() {
+        Log.d(TAG, "startPreview!!()");
         mCameraDevice.setErrorCallback(mErrorCallback);
 
         // ICS camera frameworks has a bug. Face detection state is not cleared
