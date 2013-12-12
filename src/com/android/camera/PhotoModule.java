@@ -1818,8 +1818,7 @@ public class PhotoModule
         // after taking a picture. Stop the preview to work around it. The bug
         // was fixed in JB.
         if (mCameraState != PREVIEW_STOPPED &&
-                (!mActivity.getResources().getBoolean(R.bool.previewStopsDuringSnapshot) ||
-                 mCameraState != SNAPSHOT_IN_PROGRESS)) {
+                 !mActivity.getResources().getBoolean(R.bool.previewStopsDuringSnapshot)) {
             stopPreview();
         }
         setDisplayOrientation();
@@ -2150,7 +2149,6 @@ public class PhotoModule
                 updateCameraParametersPreference();
             }
 
-            Util.dumpParameters(mParameters);
             mCameraDevice.setParameters(mParameters);
         }
     }

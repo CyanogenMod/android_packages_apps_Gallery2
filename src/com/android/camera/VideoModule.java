@@ -2183,8 +2183,6 @@ public class VideoModule implements CameraModule,
             Log.w(TAG, "invalid exposure range: " + value);
         }
 
-        Util.dumpParameters(mParameters);
-
         mActivity.mCameraDevice.setParameters(mParameters);
         // Keep preview size up to date.
         mParameters = mActivity.mCameraDevice.getParameters();

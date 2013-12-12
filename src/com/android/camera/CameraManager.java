@@ -241,6 +241,7 @@ public class CameraManager {
                     case SET_PARAMETERS:
                         mParametersIsDirty = true;
                         mCamera.setParameters((Parameters) msg.obj);
+                        Util.dumpParameters((Parameters) msg.obj);
                         mSig.open();
                         break;
 
