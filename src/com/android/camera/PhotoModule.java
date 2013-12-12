@@ -839,6 +839,10 @@ public class PhotoModule
                 mActivity.showSwitcher();
                 mActivity.setSwipingEnabled(true);
             }
+            if (!mBurstShotInProgress) {
+                mActivity.showUI();
+                mActivity.setSwipingEnabled(true);
+            }
 
             mJpegPictureCallbackTime = System.currentTimeMillis();
             // If postview callback has arrived, the captured image is displayed
@@ -1398,17 +1402,22 @@ public class PhotoModule
         if (seconds > 0) {
             mUI.startCountDown(seconds, playSound);
         } else {
+            mSnapshotOnIdle = false;
             mFocusManager.doSnap();
             mBurstShotsDone++;
 
             if (mBurstShotsDone == nbBurstShots) {
                 mBurstShotsDone = 0;
                 mBurstShotInProgress = false;
-                mSnapshotOnIdle = false;
-            } else if (mSnapshotOnIdle == false) {
-                // queue a new shot until we done all our shots
-                mSnapshotOnIdle = true;
+            } else if (nbBurstShots > 1) {
                 mBurstShotInProgress = true;
+                // do queue snapshot while previous is in progress, see above
+                mSnapshotOnIdle = true;
+            }
+
+            if (mBurstShotInProgress) {
+                mActivity.hideUI();
+                mActivity.setSwipingEnabled(false);
             }
         }
     }
