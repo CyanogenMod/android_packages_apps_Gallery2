@@ -50,5 +50,13 @@
                 android:padding="23dp"
                 android:visibility="gone"
                 android:src="@drawable/smart_scene_sports" />
+            <com.android.camera.ui.RotateImageView
+                android:id="@+id/burst_mode_icon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@+id/scene_detect_icon"
+                android:padding="23dp"
+                android:visibility="gone"
+                android:src="@drawable/burst_mode_5" />
     </com.android.camera.PreviewFrameLayout>
 </merge>

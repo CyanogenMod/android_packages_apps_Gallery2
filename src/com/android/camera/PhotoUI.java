@@ -88,6 +88,8 @@ public class PhotoUI implements PieListener,
 
     private ImageView mSceneDetectView;
 
+    private ImageView mBurstModeView;
+
     private OnScreenIndicators mOnScreenIndicators;
 
     protected PieRenderer mPieRenderer;
@@ -146,6 +148,7 @@ public class PhotoUI implements PieListener,
             }
         }
         mSceneDetectView = (ImageView) mRootView.findViewById(R.id.scene_detect_icon);
+        mBurstModeView = (ImageView) mRootView.findViewById(R.id.burst_mode_icon);
     }
 
     public View getRootView() {
@@ -746,6 +749,29 @@ public class PhotoUI implements PieListener,
             mSceneDetectView.setImageResource(imgs.getResourceId(i, -1));
         }
         mSceneDetectView.setVisibility(View.VISIBLE);
+    }
+
+    public void updateBurstModeIcon(int burstCount) {
+        if (burstCount == 1) {
+            mBurstModeView.setVisibility(View.GONE);
+            return;
+        }
+
+        switch (burstCount) {
+            case 5:
+                mBurstModeView.setImageResource(R.drawable.burst_mode_5);
+                break;
+            case 10:
+                mBurstModeView.setImageResource(R.drawable.burst_mode_10);
+                break;
+            case 15:
+                mBurstModeView.setImageResource(R.drawable.burst_mode_15);
+                break;
+            case 20:
+                mBurstModeView.setImageResource(R.drawable.burst_mode_20);
+                break;
+        }
+        mBurstModeView.setVisibility(View.VISIBLE);
     }
 }
 
