@@ -259,6 +259,9 @@ public class PhotoMenu extends PieController
             }
         });
         more.addItem(item);
+        // burst mode
+        final ListPreference burstPref = group.findPreference(CameraSettings.KEY_BURST_MODE);
+        mUI.updateBurstModeIcon(Integer.valueOf(burstPref.getValue()));
     }
 
     @Override
@@ -318,6 +321,8 @@ public class PhotoMenu extends PieController
             setPreference(CameraSettings.KEY_SCENE_MODE, Parameters.SCENE_MODE_AUTO);
             setPreference(CameraSettings.KEY_ASD, mSettingOff);
             setPreference(CameraSettings.KEY_BEAUTY_MODE, mSettingOff);
+        } else if (CameraSettings.KEY_BURST_MODE.equals(pref.getKey())) {
+            mUI.updateBurstModeIcon(Integer.valueOf(pref.getValue()));
         }
         super.onSettingChanged(pref);
     }
