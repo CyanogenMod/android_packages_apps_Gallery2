@@ -144,13 +144,13 @@ public class PieItem {
     }
 
     public void performClick() {
-        if (mOnClickListener != null) {
+        if (mOnClickListener != null && mEnabled) {
             mOnClickListener.onClick(this);
         }
     }
 
     public void performSuperClick() {
-        if (mOnSuperClickListener != null) {
+        if (mOnSuperClickListener != null && mEnabled) {
             mOnSuperClickListener.onClick(this);
         }
     }

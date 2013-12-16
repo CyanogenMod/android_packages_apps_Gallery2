@@ -2140,11 +2140,11 @@ public class VideoModule implements CameraModule,
             if (mEnableHFR) {
                 int hfr = Integer.parseInt(hfrModes.get(hfrModes.size() - 1));
                 mParameters.setVideoHighFrameRate(String.valueOf(hfr));
-                mUI.overrideSettings(CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL, "0");
+                mUI.enableItem(R.drawable.ic_timer, false);
 
             } else {
                 mParameters.setVideoHighFrameRate("off");
-                mUI.overrideSettings(CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL, null);
+                mUI.enableItem(R.drawable.ic_timer, true);
             }
         }
 
