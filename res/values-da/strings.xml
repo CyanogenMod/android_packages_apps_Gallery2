@@ -434,4 +434,8 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d billede"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d billeder"</item>
   </plurals>
+  <plurals name="pref_camera_timer_entry">
+    <item quantity="one">1 sekund</item>
+    <item quantity="other">%d sekunder</item>
+  </plurals>
 </resources>
