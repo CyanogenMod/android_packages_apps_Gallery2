@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_camera_storage_title">ที่เก็บข้อมูล</string>
+ <string name="pref_camera_picturesize_entry_20_7mp">20.7ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_18mp">18ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_12_8mp">12.8ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12.7ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_12mp">12ล้านพิกเซล(4:3)</string>
+    <string name="pref_camera_picturesize_entry_11_5mp">11.5ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10.4ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_9mp">9ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_8_2mp">8.2ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7.7ล้านพิกเซล(4:3)</string>
+    <string name="pref_camera_picturesize_entry_6_4mp">6.4ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_6mp">6ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_4_5mp">4.5ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_3_7mp">3.7ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_2_5mp">2.5ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_2_1mp">2.1ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_1_9mp">1.9ล้านพิกเซล</string>
+    <string name="pref_camera_picturesize_entry_1_5mp">1.5ล้านพิกเซล</string>
+    <string name="bass_boost_strength">เพิ่มเสียงเบส</string>
+    <string name="virtualizer_strength">เอฟเฟค3มิติ</string>
+    <string name="audio_effects">เอฟเฟคเสียง</string>
+    <string name="headset_plug">เสียบหูฟังสำหรับใช้เอฟเฟคเหล่านี้</string>
+    <string name="fail_trim">ไฟล์วิดีโอนี้ไม่สามารถตัดแต่งได้</string>
+    <string name="can_not_trim">สามารถตัดแต่งได้เฉพาะไฟล์ mp4เท่านั้น</string>
+    <string name="pref_video_quality_entry_hfr">WVGA อัตราเฟรมเรตสูง</string>
+    <string name="pref_camera_scenemode_entry_antimotionblur">ลดการเบลอจากการเคลื่อนไหว</string>
+    <string name="pref_camera_scenemode_entry_aqua">น้ำ</string>
+    <string name="pref_camera_scenemode_entry_ar">ทำให้เหมือนจริง</string>
+    <string name="pref_camera_scenemode_entry_asd">ช็อตที่ดี</string>
+    <string name="pref_camera_scenemode_entry_baby">เด็ก</string>
+    <string name="pref_camera_scenemode_entry_backgroundblur">พื้นหลังเบลอ</string>
+    <string name="pref_camera_scenemode_entry_backlight">แสงไฟ</string>
+    <string name="pref_camera_scenemode_entry_backlightportrait">ภาพคนและแสงไฟ</string>
+    <string name="pref_camera_scenemode_entry_barcode">บาร์โค้ด</string>
+    <string name="pref_camera_scenemode_entry_beach">ชายหาด</string>
+    <string name="pref_camera_scenemode_entry_beauty">สวยงาม</string>
+    <string name="pref_camera_scenemode_entry_candlelight">แสงเทียน</string>
+    <string name="pref_camera_scenemode_entry_cine">โรงภาพยนตร์</string>
+    <string name="pref_camera_scenemode_entry_closeup">ภาพระยะใกล้</string>
+    <string name="pref_camera_scenemode_entry_dark">มืด</string>
+    <string name="pref_camera_scenemode_entry_dish">จาน</string>
+    <string name="pref_camera_scenemode_entry_document">เอกสาร</string>
+    <string name="pref_camera_scenemode_entry_fallcolor">สีฤดูใบไม้ร่วง</string>
+    <string name="pref_camera_scenemode_entry_fireworks">พลุ</string>
+    <string name="pref_camera_scenemode_entry_flowers">ดอกไม้</string>
+    <string name="pref_camera_scenemode_entry_highsensitivity">ความอ่อนไหวสูง</string>
+    <string name="pref_camera_scenemode_entry_indoor">ในร่ม</string>
+    <string name="pref_camera_scenemode_entry_landscape">ทิวทัศน์</string>
+    <string name="pref_camera_scenemode_entry_mix_illuminant">แสงผสม</string>
+    <string name="pref_camera_scenemode_entry_mood">อารมณ์</string>
+    <string name="pref_camera_scenemode_entry_nightportrait">ภาพบุคคลตอนกลางคืน</string>
+    <string name="pref_camera_scenemode_entry_nightindoor">กลางคืนในร่ม</string>
+    <string name="pref_camera_scenemode_entry_oldfilm">ฟิล์มเก่า</string>
+    <string name="pref_camera_scenemode_entry_pet">สัตว์เลี้ยง</string>
+    <string name="pref_camera_scenemode_entry_portrait">ภาพบุคคล</string>
+    <string name="pref_camera_scenemode_entry_snow">หิมะ</string>
+    <string name="pref_camera_scenemode_entry_softskin">ผิวนุ่ม</string>
+    <string name="pref_camera_scenemode_entry_sports">กีฬา</string>
+    <string name="pref_camera_scenemode_entry_spotlight">ไฟฉายสว่างจ้า</string>
+    <string name="pref_camera_scenemode_entry_steadyphoto">ภาพอย่างต่อเนื่อง</string>
+    <string name="pref_camera_scenemode_entry_supernight">กลางคืนมืด</string>
+    <string name="pref_camera_scenemode_entry_sweepstitch">ลบรอยต่อ</string>
+    <string name="pref_camera_scenemode_entry_text">ข้อความ</string>
+    <string name="pref_camera_scenemode_entry_theatre">โรงละคร</string>
+    <string name="pref_camera_scenemode_entry_whiteboard">กระดานดำ</string>
+    <string name="pref_camera_focusmode_entry_continuouspicture">ภาพต่อเนื่อง</string>
+    <string name="pref_camera_focusmode_entry_extended">ขยาย</string>
+    <string name="pref_camera_focusmode_entry_facedetect">ค้นหาหน้า</string>
+    <string name="pref_camera_focusmode_entry_facepriority">ลำดับความสำคัญหน้า</string>
+    <string name="pref_camera_focusmode_entry_fixed">คงที่</string>
+    <string name="pref_camera_focusmode_entry_portrait">ภาพบุคคล</string>
+    <string name="pref_camera_focusmode_entry_hyperfocal">เน้นโฟกัส</string>
+    <string name="pref_camera_power_shutter_title">เพาว์เวอร์ชัตเตอร์</string>
+    <string name="pref_camera_iso_entry_auto">อัตโนมัติ</string>
+    <string name="pref_camera_iso_entry_isodeblur">อัตโนมัติ (HJR)</string>
+    <string name="pref_camera_iso_entry_isosports">กีฬา</string>
+    <string name="pref_camera_iso_entry_isonight">กลางคืน</string>
+    <string name="pref_camera_iso_entry_isomovie">ภาพยนตร์</string>
+    <string name="pref_camera_jpeg_title">คุณภาพ JPEG</string>
+    <string name="pref_video_jpeg_title">คุณภาพการเข้ารหัส</string>
+    <string name="pref_camera_jpeg_entry_super">สูงมาก</string>
+    <string name="pref_camera_jpeg_entry_high">สูง</string>
+    <string name="pref_camera_jpeg_entry_medium">ปานกลาง</string>
+    <string name="pref_camera_jpeg_entry_low">ต่ำ</string>
+    <string name="pref_camera_coloreffect_title">เอฟเฟคสี</string>
+    <string name="pref_camera_coloreffect_entry_none">ไม่มี</string>
+    <string name="pref_camera_coloreffect_entry_mono">โมโน</string>
+    <string name="pref_camera_coloreffect_entry_sepia">ซีเปีย</string>
+    <string name="pref_camera_coloreffect_entry_negative">กลับสี</string>
+    <string name="pref_camera_coloreffect_entry_aqua">น้ำ</string>
+    <string name="pref_camera_coloreffect_entry_emboss">ผิวนูน</string>
+    <string name="pref_camera_coloreffect_entry_sketch">ภาพร่าง</string>
+    <string name="pref_camera_coloreffect_entry_neon">นีออน</string>
+    <string name="pref_camera_coloreffect_entry_pastel">พาสเทล</string>
+    <string name="pref_camera_coloreffect_entry_mosaic">โมเสก</string>
+    <string name="pref_camera_coloreffect_entry_redtint">โทนสีแดง</string>
+    <string name="pref_camera_coloreffect_entry_bluetint">โทนสีฟ้า</string>
+    <string name="pref_camera_coloreffect_entry_greentint">โทนเขียว</string>
+    <string name="pref_camera_coloreffect_entry_washed">ชะล้าง</string>
+    <string name="pref_camera_coloreffect_entry_vintage_warm">วินเทจอบอุ่น</string>
+    <string name="pref_camera_coloreffect_entry_vintage_cold">วินเทจหนาวเย็น</string>
+    <string name="pref_camera_coloreffect_entry_point_blue">จุดสีฟ้า</string>
+    <string name="pref_camera_coloreffect_entry_point_green">จุดสีเขียว</string>
+    <string name="pref_camera_coloreffect_entry_point_red_yellow">จุดสีแดง-เหลือง</string>
+    <string name="pref_camera_coloreffect_entry_cartoonize">การ์ตูน</string>
+    <string name="pref_camera_burst_title">ถ่ายภาพต่อเนื่อง</string>
+    <string name="pref_camera_burst_entry_off">ปิด</string>
+    <string name="pref_camera_burst_entry_5">5ช็อต</string>
+    <string name="pref_camera_burst_entry_10">10ช็อต</string>
+    <string name="pref_camera_burst_entry_15">15ช็อต</string>
+    <string name="pref_camera_burst_entry_20">20ช็อต</string>
+    <string name="pref_camera_focustime_title">ระยะเวลาสัมผัสเพื่อเพื่อโฟกัส</string>
+    <string name="pref_camera_focustime_summary">เลือกระยะเวลาในการแตะเพื่อโฟกัส</string>
+    <string name="pref_camera_focustime_entry_5">5วินาที</string>
+    <string name="pref_camera_focustime_entry_10">10วินาที</string>
+    <string name="pref_camera_focustime_entry_15">15วินาที</string>
+    <string name="pref_camera_focustime_entry_20">20วินาที</string>
+    <string name="pref_camera_focustime_entry_30">30วินาที</string>
+    <string name="pref_camera_focustime_entry_infinite">ไม่จำกัด</string>
+    <string name="pref_camera_flashmode_entry_redeye">ตาแดง</string>
+    <string name="pref_camera_flashmode_label_redeye">ตาแดง</string>
+    <string name="pref_camera_beauty_mode_title">รูปแบบสวยงาม</string>
+    <string name="pref_camera_slow_shutter_title">ชัตเตอร์ความเร็วต่ำ</string>
+    <string name="pref_camera_slow_shutter_entry_off">ปิด</string>
+    <string name="pref_camera_slow_shutter_entry_auto">อัตโนมัติ</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">1/2วินาที</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1วินาที</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2วินาที</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4วินาที</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8วินาที</string>
+    <string name="camera_menu_enhance_label">เพิ่มประสิทธิภาพ</string>
+    <string name="camera_menu_slow_shutter_label">ชัตเตอร์ช้า</string>
+    <string name="camera_menu_beauty_mode_label">สวยงาม</string>
+    <string name="camera_menu_colorize_label">สีสัน</string>
+    <string name="camera_menu_effects_label">เอฟเฟค</string>
+    <string name="camera_menu_asd_label">สมาร์ทซีน</string>
+</resources>
