@@ -28,9 +28,12 @@ import java.util.Comparator;
 public class MediaSetUtils {
     public static final Comparator<MediaSet> NAME_COMPARATOR = new NameComparator();
 
-    public static final int CAMERA_BUCKET_ID = GalleryUtils.getBucketId(
-            Environment.getExternalStorageDirectory().toString() + "/"
-            + BucketNames.CAMERA);
+    private static String mRoot = Environment.getExternalStorageDirectory().toString();
+
+    public static void setRoot(String root) {
+        mRoot = root;
+    }
+
     public static final int DOWNLOAD_BUCKET_ID = GalleryUtils.getBucketId(
             Environment.getExternalStorageDirectory().toString() + "/"
             + BucketNames.DOWNLOAD);
@@ -44,14 +47,14 @@ public class MediaSetUtils {
             Environment.getExternalStorageDirectory().toString() +
             "/" + BucketNames.SCREENSHOTS);
 
-    private static final Path[] CAMERA_PATHS = {
-            Path.fromString("/local/all/" + CAMERA_BUCKET_ID),
-            Path.fromString("/local/image/" + CAMERA_BUCKET_ID),
-            Path.fromString("/local/video/" + CAMERA_BUCKET_ID)};
+    public static int getCameraBucketId() {
+        return GalleryUtils.getBucketId(mRoot + "/" + BucketNames.CAMERA);
+    }
 
     public static boolean isCameraSource(Path path) {
-        return CAMERA_PATHS[0] == path || CAMERA_PATHS[1] == path
-                || CAMERA_PATHS[2] == path;
+        return path.equalsIgnoreCase("/local/all/" + getCameraBucketId())
+                || path.equalsIgnoreCase("/local/image/" + getCameraBucketId())
+                || path.equalsIgnoreCase("/local/video/" + getCameraBucketId());
     }
 
     // Sort MediaSets by name
