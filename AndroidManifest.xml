@@ -12,6 +12,9 @@
     <permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER"
             android:protectionLevel="signatureOrSystem" />
 
+    <permission android:name="com.android.gallery3d.permission.STORAGE_CHANGE"
+            android:protectionLevel="signatureOrSystem" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -358,6 +361,14 @@
         <receiver android:name="com.android.camera.DisableCameraReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Receiver to keep the storage path for the camera in sync -->
+        <receiver android:name="com.android.gallery3d.app.StorageChangeReceiver"
+            android:permission="com.android.gallery3d.permission.STORAGE_CHANGE" >
+            <intent-filter>
+                <action android:name="com.android.gallery3d.STORAGE_CHANGE" />
             </intent-filter>
         </receiver>
 
