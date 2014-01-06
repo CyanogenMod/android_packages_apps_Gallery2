@@ -473,8 +473,13 @@ public class PhotoModule
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
         mActivity.setStoragePath(mPreferences);
+
+        // Power shutter
+        mActivity.initPowerShutter(mPreferences);
+
         // we need to reset exposure for the preview
         resetExposureCompensation();
+
         // Starting the preview needs preferences, camera screen nail, and
         // focus area indicator.
         mStartPreviewPrerequisiteReady.open();
