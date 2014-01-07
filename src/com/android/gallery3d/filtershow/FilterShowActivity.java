@@ -195,6 +195,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private DialogInterface mCurrentDialog = null;
     private PopupMenu mCurrentMenu = null;
     private boolean mLoadingVisible = true;
+    private boolean mLoadingComplete = false;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -283,6 +284,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         doBindService();
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
         setContentView(R.layout.filtershow_splashscreen);
+        mLoadingComplete = false;
     }
 
     public boolean isShowingImageStatePanel() {
@@ -861,6 +863,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             MasterImage.getImage().warnListeners();
             loadActions();
+            mLoadingComplete = false;
 
             if (mOriginalPreset != null) {
                 MasterImage.getImage().setLoadedPreset(mOriginalPreset);
@@ -1162,6 +1165,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void enableSave(boolean enable) {
+        mLoadingComplete = true;
         if (mSaveButton != null) {
             mSaveButton.setEnabled(enable);
         }
@@ -1329,6 +1333,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
         if (currentPanel instanceof MainPanel) {
             if (!mImageShow.hasModifications()) {
+                if (!mLoadingComplete) {
+                    Log.v(LOGTAG,"Background processing is ON, rejecting back key event");
+                    return;
+                }
                 done();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
