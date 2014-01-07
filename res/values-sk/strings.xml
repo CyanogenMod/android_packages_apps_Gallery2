@@ -106,7 +106,7 @@
     <string name="untagged" msgid="7281481064509590402">"Neoznačené"</string>
     <string name="no_location" msgid="4043624857489331676">"Bez údajov o polohe"</string>
     <string name="no_connectivity" msgid="7164037617297293668">"Niektoré umiestnenia nebolo možné identifikovať kvôli problémom so sieťou."</string>
-    <string name="sync_album_error" msgid="1020688062900977530">"Fotografie z tohto albumu sa nepodarilo prevziať. Skúste to znova neskôr."</string>
+    <string name="sync_album_error" msgid="1020688062900977530">"Fotografie z tohto albumu sa nepodarilo stiahnuť. Skúste to znova neskôr."</string>
     <string name="show_images_only" msgid="7263218480867672653">"Iba obrázky"</string>
     <string name="show_videos_only" msgid="3850394623678871697">"Iba videá"</string>
     <string name="show_all" msgid="6963292714584735149">"Obrázky a videá"</string>
@@ -188,7 +188,7 @@
     <string name="settings" msgid="1534847740615665736">"Nastavenia"</string>
     <string name="add_account" msgid="4271217504968243974">"Pridať účet"</string>
     <string name="folder_camera" msgid="4714658994809533480">"Fotoaparát"</string>
-    <string name="folder_download" msgid="7186215137642323932">"Preberanie"</string>
+    <string name="folder_download" msgid="7186215137642323932">"Sťahovanie"</string>
     <string name="folder_edited_online_photos" msgid="6278215510236800181">"Upravené fotografie online"</string>
     <string name="folder_imported" msgid="2773581395524747099">"Importované"</string>
     <string name="folder_screenshot" msgid="7200396565864213450">"Snímky obrazovky"</string>
