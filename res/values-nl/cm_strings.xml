@@ -16,4 +16,5 @@
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="mute_nosupport">Kan niet dempen: video niet ondersteund</string>
+    <string name="fail_trim">Kan deze video niet bijsnijden</string>
 </resources>
