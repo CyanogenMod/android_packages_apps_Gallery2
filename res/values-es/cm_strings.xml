@@ -16,4 +16,5 @@
 -->
 <resources>
     <string name="mute_nosupport">No se puede silenciar: vídeo no soportado</string>
+    <string name="fail_trim">Este vídeo no puede ser recortado</string>
 </resources>
