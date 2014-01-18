@@ -16,4 +16,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="mute_nosupport">Negali nutildyti: nepalaikomas vaizdo įrašas</string>
+    <string name="fail_trim">Atsiprašome, šis vaizdo įrašas negali būti apkarpytas</string>
 </resources>
