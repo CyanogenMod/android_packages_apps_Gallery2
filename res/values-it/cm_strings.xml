@@ -16,4 +16,5 @@
 -->
 <resources>
     <string name="mute_nosupport">Impossibile disattivare l\'audio: video non supportato</string>
+    <string name="fail_trim">Spiacente, questo file video non può essere tagliato</string>
 </resources>
