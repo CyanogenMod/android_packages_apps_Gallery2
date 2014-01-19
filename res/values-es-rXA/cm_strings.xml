@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_camera_storage_title">Almacenamientu</string>
+    <string name="pref_camera_picturesize_entry_20_7mp">20,7 MP</string>
+    <string name="pref_camera_picturesize_entry_18mp">18 MP</string>
+    <string name="pref_camera_picturesize_entry_12_8mp">12,8 MP</string>
+    <string name="pref_camera_picturesize_entry_12_7mp">12,7 MP</string>
+    <string name="pref_camera_picturesize_entry_12mp">12 MP (4:3)</string>
+    <string name="pref_camera_picturesize_entry_11_5mp">11,5 MP</string>
+    <string name="pref_camera_picturesize_entry_10_4mp">10,4 MP</string>
+    <string name="pref_camera_picturesize_entry_9mp">9 MP</string>
+    <string name="pref_camera_picturesize_entry_8_2mp">8,2 MP</string>
+    <string name="pref_camera_picturesize_entry_7_7mp">7,7 MP (4:3)</string>
+    <string name="pref_camera_picturesize_entry_6_4mp">6,4 MP</string>
+    <string name="pref_camera_picturesize_entry_6mp">6 MP</string>
+    <string name="pref_camera_picturesize_entry_4_5mp">4,5 MP</string>
+    <string name="pref_camera_picturesize_entry_3_7mp">3,7 MP</string>
+    <string name="pref_camera_picturesize_entry_2_5mp">2,5 MP</string>
+    <string name="pref_camera_picturesize_entry_2_1mp">2,1 MP</string>
+    <string name="pref_camera_picturesize_entry_1_9mp">1,9 MP</string>
+    <string name="pref_camera_picturesize_entry_1_5mp">1,5 MP</string>
+    <string name="pref_camera_picturesize_entry_wxga">WXGA</string>
+    <string name="pref_camera_picturesize_entry_xga">XGA</string>
+    <string name="pref_camera_picturesize_entry_svga">SVGA</string>
+    <string name="pref_camera_picturesize_entry_wvga">WVGA</string>
+    <string name="pref_camera_picturesize_entry_wqvga">WQVGA</string>
+    <string name="bass_boost_strength">Refuerzu de graves</string>
+    <string name="virtualizer_strength">Efeutu 3D</string>
+    <string name="audio_effects">Efeutos de soníu</string>
+    <string name="headset_plug">Coneuta los auriculares p\'habilitar estos efeutos.</string>
+    <string name="fail_trim">Esti tipu de ficheru nun pue recortase</string>
+    <string name="can_not_trim">Namái puen recortase los ficheros mp4</string>
+    <string name="pref_video_quality_entry_hfr">WVGA alta velocidá</string>
+    <string name="pref_camera_scenemode_entry_antimotionblur">Reductor de desenfoque</string>
+    <string name="pref_camera_scenemode_entry_aqua">Agua</string>
+    <string name="pref_camera_scenemode_entry_ar">Realidá aumentada</string>
+    <string name="pref_camera_scenemode_entry_asd">Meyor disparu</string>
+    <string name="pref_camera_scenemode_entry_baby">Bebé</string>
+    <string name="pref_camera_scenemode_entry_backgroundblur">Fondu desenfocáu</string>
+    <string name="pref_camera_scenemode_entry_backlight">Contralluz</string>
+    <string name="pref_camera_scenemode_entry_backlightportrait">Retratu a contralluz</string>
+    <string name="pref_camera_scenemode_entry_barcode">Códigu de barres</string>
+    <string name="pref_camera_scenemode_entry_beach">Sablera</string>
+    <string name="pref_camera_scenemode_entry_beauty">Belleza</string>
+    <string name="pref_camera_scenemode_entry_candlelight">Lluz de vela</string>
+    <string name="pref_camera_scenemode_entry_cine">Cine</string>
+    <string name="pref_camera_scenemode_entry_closeup">Detalle</string>
+    <string name="pref_camera_scenemode_entry_dark">Escuru</string>
+    <string name="pref_camera_scenemode_entry_dish">Reflector</string>
+    <string name="pref_camera_scenemode_entry_duskdawn">Alborecer/atapecer</string>
+    <string name="pref_camera_scenemode_entry_document">Documentu</string>
+    <string name="pref_camera_scenemode_entry_fallcolor">Serondiegu</string>
+    <string name="pref_camera_scenemode_entry_fireworks">Fueos artificiales</string>
+    <string name="pref_camera_scenemode_entry_flowers">Flores</string>
+    <string name="pref_camera_scenemode_entry_handheldtwilight">Aséu</string>
+    <string name="pref_camera_scenemode_entry_highsensitivity">Alta sensibilidá</string>
+    <string name="pref_camera_scenemode_entry_indoor">Interior</string>
+    <string name="pref_camera_scenemode_entry_landscape">Paisaxe</string>
+    <string name="pref_camera_scenemode_entry_mix_illuminant">Mezu de lluces</string>
+    <string name="pref_camera_scenemode_entry_mood">Humor</string>
+    <string name="pref_camera_scenemode_entry_nightportrait">Retratu nocherniegu</string>
+    <string name="pref_camera_scenemode_entry_nightindoor">Interior nocherniegu</string>
+    <string name="pref_camera_scenemode_entry_oldfilm">Cine antiguu</string>
+    <string name="pref_camera_scenemode_entry_pet">Mascota</string>
+    <string name="pref_camera_scenemode_entry_portrait">Retratu</string>
+    <string name="pref_camera_scenemode_entry_snow">Ñeve</string>
+    <string name="pref_camera_scenemode_entry_softskin">Suavizáu</string>
+    <string name="pref_camera_scenemode_entry_sports">Deportes</string>
+    <string name="pref_camera_scenemode_entry_spotlight">Destacáu</string>
+    <string name="pref_camera_scenemode_entry_steadyphoto">Semeya rápida</string>
+    <string name="pref_camera_scenemode_entry_supernight">Nueche escura</string>
+    <string name="pref_camera_scenemode_entry_sweepstitch">Barríu</string>
+    <string name="pref_camera_scenemode_entry_text">Testu</string>
+    <string name="pref_camera_scenemode_entry_theatre">Teatru</string>
+    <string name="pref_camera_scenemode_entry_whiteboard">Pizarra</string>
+    <string name="pref_camera_focusmode_entry_continuouspicture">Imaxe continua</string>
+    <string name="pref_camera_focusmode_entry_extended">Ampliu</string>
+    <string name="pref_camera_focusmode_entry_facedetect">Deteición rostru</string>
+    <string name="pref_camera_focusmode_entry_facepriority">Prioridá rostru</string>
+    <string name="pref_camera_focusmode_entry_fixed">Fixu</string>
+    <string name="pref_camera_focusmode_entry_portrait">Retratu</string>
+    <string name="pref_camera_focusmode_entry_hyperfocal">Hiperfocal</string>
+    <string name="pref_camera_power_shutter_title">Disparador alternativu</string>
+    <string name="pref_camera_iso_entry_auto">Automáticu</string>
+    <string name="pref_camera_iso_entry_isodeblur">Reductor temblor</string>
+    <string name="pref_camera_iso_entry_isosports">Deporte</string>
+    <string name="pref_camera_iso_entry_isonight">Nocherniegu</string>
+    <string name="pref_camera_iso_entry_isomovie">Película</string>
+    <string name="pref_camera_jpeg_title">Calidá JPEG</string>
+    <string name="pref_video_jpeg_title">Calidá codificación</string>
+    <string name="pref_camera_jpeg_entry_super">Máxima</string>
+    <string name="pref_camera_jpeg_entry_high">Alta</string>
+    <string name="pref_camera_jpeg_entry_medium">Media</string>
+    <string name="pref_camera_jpeg_entry_low">Baxa</string>
+    <string name="pref_camera_coloreffect_title">Efeutu color</string>
+    <string name="pref_camera_coloreffect_entry_none">Nengún</string>
+    <string name="pref_camera_coloreffect_entry_mono">Mono</string>
+    <string name="pref_camera_coloreffect_entry_sepia">Sepia</string>
+    <string name="pref_camera_coloreffect_entry_negative">Negativu</string>
+    <string name="pref_camera_coloreffect_entry_solarize">Solarizar</string>
+    <string name="pref_camera_coloreffect_entry_posterize">Posterizar</string>
+    <string name="pref_camera_coloreffect_entry_aqua">Agua</string>
+    <string name="pref_camera_coloreffect_entry_emboss">Realzar</string>
+    <string name="pref_camera_coloreffect_entry_sketch">Dibuxu</string>
+    <string name="pref_camera_coloreffect_entry_neon">Neón</string>
+    <string name="pref_camera_coloreffect_entry_pastel">Pastel</string>
+    <string name="pref_camera_coloreffect_entry_mosaic">Mosaicu</string>
+    <string name="pref_camera_coloreffect_entry_redtint">Tintáu en bermeyu</string>
+    <string name="pref_camera_coloreffect_entry_bluetint">Tintáu n\'azul</string>
+    <string name="pref_camera_coloreffect_entry_greentint">Tintáu en verde</string>
+    <string name="pref_camera_coloreffect_entry_washed">Llaváu</string>
+    <string name="pref_camera_coloreffect_entry_vintage_warm">Retro cálidu</string>
+    <string name="pref_camera_coloreffect_entry_vintage_cold">Retro fríu</string>
+    <string name="pref_camera_coloreffect_entry_point_blue">Puntu azul</string>
+    <string name="pref_camera_coloreffect_entry_point_green">Puntu verde</string>
+    <string name="pref_camera_coloreffect_entry_point_red_yellow">Puntu bermeyu-mariellu</string>
+    <string name="pref_camera_coloreffect_entry_cartoonize">Viñeta</string>
+    <string name="pref_camera_burst_title">Mou ráfaga</string>
+    <string name="pref_camera_burst_entry_off">Apagau</string>
+    <string name="pref_camera_burst_entry_5">5 disparos</string>
+    <string name="pref_camera_burst_entry_10">10 disparos</string>
+    <string name="pref_camera_burst_entry_15">15 disparos</string>
+    <string name="pref_camera_burst_entry_20">20 disparos</string>
+    <string name="pref_camera_focustime_title">Duración del enfoque</string>
+    <string name="pref_camera_focustime_summary">Seleicionar la duración del enfoque al tocar la pantalla</string>
+    <string name="pref_camera_focustime_entry_5">5 segundos</string>
+    <string name="pref_camera_focustime_entry_10">10 segundos</string>
+    <string name="pref_camera_focustime_entry_15">15 segundos</string>
+    <string name="pref_camera_focustime_entry_20">20 segundos</string>
+    <string name="pref_camera_focustime_entry_30">30 segundos</string>
+    <string name="pref_camera_focustime_entry_infinite">Infinita</string>
+    <string name="pref_camera_flashmode_entry_redeye">Güeyos bermeyos</string>
+    <string name="pref_camera_flashmode_label_redeye">GÜEYOS BERMEYOS</string>
+    <string name="pref_camera_beauty_mode_title">Mou belleza</string>
+    <string name="pref_camera_slow_shutter_title">Obturador lentu</string>
+    <string name="pref_camera_slow_shutter_entry_off">Apagáu</string>
+    <string name="pref_camera_slow_shutter_entry_auto">Automáticu</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">0,5 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_1s">1 segundu</string>
+    <string name="pref_camera_slow_shutter_entry_2s">2 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_4s">4 segundos</string>
+    <string name="pref_camera_slow_shutter_entry_8s">8 segundos</string>
+    <string name="camera_menu_enhance_label">MEYORES</string>
+    <string name="camera_menu_slow_shutter_label">OBTURADOR LENTU</string>
+    <string name="camera_menu_beauty_mode_label">EMBELLECER</string>
+    <string name="camera_menu_colorize_label">COLOREAR</string>
+    <string name="camera_menu_effects_label">EFEUTOS</string>
+    <string name="camera_menu_asd_label">ESCENA INTELIXENTE</string>
+</resources>
