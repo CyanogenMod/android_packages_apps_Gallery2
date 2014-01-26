@@ -514,6 +514,12 @@ public class MoviePlayer implements
             }
             mHasPaused = false;
         }
+
+        if (System.currentTimeMillis() > mResumeableTime) {
+            mHandler.removeCallbacks(mPlayingChecker);
+            mHandler.postDelayed(mPlayingChecker, 250);
+        }
+
         mHandler.post(mProgressChecker);
     }
 
