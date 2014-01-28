@@ -115,7 +115,7 @@ public class AlbumSetDataLoader {
     }
 
     private void assertIsActive(int index) {
-        if (index < mActiveStart && index >= mActiveEnd) {
+        if (index < mActiveStart || index >= mActiveEnd) {
             throw new IllegalArgumentException(String.format(
                     "%s not in (%s, %s)", index, mActiveStart, mActiveEnd));
         }
