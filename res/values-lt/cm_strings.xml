@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="pref_camera_storage_title">Saugykla</string>
+    <string name="pref_camera_storage_title">Talpykla</string>
     <string name="pref_camera_picturesize_entry_20_7mp">20.7 MP</string>
     <string name="pref_camera_picturesize_entry_18mp">18 MP</string>
     <string name="pref_camera_picturesize_entry_12_8mp">12,8 MP</string>
@@ -43,7 +43,7 @@
     <string name="virtualizer_strength">3D efektai</string>
     <string name="audio_effects">Garso efektai</string>
     <string name="headset_plug">Prijunkite ausines norėdami naudotis šiais efektais.</string>
-    <string name="fail_trim">Šis video failas negali būti sumažintas</string>
+    <string name="fail_trim">Šis vaizdo failas negali būti sumažintas</string>
     <string name="can_not_trim">Tik mp4 failai gali būti sumažinti</string>
     <string name="pref_video_quality_entry_hfr">WVGA (daug kadrų per sekundę)</string>
     <string name="pref_camera_scenemode_entry_antimotionblur">Judesių liejimosi mažinimas</string>
@@ -128,7 +128,7 @@
     <string name="pref_camera_coloreffect_entry_vintage_cold">Senamadiškas (šaltas)</string>
     <string name="pref_camera_coloreffect_entry_point_blue">Mėlynas taškas</string>
     <string name="pref_camera_coloreffect_entry_point_green">Žalias taškas</string>
-    <string name="pref_camera_coloreffect_entry_point_red_yellow">Raudona-geltona taškas</string>
+    <string name="pref_camera_coloreffect_entry_point_red_yellow">Rausvas taškas</string>
     <string name="pref_camera_coloreffect_entry_cartoonize">Animacinis filmas</string>
     <string name="pref_camera_burst_title">Greita kadrų serija</string>
     <string name="pref_camera_burst_entry_off">Išjungta</string>
@@ -138,19 +138,19 @@
     <string name="pref_camera_burst_entry_20">20 nuotraukų</string>
     <string name="pref_camera_focustime_title">Fokusavimo trukmė</string>
     <string name="pref_camera_focustime_summary">Pasirinkite fokusavimo trukmę</string>
-    <string name="pref_camera_focustime_entry_5">5s</string>
-    <string name="pref_camera_focustime_entry_10">10s</string>
-    <string name="pref_camera_focustime_entry_15">15s</string>
-    <string name="pref_camera_focustime_entry_20">20s</string>
-    <string name="pref_camera_focustime_entry_30">30s</string>
-    <string name="pref_camera_focustime_entry_infinite">Begalinis</string>
+    <string name="pref_camera_focustime_entry_5">5 sekundės </string>
+    <string name="pref_camera_focustime_entry_10">10 sekundžių</string>
+    <string name="pref_camera_focustime_entry_15">15 sekundžių</string>
+    <string name="pref_camera_focustime_entry_20">20 sekundžių</string>
+    <string name="pref_camera_focustime_entry_30">30 sekundžių</string>
+    <string name="pref_camera_focustime_entry_infinite">Begalinė</string>
     <string name="pref_camera_flashmode_entry_redeye">Raudonų akių efekto naikinimas</string>
     <string name="pref_camera_flashmode_label_redeye">RAUDONŲ AKIŲ EFEKTO NAIKINIMAS</string>
     <string name="pref_camera_beauty_mode_title">Grožio režimas</string>
     <string name="pref_camera_slow_shutter_title">Ilgas išlaikymas</string>
-    <string name="pref_camera_slow_shutter_entry_off">Išjungta</string>
+    <string name="pref_camera_slow_shutter_entry_off">Išjungtas</string>
     <string name="pref_camera_slow_shutter_entry_auto">Matinis</string>
-    <string name="pref_camera_slow_shutter_entry_half_second">1/2 sekundės</string>
+    <string name="pref_camera_slow_shutter_entry_half_second">1 / 2 sekundės</string>
     <string name="pref_camera_slow_shutter_entry_1s">1 sekundė</string>
     <string name="pref_camera_slow_shutter_entry_2s">2 sekundės</string>
     <string name="pref_camera_slow_shutter_entry_4s">4 sekundės</string>
