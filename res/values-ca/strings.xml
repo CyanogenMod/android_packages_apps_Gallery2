@@ -51,8 +51,8 @@
     <string name="camera_setas_wallpaper" msgid="797463183863414289">"Fons de pantalla"</string>
     <string name="delete" msgid="2839695998251824487">"Suprimeix"</string>
   <plurals name="delete_selection">
-    <item quantity="one" msgid="6453379735401083732">"Vols supr. l\'element selecc.?"</item>
-    <item quantity="other" msgid="5874316486520635333">"Vols supr. els elements sel.?"</item>
+    <item quantity="one" msgid="6453379735401083732">"Suprimir l\'element seleccionat?"</item>
+    <item quantity="other" msgid="5874316486520635333">"Suprimir elements seleccionats?"</item>
   </plurals>
     <string name="confirm" msgid="8646870096527848520">"Confirma"</string>
     <string name="cancel" msgid="3637516880917356226">"Cancel·la"</string>
