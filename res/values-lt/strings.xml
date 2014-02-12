@@ -141,7 +141,7 @@
     <string name="iso" msgid="5028296664327335940">"ISO"</string>
     <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
     <string name="manual" msgid="6608905477477607865">"Rankiniu būdu"</string>
-    <string name="auto" msgid="4296941368722892821">"Automobiliai"</string>
+    <string name="auto" msgid="4296941368722892821">"Automatinis"</string>
     <string name="flash_on" msgid="7891556231891837284">"Blykstė suveikė"</string>
     <string name="flash_off" msgid="1445443413822680010">"Be blykstės"</string>
     <string name="unknown" msgid="3506693015896912952">"Nežinoma"</string>
