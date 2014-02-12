@@ -70,17 +70,17 @@
     <string name="switch_to_camera" msgid="7280111806675169992">"Φωτογραφική μηχανή"</string>
   <plurals name="number_of_items_selected">
     <item quantity="zero" msgid="2142579311530586258">"Επιλέχθηκαν %1$d"</item>
-    <item quantity="one" msgid="2478365152745637768">"Επιλέχθηκαν %1$d"</item>
+    <item quantity="one" msgid="2478365152745637768">"Επιλέχθηκε %1$d"</item>
     <item quantity="other" msgid="754722656147810487">"Επιλέχθηκαν %1$d"</item>
   </plurals>
   <plurals name="number_of_albums_selected">
     <item quantity="zero" msgid="749292746814788132">"Επιλέχθηκαν %1$d"</item>
-    <item quantity="one" msgid="6184377003099987825">"Επιλέχθηκαν %1$d"</item>
+    <item quantity="one" msgid="6184377003099987825">"Επιλέχθηκε %1$d"</item>
     <item quantity="other" msgid="53105607141906130">"Επιλέχθηκαν %1$d"</item>
   </plurals>
   <plurals name="number_of_groups_selected">
     <item quantity="zero" msgid="3466388370310869238">"Επιλέχθηκαν %1$d"</item>
-    <item quantity="one" msgid="5030162638216034260">"Επιλέχθηκαν %1$d"</item>
+    <item quantity="one" msgid="5030162638216034260">"Επιλέχθηκε %1$d"</item>
     <item quantity="other" msgid="3512041363942842738">"Επιλέχθηκαν %1$d"</item>
   </plurals>
     <string name="show_on_map" msgid="6157544221201750980">"Εμφάνιση στον χάρτη"</string>
