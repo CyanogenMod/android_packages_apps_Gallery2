@@ -67,6 +67,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             android:id="@+id/knob_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:ellipsize="marquee"
             android:visibility="gone" />
     </LinearLayout>
