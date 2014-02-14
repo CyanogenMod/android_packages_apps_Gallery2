@@ -32,6 +32,7 @@
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <supports-screens android:smallScreens="false"
             android:normalScreens="true" android:largeScreens="true"
