@@ -90,10 +90,9 @@ public class Knob extends FrameLayout {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Knob, 0, 0);
 
         String label;
-        int background, foreground;
+        int foreground;
         try {
             label = a.getString(R.styleable.Knob_label);
-            background = a.getResourceId(R.styleable.Knob_background, R.drawable.knob_bg);
             foreground = a.getResourceId(R.styleable.Knob_foreground, R.drawable.knob);
         } finally {
             a.recycle();
@@ -108,7 +107,6 @@ public class Knob extends FrameLayout {
         mLowlightColor = res.getColor(R.color.lowlight);
         mDisabledColor = res.getColor(R.color.disabled);
 
-        setBackgroundResource(background);
         ((ImageView) findViewById(R.id.knob_foreground)).setImageResource(foreground);
 
         mLabelTV = (TextView) findViewById(R.id.knob_label);
@@ -213,16 +211,25 @@ public class Knob extends FrameLayout {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        mWidth = w;
+        int size = w > h ? h : w;
+        mWidth = size;
         mIndicatorWidth = mKnobOn.getWidth();
 
-        mRectF = new RectF(STROKE_WIDTH, STROKE_WIDTH,
-                mWidth - STROKE_WIDTH, mWidth - STROKE_WIDTH);
+        int diff;
+        if (w > h) {
+            diff = (w - h) / 2;
+            mRectF = new RectF(STROKE_WIDTH + diff, STROKE_WIDTH,
+                    w - STROKE_WIDTH - diff, h - STROKE_WIDTH);
+        } else {
+            diff = (h - w) / 2;
+            mRectF = new RectF(STROKE_WIDTH, STROKE_WIDTH + diff,
+                    w - STROKE_WIDTH, h - STROKE_WIDTH - diff);
+        }
 
-        mProgressTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, w * 0.16f);
-        mProgressTV.setPadding(0, (int) (w * 0.33), 0, 0);
+        mProgressTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, size * 0.16f);
+        mProgressTV.setPadding(0, (int) (size * 0.33), 0, 0);
         mProgressTV.setVisibility(View.VISIBLE);
-        mLabelTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, w * 0.12f);
+        mLabelTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, size * 0.12f);
         mLabelTV.setVisibility(View.VISIBLE);
     }
 

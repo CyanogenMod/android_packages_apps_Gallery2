@@ -65,16 +65,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 android:id="@+id/bBStrengthKnob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 custom:label="@string/bass_boost_strength"
-                custom:background="@drawable/knob_bg"
                 custom:foreground="@drawable/knob" />
 
             <com.android.gallery3d.ui.Knob
                 android:id="@+id/vIStrengthKnob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 custom:label="@string/virtualizer_strength"
-                custom:background="@drawable/knob_bg"
                 custom:foreground="@drawable/knob" />
 
         </LinearLayout>
