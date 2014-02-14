@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (c) 2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -32,41 +32,29 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     xmlns:custom="http://schemas.android.com/apk/res/com.android.gallery3d"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="horizontal"
+    android:gravity="left|center_vertical">
 
-    <LinearLayout
+    <TextView
+        android:text="@string/audio_effects_dialog_title"
+        android:gravity="left|center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingBottom="10dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20dp" />
 
-        <LinearLayout
-            android:id="@+id/aEffectsPanel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-            <com.android.gallery3d.ui.Knob
-                android:id="@+id/bBStrengthKnob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                custom:label="@string/bass_boost_strength"
-                custom:foreground="@drawable/knob" />
-
-            <com.android.gallery3d.ui.Knob
-                android:id="@+id/vIStrengthKnob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                custom:label="@string/virtualizer_strength"
-                custom:foreground="@drawable/knob" />
-
-        </LinearLayout>
-    </LinearLayout>
+    <ToggleButton
+        android:id="@+id/audio_effects_switch"
+        android:textOn=""
+        android:textOff=""
+        android:layout_width="72dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="4dp"/>
 </LinearLayout>
