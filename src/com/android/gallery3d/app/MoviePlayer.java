@@ -486,6 +486,7 @@ public class MoviePlayer implements
 
             if (mServerTimeoutExt.handleOnResume() || mIsShowResumingDialog) {
                 mHasPaused = false;
+                mHandler.post(mProgressChecker);
                 return;
             }
             switch (mTState) {
