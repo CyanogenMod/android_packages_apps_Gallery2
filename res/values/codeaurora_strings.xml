@@ -30,10 +30,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for step option settins -->
-    <string name="setp_option_name">Step</string>
+    <string name="step_option_name">Step</string>
     <string name="step_option_desc">Customize fast forward/backward step</string>
-    <string name="setp_option_three_second">3 seconds</string>
-    <string name="setp_option_six_second">6 seconds</string>
+    <string name="step_option_alternate">5 seconds</string>
+    <string name="step_option_default">10 seconds</string>
 
     <string name="loop">"Loop"</string>
     <string name="single">"Single"</string>
