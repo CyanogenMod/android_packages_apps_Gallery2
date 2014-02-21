@@ -30,10 +30,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for step option settins -->
-    <string name="setp_option_name">步长</string>
+    <string name="step_option_name">步长</string>
     <string name="step_option_desc">定制快进/快退步长</string>
-    <string name="setp_option_three_second">3秒</string>
-    <string name="setp_option_six_second">6秒</string>
+    <string name="step_option_alternate">5秒</string>
+    <string name="step_option_default">10秒</string>
 
     <string name="loop">"循环"</string>
     <string name="single">"单次"</string>
