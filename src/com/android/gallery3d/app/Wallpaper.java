@@ -105,7 +105,14 @@ public class Wallpaper extends Activity {
             }
             case STATE_PHOTO_PICKED: {
                 Intent cropAndSetWallpaperIntent;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                boolean fromScreenColor = false;
+
+                // Do this for screencolor select and crop image to preview.
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    fromScreenColor = extras.getBoolean(KEY_FROM_SCREENCOLOR, false);
+                }
+                if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) && (!fromScreenColor)) {
                     WallpaperManager wpm = WallpaperManager.getInstance(getApplicationContext());
                     try {
                         cropAndSetWallpaperIntent = wpm.getCropAndSetWallpaperIntent(mPickedItem);
@@ -121,13 +128,7 @@ public class Wallpaper extends Activity {
 
                 int width,height;
                 float spotlightX,spotlightY;
-                boolean fromScreenColor = false;
 
-                // Do this for screencolor select and crop image to preview.
-                Bundle extras = intent.getExtras();
-                if (extras != null) {
-                    fromScreenColor = extras.getBoolean(KEY_FROM_SCREENCOLOR, false);
-                }
                 if (fromScreenColor) {
                     width = extras.getInt(KEY_ASPECT_X, 0);
                     height = extras.getInt(KEY_ASPECT_Y, 0);
