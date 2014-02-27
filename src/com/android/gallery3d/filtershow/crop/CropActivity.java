@@ -478,6 +478,14 @@ public class CropActivity extends Activity {
                     failure = true;
                     return false;
                 }
+                if (roundedTrueCrop.right > mOrig.right) {
+                    roundedTrueCrop.set(roundedTrueCrop.left, roundedTrueCrop.top,
+                            (int) mOrig.right, roundedTrueCrop.bottom);
+                }
+                if (roundedTrueCrop.bottom > mOrig.bottom) {
+                    roundedTrueCrop.set(roundedTrueCrop.left, roundedTrueCrop.top,
+                            roundedTrueCrop.right, (int) mOrig.bottom);
+                }
 
                 // Attempt to open a region decoder
                 BitmapRegionDecoder decoder = null;
