@@ -57,9 +57,11 @@ public class UpdatePreviewTask extends ProcessingTask {
         SharedBuffer buffer = MasterImage.getImage().getPreviewBuffer();
         SharedPreset preset = MasterImage.getImage().getPreviewPreset();
         ImagePreset renderingPreset = preset.dequeuePreset();
-        if ( (buffer != null) && (renderingPreset != null) &&
-                (buffer.getProducer() != null)) {
+        if ( (buffer != null) && (renderingPreset != null)) {
             mPreviewPipeline.compute(buffer, renderingPreset, 0);
+            if ( buffer.getProducer() == null) {
+                return null;
+            }
             // set the preset we used in the buffer for later inspection UI-side
             buffer.getProducer().setPreset(renderingPreset);
             buffer.getProducer().sync();
