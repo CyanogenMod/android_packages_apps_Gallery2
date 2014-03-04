@@ -82,6 +82,8 @@
                 <data android:mimeType="application/sdp" />
                 <data android:mimeType="video/x-msvideo"/>
                 <data android:mimeType="video/divx" />
+                <data android:mimeType="video/mkv" />
+                <data android:mimeType="video/mpeg" />
              </intent-filter>
              <intent-filter>
                 <!-- HTTP live support -->
