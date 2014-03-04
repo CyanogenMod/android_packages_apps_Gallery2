@@ -36,6 +36,7 @@ public class GalleryAppImpl extends Application implements GalleryApp {
 
     private static final String DOWNLOAD_FOLDER = "download";
     private static final long DOWNLOAD_CAPACITY = 64 * 1024 * 1024; // 64M
+    private static GalleryAppImpl sGalleryAppImpl;
 
     private ImageCacheService mImageCacheService;
     private Object mLock = new Object();
@@ -51,11 +52,16 @@ public class GalleryAppImpl extends Application implements GalleryApp {
         WidgetUtils.initialize(this);
         PicasaSource.initialize(this);
         UsageStatistics.initialize(this);
+        sGalleryAppImpl = this;
     }
 
     @Override
     public Context getAndroidContext() {
         return this;
+    }
+
+    public static Context getContext() {
+        return sGalleryAppImpl;
     }
 
     @Override

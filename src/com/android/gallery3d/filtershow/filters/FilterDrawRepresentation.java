@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
@@ -23,6 +24,7 @@ import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
 
+import com.android.gallery3d.app.GalleryAppImpl;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.BasicParameterInt;
 import com.android.gallery3d.filtershow.controller.BasicParameterStyle;
@@ -158,9 +160,9 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     private StrokeData mCurrent; // used in the currently drawing style
 
     public FilterDrawRepresentation() {
-        super("Draw");
+        super(GalleryAppImpl.getContext().getString(R.string.imageDraw));
         setFilterClass(ImageFilterDraw.class);
-        setSerializationName("DRAW");
+        setSerializationName(GalleryAppImpl.getContext().getString(R.string.imageDraw));
         setFilterType(FilterRepresentation.TYPE_VIGNETTE);
         setTextId(R.string.imageDraw);
         setEditorId(EditorDraw.ID);
