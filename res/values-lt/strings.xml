@@ -20,7 +20,7 @@
     <string name="gadget_title" msgid="259405922673466798">"Paveikslėlio rėmelis"</string>
     <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
     <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
-    <string name="movie_view_label" msgid="3526526872644898229">"Vaizdo įrašų grotuvas"</string>
+    <string name="movie_view_label" msgid="3526526872644898229">"Vaizdo įrašų leistuvė"</string>
     <string name="loading_video" msgid="4013492720121891585">"Įkeliamas vaizdo įrašas..."</string>
     <string name="loading_image" msgid="1200894415793838191">"Įkeliamas vaizdas..."</string>
     <string name="loading_account" msgid="928195413034552034">"Įkeliama paskyra…"</string>
@@ -370,7 +370,7 @@
     <string name="accessibility_play_video" msgid="7596298365794810207">"Leisti vaizdo įrašą"</string>
     <string name="accessibility_pause_video" msgid="6526344477133046653">"Pristabdyti vaizdo įrašą"</string>
     <string name="accessibility_reload_video" msgid="3250335917598607232">"Įkelti vaizdo įrašą iš naujo"</string>
-    <string name="accessibility_time_bar" msgid="1414029843602604531">"Vaizdo įrašų grotuvo laiko juosta"</string>
+    <string name="accessibility_time_bar" msgid="1414029843602604531">"Vaizdo įrašų leistuvės laiko juosta"</string>
     <string name="capital_on" msgid="5491353494964003567">"ĮJUNGTA"</string>
     <string name="capital_off" msgid="7231052688467970897">"IŠJUNGTA"</string>
     <string name="pref_video_time_lapse_frame_interval_off" msgid="3490489191038309496">"Išj."</string>
