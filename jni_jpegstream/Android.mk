@@ -12,9 +12,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/src \
                     external/jpeg
 
-LOCAL_SHARED_LIBRARIES := libjpeg
+LOCAL_SHARED_LIBRARIES := libjpeg liblog
 
-LOCAL_LDFLAGS        := -llog
 LOCAL_SDK_VERSION   := 9
 LOCAL_ARM_MODE := arm
 
