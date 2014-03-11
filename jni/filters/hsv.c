@@ -15,6 +15,7 @@
  */
 
 #include <math.h>
+#include <stdlib.h> /* For abs */
 #include "filters.h"
 
 double fastevalPoly(double *poly,int n, double x){
