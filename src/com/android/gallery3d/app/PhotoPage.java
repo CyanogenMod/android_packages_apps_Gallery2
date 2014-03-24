@@ -1546,7 +1546,8 @@ public abstract class PhotoPage extends ActivityState implements
     }
 
     private static void viewAnimateGif(Activity activity, Uri uri) {
-        Intent intent = new Intent(ViewGifImage.VIEW_GIF_ACTION, uri);
+        Intent intent = new Intent(ViewGifImage.VIEW_GIF_ACTION);
+        intent.setDataAndType(uri, MediaItem.MIME_TYPE_GIF);
         activity.startActivity(intent);
     }
 }
