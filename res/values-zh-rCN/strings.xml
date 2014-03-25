@@ -244,7 +244,7 @@
     <skip />
     <string name="pref_camera_timer_sound_title" msgid="2469008631966169105">"倒计时过程中发出提示音"</string>
     <string name="setting_off" msgid="4480039384202951946">"关闭"</string>
-    <string name="setting_on" msgid="8602246224465348901">"打开"</string>
+    <string name="setting_on" msgid="8602246224465348901">"开启"</string>
     <string name="pref_video_quality_title" msgid="8245379279801096922">"视频画质"</string>
     <string name="pref_video_quality_entry_high" msgid="8664038216234805914">"高画质"</string>
     <string name="pref_video_quality_entry_low" msgid="7258507152393173784">"低画质"</string>
@@ -273,8 +273,8 @@
     <string name="pref_camera_flashmode_title" msgid="2287362477238791017">"闪光模式"</string>
     <string name="pref_camera_flashmode_label" msgid="7546741624882856171">"闪光灯模式"</string>
     <string name="pref_camera_flashmode_entry_auto" msgid="7288383434237457709">"自动"</string>
-    <string name="pref_camera_flashmode_entry_on" msgid="5330043918845197616">"开"</string>
-    <string name="pref_camera_flashmode_entry_off" msgid="867242186958805761">"关"</string>
+    <string name="pref_camera_flashmode_entry_on" msgid="5330043918845197616">"开启"</string>
+    <string name="pref_camera_flashmode_entry_off" msgid="867242186958805761">"关闭"</string>
     <string name="pref_camera_flashmode_label_auto" msgid="8854671890619026197">"自动闪光灯"</string>
     <string name="pref_camera_flashmode_label_on" msgid="7347504762794840140">"打开闪光灯"</string>
     <string name="pref_camera_flashmode_label_off" msgid="3541596735596053416">"关闭闪光灯"</string>
@@ -371,7 +371,7 @@
     <string name="accessibility_pause_video" msgid="6526344477133046653">"暂停视频"</string>
     <string name="accessibility_reload_video" msgid="3250335917598607232">"重新加载视频"</string>
     <string name="accessibility_time_bar" msgid="1414029843602604531">"视频播放器时间栏"</string>
-    <string name="capital_on" msgid="5491353494964003567">"打开"</string>
+    <string name="capital_on" msgid="5491353494964003567">"开启"</string>
     <string name="capital_off" msgid="7231052688467970897">"关闭"</string>
     <string name="pref_video_time_lapse_frame_interval_off" msgid="3490489191038309496">"关闭"</string>
     <string name="pref_video_time_lapse_frame_interval_500" msgid="2949719376111679816">"0.5 秒"</string>

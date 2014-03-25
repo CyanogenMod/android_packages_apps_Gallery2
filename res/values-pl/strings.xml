@@ -274,7 +274,7 @@
     <string name="pref_camera_flashmode_label" msgid="7546741624882856171">"LAMPA BŁYSKOWA"</string>
     <string name="pref_camera_flashmode_entry_auto" msgid="7288383434237457709">"Automatyczna"</string>
     <string name="pref_camera_flashmode_entry_on" msgid="5330043918845197616">"Włączona"</string>
-    <string name="pref_camera_flashmode_entry_off" msgid="867242186958805761">"Wyłączona"</string>
+    <string name="pref_camera_flashmode_entry_off" msgid="867242186958805761">"Wyłączone"</string>
     <string name="pref_camera_flashmode_label_auto" msgid="8854671890619026197">"LAMPA BŁYSKOWA AUTOMATYCZNIE"</string>
     <string name="pref_camera_flashmode_label_on" msgid="7347504762794840140">"LAMPA BŁYSKOWA WŁĄCZONA"</string>
     <string name="pref_camera_flashmode_label_off" msgid="3541596735596053416">"LAMPA BŁYSKOWA WYŁĄCZONA"</string>
