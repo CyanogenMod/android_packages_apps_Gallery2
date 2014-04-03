@@ -87,9 +87,19 @@ public class MuteVideo {
                     VideoUtils.startMute(mFilePath, mDstFileInfo);
                     SaveVideoFileUtils.insertContent(
                             mDstFileInfo, mActivity.getContentResolver(), mUri);
-                } catch (IOException e) {
-                    Toast.makeText(mActivity, mActivity.getString(R.string.video_mute_err),
-                            Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    mHandler.post(new Runnable() {
+                    @Override
+                        public void run() {
+                            Toast.makeText(mActivity, mActivity.getString(R.string.video_mute_err),
+                                Toast.LENGTH_SHORT).show();
+                            if (mMuteProgress != null) {
+                                mMuteProgress.dismiss();
+                                mMuteProgress = null;
+                            }
+                        }
+                    });
+                    return;
                 }
                 // After muting is done, trigger the UI changed.
                 mHandler.post(new Runnable() {
