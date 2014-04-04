@@ -39,6 +39,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
+import android.media.MediaFile;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
@@ -1073,9 +1074,17 @@ public abstract class PhotoPage extends ActivityState implements
                 return true;
             }
             case R.id.action_mute: {
-                MuteVideo muteVideo = new MuteVideo(current.getFilePath(),
-                        manager.getContentUri(path), mActivity);
-                muteVideo.muteInBackground();
+                final String mime = MediaFile.getMimeTypeForFile(current.getFilePath());
+                // Can only mute mp4, mpeg4 and 3gp
+                if ("video/mp4".equals(mime) || "video/mpeg4".equals(mime)
+                            || "video/3gpp".equals(mime) || "video/3gpp2".equals(mime)) {
+                    MuteVideo muteVideo = new MuteVideo(current.getFilePath(),
+                            manager.getContentUri(path), mActivity);
+                    muteVideo.muteInBackground();
+                } else {
+                    Toast.makeText(mActivity, mActivity.getString(R.string.video_mute_err),
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
             case R.id.action_edit: {
