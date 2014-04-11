@@ -1426,8 +1426,12 @@ public class MoviePlayer implements
         }
 
         public void setVideoInfo(Metadata data) {
+            mServerTimeout = DEFAULT_SERVER_TIMEOUT;
             if (data.has(SERVER_TIMEOUT)) {
                 mServerTimeout = data.getInt(SERVER_TIMEOUT);
+                if (mServerTimeout == 0) {
+                    mServerTimeout = DEFAULT_SERVER_TIMEOUT;
+                }
                 if (LOG) {
                     Log.v(TAG, "get server timeout from metadata. mServerTimeout="
                             + mServerTimeout);
