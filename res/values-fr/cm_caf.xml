@@ -16,6 +16,6 @@
      limitations under the License.
 -->
 <resources>
-  <string name="mute_nosupport">Nun pue silenciase: nun hai sofitu pa esti videu</string>
-  <string name="fail_trim">Esti videu nun pue retayase</string>
+  <string name="mute_nosupport">Ne peux pas couper : vidéo non pris en charge</string>
+  <string name="fail_trim">Désolé, cette vidéo ne peut pas être coupé</string>
 </resources>
