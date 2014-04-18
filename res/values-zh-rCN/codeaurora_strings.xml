@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (c) 2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -38,6 +38,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="loop">"循环"</string>
     <string name="single">"单次"</string>
     <string name="stereo">"立体声"</string>
+    <string name="speaker_on">扬声器 开</string>
+    <string name="speaker_off">扬声器 关</string>
+    <string name="speaker_need_headset">请先插入耳机！</string>
     <string name="single_track">"单声道"</string>
     <string name="media_detail">"媒体详情"</string>
     <string name="input_url">"输入 URL"</string>
