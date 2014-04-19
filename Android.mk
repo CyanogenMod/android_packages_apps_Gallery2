@@ -33,14 +33,7 @@ LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
 LOCAL_SDK_VERSION := current
 
-# If this is an unbundled build (to install seprately) then include
-# the libraries in the APK, otherwise just put them in /system/lib and
-# leave them out of the APK
-ifneq (,$(TARGET_BUILD_APPS))
-  LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
-else
-  LOCAL_REQUIRED_MODULES := libjni_eglfence libjni_filtershow_filters libjni_jpegstream
-endif
+LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
