@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.filters;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.BasicEditor;
 
 public class ImageFilterSharpen extends ImageFilterRS {
     private static final String SERIALIZATION_NAME = "SHARPEN";
@@ -36,7 +37,7 @@ public class ImageFilterSharpen extends ImageFilterRS {
         representation.setFilterClass(ImageFilterSharpen.class);
         representation.setTextId(R.string.sharpness);
         representation.setOverlayId(R.drawable.filtershow_button_colors_sharpen);
-        representation.setEditorId(R.id.imageShow);
+        representation.setEditorId(BasicEditor.ID);
         representation.setSupportsPartialRendering(true);
         return representation;
     }
