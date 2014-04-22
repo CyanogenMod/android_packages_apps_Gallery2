@@ -1117,4 +1117,5 @@ CHAR LIMIT = NONE] -->
 
     <!-- The title of the audio effects dialog. -->
     <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+    <string name="can_not_trim">Only mp4 and 3gp file can be trimmed</string>
 </resources>
