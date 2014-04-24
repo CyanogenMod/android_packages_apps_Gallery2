@@ -174,6 +174,9 @@ public class GIFView extends ImageView implements GifAction {
                 if (!isShown() || mRedrawHandler == null) {
                     break;
                 }
+                if (mGifDecoder == null) {
+                    return;
+                }
                 GifFrame frame = mGifDecoder.next();
                 mCurrentImage = frame.mImage;
 
