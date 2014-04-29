@@ -108,10 +108,6 @@ public class MoviePlayer implements
     private static final int DELAY_REMOVE_MS = 10000;
     public static final int SERVER_TIMEOUT = 8801;
 
-    // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
-    // Otherwise, we pause the player.
-    private static final long RESUMEABLE_TIMEOUT = 3 * 60 * 1000; // 3 mins
-
     public static final int STREAMING_LOCAL = 0;
     public static final int STREAMING_HTTP = 1;
     public static final int STREAMING_RTSP = 2;
@@ -126,7 +122,6 @@ public class MoviePlayer implements
     private final AudioBecomingNoisyReceiver mAudioBecomingNoisyReceiver;
     private final MovieControllerOverlay mController;
 
-    private long mResumeableTime = Long.MAX_VALUE;
     private int mVideoPosition = 0;
     private boolean mHasPaused = false;
     private boolean mVideoHasPaused = false;
@@ -305,7 +300,6 @@ public class MoviePlayer implements
 
         if (savedInstance != null) { // this is a resumed activity
             mVideoPosition = savedInstance.getInt(KEY_VIDEO_POSITION, 0);
-            mResumeableTime = savedInstance.getLong(KEY_RESUMEABLE_TIME, Long.MAX_VALUE);
             onRestoreInstanceState(savedInstance);
             mHasPaused = true;
             doStartVideo(true, mVideoPosition, mVideoLastDuration,false);
@@ -376,7 +370,6 @@ public class MoviePlayer implements
 
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(KEY_VIDEO_POSITION, mVideoPosition);
-        outState.putLong(KEY_RESUMEABLE_TIME, mResumeableTime);
         onSaveInstanceStateMore(outState);
     }
 
@@ -470,7 +463,6 @@ public class MoviePlayer implements
         mBookmarker.setBookmark(mMovieItem.getUri(), mVideoPosition, mVideoLastDuration);
         long end1 = System.currentTimeMillis();
         mVideoView.suspend();
-        mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
         mVideoView.setResumed(false);// avoid start after surface created
         // Workaround for last-seek frame difference
         mVideoView.setVisibility(View.INVISIBLE);
@@ -481,8 +473,7 @@ public class MoviePlayer implements
         if (LOG) {
             Log.v(TAG, "doOnPause() save video info consume:" + (end1 - start));
             Log.v(TAG, "doOnPause() suspend video consume:" + (end2 - end1));
-            Log.v(TAG, "doOnPause() mVideoPosition=" + mVideoPosition + ", mResumeableTime="
-                    + mResumeableTime
+            Log.v(TAG, "doOnPause() mVideoPosition=" + mVideoPosition
                     + ", mVideoLastDuration=" + mVideoLastDuration + ", mIsShowResumingDialog="
                     + mIsShowResumingDialog);
         }
@@ -523,32 +514,11 @@ public class MoviePlayer implements
                     showLoading();
                     mVideoView.seekTo(mVideoPosition);
                     mVideoView.resume();
-                    pauseVideoMoreThanThreeMinutes();
                     break;
             }
             mHasPaused = false;
         }
-
-        if (System.currentTimeMillis() > mResumeableTime) {
-            mHandler.removeCallbacks(mPlayingChecker);
-            mHandler.postDelayed(mPlayingChecker, 250);
-        }
-
         mHandler.post(mProgressChecker);
-    }
-
-    private void pauseVideoMoreThanThreeMinutes() {
-        // If we have slept for too long, pause the play
-        // If is live streaming, do not pause it too
-        long now = System.currentTimeMillis();
-        if (now > mResumeableTime && !isLiveStreaming()) {
-            if (mVideoCanPause || mVideoView.canPause()) {
-                pauseVideo();
-            }
-        }
-        if (LOG) {
-            Log.v(TAG, "pauseVideoMoreThanThreeMinutes() now=" + now);
-        }
     }
 
     public void onDestroy() {
