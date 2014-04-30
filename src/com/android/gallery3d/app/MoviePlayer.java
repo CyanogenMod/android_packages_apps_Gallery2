@@ -482,15 +482,15 @@ public class MoviePlayer implements
     public void onResume() {
         mDragging = false;// clear drag info
         if (mHasPaused) {
-            //M: same as launch case to delay transparent.
-            mVideoView.removeCallbacks(mDelayVideoRunnable);
-            mVideoView.postDelayed(mDelayVideoRunnable, BLACK_TIMEOUT);
-
             if (mServerTimeoutExt.handleOnResume() || mIsShowResumingDialog) {
                 mHasPaused = false;
                 mHandler.post(mProgressChecker);
                 return;
             }
+
+            //M: same as launch case to delay transparent.
+            mVideoView.removeCallbacks(mDelayVideoRunnable);
+            mVideoView.postDelayed(mDelayVideoRunnable, BLACK_TIMEOUT);
             switch (mTState) {
                 case RETRY_ERROR:
                     mRetryExt.showRetry();
