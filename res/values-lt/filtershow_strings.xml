@@ -93,7 +93,7 @@
     <string name="kmeans" msgid="2080952022674981541">"Pav. plak."</string>
     <string name="downsample" msgid="3552938534146980104">"Mažinimas"</string>
     <string name="grad" msgid="546774853424848655">"Gradientinis"</string>
-    <string name="editor_grad_brightness" msgid="5937316734380235741">"Skaistis"</string>
+    <string name="editor_grad_brightness" msgid="5937316734380235741">"Šviesumas"</string>
     <string name="editor_grad_contrast" msgid="3454456673401803360">"Kontrastas"</string>
     <string name="editor_grad_saturation" msgid="3760247354109521726">"Spalvų sodrumas"</string>
     <string name="editor_chan_sat_main" msgid="4427652337797121940">"Pagrindinis"</string>
@@ -113,7 +113,7 @@
     <string name="draw_size" msgid="4360005386104151209">"Dydis"</string>
     <string name="draw_hue" msgid="4975135843189267133">"Atspalvis"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"Spalvų sodrum."</string>
-    <string name="draw_value" msgid="6571604055161538273">"Skaistis"</string>
+    <string name="draw_value" msgid="6571604055161538273">"Šviesumas"</string>
     <string name="draw_color" msgid="2119030386987211193">"Spalva"</string>
     <string name="draw_style_line" msgid="9216476853904429628">"Linijos"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Žymeklis"</string>
