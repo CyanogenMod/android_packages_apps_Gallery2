@@ -52,6 +52,7 @@
             android:id="@+id/ingest_warning_view_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dip"
             android:layout_marginLeft="10dip"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>

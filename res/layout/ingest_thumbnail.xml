@@ -17,6 +17,4 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scaleType="centerCrop"
-    android:background="@drawable/ingest_item_list_selector">
-</com.android.gallery3d.ingest.ui.MtpThumbnailTileView>
+    android:scaleType="centerCrop" />

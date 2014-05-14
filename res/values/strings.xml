@@ -528,6 +528,12 @@
     <!-- The label on the button that will save an edited image -->
     <string name="save" msgid="8140440041190264400">Save</string>
 
+    <!-- A label representing the action of importing media item(s) [CHAR LIMIT=20] -->
+    <string name="ingest_import">@string/Import</string>
+
+    <!-- A label that indicates the media import operation completed [CHAR LIMIT=20] -->
+    <string name="ingest_import_complete">@string/import_complete</string>
+
     <!--  Text of notification message which is shown when user attaches camera -->
     <string name="ingest_scanning" msgid="2048262851775139720">Scanning content...</string>
 
@@ -536,6 +542,13 @@
         <item quantity="zero">%1$d items scanned</item>
         <item quantity="one">%1$d item scanned</item>
         <item quantity="other">%1$d items scanned</item>
+    </plurals>
+
+    <!-- String indicating how many media items from the camera have been selected -->
+    <plurals name="ingest_number_of_items_selected">
+        <item quantity="zero">%1$d items selected</item>
+        <item quantity="one">%1$d item selected</item>
+        <item quantity="other">%1$d items selected</item>
     </plurals>
 
     <!--  Status message shown when content from the camera is being sorted -->
@@ -552,6 +565,12 @@
 
     <!--  Status message shown when there is no MTP device connected  -->
     <string name="ingest_no_device">There is no MTP device connected</string>
+
+    <!-- Label for album grid button -->
+    <string name="ingest_switch_photo_grid">@string/switch_photo_grid</string>
+
+    <!-- Label for fullscreen button. [CHAR LIMIT=20] -->
+    <string name="ingest_switch_photo_fullscreen">@string/switch_photo_fullscreen</string>
 
     <!-- Camera resources below -->
 

@@ -20,4 +20,7 @@
     <item type="id" name="action_toggle_full_caching" />
     <item type="id" name="action_select_all" />
     <item type="id" name="viewpager" />
+
+    <item type="id" name="ingest_notification_scanning" />
+    <item type="id" name="ingest_notification_importing" />
 </resources>

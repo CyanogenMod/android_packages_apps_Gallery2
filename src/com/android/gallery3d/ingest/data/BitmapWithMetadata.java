@@ -16,14 +16,20 @@
 
 package com.android.gallery3d.ingest.data;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.os.Build;
 
+/**
+ * Encapsulates a Bitmap and some additional metadata.
+ */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class BitmapWithMetadata {
-    public Bitmap bitmap;
-    public int rotationDegrees;
+  public Bitmap bitmap;
+  public int rotationDegrees;
 
-    public BitmapWithMetadata(Bitmap bitmap, int rotationDegrees) {
-        this.bitmap = bitmap;
-        this.rotationDegrees = rotationDegrees;
-    }
+  public BitmapWithMetadata(Bitmap bitmap, int rotationDegrees) {
+    this.bitmap = bitmap;
+    this.rotationDegrees = rotationDegrees;
+  }
 }

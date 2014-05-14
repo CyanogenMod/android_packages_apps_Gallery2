@@ -21,38 +21,40 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 
 /**
- * This just extends GridView with the ability to listen for calls
- * to clearChoices()
+ * Extends GridView with the ability to listen for calls to clearChoices()
  */
 public class IngestGridView extends GridView {
 
-    public interface OnClearChoicesListener {
-        public void onClearChoices();
-    }
+  /**
+   * Listener for all checked choices being cleared.
+   */
+  public interface OnClearChoicesListener {
+    public void onClearChoices();
+  }
 
-    private OnClearChoicesListener mOnClearChoicesListener = null;
+  private OnClearChoicesListener mOnClearChoicesListener = null;
 
-    public IngestGridView(Context context) {
-        super(context);
-    }
+  public IngestGridView(Context context) {
+    super(context);
+  }
 
-    public IngestGridView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public IngestGridView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public IngestGridView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+  public IngestGridView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
 
-    public void setOnClearChoicesListener(OnClearChoicesListener l) {
-        mOnClearChoicesListener = l;
-    }
+  public void setOnClearChoicesListener(OnClearChoicesListener l) {
+    mOnClearChoicesListener = l;
+  }
 
-    @Override
-    public void clearChoices() {
-        super.clearChoices();
-        if (mOnClearChoicesListener != null) {
-            mOnClearChoicesListener.onClearChoices();
-        }
+  @Override
+  public void clearChoices() {
+    super.clearChoices();
+    if (mOnClearChoicesListener != null) {
+      mOnClearChoicesListener.onClearChoices();
     }
+  }
 }

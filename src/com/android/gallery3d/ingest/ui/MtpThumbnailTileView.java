@@ -16,91 +16,98 @@
 
 package com.android.gallery3d.ingest.ui;
 
+import com.android.gallery3d.R;
+import com.android.gallery3d.ingest.data.IngestObjectInfo;
+import com.android.gallery3d.ingest.data.MtpBitmapFetch;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.mtp.MtpDevice;
-import android.mtp.MtpObjectInfo;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 
-import com.android.gallery3d.R;
-import com.android.gallery3d.ingest.data.MtpBitmapFetch;
 
-
+/**
+ * View for thumbnail images from an MTP device
+ */
 public class MtpThumbnailTileView extends MtpImageView implements Checkable {
 
-    private Paint mForegroundPaint;
-    private boolean mIsChecked;
-    private Bitmap mBitmap;
+  private Paint mForegroundPaint;
+  private boolean mIsChecked;
+  private Bitmap mBitmap;
 
-    private void init() {
-        mForegroundPaint = new Paint();
-        mForegroundPaint.setColor(getResources().getColor(R.color.ingest_highlight_semitransparent));
-    }
+  private void init() {
+    mForegroundPaint = new Paint();
+    mForegroundPaint.setColor(
+        getResources().getColor(R.color.ingest_highlight_semitransparent));
+  }
 
-    public MtpThumbnailTileView(Context context) {
-        super(context);
-        init();
-    }
+  public MtpThumbnailTileView(Context context) {
+    super(context);
+    init();
+  }
 
-    public MtpThumbnailTileView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
+  public MtpThumbnailTileView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
 
-    public MtpThumbnailTileView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
+  public MtpThumbnailTileView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+    init();
+  }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Force this to be square
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-    }
+  @Override
+  public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    // Force this to be square
+    super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+  }
 
-    @Override
-    protected Object fetchMtpImageDataFromDevice(MtpDevice device, MtpObjectInfo info) {
-        return MtpBitmapFetch.getThumbnail(device, info);
-    }
+  @Override
+  protected Object fetchMtpImageDataFromDevice(MtpDevice device, IngestObjectInfo info) {
+    return MtpBitmapFetch.getThumbnail(device, info);
+  }
 
-    @Override
-    protected void onMtpImageDataFetchedFromDevice(Object result) {
-        mBitmap = (Bitmap)result;
-        setImageBitmap(mBitmap);
-    }
+  @Override
+  protected void onMtpImageDataFetchedFromDevice(Object result) {
+    mBitmap = (Bitmap) result;
+    setImageBitmap(mBitmap);
+  }
 
-    @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-        if (isChecked()) {
-            canvas.drawRect(canvas.getClipBounds(), mForegroundPaint);
-        }
+  @Override
+  public void draw(Canvas canvas) {
+    super.draw(canvas);
+    if (isChecked()) {
+      canvas.drawRect(canvas.getClipBounds(), mForegroundPaint);
     }
+  }
 
-    @Override
-    public boolean isChecked() {
-        return mIsChecked;
-    }
+  @Override
+  public boolean isChecked() {
+    return mIsChecked;
+  }
 
-    @Override
-    public void setChecked(boolean checked) {
-        mIsChecked = checked;
+  @Override
+  public void setChecked(boolean checked) {
+    if (mIsChecked != checked) {
+      mIsChecked = checked;
+      invalidate();
     }
+  }
 
-    @Override
-    public void toggle() {
-        setChecked(!mIsChecked);
-    }
+  @Override
+  public void toggle() {
+    setChecked(!mIsChecked);
+  }
 
-    @Override
-    protected void cancelLoadingAndClear() {
-        super.cancelLoadingAndClear();
-        if (mBitmap != null) {
-            MtpBitmapFetch.recycleThumbnail(mBitmap);
-            mBitmap = null;
-        }
+  @Override
+  protected void cancelLoadingAndClear() {
+    super.cancelLoadingAndClear();
+    if (mBitmap != null) {
+      MtpBitmapFetch.recycleThumbnail(mBitmap);
+      mBitmap = null;
     }
+  }
 }
