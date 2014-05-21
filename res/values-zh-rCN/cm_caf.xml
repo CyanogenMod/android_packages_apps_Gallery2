@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="mute_nosupport">不能静音： 视频不支持此操作</string>
   <string name="fail_trim">抱歉，此视频文件不能被修剪</string>
 </resources>

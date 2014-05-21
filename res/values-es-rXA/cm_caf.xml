@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="mute_nosupport">Nun pue silenciase: nun hai sofitu pa esti videu</string>
   <string name="fail_trim">Esti videu nun pue retayase</string>
 </resources>

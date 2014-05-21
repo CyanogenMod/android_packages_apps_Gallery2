@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-  <string name="mute_nosupport">ミュートにできません: 未対応のビデオです</string>
-  <string name="fail_trim">申し訳ありませんが、このビデオファイルはトリミングできません</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="mute_nosupport">ミュートにできません: サポートされていない動画です</string>
+  <string name="fail_trim">申し訳ありませんが、この動画ファイルはトリミングできません</string>
 </resources>

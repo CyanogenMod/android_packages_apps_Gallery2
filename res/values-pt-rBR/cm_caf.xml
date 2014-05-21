@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-  <string name="mute_nosupport">Não pode silenciar: vídeo não suportado</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="mute_nosupport">Não é possível silenciar: vídeo não suportado</string>
   <string name="fail_trim">Desculpe, o arquivo de vídeo não pode ser diminuído</string>
 </resources>

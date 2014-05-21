@@ -16,6 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="mute_nosupport">Susturulamıyor : video desteklemiyor</string>
-  <string name="fail_trim">Üzgünüz, bu video kesilemez</string>
+  <string name="mute_nosupport">不能靜音：不支援影片</string>
+  <string name="fail_trim">抱歉，此影片檔案不能被修剪</string>
 </resources>
