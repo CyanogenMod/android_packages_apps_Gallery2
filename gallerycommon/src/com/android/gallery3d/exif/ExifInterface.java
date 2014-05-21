@@ -732,7 +732,7 @@ public class ExifInterface {
      * @param inStream an InputStream containing a jpeg compressed image.
      * @throws IOException
      */
-    public void readExif(InputStream inStream) throws IOException {
+    public void readExif(InputStream inStream) throws IOException, NullPointerException {
         if (inStream == null) {
             throw new IllegalArgumentException(NULL_ARGUMENT_STRING);
         }

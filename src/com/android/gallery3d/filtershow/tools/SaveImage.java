@@ -256,6 +256,8 @@ public class SaveImage {
                 Log.w(LOGTAG, "Cannot find file: " + source, e);
             } catch (IOException e) {
                 Log.w(LOGTAG, "Cannot read exif for: " + source, e);
+            } catch (NullPointerException e) {
+                Log.w(LOGTAG, "Invalid exif data for: " + source, e);
             } finally {
                 Utils.closeSilently(inStream);
             }
