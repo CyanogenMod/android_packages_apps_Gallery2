@@ -37,6 +37,8 @@ LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
+LOCAL_MULTILIB := 32
+
 include $(BUILD_PACKAGE)
 
 include $(call all-makefiles-under, jni)
