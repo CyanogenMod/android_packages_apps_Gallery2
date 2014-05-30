@@ -442,4 +442,6 @@
     <string name="audio_effects" msgid="612896145300512593">"音效"</string>
     <string name="headset_plug">此类音效需插入耳机。</string>
     <string name="audio_effects_dialog_title">骁龙音频+</string>
+    <!-- The tips of trimming video -->
+    <string name="can_not_trim">只有MP4和3GP文件才能修剪</string>
 </resources>
