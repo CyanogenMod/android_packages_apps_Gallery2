@@ -64,12 +64,12 @@
     <skip />
     <string name="Fixed" msgid="8017376448916924565">"បាន​កែ"</string>
     <string name="tinyplanet" msgid="2783694326474415761">"ភព​តូច"</string>
-    <string name="exposure" msgid="6526397045949374905">"បង្ហាញ"</string>
+    <string name="exposure" msgid="6526397045949374905">"ពន្លឺ"</string>
     <string name="sharpness" msgid="6463103068318055412">"ភាព​ច្បាស់"</string>
     <string name="contrast" msgid="2310908487756769019">"កម្រិត​ពណ៌"</string>
     <string name="vibrance" msgid="3326744578577835915">"បន្ថែម​ពណ៌"</string>
     <string name="saturation" msgid="7026791551032438585">"តិត្ថិភាព"</string>
-    <string name="bwfilter" msgid="8927492494576933793">"តម្រង​ស/ខ្មី"</string>
+    <string name="bwfilter" msgid="8927492494576933793">"តម្រង​ស/ខ្មៅ"</string>
     <string name="wbalance" msgid="6346581563387083613">"ពណ៌​ស្វ័យប្រវត្តិ"</string>
     <string name="hue" msgid="6231252147971086030">"ពណ៌​លាំៗ"</string>
     <string name="shadow_recovery" msgid="3928572915300287152">"ស្រមោល"</string>
@@ -77,7 +77,7 @@
     <string name="curvesRGB" msgid="915010781090477550">"ខ្សែ​កោង"</string>
     <string name="vignette" msgid="934721068851885390">"ផុស​ចេញ"</string>
     <string name="vignette_main" msgid="6046495605390665423">"ផុស​ចេញ"</string>
-    <string name="vignette_exposure" msgid="6862058227309534094">"បង្ហាញ"</string>
+    <string name="vignette_exposure" msgid="6862058227309534094">"ពន្លឺ"</string>
     <string name="vignette_saturation" msgid="1617055207565719771">"តិត្ថិភាព"</string>
     <string name="vignette_contrast" msgid="955732121756799897">"កម្រិត​ពណ៌"</string>
     <string name="vignette_falloff" msgid="690918055030064199">"បន្ថយ"</string>

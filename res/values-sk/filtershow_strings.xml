@@ -22,7 +22,7 @@
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"Prebieha nastavovanie tapety"</string>
-    <string name="download_failure" msgid="5923323939788582895">"Fotografiu sa nepodarilo prevziať. Sieť nie je k dispozícii."</string>
+    <string name="download_failure" msgid="5923323939788582895">"Fotografiu sa nepodarilo stiahnuť. Sieť nie je k dispozícii."</string>
     <string name="original" msgid="3524493791230430897">"Pôvodné"</string>
     <string name="borders" msgid="2067345080568684614">"Okraje"</string>
     <string name="custom_border" msgid="8679893731790931871">"Vlastný"</string>
