@@ -799,7 +799,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             mContollerButtons.setGravity(Gravity.CENTER);
 
             LinearLayout.LayoutParams buttonParam = new LinearLayout.LayoutParams(
-                    mTimeBarHeight, mTimeBarHeight);
+                    mButtonWidth, mTimeBarHeight);
             mRewind = new ImageView(context);
             mRewind.setImageResource(R.drawable.icn_media_rewind);
             mRewind.setScaleType(ScaleType.CENTER);
