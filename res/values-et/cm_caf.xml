@@ -16,6 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="mute_nosupport">Не можеш искључити: не подржава видео</string>
-  <string name="fail_trim">Жао нам је, овај видео фајл не може бити скраћен</string>
+  <string name="mute_nosupport">Ei saa vaigistada : video ei ole toetatud</string>
+  <string name="fail_trim">Vabandust, seda videofaili ei saa kärpida</string>
 </resources>
