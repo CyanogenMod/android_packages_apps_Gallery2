@@ -32,7 +32,7 @@
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Απόκρυψη εφαρμοσμένων εφέ"</string>
     <string name="export_image" msgid="3202835713172222134">"Εξαγωγή"</string>
     <string name="print_image" msgid="1942989216591621413">"Εκτύπωση"</string>
-    <string name="export_flattened" msgid="9046192331465915411">"Εξαγωγή πεπλατυσμένης εικόνας"</string>
+    <string name="export_flattened" msgid="9046192331465915411">"Εξαγ. πεπλατυσμένης εικ."</string>
     <string name="select_output_settings" msgid="1268532018080310748">"Η εξαγόμενη εικόνα θα αποτελεί ένα αντίγραφο, χωρίς το ιστορικό."</string>
     <string name="quality" msgid="179292110309050529">"Ποιότητα"</string>
     <string name="size" msgid="4639404642236356037">"Μέγεθος"</string>
