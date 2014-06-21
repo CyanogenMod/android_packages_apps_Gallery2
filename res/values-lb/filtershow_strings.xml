@@ -15,12 +15,23 @@
      limitations under the License.
 -->
 <resources>
+  <string name="custom_border">Personaliséiert</string>
   <string name="print_image">Drécken</string>
   <string name="menu_settings">Astellungen</string>
   <string name="history">Historique</string>
+  <string name="aspectNone_effect">Keen</string>
+  <string name="crop" msgid="5584000454518174632">Schneiden</string>
+  <string name="none" msgid="3601545724573307541">Keen</string>
+  <string name="editor_grad_brightness">Hellegkeet</string>
+  <string name="editor_chan_sat_main">Haapt</string>
+  <string name="draw_value">Hellegkeet</string>
   <string name="draw_color">Faarf</string>
   <string name="draw_clear">Eidel maachen</string>
   <string name="color_border_color">Faarf</string>
   <string name="color_border_clear">Eidel maachen</string>
   <string name="draw_size_accept">OK</string>
+  <string name="filtershow_exif_model">Modell</string>
+  <string name="filtershow_exif_aperture">Blend</string>
+  <string name="filtershow_exif_focal_length">Brennwäit</string>
+  <string name="filtershow_exif_iso">ISO</string>
 </resources>
