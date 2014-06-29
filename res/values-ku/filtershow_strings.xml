@@ -15,8 +15,48 @@
      limitations under the License.
 -->
 <resources>
+  <string name="cannot_load_image">ناتوانێت وێنە دابەزێنێت!</string>
+  <string name="setting_wallpaper">ڕێکخستنی پشتەگەڵاڵە</string>
+  <string name="original">ڕەسەن</string>
+  <string name="custom_border">دروستکراو</string>
+  <string name="print_image">چاپکردن</string>
+  <string name="menu_settings">ڕێکخستنه‌کان</string>
+  <string name="history">مێژوو</string>
+  <string name="reset">ڕێکخستنەوە</string>
+  <string name="reset_effect">ڕێکخستنەوە</string>
+  <string name="aspectNone_effect">هیچ</string>
+  <string name="exposure" msgid="1229093066434614811">كەوتنەبەر</string>
+  <string name="contrast">جیاوازی</string>
+  <string name="vignette_exposure">كەوتنەبەر</string>
+  <string name="vignette_contrast">جیاوازی</string>
+  <string name="crop" msgid="5584000454518174632">بڕین</string>
+  <string name="rotate" msgid="460017689320955494">سوڕانەوە</string>
+  <string name="none" msgid="3601545724573307541">هیچ</string>
   <string name="editor_grad_brightness">ڕوناکی</string>
+  <string name="editor_grad_contrast">جیاوازی</string>
+  <string name="editor_chan_sat_main">سەرەکی</string>
+  <string name="editor_chan_sat_red">سور</string>
+  <string name="editor_chan_sat_yellow">زەرد</string>
+  <string name="editor_chan_sat_green">سەوز</string>
+  <string name="editor_chan_sat_cyan">شینی ئاسمانی</string>
+  <string name="editor_chan_sat_blue">شین</string>
+  <string name="editor_chan_sat_magenta">سووری ئەرخەوانی</string>
+  <string name="editor_grad_style">ستایل</string>
+  <string name="curves_channel_red">سور</string>
+  <string name="curves_channel_green">سەوز</string>
+  <string name="curves_channel_blue">شین</string>
+  <string name="draw_style">ستایل</string>
   <string name="draw_value">ڕوناکی</string>
+  <string name="draw_color">رەنگ</string>
   <string name="draw_clear">پاکردنەوە</string>
+  <string name="color_border_color">رەنگ</string>
   <string name="color_border_clear">پاکردنەوە</string>
+  <string name="draw_size_accept">باشه‌</string>
+  <string name="state_panel_original">ڕەسەن</string>
+  <string name="filtershow_version_original">ڕەسەن</string>
+  <string name="filtershow_exif_model">مۆدێل</string>
+  <string name="filtershow_exif_aperture">دەلاقە</string>
+  <string name="filtershow_exif_focal_length">درێژی چەقکوڕی</string>
+  <string name="filtershow_exif_iso">ISO</string>
+  <string name="filtershow_exif_copyright">مافی له‌به‌رگرتنه‌وه‌</string>
 </resources>
