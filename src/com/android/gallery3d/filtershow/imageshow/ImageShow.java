@@ -415,8 +415,9 @@ public class ImageShow extends View implements OnGestureListener,
                     float scaleImageY = mImageBounds.height() / (float) image.getHeight();
                     mShaderMatrix.preScale(scaleImageX, scaleImageY);
                     mMaskPaint.reset();
-                    mMaskPaint.setShader(createShader(image));
-                    mMaskPaint.getShader().setLocalMatrix(mShaderMatrix);
+                    Shader maskShader = createShader(image);
+                    maskShader.setLocalMatrix(mShaderMatrix);
+                    mMaskPaint.setShader(maskShader);
 
                     drawShadow(canvas, mImageBounds); // as needed
                     canvas.drawBitmap(previousImage, m, mPaint);
