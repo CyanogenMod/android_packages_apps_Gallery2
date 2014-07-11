@@ -89,11 +89,6 @@ public class MoviePlayer implements
     private static final int KEYCODE_MEDIA_PLAY = 126;
     private static final int KEYCODE_MEDIA_PAUSE = 127;
 
-    // Copied from MediaPlaybackService in the Music Player app.
-    private static final String SERVICECMD = "com.android.music.musicservicecommand";
-    private static final String CMDNAME = "command";
-    private static final String CMDPAUSE = "pause";
-
     private static final String KEY_VIDEO_CAN_SEEK = "video_can_seek";
     private static final String KEY_VIDEO_CAN_PAUSE = "video_can_pause";
     private static final String KEY_VIDEO_LAST_DURATION = "video_last_duration";
@@ -296,10 +291,6 @@ public class MoviePlayer implements
         filter.addAction(Intent.ACTION_USER_PRESENT);
         filter.addAction(Intent.ACTION_SHUTDOWN);
         mContext.registerReceiver(mReceiver, filter);
-
-        Intent i = new Intent(SERVICECMD);
-        i.putExtra(CMDNAME, CMDPAUSE);
-        movieActivity.sendBroadcast(i);
 
         if (savedInstance != null) { // this is a resumed activity
             mVideoPosition = savedInstance.getInt(KEY_VIDEO_POSITION, 0);
@@ -608,9 +599,6 @@ public class MoviePlayer implements
     }
 
     private void doStartVideo(boolean enableFasten, int position, int duration) {
-        ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).requestAudioFocus(
-                null, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         doStartVideo(enableFasten, position, duration, true);
     }
 
