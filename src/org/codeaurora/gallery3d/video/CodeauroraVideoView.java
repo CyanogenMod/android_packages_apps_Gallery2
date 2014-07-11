@@ -455,11 +455,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             // not ready for playback just yet, will try again later
             return;
         }
-        // Tell the music playback service to pause
-        // TODO: these constants need to be published somewhere in the framework.
-        Intent i = new Intent("com.android.music.musicservicecommand");
-        i.putExtra("command", "pause");
-        mContext.sendBroadcast(i);
+
         // we shouldn't clear the target state, because somebody might have
         // called start() previously
         release(false);
