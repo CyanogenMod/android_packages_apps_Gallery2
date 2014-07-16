@@ -271,6 +271,9 @@ public class MasterImage implements RenderingRequestCaller {
     public void onHistoryItemClick(int position) {
         HistoryItem historyItem = mHistory.getItem(position);
         // We need a copy from the history
+        if (historyItem == null) {
+            return;
+        }
         ImagePreset newPreset = new ImagePreset(historyItem.getImagePreset());
         // don't need to add it to the history
         setPreset(newPreset, historyItem.getFilterRepresentation(), false);
