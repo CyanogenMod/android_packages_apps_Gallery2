@@ -41,8 +41,6 @@ LOCAL_MULTILIB := 32
 
 include $(BUILD_PACKAGE)
 
-include $(call all-makefiles-under, jni)
-
 ifeq ($(strip $(LOCAL_PACKAGE_OVERRIDES)),)
 
 # Use the following include to make gallery test apk
