@@ -21,14 +21,31 @@
   <string name="details_hms">%1$d:%2$02d:%3$02d</string>
   <string name="movie_view_label">لێده‌ری ڤیدیۆ</string>
   <string name="loading_video">دابه‌زاندنی ڤیدیۆ\u2026</string>
+  <string name="loading_image">کردنه‌وه‌ی وێنه‌\u2026</string>
+  <string name="loading_account">کردنه‌وه‌ی هه‌ژمار\u2026</string>
   <string name="resume_playing_title">ڤيديۆكه‌ دەست پێ بكەوە</string>
+  <string name="resume_playing_message">ڤیدیۆ ده‌ستپێبکاته‌وه‌ له‌ %s ؟ ?</string>
+  <string name="resume_playing_resume">ده‌ستپێکردنه‌وه‌</string>
   <string name="loading">ئامادەکردن\u2026</string>
   <string name="fail_to_load">نەتوانى بار بكه‌یت</string>
   <string name="fail_to_load_image">ناتوانی وێنه‌كه‌ باربكه‌یت</string>
+  <string name="no_thumbnail">هیچ کورته‌ وێنه‌یه‌ک نییه‌</string>
   <string name="resume_playing_restart">دەست پێ بكەوە</string>
   <string name="crop_save_text">باشه‌</string>
   <string name="ok">باشه‌</string>
+  <string name="multiface_crop_help">په‌نجه‌ بنێ به‌ ڕوودا بۆ ده‌ستپێکردن.</string>
+  <string name="saving_image">پاشه‌که‌وتکردنی وێنه‌\u2026</string>
+  <string name="filtershow_saving_image">پاشه‌که‌وتکردنی وێنه‌ بۆ <xliff:g id="album_name">%1$s</xliff:g>\u2026</string>
+  <string name="save_error">نه‌توانرا وێنه‌ی بڕدراو پاشه‌که‌وت بکرێت.</string>
+  <string name="crop_label">بڕینی وێنه‌</string>
+  <string name="trim_label">بڕینی ڤیدیۆ</string>
+  <string name="select_image">دیاریکردنی وێنه‌</string>
+  <string name="select_video">دیاریکردنی ڤیدیۆ</string>
+  <string name="select_item">دیاریکردنی دانه‌یه‌ک</string>
+  <string name="select_album">دیاریکردنی ئه‌لبوم</string>
+  <string name="select_group">دیاریکردنی گروپ</string>
   <string name="set_image">دانانی وێنە وەک</string>
+  <string name="set_wallpaper">دانانی وێنەی پشتەوە</string>
   <string name="wallpaper">ڕێکخستنی پشته‌گه‌ڵاڵه‌\u2026</string>
   <string name="camera_setas_wallpaper">دیوارپۆش</string>
   <string name="delete">سڕینه‌وه‌</string>
@@ -41,7 +58,9 @@
   <string name="undo">پاشگەزبون</string>
   <string name="select_all">دیاریکردنی هەموو</string>
   <string name="deselect_all">دیاری نەکردنی هەموو</string>
+  <string name="slideshow">نیشاندانی سلاید</string>
   <string name="details">زانیاری زیاتر</string>
+  <string name="details_title">%1$d له‌ %2$d دانه‌:</string>
   <string name="close">داخستن</string>
   <string name="switch_to_camera">گۆڕین بۆ كامێرا</string>
   <plurals name="number_of_items_selected">
@@ -59,6 +78,7 @@
   <string name="show_on_map">پیشاندانی لەسەر نەخشە</string>
   <string name="rotate_left">سوڕانەوە بۆ چەپ</string>
   <string name="rotate_right">سوڕانەوە بۆ ڕاست</string>
+  <string name="no_such_item">نه‌توانرا دانه‌ بدۆزرێته‌وه‌.</string>
   <string name="edit">دەستکاری</string>
   <string name="simple_edit">ده‌ستكاری كرنی سادە</string>
   <string name="process_caching_requests">دەستكاريكردنی داواكارى هەڵگرتن</string>
@@ -75,11 +95,20 @@
   <string name="group_by_faces">له‌لایه‌ن خه‌ڵكه‌وه‌</string>
   <string name="group_by_album">له‌لایه‌ن ئه‌لبومه‌وه‌</string>
   <string name="group_by_size">به‌پێی قه‌باره‌</string>
+  <string name="untagged">ئاراسته‌بۆنه‌کراو</string>
   <string name="no_location">شوێن نییه‌</string>
+  <string name="no_connectivity">هه‌ندێ شوێن نه‌توانرا بناسرێته‌وه‌ له‌ کاتی کێشه‌کانی هێڵ.</string>
+  <string name="sync_album_error">نه‌توانرا وێنه‌ دابگیرێت بۆ ئه‌لبوومه‌که‌. دواتر هه‌وڵبده‌ره‌وه‌.</string>
   <string name="show_images_only">ته‌نها وێنه‌</string>
   <string name="show_videos_only">ته‌نها ڤیدیۆ</string>
+  <string name="show_all">وێنه‌ &amp; ڤیدیۆ</string>
+  <string name="appwidget_title">پێشەنگای وێنە</string>
+  <string name="appwidget_empty_text">وێنه‌ نییه‌.</string>
   <string name="crop_saved">
         وێنە بڕاوەکو پاشەکەوتکرا بۆ <xliff:g id="folder_name">%s</xliff:g>.</string>
+  <string name="no_albums_alert">هیچ ئه‌لبومێک ئاماده‌ نییه‌.</string>
+  <string name="empty_album">0 وێنه‌/ڤیدیۆ ئاماده‌یه‌.</string>
+  <string name="picasa_posts">په‌یامه‌کان</string>
   <string name="make_available_offline">کردن بە دەرهێڵ</string>
   <string name="sync_picasa_albums">تازەکردنەوە</string>
   <string name="done">ئه‌نجامدرا</string>
@@ -119,6 +148,10 @@
   <string name="ffx_x_process">كرداری X</string>
   <string name="ffx_washout">ژاوەژاو</string>
   <string name="ffx_washout_color">Litho</string>
+  <plurals name="make_albums_available_offline">
+    <item quantity="one">دروستکردنی ئه‌لبومی ده‌رهێڵی</item>
+    <item quantity="other">دروستکردنی ئه‌لبومی ده‌رهێڵی</item>
+  </plurals>
   <string name="try_to_set_local_album_available_offline">ئەم بڕگەیە پاشەکەوتکراوە وە لە کارە بە ده‌رهێڵ.</string>
   <string name="set_label_all_albums">هه‌موو ئه‌لبومه‌كانم</string>
   <string name="set_label_local_albums">شوێنی ئه‌لبومه‌كان</string>
@@ -166,6 +199,12 @@
   <string name="pano_progress_text">پانۆراما</string>
   <string name="save" msgid="8140440041190264400">پاشەکەوتکردن</string>
   <string name="ingest_scanning" msgid="2048262851775139720">پشكنینی ناوه‌ڕۆك...</string>
+  <plurals name="ingest_number_of_items_scanned">
+    <item quantity="one">%1$d دانه‌ پشکنران</item>
+    <item quantity="other">%1$d دانه‌ پشکنران
+
+%1$d دانه‌ پشکنران</item>
+  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">جیاكردنه‌وه‌...</string>
   <string name="ingest_scanning_done">پشكنین ته‌واو بوو</string>
   <string name="ingest_importing">دانان...</string>
@@ -176,9 +215,14 @@
   <string name="camera_disabled">کامێراکە لەکارخرا لەبەر هۆکاری ئاسایشیەوە.</string>
   <string name="camera_label">کامێرا</string>
   <string name="wait">تکایە چاوەڕێبکە\u2026</string>
+  <string name="no_storage" product="nosdcard">ده‌رکردنی بیرگه‌ی USB پێش به‌کارهێنانی کامێرا.</string>
   <string name="no_storage" product="default">بیرگەی دەرەکی تێبکە پێشی بەکارهێنانی کامێراکە.</string>
+  <string name="preparing_sd" product="nosdcard">ئاماده‌کردنی بیرگه‌ی USB\u2026</string>
   <string name="preparing_sd" product="default">ئامادەکردنی بیرگەی دەرەکی\u2026</string>
+  <string name="access_sd_fail" product="nosdcard">ده‌سته‌ڵات نه‌شكێنرایه‌وه‌ به‌سه‌ر بیرگه‌ی USB.</string>
   <string name="access_sd_fail" product="default">بیرگەی دەرەکیەکە ناتوانرێت بخوێنرێتەوە.</string>
+  <string name="review_cancel">لابردن</string>
+  <string name="review_ok">ته‌واوبوو</string>
   <string name="time_lapse_title">تۆمارکردنی کاتی دیار نەمان</string>
   <string name="pref_camera_id_title">کامێرا هەڵبژێرە</string>
   <string name="pref_camera_id_entry_back">گەڕانەوە</string>
@@ -189,7 +233,7 @@
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">پاراستنی کات دانان بۆ خوارەوە</string>
   <string name="setting_off">کوژانه‌وه‌</string>
-  <string name="setting_on">کردنەوە</string>
+  <string name="setting_on">چالاکردن</string>
   <string name="pref_video_quality_title">جۆری کامێرا</string>
   <string name="pref_video_quality_entry_high">به‌رز</string>
   <string name="pref_video_quality_entry_low">نزم</string>
@@ -197,11 +241,12 @@
   <string name="pref_camera_settings_category">ڕێکخستنی کامێرا</string>
   <string name="pref_camcorder_settings_category">کۆدەری کامێرا ڕێکخستن</string>
   <string name="pref_camera_picturesize_title">قەبارەی وێنە</string>
-  <string name="pref_camera_picturesize_entry_13mp">١٣ مێگاپێکسڵ</string>
+  <string name="pref_camera_picturesize_entry_13mp">13 مێگاپێکسڵ</string>
   <string name="pref_camera_picturesize_entry_8mp">8 مێگاپێکسڵ</string>
-  <string name="pref_camera_picturesize_entry_5mp">٥ مێگاپێکسڵ</string>
-  <string name="pref_camera_picturesize_entry_3mp">٣ مێگاپێکسڵ</string>
-  <string name="pref_camera_picturesize_entry_2mp">٢ مێگاپێکسڵ</string>
+  <string name="pref_camera_picturesize_entry_5mp">5 مێگاپێکسڵ</string>
+  <string name="pref_camera_picturesize_entry_4mp">4 مێگاپێکسڵ</string>
+  <string name="pref_camera_picturesize_entry_3mp">3 مێگاپێکسڵ</string>
+  <string name="pref_camera_picturesize_entry_2mp">2 مێگاپێکسڵ</string>
   <string name="pref_camera_picturesize_entry_2mp_wide">2M مێگاپێکسڵ(16:9)</string>
   <string name="pref_camera_picturesize_entry_1_3mp">1.3M مێگاپێکسڵ</string>
   <string name="pref_camera_picturesize_entry_1mp">1M مێگاپێکسڵ</string>
@@ -217,11 +262,11 @@
   <string name="pref_camera_flashmode_title">باری فلاش</string>
   <string name="pref_camera_flashmode_label">باری فلاش</string>
   <string name="pref_camera_flashmode_entry_auto">خۆکارانه‌</string>
-  <string name="pref_camera_flashmode_entry_on">کردنەوە</string>
+  <string name="pref_camera_flashmode_entry_on">چالاکردن</string>
   <string name="pref_camera_flashmode_entry_off">کوژانه‌وه‌</string>
   <string name="pref_camera_flashmode_label_auto">فلاشی خۆکارانە</string>
-  <string name="pref_camera_flashmode_label_on">کردنەوەی فلاش</string>
-  <string name="pref_camera_flashmode_label_off">کوژانەوەی فلاش</string>
+  <string name="pref_camera_flashmode_label_on">چالاکردنی فلاش</string>
+  <string name="pref_camera_flashmode_label_off">ناچالاکردنی فلاش</string>
   <string name="pref_camera_whitebalance_title">هاوسەنگی سپی</string>
   <string name="pref_camera_whitebalance_label">بالانسی سپێتی</string>
   <string name="pref_camera_whitebalance_entry_auto">خۆکارانه‌</string>
@@ -246,11 +291,12 @@
   <string name="pref_camera_scenemode_label_night">شەو</string>
   <string name="pref_camera_scenemode_label_sunset">خۆراوا</string>
   <string name="pref_camera_scenemode_label_party">ئاهەنگ</string>
-  <string name="pref_camera_countdown_label_off">کوژانەوەی کات</string>
-  <string name="pref_camera_countdown_label_one">١ چرکە</string>
-  <string name="pref_camera_countdown_label_three">٢ چرکە</string>
-  <string name="pref_camera_countdown_label_ten">١٠ چرکە</string>
-  <string name="pref_camera_countdown_label_fifteen">١٥ چرکە</string>
+  <string name="pref_camera_countdown_label">ژمێره‌ری کات</string>
+  <string name="pref_camera_countdown_label_off">ناچالاکردنی کات</string>
+  <string name="pref_camera_countdown_label_one">1 چرکە</string>
+  <string name="pref_camera_countdown_label_three">2 چرکە</string>
+  <string name="pref_camera_countdown_label_ten">10 چرکە</string>
+  <string name="pref_camera_countdown_label_fifteen">15 چرکە</string>
   <string name="not_selectable_in_scene_mode">باری هەستی دیاری نەکراوە.</string>
   <string name="pref_exposure_title">كەوتنەبەر</string>
   <string name="pref_exposure_label">كەوتنەبەر</string>
@@ -259,6 +305,7 @@
   <string name="pref_camera_id_label_back">کامێرای پێشەوە</string>
   <string name="pref_camera_id_label_front">کامێرای دواوە</string>
   <string name="dialog_ok">باشه‌</string>
+  <string name="spaceIsLow_content" product="nosdcard">بیرگەکەت پڕ بوە تکایە لەپێشدا کەمێك زانیاری بسڕەوە و پاشان هەوڵ بدەرەوە.</string>
   <string name="spaceIsLow_content" product="default">بیرگەکەت پڕ بوە تکایە لەپێشدا کەمێك زانیاری بسڕەوە و پاشان هەوڵ بدەرەوە.</string>
   <string name="video_reach_size_limit">قەبارەی دیاری کراو تێپەڕیوە.</string>
   <string name="pano_too_fast_prompt">زۆر خێرا</string>
@@ -281,66 +328,83 @@
   <string name="effect_backdropper_space">لە بۆشای</string>
   <string name="effect_backdropper_sunset">خۆراوا</string>
   <string name="effect_backdropper_gallery">ڤیدۆکانت</string>
+  <string name="bg_replacement_message">دانانی ئامێر بۆ وه‌ستان.\nهه‌نگاوێک له‌ بینینی کات.</string>
   <string name="video_snapshot_hint">دەستلێدان بۆ وێنەگرتن کاتێک تۆمار ئەکات.</string>
   <string name="video_recording_started">تۆمارکردنی ڤیدیۆ دەستی پێکرد.</string>
   <string name="video_recording_stopped">تۆمارکردنی ڤیدیۆ وەستا.</string>
+  <string name="disable_video_snapshot_hint">گرتنی ڤیدیۆ ئاماده‌نییه‌ کاتێک کاریگه‌ری تایبه‌تی کارده‌کات.</string>
   <string name="clear_effects">پاکردنەوەی کاریگەریەکان</string>
   <string name="effect_silly_faces">دەموچاوی گەمژاوی</string>
   <string name="effect_background">پشتەگەڵاڵە</string>
+  <string name="accessibility_shutter_button">دوگمه‌ی خێرایی لێنس</string>
   <string name="accessibility_menu_button">دوگمەی پێڕست</string>
+  <string name="accessibility_review_thumbnail">تازه‌ترین وێنه‌</string>
+  <string name="accessibility_camera_picker">گۆڕینی پێش و دواوه‌ی کامێرا</string>
   <string name="accessibility_mode_picker">کامێرا،ڤیدیۆ،یان هەڵبژاردەی پانۆراما</string>
+  <string name="accessibility_second_level_indicators">ڕێکخستنی زیاتری سه‌رپه‌رشتی</string>
+  <string name="accessibility_back_to_first_level">داخستنی ڕێکخستنی سه‌رپه‌رشتی</string>
+  <string name="accessibility_zoom_control">سه‌رپه‌رشتی هێنانه‌ پێشه‌وه‌</string>
+  <string name="accessibility_decrement">که‌مکردن%1$s</string>
+  <string name="accessibility_increment">زیادکردن%1$s</string>
   <string name="accessibility_check_box">%1$s بۆکس پشکنەر</string>
   <string name="accessibility_switch_to_camera">گۆڕین بۆ وێنە</string>
   <string name="accessibility_switch_to_video">گۆڕین بۆ ڤیدیۆ</string>
   <string name="accessibility_switch_to_panorama">گۆڕین بۆ پانۆراما</string>
+  <string name="accessibility_switch_to_new_panorama">گۆڕین بوێ پانۆرامای نوێ</string>
+  <string name="accessibility_switch_to_refocus">گۆڕین بۆ دووباره‌ فۆکس</string>
   <string name="accessibility_review_cancel">پیشاندانی هەڵوەشانەوە</string>
   <string name="accessibility_review_ok">پیشاندانی ئەنجامدراو</string>
   <string name="accessibility_review_retake">پیشاندانی دوبارەگرتنەوە</string>
-  <string name="capital_on">کردنەوە</string>
+  <string name="accessibility_play_video">لێدانی ڤیدیۆ</string>
+  <string name="accessibility_pause_video">ڕاگرتنی ڤیدیۆ</string>
+  <string name="accessibility_reload_video">دووباره‌کردنه‌وه‌ی ڤیدیۆ</string>
+  <string name="accessibility_time_bar">شریتی کاتی لێده‌ری ڤیدیۆ</string>
+  <string name="capital_on">چالاکردن</string>
   <string name="capital_off">کووژاوە</string>
   <string name="pref_video_time_lapse_frame_interval_off">کوژانه‌وه‌</string>
   <string name="pref_video_time_lapse_frame_interval_500">0.5 چرکه‌</string>
-  <string name="pref_video_time_lapse_frame_interval_1500">١.٥ چرکە</string>
+  <string name="pref_video_time_lapse_frame_interval_1500">1.5 چرکە</string>
   <string name="pref_video_time_lapse_frame_interval_2000">2 چرکه‌</string>
-  <string name="pref_video_time_lapse_frame_interval_2500">٢.٥  چرکە</string>
+  <string name="pref_video_time_lapse_frame_interval_2500">2.5  چرکە</string>
   <string name="pref_video_time_lapse_frame_interval_3000">3 چرکە</string>
-  <string name="pref_video_time_lapse_frame_interval_4000">٤ چرکه‌</string>
+  <string name="pref_video_time_lapse_frame_interval_4000">4 چرکه‌</string>
   <string name="pref_video_time_lapse_frame_interval_5000">5 چرکه‌</string>
-  <string name="pref_video_time_lapse_frame_interval_6000">٦ چرکە</string>
+  <string name="pref_video_time_lapse_frame_interval_6000">6 چرکە</string>
   <string name="pref_video_time_lapse_frame_interval_10000">10 چرکه‌</string>
-  <string name="pref_video_time_lapse_frame_interval_12000">١٢ چرکە</string>
+  <string name="pref_video_time_lapse_frame_interval_12000">12 چرکە</string>
   <string name="pref_video_time_lapse_frame_interval_15000">15 چرکه‌</string>
-  <string name="pref_video_time_lapse_frame_interval_24000">٢٤ چرکە</string>
-  <string name="pref_video_time_lapse_frame_interval_30000">٠.٥ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_90000">٠.٥ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_120000">٢ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_150000">٢.٣ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_180000">٣ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_240000">٤ خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_24000">24 چرکە</string>
+  <string name="pref_video_time_lapse_frame_interval_30000">0.5 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_90000">0.5 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_120000">2 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_150000">2.3 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_180000">3 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_240000">4 خولەک</string>
   <string name="pref_video_time_lapse_frame_interval_300000">5 خوله‌ک</string>
-  <string name="pref_video_time_lapse_frame_interval_360000">٦ خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_360000">6 خولەک</string>
   <string name="pref_video_time_lapse_frame_interval_600000">10 خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_720000">١٢ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_900000">١٥خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_1440000">٢٤ خولەک</string>
-  <string name="pref_video_time_lapse_frame_interval_1800000">٠.٥ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_5400000">١.٥ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_7200000">٢ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_9000000">٢.٥ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_10800000">٣ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_14400000">٤ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_18000000">٥ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_21600000">٦ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_36000000">١٠ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_43200000">١٢ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_54000000">١٥ کاتژێر</string>
-  <string name="pref_video_time_lapse_frame_interval_86400000">٢٤ کاتژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_720000">12 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_900000">15خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_1440000">24 خولەک</string>
+  <string name="pref_video_time_lapse_frame_interval_1800000">0.5 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_5400000">1.5 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_7200000">2 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_9000000">2.5 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_10800000">3 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_14400000">4 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_18000000">5 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_21600000">6 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_36000000">10 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_43200000">12 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_54000000">15 کاژێر</string>
+  <string name="pref_video_time_lapse_frame_interval_86400000">24 کاژێر</string>
   <string name="time_lapse_seconds">چرکە</string>
   <string name="time_lapse_minutes">خولەک</string>
-  <string name="time_lapse_hours">کاتژمێرەکان</string>
+  <string name="time_lapse_hours">کاژێرەکان</string>
   <string name="time_lapse_interval_set">ئه‌نجامدرا</string>
   <string name="set_time_interval">دانانی ماوەی کات</string>
   <string name="set_time_interval_help">تايبەندمەنديى ديارنەمانى كات دوور لەيە. بسوڕێەوە ئەو لەسەر تا ماوەى كات دا بنێت.</string>
+  <string name="set_timer_help">کات پێوه‌ر کوژاوه‌ته‌وه‌.دایبگیرسێنه‌ ئه‌گه‌ر بۆ ژماردنته‌ پێش گرتنی وێنه‌.</string>
   <string name="set_duration">دانانی ماوە لە چرکە</string>
   <string name="count_down_title_text">ژماردن بۆ خوارەوە وێنەیەک بگرە</string>
   <string name="remember_location_title">بیرهێنانەوەی ناوچەی وێنە?</string>
@@ -350,7 +414,12 @@
   <string name="remember_location_yes">بەڵێ</string>
   <string name="menu_camera">کامێرا</string>
   <string name="menu_search">گەڕان</string>
+  <string name="tab_photos">وێنه‌کان</string>
   <string name="tab_albums">ئەلبوم</string>
   <string name="camera_menu_more_label">هەڵبژاردەی زیاتر</string>
   <string name="camera_menu_settings_label">ڕێکخستنەکان</string>
+  <plurals name="number_of_photos">
+    <item quantity="one">%1$d وێنه‌</item>
+    <item quantity="other">%1$d وێنه‌</item>
+  </plurals>
 </resources>

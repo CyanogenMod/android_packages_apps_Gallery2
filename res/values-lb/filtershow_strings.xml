@@ -15,10 +15,18 @@
      limitations under the License.
 -->
 <resources>
+  <string name="cannot_edit_original">Original kann net geännert ginn</string>
   <string name="custom_border">Personaliséiert</string>
   <string name="print_image">Drécken</string>
+  <string name="x">x</string>
   <string name="menu_settings">Astellungen</string>
   <string name="history">Historique</string>
+  <string name="aspect4to3_effect">4:3</string>
+  <string name="aspect3to4_effect">3:4</string>
+  <string name="aspect4to6_effect">4:6</string>
+  <string name="aspect5to7_effect">5:7</string>
+  <string name="aspect7to5_effect">7:5</string>
+  <string name="aspect9to16_effect">16:9</string>
   <string name="aspectNone_effect">Keen</string>
   <string name="crop" msgid="5584000454518174632">Schneiden</string>
   <string name="none" msgid="3601545724573307541">Keen</string>
