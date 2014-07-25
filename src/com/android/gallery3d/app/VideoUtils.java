@@ -156,11 +156,16 @@ public class VideoUtils {
 
             if (selectCurrentTrack) {
                 extractor.selectTrack(i);
-                int dstIndex = muxer.addTrack(format);
-                indexMap.put(i, dstIndex);
-                if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
-                    int newSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
-                    bufferSize = newSize > bufferSize ? newSize : bufferSize;
+                try {
+                    int dstIndex = muxer.addTrack(format);
+                    indexMap.put(i, dstIndex);
+                    if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                        int newSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
+                        bufferSize = newSize > bufferSize ? newSize : bufferSize;
+                    }
+                } catch (IllegalArgumentException e) {
+                    Log.e(LOGTAG, "Unsupported format '" + mime + "'");
+                    throw new IOException("Muxer does not support " + mime);
                 }
             }
         }
