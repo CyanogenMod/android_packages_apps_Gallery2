@@ -17,7 +17,7 @@
 <resources>
   <string name="title_activity_filter_show">ده‌ستکاری کردنی وێنه‌</string>
   <string name="cannot_load_image">ناتوانێت وێنە دابەزێنێت!</string>
-  <string name="cannot_edit_original">نه‌توانرا وێنه‌ی بنه‌ڕه‌ت ده‌ستکاریبکرێت</string>
+  <string name="cannot_edit_original">نه‌توانرا وێنه‌ی بنێڕه‌ت ده‌ستکاریبکرێت</string>
   <string name="original_picture_text">@string/original</string>
   <string name="setting_wallpaper">ڕێکخستنی پشتەگەڵاڵە</string>
   <string name="download_failure">نه‌توانرا وێنه‌ دابگیرێت.هێڵ ئاماده‌نییه‌.</string>
