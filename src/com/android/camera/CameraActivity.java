@@ -31,6 +31,7 @@ public class CameraActivity extends Activity {
         // it's already in a new task. Start Camera activity and
         // reset the task to its initial state if needed.
         intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
