@@ -1,11 +1,13 @@
 package org.codeaurora.gallery3d.video;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Browser;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import org.codeaurora.gallery3d.ext.MovieUtils;
@@ -61,7 +63,14 @@ public class StreamingHooker extends MovieHooker {
         intent.setData(Uri.parse(URI_STR));
         intent.putExtra(EXTRA_NAME, true);
         intent.putExtra(Browser.EXTRA_APPLICATION_ID, APN_NAME);
-        getContext().startActivity(intent);
+
+        try {
+            getContext().startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    R.string.fail_to_load, Toast.LENGTH_LONG).show();
+        }
+
         if (LOG) {
             Log.v(TAG, "gotoInputUrl() appName=" + APN_NAME);
         }
