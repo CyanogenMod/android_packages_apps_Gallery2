@@ -26,7 +26,7 @@
     <string name="original" msgid="3524493791230430897">"မူလ"</string>
     <string name="borders" msgid="2067345080568684614">"အနားသတ်များ"</string>
     <string name="custom_border" msgid="8679893731790931871">"မိမိစိတ်ကြိုက်"</string>
-    <string name="filtershow_undo" msgid="6781743189243585101">"တစ်ဆင့် နောက်ပြန်ပြုလုပ်ပါ"</string>
+    <string name="filtershow_undo" msgid="6781743189243585101">"နောက်ပြန်လုပ်ပါ"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"ပြန်လုပ်ရန်"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"ပြုလုပ်ထားသောအထူးပြုချက်များပြ"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"အထူးပြုလုပ်မှုများ ဖျောက်ရန်"</string>
@@ -152,5 +152,5 @@
     <string name="filtershow_exif_date" msgid="8882402253732028544">"ရိုက်ကူးခဲ့သောနေ့"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"F Stop"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"အလင်းဝင်ချိန်"</string>
-    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"မူပိုင်ခွင့်"</string>
+    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"မူပိုင်ခွင့်"</string>
 </resources>
