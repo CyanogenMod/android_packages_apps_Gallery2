@@ -331,11 +331,18 @@ public class ExifTag {
 
         byte[] buf = value.getBytes(US_ASCII);
         byte[] finalBuf = buf;
-        if (buf.length > 0) {
-            finalBuf = (buf[buf.length - 1] == 0 || mDataType == TYPE_UNDEFINED) ? buf : Arrays
-                .copyOf(buf, buf.length + 1);
-        } else if (mDataType == TYPE_ASCII && mComponentCountActual == 1) {
-            finalBuf = new byte[] { 0 };
+        if (mDataType == TYPE_ASCII) {
+            if (buf.length > 0) {
+                if (buf[buf.length - 1] != 0) {
+                    finalBuf = Arrays.copyOf(buf, buf.length + 1);
+                    // If the original count was without the termination zero
+                    // add 1 to the count to pass the check
+                    if (mComponentCountActual == buf.length)
+                        mComponentCountActual++;
+                }
+            } else if (mComponentCountActual == 1) {
+                finalBuf = new byte[] { 0 };
+            }
         }
         int count = finalBuf.length;
         if (checkBadComponentCount(count)) {
