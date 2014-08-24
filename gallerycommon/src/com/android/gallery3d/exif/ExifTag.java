@@ -314,13 +314,17 @@ public class ExifTag {
      * Sets a string value into this tag. This method should be used for tags of
      * type {@link #TYPE_ASCII}. The string is converted to an ASCII string.
      * Characters that cannot be converted are replaced with '?'. The length of
-     * the string must be equal to either (component count -1) or (component
-     * count). The final byte will be set to the string null terminator '\0',
-     * overwriting the last character in the string if the value.length is equal
-     * to the component count. This method will fail if:
+     * the string must be equal to either
+     * <ul>
+     * <li>component count - 1 when the terminating '\0' is not present</li>
+     * <li>component count when the null terminator is present, although some
+     * implementations omit it (faulty behavior according to the specs) so it
+     * will be added here disabling the length checks temporarily</li>
+     * </ul>
+     * This method will fail if:
      * <ul>
      * <li>The data type is not {@link #TYPE_ASCII} or {@link #TYPE_UNDEFINED}.</li>
-     * <li>The length of the string is not equal to (component count -1) or
+     * <li>The length of the string is not equal to (component count - 1) or
      * (component count) in the definition for this tag.</li>
      * </ul>
      */
@@ -331,11 +335,19 @@ public class ExifTag {
 
         byte[] buf = value.getBytes(US_ASCII);
         byte[] finalBuf = buf;
-        if (buf.length > 0) {
-            finalBuf = (buf[buf.length - 1] == 0 || mDataType == TYPE_UNDEFINED) ? buf : Arrays
-                .copyOf(buf, buf.length + 1);
-        } else if (mDataType == TYPE_ASCII && mComponentCountActual == 1) {
-            finalBuf = new byte[] { 0 };
+        if (mDataType == TYPE_ASCII) {
+            if (buf.length > 0) {
+                if (buf[buf.length - 1] != 0) {
+                    finalBuf = Arrays.copyOf(buf, buf.length + 1);
+                    // If the original count was without the termination zero
+                    // fix the check by increasing the component count.
+                    // This happens e.g. with Samsungs Wave2 Camera
+                    if (mComponentCountActual == buf.length)
+                        mComponentCountActual++;
+                }
+            } else if (mComponentCountActual == 1) {
+                finalBuf = new byte[] { 0 };
+            }
         }
         int count = finalBuf.length;
         if (checkBadComponentCount(count)) {
