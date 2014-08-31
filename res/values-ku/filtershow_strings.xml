@@ -19,7 +19,7 @@
   <string name="cannot_load_image">ناتوانێت وێنە دابەزێنێت!</string>
   <string name="cannot_edit_original">نه‌توانرا وێنه‌ی بنێڕه‌ت ده‌ستکاریبکرێت</string>
   <string name="original_picture_text">@string/original</string>
-  <string name="setting_wallpaper">ڕێکخستنی پشتەگەڵاڵە</string>
+  <string name="setting_wallpaper">ڕێکخستنی پێشینه‌</string>
   <string name="download_failure">نه‌توانرا وێنه‌ دابگیرێت.هێڵ ئاماده‌نییه‌.</string>
   <string name="original">ڕەسەن</string>
   <string name="borders" msgid="4461692156695893616">ته‌خته‌کان</string>
@@ -81,7 +81,7 @@
   <string name="imageDraw">کێشان</string>
   <string name="straighten" msgid="5217801513491493491">هێزی</string>
   <string name="crop" msgid="5584000454518174632">بڕین</string>
-  <string name="rotate" msgid="460017689320955494">سوڕانەوە</string>
+  <string name="rotate" msgid="460017689320955494">سووڕانەوە</string>
   <string name="mirror">ئاوێنه‌</string>
   <string name="negative">پێچه‌وانه‌</string>
   <string name="none" msgid="3601545724573307541">هیچ</string>
@@ -142,7 +142,7 @@
   <string name="filtershow_version_current">ئێستا</string>
   <string name="filtershow_exif_model">مۆدێل</string>
   <string name="filtershow_exif_aperture">دەلاقە</string>
-  <string name="filtershow_exif_focal_length">درێژی چەقکوڕی</string>
+  <string name="filtershow_exif_focal_length">درێژی تیشکۆیی</string>
   <string name="filtershow_exif_iso">ISO</string>
   <string name="filtershow_exif_subject_distance">ماوه‌ی دێڕ</string>
   <string name="filtershow_exif_date">ڕۆژی گرتنی وێنه‌که‌</string>
