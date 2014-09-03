@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -560,6 +564,11 @@ public class AlbumSetPage extends ActivityState implements
             helpItem.setVisible(helpIntent != null);
             if (helpIntent != null) helpItem.setIntent(helpIntent);
 
+            MenuItem moreItem = menu.findItem(R.id.action_more_image);
+            moreItem.setVisible(mActivity.getResources().getBoolean(
+                    R.bool.config_show_more_images));
+
+
             mActionBar.setTitle(mTitle);
             mActionBar.setSubtitle(mSubtitle);
             if (mShowClusterMenu != wasShowingClusterMenu) {
@@ -577,6 +586,11 @@ public class AlbumSetPage extends ActivityState implements
     protected boolean onItemSelected(MenuItem item) {
         Activity activity = mActivity;
         switch (item.getItemId()) {
+            case R.id.action_more_image:
+                Uri moreUri = Uri.parse(mActivity.getString(R.string.website_for_more_image));
+                Intent moreIntent = new Intent(Intent.ACTION_VIEW, moreUri);
+                mActivity.startActivity(moreIntent);
+                return true;
             case R.id.action_cancel:
                 activity.setResult(Activity.RESULT_CANCELED);
                 activity.finish();
