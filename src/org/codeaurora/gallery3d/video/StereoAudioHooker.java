@@ -10,7 +10,7 @@ import com.android.gallery3d.R;
 
 public class StereoAudioHooker extends MovieHooker {
     private static final String TAG = "StereoAudioHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private static final int MENU_STEREO_AUDIO = 1;
     private MenuItem mMenuStereoAudio;
