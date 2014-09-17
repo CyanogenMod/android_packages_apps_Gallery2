@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class MovieListLoader implements IMovieListLoader {  
     private static final String TAG = "MovieListLoader";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     
     private MovieListFetcherTask mListTask;
     
@@ -101,7 +101,7 @@ public class MovieListLoader implements IMovieListLoader {
 
     private class MovieListFetcherTask extends AsyncTask<IMovieItem, Void, IMovieList> {
         private static final String TAG = "MovieListFetcherTask";
-        private static final boolean LOG = true;
+        private static final boolean LOG = false;
         
         // TODO comments by sunlei
 //        public static final String COLUMN_STEREO_TYPE = MediaStore.Video.Media.STEREO_TYPE;
