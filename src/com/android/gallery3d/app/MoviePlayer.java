@@ -82,7 +82,7 @@ public class MoviePlayer implements
         MediaPlayer.OnBufferingUpdateListener {
     @SuppressWarnings("unused")
     private static final String TAG = "MoviePlayer";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private static final String KEY_VIDEO_POSITION = "video-position";
     private static final String KEY_RESUMEABLE_TIME = "resumeable-timeout";
@@ -205,7 +205,9 @@ public class MoviePlayer implements
                 mKeyguardLocked = false;
                 mCanResumed = false;
             } else if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
-                Log.v(TAG, "Intent.ACTION_SHUTDOWN received");
+                if (LOG) {
+                    Log.v(TAG, "Intent.ACTION_SHUTDOWN received");
+                }
                 mActivityContext.finish();
             }
         }
@@ -770,10 +772,14 @@ public class MoviePlayer implements
     public boolean onIsRTSP() {
         if (MovieUtils.isRtspStreaming(mMovieItem.getUri(), mMovieItem
                 .getMimeType())) {
-            Log.v(TAG, "onIsRTSP() is RTSP");
+            if (LOG) {
+                Log.v(TAG, "onIsRTSP() is RTSP");
+            }
             return true;
         }
-        Log.v(TAG, "onIsRTSP() is not RTSP");
+        if (LOG) {
+            Log.v(TAG, "onIsRTSP() is not RTSP");
+        }
         return false;
     }
 
@@ -831,9 +837,11 @@ public class MoviePlayer implements
     }
 
     public void updateRewindAndForwardUI() {
-        Log.v(TAG, "updateRewindAndForwardUI");
-        Log.v(TAG, "updateRewindAndForwardUI== getCurrentPosition = " +  mVideoView.getCurrentPosition());
-        Log.v(TAG, "updateRewindAndForwardUI==getDuration =" +  mVideoView.getDuration());
+        if (LOG) {
+            Log.v(TAG, "updateRewindAndForwardUI");
+            Log.v(TAG, "updateRewindAndForwardUI== getCurrentPosition = " +  mVideoView.getCurrentPosition());
+            Log.v(TAG, "updateRewindAndForwardUI==getDuration =" +  mVideoView.getDuration());
+        }
         if (mControllerRewindAndForwardExt != null) {
             mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
                     .canStop(), mVideoView.canSeekBackward()
@@ -1492,7 +1500,9 @@ public class MoviePlayer implements
 
         @Override
         public void onStopVideo() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onStopVideo()");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onStopVideo()");
+            }
             if (mPlayerExt.canStop()) {
                 mPlayerExt.stopVideo();
                 mControllerRewindAndForwardExt.showControllerButtonsView(false,
@@ -1502,7 +1512,9 @@ public class MoviePlayer implements
 
         @Override
         public void onRewind() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onRewind()");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onRewind()");
+            }
             if (mVideoView != null && mVideoView.canSeekBackward()) {
                 mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
                         .canStop(),
@@ -1511,7 +1523,9 @@ public class MoviePlayer implements
                 int targetDuration = mVideoView.getCurrentPosition()
                         - stepValue < 0 ? 0 : mVideoView.getCurrentPosition()
                         - stepValue;
-                Log.v(TAG, "onRewind targetDuration " + targetDuration);
+                if (LOG) {
+                    Log.v(TAG, "onRewind targetDuration " + targetDuration);
+                }
                 mVideoView.seekTo(targetDuration);
             } else {
                 mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
@@ -1522,7 +1536,9 @@ public class MoviePlayer implements
 
         @Override
         public void onForward() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onForward()");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onForward()");
+            }
             if (mVideoView != null && mVideoView.canSeekForward()) {
                 mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
                         .canStop(),
@@ -1532,7 +1548,9 @@ public class MoviePlayer implements
                         + stepValue > mVideoView.getDuration() ? mVideoView
                         .getDuration() : mVideoView.getCurrentPosition()
                         + stepValue;
-                Log.v(TAG, "onForward targetDuration " + targetDuration);
+                if (LOG) {
+                    Log.v(TAG, "onForward targetDuration " + targetDuration);
+                }
                 mVideoView.seekTo(targetDuration);
             } else {
                 mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt

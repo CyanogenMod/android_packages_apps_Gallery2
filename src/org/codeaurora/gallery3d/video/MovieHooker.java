@@ -9,7 +9,7 @@ import org.codeaurora.gallery3d.ext.IMoviePlayer;
 public class MovieHooker extends ActivityHooker {
 
     private static final String TAG = "MovieHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     private IMovieItem mMovieItem;
     private IMoviePlayer mPlayer;
 

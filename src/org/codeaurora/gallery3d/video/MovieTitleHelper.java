@@ -13,7 +13,7 @@ import java.io.File;
 
 public class MovieTitleHelper {
     private static final String TAG = "MovieTitleHelper";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     public static String getTitleFromMediaData(final Context context, final Uri uri) {
         String title = null;

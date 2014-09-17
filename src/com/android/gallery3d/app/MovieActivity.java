@@ -84,7 +84,7 @@ import android.bluetooth.BluetoothProfile;
 public class MovieActivity extends Activity {
     @SuppressWarnings("unused")
     private static final String  TAG = "MovieActivity";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     public  static final String  KEY_LOGO_BITMAP = "logo-bitmap";
     public  static final String  KEY_TREAT_UP_AS_BACK = "treat-up-as-back";
     private static final String  VIDEO_SDP_MIME_TYPE = "application/sdp";

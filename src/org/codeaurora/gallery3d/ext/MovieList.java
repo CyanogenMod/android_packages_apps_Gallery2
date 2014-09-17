@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class MovieList implements IMovieList {
     private static final String TAG = "MovieList";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     
     private final ArrayList<IMovieItem> mItems = new ArrayList<IMovieItem>();
     private static final int UNKNOWN = -1;
