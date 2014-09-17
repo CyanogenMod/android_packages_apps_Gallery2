@@ -318,6 +318,13 @@ public class ExifInterface {
     public static final int TAG_INTEROPERABILITY_INDEX =
         defineTag(IfdId.TYPE_IFD_INTEROPERABILITY, (short) 1);
 
+    private static final String GPS_DATE_FORMAT_STR = "yyyy:MM:dd";
+    private static final String DATETIME_FORMAT_STR = "yyyy:MM:dd kk:mm:ss";
+    public static final DateFormat DATETIME_FORMAT = new SimpleDateFormat(DATETIME_FORMAT_STR);
+    private final DateFormat mGPSDateStampFormat = new SimpleDateFormat(GPS_DATE_FORMAT_STR);
+    private final Calendar mGPSTimeStampCalendar = Calendar
+            .getInstance(TimeZone.getTimeZone("UTC"));
+
     /**
      * Tags that contain offset markers. These are included in the banned
      * defines.
@@ -1944,13 +1951,6 @@ public class ExifInterface {
         return latLon;
     }
 
-    private static final String GPS_DATE_FORMAT_STR = "yyyy:MM:dd";
-    private static final String DATETIME_FORMAT_STR = "yyyy:MM:dd kk:mm:ss";
-    private final DateFormat mDateTimeStampFormat = new SimpleDateFormat(DATETIME_FORMAT_STR);
-    private final DateFormat mGPSDateStampFormat = new SimpleDateFormat(GPS_DATE_FORMAT_STR);
-    private final Calendar mGPSTimeStampCalendar = Calendar
-            .getInstance(TimeZone.getTimeZone("UTC"));
-
     /**
      * Creates, formats, and sets the DateTimeStamp tag for one of:
      * {@link #TAG_DATE_TIME}, {@link #TAG_DATE_TIME_DIGITIZED},
@@ -1964,8 +1964,8 @@ public class ExifInterface {
     public boolean addDateTimeStampTag(int tagId, long timestamp, TimeZone timezone) {
         if (tagId == TAG_DATE_TIME || tagId == TAG_DATE_TIME_DIGITIZED
                 || tagId == TAG_DATE_TIME_ORIGINAL) {
-            mDateTimeStampFormat.setTimeZone(timezone);
-            ExifTag t = buildTag(tagId, mDateTimeStampFormat.format(timestamp));
+            DATETIME_FORMAT.setTimeZone(timezone);
+            ExifTag t = buildTag(tagId, DATETIME_FORMAT.format(timestamp));
             if (t == null) {
                 return false;
             }
