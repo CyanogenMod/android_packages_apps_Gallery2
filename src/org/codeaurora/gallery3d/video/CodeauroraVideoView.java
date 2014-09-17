@@ -41,7 +41,7 @@ import java.util.Map;
  * such as scaling and tinting.
  */
 public class CodeauroraVideoView extends SurfaceView implements MediaPlayerControl, ScreenModeListener{
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     private String TAG = "CodeauroraVideoView";
     // settable by the client
     private Uri         mUri;

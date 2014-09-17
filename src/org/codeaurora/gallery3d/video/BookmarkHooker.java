@@ -9,7 +9,7 @@ import org.codeaurora.gallery3d.ext.MovieUtils;
 
 public class BookmarkHooker extends MovieHooker {
     private static final String TAG = "BookmarkHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private static final String ACTION_BOOKMARK = "org.codeaurora.bookmark.VIEW";
     private static final int MENU_BOOKMARK_ADD = 1;

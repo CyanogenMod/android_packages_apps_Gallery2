@@ -33,7 +33,7 @@ import com.android.gallery3d.app.MovieActivity;
 
 public class BookmarkActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "BookmarkActivity";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private BookmarkEnhance mBookmark;
     private BookmarkAdapter mAdapter;

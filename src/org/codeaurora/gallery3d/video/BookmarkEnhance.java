@@ -12,7 +12,7 @@ import com.android.gallery3d.R;
 
 public class BookmarkEnhance {
     private static final String TAG = "BookmarkEnhance";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private static final Uri BOOKMARK_URI = Uri.parse("content://media/internal/bookmark");
 

@@ -9,7 +9,7 @@ import org.codeaurora.gallery3d.ext.MovieUtils;
 public class LoopVideoHooker extends MovieHooker {
 
     private static final String TAG = "LoopVideoHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     private static final int MENU_LOOP = 1;
 
     private MenuItem mMenuLoopButton;
