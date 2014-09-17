@@ -294,6 +294,8 @@
     <string name="description">Description</string>
     <!-- Text indicating the creation time of a media item in details window [CHAR LIMIT=14] -->
     <string name="time">Time</string>
+    <!-- Text indicating the time a media item was taken in details window [CHAR LIMIT=14] -->
+    <string name="record_time">Record Time</string>
     <!-- Text indicating the location of a media item in details window [CHAR LIMIT=14] -->
     <string name="location">Location</string>
     <!-- Text indicating the path of a media item in details window [CHAR LIMIT=14] -->

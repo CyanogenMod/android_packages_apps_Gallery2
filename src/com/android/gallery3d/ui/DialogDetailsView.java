@@ -39,8 +39,12 @@ import com.android.gallery3d.ui.DetailsHelper.DetailsSource;
 import com.android.gallery3d.ui.DetailsHelper.DetailsViewContainer;
 import com.android.gallery3d.ui.DetailsHelper.ResolutionResolvingListener;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -129,6 +133,18 @@ public class DialogDetailsView implements DetailsViewContainer {
             mItems = new ArrayList<String>(details.size());
             mLocationIndex = -1;
             setDetails(context, details);
+        }
+
+        private String exifDateToFormatedDate(String exifDt) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+            Date date;
+            try {
+                date = format.parse(exifDt);
+            } catch (ParseException e) {
+                return exifDt;
+            }
+            DateFormat formater = DateFormat.getDateTimeInstance();
+            return formater.format(date);
         }
 
         private void setDetails(Context context, MediaDetails details) {
@@ -220,6 +236,9 @@ public class DialogDetailsView implements DetailsViewContainer {
                         break;
                     case MediaDetails.INDEX_ORIENTATION:
                         value = toLocalInteger(detail.getValue());
+                        break;
+                    case MediaDetails.INDEX_DATETIME_ORIGINAL:
+                        value = exifDateToFormatedDate(detail.getValue().toString());
                         break;
                     default: {
                         Object valueObj = detail.getValue();
