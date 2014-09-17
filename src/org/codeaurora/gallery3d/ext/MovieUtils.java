@@ -10,7 +10,7 @@ import java.util.Locale;
  */
 public class MovieUtils {
     private static final String TAG = "MovieUtils";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private MovieUtils() {
     }

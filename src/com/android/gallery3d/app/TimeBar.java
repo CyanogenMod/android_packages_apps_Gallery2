@@ -56,7 +56,7 @@ public class TimeBar extends View {
     private static final int TEXT_SIZE_IN_DP = 14;
 
     private static final String TAG = "Gallery3D/TimeBar";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     public static final int UNKNOWN = -1;
 
     protected final Listener mListener;
@@ -439,7 +439,7 @@ interface ITimeBarLayoutExt {
 
 class TimeBarInfoExtImpl implements ITimeBarInfoExt {
     private static final String TAG = "TimeBarInfoExtensionImpl";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     private static final String ELLIPSE = "...";
 
     private Paint mInfoPaint;
@@ -504,7 +504,7 @@ class TimeBarInfoExtImpl implements ITimeBarInfoExt {
 
 class TimeBarSecondaryProgressExtImpl implements ITimeBarSecondaryProgressExt {
     private static final String TAG = "TimeBarSecondaryProgressExtensionImpl";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private int mBufferPercent;
     private Rect mSecondaryBar;
@@ -539,7 +539,7 @@ class TimeBarSecondaryProgressExtImpl implements ITimeBarSecondaryProgressExt {
 
 class TimeBarLayoutExtImpl implements ITimeBarLayoutExt {
     private static final String TAG = "TimeBarLayoutExtensionImpl";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private int mTextPadding;
     private int mVPaddingInPx;

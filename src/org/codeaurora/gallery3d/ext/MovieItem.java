@@ -5,7 +5,7 @@ import android.provider.MediaStore;
 
 public class MovieItem implements IMovieItem {
     private static final String TAG = "MovieItem";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private Uri mUri;
     private String mMimeType;

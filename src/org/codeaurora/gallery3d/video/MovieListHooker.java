@@ -14,7 +14,7 @@ import org.codeaurora.gallery3d.ext.MovieListLoader;
 
 public class MovieListHooker extends MovieHooker implements LoaderListener {
     private static final String TAG = "MovieListHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     
     private static final int MENU_NEXT = 1;
     private static final int MENU_PREVIOUS = 2;

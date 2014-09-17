@@ -14,7 +14,7 @@ import org.codeaurora.gallery3d.ext.MovieUtils;
 
 public class StreamingHooker extends MovieHooker {
     private static final String TAG = "StreamingHooker";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private static final String ACTION_STREAMING = "org.codeaurora.settings.streaming";
     private static final int MENU_INPUT_URL = 1;
