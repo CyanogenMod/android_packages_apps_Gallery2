@@ -62,7 +62,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         AnimationListener {
 
     private static final String TAG = "Gallery3D/MovieControllerOverlay";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
 
     private ScreenModeManager mScreenModeManager;
     protected ScreenModeExt mScreenModeExt = new ScreenModeExt();
@@ -283,7 +283,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
     @Override
     public void setViewEnabled(boolean isEnabled) {
         if (mListener.onIsRTSP()) {
-            Log.v(TAG, "setViewEnabled is " + isEnabled);
+            if (LOG) {
+                Log.v(TAG, "setViewEnabled is " + isEnabled);
+            }
             mOverlayExt.setCanScrubbing(isEnabled);
             mPlayPauseReplayView.setEnabled(isEnabled);
             if (enableRewindAndForward) {
@@ -301,7 +303,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
     @Override
     public void setPlayPauseReplayResume() {
         if (mListener.onIsRTSP()) {
-            Log.v(TAG, "setPlayPauseReplayResume is enabled is true");
+            if (LOG) {
+                Log.v(TAG, "setPlayPauseReplayResume is enabled is true");
+            }
             mPlayPauseReplayView.setEnabled(true);
         }
     }
@@ -684,7 +688,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             addView(mScreenView, wrapContent);
 
             if (enableRewindAndForward) {
-                Log.v(TAG, "ScreenModeExt enableRewindAndForward");
+                if (LOG) {
+                    Log.v(TAG, "ScreenModeExt enableRewindAndForward");
+                }
                 mSeprator = new ImageView(context);
                 // default next screen mode
                 mSeprator.setImageResource(R.drawable.ic_separator_line);
@@ -695,7 +701,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
                 addView(mSeprator, wrapContent);
 
             } else {
-                Log.v(TAG, "ScreenModeExt unenableRewindAndForward");
+                if (LOG) {
+                    Log.v(TAG, "ScreenModeExt unenableRewindAndForward");
+                }
             }
 
             // for screen layout
@@ -782,7 +790,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         private int mTimeBarHeight = 0;
 
         void init(Context context) {
-            Log.v(TAG, "ControllerRewindAndForwardExt init");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt init");
+            }
             mTimeBarHeight = mTimeBar.getPreferredHeight();
             Bitmap button = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.ic_menu_forward);
@@ -834,10 +844,14 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         @Override
         public void onClick(View v) {
             if (v == mStop) {
-                Log.v(TAG, "ControllerRewindAndForwardExt onClick mStop");
+                if (LOG) {
+                    Log.v(TAG, "ControllerRewindAndForwardExt onClick mStop");
+                }
                 mListenerForRewind.onStopVideo();
             } else if (v == mRewind) {
-                Log.v(TAG, "ControllerRewindAndForwardExt onClick mRewind");
+                if (LOG) {
+                    Log.v(TAG, "ControllerRewindAndForwardExt onClick mRewind");
+                }
                 if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault())
                         == View.LAYOUT_DIRECTION_RTL) {
                     mListenerForRewind.onForward();
@@ -845,7 +859,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
                     mListenerForRewind.onRewind();
                 }
             } else if (v == mForward) {
-                Log.v(TAG, "ControllerRewindAndForwardExt onClick mForward");
+                if (LOG) {
+                    Log.v(TAG, "ControllerRewindAndForwardExt onClick mForward");
+                }
                 if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault())
                         == View.LAYOUT_DIRECTION_RTL) {
                     mListenerForRewind.onRewind();
@@ -856,28 +872,38 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         }
 
         public void onStartHiding() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onStartHiding");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onStartHiding");
+            }
             startHideAnimation(mContollerButtons);
         }
 
         public void onCancelHiding() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onCancelHiding");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onCancelHiding");
+            }
             mContollerButtons.setAnimation(null);
         }
 
         public void onHide() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onHide");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onHide");
+            }
             mContollerButtons.setVisibility(View.INVISIBLE);
         }
 
         public void onShow() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onShow: "+mState);
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onShow: " + mState);
+            }
             mContollerButtons.setVisibility(View.VISIBLE);
             updateBackgroundColor();
         }
 
         public void onLayout(int l, int r, int b) {
-            Log.v(TAG, "ControllerRewindAndForwardExt onLayout");
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt onLayout");
+            }
             int cl = (r - l - getAddedRightPadding()) / 2;
             int cr = cl + getAddedRightPadding();
             mContollerButtons.layout(cl, b - mTimeBar.getPreferredHeight(), cr, b);
@@ -889,14 +915,18 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
 
         @Override
         public void setIListener(IRewindAndForwardListener listener) {
-            Log.v(TAG, "ControllerRewindAndForwardExt setIListener " + listener);
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt setIListener " + listener);
+            }
             mListenerForRewind = listener;
         }
 
         @Override
         public void showControllerButtonsView(boolean canStop, boolean canRewind, boolean canForward) {
-            Log.v(TAG, "ControllerRewindAndForwardExt showControllerButtonsView " + canStop
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt showControllerButtonsView " + canStop
                     + canRewind + canForward);
+            }
             // show ui
             mStop.setEnabled(canStop);
             mRewind.setEnabled(canRewind);
@@ -967,7 +997,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
 
         public void setViewEnabled(boolean isEnabled) {
             // TODO Auto-generated method stub
-            Log.v(TAG, "ControllerRewindAndForwardExt setViewEnabled is " + isEnabled);
+            if (LOG) {
+                Log.v(TAG, "ControllerRewindAndForwardExt setViewEnabled is " + isEnabled);
+            }
             mRewind.setEnabled(isEnabled);
             mForward.setEnabled(isEnabled);
         }

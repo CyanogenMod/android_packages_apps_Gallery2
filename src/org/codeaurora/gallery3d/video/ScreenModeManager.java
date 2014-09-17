@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ScreenModeManager {
     private static final String TAG = "ScreenModeManager";
-    private static final boolean LOG = true;
+    private static final boolean LOG = false;
     //support screen mode.
     public static final int SCREENMODE_BIGSCREEN = 1;
     public static final int SCREENMODE_FULLSCREEN = 2;
