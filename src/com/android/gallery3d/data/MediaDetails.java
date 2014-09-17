@@ -17,15 +17,11 @@
 package com.android.gallery3d.data;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.exif.ExifTag;
-import com.android.gallery3d.exif.Rational;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -50,15 +46,16 @@ public class MediaDetails implements Iterable<Entry<Integer, Object>> {
     public static final int INDEX_SIZE = 10;
 
     // for EXIF
-    public static final int INDEX_MAKE = 100;
-    public static final int INDEX_MODEL = 101;
-    public static final int INDEX_FLASH = 102;
-    public static final int INDEX_FOCAL_LENGTH = 103;
-    public static final int INDEX_WHITE_BALANCE = 104;
-    public static final int INDEX_APERTURE = 105;
-    public static final int INDEX_SHUTTER_SPEED = 106;
-    public static final int INDEX_EXPOSURE_TIME = 107;
-    public static final int INDEX_ISO = 108;
+    public static final int INDEX_DATETIME_ORIGINAL = 100;
+    public static final int INDEX_MAKE = 101;
+    public static final int INDEX_MODEL = 102;
+    public static final int INDEX_FLASH = 103;
+    public static final int INDEX_FOCAL_LENGTH = 104;
+    public static final int INDEX_WHITE_BALANCE = 105;
+    public static final int INDEX_APERTURE = 106;
+    public static final int INDEX_SHUTTER_SPEED = 107;
+    public static final int INDEX_EXPOSURE_TIME = 108;
+    public static final int INDEX_ISO = 109;
 
     // Put this last because it may be long.
     public static final int INDEX_PATH = 200;
@@ -148,6 +145,12 @@ public class MediaDetails implements Iterable<Entry<Integer, Object>> {
                 MediaDetails.INDEX_WIDTH);
         setExifData(details, exif.getTag(ExifInterface.TAG_IMAGE_LENGTH),
                 MediaDetails.INDEX_HEIGHT);
+        ExifTag recordTag = exif.getTag(ExifInterface.TAG_DATE_TIME_ORIGINAL);
+        if (recordTag == null)
+            recordTag = exif.getTag(ExifInterface.TAG_DATE_TIME_DIGITIZED);
+        if (recordTag == null)
+            recordTag = exif.getTag(ExifInterface.TAG_DATE_TIME);
+        setExifData(details, recordTag, MediaDetails.INDEX_DATETIME_ORIGINAL);
         setExifData(details, exif.getTag(ExifInterface.TAG_MAKE),
                 MediaDetails.INDEX_MAKE);
         setExifData(details, exif.getTag(ExifInterface.TAG_MODEL),
