@@ -40,7 +40,7 @@
     <string name="menu_settings" msgid="6428291655769260831">"सेटिंग"</string>
     <string name="unsaved" msgid="8704442449002374375">"इस चित्र में न सहेजे गए बदलाव हैं."</string>
     <string name="save_before_exit" msgid="2680660633675916712">"क्या आप बाहर निकलने के पहले सहेजना चाहते हैं?"</string>
-    <string name="save_and_exit" msgid="3628425023766687419">"सहेजें और बाहर निकलें"</string>
+    <string name="save_and_exit" msgid="3628425023766687419">"जोड़ें और बाहर निकलें"</string>
     <string name="save_and_processing" msgid="6371565035837463194">"पूर्ण रिज़ॉल्यूशन चित्र प्रोसेस हो रहा है..."</string>
     <string name="exit" msgid="242642957038770113">"बाहर निकलें"</string>
     <string name="history" msgid="455767361472692409">"इतिहास"</string>
@@ -131,7 +131,7 @@
     <string name="state_panel_result" msgid="318640531123298676">"परिणाम"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"चित्र सहेजा जा रहा है"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"प्रोसस हो रहा है..."</string>
-    <string name="filtershow_save_preset" msgid="3933550455577927439">"वर्तमान प्रीसेट सहेजें"</string>
+    <string name="filtershow_save_preset" msgid="3933550455577927439">"वर्तमान प्रीसेट जोड़ें"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"उपयोगकर्ता प्रीसेट प्रबंधित करें"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"नया प्रीसेट"</string>
     <string name="filtershow_preset_name" msgid="7015939727047649866">"नाम प्रीसेट करें"</string>
