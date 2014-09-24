@@ -43,15 +43,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="speaker_off">Speaker OFF</string>
     <string name="speaker_need_headset">Plug in headphones to use this feature.</string>
     <string name="single_track">"Single track"</string>
-    <string name="media_detail">"Media details"</string>
     <string name="input_url">"Enter URL"</string>
     <string name="streaming_settings">"Streaming settings"</string>
     <string name="next">"Next"</string>
     <string name="previous">"Previous"</string>
 
     <string name="rtp_rtcp">RTP/RTCP</string>
-    <string name="min_port">Min port:</string>
-    <string name="max_port">Max port:</string>
     <string name="buffer_size">Buffer size</string>
     <string name="apn">Preferred APN</string>
     <string name="rtp_min_port">Min port</string>
