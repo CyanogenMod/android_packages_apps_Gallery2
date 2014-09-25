@@ -348,9 +348,9 @@ public class SaveImage {
         // newSourceUri is then pointing to the new location.
         // If no file is moved, newSourceUri will be the same as mSourceUri.
         Uri newSourceUri = mSourceUri;
-        if (!flatten) {
-            newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile);
-        }
+        /*
+         * if (!flatten) { newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile); }
+         */
 
         Uri savedUri = mSelectedImageUri;
         if (mPreviewImage != null) {
@@ -382,7 +382,7 @@ public class SaveImage {
                     // After this call, mSelectedImageUri will be actually
                     // pointing at the new file mDestinationFile.
                     savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
-                            mDestinationFile, time, !flatten);
+                            mDestinationFile, time, false);
                 }
             }
             if (mCallback != null) {
