@@ -48,7 +48,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="next">"Next"</string>
     <string name="previous">"Previous"</string>
 
-    <string name="rtp_rtcp">RTP/RTCP</string>
+    <string name="rtp_rtcp" translatable="false">RTP/RTCP</string>
     <string name="buffer_size">Buffer size</string>
     <string name="apn">Preferred APN</string>
     <string name="rtp_min_port">Min port</string>
