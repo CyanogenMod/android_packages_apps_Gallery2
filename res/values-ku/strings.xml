@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">پیشەنگا</string>
+  <string name="app_name">پێشەنگا</string>
   <string name="gadget_title">چوارچێوه‌ی وێنه‌</string>
   <string name="details_ms">%1$02d:%2$02d</string>
   <string name="details_hms">%1$d:%2$02d:%3$02d</string>
@@ -123,7 +123,7 @@
   <string name="orientation">باری پیشاندان</string>
   <string name="duration">ماوه‌</string>
   <string name="mimetype">جۆری MIME</string>
-  <string name="file_size">قەبارەی فایل</string>
+  <string name="file_size">قەبارەی پەڕگە</string>
   <string name="maker">دروستکەر</string>
   <string name="model">مۆدێل</string>
   <string name="flash">فلاش</string>
@@ -200,12 +200,6 @@
   <string name="pano_progress_text">کارپێکردنی پانۆراما</string>
   <string name="save" msgid="8140440041190264400">پاشەکەوت</string>
   <string name="ingest_scanning" msgid="2048262851775139720">پشكنینی ناوه‌ڕۆك...</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="one">%1$d دانه‌ پشکنران</item>
-    <item quantity="other">%1$d دانه‌ پشکنران
-
-%1$d دانه‌ پشکنران</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">جیاكردنه‌وه‌...</string>
   <string name="ingest_scanning_done">پشكنین ته‌واو بوو</string>
   <string name="ingest_importing">دانان...</string>
