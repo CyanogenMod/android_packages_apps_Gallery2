@@ -202,10 +202,6 @@
   <string name="pano_progress_text">Creando panorámica...</string>
   <string name="save" msgid="8140440041190264400">Guardar</string>
   <string name="ingest_scanning" msgid="2048262851775139720">Analizando conteníu...</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="one">%1$d elementu analizáu</item>
-    <item quantity="other">%1$d elementos analizaos</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">Ordenando...</string>
   <string name="ingest_scanning_done">Análisis completu</string>
   <string name="ingest_importing">Importando...</string>
