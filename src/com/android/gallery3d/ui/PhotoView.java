@@ -23,7 +23,6 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Message;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateInterpolator;
@@ -1071,7 +1070,7 @@ public class PhotoView extends GLView {
                 delta = delta > 0 ? maxScrollDistance : -maxScrollDistance;
             } else {
                 delta = maxScrollDistance *
-                        FloatMath.sin((delta / size) * (float) (Math.PI / 2));
+                        (float) Math.sin((delta / size) * (Math.PI / 2));
             }
             return (int) (delta + 0.5f);
         }
