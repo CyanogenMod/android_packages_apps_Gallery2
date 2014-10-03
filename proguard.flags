@@ -3,6 +3,7 @@
 
 #Avoid the library class dependency error
 -dontwarn android.view.inputmethod.InputMethodManager
+-dontwarn android.content.res.Resources
 
 # Keep all classes extended from com.android.gallery3d.common.Entry
 # Since we annotate on the fields and use reflection to create SQL
