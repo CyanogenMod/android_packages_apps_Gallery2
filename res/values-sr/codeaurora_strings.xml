@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Подешавања streaming-а"</string>
   <string name="next">"Следеће"</string>
   <string name="previous">"Претходно"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Величина buffer-а</string>
   <string name="apn">Жељени APN</string>
   <string name="rtp_min_port">Мин. порт</string>

@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"ප්‍රවාහන සැකසීම්"</string>
   <string name="next">"ඊළඟ"</string>
   <string name="previous">"පෙර"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">බෆර ප්‍රමාණය</string>
   <string name="apn">වඩා ලැදි APN ය</string>
   <string name="rtp_min_port">අවම තොට</string>

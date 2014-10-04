@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Nastavenia streamovania"</string>
   <string name="next">"Ďalšie"</string>
   <string name="previous">"Predchádzajúce"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Veľkosť vyrovnávacej pamäte</string>
   <string name="apn">Uprednostňovaný prístupový bod</string>
   <string name="rtp_min_port">Minimálny port</string>

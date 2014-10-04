@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Akış ayarları"</string>
   <string name="next">"Sonraki"</string>
   <string name="previous">"Önceki"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Ara bellek boyutu</string>
   <string name="apn">Tercih edilen APN</string>
   <string name="rtp_min_port">Min bağlantı noktası</string>

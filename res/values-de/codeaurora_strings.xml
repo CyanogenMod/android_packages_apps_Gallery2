@@ -38,7 +38,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_need_headset">Für diese Funktionen müssen Sie Kopfhörer verwenden.</string>
   <string name="input_url">"Geben Sie eine URL ein"</string>
   <string name="streaming_settings">"Streaming-Einstellungen"</string>
+  <string name="buffer_size">Puffergröße</string>
+  <string name="apn">Bevorzugter APN</string>
+  <string name="set_apn">Bevorzugten APN wählen</string>
+  <string name="setting">Einstellungen</string>
   <string name="server_timeout_title">"Zeitüberschreitung beim Server"</string>
+  <string name="media_controller_live">Live</string>
   <string name="media_controller_connecting">Verbinde\u2026</string>
   <string name="bookmark_add">"Lesezeichen hinzufügen"</string>
   <string name="bookmark_display">"Lesezeichen anzeigen"</string>

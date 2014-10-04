@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Pengaturan streaming"</string>
   <string name="next">"Berikutnya"</string>
   <string name="previous">"Sebelumnya"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Ukuran buffer</string>
   <string name="apn">Pilihan APN</string>
   <string name="rtp_min_port">Port min</string>

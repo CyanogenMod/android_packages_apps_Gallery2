@@ -42,9 +42,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="single_track">"Traccia singola"</string>
   <string name="input_url">"Inserisci URL"</string>
   <string name="streaming_settings">"Impostazioni streaming"</string>
-  <string name="next">"Prossimo"</string>
+  <string name="next">"Successivo"</string>
   <string name="previous">"Precedente"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Dimensione buffer</string>
   <string name="apn">APN preferito</string>
   <string name="rtp_min_port">Porta min</string>
@@ -70,7 +69,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Posizione"</string>
   <string name="delete_all">"Elimina tutto"</string>
   <string name="default_title">"Titolo predefinito"</string>
-  <string name="mute_nosupport">Impossibile disattivare audio: video non supportato</string>
+  <string name="mute_nosupport">Impossibile disattivare l\'audio: video non supportato</string>
   <string name="fail_trim">Questo file video non può essere tagliato</string>
   <string name="bass_boost_strength">Amplificazione bassi</string>
   <string name="virtualizer_strength">Effetto 3D</string>

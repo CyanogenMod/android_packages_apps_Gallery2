@@ -29,14 +29,28 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="step_option_name">Étape</string>
   <string name="step_option_alternate">5 secondes</string>
   <string name="step_option_default">10 secondes</string>
+  <string name="single">"Simple"</string>
   <string name="stereo">"Stéréo"</string>
+  <string name="input_url">"Saisir l'URL"</string>
+  <string name="streaming_settings">"Paramètres de transmission"</string>
   <string name="next">"Suivant"</string>
   <string name="previous">"Précédent"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="apn">APN préféré</string>
+  <string name="set_apn">Sélectionner l\'APN préféré</string>
+  <string name="setting">Paramètres</string>
+  <string name="media_controller_live">En direct</string>
+  <string name="media_controller_playing">Lecture</string>
+  <string name="media_controller_connecting">Connexion\u2026</string>
   <string name="bookmark_title">"Titre"</string>
+  <string name="bookmark_location">"Localisation"</string>
   <string name="delete_all">"Tout supprimer"</string>
   <string name="default_title">"Titre par défaut"</string>
+  <string name="bass_boost_strength">Amplification des basses</string>
+  <string name="virtualizer_strength">Effet 3D</string>
+  <string name="audio_effects">Effets audio</string>
+  <string name="headset_plug">Brancher un casque pour ces effets.</string>
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
 </resources>

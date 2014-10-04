@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Definições de transmissão"</string>
   <string name="next">"Próximo"</string>
   <string name="previous">"Anterior"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Tamanho do buffer</string>
   <string name="apn">APN preferida</string>
   <string name="rtp_min_port">Porta mínima</string>
