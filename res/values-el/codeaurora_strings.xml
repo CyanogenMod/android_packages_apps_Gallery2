@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Ρυθµίσεις ροής"</string>
   <string name="next">"Επόμενο"</string>
   <string name="previous">"Προηγούμενο"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Μέγεθος buffer</string>
   <string name="apn">Προτιμώμενο APN</string>
   <string name="rtp_min_port">Ελάχιστη θύρα</string>

@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"ตั้งค่าสตรีมมิ่ง"</string>
   <string name="next">"ถัดไป"</string>
   <string name="previous">"ก่อนหน้า"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">ขนาดของบัฟเฟอร์</string>
   <string name="apn">APN ที่ต้องการ</string>
   <string name="rtp_min_port">พอร์ตต่ำสุด</string>

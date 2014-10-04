@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Ajustaments del flux de dades"</string>
   <string name="next">"Següent"</string>
   <string name="previous">"Anterior"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Mida del buffer</string>
   <string name="apn">APN preferida</string>
   <string name="rtp_min_port">Port min</string>

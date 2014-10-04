@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Suoratoistoasetukset"</string>
   <string name="next">"Seuraava"</string>
   <string name="previous">"Edellinen"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Puskurin koko</string>
   <string name="apn">Ensisijainen APN</string>
   <string name="rtp_min_port">Min port</string>

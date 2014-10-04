@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Stroom instellings"</string>
   <string name="next">"Volgende"</string>
   <string name="previous">"Vorige"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Buffer grootte</string>
   <string name="apn">Voorkeur TPN</string>
   <string name="rtp_min_port">Min poort</string>

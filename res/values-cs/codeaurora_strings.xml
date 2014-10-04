@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Nastavení pro datové toky"</string>
   <string name="next">"Další"</string>
   <string name="previous">"Předchozí"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Velikost vyrovnávací paměti</string>
   <string name="apn">Upřednostňované APN</string>
   <string name="rtp_min_port">Min. č. portu</string>

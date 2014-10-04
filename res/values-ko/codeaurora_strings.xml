@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"스트리밍 설정"</string>
   <string name="next">"다음"</string>
   <string name="previous">"이전"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">버퍼 크기</string>
   <string name="apn">선호 APN</string>
   <string name="rtp_min_port">최저 포트</string>

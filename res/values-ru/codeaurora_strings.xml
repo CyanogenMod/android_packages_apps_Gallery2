@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Настройки потоковой передачи"</string>
   <string name="next">"След. трек"</string>
   <string name="previous">"Пред. трек"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Размер буфера</string>
   <string name="apn">Точка доступа по умолчанию</string>
   <string name="rtp_min_port">Мин. порт</string>

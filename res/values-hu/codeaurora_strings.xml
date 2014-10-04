@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Műsorszórás beállításai"</string>
   <string name="next">"Következő"</string>
   <string name="previous">"Előző"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Bufferméret</string>
   <string name="apn">Előnyben részesített APN</string>
   <string name="rtp_min_port">Min port</string>

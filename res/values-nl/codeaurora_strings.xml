@@ -31,8 +31,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="step_option_name">Stap</string>
   <string name="step_option_desc">Stapgrootte vooruitspoelen/terugspoelen aanpassen</string>
-  <string name="step_option_alternate">5 seconden</string>
-  <string name="step_option_default">10 seconden</string>
+  <string name="step_option_alternate">5 sec.</string>
+  <string name="step_option_default">10 sec.</string>
   <string name="loop">"Herhalen"</string>
   <string name="single">"Enkel"</string>
   <string name="stereo">"Stereo"</string>
@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Instellingen voor streaming"</string>
   <string name="next">"Volgende"</string>
   <string name="previous">"Vorige"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Buffergrootte</string>
   <string name="apn">Voorkeurs-APN</string>
   <string name="rtp_min_port">Min. poort</string>

@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"流媒体设置"</string>
   <string name="next">"下一个"</string>
   <string name="previous">"上一个"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">缓冲大小</string>
   <string name="apn">首选 APN</string>
   <string name="rtp_min_port">最小端口</string>

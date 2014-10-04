@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"ストリーミングの設定"</string>
   <string name="next">"次へ"</string>
   <string name="previous">"前へ"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">バッファサイズ</string>
   <string name="apn">優先APN</string>
   <string name="rtp_min_port">最小ポート</string>

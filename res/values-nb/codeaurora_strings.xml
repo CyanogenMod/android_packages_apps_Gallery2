@@ -44,7 +44,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="streaming_settings">"Streaming innstillinger"</string>
   <string name="next">"Neste"</string>
   <string name="previous">"Forrige"</string>
-  <string name="rtp_rtcp">RTP/RTCP</string>
   <string name="buffer_size">Buffer Størrelse</string>
   <string name="apn">Foretrukket APN</string>
   <string name="rtp_min_port">Min port</string>
