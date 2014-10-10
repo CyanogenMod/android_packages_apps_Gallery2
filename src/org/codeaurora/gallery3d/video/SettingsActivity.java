@@ -64,6 +64,8 @@ public class SettingsActivity extends PreferenceActivity {
     private static final Uri    PREFERAPN_URI = Uri.parse(PREFERRED_APN_URI);
     private static final int    COLUMN_ID_INDEX = 0;
     private static final int    NAME_INDEX = 1;
+    private static final String RTP_PORTS_PROPERTY_NAME = "persist.env.media.rtp-ports";
+    private static final String CACHE_PROPERTY_NAME = "persist.env.media.cache-params";
 
     private boolean mUseNvOperatorForEhrpd = SystemProperties.getBoolean(
             "persist.radio.use_nv_for_ehrpd", false);
@@ -203,40 +205,28 @@ public class SettingsActivity extends PreferenceActivity {
                 Integer.toString(DEFAULT_RTP_MINPORT));
         final String rtpMaxPortStr = mPref.getString(PREFERENCE_RTP_MAXPORT,
                 Integer.toString(DEFAULT_RTP_MAXPORT));
-        final String CLASS_NAME    = "com.android.settings.StreamingSettingsEnablerActivity";
-        final int rtpMinPort;
-        final int rtpMaxPort;
-        try {
-            rtpMinPort = Integer.valueOf(rtpMinPortStr);
-            rtpMaxPort = Integer.valueOf(rtpMaxPortStr);
-        } catch (NumberFormatException e) {
-            Log.e(LOG_TAG, "Failed to parse rtp ports");
-            return;
-        }
-        Intent intent = new Intent();
-        intent.setClassName(PACKAGE_NAME, CLASS_NAME);
-        intent.putExtra(PREFERENCE_RTP_MINPORT, rtpMinPort);
-        intent.putExtra(PREFERENCE_RTP_MAXPORT, rtpMaxPort);
-        startActivity(intent);
+        // System property format: "rtpMinPort/rtpMaxPort"
+        final String propertyValue = rtpMinPortStr + "/" + rtpMaxPortStr;
+        Log.v(LOG_TAG, "set system property " + RTP_PORTS_PROPERTY_NAME + " : " + propertyValue);
+        SystemProperties.set(RTP_PORTS_PROPERTY_NAME, propertyValue);
     }
 
     private void enableBufferSetting() {
         final String bufferSizeStr = mPref.getString(PREFERENCE_BUFFER_SIZE, 
                 Integer.toString(DEFAULT_CACHE_MAX_SIZE));
-        final String CLASS_NAME    = "com.android.settings.StreamingSettingsEnablerActivity";
         final int cacheMaxSize;
+        final String ACTION_NAME = "org.codeaurora.gallery3d.video.STREAMING_SETTINGS_ENABLER";
         try {
             cacheMaxSize = Integer.valueOf(bufferSizeStr);
         } catch (NumberFormatException e) {
             Log.e(LOG_TAG, "Failed to parse cache max size");
             return;
         }
-        Intent intent = new Intent();
-        intent.setClassName(PACKAGE_NAME, CLASS_NAME);
-        intent.putExtra(PREFERENCE_CACHE_MIN_SIZE, DEFAULT_CACHE_MIN_SIZE);
-        intent.putExtra(PREFERENCE_CACHE_MAX_SIZE, cacheMaxSize);
-        intent.putExtra(PREFERENCE_KEEP_ALIVE_INTERVAL_SECOND, DEFAULT_KEEP_ALIVE_INTERVAL_SECOND);
-        startActivity(intent);
+        // System property format: "minCacheSizeKB/maxCacheSizeKB/keepAliveIntervalSeconds"
+        final String propertyValue = (DEFAULT_CACHE_MIN_SIZE / 1024) + "/" +
+                (cacheMaxSize / 1024) + "/" + DEFAULT_KEEP_ALIVE_INTERVAL_SECOND;
+        Log.v(LOG_TAG, "set system property " + CACHE_PROPERTY_NAME + " : " + propertyValue);
+        SystemProperties.set(CACHE_PROPERTY_NAME, propertyValue);
     }
     
     private void setPreferenceListener(final int which, final EditTextPreference etp) {
@@ -295,16 +285,14 @@ public class SettingsActivity extends PreferenceActivity {
     }
     
     private void setApnListener() {
-        final String CLASS_NAME    = "com.android.settings.ApnSettings";
+        final String ACTION_NAME = "android.settings.APN_SETTINGS";
         mApn.setSummary(getDefaultApnName());
         mApn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent();
-                intent.setClassName(PACKAGE_NAME, CLASS_NAME);
+                Intent intent = new Intent(ACTION_NAME);
                 startActivityForResult(intent, SELECT_APN);
                 return true;
             }
         });
     }
-
 }
