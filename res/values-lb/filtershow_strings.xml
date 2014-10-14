@@ -22,6 +22,7 @@
   <string name="original">Original</string>
   <string name="borders" msgid="4461692156695893616">Borden</string>
   <string name="custom_border">Personaliséiert</string>
+  <string name="filtershow_undo">Réckgängeg maachen</string>
   <string name="filtershow_redo">Widderhuelen</string>
   <string name="export_image">Exportéieren</string>
   <string name="print_image">Drécken</string>
@@ -43,11 +44,15 @@
   <string name="aspectNone_effect">Keen</string>
   <string name="aspectOriginal_effect">@string/original</string>
   <string name="exposure" msgid="1229093066434614811">Beliichtung</string>
+  <string name="contrast">Kontrast</string>
   <string name="vignette_exposure">Beliichtung</string>
+  <string name="vignette_contrast">Kontrast</string>
   <string name="crop" msgid="5584000454518174632">Schneiden</string>
   <string name="rotate" msgid="460017689320955494">Rotéieren</string>
+  <string name="negative">Negativ</string>
   <string name="none" msgid="3601545724573307541">Keen</string>
   <string name="editor_grad_brightness">Hellegkeet</string>
+  <string name="editor_grad_contrast">Kontrast</string>
   <string name="editor_chan_sat_main">Haapt</string>
   <string name="editor_grad_style">Stil</string>
   <string name="draw_style">Stil</string>

@@ -20,12 +20,23 @@
   <string name="details_ms">%1$02d:%2$02d</string>
   <string name="details_hms">%1$d:%2$02d:%3$02d</string>
   <string name="loading_video">Video gëtt gelueden\u2026</string>
+  <string name="resume_playing_title">Video weiderspillen</string>
+  <string name="resume_playing_message">Bei %s weider ofspillen?</string>
+  <string name="resume_playing_resume">Weider ofspillen</string>
   <string name="loading">Gëtt gelueden\u2026</string>
+  <string name="fail_to_load">Konnt net lueden</string>
   <string name="resume_playing_restart">Vu vir ufänken</string>
   <string name="crop_save_text">OK</string>
   <string name="ok">OK</string>
   <string name="multiface_crop_help">E Gesiicht drécke fir unzefänken.</string>
+  <string name="saving_image">Bild gëtt gespäichert\u2026</string>
+  <string name="filtershow_saving_image">D\'Bild gëtt an den Album <xliff:g id="album_name">%1$s</xliff:g> gespäichert\u2026</string>
+  <string name="save_error">Konnt dat geschniddent Bild net späicheren.</string>
+  <string name="crop_label">Bild schneiden</string>
+  <string name="trim_label">Video kierzen</string>
   <string name="select_image">Foto auswielen</string>
+  <string name="select_item">Element auswielen</string>
+  <string name="select_album">Album auswielen</string>
   <string name="select_group">Grupp auswielen</string>
   <string name="set_image">Bild setzen als</string>
   <string name="set_wallpaper">Hannergrondbild setzen</string>
@@ -35,13 +46,18 @@
     <item quantity="one">Ausgewielt Element läschen?</item>
     <item quantity="other">Ausgewielt Elementer läschen?</item>
   </plurals>
+  <string name="cancel">Ofbriechen</string>
+  <string name="share">Deelen</string>
   <string name="share_panorama">Panorama deelen</string>
   <string name="share_as_photo">Als Foto deelen</string>
   <string name="deleted">Geläscht</string>
   <string name="undo">RÉCKGÄNGEG</string>
+  <string name="select_all">All auswielen</string>
+  <string name="slideshow">Diashow</string>
   <string name="details">Detailer</string>
   <string name="details_title">%1$d / %2$d Elementer:</string>
   <string name="close">Zoumaachen</string>
+  <string name="switch_to_camera">Op d\'Kamera wiesselen</string>
   <plurals name="number_of_items_selected">
     <item quantity="one">%1$d ausgewielt</item>
     <item quantity="other">%1$d ausgewielt</item>
@@ -57,20 +73,33 @@
   <string name="show_on_map">Op der Kaart weisen</string>
   <string name="rotate_left">Lénks rotéieren</string>
   <string name="rotate_right">Riets rotéieren</string>
+  <string name="no_such_item">Konnt d\'Element net fannen.</string>
+  <string name="process_caching_requests">Tëschespäicherungsufroe gi veraarbecht</string>
+  <string name="caching_label">Tëschespäicherung leeft\u2026</string>
   <string name="crop_action">Schneiden</string>
   <string name="trim_action">Trimmen</string>
   <string name="mute_action">Stomm</string>
   <string name="set_as">Setzen als</string>
+  <string name="video_mute_err">Kann de Video net stommschalten.</string>
   <string name="video_err">Video kann net ofgespillt ginn.</string>
+  <string name="group_by_location">No Plaz</string>
+  <string name="group_by_faces">No Leit</string>
   <string name="group_by_size">No Gréisst</string>
+  <string name="no_location">Keng Plaz</string>
+  <string name="show_images_only">Just Biller</string>
+  <string name="show_videos_only">Just Videoen</string>
+  <string name="show_all">Biller a Videoen</string>
   <string name="crop_saved">
         Geschniddent Bild gespäichert ënner <xliff:g id="folder_name">%s</xliff:g>.</string>
+  <string name="empty_album">O Biller/Videoen disponibel.</string>
+  <string name="make_available_offline">Offline disponibel maachen</string>
+  <string name="sync_picasa_albums">Nei lueden</string>
   <string name="done">Fäerdeg</string>
   <string name="sequence_in_set">%1$d / %2$d Elementer:</string>
   <string name="title">Titel</string>
   <string name="description">Beschreiwung</string>
   <string name="time">Zäit</string>
-  <string name="location">Lokaliséierung</string>
+  <string name="location">Standuert</string>
   <string name="path">Pad</string>
   <string name="width">Breet</string>
   <string name="height">Héicht</string>
@@ -92,24 +121,52 @@
   <string name="flash_on">Blëtz ausgeléist</string>
   <string name="flash_off">Kee Blëtz</string>
   <string name="unknown">Onbekannt</string>
+  <string name="ffx_original">Original</string>
+  <string name="ffx_punch">Punch</string>
+  <string name="ffx_x_process">X Process</string>
+  <string name="ffx_washout">Latte</string>
+  <string name="ffx_washout_color">Litho</string>
   <string name="try_to_set_local_album_available_offline">Dëst Element ass lokal gespäichert an och offiline disponibel.</string>
+  <string name="slideshow_dream_name">Diashow</string>
   <string name="people">Leit</string>
   <string name="settings">Astellungen</string>
+  <string name="add_account">Kont dobäisetzen</string>
   <string name="folder_camera">Fotoapparat</string>
+  <string name="folder_download">Eroflueden</string>
+  <string name="folder_edited_online_photos">Beaarbecht Online-Fotoen</string>
+  <string name="folder_imported">Importéiert</string>
+  <string name="folder_screenshot">Schiermfoto</string>
   <string name="help">Hëllef</string>
+  <string name="no_external_storage_title">Kee Späicher</string>
+  <string name="no_external_storage">Keen externe Späicher disponibel</string>
   <string name="switch_photo_filmstrip">Als Filmsträif uweisen</string>
   <string name="switch_photo_grid">Gitterusiicht</string>
+  <string name="switch_photo_fullscreen">Vollschierm-Usiicht</string>
+  <string name="trimming">Gëtt geschnidden</string>
+  <string name="muting">Toun gëtt ausgeschalt</string>
   <string name="please_wait">W.e.g. waarden</string>
+  <string name="save_into">De Video gëtt an den Album <xliff:g id="album_name">%1$s</xliff:g> gespäichert\u2026</string>
+  <string name="trim_too_short">Kann net kierzen: den Zilvideo ass ze kuerz</string>
   <string name="pano_progress_text">Panorama gëtt gerendert</string>
   <string name="save" msgid="8140440041190264400">Späicheren</string>
+  <string name="ingest_scanning" msgid="2048262851775139720">Inhalt gëtt gescannt...</string>
+  <plurals name="ingest_number_of_items_scanned">
+    <item quantity="one">%1$d Element gescannt</item>
+    <item quantity="other">%1$d Elementer gescannt</item>
+  </plurals>
+  <string name="ingest_no_device">Et si keng MTP-Apparater connectéiert</string>
   <string name="camera_error_title">Kamerafeeler</string>
   <string name="cannot_connect_camera">Keng Connectioun zur Kamera méiglech.</string>
   <string name="camera_disabled">D\'Kamera gouf wéinst Sécherheetsriichtlinnen deaktivéiert.</string>
   <string name="camera_label">Fotoapparat</string>
   <string name="wait">Waart w.e.g.\u2026</string>
   <string name="no_storage" product="default">Maach eng SD-Kaart dran ier s du d\'Kamera benotzt.</string>
+  <string name="preparing_sd" product="nosdcard">USB-Späicher gëtt preparéiert\u2026</string>
   <string name="preparing_sd" product="default">SD-Kaart gëtt preparéiert\u2026</string>
+  <string name="access_sd_fail" product="nosdcard">Kann net op den USB-Späicher zougräifen.</string>
   <string name="access_sd_fail" product="default">Keen Zougrëff op USB-Späicher méiglech.</string>
+  <string name="review_cancel">OFBRIECHEN</string>
+  <string name="review_ok">FÄERDEG</string>
   <string name="time_lapse_title">Zäitrafferopnam</string>
   <string name="pref_camera_id_title">Kamera wielen</string>
   <string name="pref_camera_id_entry_back">Zréck</string>
@@ -123,6 +180,7 @@
   </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">Piipse während dem Countdown</string>
+  <string name="setting_off">Aus</string>
   <string name="setting_on">Un</string>
   <string name="pref_video_quality_title">Videoqualitéit</string>
   <string name="pref_video_quality_entry_high">Héich</string>
@@ -153,6 +211,7 @@
   <string name="pref_camera_flashmode_label">BLËTZMODUS</string>
   <string name="pref_camera_flashmode_entry_auto">Automatesch</string>
   <string name="pref_camera_flashmode_entry_on">Un</string>
+  <string name="pref_camera_flashmode_entry_off">Aus</string>
   <string name="pref_camera_flashmode_label_auto">BLËTZ AUTO</string>
   <string name="pref_camera_flashmode_label_on">BLËTZ UN</string>
   <string name="pref_camera_flashmode_label_off">BLËTZ AUS</string>
@@ -180,6 +239,7 @@
   <string name="pref_camera_scenemode_label_night">NUECHT</string>
   <string name="pref_camera_scenemode_label_sunset">SONNENËNNERGANK</string>
   <string name="pref_camera_scenemode_label_party">PARTY</string>
+  <string name="pref_camera_countdown_label">SANDAUER</string>
   <string name="pref_camera_countdown_label_off">TIMER AUS</string>
   <string name="pref_camera_countdown_label_one">1 SEKONN</string>
   <string name="pref_camera_countdown_label_three">3 SEKONNEN</string>
@@ -193,6 +253,7 @@
   <string name="pref_camera_id_label_back">VIISCHT KAMERA</string>
   <string name="pref_camera_id_label_front">HËNNESCHT KAMERA</string>
   <string name="dialog_ok">OK</string>
+  <string name="spaceIsLow_content" product="nosdcard">Däin USB-Späicher huet geschwë keng Plaz méi. Änner d\'Qualitéitsastellungen oder läsch e puer Fotoen oder aner Fichieren.</string>
   <string name="spaceIsLow_content" product="default">Deng SD-Kaart huet geschwë keng Plaz méi. Änner d\'Qualitéitsastellungen oder läsch e puer Fotoen oder Fichieren.</string>
   <string name="video_reach_size_limit">Limittgréisst ass erreecht.</string>
   <string name="pano_too_fast_prompt">Ze séier</string>
@@ -201,6 +262,7 @@
   <string name="pano_dialog_title">Panorama</string>
   <string name="pano_capture_indication">Panorama gëtt opgeholl</string>
   <string name="pano_dialog_waiting_previous">Waarden op dee Panorama virdrun</string>
+  <string name="pano_review_saving_indication_str">Gëtt gespäichert\u2026</string>
   <string name="pano_review_rendering">Panorama gëtt gerendert</string>
   <string name="tap_to_focus">Drécke fir schaarf ze stellen.</string>
   <string name="pref_video_effect_title">Effekter</string>
@@ -230,6 +292,7 @@
   <string name="accessibility_review_ok">Iwwerpréiwung ofgeschloss</string>
   <string name="accessibility_review_retake">Iwwerpréiwung - Nei Ophuelen</string>
   <string name="capital_on">UN</string>
+  <string name="pref_video_time_lapse_frame_interval_off">Aus</string>
   <string name="pref_video_time_lapse_frame_interval_500">0,5 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_1500">1,5 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_2000">2 Sekonnen</string>
