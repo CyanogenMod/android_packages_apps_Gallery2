@@ -362,7 +362,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         // padding is changed
         if (enableRewindAndForward) {
             mBackground.layout(0, y - mTimeBar.getPreferredHeight() - 80, w, y);
-            mTimeBar.layout(pl, y - mTimeBar.getPreferredHeight() - 80, w - pr,
+            mTimeBar.layout(pl, y - mTimeBar.getPreferredHeight() - 120, w - pr,
                     y - mTimeBar.getBarHeight());
             mControllerRewindAndForwardExt.onLayout(0, width, y);
         } else {
