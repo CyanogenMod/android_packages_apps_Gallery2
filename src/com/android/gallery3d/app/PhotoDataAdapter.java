@@ -20,15 +20,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapRegionDecoder;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
 
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.CameraShortcutImage;
 import com.android.gallery3d.data.ContentListener;
 import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.data.SnailItem;
 import com.android.gallery3d.glrenderer.TiledTexture;
 import com.android.gallery3d.ui.PhotoView;
 import com.android.gallery3d.ui.ScreenNail;
@@ -49,6 +53,7 @@ import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.Locale;
 
 public class PhotoDataAdapter implements PhotoPage.Model {
     @SuppressWarnings("unused")
@@ -154,6 +159,9 @@ public class PhotoDataAdapter implements PhotoPage.Model {
     private boolean mNeedFullImage;
     private int mFocusHintDirection = FOCUS_HINT_NEXT;
     private Path mFocusHintPath = null;
+
+    // If Bundle is from widget, it's true, otherwise it's false.
+    private boolean mIsFromWidget = false;
 
     public interface DataListener extends LoadingListener {
         public void onPhotoChanged(int index, Path item);
@@ -290,6 +298,13 @@ public class PhotoDataAdapter implements PhotoPage.Model {
 
     public void setDataListener(DataListener listener) {
         mDataListener = listener;
+    }
+
+    /**
+     * Set this to true if it is from widget.
+     */
+    public void setFromWidget(boolean isFromWidget) {
+        mIsFromWidget = isFromWidget;
     }
 
     private void updateScreenNail(Path path, Future<ScreenNail> future) {
@@ -658,6 +673,31 @@ public class PhotoDataAdapter implements PhotoPage.Model {
             mContentEnd = end;
             if (mReloadTask != null) mReloadTask.notifyDirty();
         }
+    }
+
+    /**
+     * Update the image window and data window for RTL.
+     */
+    private void updateSlidingWindowForRTL() {
+        // 1. Update the image window
+        int nStart = Utils.clamp(mCurrentIndex - IMAGE_CACHE_SIZE / 2,
+                0, Math.max(0, mSize - IMAGE_CACHE_SIZE));
+        int nEnd = Math.min(mSize, nStart + IMAGE_CACHE_SIZE);
+
+        if (mActiveStart == nStart && mActiveEnd == nEnd) {
+            return; // don't need to refresh
+        }
+
+        mActiveStart = nStart;
+        mActiveEnd = nEnd;
+
+        // 2. Update the data window
+        nStart = Utils.clamp(mCurrentIndex - DATA_CACHE_SIZE / 2,
+                0, Math.max(0, mSize - DATA_CACHE_SIZE));
+        nEnd = Math.min(mSize, nStart + DATA_CACHE_SIZE);
+
+        mContentStart = nStart;
+        mContentEnd = nEnd;
     }
 
     private void updateImageRequests() {
@@ -1040,13 +1080,75 @@ public class PhotoDataAdapter implements PhotoPage.Model {
                 UpdateInfo info = executeAndWait(new GetUpdateInfo());
                 updateLoading(true);
                 long version = mSource.reload();
+
+                // Used for delete photo, RTL need to re-decide the slide range.
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())
+                        && mSource.getCurrectSize() == 1 && mCurrentIndex > 0) {
+                    mCurrentIndex = mCurrentIndex - 1;
+                    mSize = mSource.getMediaItemCount();
+                    updateSlidingWindowForRTL();
+                    info = executeAndWait(new GetUpdateInfo());
+                }
+
                 if (info.version != version) {
                     info.reloadContent = true;
                     info.size = mSource.getMediaItemCount();
                 }
                 if (!info.reloadContent) continue;
-                info.items = mSource.getMediaItem(
-                        info.contentStart, info.contentEnd);
+
+                // Check it is from camera or not
+                boolean isCameraFlag = false;
+                if (mCameraIndex == mCurrentIndex) {
+                    info.items = mSource.getMediaItem(mCameraIndex, 1);
+                    if (info.items.get(0) instanceof CameraShortcutImage
+                            || info.items.get(0) instanceof SnailItem) {
+                        isCameraFlag = true;
+                    }
+                }
+
+                // If RTL, need to descending photos
+                if (!isCameraFlag
+                        && info.contentStart < info.contentEnd
+                        && (View.LAYOUT_DIRECTION_RTL == TextUtils
+                                .getLayoutDirectionFromLocale(Locale.getDefault()))) {
+
+                    // Calculate picture index/range etc..
+                    int nIndex = isCameraFlag ? mCurrentIndex : info.size - mCurrentIndex - 1;
+                    int nStart = Utils.clamp(nIndex - DATA_CACHE_SIZE / 2, 0,
+                            Math.max(0, info.size - DATA_CACHE_SIZE));
+                    info.items = mSource.getMediaItem(nStart, DATA_CACHE_SIZE);
+
+                    // Initialize temporary picture list
+                    ArrayList<MediaItem> mediaItemList = new ArrayList<MediaItem>();
+
+                    // Fetch source, check the first item is camera or not
+                    ArrayList<MediaItem> itemstmpList = mSource.getMediaItem(0, 1);
+                    MediaItem itemstmp = itemstmpList.size() > 0 ? itemstmpList.get(0) : null;
+                    boolean isCameraItem = (itemstmp != null)
+                            && (itemstmp instanceof CameraShortcutImage
+                            || itemstmp instanceof SnailItem);
+                    if (isCameraItem) {
+                        // If it's camera mode, need to put camera to first position
+                        mediaItemList.add(itemstmp);
+                    }
+
+                    // Descending
+                    for (int i = info.items.size() - 1; i >= 0; i--) {
+                        if (isCameraItem && 0 == i) {
+                            continue;
+                        }
+                        mediaItemList.add(info.items.get(i));
+                    }
+                    info.items = (ArrayList<MediaItem>) mediaItemList.clone();
+
+                    // Clear temporary list and free memory immediately
+                    mediaItemList.clear();
+                    mediaItemList = null;
+                } else {
+                    info.items = mSource.getMediaItem(
+                            info.contentStart, info.contentEnd);
+                } // If RTL, need to descending photos end
 
                 int index = MediaSet.INDEX_NOT_FOUND;
 
@@ -1062,7 +1164,15 @@ public class PhotoDataAdapter implements PhotoPage.Model {
                     if (item != null && item.getPath() == info.target) {
                         index = info.indexHint;
                     } else {
-                        index = findIndexOfTarget(info);
+                        // If RTL and it's not from widget, the index don't need to be amended
+                        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                                .getLayoutDirectionFromLocale(Locale.getDefault())
+                                && !mIsFromWidget) {
+                            index = info.indexHint;
+                        } else {
+                            index = findIndexOfTarget(info);
+                            mIsFromWidget = false;
+                        }
                     }
                 }
 

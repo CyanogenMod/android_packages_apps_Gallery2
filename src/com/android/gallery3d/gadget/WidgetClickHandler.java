@@ -57,6 +57,8 @@ public class WidgetClickHandler extends Activity {
         Intent intent;
         if (isValidDataUri(uri)) {
             intent = new Intent(Intent.ACTION_VIEW, uri);
+            // Used for checking whether it is from widget
+            intent.putExtra(PhotoPage.KEY_IS_FROM_WIDGET, true);
             if (tediousBack) {
                 intent.putExtra(PhotoPage.KEY_TREAT_BACK_AS_UP, true);
             }
