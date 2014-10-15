@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -236,13 +237,20 @@ public class DialogDetailsView implements DetailsViewContainer {
                     value = String.format("%s: %s %s", DetailsHelper.getDetailsName(
                             context, key), value, context.getString(details.getUnit(key)));
                 } else {
-                    value = String.format("%s: %s", DetailsHelper.getDetailsName(
-                            context, key), value);
+                    if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                            .getLayoutDirectionFromLocale(Locale.getDefault())
+                            && (key == MediaDetails.INDEX_PATH)) {
+                        value = String.format("%s : \n%s",
+                                DetailsHelper.getDetailsName(context, key), value);
+                    } else {
+                        value = String.format("%s: %s", DetailsHelper.getDetailsName(context, key),
+                                value);
+                    }
                 }
                 mItems.add(value);
-            }
-            if (!resolutionIsValid) {
-                DetailsHelper.resolveResolution(path, this);
+                if (!resolutionIsValid) {
+                    DetailsHelper.resolveResolution(path, this);
+                }
             }
         }
 

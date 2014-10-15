@@ -827,6 +827,9 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             mForward.setOnClickListener(this);
             mContollerButtons.addView(mForward, buttonParam);
 
+            // Do NOT RTL for media controller
+            mContollerButtons.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+
             addView(mContollerButtons, wrapContent);
         }
 

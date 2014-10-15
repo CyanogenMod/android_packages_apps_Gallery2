@@ -25,12 +25,15 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.data.DataSourceType;
 import com.android.photos.data.GalleryBitmapPool;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.gallery3d.util.ThreadPool.JobContext;
+
+import java.util.Locale;
 
 public class AlbumLabelMaker {
     private static final int BORDER_SIZE = 0;
@@ -170,30 +173,60 @@ public class AlbumLabelMaker {
 
             canvas.translate(BORDER_SIZE, BORDER_SIZE);
 
-            // draw title
-            if (jc.isCancelled()) return null;
-            int x = s.leftMargin + s.iconSize;
-            // TODO: is the offset relevant in new reskin?
-            // int y = s.titleOffset;
-            int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-            drawText(canvas, x, y, title, labelWidth - s.leftMargin - x - 
-                    s.titleRightMargin, mTitlePaint);
-
-            // draw count
-            if (jc.isCancelled()) return null;
-            x = labelWidth - s.titleRightMargin;
-            y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-            drawText(canvas, x, y, count,
-                    labelWidth - x , mCountPaint);
-
-            // draw the icon
-            if (icon != null) {
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {// RTL
+                // draw title
                 if (jc.isCancelled()) return null;
-                float scale = (float) s.iconSize / icon.getWidth();
-                canvas.translate(s.leftMargin, (s.labelBackgroundHeight -
-                        Math.round(scale * icon.getHeight()))/2f);
-                canvas.scale(scale, scale);
-                canvas.drawBitmap(icon, 0, 0, null);
+                int strLength = (int) mTitlePaint.measureText(title);
+                int x = labelWidth - (s.leftMargin + s.iconSize) - strLength;
+                // TODO: is the offset relevant in new reskin?
+                // int y = s.titleOffset;
+                int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
+                drawText(canvas, x, y, title, labelWidth - s.leftMargin - x -
+                        s.titleRightMargin, mTitlePaint);
+
+                // draw count
+                if (jc.isCancelled()) return null;
+                x = s.leftMargin + 10;// plus 10 to get a much bigger margin
+                y = (s.labelBackgroundHeight - s.countFontSize) / 2;
+                drawText(canvas, x, y, count,
+                        labelWidth - x, mCountPaint);
+                // draw the icon
+                if (icon != null) {
+                    if (jc.isCancelled()) return null;
+                    float scale = (float) s.iconSize / icon.getWidth();
+                    canvas.translate(labelWidth - s.leftMargin - s.iconSize,
+                            (s.labelBackgroundHeight -
+                            Math.round(scale * icon.getHeight())) / 2f);
+                    canvas.scale(scale, scale);
+                    canvas.drawBitmap(icon, 0, 0, null);
+                }
+            } else { // LTR
+                // draw title
+                if (jc.isCancelled()) return null;
+                int x = s.leftMargin + s.iconSize;
+                // TODO: is the offset relevant in new reskin?
+                // int y = s.titleOffset;
+                int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
+                drawText(canvas, x, y, title, labelWidth - s.leftMargin - x -
+                        s.titleRightMargin, mTitlePaint);
+
+                // draw count
+                if (jc.isCancelled()) return null;
+                x = labelWidth - s.titleRightMargin;
+                y = (s.labelBackgroundHeight - s.countFontSize) / 2;
+                drawText(canvas, x, y, count,
+                        labelWidth - x, mCountPaint);
+
+                // draw the icon
+                if (icon != null) {
+                    if (jc.isCancelled()) return null;
+                    float scale = (float) s.iconSize / icon.getWidth();
+                    canvas.translate(s.leftMargin, (s.labelBackgroundHeight -
+                            Math.round(scale * icon.getHeight())) / 2f);
+                    canvas.scale(scale, scale);
+                    canvas.drawBitmap(icon, 0, 0, null);
+                }
             }
 
             return bitmap;
