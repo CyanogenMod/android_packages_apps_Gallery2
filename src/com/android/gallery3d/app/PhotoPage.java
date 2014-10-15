@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +75,9 @@ import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.UsageStatistics;
 import com.android.gallery3d.util.ViewGifImage;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public abstract class PhotoPage extends ActivityState implements
         PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
         PhotoPageBottomControls.Delegate, GalleryActionBar.OnAlbumModeSelectedListener {
@@ -103,6 +107,9 @@ public abstract class PhotoPage extends ActivityState implements
     private static final int REQUEST_PLAY_VIDEO = 5;
     private static final int REQUEST_TRIM = 6;
 
+    // Data cache size, equal to AlbumDataLoader.DATA_CACHE_SIZE
+    private static final int DATA_CACHE_SIZE = 256;
+
     public static final String KEY_MEDIA_SET_PATH = "media-set-path";
     public static final String KEY_MEDIA_ITEM_PATH = "media-item-path";
     public static final String KEY_INDEX_HINT = "index-hint";
@@ -114,6 +121,10 @@ public abstract class PhotoPage extends ActivityState implements
     public static final String KEY_SHOW_WHEN_LOCKED = "show_when_locked";
     public static final String KEY_IN_CAMERA_ROLL = "in_camera_roll";
     public static final String KEY_READONLY = "read-only";
+
+
+    // Bundle key, used for checking whether it is from widget
+    public static final String KEY_IS_FROM_WIDGET = "is_from_widget";
 
     public static final String KEY_ALBUMPAGE_TRANSITION = "albumpage-transition";
     public static final int MSG_ALBUMPAGE_NONE = 0;
@@ -160,6 +171,8 @@ public abstract class PhotoPage extends ActivityState implements
     private SnailAlbum mScreenNailSet;
     private OrientationManager mOrientationManager;
     private boolean mTreatBackAsUp;
+    // Used for checking whether it is from widget
+    private boolean mIsFromWidget;
     private boolean mStartInFilmstrip;
     private boolean mHasCameraScreennailOrPlaceholder = false;
     private boolean mRecenterCameraOnResume = true;
@@ -390,6 +403,7 @@ public abstract class PhotoPage extends ActivityState implements
                 Path.fromString(data.getString(KEY_MEDIA_ITEM_PATH)) :
                     null;
         mTreatBackAsUp = data.getBoolean(KEY_TREAT_BACK_AS_UP, false);
+        mIsFromWidget = data.getBoolean(KEY_IS_FROM_WIDGET, false);
         mStartInFilmstrip = data.getBoolean(KEY_START_IN_FILMSTRIP, false);
         boolean inCameraRoll = data.getBoolean(KEY_IN_CAMERA_ROLL, false);
         mCurrentIndex = data.getInt(KEY_INDEX_HINT, 0);
@@ -466,6 +480,30 @@ public abstract class PhotoPage extends ActivityState implements
                     return;
                 }
             }
+
+            // If it is from widget, need to re-calcuate index and range
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())
+                    && mIsFromWidget) {
+                int nMediaItemCount = mMediaSet.getMediaItemCount();
+                ArrayList<MediaItem> mediaItemList = mMediaSet.getMediaItem(0, nMediaItemCount);
+                int nItemIndex;
+                for (nItemIndex = 0; nItemIndex < nMediaItemCount; nItemIndex++) {
+                    if (mediaItemList.get(nItemIndex).getPath().toString()
+                            .equals(itemPath.toString())) {
+                        int nIndex;
+                        if (nItemIndex > DATA_CACHE_SIZE / 2
+                                && nItemIndex < (mMediaSet.getMediaItemCount() -
+                                        DATA_CACHE_SIZE / 2)) {
+                            nIndex = mMediaSet.getMediaItemCount() - nItemIndex - 2;
+                        } else {
+                            nIndex = mMediaSet.getMediaItemCount() - nItemIndex - 1;
+                        }
+                        itemPath = mMediaSet.getMediaItem(nIndex, 1).get(0).getPath();
+                        break;
+                    }
+                }
+            }
             PhotoDataAdapter pda = new PhotoDataAdapter(
                     mActivity, mPhotoView, mMediaSet, itemPath, mCurrentIndex,
                     mAppBridge == null ? -1 : 0,
@@ -474,6 +512,12 @@ public abstract class PhotoPage extends ActivityState implements
             mModel = pda;
             mPhotoView.setModel(mModel);
 
+            // If RTL and from widget, set the flag into PhotoDataAdapter.
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())
+                    && mIsFromWidget) {
+                pda.setFromWidget(mIsFromWidget);
+            }
             pda.setDataListener(new PhotoDataAdapter.DataListener() {
 
                 @Override
@@ -1023,6 +1067,12 @@ public abstract class PhotoPage extends ActivityState implements
             return true;
         }
         int currentIndex = mModel.getCurrentIndex();
+
+        // If RTL, the current index need be revised.
+        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())) {
+            currentIndex = mMediaSet.getMediaItemCount() - currentIndex - 1;
+        }
         Path path = current.getPath();
 
         DataManager manager = mActivity.getDataManager();
@@ -1205,7 +1255,14 @@ public abstract class PhotoPage extends ActivityState implements
         onCommitDeleteImage();  // commit the previous deletion
         mDeletePath = path;
         mDeleteIsFocus = (offset == 0);
-        mMediaSet.addDeletion(path, mCurrentIndex + offset);
+
+        // If RTL, the index need be revised.
+        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())) {
+            mMediaSet.addDeletion(path, mMediaSet.getMediaItemCount() - mCurrentIndex - 1);
+        } else {
+            mMediaSet.addDeletion(path, mCurrentIndex + offset);
+        }
     }
 
     @Override
@@ -1289,6 +1346,12 @@ public abstract class PhotoPage extends ActivityState implements
                 if (data == null) break;
                 String path = data.getStringExtra(SlideshowPage.KEY_ITEM_PATH);
                 int index = data.getIntExtra(SlideshowPage.KEY_PHOTO_INDEX, 0);
+
+                // If RTL, the index need be revised.
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    index = mMediaSet.getMediaItemCount() - index - 1;
+                }
                 if (path != null) {
                     mModel.setCurrentPhoto(Path.fromString(path), index);
                 }

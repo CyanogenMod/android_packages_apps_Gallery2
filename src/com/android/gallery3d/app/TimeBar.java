@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ import android.view.View;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
+
+import java.util.Locale;
 
 /**
  * The time bar view, which includes the current and total time, the progress
@@ -127,9 +130,15 @@ public class TimeBar extends View {
         mPlayedBar.set(mProgressBar);
 
         if (mTotalTime > 0) {
-            mPlayedBar.right =
-                    mPlayedBar.left
-                            + (int) ((mProgressBar.width() * (long) mCurrentTime) / mTotalTime);
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                // The progress bar should be reversed in RTL.
+                mPlayedBar.left = mPlayedBar.right
+                        - (int) ((mProgressBar.width() * (long) mCurrentTime) / mTotalTime);
+            } else {
+                mPlayedBar.right = mPlayedBar.left
+                        + (int) ((mProgressBar.width() * (long) mCurrentTime) / mTotalTime);
+            }
             /*
              * M: if duration is not accurate, here just adjust playedBar we
              * also show the accurate position text to final user.
@@ -138,11 +147,23 @@ public class TimeBar extends View {
                 mPlayedBar.right = mProgressBar.right;
             }
         } else {
-            mPlayedBar.right = mProgressBar.left;
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                // The progress bar should be reversed in RTL.
+                mPlayedBar.left = mProgressBar.right;
+            } else {
+                mPlayedBar.right = mProgressBar.left;
+            }
         }
 
         if (!mScrubbing) {
-            mScrubberLeft = mPlayedBar.right - mScrubber.getWidth() / 2;
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils.getLayoutDirectionFromLocale(
+                    Locale.getDefault())) {
+                // The progress bar should be reversed in RTL.
+                mScrubberLeft = mPlayedBar.left - mScrubber.getWidth() / 2;
+            } else {
+                mScrubberLeft = mPlayedBar.right - mScrubber.getWidth() / 2;
+            }
         }
         // update text bounds when layout changed or time changed
         updateBounds();
@@ -194,9 +215,17 @@ public class TimeBar extends View {
     }
 
     private int getScrubberTime() {
-        return (int) ((long) (mScrubberLeft + mScrubber.getWidth() / 2 - mProgressBar.left)
-                * mTotalTime / mProgressBar.width());
-    }
+        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())) {
+            // The progress bar's scrubber time should be reversed in RTL.
+            return (int) ((long) (mProgressBar.width() - (mScrubberLeft
+                    + mScrubber.getWidth() / 2 - mProgressBar.left))
+                    * mTotalTime / mProgressBar.width());
+        } else {
+            return (int) ((long) (mScrubberLeft + mScrubber.getWidth() / 2 - mProgressBar.left)
+                    * mTotalTime / mProgressBar.width());
+        }
+  }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -232,18 +261,31 @@ public class TimeBar extends View {
             canvas.drawBitmap(mScrubber, mScrubberLeft, mScrubberTop, null);
         }
         if (mShowTimes) {
-            canvas.drawText(
-                    stringForTime(mCurrentTime),
-                    mTimeBounds.width() / 2 + getPaddingLeft(),
-                    mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1
-                            + mLayoutExt.getTimeOffset(),
-                    mTimeTextPaint);
-            canvas.drawText(
-                    stringForTime(mTotalTime),
-                    getWidth() - getPaddingRight() - mTimeBounds.width() / 2,
-                    mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1
-                            + mLayoutExt.getTimeOffset(),
-                    mTimeTextPaint);
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                // The progress bar's time should be reversed in RTL.
+                canvas.drawText(
+                        stringForTime(mCurrentTime),
+                        getWidth() - getPaddingRight() - mTimeBounds.width() / 2,
+                        mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1,
+                        mTimeTextPaint);
+                canvas.drawText(
+                        stringForTime(mTotalTime),
+                        mTimeBounds.width() / 2 + getPaddingLeft(),
+                        mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1,
+                        mTimeTextPaint);
+            } else {
+                canvas.drawText(
+                        stringForTime(mCurrentTime),
+                        mTimeBounds.width() / 2 + getPaddingLeft(),
+                        mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1,
+                        mTimeTextPaint);
+                canvas.drawText(
+                        stringForTime(mTotalTime),
+                        getWidth() - getPaddingRight() - mTimeBounds.width() / 2,
+                        mTimeBounds.height() + mVPaddingInPx / 2 + mScrubberPadding + 1,
+                        mTimeTextPaint);
+            }
         }
         mInfoExt.draw(canvas, mLayoutExt.getInfoBounds(this, mTimeBounds));
     }

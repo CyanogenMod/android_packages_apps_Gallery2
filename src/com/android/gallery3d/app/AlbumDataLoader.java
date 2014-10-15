@@ -19,6 +19,8 @@ package com.android.gallery3d.app;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.text.TextUtils;
+import android.view.View;
 
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.ContentListener;
@@ -33,6 +35,7 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.Locale;
 
 public class AlbumDataLoader {
     @SuppressWarnings("unused")
@@ -119,7 +122,9 @@ public class AlbumDataLoader {
     }
 
     public MediaItem get(int index) {
-        if (!isActive(index)) {
+        if (!isActive(index)
+                && View.LAYOUT_DIRECTION_LTR == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
             return mSource.getMediaItem(index, 1).get(0);
         }
         return mData[index % mData.length];
