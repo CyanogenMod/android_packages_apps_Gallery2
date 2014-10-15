@@ -35,7 +35,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">@dimen/setting_popup_right_margin</item>
+        <item name="android:layout_marginEnd">@dimen/setting_popup_right_margin</item>
         <item name="android:visibility">gone</item>
     </style>
     <style name="PopupTitleText">
@@ -45,14 +45,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/popup_title_color</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:paddingLeft">16dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:paddingStart">16dp</item>
     </style>
     <style name="ViewfinderLabelLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginLeft">13dp</item>
-        <item name="android:layout_marginRight">@dimen/indicator_bar_width</item>
+        <item name="android:layout_marginStart">13dp</item>
+        <item name="android:layout_marginEnd">@dimen/indicator_bar_width</item>
         <item name="android:layout_marginBottom">13dp</item>
         <item name="android:layout_marginTop">13dp</item>
     </style>
@@ -67,8 +67,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">@dimen/setting_popup_right_margin</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginEnd">@dimen/setting_popup_right_margin</item>
         <item name="android:visibility">gone</item>
     </style>
 

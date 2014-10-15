@@ -16,7 +16,7 @@
     android:layout_height="match_parent">
     <ListView android:id="@android:id/list" android:layout_width="match_parent"
         android:layout_height="0px" android:layout_weight="1"
-        android:paddingLeft="16dip" android:paddingRight="16dip"
+        android:paddingStart="16dip" android:paddingEnd="16dip"
         android:paddingTop="0dp" android:paddingBottom="0dp"
         android:clipToPadding="false" android:scrollbarStyle="outsideOverlay"
         android:drawSelectorOnTop="false" android:cacheColorHint="@android:color/transparent"

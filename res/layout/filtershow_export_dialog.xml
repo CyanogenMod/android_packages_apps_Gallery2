@@ -40,7 +40,7 @@
 
         <TextView
                 android:text="@string/size"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_gravity="start|center_vertical"/>
 
         <EditText
@@ -61,7 +61,7 @@
 
         <TextView
                 android:id="@+id/estimadedSize"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_gravity="end|center_vertical"/>
 
         <LinearLayout
