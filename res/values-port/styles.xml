@@ -37,15 +37,15 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/popup_title_color</item>
-        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
     </style>
     <style name="ViewfinderLabelLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginTop">13dp</item>
         <item name="android:layout_marginBottom">@dimen/indicator_bar_width</item>
-        <item name="android:layout_marginLeft">13dp</item>
-        <item name="android:layout_marginRight">13dp</item>
+        <item name="android:layout_marginStart">13dp</item>
+        <item name="android:layout_marginEnd">13dp</item>
     </style>
     <style name="PanoViewHorizontalBar">
         <item name="android:background">#000000</item>

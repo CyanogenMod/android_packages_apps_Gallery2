@@ -20,13 +20,13 @@
         android:layout_centerVertical="true">
     <TextView
         android:id="@+id/start_trim"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="@string/save"
         android:textAllCaps="true"
         android:textSize="14sp"
         android:gravity="left|center_vertical"
-        android:drawableLeft="@drawable/menu_save_photo"
+        android:drawableStart="@drawable/menu_save_photo"
         android:drawablePadding="8dp" />
 </FrameLayout>
