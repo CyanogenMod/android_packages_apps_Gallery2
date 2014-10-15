@@ -44,8 +44,8 @@
                 <TextView android:id="@+id/rotate_dialog_title"
                         style="@style/TextAppearance.DialogWindowTitle"
                         android:gravity="center_vertical"
-                        android:layout_marginLeft="16dip"
-                        android:layout_marginRight="16dip"
+                        android:layout_marginStart="16dip"
+                        android:layout_marginEnd="16dip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="64dp"/>

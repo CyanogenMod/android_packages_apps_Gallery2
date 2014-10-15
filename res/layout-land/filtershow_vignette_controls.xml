@@ -24,12 +24,12 @@
                     android:layout_gravity="left|center_vertical"
                     android:text="@string/vignette_exposure"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:visibility="gone"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/exposureValue"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
                     android:visibility="gone"/>
             <SeekBar
                     android:id="@+id/exposureSeekBar"
@@ -43,11 +43,11 @@
                     android:layout_gravity="left|center_vertical"
                     android:text="@string/vignette_saturation"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/saturationValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/saturationSeekBar"
                     android:layout_width="match_parent"
@@ -59,11 +59,11 @@
                     android:layout_gravity="left|center_vertical"
                     android:text="@string/vignette_contrast"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/contrastValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/contrastSeekBar"
                     android:layout_width="match_parent"
@@ -75,11 +75,11 @@
                     android:layout_gravity="left|center_vertical"
                     android:text="@string/vignette_falloff"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/falloffValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/falloffSeekBar"
                     android:layout_width="match_parent"
@@ -103,11 +103,11 @@
         <TextView
                 android:layout_gravity="left|center_vertical"
                 android:text="@string/vignette_main"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginStart="8dp"/>
         <TextView
                 android:layout_gravity="right|center_vertical"
                 android:id="@+id/mainVignetteValue"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginEnd="16dp"/>
         <SeekBar
                 android:id="@+id/mainVignetteSeekbar"
                 android:layout_width="match_parent"

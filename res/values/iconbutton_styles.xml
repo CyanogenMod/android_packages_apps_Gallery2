@@ -38,8 +38,8 @@
         <item name="android:textSize">13dp</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">3dp</item>
-        <item name="android:paddingRight">3dp</item>
+        <item name="android:paddingStart">3dp</item>
+        <item name="android:paddingEnd">3dp</item>
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:ellipsize">marquee</item>

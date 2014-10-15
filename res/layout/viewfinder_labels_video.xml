@@ -21,7 +21,7 @@
     <TextView android:id="@+id/recording_time"
             style="@style/OnViewfinderLabel"
             android:gravity="center"
-            android:drawableLeft="@drawable/ic_recording_indicator"
+            android:drawableStart="@drawable/ic_recording_indicator"
             android:drawablePadding="5dp"
             android:visibility="gone" />
     <TextView android:id="@+id/time_lapse_label"
