@@ -223,12 +223,11 @@ public class ImageCurves extends ImageShow {
         Spline spline = getSpline(mCurrentCurveIndex);
         float px = spline.getPoint(0).x;
         float py = spline.getPoint(0).y;
-        double delta = Math.sqrt((px - x) * (px - x) + (py - y) * (py - y));
+        double delta = Math.hypot(px - x, py - y);
         for (int i = 1; i < spline.getNbPoints(); i++) {
             px = spline.getPoint(i).x;
             py = spline.getPoint(i).y;
-            double currentDelta = Math.sqrt((px - x) * (px - x) + (py - y)
-                    * (py - y));
+            double currentDelta = Math.hypot(px - x, py - y);
             if (currentDelta < delta) {
                 delta = currentDelta;
                 pick = i;

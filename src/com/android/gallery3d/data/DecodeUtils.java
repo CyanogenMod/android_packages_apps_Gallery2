@@ -23,7 +23,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapRegionDecoder;
 import android.os.Build;
-import android.util.FloatMath;
 
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.BitmapUtils;
@@ -135,7 +134,7 @@ public class DecodeUtils {
             final int MAX_PIXEL_COUNT = 640000; // 400 x 1600
             if ((w / options.inSampleSize) * (h / options.inSampleSize) > MAX_PIXEL_COUNT) {
                 options.inSampleSize = BitmapUtils.computeSampleSize(
-                        FloatMath.sqrt((float) MAX_PIXEL_COUNT / (w * h)));
+                        (float) Math.sqrt((double) MAX_PIXEL_COUNT / (w * h)));
             }
         } else {
             // For screen nail, we only want to keep the longer side >= targetSize.
