@@ -17,7 +17,6 @@ package com.android.gallery3d.util;
 
 import android.annotation.TargetApi;
 import android.graphics.Matrix;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
@@ -104,8 +103,8 @@ public final class MotionEventHelper {
         // angle from vertical.  Coordinate system: down is increasing Y, right is
         // increasing X.
         float[] v = new float[2];
-        v[0] = FloatMath.sin(angleRadians);
-        v[1] = -FloatMath.cos(angleRadians);
+        v[0] = (float) Math.sin(angleRadians);
+        v[1] = (float) -Math.cos(angleRadians);
         m.mapVectors(v);
 
         // Derive the transformed vector's clockwise angle from vertical.

@@ -110,7 +110,7 @@ public class GradControl {
         for (int i = 0; i < handlex.length; i++) {
             float dx = handlex[i] - x;
             float dy = handley[i] - y;
-            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+            float dist = (float) Math.hypot(dx, dy);
         }
 
         return -1;
@@ -236,7 +236,7 @@ public class GradControl {
         float cy = (p1y + p2y) / 2;
         float dx = p1x - p2x;
         float dy = p1y - p2y;
-        float len = (float) Math.sqrt(dx * dx + dy * dy);
+        float len = (float) Math.hypot(dx, dy);
         dx *= 2048 / len;
         dy *= 2048 / len;
 
