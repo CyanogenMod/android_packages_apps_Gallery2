@@ -65,10 +65,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Ort"</string>
   <string name="delete_all">"Alle löschen"</string>
   <string name="default_title">"Standardtitel"</string>
+  <string name="mute_nosupport">Stummschalten nicht möglich – das Video wird nicht unterstützt</string>
   <string name="fail_trim">Diese Videodatei kann nicht gekürzt werden</string>
   <string name="bass_boost_strength">Bassverstärkung</string>
   <string name="virtualizer_strength">3D-Effekt</string>
   <string name="audio_effects">Audioeffekte</string>
+  <string name="headset_plug">Schließen Sie Kopfhörer für diese Effekte an.</string>
   <string name="audio_effects_dialog_title">Snapdragon-Audio+</string>
   <string name="can_not_trim">Es können nur MP4- und 3GP-Dateien gekürzt werden</string>
 </resources>
