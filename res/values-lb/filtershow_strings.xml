@@ -62,9 +62,14 @@
   <string name="exposure" msgid="1229093066434614811">Beliichtung</string>
   <string name="sharpness">Schäerft</string>
   <string name="contrast">Kontrast</string>
+  <string name="vibrance">Intensitéit</string>
   <string name="bwfilter">SW-Filter</string>
   <string name="wbalance">Automatesch Faarwen</string>
   <string name="hue">Faarftoun</string>
+  <string name="shadow_recovery">Déiften</string>
+  <string name="curvesRGB">Kurven</string>
+  <string name="vignette">Vignettéierung</string>
+  <string name="vignette_main">Vignettéierung</string>
   <string name="vignette_exposure">Beliichtung</string>
   <string name="vignette_contrast">Kontrast</string>
   <string name="vignette_falloff">Luuchtoffall</string>
