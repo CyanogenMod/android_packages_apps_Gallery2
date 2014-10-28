@@ -440,4 +440,5 @@
     <string name="bass_boost_strength" msgid="882301530007752270">"低音增强"</string>
     <string name="virtualizer_strength" msgid="5035111173763913313">"3D 音效"</string>
     <string name="audio_effects" msgid="612896145300512593">"音效"</string>
+    <string name="headset_plug">“插入耳机体验音效”</string>
 </resources>
