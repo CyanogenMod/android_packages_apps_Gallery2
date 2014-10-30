@@ -30,9 +30,9 @@
     <item android:id="@+id/action_sync_picasa_albums"
             android:title="@string/sync_picasa_albums"
             android:showAsAction="never" />
-    <item android:id="@+id/action_settings"
+    <!-- <item android:id="@+id/action_settings"
             android:title="@string/settings"
-            android:showAsAction="never" />
+            android:showAsAction="never" /> -->
     <item android:id="@+id/action_general_help"
             android:title="@string/help"
             android:visible="false"
