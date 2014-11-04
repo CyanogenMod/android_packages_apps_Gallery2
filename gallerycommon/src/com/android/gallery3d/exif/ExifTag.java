@@ -17,7 +17,6 @@
 package com.android.gallery3d.exif;
 
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -101,8 +100,6 @@ public class ExifTag {
     private Object mValue;
     // Value offset in exif header.
     private int mOffset;
-
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("yyyy:MM:dd kk:mm:ss");
 
     /**
      * Returns true if the given IFD is a valid IFD.
@@ -537,9 +534,10 @@ public class ExifTag {
      * @return true on success
      */
     public boolean setTimeValue(long time) {
-        // synchronized on TIME_FORMAT as SimpleDateFormat is not thread safe
-        synchronized (TIME_FORMAT) {
-            return setValue(TIME_FORMAT.format(new Date(time)));
+        // synchronized on DATETIME_FORMAT as SimpleDateFormat is not thread
+        // safe
+        synchronized (ExifInterface.DATETIME_FORMAT) {
+            return setValue(ExifInterface.DATETIME_FORMAT.format(new Date(time)));
         }
     }
 
