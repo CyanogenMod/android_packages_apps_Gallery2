@@ -87,10 +87,17 @@
   <string name="editor_grad_brightness">Hellegkeet</string>
   <string name="editor_grad_contrast">Kontrast</string>
   <string name="editor_chan_sat_main">Haapt</string>
+  <string name="editor_chan_sat_red">Rout</string>
+  <string name="editor_chan_sat_yellow">Giel</string>
+  <string name="editor_chan_sat_green">Gréng</string>
+  <string name="editor_chan_sat_cyan">Cyan</string>
   <string name="editor_chan_sat_blue">Blo</string>
+  <string name="editor_chan_sat_magenta">Magenta</string>
   <string name="editor_grad_style">Stil</string>
   <string name="editor_grad_new">nei</string>
   <string name="curves_channel_rgb">RGB</string>
+  <string name="curves_channel_red">Rout</string>
+  <string name="curves_channel_green">Gréng</string>
   <string name="curves_channel_blue">Blo</string>
   <string name="draw_style">Stil</string>
   <string name="draw_size">Gréisst</string>
