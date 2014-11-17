@@ -97,7 +97,7 @@ public class MoviePlayer implements
     private static final String KEY_VIDEO_STATE = "video_state";
 
     private static final String VIRTUALIZE_EXTRA = "virtualize";
-    private static final long BLACK_TIMEOUT = 50;
+    private static final long BLACK_TIMEOUT = 500;
     private static final int DELAY_REMOVE_MS = 10000;
     public static final int SERVER_TIMEOUT = 8801;
 
