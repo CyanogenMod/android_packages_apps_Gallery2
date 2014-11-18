@@ -69,7 +69,7 @@ public class MoviePlayer implements
     private static final String CMDPAUSE = "pause";
 
     private static final String VIRTUALIZE_EXTRA = "virtualize";
-    private static final long BLACK_TIMEOUT = 50;
+    private static final long BLACK_TIMEOUT = 500;
 
     // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
     // Otherwise, we pause the player.
