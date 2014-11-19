@@ -31,6 +31,7 @@
                     android:layout_width="@dimen/stack_photo_width"
                     android:layout_height="@dimen/stack_photo_height"
                     android:gravity="center"
+                    android:textColor="@android:color/black"
                     android:text="@string/appwidget_empty_text"/>
         </FrameLayout>
     </RelativeLayout>
