@@ -192,6 +192,9 @@ public class MovieActivity extends Activity {
             public void onCompletion() {
                 if (mFinishOnCompletion) {
                     finish();
+                    mControlResumed = false;
+                    Bookmarker mBookmarker = new Bookmarker(MovieActivity.this);
+                    mBookmarker.setBookmark(mMovieItem.getUri(), 0, 1);
                 }
             }
         };
