@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <resources>
+  <string name="title_activity_filter_show">Fotoediteur</string>
   <string name="cannot_load_image">D\'Bild kann net geluede ginn!</string>
   <string name="cannot_edit_original">Original kann net geännert ginn</string>
   <string name="original_picture_text">@string/original</string>
@@ -63,6 +64,7 @@
   <string name="sharpness">Schäerft</string>
   <string name="contrast">Kontrast</string>
   <string name="vibrance">Intensitéit</string>
+  <string name="saturation">Sättegung</string>
   <string name="bwfilter">SW-Filter</string>
   <string name="wbalance">Automatesch Faarwen</string>
   <string name="hue">Faarftoun</string>
@@ -71,6 +73,7 @@
   <string name="vignette">Vignettéierung</string>
   <string name="vignette_main">Vignettéierung</string>
   <string name="vignette_exposure">Beliichtung</string>
+  <string name="vignette_saturation">Sättegung</string>
   <string name="vignette_contrast">Kontrast</string>
   <string name="vignette_falloff">Luuchtoffall</string>
   <string name="redeye">Rout Aen</string>
@@ -86,6 +89,7 @@
   <string name="downsample">Verklengeren</string>
   <string name="editor_grad_brightness">Hellegkeet</string>
   <string name="editor_grad_contrast">Kontrast</string>
+  <string name="editor_grad_saturation">Sättegung</string>
   <string name="editor_chan_sat_main">Haapt</string>
   <string name="editor_chan_sat_red">Rout</string>
   <string name="editor_chan_sat_yellow">Giel</string>
@@ -102,6 +106,7 @@
   <string name="draw_style">Stil</string>
   <string name="draw_size">Gréisst</string>
   <string name="draw_hue">Faarftoun</string>
+  <string name="draw_saturation">Sättegung</string>
   <string name="draw_value">Hellegkeet</string>
   <string name="draw_color">Faarf</string>
   <string name="draw_style_line">Linnen</string>
