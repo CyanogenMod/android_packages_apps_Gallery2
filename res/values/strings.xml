@@ -1104,6 +1104,9 @@ CHAR LIMIT = NONE] -->
     <!-- Positive answer for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = 20] -->
     <string name="remember_location_yes">Yes</string>
 
+    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+    <string name="map_activity_not_found_err">There is no map app for show location.</string>
+
     <!-- Menu item to launch the camera app [CHAR LIMIT=25] -->
     <string name="menu_camera">Camera</string>
     <!-- Menu item to search for photos [CHAR LIMIT=25] -->
