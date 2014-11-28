@@ -426,6 +426,9 @@
     <string name="remember_location_prompt" msgid="724592331305808098">"为您的照片和视频标明拍摄地点。\n\n其他应用在查看您保存的照片和视频时将可以使用这些信息。"</string>
     <string name="remember_location_no" msgid="7541394381714894896">"不用了"</string>
     <string name="remember_location_yes" msgid="862884269285964180">"好"</string>
+    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+    <string name="map_activity_not_found_err">没有地图应用显示地理位置信息</string>
+
     <string name="menu_camera" msgid="3476709832879398998">"相机"</string>
     <string name="menu_search" msgid="7580008232297437190">"搜索"</string>
     <string name="tab_photos" msgid="9110813680630313419">"照片"</string>

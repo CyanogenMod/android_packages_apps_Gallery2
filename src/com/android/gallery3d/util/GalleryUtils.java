@@ -17,6 +17,7 @@
 package com.android.gallery3d.util;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -35,6 +36,7 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.GalleryActivity;
@@ -275,7 +277,7 @@ public class GalleryUtils {
         return String.format(Locale.ENGLISH, format, latitude, longitude);
     }
 
-    public static void showOnMap(Context context, double latitude, double longitude) {
+    public static void showOnMap(final Context context, double latitude, double longitude) {
         try {
             // We don't use "geo:latitude,longitude" because it only centers
             // the MapView to the specified location, but we need a marker
@@ -292,8 +294,21 @@ public class GalleryUtils {
             // Use the "geo intent" if no GMM is installed
             Log.e(TAG, "GMM activity not found!", e);
             String url = formatLatitudeLongitude("geo:%f,%f", latitude, longitude);
-            Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            context.startActivity(mapsIntent);
+            try {
+                Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                context.startActivity(mapsIntent);
+            } catch (ActivityNotFoundException ex) {
+                Log.e(TAG, "Map view activity not found! url = " + url, ex);
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,
+                                context.getString(R.string.map_activity_not_found_err),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
         }
     }
 
