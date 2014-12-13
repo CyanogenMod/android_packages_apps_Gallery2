@@ -400,16 +400,8 @@ public class CropActivity extends Activity {
             mOutputX = outputX;
             mOutputY = outputY;
 
-            if ((flags & DO_EXTRA_OUTPUT) != 0) {
-                if (mOutUri == null) {
-                    Log.w(LOGTAG, "cannot write file, no output URI given");
-                } else {
-                    try {
-                        mOutStream = getContentResolver().openOutputStream(mOutUri);
-                    } catch (FileNotFoundException e) {
-                        Log.w(LOGTAG, "cannot write file: " + mOutUri.toString(), e);
-                    }
-                }
+            if ((flags & DO_EXTRA_OUTPUT) != 0 && mOutUri == null) {
+                Log.w(LOGTAG, "cannot write file, no output URI given");
             }
 
             if ((flags & (DO_EXTRA_OUTPUT | DO_SET_WALLPAPER)) != 0) {
@@ -542,7 +534,14 @@ public class CropActivity extends Activity {
                 // Get output compression format
                 CompressFormat cf =
                         convertExtensionToCompressFormat(getFileExtension(mOutputFormat));
-
+                Utils.closeSilently(mInStream);
+                if (mOutUri != null) {
+                    try {
+                        mOutStream = getContentResolver().openOutputStream(mOutUri);
+                    } catch (FileNotFoundException e) {
+                        Log.w(LOGTAG, "cannot write file: " + mOutUri.toString(), e);
+                    }
+                }
                 // If we only need to output to a URI, compress straight to file
                 if (mFlags == DO_EXTRA_OUTPUT) {
                     if (mOutStream == null
@@ -604,7 +603,7 @@ public class CropActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean result) {
             Utils.closeSilently(mOutStream);
-            Utils.closeSilently(mInStream);
+            // Utils.closeSilently(mInStream);
             doneBitmapIO(result.booleanValue(), mResultIntent);
         }
 
