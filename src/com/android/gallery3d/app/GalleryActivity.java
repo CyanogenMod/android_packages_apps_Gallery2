@@ -18,11 +18,18 @@ package com.android.gallery3d.app;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.database.Cursor;
+import android.drm.DrmManagerClient;
+import android.drm.DrmStore.Action;
+import android.drm.DrmStore.DrmDeliveryType;
+import android.drm.DrmStore.RightsStatus;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore.Video.VideoColumns;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,12 +41,14 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.util.GalleryUtils;
 
 public final class GalleryActivity extends AbstractGalleryActivity implements OnCancelListener {
+    public static final String BUY_LICENSE = "android.drmservice.intent.action.BUY_LICENSE";
     public static final String EXTRA_SLIDESHOW = "slideshow";
     public static final String EXTRA_DREAM = "dream";
     public static final String EXTRA_CROP = "crop";
@@ -203,7 +212,81 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                     startDefaultPage();
                 }
             } else {
-                Path itemPath = dm.findPathByUri(uri, contentType);
+                Path itemPath = null;
+                String imagePath = null;
+                String scheme = uri.getScheme();
+                if ("file".equals(scheme)) {
+                    imagePath = uri.getPath();
+                } else {
+                    Cursor cursor = null;
+                    try {
+                        cursor = this.getContentResolver().query(uri,
+                                new String[] {VideoColumns.DATA}, null, null, null);
+                        if (cursor != null && cursor.moveToNext()) {
+                            imagePath = cursor.getString(0);
+                        }
+                    } catch (Throwable t) {
+                        Log.d(TAG, "cannot get path from: " + uri);
+                    } finally {
+                        if (cursor != null) cursor.close();
+                    }
+                }
+                String mime_Type = intent.getType();
+                if (imagePath != null
+                        && (imagePath.endsWith(".dcf") || imagePath.endsWith(".dm"))
+                        && "*/*".equals(mime_Type)) {
+                    imagePath = imagePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
+                    DrmManagerClient drmClient = new DrmManagerClient(this);
+                    mime_Type = drmClient.getOriginalMimeType(imagePath);
+                    if (drmClient != null) drmClient.release();
+                }
+
+                Log.d(TAG, "DRM mime_Type==" + mime_Type);
+                itemPath = getDataManager().findPathByUri(uri, mime_Type);
+                Log.d(TAG, "itemPath=" + itemPath);
+                // If item path not correct, just finish starting the gallery
+                if (itemPath == null) {
+                    finish();
+                    return;
+                }
+
+                Log.d(TAG,"imagePath=" + imagePath);
+                if (intent.getBooleanExtra("WidgetClick", false) == true) {
+                    DrmManagerClient drmClient = new DrmManagerClient(this);
+
+                    // This hack is added to work FL. It will remove after the sdcard permission issue solved
+                    int status = drmClient.checkRightsStatus(imagePath, Action.DISPLAY);
+                    status = RightsStatus.RIGHTS_VALID;
+
+                    if (RightsStatus.RIGHTS_VALID != status) {
+                        ContentValues values = drmClient.getMetadata(imagePath);
+                        String address = values.getAsString("Rights-Issuer");
+                        Intent buyIntent = new Intent(BUY_LICENSE);
+                        buyIntent.putExtra("DRM_FILE_PATH", address);
+                        sendBroadcast(buyIntent);
+                        Log.d(TAG, "startViewAction:WidgetClick, intent sent");
+                    }
+                    if (drmClient != null) drmClient.release();
+                }
+
+                if (imagePath != null
+                        && (imagePath.endsWith(".dcf") || imagePath.endsWith(".dm"))) {
+                    DrmManagerClient drmClient = new DrmManagerClient(this);
+                    imagePath = imagePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
+                    ContentValues values = drmClient.getMetadata(imagePath);
+                    int drmType = values.getAsInteger("DRM-TYPE");
+                    if (drmType > DrmDeliveryType.FORWARD_LOCK) {
+                        MediaItem mediaItem = (MediaItem) getDataManager()
+                                .getMediaObject(itemPath);
+                        if (mediaItem.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+                            mediaItem.setConsumeRights(true);
+                        }
+                        Toast.makeText(this, R.string.action_consumes_rights,
+                                Toast.LENGTH_LONG).show();
+                    }
+                    if (drmClient != null) drmClient.release();
+                }
+
                 Path albumPath = dm.getDefaultSetOf(itemPath);
 
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, itemPath.toString());

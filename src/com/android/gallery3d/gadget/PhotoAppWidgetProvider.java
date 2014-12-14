@@ -106,7 +106,7 @@ public class PhotoAppWidgetProvider extends AppWidgetProvider {
                 context.getPackageName(), R.layout.photo_frame);
         try {
             byte[] data = entry.imageData;
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, false);
             views.setImageViewBitmap(R.id.photo, bitmap);
         } catch (Throwable t) {
             Log.w(TAG, "cannot load widget image: " + appWidgetId, t);

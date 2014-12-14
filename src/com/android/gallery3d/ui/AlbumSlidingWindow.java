@@ -24,6 +24,7 @@ import com.android.gallery3d.app.AlbumDataLoader;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
+import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.glrenderer.Texture;
@@ -267,6 +268,18 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         entry.mediaType = (item == null)
                 ? MediaItem.MEDIA_TYPE_UNKNOWN
                 : entry.item.getMediaType();
+
+        if (item instanceof LocalMediaItem) {
+            String filePath = ((LocalMediaItem)item).filePath;
+            if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
+                if (entry.mediaType == MediaObject.MEDIA_TYPE_IMAGE) {
+                    entry.mediaType = MediaObject.MEDIA_TYPE_DRM_IMAGE;
+                } else if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
+                    entry.mediaType = MediaObject.MEDIA_TYPE_DRM_VIDEO;
+                }
+            }
+        }
+
         entry.path = (item == null) ? null : item.getPath();
         entry.rotation = (item == null) ? 0 : item.getRotation();
         entry.contentLoader = new ThumbnailLoader(slotIndex, entry.item);
