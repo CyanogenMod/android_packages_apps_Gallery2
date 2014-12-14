@@ -136,7 +136,7 @@
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
-            android:src="@drawable/ic_menu_trash_holo_light"
+            android:src="@drawable/ic_menu_trash"
             android:paddingBottom="8dp"
             android:layout_marginEnd="48dp" />
 

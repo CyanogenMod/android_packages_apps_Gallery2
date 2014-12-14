@@ -23,21 +23,21 @@
          But, if share_panorama is set to never, it doesn't seem to get promoted
          to the action bar and stays on the overflow menu. -->
     <item android:id="@+id/action_share_panorama"
-            android:icon="@drawable/ic_menu_share_holo_light"
+            android:icon="@drawable/ic_menu_share"
             android:title="@string/share_panorama"
             android:visible="false"
             android:actionProviderClass="android.widget.ShareActionProvider"
             android:showAsAction="ifRoom">
     </item>
     <item android:id="@+id/action_share"
-            android:icon="@drawable/ic_menu_share_holo_light"
+            android:icon="@drawable/ic_menu_share"
             android:title="@string/share"
             android:visible="false"
             android:actionProviderClass="android.widget.ShareActionProvider"
             android:showAsAction="never">
     </item>
     <item android:id="@+id/action_delete"
-            android:icon="@drawable/ic_menu_trash_holo_light"
+            android:icon="@drawable/ic_menu_trash"
             android:title="@string/delete"
             android:visible="false"
             android:showAsAction="ifRoom" />

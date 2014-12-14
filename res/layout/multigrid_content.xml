@@ -36,7 +36,7 @@
 
     </LinearLayout>
 
-    <FrameLayout android:id="@+id/gridContainer"
+    <HorizontalScrollView android:id="@+id/gridContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -52,6 +52,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-    </FrameLayout>
+    </HorizontalScrollView>
 
 </FrameLayout>
