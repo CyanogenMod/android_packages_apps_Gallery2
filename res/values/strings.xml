@@ -1147,4 +1147,9 @@ CHAR LIMIT = NONE] -->
     <!-- The tips of trimming video -->
     <string name="fail_trim">Sorry, this video file can not be trimmed</string>
     <string name="can_not_trim">Only mp4 and 3gp file can be trimmed</string>
+
+    <string name="no_permission_for_drm">"Sorry, Drm file can not be shared"</string>
+    <string name="drm_license_info">Drm license info</string>
+    <string name="mimetype_not_supported">This file can not be played</string>
+    <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
 </resources>

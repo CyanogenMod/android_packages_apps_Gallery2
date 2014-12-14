@@ -84,7 +84,7 @@ public class DecodeUtils {
         jc.setCancelListener(new DecodeCanceller(options));
         setOptionsMutable(options);
         return ensureGLCompatibleBitmap(
-                BitmapFactory.decodeByteArray(bytes, offset, length, options));
+                BitmapFactory.decodeByteArray(bytes, offset, length, options, false));
     }
 
     public static void decodeBounds(JobContext jc, byte[] bytes, int offset,
@@ -92,7 +92,7 @@ public class DecodeUtils {
         Utils.assertTrue(options != null);
         options.inJustDecodeBounds = true;
         jc.setCancelListener(new DecodeCanceller(options));
-        BitmapFactory.decodeByteArray(bytes, offset, length, options);
+        BitmapFactory.decodeByteArray(bytes, offset, length, options, false);
         options.inJustDecodeBounds = false;
     }
 
@@ -117,7 +117,7 @@ public class DecodeUtils {
         jc.setCancelListener(new DecodeCanceller(options));
 
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFileDescriptor(fd, null, options);
+        BitmapFactory.decodeFileDescriptor(fd, null, options, false);
         if (jc.isCancelled()) return null;
 
         int w = options.outWidth;
@@ -145,7 +145,7 @@ public class DecodeUtils {
         options.inJustDecodeBounds = false;
         setOptionsMutable(options);
 
-        Bitmap result = BitmapFactory.decodeFileDescriptor(fd, null, options);
+        Bitmap result = BitmapFactory.decodeFileDescriptor(fd, null, options, false);
         if (result == null) return null;
 
         // We need to resize down if the decoder does not support inSampleSize
@@ -171,7 +171,7 @@ public class DecodeUtils {
         jc.setCancelListener(new DecodeCanceller(options));
 
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        BitmapFactory.decodeByteArray(data, 0, data.length, options, false);
         if (jc.isCancelled()) return null;
         if (options.outWidth < targetSize || options.outHeight < targetSize) {
             return null;
@@ -181,8 +181,16 @@ public class DecodeUtils {
         options.inJustDecodeBounds = false;
         setOptionsMutable(options);
 
-        return ensureGLCompatibleBitmap(
-                BitmapFactory.decodeByteArray(data, 0, data.length, options));
+        Bitmap bitmap = null;
+
+        try {
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options, false);
+
+        } catch (OutOfMemoryError ex) {
+            bitmap = null;
+            Log.e(TAG, "OutOfMemoryError : image is too large");
+        }
+        return ensureGLCompatibleBitmap(bitmap);
     }
 
     // TODO: This function should not be called directly from
