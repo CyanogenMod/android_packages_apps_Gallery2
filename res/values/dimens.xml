@@ -152,4 +152,6 @@
     <dimen name="photoeditor_text_padding">10dp</dimen>
     <dimen name="photoeditor_original_text_size">18dp</dimen>
     <dimen name="photoeditor_original_text_margin">4dp</dimen>
+
+    <dimen name="action_bar_elevation">2dp</dimen>
 </resources>
