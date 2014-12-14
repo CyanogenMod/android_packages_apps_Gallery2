@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Rect;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.glrenderer.FadeOutTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.glrenderer.NinePatchTexture;
@@ -33,6 +34,7 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
     private final ResourceTexture mPanoramaIcon;
     private final NinePatchTexture mFramePressed;
     private final NinePatchTexture mFrameSelected;
+    private final ResourceTexture mDrmIcon;
     private FadeOutTexture mFramePressedUp;
 
     protected AbstractSlotRenderer(Context context) {
@@ -41,6 +43,7 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
         mPanoramaIcon = new ResourceTexture(context, R.drawable.ic_360pano_holo_light);
         mFramePressed = new NinePatchTexture(context, R.drawable.grid_pressed);
         mFrameSelected = new NinePatchTexture(context, R.drawable.grid_selected);
+        mDrmIcon = new ResourceTexture(context, R.drawable.drm_image);
     }
 
     protected void drawContent(GLCanvas canvas,
@@ -77,6 +80,19 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
 
         int s = Math.min(width, height) / 6;
         mVideoPlayIcon.draw(canvas, (width - s) / 2, (height - s) / 2, s, s);
+    }
+
+    protected void drawDrmOverlay(GLCanvas canvas, int width, int height, int Drm_mediaType) {
+        // Scale the video overlay to the height of the thumbnail and put it on the left side.
+        if (Drm_mediaType == MediaObject.MEDIA_TYPE_DRM_VIDEO) {
+            ResourceTexture v = mVideoOverlay;
+            float scale = (float) height / v.getHeight();
+            int w = Math.round(scale * v.getWidth());
+            int h = Math.round(scale * v.getHeight());
+            v.draw(canvas, 0, 0, w, h);
+        }
+        int side = Math.min(width, height) / 6;
+        mDrmIcon.draw(canvas, (width - side) / 2, (height - side) / 2, side, side);
     }
 
     protected void drawPanoramaIcon(GLCanvas canvas, int width, int height) {

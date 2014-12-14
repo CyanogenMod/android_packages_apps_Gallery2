@@ -1127,4 +1127,9 @@ CHAR LIMIT = NONE] -->
     <string name="text_makeup_trimface">Trimface</string>
     <string name="text_makeup_bigeye">Bigeye</string>
 
+
+    <string name="no_permission_for_drm">"Sorry, Drm file can not be shared"</string>
+    <string name="drm_license_info">Drm license info</string>
+    <string name="mimetype_not_supported">This file can not be played</string>
+    <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
 </resources>

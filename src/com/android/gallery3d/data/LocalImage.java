@@ -20,6 +20,8 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.drm.DrmManagerClient;
+import android.drm.DrmStore.DrmDeliveryType;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
@@ -173,16 +175,16 @@ public class LocalImage extends LocalMediaItem {
     @Override
     public Job<Bitmap> requestImage(int type) {
         return new LocalImageRequest(mApplication, mPath, dateModifiedInSec,
-                type, filePath);
+                type, filePath, mimeType);
     }
 
     public static class LocalImageRequest extends ImageCacheRequest {
         private String mLocalFilePath;
 
         LocalImageRequest(GalleryApp application, Path path, long timeModified,
-                int type, String localFilePath) {
+                int type, String localFilePath, String mimetype) {
             super(application, path, timeModified, type,
-                    MediaItem.getTargetSize(type));
+                    MediaItem.getTargetSize(type), localFilePath, mimetype);
             mLocalFilePath = localFilePath;
         }
 
@@ -236,10 +238,24 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
-        int operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
-                | SUPPORT_SETAS | SUPPORT_PRINT | SUPPORT_INFO;
+        int operation = SUPPORT_DELETE  | SUPPORT_SETAS | SUPPORT_INFO;
+        if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
+            filePath = filePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
+            operation |= SUPPORT_DRM_INFO;
+            DrmManagerClient drmClient = new DrmManagerClient(mApplication.getAndroidContext());
+            ContentValues values = drmClient.getMetadata(filePath);
+            int drmType = values.getAsInteger("DRM-TYPE");
+            Log.d(TAG, "getSupportedOperations:drmType returned= "
+                    + Integer.toString(drmType) + " for path= " + filePath);
+            if (drmType == DrmDeliveryType.SEPARATE_DELIVERY) {
+                operation |= SUPPORT_SHARE;
+            }
+            if (drmClient != null) drmClient.release();
+        } else {
+            operation |= SUPPORT_SHARE | SUPPORT_EDIT | SUPPORT_CROP | SUPPORT_PRINT;
+        }
         if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
-            operation |= SUPPORT_FULL_IMAGE | SUPPORT_EDIT;
+            operation |= SUPPORT_FULL_IMAGE;
         }
 
         if (BitmapUtils.isRotationSupported(mimeType)) {
@@ -346,5 +362,15 @@ public class LocalImage extends LocalMediaItem {
     @Override
     public String getFilePath() {
         return filePath;
+    }
+
+    @Override
+    public void setConsumeRights(boolean flag) {
+        consumeRights = flag;
+    }
+
+    @Override
+    public boolean getConsumeRights() {
+        return consumeRights;
     }
 }
