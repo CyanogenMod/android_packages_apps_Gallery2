@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <!-- configuration for album set page -->
+    <color name="albumset_background">#ff21272b</color>
+    <color name="albumset_placeholder">#37474F</color>
+    <color name="albumset_label_background">#EE37474F</color>
+    <color name="albumset_label_title">#FBFBFB</color>
+    <color name="albumset_label_count">#A9ABAD</color>
+
+    <!-- configuration for album page -->
+    <color name="album_background">#ff21272b</color>
+    <color name="album_placeholder">#37474F</color>
+
+    <!-- configuration for photo page -->
+    <color name="photo_background">#ff21272b</color>
+    <color name="photo_placeholder">#37474F</color>
+
+    <!-- configuration for manage cache page -->
+    <color name="cache_background">#ff21272b</color>
+    <color name="cache_placeholder">#37474F</color>
+
+    <color name="bitmap_screennail_placeholder">#37474F</color>
+
+    <color name="slideshow_background">#ff21272b</color>
+
+    <color name="button_dark_transparent_background">#263238</color>
+
+    <color name="ingest_highlight_semitransparent">#8833b5e5</color>
+    <color name="ingest_date_tile_text">#33b5e5</color>
+
+    <!-- FAB -->
+    <color name="fab">#FF9800</color>
+    <color name="floating_action_button_touch_tint">#FFB74D</color>
+    <color name="floating_action_button_icon_color">#ffffff</color>
+
+</resources>
