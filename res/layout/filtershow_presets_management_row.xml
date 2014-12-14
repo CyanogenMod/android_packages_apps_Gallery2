@@ -47,6 +47,6 @@
             android:background="@android:color/transparent"
             android:layout_weight=".1"
             android:gravity="center"
-            android:src="@drawable/ic_menu_trash_holo_light"
+            android:src="@drawable/ic_menu_trash"
             android:visibility="gone"/>
 </LinearLayout>
