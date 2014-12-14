@@ -47,6 +47,7 @@ public class GalleryActionBar implements OnNavigationListener {
 
     private ClusterRunner mClusterRunner;
     private CharSequence[] mTitles;
+    private CharSequence mTitle;
     private ArrayList<Integer> mActions;
     private Context mContext;
     private LayoutInflater mInflater;
@@ -159,7 +160,8 @@ public class GalleryActionBar implements OnNavigationListener {
                         parent, false);
             }
             TwoLineListItem view = (TwoLineListItem) convertView;
-            view.getText1().setText(mActionBar.getTitle());
+            CharSequence title = mActionBar.getTitle();
+            view.getText1().setText(title == null ? mTitle : title);
             view.getText2().setText((CharSequence) getItem(position));
             return convertView;
         }
@@ -326,12 +328,14 @@ public class GalleryActionBar implements OnNavigationListener {
     }
 
     public void setTitle(String title) {
+        mTitle = title;
         if (mActionBar != null) mActionBar.setTitle(title);
     }
 
     public void setTitle(int titleId) {
         if (mActionBar != null) {
-            mActionBar.setTitle(mContext.getString(titleId));
+            mTitle = mContext.getString(titleId);
+            mActionBar.setTitle(mTitle);
         }
     }
 
