@@ -18,7 +18,7 @@ package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.support.v8.renderscript.Allocation;
+import android.renderscript.Allocation;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
