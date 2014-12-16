@@ -115,6 +115,9 @@ public class MovieListLoader implements IMovieListLoader {
                         //from gallery, gallery3D, videoplayer
                         long curId = Long.parseLong(uri.getPathSegments().get(3));
                         movieList = fillUriList(null, null, curId, params[0]);
+                    } else if (uristr.toLowerCase().startsWith("file://")) {
+                        long curId = getCursorId(uri);
+                        movieList = fillUriList(null, null, curId, params[0]);
                     }
                 }
             } else { //get current list
@@ -198,6 +201,31 @@ public class MovieListLoader implements IMovieListLoader {
                 Log.v(TAG, "fillUriList() cursor=" + cursor + ", return " + movieList);
             }
             return movieList;
+        }
+
+        private long getCursorId(Uri uri) {
+            long curId = -1;
+            Cursor cursor = null;
+            String data = Uri.decode(uri.toString());
+            data = data.replaceAll("'", "''");
+            String where = "_data LIKE '%" + data.replaceFirst("file:///", "") + "'";
+            try {
+                cursor = mCr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        new String[] {
+                            "_id"
+                        }, where, null, null);
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    curId = cursor.getLong(0);
+                }
+            } catch (final SQLiteException e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            return curId;
         }
     }
 }
