@@ -24,8 +24,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.RenderScript;
+
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
 import android.util.Log;
 
 import com.android.gallery3d.filtershow.cache.BitmapCache;
