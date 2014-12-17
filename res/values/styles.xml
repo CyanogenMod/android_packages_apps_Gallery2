@@ -37,7 +37,7 @@
         <item name="android:actionBarStyle">@style/Holo.ActionBar</item>
         <item name="android:colorBackground">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowBackground">@drawable/filtershow_tiled_background</item>
+        <item name="android:windowBackground">@color/filtershow_background</item>
     </style>
     <style name="Holo.ActionBar" parent="android:Widget.Holo.ActionBar">
         <item name="android:displayOptions">useLogo|showHome</item>
