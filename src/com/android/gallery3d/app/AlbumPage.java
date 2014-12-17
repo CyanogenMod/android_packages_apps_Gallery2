@@ -93,6 +93,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     private Path mMediaSetPath;
     private String mParentMediaSetString;
     private SlotView mSlotView;
+    private Config.AlbumPage mConfig;
 
     private AlbumDataLoader mAlbumDataAdapter;
 
@@ -158,9 +159,9 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         protected void onLayout(
                 boolean changed, int left, int top, int right, int bottom) {
 
-            int slotViewTop = mActivity.getGalleryActionBar().getHeight();
-            int slotViewBottom = bottom - top;
-            int slotViewRight = right - left;
+            int slotViewTop = mActivity.getGalleryActionBar().getHeight() + mConfig.paddingTop;
+            int slotViewBottom = bottom - top - mConfig.paddingBottom;
+            int slotViewRight = right - left - mConfig.paddingRight;
 
             if (mShowDetails) {
                 mDetailsHelper.layout(left, slotViewTop, right, bottom);
@@ -169,8 +170,8 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             }
 
             // Set the mSlotView as a reference point to the open animation
-            mOpenCenter.setReferencePosition(0, slotViewTop);
-            mSlotView.layout(0, slotViewTop, slotViewRight, slotViewBottom);
+            mOpenCenter.setReferencePosition(mConfig.paddingLeft, slotViewTop);
+            mSlotView.layout(mConfig.paddingLeft, slotViewTop, slotViewRight, slotViewBottom);
             GalleryUtils.setViewPointMatrix(mMatrix,
                     (right - left) / 2, (bottom - top) / 2, -mUserDistance);
         }
@@ -504,10 +505,10 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     private void initializeViews() {
         mSelectionManager = new SelectionManager(mActivity, false);
         mSelectionManager.setSelectionListener(this);
-        Config.AlbumPage config = Config.AlbumPage.get(mActivity);
-        mSlotView = new SlotView(mActivity, config.slotViewSpec);
+        mConfig = Config.AlbumPage.get(mActivity);
+        mSlotView = new SlotView(mActivity, mConfig.slotViewSpec);
         mAlbumView = new AlbumSlotRenderer(mActivity, mSlotView,
-                mSelectionManager, config.placeholderColor);
+                mSelectionManager, mConfig.placeholderColor);
         mSlotView.setSlotRenderer(mAlbumView);
         mRootPane.addComponent(mSlotView);
         mSlotView.setListener(new SlotView.SimpleListener() {
