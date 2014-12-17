@@ -31,6 +31,8 @@ final class Config {
         public AlbumSetSlotRenderer.LabelSpec labelSpec;
         public int paddingTop;
         public int paddingBottom;
+        public int paddingLeft;
+        public int paddingRight;
         public int placeholderColor;
 
         public static synchronized AlbumSetPage get(Context context) {
@@ -48,11 +50,15 @@ final class Config {
             slotViewSpec = new SlotView.Spec();
             slotViewSpec.rowsLand = r.getInteger(R.integer.albumset_rows_land);
             slotViewSpec.rowsPort = r.getInteger(R.integer.albumset_rows_port);
+            slotViewSpec.colsLand = r.getInteger(R.integer.albumset_cols_land);
+            slotViewSpec.colsPort = r.getInteger(R.integer.albumset_cols_port);
             slotViewSpec.slotGap = r.getDimensionPixelSize(R.dimen.albumset_slot_gap);
             slotViewSpec.slotHeightAdditional = 0;
 
             paddingTop = r.getDimensionPixelSize(R.dimen.albumset_padding_top);
             paddingBottom = r.getDimensionPixelSize(R.dimen.albumset_padding_bottom);
+            paddingLeft = r.getDimensionPixelSize(R.dimen.albumset_padding_left);
+            paddingRight = r.getDimensionPixelSize(R.dimen.albumset_padding_right);
 
             labelSpec = new AlbumSetSlotRenderer.LabelSpec();
             labelSpec.labelBackgroundHeight = r.getDimensionPixelSize(
@@ -82,6 +88,10 @@ final class Config {
         private static AlbumPage sInstance;
 
         public SlotView.Spec slotViewSpec;
+        public int paddingTop;
+        public int paddingBottom;
+        public int paddingLeft;
+        public int paddingRight;
         public int placeholderColor;
 
         public static synchronized AlbumPage get(Context context) {
@@ -99,7 +109,14 @@ final class Config {
             slotViewSpec = new SlotView.Spec();
             slotViewSpec.rowsLand = r.getInteger(R.integer.album_rows_land);
             slotViewSpec.rowsPort = r.getInteger(R.integer.album_rows_port);
+            slotViewSpec.colsLand = r.getInteger(R.integer.album_cols_land);
+            slotViewSpec.colsPort = r.getInteger(R.integer.album_cols_port);
             slotViewSpec.slotGap = r.getDimensionPixelSize(R.dimen.album_slot_gap);
+
+            paddingTop = r.getDimensionPixelSize(R.dimen.album_padding_top);
+            paddingBottom = r.getDimensionPixelSize(R.dimen.album_padding_bottom);
+            paddingLeft = r.getDimensionPixelSize(R.dimen.album_padding_left);
+            paddingRight = r.getDimensionPixelSize(R.dimen.album_padding_right);
         }
     }
 

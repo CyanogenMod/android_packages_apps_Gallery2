@@ -28,53 +28,76 @@ class Paper {
     @SuppressWarnings("unused")
     private static final String TAG = "Paper";
     private static final int ROTATE_FACTOR = 4;
-    private EdgeAnimation mAnimationLeft = new EdgeAnimation();
-    private EdgeAnimation mAnimationRight = new EdgeAnimation();
+    private EdgeAnimation mAnimationBegin = new EdgeAnimation();
+    private EdgeAnimation mAnimationEnd = new EdgeAnimation();
     private int mWidth;
+    private int mHeight;
     private float[] mMatrix = new float[16];
+
+    private final boolean mIsWide;
+
+    public Paper(boolean wide) {
+        mIsWide = wide;
+    }
 
     public void overScroll(float distance) {
         distance /= mWidth;  // make it relative to width
         if (distance < 0) {
-            mAnimationLeft.onPull(-distance);
+            mAnimationBegin.onPull(-distance);
         } else {
-            mAnimationRight.onPull(distance);
+            mAnimationEnd.onPull(distance);
         }
     }
 
     public void edgeReached(float velocity) {
         velocity /= mWidth;  // make it relative to width
         if (velocity < 0) {
-            mAnimationRight.onAbsorb(-velocity);
+            mAnimationEnd.onAbsorb(-velocity);
         } else {
-            mAnimationLeft.onAbsorb(velocity);
+            mAnimationBegin.onAbsorb(velocity);
         }
     }
 
     public void onRelease() {
-        mAnimationLeft.onRelease();
-        mAnimationRight.onRelease();
+        mAnimationBegin.onRelease();
+        mAnimationEnd.onRelease();
     }
 
     public boolean advanceAnimation() {
         // Note that we use "|" because we want both animations get updated.
-        return mAnimationLeft.update() | mAnimationRight.update();
+        return mAnimationBegin.update() | mAnimationEnd.update();
     }
 
     public void setSize(int width, int height) {
         mWidth = width;
+        mHeight = height;
     }
 
-    public float[] getTransform(Rect rect, float scrollX) {
-        float left = mAnimationLeft.getValue();
-        float right = mAnimationRight.getValue();
-        float screenX = rect.centerX() - scrollX;
-        // We linearly interpolate the value [left, right] for the screenX
-        // range int [-1/4, 5/4]*mWidth. So if part of the thumbnail is outside
+    public float[] getTransform(Rect rect, float scroll) {
+        Log.d(TAG, rect.toString());
+        float start = mAnimationBegin.getValue();
+        float end = mAnimationEnd.getValue();
+        int center = 0;
+        int screenWidth = mWidth;
+        int rotateX = 0;
+        int rotateY = 0;
+        final boolean wide = mIsWide;
+        if (wide) {
+            center = rect.centerX();
+            rotateY = 1;
+        } else {
+            center = rect.centerY();
+            rotateX = 1;
+            screenWidth = mHeight;
+        }
+        float screen = center - scroll;
+        // We linearly interpolate the value [start, end] for the screen
+        // range int [-1/4, 5/4]*screenWidth. So if part of the thumbnail is outside
         // the screen, we still get some transform.
-        float x = screenX + mWidth / 4;
-        int range = 3 * mWidth / 2;
-        float t = ((range - x) * left - x * right) / range;
+        float x = screen + screenWidth / 4;
+        int range = 3 * screenWidth / 2;
+        float t = ((range - x) * start - x * end) / range;
+
         // compress t to the range (-1, 1) by the function
         // f(t) = (1 / (1 + e^-t) - 0.5) * 2
         // then multiply by 90 to make the range (-45, 45)
@@ -82,8 +105,9 @@ class Paper {
                 (1 / (1 + (float) Math.exp(-t * ROTATE_FACTOR)) - 0.5f) * 2 * -45;
         Matrix.setIdentityM(mMatrix, 0);
         Matrix.translateM(mMatrix, 0, mMatrix, 0, rect.centerX(), rect.centerY(), 0);
-        Matrix.rotateM(mMatrix, 0, degrees, 0, 1, 0);
+        Matrix.rotateM(mMatrix, 0, degrees, rotateX, rotateY, 0);
         Matrix.translateM(mMatrix, 0, mMatrix, 0, -rect.width() / 2, -rect.height() / 2, 0);
+
         return mMatrix;
     }
 }
