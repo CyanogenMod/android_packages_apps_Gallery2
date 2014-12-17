@@ -37,7 +37,7 @@
         <item name="android:actionBarStyle">@style/Material.ActionBar</item>
         <item name="android:colorBackground">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowBackground">@drawable/filtershow_tiled_background</item>
+        <item name="android:windowBackground">@color/filtershow_background</item>
     </style>
     <style name="Material.ActionBar" parent="android:Widget.Material.ActionBar">
         <item name="android:title"></item>
