@@ -107,6 +107,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
 
         mOriginalBounds = MasterImage.getImage().getOriginalBounds();
         ImagePreset preset = MasterImage.getImage().getPreset();
+        if (mOriginalBounds == null || preset == null) return null;
         mOriginalBounds = preset.finalGeometryRect(mOriginalBounds.width(),
                 mOriginalBounds.height());
         if (preset != null) {
