@@ -61,5 +61,4 @@
     </style>
     <style name="Theme.Photos.Fullscreen" parent="android:Theme.Material">
     </style>
-    <style name="DialogPickerTheme" parent="android:Theme.Material.Dialog"/>
 </resources>
