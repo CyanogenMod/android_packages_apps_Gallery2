@@ -69,6 +69,7 @@
   <string name="wbalance">Automatesch Faarwen</string>
   <string name="hue">Faarftoun</string>
   <string name="shadow_recovery">Déiften</string>
+  <string name="highlight_recovery">Héichten</string>
   <string name="curvesRGB">Kurven</string>
   <string name="vignette">Vignettéierung</string>
   <string name="vignette_main">Vignettéierung</string>
@@ -87,6 +88,7 @@
   <string name="edge">Kanten</string>
   <string name="kmeans">Posteriséiert</string>
   <string name="downsample">Verklengeren</string>
+  <string name="grad">Ofgestuft</string>
   <string name="editor_grad_brightness">Hellegkeet</string>
   <string name="editor_grad_contrast">Kontrast</string>
   <string name="editor_grad_saturation">Sättegung</string>
@@ -110,7 +112,10 @@
   <string name="draw_value">Hellegkeet</string>
   <string name="draw_color">Faarf</string>
   <string name="draw_style_line">Linnen</string>
+  <string name="draw_style_brush_spatter">Filzstëft</string>
+  <string name="draw_style_brush_marker">Sprëtzer</string>
   <string name="draw_clear">Eidel maachen</string>
+  <string name="color_border_size">Randstäerkt</string>
   <string name="color_border_corner_size">Eckegréisst</string>
   <string name="color_border_color">Faarf</string>
   <string name="color_border_clear">Eidel maachen</string>
@@ -143,4 +148,5 @@
   <string name="filtershow_exif_date">Ophueldatum</string>
   <string name="filtershow_exif_f_stop">Blendenzuel</string>
   <string name="filtershow_exif_exposure_time">Beliichtungszäit</string>
+  <string name="filtershow_exif_copyright">Auteursrecht</string>
 </resources>
