@@ -29,6 +29,35 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="step_option_name">Schrëtt</string>
+  <string name="step_option_desc">Vir- an Zréckspull-Schrëtter upassen</string>
   <string name="step_option_alternate">5 Sekonnen</string>
   <string name="step_option_default">10 Sekonnen</string>
+  <string name="loop">"Widderhuelen"</string>
+  <string name="single">"Eenzel"</string>
+  <string name="stereo">"Stereo"</string>
+  <string name="speaker_on">Lautsprecher UN</string>
+  <string name="speaker_off">Lautsprecher AUS</string>
+  <string name="input_url">"URL aginn"</string>
+  <string name="streaming_settings">"Streamingastellungen"</string>
+  <string name="previous">"Zréck"</string>
+  <string name="rtp_min_port">Min. Port</string>
+  <string name="rtp_max_port">Max. Port</string>
+  <string name="setting">Astellungen</string>
+  <string name="media_controller_live">Live</string>
+  <string name="media_controller_playing">Gëtt ofgespillt</string>
+  <string name="media_controller_connecting">Connectéieren\u2026</string>
+  <string name="bookmark_add">"Lieszeechen dobäisetzen"</string>
+  <string name="bookmark_display">"Lieszeechen uweisen"</string>
+  <string name="bookmark_empty">"Keng Lieszeechen"</string>
+  <string name="bookmark_add_success">"Lieszeechen dobäigesat"</string>
+  <string name="bookmark_list">"Lieszeechen"</string>
+  <string name="bookmark_title">"Titel"</string>
+  <string name="bookmark_location">"Standuert"</string>
+  <string name="delete_all">"All läschen"</string>
+  <string name="default_title">"Standardtitel"</string>
+  <string name="fail_trim">Dëse Video ka leider net geschnidde ginn</string>
+  <string name="bass_boost_strength">Bassunhiewung</string>
+  <string name="virtualizer_strength">3D-Effekt</string>
+  <string name="audio_effects_dialog_title">Snapdragon-Audio+</string>
 </resources>

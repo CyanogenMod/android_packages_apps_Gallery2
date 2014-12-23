@@ -112,6 +112,7 @@
         Geschniddent Bild gespäichert ënner <xliff:g id="folder_name">%s</xliff:g>.</string>
   <string name="no_albums_alert">Keng Alben disponibel.</string>
   <string name="empty_album">O Biller/Videoen disponibel.</string>
+  <string name="picasa_posts">Posts</string>
   <string name="make_available_offline">Offline disponibel maachen</string>
   <string name="sync_picasa_albums">Nei lueden</string>
   <string name="done">Fäerdeg</string>
@@ -151,6 +152,10 @@
   <string name="ffx_x_process">X Process</string>
   <string name="ffx_washout">Latte</string>
   <string name="ffx_washout_color">Litho</string>
+  <plurals name="make_albums_available_offline">
+    <item quantity="one">Den Album gëtt offline disponibel gemaach.</item>
+    <item quantity="other">D\'Albe ginn offline disponibel gemaach.</item>
+  </plurals>
   <string name="try_to_set_local_album_available_offline">Dëst Element ass lokal gespäichert an och offiline disponibel.</string>
   <string name="set_label_all_albums">All d\'Alben</string>
   <string name="set_label_local_albums">Lokal Alben</string>
@@ -329,9 +334,11 @@
   <string name="effect_backdropper_space">Am Weltraum</string>
   <string name="effect_backdropper_sunset">Sonnenënnergank</string>
   <string name="effect_backdropper_gallery">Däi Video</string>
+  <string name="bg_replacement_message">Lee däin Apparat of.\nTriet e Moment aus dem Siichtberäich.</string>
   <string name="video_snapshot_hint">Drécke fir Fotoen ze maache während s du films.</string>
   <string name="video_recording_started">Videoopnam gouf gestart.</string>
   <string name="video_recording_stopped">Videoopnam gouf opgehalen.</string>
+  <string name="disable_video_snapshot_hint">Video-Schnappschoss ass bei Spezialeffekter desaktivéiert.</string>
   <string name="clear_effects">Effekter ewechhuelen</string>
   <string name="effect_silly_faces">LËSCHTEG GESIICHTER</string>
   <string name="effect_background">HANNERGROND</string>
@@ -342,6 +349,7 @@
   <string name="accessibility_mode_picker">Auswiel fir Fotoapparat, Video oder Panorama</string>
   <string name="accessibility_second_level_indicators">Weider Astellungen</string>
   <string name="accessibility_back_to_first_level">Astellungen zoumaachen</string>
+  <string name="accessibility_zoom_control">Zoomsteierung</string>
   <string name="accessibility_decrement">%1$s erofsetzen</string>
   <string name="accessibility_increment">%1$s eropsetzen</string>
   <string name="accessibility_check_box">%1$s Ukräizfeld</string>
@@ -356,6 +364,7 @@
   <string name="accessibility_play_video">Video ofspillen</string>
   <string name="accessibility_pause_video">Video pauséieren</string>
   <string name="accessibility_reload_video">Video nei lueden</string>
+  <string name="accessibility_time_bar">Zäitlinn vum Videoofspiller</string>
   <string name="capital_on">UN</string>
   <string name="capital_off">AUS</string>
   <string name="pref_video_time_lapse_frame_interval_off">Aus</string>
@@ -401,6 +410,7 @@
   <string name="time_lapse_interval_set">Fäerdeg</string>
   <string name="set_time_interval">Zäitintervall setzen</string>
   <string name="set_time_interval_help">Zäitrafferfunktioun ass aus. Maach s\'u fir den Zäitintervall ze setzen.</string>
+  <string name="set_timer_help">D\'Sandauer ass aus. Schalt s\'u fir erof ze ziele ier eng Foto gemaach gëtt.</string>
   <string name="set_duration">Dauer a Sekonne festleeën</string>
   <string name="count_down_title_text">Countdown fir eng Foto ze schéissen</string>
   <string name="remember_location_title">De Fotostanduert späicheren?</string>
