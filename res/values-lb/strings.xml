@@ -114,7 +114,7 @@
   <string name="empty_album">O Biller/Videoen disponibel.</string>
   <string name="picasa_posts">Posts</string>
   <string name="make_available_offline">Offline disponibel maachen</string>
-  <string name="sync_picasa_albums">Nei lueden</string>
+  <string name="sync_picasa_albums">Opfrëschen</string>
   <string name="done">Fäerdeg</string>
   <string name="sequence_in_set">%1$d / %2$d Elementer:</string>
   <string name="title">Titel</string>
