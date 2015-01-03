@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2014, The Linux Foundation. All rights reserved.
-     Not a Contribution.
-
-     Copyright (C) 2007 The Android Open Source Project
+<!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -285,10 +282,6 @@
          some albums to be viewable offline [CHAR LIMIT=30] -->
     <string name="make_available_offline">Make available offline</string>
 
-    <!-- A label describing to link website [CHAR LIMIT=30] -->
-    <string name="more_image">More Images</string>
-    <string name="website_for_more_image"></string>
-
     <!-- A label of a menu item for user to sync the content [CHAR LIMIT=30] -->
     <string name="sync_picasa_albums">Refresh</string>
 
@@ -532,9 +525,6 @@
 
     <!-- Toast if the trimmed video is too short to trim. [CHAR LIMIT=80] -->
     <string name="trim_too_short">Can not trim : target video is too short</string>
-
-    <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
-    <string name="mute_nosupport">Can not mute : not supported video</string>
 
     <!-- Text to show with progress bar while stitching in Gallery -->
     <string name="pano_progress_text">Rendering panorama</string>
@@ -1108,9 +1098,6 @@ CHAR LIMIT = NONE] -->
     <!-- Positive answer for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = 20] -->
     <string name="remember_location_yes">Yes</string>
 
-    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
-    <string name="map_activity_not_found_err">There is no map app for show location.</string>
-
     <!-- Menu item to launch the camera app [CHAR LIMIT=25] -->
     <string name="menu_camera">Camera</string>
     <!-- Menu item to search for photos [CHAR LIMIT=25] -->
@@ -1132,21 +1119,6 @@ CHAR LIMIT = NONE] -->
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>
     </plurals>
-
-    <!-- The label for the bass boost knob of the audio effects dialog. -->
-    <string name="bass_boost_strength">Bass boost</string>
-
-    <!-- The label for the 3d effect knob of the audio effects dialog. -->
-    <string name="virtualizer_strength">3D effect</string>
-
-    <!-- The label for the audio effects menu. -->
-    <string name="audio_effects">Audio effects</string>
-
-    <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
-    <string name="headset_plug">Plug in headphones for these effects.</string>
-
-    <!-- The title of the audio effects dialog. -->
-    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
 
     <!-- The tips of trimming video -->
     <string name="fail_trim">Sorry, this video file can not be trimmed</string>
