@@ -794,7 +794,7 @@ public class PhotoDataAdapter implements PhotoPage.Model {
         // Must be an item in camera roll.
         if (!(mediaItem instanceof LocalMediaItem)) return false;
         LocalMediaItem item = (LocalMediaItem) mediaItem;
-        if (item.getBucketId() != MediaSetUtils.CAMERA_BUCKET_ID) return false;
+        if (item.getBucketId() != MediaSetUtils.getCameraBucketId()) return false;
         // Must have no size, but must have width and height information
         if (item.getSize() != 0) return false;
         if (item.getWidth() == 0) return false;

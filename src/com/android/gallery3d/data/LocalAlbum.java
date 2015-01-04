@@ -95,7 +95,7 @@ public class LocalAlbum extends MediaSet {
 
     @Override
     public boolean isCameraRoll() {
-        return mBucketId == MediaSetUtils.CAMERA_BUCKET_ID;
+        return mBucketId == MediaSetUtils.getCameraBucketId();
     }
 
     @Override
@@ -279,7 +279,7 @@ public class LocalAlbum extends MediaSet {
 
     public static String getLocalizedName(Resources res, int bucketId,
             String name) {
-        if (bucketId == MediaSetUtils.CAMERA_BUCKET_ID) {
+        if (bucketId == MediaSetUtils.getCameraBucketId()) {
             return res.getString(R.string.folder_camera);
         } else if (bucketId == MediaSetUtils.DOWNLOAD_BUCKET_ID) {
             return res.getString(R.string.folder_download);
@@ -297,7 +297,7 @@ public class LocalAlbum extends MediaSet {
     // Relative path is the absolute path minus external storage path
     public static String getRelativePath(int bucketId) {
         String relativePath = "/";
-        if (bucketId == MediaSetUtils.CAMERA_BUCKET_ID) {
+        if (bucketId == MediaSetUtils.getCameraBucketId()) {
             relativePath += BucketNames.CAMERA;
         } else if (bucketId == MediaSetUtils.DOWNLOAD_BUCKET_ID) {
             relativePath += BucketNames.DOWNLOAD;
