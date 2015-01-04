@@ -65,6 +65,9 @@ public class FilterCropRepresentation extends FilterRepresentation {
             return false;
         }
         FilterCropRepresentation crop = (FilterCropRepresentation) rep;
+        if (crop.isNil()) {
+            return true;
+        }
         if (mCrop.bottom != crop.mCrop.bottom
             || mCrop.left != crop.mCrop.left
             || mCrop.right != crop.mCrop.right
