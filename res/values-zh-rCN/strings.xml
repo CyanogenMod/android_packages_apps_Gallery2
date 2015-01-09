@@ -427,9 +427,6 @@
     <string name="remember_location_prompt" msgid="724592331305808098">"为您的照片和视频标明拍摄地点。\n\n其他应用在查看您保存的照片和视频时将可以使用这些信息。"</string>
     <string name="remember_location_no" msgid="7541394381714894896">"不用了"</string>
     <string name="remember_location_yes" msgid="862884269285964180">"好"</string>
-    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
-    <string name="map_activity_not_found_err">没有地图应用显示地理位置信息</string>
-
     <string name="menu_camera" msgid="3476709832879398998">"相机"</string>
     <string name="menu_search" msgid="7580008232297437190">"搜索"</string>
     <string name="tab_photos" msgid="9110813680630313419">"照片"</string>
@@ -441,10 +438,6 @@
     <item quantity="other" msgid="3813306834113858135">"%1$d张照片"</item>
   </plurals>
 
-    <string name="bass_boost_strength" msgid="882301530007752270">"低音增强"</string>
-    <string name="virtualizer_strength" msgid="5035111173763913313">"3D 音效"</string>
-    <string name="audio_effects" msgid="612896145300512593">"音效"</string>
-    <string name="headset_plug">“插入耳机体验音效”</string>
     <string name="text_makeup_whiten">美白</string>
     <string name="text_makeup_Soften">磨皮</string>
     <string name="text_makeup_trimface">瘦脸</string>
