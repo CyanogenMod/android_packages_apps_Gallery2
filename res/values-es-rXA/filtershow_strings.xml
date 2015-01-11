@@ -148,5 +148,5 @@
   <string name="filtershow_exif_date">Data de creación</string>
   <string name="filtershow_exif_f_stop">Númberu f</string>
   <string name="filtershow_exif_exposure_time">Tiempu d\'esposición</string>
-  <string name="filtershow_exif_copyright">Derechos d\'autor</string>
+  <string name="filtershow_exif_copyright">Copyright</string>
 </resources>

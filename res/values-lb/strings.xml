@@ -89,9 +89,9 @@
   <string name="caching_label">Tëschespäicherung leeft\u2026</string>
   <string name="crop_action">Schneiden</string>
   <string name="trim_action">Trimmen</string>
-  <string name="mute_action">Stomm</string>
+  <string name="mute_action">Roueg</string>
   <string name="set_as">Setzen als</string>
-  <string name="video_mute_err">Kann de Video net stommschalten.</string>
+  <string name="video_mute_err">Kann de Video net roueg schalten.</string>
   <string name="video_err">Video kann net ofgespillt ginn.</string>
   <string name="group_by_location">No Plaz</string>
   <string name="group_by_time">No Zäit</string>
@@ -108,8 +108,7 @@
   <string name="show_all">Biller a Videoen</string>
   <string name="appwidget_title">Fotogalerie</string>
   <string name="appwidget_empty_text">Keng Fotoen.</string>
-  <string name="crop_saved">
-        Geschniddent Bild gespäichert ënner <xliff:g id="folder_name">%s</xliff:g>.</string>
+  <string name="crop_saved">Geschniddent Bild gespäichert ënner <xliff:g id="folder_name">%s</xliff:g>.</string>
   <string name="no_albums_alert">Keng Alben disponibel.</string>
   <string name="empty_album">O Biller/Videoen disponibel.</string>
   <string name="picasa_posts">Posts</string>
@@ -221,20 +220,20 @@
   <string name="no_storage" product="default">Maach eng SD-Kaart dran ier s du d\'Kamera benotzt.</string>
   <string name="preparing_sd" product="nosdcard">USB-Späicher gëtt preparéiert\u2026</string>
   <string name="preparing_sd" product="default">SD-Kaart gëtt preparéiert\u2026</string>
-  <string name="access_sd_fail" product="nosdcard">Kann net op den USB-Späicher zougräifen.</string>
-  <string name="access_sd_fail" product="default">Keen Zougrëff op USB-Späicher méiglech.</string>
+  <string name="access_sd_fail" product="nosdcard">Keen Zougrëff op den USB-Späicher méiglech.</string>
+  <string name="access_sd_fail" product="default">Keen Zougrëff op d\'SD-Kaart méiglech.</string>
   <string name="review_cancel">OFBRIECHEN</string>
   <string name="review_ok">FÄERDEG</string>
   <string name="time_lapse_title">Zäitrafferopnam</string>
-  <string name="pref_camera_id_title">Kamera auswielen</string>
-  <string name="pref_camera_id_entry_back">Zréck</string>
+  <string name="pref_camera_id_title">Kamera wielen</string>
+  <string name="pref_camera_id_entry_back">Hannen</string>
   <string name="pref_camera_id_entry_front">Vir</string>
   <string name="pref_camera_recordlocation_title">Plaz späicheren</string>
   <string name="pref_camera_location_label">PLAZ</string>
   <string name="pref_camera_timer_title">Countdown-Timer</string>
   <plurals name="pref_camera_timer_entry">
     <item quantity="one">1 Sekonn</item>
-    <item quantity="other"><xliff:g id="count">%d</xliff:g> Sekonnen</item>
+    <item quantity="other">%d Sekonnen</item>
   </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">Piipse während dem Countdown</string>
@@ -288,12 +287,12 @@
   <string name="pref_camera_scenemode_title">Zeenemodus</string>
   <string name="pref_camera_scenemode_entry_auto">Automatesch</string>
   <string name="pref_camera_scenemode_entry_hdr">HDR</string>
-  <string name="pref_camera_scenemode_entry_action">Action</string>
+  <string name="pref_camera_scenemode_entry_action">Aktioun</string>
   <string name="pref_camera_scenemode_entry_night">Nuecht</string>
   <string name="pref_camera_scenemode_entry_sunset">Sonnenënnergank</string>
   <string name="pref_camera_scenemode_entry_party">Party</string>
   <string name="pref_camera_scenemode_label_auto">KEEN</string>
-  <string name="pref_camera_scenemode_label_action">ACTION</string>
+  <string name="pref_camera_scenemode_label_action">AKTIOUN</string>
   <string name="pref_camera_scenemode_label_night">NUECHT</string>
   <string name="pref_camera_scenemode_label_sunset">SONNENËNNERGANK</string>
   <string name="pref_camera_scenemode_label_party">PARTY</string>
@@ -313,7 +312,7 @@
   <string name="dialog_ok">OK</string>
   <string name="spaceIsLow_content" product="nosdcard">Däin USB-Späicher huet geschwë keng Plaz méi. Änner d\'Qualitéitsastellungen oder läsch e puer Fotoen oder aner Fichieren.</string>
   <string name="spaceIsLow_content" product="default">Deng SD-Kaart huet geschwë keng Plaz méi. Änner d\'Qualitéitsastellungen oder läsch e puer Fotoen oder Fichieren.</string>
-  <string name="video_reach_size_limit">Limittgréisst ass erreecht.</string>
+  <string name="video_reach_size_limit">Gréisstelimitt ass erreecht.</string>
   <string name="pano_too_fast_prompt">Ze séier</string>
   <string name="pano_dialog_prepare_preview">Panorama gëtt preparéiert</string>
   <string name="pano_dialog_panorama_failed">De Panorama konnt net gespäichert ginn.</string>
@@ -369,6 +368,7 @@
   <string name="capital_off">AUS</string>
   <string name="pref_video_time_lapse_frame_interval_off">Aus</string>
   <string name="pref_video_time_lapse_frame_interval_500">0,5 Sekonnen</string>
+  <string name="pref_video_time_lapse_frame_interval_1000">1 Sekonn</string>
   <string name="pref_video_time_lapse_frame_interval_1500">1,5 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_2000">2 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_2500">2,5 Sekonnen</string>
@@ -381,6 +381,7 @@
   <string name="pref_video_time_lapse_frame_interval_15000">15 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_24000">24 Sekonnen</string>
   <string name="pref_video_time_lapse_frame_interval_30000">0,5 Minutten</string>
+  <string name="pref_video_time_lapse_frame_interval_60000">1 Minutt</string>
   <string name="pref_video_time_lapse_frame_interval_90000">1,5 Minutten</string>
   <string name="pref_video_time_lapse_frame_interval_120000">2 Minutten</string>
   <string name="pref_video_time_lapse_frame_interval_150000">2,5 Minutten</string>
@@ -393,6 +394,7 @@
   <string name="pref_video_time_lapse_frame_interval_900000">15 Minutten</string>
   <string name="pref_video_time_lapse_frame_interval_1440000">24 Minutten</string>
   <string name="pref_video_time_lapse_frame_interval_1800000">0,5 Stonnen</string>
+  <string name="pref_video_time_lapse_frame_interval_3600000">1 Stonn</string>
   <string name="pref_video_time_lapse_frame_interval_5400000">1,5 Stonnen</string>
   <string name="pref_video_time_lapse_frame_interval_7200000">2 Stonnen</string>
   <string name="pref_video_time_lapse_frame_interval_9000000">2,5 Stonnen</string>
@@ -410,7 +412,7 @@
   <string name="time_lapse_interval_set">Fäerdeg</string>
   <string name="set_time_interval">Zäitintervall setzen</string>
   <string name="set_time_interval_help">Zäitrafferfunktioun ass aus. Maach s\'u fir den Zäitintervall ze setzen.</string>
-  <string name="set_timer_help">D\'Sandauer ass aus. Schalt s\'u fir erof ze ziele ier eng Foto gemaach gëtt.</string>
+  <string name="set_timer_help">D\'Sandauer ass aus. Schalt s\'u fir erofzezielen ier eng Foto gemaach gëtt.</string>
   <string name="set_duration">Dauer a Sekonne festleeën</string>
   <string name="count_down_title_text">Countdown fir eng Foto ze schéissen</string>
   <string name="remember_location_title">De Fotostanduert späicheren?</string>

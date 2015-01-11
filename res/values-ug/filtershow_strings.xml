@@ -57,7 +57,6 @@
   <string name="aspect7to5_effect">7:5</string>
   <string name="aspect9to16_effect">16:9</string>
   <string name="aspectNone_effect">يوق</string>
-  <string name="aspectOriginal_effect">@string/original</string>
   <string name="Fixed">مۇقىم</string>
   <string name="tinyplanet">كىچىك پىلانىت</string>
   <string name="exposure" msgid="1229093066434614811">نۇر ئۆتۈش</string>
@@ -143,7 +142,6 @@
   <string name="filtershow_exif_model">ئەندىزە</string>
   <string name="filtershow_exif_aperture">نۇر گەردىشى</string>
   <string name="filtershow_exif_focal_length">فوكۇس ئارىلىقى</string>
-  <string name="filtershow_exif_iso">ISO</string>
   <string name="filtershow_exif_subject_distance">جىسىم ئارىلىقى</string>
   <string name="filtershow_exif_date">تارتىلغان چېسلا</string>
   <string name="filtershow_exif_f_stop">يورۇقلۇق چەمبەر قىممىتى</string>

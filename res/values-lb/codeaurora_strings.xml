@@ -69,7 +69,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Standuert"</string>
   <string name="delete_all">"All läschen"</string>
   <string name="default_title">"Standardtitel"</string>
-  <string name="mute_nosupport">Kann net stommschalten: Video net ënnerstëtzt</string>
+  <string name="mute_nosupport">Kann net roueg schalten: Video net ënnerstëtzt</string>
   <string name="fail_trim">Dëse Video ka leider net geschnidde ginn</string>
   <string name="bass_boost_strength">Bassunhiewung</string>
   <string name="virtualizer_strength">3D-Effekt</string>

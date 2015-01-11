@@ -17,8 +17,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">سۈرەت يىغقۇچ</string>
   <string name="gadget_title">رەسىم كاندۇك</string>
-  <string name="details_ms">%1$02d:%2$02d</string>
-  <string name="details_hms">%1$d:%2$02d:%3$02d</string>
   <string name="movie_view_label">سىن  قويغۇچ</string>
   <string name="loading_video">سىن يۈكلەۋاتىدۇ…</string>
   <string name="loading_image">سۈرەت يۈكلەۋاتىدۇ…</string>
@@ -130,8 +128,6 @@
   <string name="focal_length">فوكۇس ئارىلىقى</string>
   <string name="white_balance">ئاق تەڭپۇڭلۇق</string>
   <string name="exposure_time">ئاشكارىلانغان ۋاقتى</string>
-  <string name="iso">ISO</string>
-  <string name="unit_mm">mm</string>
   <string name="manual">قولدا</string>
   <string name="auto">ئاپتوماتىك</string>
   <string name="flash_on">چاقماق لامپا</string>
@@ -228,7 +224,6 @@
   <plurals name="pref_camera_timer_entry">
     <item quantity="other">1 سېكۇنت</item>
   </plurals>
-  <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">تەتۈر ساناۋاتقاندا ئەسكەرتىش ئاۋازى چىقار</string>
   <string name="setting_off">تاقاق</string>
   <string name="setting_on">ئوچۇق</string>
@@ -248,8 +243,6 @@
   <string name="pref_camera_picturesize_entry_2mp_wide">2 مىليون پىكسېل (16:9)</string>
   <string name="pref_camera_picturesize_entry_1_3mp">1،3 مىليون پىكسېل</string>
   <string name="pref_camera_picturesize_entry_1mp">1 مىليون پىكسېل</string>
-  <string name="pref_camera_picturesize_entry_vga">VGA</string>
-  <string name="pref_camera_picturesize_entry_qvga">QVGA</string>
   <string name="pref_camera_focusmode_title">فوكۇس مودېلى</string>
   <string name="pref_camera_focusmode_entry_auto">ئاپتوماتىك</string>
   <string name="pref_camera_focusmode_entry_infinity">چەكسىز</string>
@@ -279,7 +272,6 @@
   <string name="pref_camera_whitebalance_label_cloudy">بۇلۇتلۇق</string>
   <string name="pref_camera_scenemode_title">مەنزىرە ھالىتى</string>
   <string name="pref_camera_scenemode_entry_auto">ئاپتوماتىك</string>
-  <string name="pref_camera_scenemode_entry_hdr">HDR</string>
   <string name="pref_camera_scenemode_entry_action">مەشغۇلات</string>
   <string name="pref_camera_scenemode_entry_night">كېچە</string>
   <string name="pref_camera_scenemode_entry_sunset">كۈن پېتىش</string>
@@ -298,8 +290,6 @@
   <string name="not_selectable_in_scene_mode">تەڭشەكنى مەنزىرە ھالىتىدە تاللىغىلى بولمايدۇ.</string>
   <string name="pref_exposure_title">نۇر ئۆتۈش</string>
   <string name="pref_exposure_label">نۇر ئۆتۈش</string>
-  <string name="pref_camera_hdr_default">@string/setting_off_value</string>
-  <string name="pref_camera_hdr_label">HDR</string>
   <string name="pref_camera_id_label_back">ئالدى كامېرا</string>
   <string name="pref_camera_id_label_front">كەينى كامېرا</string>
   <string name="dialog_ok">جەزملە</string>

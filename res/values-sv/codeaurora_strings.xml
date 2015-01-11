@@ -35,16 +35,22 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="step_option_default">10 sekunder</string>
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Högtalare på</string>
+  <string name="speaker_off">Högtalare AV</string>
   <string name="speaker_need_headset">Anslut hörlurarna för att använda denna funktion.</string>
   <string name="single_track">"Enkelt spår"</string>
   <string name="input_url">"Ange URL"</string>
+  <string name="streaming_settings">"Inställningar för direktuppspelning"</string>
   <string name="next">"Nästa"</string>
   <string name="previous">"Föregående"</string>
   <string name="buffer_size">Bufferstorlek</string>
   <string name="apn">Förvald APN</string>
+  <string name="rtp_max_port">Högsta port</string>
+  <string name="set_rtp_min_port">Ange lägsta portnummer</string>
+  <string name="set_rtp_max_port">Ange högsta portnummer</string>
   <string name="set_buffer_size">Ange buffertstorlek</string>
   <string name="set_apn">Välj önskad APN</string>
   <string name="setting">Inställningar</string>
+  <string name="server_timeout_title">"Server-timeout"</string>
   <string name="media_controller_live">Live</string>
   <string name="media_controller_playing">Spelar</string>
   <string name="media_controller_connecting">Ansluter\u2026</string>
@@ -57,6 +63,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_title">"Titel"</string>
   <string name="bookmark_location">"Plats"</string>
   <string name="delete_all">"Ta bort alla"</string>
+  <string name="bass_boost_strength">Basförstärkning</string>
   <string name="virtualizer_strength">3D-effekt</string>
   <string name="audio_effects">Ljudeffekter</string>
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
 </resources>
