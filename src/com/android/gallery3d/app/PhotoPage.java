@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.media.MediaFile;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcAdapter.CreateBeamUrisCallback;
@@ -1108,8 +1109,15 @@ public abstract class PhotoPage extends ActivityState implements
                 Intent intent = new Intent(mActivity, TrimVideo.class);
                 intent.setData(manager.getContentUri(path));
                 // We need the file path to wrap this into a RandomAccessFile.
-                intent.putExtra(KEY_MEDIA_ITEM_PATH, current.getFilePath());
-                mActivity.startActivityForResult(intent, REQUEST_TRIM);
+                String str = android.media.MediaFile.getMimeTypeForFile(current.getFilePath());
+                if("video/mp4".equals(str) || "video/mpeg4".equals(str)
+                        || "video/3gpp".equals(str) || "video/3gpp2".equals(str)) {
+                    intent.putExtra(KEY_MEDIA_ITEM_PATH, current.getFilePath());
+                    mActivity.startActivityForResult(intent, REQUEST_TRIM);
+                } else {
+                    Toast.makeText(mActivity,mActivity.getString(R.string.can_not_trim),
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
             case R.id.action_mute: {
