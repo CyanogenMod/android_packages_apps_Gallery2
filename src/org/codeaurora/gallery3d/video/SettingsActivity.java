@@ -286,22 +286,19 @@ public class SettingsActivity extends PreferenceActivity {
     }
     
     private void setApnListener() {
-        final String CLASS_NAME    = "com.android.settings.ApnSettings";
         final String SUBSCRIPTION_KEY = "subscription";
-
         mApn.setSummary(getDefaultApnName());
         mApn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent();
-                intent.setClassName(PACKAGE_NAME, CLASS_NAME);
-
+                Intent intent = new Intent(Settings.ACTION_APN_SETTINGS);
                 int subscription = 0;
                 try {
                     subscription = Settings.Global.getInt(SettingsActivity.this.getContentResolver(),
                             Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION);
-                    intent.putExtra(SUBSCRIPTION_KEY, subscription);
                 } catch (Exception e) {
-                    Log.d("SettingActivity", "Can't get subscription for Exception" + e);
+                    Log.d("SettingActivity", "Can't get subscription for Exception: " + e);
+                } finally {
+                    intent.putExtra(SUBSCRIPTION_KEY, subscription);
                 }
                 startActivityForResult(intent, SELECT_APN);
                 return true;
