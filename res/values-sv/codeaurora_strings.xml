@@ -44,13 +44,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="previous">"Föregående"</string>
   <string name="buffer_size">Bufferstorlek</string>
   <string name="apn">Förvald APN</string>
-  <string name="rtp_max_port">Högsta port</string>
+  <string name="rtp_min_port">Min port</string>
+  <string name="rtp_max_port">Max port</string>
   <string name="set_rtp_min_port">Ange lägsta portnummer</string>
   <string name="set_rtp_max_port">Ange högsta portnummer</string>
   <string name="set_buffer_size">Ange buffertstorlek</string>
   <string name="set_apn">Välj önskad APN</string>
   <string name="setting">Inställningar</string>
   <string name="server_timeout_title">"Server-timeout"</string>
+  <string name="server_timeout_message">"Återanslut till servern för att spela videon?"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"Anslutning misslyckades, försöker återansluta till %1$d\u2026"</string>
   <string name="media_controller_live">Live</string>
   <string name="media_controller_playing">Spelar</string>
   <string name="media_controller_connecting">Ansluter\u2026</string>
@@ -63,6 +66,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_title">"Titel"</string>
   <string name="bookmark_location">"Plats"</string>
   <string name="delete_all">"Ta bort alla"</string>
+  <string name="mute_nosupport">Kan inte stänga av ljudet: video stöds inte</string>
   <string name="bass_boost_strength">Basförstärkning</string>
   <string name="virtualizer_strength">3D-effekt</string>
   <string name="audio_effects">Ljudeffekter</string>
