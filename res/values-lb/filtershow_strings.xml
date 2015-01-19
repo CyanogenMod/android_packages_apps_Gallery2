@@ -18,7 +18,6 @@
   <string name="title_activity_filter_show">Fotoediteur</string>
   <string name="cannot_load_image">D\'Bild kann net geluede ginn!</string>
   <string name="cannot_edit_original">Original kann net geännert ginn</string>
-  <string name="original_picture_text">@string/original</string>
   <string name="setting_wallpaper">Als Hannergrondbild setzen</string>
   <string name="download_failure">Konnt d\'Foto net eroflueden. D\'Netzwierk ass net disponibel.</string>
   <string name="original">Original</string>
@@ -43,7 +42,6 @@
   <string name="exit">Verloossen</string>
   <string name="history">Historique</string>
   <string name="reset">Zrécksetzen</string>
-  <string name="history_original">@string/original</string>
   <string name="imageState">Applizéiert Effekter</string>
   <string name="compare_original">Vergläichen</string>
   <string name="apply_effect">Applizéieren</string>
@@ -57,7 +55,6 @@
   <string name="aspect7to5_effect">7:5</string>
   <string name="aspect9to16_effect">16:9</string>
   <string name="aspectNone_effect">Keen</string>
-  <string name="aspectOriginal_effect">@string/original</string>
   <string name="Fixed">Fixéiert</string>
   <string name="tinyplanet">Klenge Planéit</string>
   <string name="exposure" msgid="1229093066434614811">Beliichtung</string>

@@ -19,7 +19,7 @@
   <string name="gadget_title">Billerrumm</string>
   <string name="details_ms">%1$02d:%2$02d</string>
   <string name="details_hms">%1$d:%2$02d:%3$02d</string>
-  <string name="movie_view_label">Videofspiller</string>
+  <string name="movie_view_label">Videoofspiller</string>
   <string name="loading_video">Video gëtt gelueden\u2026</string>
   <string name="loading_image">Bild gëtt gelueden\u2026</string>
   <string name="loading_account">Kont gëtt gelueden\u2026</string>
