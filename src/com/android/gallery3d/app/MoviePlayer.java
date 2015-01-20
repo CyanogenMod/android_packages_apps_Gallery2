@@ -89,6 +89,11 @@ public class MoviePlayer implements
     private static final int KEYCODE_MEDIA_PLAY = 126;
     private static final int KEYCODE_MEDIA_PAUSE = 127;
 
+    // Copied from MediaPlaybackService in the Music Player app.
+    private static final String SERVICECMD = "com.android.music.musicservicecommand";
+    private static final String CMDNAME = "command";
+    private static final String CMDPAUSE = "pause";
+
     private static final String KEY_VIDEO_CAN_SEEK = "video_can_seek";
     private static final String KEY_VIDEO_CAN_PAUSE = "video_can_pause";
     private static final String KEY_VIDEO_LAST_DURATION = "video_last_duration";
@@ -284,6 +289,10 @@ public class MoviePlayer implements
 
         mAudioBecomingNoisyReceiver = new AudioBecomingNoisyReceiver();
         mAudioBecomingNoisyReceiver.register();
+
+        Intent i = new Intent(SERVICECMD);
+        i.putExtra(CMDNAME, CMDPAUSE);
+        movieActivity.sendBroadcast(i);
 
         // Listen for broadcasts related to user-presence
         final IntentFilter filter = new IntentFilter();
