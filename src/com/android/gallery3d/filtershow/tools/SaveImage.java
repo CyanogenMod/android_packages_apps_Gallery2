@@ -247,7 +247,7 @@ public class SaveImage {
         if (mimeType == null) {
             mimeType = ImageLoader.getMimeType(mSelectedImageUri);
         }
-        if (mimeType.equals(ImageLoader.JPEG_MIME_TYPE)) {
+        if (ImageLoader.JPEG_MIME_TYPE.equals(mimeType)) {
             InputStream inStream = null;
             try {
                 inStream = mContext.getContentResolver().openInputStream(source);
