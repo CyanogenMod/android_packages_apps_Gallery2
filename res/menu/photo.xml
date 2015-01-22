@@ -78,4 +78,9 @@
     <item android:id="@+id/print"
           android:title="@string/print_image"
           android:showAsAction="never" />
+    <item android:id="@+id/action_drm_info"
+        android:title="@string/drm_license_info"
+        android:enabled="true"
+        android:visible="false"
+        android:showAsAction="never" />
 </menu>

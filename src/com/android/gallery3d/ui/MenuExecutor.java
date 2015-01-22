@@ -24,8 +24,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore.Video.VideoColumns;
 import android.support.v4.print.PrintHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -179,7 +182,7 @@ public class MenuExecutor {
         boolean supportInfo = (supported & MediaObject.SUPPORT_INFO) != 0;
         boolean supportPrint = (supported & MediaObject.SUPPORT_PRINT) != 0;
         supportPrint &= PrintHelper.systemSupportsPrint();
-
+        boolean supportDrmInfo = (supported & MediaObject.SUPPORT_DRM_INFO) != 0;
         setMenuItemVisible(menu, R.id.action_delete, supportDelete);
         setMenuItemVisible(menu, R.id.action_rotate_ccw, supportRotate);
         setMenuItemVisible(menu, R.id.action_rotate_cw, supportRotate);
@@ -195,6 +198,7 @@ public class MenuExecutor {
         // setMenuItemVisible(menu, R.id.action_simple_edit, supportEdit);
         setMenuItemVisible(menu, R.id.action_details, supportInfo);
         setMenuItemVisible(menu, R.id.print, supportPrint);
+        setMenuItemVisible(menu, R.id.action_drm_info, supportDrmInfo);
     }
 
     public static void updateMenuForPanorama(Menu menu, boolean shareAsPanorama360,
@@ -270,6 +274,36 @@ public class MenuExecutor {
                 break;
             case R.id.action_show_on_map:
                 title = R.string.show_on_map;
+                break;
+            case R.id.action_drm_info:
+                DataManager manager = mActivity.getDataManager();
+                Path path = getSingleSelectedPath();
+                Uri uri = manager.getContentUri(path);
+                Log.d(TAG, "onMenuClicked:" + uri);
+                String filepath = null;
+                String scheme = uri.getScheme();
+                if ("file".equals(scheme)) {
+                    filepath = uri.getPath();
+                } else {
+                    Cursor cursor = null;
+                    try {
+                        cursor = mActivity.getAndroidContext().getContentResolver().query(uri,
+                                new String[] {VideoColumns.DATA}, null, null, null);
+                        if (cursor != null && cursor.moveToNext()) {
+                            filepath = cursor.getString(0);
+                        }
+                    } catch (Throwable t) {
+                        Log.w(TAG, "cannot get path from: " + uri);
+                    } finally {
+                        if (cursor != null) cursor.close();
+                    }
+                }
+                Intent drmintent = new Intent("android.drmservice.intent.action.SHOW_PROPERTIES");
+                filepath = filepath.replace("/storage/emulated/0", "/storage/emulated/legacy");
+                drmintent.putExtra("DRM_FILE_PATH", filepath);
+                drmintent.putExtra("DRM_TYPE", "OMAV1");
+                mActivity.getAndroidContext().sendBroadcast(drmintent);
+                title = R.string.drm_license_info;
                 break;
             default:
                 return;

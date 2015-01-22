@@ -21,12 +21,21 @@ package com.android.gallery3d.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.drm.DrmManagerClient;
+import android.drm.DrmRights;
+import android.drm.DrmStore.Action;
+import android.drm.DrmStore.DrmDeliveryType;
+import android.drm.DrmStore.RightsStatus;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore.Video.VideoColumns;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,8 +72,13 @@ import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.HelpUtils;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AlbumSetPage extends ActivityState implements
         SelectionManager.SelectionListener, GalleryActionBar.ClusterRunner,
@@ -73,6 +87,8 @@ public class AlbumSetPage extends ActivityState implements
     private static final String TAG = "AlbumSetPage";
 
     private static final int MSG_PICK_ALBUM = 1;
+
+    public static final String BUY_LICENSE = "android.drmservice.intent.action.BUY_LICENSE";
 
     public static final String KEY_MEDIA_PATH = "media-path";
     public static final String KEY_SET_TITLE = "set-title";
@@ -242,6 +258,72 @@ public class AlbumSetPage extends ActivityState implements
         if (!mIsActive) return;
 
         MediaSet targetSet = mAlbumSetDataAdapter.getMediaSet(slotIndex);
+        if (targetSet.getTotalMediaItemCount() == 1) {
+            MediaItem item = null;
+            item = targetSet.getCoverMediaItem();
+            Uri uri = item.getContentUri();
+            Context context = (Context) mActivity;
+
+            Log.d(TAG, "pickAlbum:uri=" + item.getContentUri());
+            String path = null;
+            String scheme = uri.getScheme();
+            if ("file".equals(scheme)) {
+                path = uri.getPath();
+            } else {
+                Cursor cursor = null;
+                try {
+                    cursor = context.getContentResolver().query(uri,
+                            new String[] {VideoColumns.DATA}, null, null, null);
+                    if (cursor != null && cursor.moveToNext()) {
+                        path = cursor.getString(0);
+                    }
+                } catch (Throwable t) {
+                    Log.w(TAG, "cannot get path from: " + uri);
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+            }
+
+            Log.d(TAG, "pickAlbum:path = " + path);
+            if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
+                DrmManagerClient drmClient = new DrmManagerClient(context);
+                int status = -1;
+                path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
+                Log.d(TAG, "pickAlbum:item type = " + Integer.toString(item.getMediaType()));
+                if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+                   status = drmClient.checkRightsStatus(path, Action.DISPLAY);
+                } else {
+                   status = drmClient.checkRightsStatus(path, Action.PLAY);
+                }
+                Log.d(TAG, "pickAlbum:status fron drmClient.checkRightsStatus is "
+                        + Integer.toString(status));
+
+                ContentValues values = drmClient.getMetadata(path);
+
+                // This hack is added to work FL. It will remove after the sdcard permission issue solved
+                status = RightsStatus.RIGHTS_VALID;
+
+                if (RightsStatus.RIGHTS_VALID != status) {
+                    String address = values.getAsString("Rights-Issuer");
+                    Log.d(TAG, "pickAlbum:address = " + address);
+                    Intent intent = new Intent(BUY_LICENSE);
+                    intent.putExtra("DRM_FILE_PATH", address);
+                    context.sendBroadcast(intent);
+                    return;
+                }
+
+                int drmType = values.getAsInteger("DRM-TYPE");
+                Log.d(TAG, "pickAlbum:drm-type = " + Integer.toString(drmType));
+                if (drmType > DrmDeliveryType.FORWARD_LOCK) {
+                    if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
+                        item.setConsumeRights(true);
+                    }
+                    Toast.makeText(context, R.string.action_consumes_rights,
+                            Toast.LENGTH_LONG).show();
+                }
+                if (drmClient != null) drmClient.release();
+            }
+        }
         if (targetSet == null) return; // Content is dirty, we shall reload soon
         if (targetSet.getTotalMediaItemCount() == 0) {
             showEmptyAlbumToast(Toast.LENGTH_SHORT);
