@@ -20,6 +20,7 @@
 <manifest android:versionCode="40030"
         android:versionName="1.1.40030"
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:sharedUserId="android.uid.system"
         package="com.android.gallery3d">
 
     <original-package android:name="com.android.gallery3d" />
