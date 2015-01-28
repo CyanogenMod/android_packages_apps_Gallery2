@@ -1631,6 +1631,15 @@ public abstract class PhotoPage extends ActivityState implements
     }
 
     @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        if(mIsActive) return;
+        mActivity.GLRootResume(true);
+        mModel.resume();
+        mActivity.GLRootResume(false);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
