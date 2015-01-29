@@ -89,6 +89,11 @@ public class MoviePlayer implements
     private static final int KEYCODE_MEDIA_PLAY = 126;
     private static final int KEYCODE_MEDIA_PAUSE = 127;
 
+    // Copied from MediaPlaybackService in the Music Player app.
+    private static final String SERVICECMD = "com.android.music.musicservicecommand";
+    private static final String CMDNAME = "command";
+    private static final String CMDPAUSE = "pause";
+
     private static final String KEY_VIDEO_CAN_SEEK = "video_can_seek";
     private static final String KEY_VIDEO_CAN_PAUSE = "video_can_pause";
     private static final String KEY_VIDEO_LAST_DURATION = "video_last_duration";
@@ -285,6 +290,10 @@ public class MoviePlayer implements
         mAudioBecomingNoisyReceiver = new AudioBecomingNoisyReceiver();
         mAudioBecomingNoisyReceiver.register();
 
+        Intent i = new Intent(SERVICECMD);
+        i.putExtra(CMDNAME, CMDPAUSE);
+        movieActivity.sendBroadcast(i);
+
         // Listen for broadcasts related to user-presence
         final IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -297,12 +306,22 @@ public class MoviePlayer implements
             mResumeableTime = savedInstance.getLong(KEY_RESUMEABLE_TIME, Long.MAX_VALUE);
             onRestoreInstanceState(savedInstance);
             mHasPaused = true;
+            doStartVideo(true, mVideoPosition, mVideoLastDuration,false);
+            mVideoView.start();
+            mActivityContext.initEffects(mVideoView.getAudioSessionId());
         } else {
             mTState = TState.PLAYING;
             mFirstBePlayed = true;
-            final BookmarkerInfo bookmark = mBookmarker.getBookmark(mMovieItem.getUri());
-            if (bookmark != null) {
-                showResumeDialog(movieActivity, bookmark);
+            String mUri = mMovieItem.getUri().toString();
+            boolean isLive = mUri.startsWith("rtsp://") && (mUri.contains(".sdp")
+                    || mUri.contains(".smil"));
+            if (!isLive) {
+                final BookmarkerInfo bookmark = mBookmarker.getBookmark(mMovieItem.getUri());
+                if (bookmark != null) {
+                    showResumeDialog(movieActivity, bookmark);
+                } else {
+                    doStartVideo(false, 0, 0);
+                }
             } else {
                 doStartVideo(false, 0, 0);
             }

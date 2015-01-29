@@ -42,12 +42,15 @@ public abstract class MediaObject {
     public static final int SUPPORT_CAMERA_SHORTCUT = 1 << 15;
     public static final int SUPPORT_MUTE = 1 << 16;
     public static final int SUPPORT_PRINT = 1 << 17;
+    public static final int SUPPORT_DRM_INFO = 1 << 18;
     public static final int SUPPORT_ALL = 0xffffffff;
 
     // These are the bits returned from getMediaType():
     public static final int MEDIA_TYPE_UNKNOWN = 1;
     public static final int MEDIA_TYPE_IMAGE = 2;
     public static final int MEDIA_TYPE_VIDEO = 4;
+    public static final int MEDIA_TYPE_DRM_VIDEO = 5;
+    public static final int MEDIA_TYPE_DRM_IMAGE = 6;
     public static final int MEDIA_TYPE_ALL = MEDIA_TYPE_IMAGE | MEDIA_TYPE_VIDEO;
 
     public static final String MEDIA_TYPE_IMAGE_STRING = "image";
@@ -66,7 +69,7 @@ public abstract class MediaObject {
     public static final int CACHE_STATUS_CACHED_FULL = 3;
 
     private static long sVersionSerial = 0;
-
+    protected boolean consumeRights = false;
     protected long mDataVersion;
 
     protected final Path mPath;
@@ -142,6 +145,14 @@ public abstract class MediaObject {
     }
 
     public void cache(int flag) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setConsumeRights(boolean flag) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean getConsumeRights() {
         throw new UnsupportedOperationException();
     }
 

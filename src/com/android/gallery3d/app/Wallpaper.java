@@ -97,6 +97,7 @@ public class Wallpaper extends Activity {
                     Intent request = new Intent(Intent.ACTION_GET_CONTENT)
                             .setClass(this, DialogPicker.class)
                             .setType(IMAGE_TYPE);
+                    request.putExtra("com.android.gallery3d.IsWallpaper", true);
                     startActivityForResult(request, STATE_PHOTO_PICKED);
                     return;
                 }

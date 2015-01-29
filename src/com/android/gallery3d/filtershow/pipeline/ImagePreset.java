@@ -67,9 +67,11 @@ public class ImagePreset {
     }
 
     public ImagePreset(ImagePreset source) {
-        for (int i = 0; i < source.mFilters.size(); i++) {
-            FilterRepresentation sourceRepresentation = source.mFilters.elementAt(i);
-            mFilters.add(sourceRepresentation.copy());
+        if (source != null && source.mFilters != null) {
+            for (int i = 0; i < source.mFilters.size(); i++) {
+                FilterRepresentation sourceRepresentation = source.mFilters.elementAt(i);
+                mFilters.add(sourceRepresentation.copy());
+            }
         }
     }
 
