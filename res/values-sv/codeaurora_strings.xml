@@ -33,6 +33,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="step_option_desc">Anpassa snabbspolningssteg framåt/bakåt</string>
   <string name="step_option_alternate">5 sekunder</string>
   <string name="step_option_default">10 sekunder</string>
+  <string name="loop">"Repetera"</string>
+  <string name="single">"Enkel"</string>
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Högtalare på</string>
   <string name="speaker_off">Högtalare AV</string>
@@ -66,9 +68,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_title">"Titel"</string>
   <string name="bookmark_location">"Plats"</string>
   <string name="delete_all">"Ta bort alla"</string>
+  <string name="default_title">"Förvald titel"</string>
   <string name="mute_nosupport">Kan inte stänga av ljudet: video stöds inte</string>
+  <string name="fail_trim">Tyvärr, denna videofil kan inte klippas</string>
   <string name="bass_boost_strength">Basförstärkning</string>
   <string name="virtualizer_strength">3D-effekt</string>
   <string name="audio_effects">Ljudeffekter</string>
+  <string name="headset_plug">Koppla in hörlurar för dessa effekter.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <string name="can_not_trim">Endast mp4 och 3gp-filer kan klippas</string>
 </resources>

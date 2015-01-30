@@ -155,7 +155,7 @@
     <item quantity="one">Den Album gëtt offline disponibel gemaach.</item>
     <item quantity="other">D\'Albe ginn offline disponibel gemaach.</item>
   </plurals>
-  <string name="try_to_set_local_album_available_offline">Dëst Element ass lokal gespäichert an och offiline disponibel.</string>
+  <string name="try_to_set_local_album_available_offline">Dëst Element ass lokal gespäichert an och offline disponibel.</string>
   <string name="set_label_all_albums">All d\'Alben</string>
   <string name="set_label_local_albums">Lokal Alben</string>
   <string name="set_label_mtp_devices">MTP-Apparater</string>
@@ -196,7 +196,7 @@
   <string name="switch_photo_fullscreen">Vollschierm-Usiicht</string>
   <string name="trimming">Gëtt geschnidden</string>
   <string name="muting">Toun gëtt ausgeschalt</string>
-  <string name="please_wait">W.e.g. waarden</string>
+  <string name="please_wait">Waart w.e.g.</string>
   <string name="save_into">De Video gëtt an den Album <xliff:g id="album_name">%1$s</xliff:g> gespäichert\u2026</string>
   <string name="trim_too_short">Kann net kierzen: den Zilvideo ass ze kuerz</string>
   <string name="pano_progress_text">Panorama gëtt gerendert</string>
@@ -225,11 +225,11 @@
   <string name="review_cancel">OFBRIECHEN</string>
   <string name="review_ok">FÄERDEG</string>
   <string name="time_lapse_title">Zäitrafferopnam</string>
-  <string name="pref_camera_id_title">Kamera wielen</string>
+  <string name="pref_camera_id_title">Kamera auswielen</string>
   <string name="pref_camera_id_entry_back">Hannen</string>
   <string name="pref_camera_id_entry_front">Vir</string>
   <string name="pref_camera_recordlocation_title">Plaz späicheren</string>
-  <string name="pref_camera_location_label">PLAZ</string>
+  <string name="pref_camera_location_label">STANDUERT</string>
   <string name="pref_camera_timer_title">Countdown-Timer</string>
   <plurals name="pref_camera_timer_entry">
     <item quantity="one">1 Sekonn</item>
@@ -352,9 +352,9 @@
   <string name="accessibility_decrement">%1$s erofsetzen</string>
   <string name="accessibility_increment">%1$s eropsetzen</string>
   <string name="accessibility_check_box">%1$s Ukräizfeld</string>
-  <string name="accessibility_switch_to_camera">Op de Foto-Modus wiesselen</string>
+  <string name="accessibility_switch_to_camera">Op de Fotomodus wiesselen</string>
   <string name="accessibility_switch_to_video">Op de Video-Modus wiesselen</string>
-  <string name="accessibility_switch_to_panorama">Op de Panorama-Modus wiesselen</string>
+  <string name="accessibility_switch_to_panorama">Op de Panoramamodus wiesselen</string>
   <string name="accessibility_switch_to_new_panorama">Bei den neie Panorama wiesselen</string>
   <string name="accessibility_switch_to_refocus">Bei d\'Auswiel vun engem neie Fokus wiesselen</string>
   <string name="accessibility_review_cancel">Iwwerpréiwung ofbriechen</string>
