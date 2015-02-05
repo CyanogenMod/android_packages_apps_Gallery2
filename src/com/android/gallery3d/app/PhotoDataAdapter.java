@@ -72,6 +72,7 @@ public class PhotoDataAdapter implements PhotoPage.Model {
     private static final int BIT_SCREEN_NAIL = 1;
     private static final int BIT_FULL_IMAGE = 2;
 
+    private static final long NOTIFY_DIRTY_WAIT_TIME = 10;
     // sImageFetchSeq is the fetching sequence for images.
     // We want to fetch the current screennail first (offset = 0), the next
     // screennail (offset = +1), then the previous screennail (offset = -1) etc.
@@ -1207,6 +1208,12 @@ public class PhotoDataAdapter implements PhotoPage.Model {
         }
 
         public synchronized void notifyDirty() {
+            while (mDirty) {
+                try {
+                    wait(NOTIFY_DIRTY_WAIT_TIME);
+                } catch (Exception ex) {
+                }
+            }
             mDirty = true;
             notifyAll();
         }
