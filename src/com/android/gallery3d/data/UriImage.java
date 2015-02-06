@@ -19,7 +19,7 @@ package com.android.gallery3d.data;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmStore.DrmDeliveryType;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -239,7 +239,7 @@ public class UriImage extends MediaItem {
         if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
             supported |= SUPPORT_DRM_INFO;
             filePath = filePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-            DrmManagerClient drmClient = new DrmManagerClient(mApplication.getAndroidContext());
+            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
             ContentValues values = drmClient.getMetadata(filePath);
             int drmType = values.getAsInteger("DRM-TYPE");
             Log.d(TAG, "getSupportedOperations:drmType returned= "

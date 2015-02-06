@@ -16,7 +16,7 @@
 
 package com.android.gallery3d.data;
 
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmStore.Action;
 import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
@@ -61,15 +61,10 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         ImageCacheService cacheService = mApplication.getImageCacheService();
 
         if (mFilePath != null && mFilePath.endsWith(".dcf")) {
-            DrmManagerClient drmClient = new DrmManagerClient(mApplication.getAndroidContext());
+            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
             mFilePath = mFilePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-
-            // This hack is added to work FL. It will remove after the sdcard permission issue solved
             int statusDisplay = drmClient.checkRightsStatus(mFilePath, Action.DISPLAY);
-            statusDisplay = RightsStatus.RIGHTS_VALID;
             int statusPlay = drmClient.checkRightsStatus(mFilePath, Action.PLAY);
-            statusPlay = RightsStatus.RIGHTS_VALID;
-
            if (mMimeType == null) {
                 if ((RightsStatus.RIGHTS_VALID != statusDisplay)
                                 && (RightsStatus.RIGHTS_VALID != statusPlay)) {

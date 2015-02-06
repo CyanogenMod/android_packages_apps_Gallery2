@@ -38,7 +38,7 @@ import android.content.res.Configuration;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmStore.DrmDeliveryType;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -332,7 +332,7 @@ public class MovieActivity extends Activity {
         }
         Log.d(TAG, "onCreateOptionsMenu= " + path);
         if ((path != null) && ((path.endsWith(".dcf") || path.endsWith(".dm")))) {
-            DrmManagerClient drmClient = new DrmManagerClient(this);
+            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(this);
             ContentValues values = drmClient.getMetadata(path);
             int drmType = values.getAsInteger("DRM-TYPE");
             Log.d(TAG, "onCreateOptionsMenu:DRM-TYPE = " + Integer.toString(drmType));
