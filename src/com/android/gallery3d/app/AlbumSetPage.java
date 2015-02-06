@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmRights;
 import android.drm.DrmStore.Action;
 import android.drm.DrmStore.DrmDeliveryType;
@@ -286,7 +286,7 @@ public class AlbumSetPage extends ActivityState implements
 
             Log.d(TAG, "pickAlbum:path = " + path);
             if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
-                DrmManagerClient drmClient = new DrmManagerClient(context);
+                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(context);
                 int status = -1;
                 path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
                 Log.d(TAG, "pickAlbum:item type = " + Integer.toString(item.getMediaType()));
@@ -299,9 +299,6 @@ public class AlbumSetPage extends ActivityState implements
                         + Integer.toString(status));
 
                 ContentValues values = drmClient.getMetadata(path);
-
-                // This hack is added to work FL. It will remove after the sdcard permission issue solved
-                status = RightsStatus.RIGHTS_VALID;
 
                 if (RightsStatus.RIGHTS_VALID != status) {
                     String address = values.getAsString("Rights-Issuer");
