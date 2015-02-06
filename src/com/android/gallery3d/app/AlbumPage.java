@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmRights;
 import android.drm.DrmStore.Action;
 import android.drm.DrmStore.DrmDeliveryType;
@@ -366,7 +366,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
            Log.d(TAG, "pickPhoto:path = " + path);
            if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
-                DrmManagerClient drmClient = new DrmManagerClient(context);
+                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(context);
                 path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
                 int status = -1;
                 Log.d(TAG, "pickPhoto:item type = " + Integer.toString(item.getMediaType()));
@@ -380,10 +380,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                         + Integer.toString(status));
 
                 ContentValues values = drmClient.getMetadata(path);
-
-                // This hack is added to work FL. It will remove after the sdcard permission issue solved
-                status = RightsStatus.RIGHTS_VALID;
-
                 if (RightsStatus.RIGHTS_VALID!= status) {
                     String address = values.getAsString("Rights-Issuer");
                     Log.d(TAG, "pickPhoto:address = " + address);
@@ -453,7 +449,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                 path = ((LocalMediaItem)item).filePath;
             }
             if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
-                DrmManagerClient drmClient = new DrmManagerClient((Context) mActivity);
+                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper((Context) mActivity);
                 path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
                 ContentValues values = drmClient.getMetadata(path);
                 int drmType = values.getAsInteger("DRM-TYPE");
