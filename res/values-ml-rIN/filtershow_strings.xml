@@ -103,13 +103,13 @@
     <string name="editor_chan_sat_cyan" msgid="1367634650172508288">"സിയാൻ"</string>
     <string name="editor_chan_sat_blue" msgid="384409736863387895">"നീല"</string>
     <string name="editor_chan_sat_magenta" msgid="6689215719351415546">"മജന്ത"</string>
-    <string name="editor_grad_style" msgid="2168414479007745179">"ശൈലി"</string>
+    <string name="editor_grad_style" msgid="2168414479007745179">"സ്റ്റൈൽ"</string>
     <string name="editor_grad_new" msgid="4857265951369377379">"പുതിയത്"</string>
     <string name="curves_channel_rgb" msgid="7909209509638333690">"RGB"</string>
     <string name="curves_channel_red" msgid="4199710104162111357">"ചുവപ്പ്"</string>
     <string name="curves_channel_green" msgid="3733003466905031016">"പച്ച"</string>
     <string name="curves_channel_blue" msgid="9129211507395079371">"നീല"</string>
-    <string name="draw_style" msgid="2036125061987325389">"ശൈലി"</string>
+    <string name="draw_style" msgid="2036125061987325389">"സ്റ്റൈൽ"</string>
     <string name="draw_size" msgid="4360005386104151209">"വലുപ്പം"</string>
     <string name="draw_hue" msgid="4975135843189267133">"ഹ്യൂ"</string>
     <string name="draw_saturation" msgid="5394395648014454882">"സാച്ചുറേഷൻ"</string>
