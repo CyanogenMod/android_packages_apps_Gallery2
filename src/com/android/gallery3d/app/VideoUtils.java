@@ -226,6 +226,11 @@ public class VideoUtils {
         } catch (IllegalStateException e) {
             // Swallow the exception due to malformed source.
             Log.w(LOGTAG, "The source video file is malformed");
+            File f = new File(dstPath);
+            if (f.exists()) {
+                f.delete();
+            }
+            throw e;
         } finally {
             muxer.release();
         }

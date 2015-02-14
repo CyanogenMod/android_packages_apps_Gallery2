@@ -133,6 +133,15 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         return mGLRootView;
     }
 
+    public void GLRootResume(boolean isResume) {
+        if (isResume) {
+            mGLRootView.onResume();
+            mGLRootView.lockRenderThread();
+        } else {
+            mGLRootView.unlockRenderThread();
+        }
+    }
+
     public OrientationManager getOrientationManager() {
         return mOrientationManager;
     }
