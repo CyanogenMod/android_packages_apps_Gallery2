@@ -32,4 +32,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="step_option_name">ধাপ</string>
   <string name="step_option_alternate">৫ সেকেন্ড</string>
   <string name="step_option_default">১০ সেকেন্ড</string>
+  <string name="loop">"লুপ"</string>
+  <string name="stereo">"স্টেরিও"</string>
+  <string name="speaker_on">স্পিকার চালু</string>
+  <string name="speaker_off">স্পীকার বন্ধ</string>
+  <string name="single_track">"একটি ট্র্যাক"</string>
+  <string name="input_url">"ইউআরএল লিখুন"</string>
+  <string name="next">"পরবর্তী"</string>
+  <string name="previous">"পূর্ববর্তী"</string>
+  <string name="default_title">"পূর্ব-নির্ধারিত শিরনাম"</string>
 </resources>

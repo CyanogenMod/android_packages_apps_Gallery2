@@ -45,13 +45,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="next">"Weider"</string>
   <string name="previous">"Zréck"</string>
   <string name="buffer_size">Tëschespäicher-Gréisst</string>
-  <string name="apn">Preferréierten APN</string>
+  <string name="apn">Preferéierten APN</string>
   <string name="rtp_min_port">Min. Port</string>
   <string name="rtp_max_port">Max. Port</string>
   <string name="set_rtp_min_port">Min. Port festleeën</string>
   <string name="set_rtp_max_port">Max. Port festleeën</string>
   <string name="set_buffer_size">Tëschespäichergréisst definéieren</string>
-  <string name="set_apn">Preferréierten APN auswielen</string>
+  <string name="set_apn">Preferéierten APN auswielen</string>
   <string name="setting">Astellungen</string>
   <string name="server_timeout_title">"Zäitiwwerschreidung beim Server"</string>
   <string name="server_timeout_message">"Nees mam Server verbanne fir de Video ofzespillen?"</string>

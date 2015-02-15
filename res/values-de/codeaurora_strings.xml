@@ -36,8 +36,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="loop">"Endlosschleife"</string>
   <string name="single">"Einzeln"</string>
   <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Lautsprecher an</string>
-  <string name="speaker_off">Lautsprecher aus</string>
+  <string name="speaker_on">Lautsprecher EIN</string>
+  <string name="speaker_off">Lautsprecher AUS</string>
   <string name="speaker_need_headset">Für diese Funktionen müssen Sie Kopfhörer verwenden.</string>
   <string name="single_track">"Einzelner Titel"</string>
   <string name="input_url">"Geben Sie eine URL ein"</string>
