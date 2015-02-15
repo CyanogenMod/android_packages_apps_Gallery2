@@ -483,7 +483,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
         }
         if (!found) {
-            FilterRepresentation representation = new FilterDrawRepresentation();
+            FilterRepresentation representation =
+                    new FilterDrawRepresentation(getString(R.string.imageDraw));
             Action action = new Action(this, representation);
             action.setIsDoubleAction(true);
             mCategoryGeometryAdapter.add(action);
