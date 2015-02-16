@@ -89,7 +89,16 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
         @Override
         public void onFutureDone(Future<BitmapRegionDecoder> future) {
             BitmapRegionDecoder decoder = future.get();
-            if (decoder == null) return;
+            // cannot get large bitmap, then try to get thumb bitmap
+            if (decoder == null) {
+                if (mTask != null && !mTask.isCancelled()) {
+                    Log.w(TAG, "fail to get region decoder, try to request thumb image");
+                    mHasFullImage = false;
+                    pause();
+                    resume();
+                }
+                return;
+            }
             int width = decoder.getWidth();
             int height = decoder.getHeight();
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -136,7 +145,6 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
             Bitmap backup = future.get();
             if (backup == null) {
                 mLoadingState = LOADING_FAIL;
-                return;
             } else {
                 mLoadingState = LOADING_COMPLETE;
             }
