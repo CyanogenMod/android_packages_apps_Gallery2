@@ -1,5 +1,6 @@
 package org.codeaurora.gallery3d.ext;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -35,7 +36,7 @@ public interface IMovieListLoader {
      * @param l
      * @param item
      */
-    void fillVideoList(Context context, Intent intent, LoaderListener l, IMovieItem item);
+    void fillVideoList(Activity context, Intent intent, LoaderListener l, IMovieItem item);
     /**
      * enable video list or not.
      * @param intent
