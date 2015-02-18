@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">Paso</string>
   <string name="step_option_desc">Personalizar el salto rápido hacia adelante o hacia atrás</string>
+  <string name="setp_option_three_second">3 segundos</string>
+  <string name="setp_option_six_second">6 segundos</string>
   <string name="loop">"Bucle"</string>
   <string name="single">"Simple"</string>
   <string name="stereo">"Estéreo"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Ubicación"</string>
   <string name="delete_all">"Eliminar todo"</string>
   <string name="default_title">"Título por defecto"</string>
+  <string name="more_image">Más imágenes</string>
   <string name="mute_nosupport">No se puede silenciar: vídeo no soportado</string>
+  <string name="map_activity_not_found_err">No hay ninguna aplicación de mapas instalada para mostrar la ubicación.</string>
   <string name="bass_boost_strength">Refuerzo de graves</string>
   <string name="virtualizer_strength">Efecto 3D</string>
   <string name="audio_effects">Efectos de sonido</string>

@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">saltu</string>
   <string name="step_option_desc">Personalizar el saltu rápidu hacia alantre o hacia atrás</string>
+  <string name="setp_option_three_second">3 segundos</string>
+  <string name="setp_option_six_second">6 segundos</string>
   <string name="loop">"Bucle"</string>
   <string name="single">"Simple"</string>
   <string name="stereo">"Estereu"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Llocalización"</string>
   <string name="delete_all">"Desanicialo too"</string>
   <string name="default_title">"Títulu por defeutu"</string>
+  <string name="more_image">Más imáxenes</string>
   <string name="mute_nosupport">Nun pue silenciase: videu non sofitáu</string>
+  <string name="map_activity_not_found_err">Nun hai nenguna aplicación de mapes instalada p\'amosar la llocalización.</string>
   <string name="bass_boost_strength">Amplificación de graves</string>
   <string name="virtualizer_strength">Efeutu 3D</string>
   <string name="audio_effects">Efeutos d\'audiu</string>
