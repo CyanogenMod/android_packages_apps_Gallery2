@@ -1,5 +1,6 @@
 package org.codeaurora.gallery3d.ext;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -11,6 +12,9 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Movie list loader class. It will load videos from MediaProvider database.
@@ -24,7 +28,41 @@ public class MovieListLoader implements IMovieListLoader {
     private MovieListFetcherTask mListTask;
     
     @Override
-    public void fillVideoList(Context context, Intent intent, LoaderListener l, IMovieItem item) {
+    public void fillVideoList(Activity activity, Intent intent, final LoaderListener l,
+            IMovieItem currentMovieItem) {
+
+        // determine if a video playlist has been passed in through the intent
+        // if a playlist does exist, use that
+        ArrayList<Uri> uris = intent.getParcelableArrayListExtra("EXTRA_FILE_LIST");
+        if (uris != null) {
+            final MovieList movieList = new MovieList();
+            ContentResolver cr = activity.getContentResolver();
+
+            for(Uri uri : uris) {
+                // add currentMovieItem in its proper place in the video playlist
+                // 'Next' and 'Previous' functionality in MovieListHooker is dependent on reference
+                // matching currentMovieItem
+                if (currentMovieItem.getOriginalUri().equals(uri)) {
+                    movieList.add(currentMovieItem);
+                    continue;
+                }
+
+                File videoFile = new File(uri.getPath());
+                movieList.add(new MovieItem(uri, cr.getType(uri), videoFile.getName()));
+            }
+
+            // notify callback on main thread
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    l.onListLoaded(movieList);
+                }
+            });
+
+            return;
+        }
+
+        // proceed with creating a playlist if one isn't found
         boolean fetechAll = false;
         if (intent.hasExtra(EXTRA_ALL_VIDEO_FOLDER)) {
             fetechAll = intent.getBooleanExtra(EXTRA_ALL_VIDEO_FOLDER, false);
@@ -35,8 +73,8 @@ public class MovieListLoader implements IMovieListLoader {
             orderBy = intent.getStringExtra(EXTRA_ORDERBY);
         }
         cancelList();
-        mListTask = new MovieListFetcherTask(context, fetechAll, l, orderBy);
-        mListTask.execute(item);
+        mListTask = new MovieListFetcherTask(activity, fetechAll, l, orderBy);
+        mListTask.execute(currentMovieItem);
         if (LOG) {
             Log.v(TAG, "fillVideoList() fetechAll=" + fetechAll + ", orderBy=" + orderBy);
         }
