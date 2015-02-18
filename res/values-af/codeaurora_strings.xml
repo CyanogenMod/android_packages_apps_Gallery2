@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">Stap</string>
   <string name="step_option_desc">Verpersoonlik vinnige vorentoe/terugspeel stap</string>
+  <string name="setp_option_three_second">3 sekondes</string>
+  <string name="setp_option_six_second">6 sekondes</string>
   <string name="loop">"Omkring"</string>
   <string name="single">"Enkel"</string>
   <string name="stereo">"Stereo"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Ligging"</string>
   <string name="delete_all">"Verwyder alles"</string>
   <string name="default_title">"Standaard titel"</string>
+  <string name="more_image">Nog prente</string>
   <string name="mute_nosupport">Kan nie klank afskakel: video nie ondersteun</string>
+  <string name="map_activity_not_found_err">Daar is geen kaart program geïnstalleer om die plek te wys nie.</string>
   <string name="bass_boost_strength">Versterk bas</string>
   <string name="virtualizer_strength">3D Effek</string>
   <string name="audio_effects">Klank effekte</string>

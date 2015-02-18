@@ -48,7 +48,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_buffer_size">Bufer ölçüsünü tənzimlə</string>
   <string name="set_apn">Üstünlük verilən APN\'i seçin</string>
   <string name="setting">Tənzimləmələr</string>
-  <string name="server_timeout_title">"Server zaman aşımı"</string>
+  <string name="server_timeout_title">"Serverə qoyulan vaxt"</string>
   <string name="server_timeout_message">"Videonu oynatmaq üçün serverə yenidən bağlansın?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Bağlanma xətası, %1$d üçün yenidən bağlantı yaradılır\u2026"</string>
   <string name="media_controller_live">Canlı</string>
