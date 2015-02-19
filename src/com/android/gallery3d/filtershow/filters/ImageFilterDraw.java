@@ -29,6 +29,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.app.GalleryAppImpl;
 import com.android.gallery3d.app.Log;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation.StrokeData;
@@ -47,7 +48,8 @@ public class ImageFilterDraw extends ImageFilter {
     int mCachedStrokes = -1;
     int mCurrentStyle = 0;
 
-    FilterDrawRepresentation mParameters = new FilterDrawRepresentation();
+    FilterDrawRepresentation mParameters = new FilterDrawRepresentation(
+            GalleryAppImpl.getContext().getString(R.string.imageDraw));
 
     public ImageFilterDraw() {
         mName = "Image Draw";
@@ -69,7 +71,8 @@ public class ImageFilterDraw extends ImageFilter {
 
     @Override
     public FilterRepresentation getDefaultRepresentation() {
-        return new FilterDrawRepresentation();
+        return new FilterDrawRepresentation(
+                GalleryAppImpl.getContext().getString(R.string.imageDraw));
     }
 
     @Override
