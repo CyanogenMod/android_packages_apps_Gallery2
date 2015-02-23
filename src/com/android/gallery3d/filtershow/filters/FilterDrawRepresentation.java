@@ -157,10 +157,10 @@ public class FilterDrawRepresentation extends FilterRepresentation {
     private Vector<StrokeData> mDrawing = new Vector<StrokeData>();
     private StrokeData mCurrent; // used in the currently drawing style
 
-    public FilterDrawRepresentation() {
-        super("Draw");
+    public FilterDrawRepresentation(String name) {
+        super(name);
         setFilterClass(ImageFilterDraw.class);
-        setSerializationName("DRAW");
+        setSerializationName(name);
         setFilterType(FilterRepresentation.TYPE_VIGNETTE);
         setTextId(R.string.imageDraw);
         setEditorId(EditorDraw.ID);
@@ -190,7 +190,7 @@ public class FilterDrawRepresentation extends FilterRepresentation {
 
     @Override
     public FilterRepresentation copy() {
-        FilterDrawRepresentation representation = new FilterDrawRepresentation();
+        FilterDrawRepresentation representation = new FilterDrawRepresentation(getName());
         copyAllParameters(representation);
         return representation;
     }
