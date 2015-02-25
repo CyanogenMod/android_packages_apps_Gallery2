@@ -60,6 +60,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public static final String KEY_TYPE_BITS = "type-bits";
     public static final String KEY_MEDIA_TYPES = "mediaTypes";
     public static final String KEY_DISMISS_KEYGUARD = "dismiss-keyguard";
+    public static final String KEY_FROM_SNAPCAM = "from-snapcam";
 
     private static final String TAG = "GalleryActivity";
     private Dialog mVersionCheckDialog;
@@ -286,7 +287,9 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                 Path albumPath = dm.getDefaultSetOf(itemPath);
 
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, itemPath.toString());
-                data.putBoolean(PhotoPage.KEY_READONLY, true);
+                if (!intent.getBooleanExtra(KEY_FROM_SNAPCAM, false)) {
+                    data.putBoolean(PhotoPage.KEY_READONLY, true);
+                }
 
                 // TODO: Make the parameter "SingleItemOnly" public so other
                 //       activities can reference it.
