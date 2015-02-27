@@ -76,7 +76,7 @@
     <string name="highlight_recovery" msgid="8262208470735204243">"亮點"</string>
     <string name="curvesRGB" msgid="915010781090477550">"曲線"</string>
     <string name="vignette" msgid="934721068851885390">"暈影"</string>
-    <string name="vignette_main" msgid="6046495605390665423">"炫影"</string>
+    <string name="vignette_main" msgid="6046495605390665423">"暈影"</string>
     <string name="vignette_exposure" msgid="6862058227309534094">"曝光"</string>
     <string name="vignette_saturation" msgid="1617055207565719771">"飽和度"</string>
     <string name="vignette_contrast" msgid="955732121756799897">"對比"</string>

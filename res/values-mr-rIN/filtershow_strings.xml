@@ -75,8 +75,8 @@
     <string name="shadow_recovery" msgid="3928572915300287152">"शॅडो"</string>
     <string name="highlight_recovery" msgid="8262208470735204243">"हायलाइट"</string>
     <string name="curvesRGB" msgid="915010781090477550">"वक्र"</string>
-    <string name="vignette" msgid="934721068851885390">"विन्येट"</string>
-    <string name="vignette_main" msgid="6046495605390665423">"विन्येट"</string>
+    <string name="vignette" msgid="934721068851885390">"व्हिग्नेट"</string>
+    <string name="vignette_main" msgid="6046495605390665423">"व्हिग्नेट"</string>
     <string name="vignette_exposure" msgid="6862058227309534094">"एक्सपोजर"</string>
     <string name="vignette_saturation" msgid="1617055207565719771">"संपृक्तता"</string>
     <string name="vignette_contrast" msgid="955732121756799897">"तीव्रता"</string>
