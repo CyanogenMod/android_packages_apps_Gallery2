@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">Trin</string>
   <string name="step_option_desc">Tilpas trin for hurtig frem- og tilbagespoling</string>
+  <string name="setp_option_three_second">3 sekunder</string>
+  <string name="setp_option_six_second">6 sekunder</string>
   <string name="loop">"Gentagelse"</string>
   <string name="single">"Enkel"</string>
   <string name="stereo">"Stereo"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Lokation"</string>
   <string name="delete_all">"Slet alt"</string>
   <string name="default_title">"Standardtitel"</string>
+  <string name="more_image">Flere billeder</string>
   <string name="mute_nosupport">Kan ikke slå lyden fra : video understøttes ikke</string>
+  <string name="map_activity_not_found_err">Der er ikke installeret en kort-app til at vise placeringen.</string>
   <string name="bass_boost_strength">Basforstærkning</string>
   <string name="virtualizer_strength">3D-effekt</string>
   <string name="audio_effects">Lydeffekter</string>
