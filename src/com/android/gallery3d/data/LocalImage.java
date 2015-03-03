@@ -20,7 +20,7 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmStore.DrmDeliveryType;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -242,7 +242,7 @@ public class LocalImage extends LocalMediaItem {
         if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
             filePath = filePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
             operation |= SUPPORT_DRM_INFO;
-            DrmManagerClient drmClient = new DrmManagerClient(mApplication.getAndroidContext());
+            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
             ContentValues values = drmClient.getMetadata(filePath);
             int drmType = values.getAsInteger("DRM-TYPE");
             Log.d(TAG, "getSupportedOperations:drmType returned= "
