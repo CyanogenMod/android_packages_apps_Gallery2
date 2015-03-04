@@ -18,6 +18,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_checked="false" android:drawable="@android:color/transparent"  />
-    <item android:state_checked="true" android:drawable="@android:color/holo_blue_light"  />
+    <item android:state_checked="true" android:drawable="@color/accent"  />
 
 </selector>
