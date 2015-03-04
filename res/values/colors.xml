@@ -19,6 +19,8 @@
     <color name="primary_dark">#263238</color>
     <color name="accent">#607D8B</color>
     <color name="material_blue_grey_950">#ff21272b</color>
+    <color name="white">#fafafa</color>
+    <color name="black">#212121</color>
     <!-- configuration for album set page -->
     <color name="albumset_background">#1A1A1A</color>
     <color name="albumset_placeholder">#333</color>

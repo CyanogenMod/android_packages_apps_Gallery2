@@ -45,6 +45,6 @@
     <!-- FAB -->
     <color name="fab">#FF9800</color>
     <color name="floating_action_button_touch_tint">#FFB74D</color>
-    <color name="floating_action_button_icon_color">#ffffff</color>
+    <color name="floating_action_button_icon_color">#fafafa</color>
 
 </resources>
