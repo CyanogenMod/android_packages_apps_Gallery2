@@ -18,6 +18,7 @@ package com.android.gallery3d.app;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -265,6 +266,18 @@ public class MovieActivity extends Activity {
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE,
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
 
+        actionBar.addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
+            @Override
+            public void onMenuVisibilityChanged(boolean isVisible) {
+                if (mPlayer != null) {
+                    if (isVisible) {
+                        mPlayer.cancelHidingController();
+                    } else {
+                        mPlayer.restartHidingController();
+                    }
+                }
+            }
+        });
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
         if (title != null) {
             actionBar.setTitle(title);
