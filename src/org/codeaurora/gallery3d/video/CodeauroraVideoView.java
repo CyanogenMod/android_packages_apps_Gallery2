@@ -94,6 +94,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean mNeedWaitLayout = false;
     private boolean mHasGotMetaData = false;
     private boolean mOnResumed;
+    private boolean mIsShowDialog = false;
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(final Message msg) {
@@ -746,8 +747,13 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         }
     }
 
+    public void setDialogShowState(boolean isDialogShow) {
+        mIsShowDialog = isDialogShow;
+    }
+
     @Override
     public void start() {
+        if (mIsShowDialog) return;
         if (isInPlaybackState()) {
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
