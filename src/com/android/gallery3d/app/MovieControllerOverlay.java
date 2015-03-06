@@ -196,7 +196,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         maybeStartHiding();
     }
 
-    private void maybeStartHiding() {
+    public void maybeStartHiding() {
         cancelHiding();
         if (mState == State.PLAYING) {
             handler.postDelayed(startHidingRunnable, 2500);
@@ -221,7 +221,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         }
     }
 
-    private void cancelHiding() {
+    public void cancelHiding() {
         handler.removeCallbacks(startHidingRunnable);
         if (mOverlayExt.canHidePanel()) {
             mBackground.setAnimation(null);

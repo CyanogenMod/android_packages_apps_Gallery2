@@ -1575,6 +1575,18 @@ public class MoviePlayer implements
                 videoPlayerData, 0);
         return (mPrefs.getInt(slectedStepOption, stepOptionThreeSeconds) + 1) * stepBase;
     }
+
+    public void restartHidingController() {
+        if (mController != null) {
+            mController.maybeStartHiding();
+        }
+    }
+
+    public void cancelHidingController() {
+        if (mController != null) {
+            mController.cancelHiding();
+        }
+    }
 }
 
 class Bookmarker {
