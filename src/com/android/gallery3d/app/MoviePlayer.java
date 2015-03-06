@@ -637,6 +637,7 @@ public class MoviePlayer implements
         }
         mTState = TState.PAUSED;
         mVideoView.pause();
+        setProgress();
         mController.showPaused();
     }
 
