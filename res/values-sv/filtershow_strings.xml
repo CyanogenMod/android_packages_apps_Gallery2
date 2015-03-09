@@ -22,7 +22,7 @@
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"Bakgrund anges"</string>
-    <string name="download_failure" msgid="5923323939788582895">"Det gick inte att hämta fotot. Nätverket är inte tillgängligt."</string>
+    <string name="download_failure" msgid="5923323939788582895">"Det gick inte att ladda ned fotot. Nätverket är inte tillgängligt."</string>
     <string name="original" msgid="3524493791230430897">"Original"</string>
     <string name="borders" msgid="2067345080568684614">"Ramar"</string>
     <string name="custom_border" msgid="8679893731790931871">"Anpassat"</string>
