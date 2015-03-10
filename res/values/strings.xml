@@ -1156,4 +1156,9 @@ CHAR LIMIT = NONE] -->
     <string name="drm_license_info">Drm license info</string>
     <string name="mimetype_not_supported">This file can not be played</string>
     <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
+    <string name="text_makeup_whiten">Whiten</string>
+    <string name="text_makeup_Soften">Soften</string>
+    <string name="text_makeup_trimface">Trimface</string>
+    <string name="text_makeup_bigeye">Bigeye</string>
+
 </resources>

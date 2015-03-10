@@ -24,9 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-
+import android.util.Log;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.StatePanel;
 
@@ -39,6 +40,7 @@ public class MainPanel extends Fragment {
     private ImageButton bordersButton;
     private ImageButton geometryButton;
     private ImageButton filtersButton;
+    private ImageButton makeupButton;
 
     public static final String FRAGMENT_TAG = "MainPanel";
     public static final int LOOKS = 0;
@@ -46,6 +48,7 @@ public class MainPanel extends Fragment {
     public static final int GEOMETRY = 2;
     public static final int FILTERS = 3;
     public static final int VERSIONS = 4;
+    public static final int MAKEUP = 5;
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
@@ -70,6 +73,12 @@ public class MainPanel extends Fragment {
             }
             case FILTERS: {
                 filtersButton.setSelected(value);
+                break;
+            }
+            case MAKEUP: {
+                if(makeupButton != null) {
+                    makeupButton.setSelected(value);
+                }
                 break;
             }
         }
@@ -97,6 +106,19 @@ public class MainPanel extends Fragment {
         bordersButton = (ImageButton) mMainView.findViewById(R.id.borderButton);
         geometryButton = (ImageButton) mMainView.findViewById(R.id.geometryButton);
         filtersButton = (ImageButton) mMainView.findViewById(R.id.colorsButton);
+        if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+            makeupButton = (ImageButton) mMainView.findViewById(R.id.makeupButton);
+            makeupButton.setVisibility(View.VISIBLE);
+        }
+
+        if(makeupButton != null) {
+            makeupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPanel(MAKEUP);
+                }
+            });
+        }
 
         looksButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +195,19 @@ public class MainPanel extends Fragment {
         selection(mCurrentSelected, true);
     }
 
+    public void loadCategoryMakeupPanel() {
+        if (makeupButton == null || mCurrentSelected == MAKEUP) {
+            return;
+        }
+        boolean fromRight = isRightAnimation(MAKEUP);
+        selection(mCurrentSelected, false);
+        CategoryPanel categoryPanel = new CategoryPanel();
+        categoryPanel.setAdapter(MAKEUP);
+        setCategoryFragment(categoryPanel, fromRight);
+        mCurrentSelected = MAKEUP;
+        selection(mCurrentSelected, true);
+    }
+
     public void loadCategoryGeometryPanel() {
         if (mCurrentSelected == GEOMETRY) {
             return;
@@ -237,6 +272,10 @@ public class MainPanel extends Fragment {
             }
             case VERSIONS: {
                 loadCategoryVersionsPanel();
+                break;
+            }
+            case MAKEUP: {
+                loadCategoryMakeupPanel();
                 break;
             }
         }
