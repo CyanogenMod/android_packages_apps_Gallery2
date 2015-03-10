@@ -79,6 +79,9 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
             mSelectedPosition = 0;
             mAddButtonText = getContext().getString(R.string.filtershow_add_button_looks);
         }
+//        if (category == MainPanel.MAKEUP) {
+//            mSelectedPosition = 0;
+//        }
         if (category == MainPanel.BORDERS) {
             mSelectedPosition = 0;
         }

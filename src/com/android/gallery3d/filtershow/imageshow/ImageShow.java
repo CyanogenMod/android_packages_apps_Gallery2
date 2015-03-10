@@ -288,7 +288,7 @@ public class ImageShow extends View implements OnGestureListener,
             drawImageAndAnimate(canvas, highresPreview);
         }
 
-        drawHighresImage(canvas, fullHighres);
+//        drawHighresImage(canvas, fullHighres);
         drawCompareImage(canvas, getGeometryOnlyImage());
 
         canvas.restore();
