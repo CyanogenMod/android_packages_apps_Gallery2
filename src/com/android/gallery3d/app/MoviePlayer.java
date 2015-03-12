@@ -470,8 +470,6 @@ public class MoviePlayer implements
         mVideoView.suspend();
         mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
         mVideoView.setResumed(false);// avoid start after surface created
-        // Workaround for last-seek frame difference
-        mVideoView.setVisibility(View.INVISIBLE);
         long end2 = System.currentTimeMillis();
         // TODO comments by sunlei
         mOverlayExt.clearBuffering();
