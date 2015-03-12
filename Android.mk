@@ -43,12 +43,6 @@ include $(BUILD_PACKAGE)
 
 ifeq ($(strip $(LOCAL_PACKAGE_OVERRIDES)),)
 
-ifeq ($(TARGET_TS_MAKEUP), true)
-include $(CLEAR_VARS)
-   LOCAL_PREBUILT_LIBS := jni_makeup_libs/libts_detected_face_jni.so jni_makeup_libs/libts_face_beautify_jni.so
-include $(BUILD_MULTI_PREBUILT)
-endif
-
 # Use the following include to make gallery test apk
 include $(call all-makefiles-under, $(LOCAL_PATH))
 
