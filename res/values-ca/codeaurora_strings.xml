@@ -72,7 +72,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="default_title">"Títol predefinit"</string>
   <string name="more_image">Més imatges</string>
   <string name="mute_nosupport">No s\'ha pogut silenciar: vídeo no suportat</string>
-  <string name="map_activity_not_found_err">No hi ha cap app de mapes instal·lada per mostrar la ubicació.</string>
+  <string name="map_activity_not_found_err">No hi ha cap aplicació de mapes instal·lada per mostrar la ubicació.</string>
   <string name="bass_boost_strength">Amplificació de greus</string>
   <string name="virtualizer_strength">Efecte 3D</string>
   <string name="audio_effects">Efectes de so</string>
