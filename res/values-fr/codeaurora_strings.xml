@@ -41,7 +41,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_off">Haut-parleur désactivé</string>
   <string name="speaker_need_headset">Brancher un casque pour utiliser cette fonctionnalité.</string>
   <string name="single_track">"Piste simple"</string>
-  <string name="input_url">"Saisir l'URL"</string>
+  <string name="input_url">"Entrez l'URL"</string>
   <string name="streaming_settings">"Paramètres de transmission"</string>
   <string name="next">"Suivant"</string>
   <string name="previous">"Précédent"</string>
