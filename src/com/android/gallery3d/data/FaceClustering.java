@@ -83,7 +83,7 @@ public class FaceClustering extends Clustering {
     }
 
     public FaceClustering(Context context) {
-        mUntaggedString = context.getResources().getString(R.string.untagged);
+        mUntaggedString = context.getResources().getString(R.string.no_faces);
         mContext = context;
     }
 

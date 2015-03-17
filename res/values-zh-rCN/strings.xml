@@ -105,6 +105,7 @@
     <string name="group_by_size" msgid="153766174950394155">"按大小分组"</string>
     <string name="untagged" msgid="7281481064509590402">"未加标签"</string>
     <string name="no_location" msgid="4043624857489331676">"无位置信息"</string>
+    <string name="no_faces">"无人物信息"</string>
     <string name="no_connectivity" msgid="7164037617297293668">"出现网络问题，系统无法识别某些位置。"</string>
     <string name="sync_album_error" msgid="1020688062900977530">"无法下载此相册中的照片，请稍后重试。"</string>
     <string name="show_images_only" msgid="7263218480867672653">"仅限图片"</string>
