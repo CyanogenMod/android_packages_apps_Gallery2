@@ -25,6 +25,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -211,6 +212,9 @@ public class MasterImage implements RenderingRequestCaller {
         int sh = (int) (sw * (float) mOriginalBitmapLarge.getHeight() / mOriginalBitmapLarge
                 .getWidth());
         mOriginalBitmapSmall = Bitmap.createScaledBitmap(mOriginalBitmapLarge, sw, sh, true);
+        Log.d(LOGTAG, "MasterImage.loadBitmap(): OriginalBitmapLarge.WH is (" + mOriginalBitmapLarge.getWidth() + ", "
+                + mOriginalBitmapLarge.getHeight() + "), OriginalBitmapSmall.WH is (" + sw + ", " + sh + "), originalBounds is "
+                + originalBounds.toString());
         mZoomOrientation = mOrientation;
         warnListeners();
         return true;

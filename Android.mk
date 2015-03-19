@@ -39,6 +39,11 @@ LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
 LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
 
+ifeq ($(TARGET_TS_MAKEUP), true)
+  LOCAL_JNI_SHARED_LIBRARIES := libts_detected_face_jni libts_face_beautify_jni
+  LOCAL_REQUIRED_MODULES := libts_detected_face_jni libts_face_beautify_jni
+endif
+
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 LOCAL_MULTILIB := 32
@@ -46,6 +51,12 @@ LOCAL_MULTILIB := 32
 include $(BUILD_PACKAGE)
 
 ifeq ($(strip $(LOCAL_PACKAGE_OVERRIDES)),)
+
+ifeq ($(TARGET_TS_MAKEUP), true)
+include $(CLEAR_VARS)
+   LOCAL_PREBUILT_LIBS := jni_makeup_libs/libts_detected_face_jni.so jni_makeup_libs/libts_face_beautify_jni.so
+include $(BUILD_MULTI_PREBUILT)
+endif
 
 # Use the following include to make gallery test apk
 include $(call all-makefiles-under, $(LOCAL_PATH))

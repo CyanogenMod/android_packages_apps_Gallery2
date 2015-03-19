@@ -50,4 +50,5 @@
     <item type="id" name="editorParametric" />
     <item type="id" name="editorGrad" />
     <item type="id" name="editorChanSat" />
+    <item type="id" name="editorMakeup" />
 </resources>
