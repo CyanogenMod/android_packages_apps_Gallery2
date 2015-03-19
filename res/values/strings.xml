@@ -236,6 +236,10 @@
          have location information in them [CHAR LIMIT=20]-->
     <string name="no_location">No location</string>
 
+    <!-- When grouping photos by peoples, the label used for photos that don't
+        have people information in them [CHAR LIMIT=20]-->
+    <string name="no_faces">No faces</string>
+
     <!-- This toast message is shown when network connection is lost while doing clustering -->
     <string name="no_connectivity">Some locations couldn\'t be identified due to network problems.</string>
 
