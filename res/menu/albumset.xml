@@ -26,6 +26,7 @@
             android:showAsAction="never" />
     <item android:id="@+id/action_manage_offline"
             android:title="@string/make_available_offline"
+            android:visible="false"
             android:showAsAction="never" />
     <item android:id="@+id/action_sync_picasa_albums"
             android:title="@string/sync_picasa_albums"
