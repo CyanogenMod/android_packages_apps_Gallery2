@@ -1132,6 +1132,7 @@ public class PhotoView extends GLView {
         }
 
         private void deleteAfterAnimation(int duration) {
+            if (mHandler.hasMessages(MSG_DELETE_ANIMATION_DONE)) return;
             MediaItem item = mModel.getMediaItem(mTouchBoxIndex);
             if (item == null) return;
             mListener.onCommitDeleteImage();

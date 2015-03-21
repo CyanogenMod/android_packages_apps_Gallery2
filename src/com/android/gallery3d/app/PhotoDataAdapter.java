@@ -1208,12 +1208,6 @@ public class PhotoDataAdapter implements PhotoPage.Model {
         }
 
         public synchronized void notifyDirty() {
-            while (mDirty) {
-                try {
-                    wait(NOTIFY_DIRTY_WAIT_TIME);
-                } catch (Exception ex) {
-                }
-            }
             mDirty = true;
             notifyAll();
         }
