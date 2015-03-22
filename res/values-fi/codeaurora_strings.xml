@@ -41,7 +41,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_off">Kaiutin POIS KÄYTÖSTÄ</string>
   <string name="speaker_need_headset">Kytke kuulokkeet käyttääksesi tätä toimintoa.</string>
   <string name="single_track">"Yksi kappale"</string>
-  <string name="input_url">"Kirjoita URL-osoite"</string>
+  <string name="input_url">"Syötä linkki"</string>
   <string name="streaming_settings">"Suoratoistoasetukset"</string>
   <string name="next">"Seuraava"</string>
   <string name="previous">"Edellinen"</string>
