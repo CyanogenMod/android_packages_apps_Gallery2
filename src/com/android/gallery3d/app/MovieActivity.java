@@ -563,7 +563,7 @@ public class MovieActivity extends Activity {
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         super.onStart();
         mMovieHooker.onStart();
-        registerScreenOff();
+        registerScreenReceiver();
     }
 
     @Override
@@ -576,7 +576,7 @@ public class MovieActivity extends Activity {
             mControlResumed = false;
         }
         mMovieHooker.onStop();
-        unregisterScreenOff();
+        unregisterScreenReceiver();
     }
 
     @Override
@@ -697,7 +697,7 @@ public class MovieActivity extends Activity {
     }
 
     // we do not stop live streaming when other dialog overlays it.
-    private BroadcastReceiver mScreenOffReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -711,19 +711,25 @@ public class MovieActivity extends Activity {
                     mPlayer.onStop();
                     mControlResumed = false;
                 }
+            } else if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+                if (!mControlResumed) {
+                    mPlayer.onResume();
+                    mControlResumed = true;
+                }
             }
         }
 
     };
 
-    private void registerScreenOff() {
+    private void registerScreenReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mScreenOffReceiver, filter);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        registerReceiver(mScreenReceiver, filter);
     }
 
-    private void unregisterScreenOff() {
-        unregisterReceiver(mScreenOffReceiver);
+    private void unregisterScreenReceiver() {
+        unregisterReceiver(mScreenReceiver);
     }
 
     private boolean isKeyguardLocked() {
