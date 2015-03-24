@@ -115,12 +115,6 @@ public class CropActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     startFinishOutput();
-                    if (mCropExtras != null && mCropExtras.getSetAsWallpaper()) {
-                        Intent intent = new Intent("android.drmservice.intent.action.SET_WALLPAPER");
-                        intent.putExtra("DRM_TYPE", "OMAV1");
-                        intent.putExtra("DRM_FILE_PATH", mSourceUri.toString());
-                        CropActivity.this.sendBroadcast(intent);
-                    }
                 }
             });
         }

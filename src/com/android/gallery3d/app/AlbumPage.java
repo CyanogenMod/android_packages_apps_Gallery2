@@ -18,24 +18,14 @@ package com.android.gallery3d.app;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmRights;
-import android.drm.DrmStore.Action;
-import android.drm.DrmStore.DrmDeliveryType;
-import android.drm.DrmStore.RightsStatus;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
+import android.drm.DrmHelper;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Video.VideoColumns;
-import android.text.TextUtils;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
@@ -47,7 +37,6 @@ import android.widget.Toast;
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
-import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaDetails;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
@@ -74,19 +63,11 @@ import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.MediaSetUtils;
 
 import java.util.Locale;
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Random;
-
 
 public class AlbumPage extends ActivityState implements GalleryActionBar.ClusterRunner,
         SelectionManager.SelectionListener, MediaSet.SyncListener, GalleryActionBar.OnAlbumModeSelectedListener {
     @SuppressWarnings("unused")
     private static final String TAG = "AlbumPage";
-
-    public static final String BUY_LICENSE = "android.drmservice.intent.action.BUY_LICENSE";
 
     public static final String KEY_MEDIA_PATH = "media-path";
     public static final String KEY_PARENT_MEDIA_PATH = "parent-media-path";
@@ -121,8 +102,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
     private boolean mGetContent;
     private boolean mShowClusterMenu;
-    private boolean mIsWallpaper;
-    private boolean mIsContactPhoto;
+
     private ActionModeHandler mActionModeHandler;
     private int mFocusIndex = 0;
     private DetailsHelper mDetailsHelper;
@@ -331,6 +311,12 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             if (isLayoutRtl && item == null) {
                 return; // Item not ready yet, ignore the click
             }
+            if (DrmHelper.isDrmFile(DrmHelper.getFilePath(
+                    mActivity.getAndroidContext(), item.getContentUri()))) {
+                Toast.makeText(mActivity, R.string.no_permission_for_drm,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
             onGetContent(item);
         } else if (mLaunchedFromPhotoPage) {
             if (isLayoutRtl && item == null) {
@@ -343,65 +329,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             transitions.put(PhotoPage.KEY_INDEX_HINT, slotIndex);
             onBackPressed();
         } else {
-            Context context = (Context) mActivity;
-            Uri uri = item.getContentUri();
-            Log.d(TAG, "pickPhoto:uri=" + item.getContentUri());
-            String path = null;
-            String scheme = uri.getScheme();
-            if ("file".equals(scheme)) {
-                path = uri.getPath();
-            } else {
-                Cursor cursor = null;
-                try {
-                    cursor = context.getContentResolver().query(uri,
-                            new String[] {VideoColumns.DATA}, null, null, null);
-                    if (cursor != null && cursor.moveToNext()) {
-                        path = cursor.getString(0);
-                    }
-                } catch (Throwable t) {
-                    Log.d(TAG, "cannot get path from: " + uri);
-                } finally {
-                    if (cursor != null) cursor.close();
-                }
-            }
-
-           Log.d(TAG, "pickPhoto:path = " + path);
-           if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
-                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(context);
-                path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
-                int status = -1;
-                Log.d(TAG, "pickPhoto:item type = " + Integer.toString(item.getMediaType()));
-
-                if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
-                    status = drmClient.checkRightsStatus(path, Action.DISPLAY);
-                } else {
-                    status = drmClient.checkRightsStatus(path, Action.PLAY);
-                }
-                Log.d(TAG, "pickPhoto:status fron drmClient.checkRightsStatus is "
-                        + Integer.toString(status));
-
-                ContentValues values = drmClient.getMetadata(path);
-                if (RightsStatus.RIGHTS_VALID!= status) {
-                    String address = values.getAsString("Rights-Issuer");
-                    Log.d(TAG, "pickPhoto:address = " + address);
-                    Intent intent = new Intent(BUY_LICENSE);
-                    intent.putExtra("DRM_FILE_PATH", address);
-                    context.sendBroadcast(intent);
-                    return;
-                }
-
-                int drmType = values.getAsInteger("DRM-TYPE");
-                Log.d(TAG, "onSingleTapUp:drm-type = " + Integer.toString(drmType));
-                if (drmType > DrmDeliveryType.FORWARD_LOCK) {
-                    if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE) {
-                        item.setConsumeRights(true);
-                    }
-                    Toast.makeText(context, R.string.action_consumes_rights,
-                            Toast.LENGTH_LONG).show();
-                }
-                if (drmClient != null) drmClient.release();
-            }
-
             // Get into the PhotoPage.
             // mAlbumView.savePositions(PositionRepository.getInstance(mActivity));
             Bundle data = new Bundle();
@@ -435,7 +362,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         Activity activity = mActivity;
         if (mData.getString(GalleryActivity.EXTRA_CROP) != null) {
             Uri uri = dm.getContentUri(item.getPath());
-
             Intent intent = new Intent(CropActivity.CROP_ACTION, uri)
                     .addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                     .putExtras(getData());
@@ -443,29 +369,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                 intent.putExtra(CropExtras.KEY_RETURN_DATA, true);
             }
             activity.startActivity(intent);
-            activity.finish();
-        } else if (mIsWallpaper != true && mIsContactPhoto != true) {
-            String path = null;
-            if (item instanceof LocalMediaItem) {
-                path = ((LocalMediaItem)item).filePath;
-            }
-            if (path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
-                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper((Context) mActivity);
-                path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
-                ContentValues values = drmClient.getMetadata(path);
-                int drmType = values.getAsInteger("DRM-TYPE");
-                Log.d(TAG, "onGetContent:DRM-TYPE = " + Integer.toString(drmType));
-                if (drmType == DrmDeliveryType.SEPARATE_DELIVERY) {
-                    activity.setResult(Activity.RESULT_OK, new Intent(null, item.getContentUri()));
-                } else {
-                    Toast.makeText((Context) mActivity, R.string.no_permission_for_drm,
-                            Toast.LENGTH_LONG).show();
-                }
-                if (drmClient != null) drmClient.release();
-            } else {
-                activity.setResult(Activity.RESULT_OK,
-                        new Intent(null, item.getContentUri()));
-            }
             activity.finish();
         } else {
             Intent intent = new Intent(null, item.getContentUri())
@@ -509,8 +412,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         initializeViews();
         initializeData(data);
         mGetContent = data.getBoolean(GalleryActivity.KEY_GET_CONTENT, false);
-        mIsWallpaper = data.getBoolean("com.android.gallery3d.IsWallpaper", false);
-        mIsContactPhoto = data.getBoolean("isContactPhoto", false);
         mShowClusterMenu = data.getBoolean(KEY_SHOW_CLUSTER_MENU, false);
         mDetailsSource = new MyDetailsSource();
         Context context = mActivity.getAndroidContext();
