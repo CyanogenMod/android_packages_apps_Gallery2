@@ -16,11 +16,10 @@
 
 package com.android.gallery3d.data;
 
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmStore.Action;
-import android.drm.DrmStore.RightsStatus;
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.common.BitmapUtils;
@@ -40,14 +39,20 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
     private long mTimeModified;
 
     public ImageCacheRequest(GalleryApp application,
-            Path path, long timeModified, int type, int targetSize, String filePath, String mimetype) {
+            Path path, long timeModified, int type, int targetSize) {
         mApplication = application;
         mPath = path;
         mType = type;
         mTargetSize = targetSize;
-        mFilePath = filePath;
-        mMimeType = mimetype;
         mTimeModified = timeModified;
+    }
+
+    public ImageCacheRequest(GalleryApp application,
+            Path path, long timeModified, int type, int targetSize, String filepath, String mimeType) {
+        this(application, path, timeModified, type,
+                targetSize);
+        mFilePath = filepath;
+        mMimeType = mimeType;
     }
 
     private String debugTag() {
@@ -58,27 +63,15 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
 
     @Override
     public Bitmap run(JobContext jc) {
-        ImageCacheService cacheService = mApplication.getImageCacheService();
-
-        if (mFilePath != null && mFilePath.endsWith(".dcf")) {
-            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
-            mFilePath = mFilePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-            int statusDisplay = drmClient.checkRightsStatus(mFilePath, Action.DISPLAY);
-            int statusPlay = drmClient.checkRightsStatus(mFilePath, Action.PLAY);
-           if (mMimeType == null) {
-                if ((RightsStatus.RIGHTS_VALID != statusDisplay)
-                                && (RightsStatus.RIGHTS_VALID != statusPlay)) {
-                    return null;
-                }
-            } else if (mMimeType.startsWith("video/")
-                    && RightsStatus.RIGHTS_VALID != statusPlay) {
-                return null;
-            } else if (mMimeType.startsWith("image/")
-                    && RightsStatus.RIGHTS_VALID != statusDisplay) {
-                return null;
+        if (!TextUtils.isEmpty(mFilePath) && !TextUtils.isEmpty(mMimeType)
+                && !mMimeType.startsWith("video/")) {
+            if (DrmHelper.isDrmFile(mFilePath)
+                    && mType != MediaItem.TYPE_MICROTHUMBNAIL) {
+                return onDecodeOriginal(jc, mType);
             }
-            if (drmClient != null) drmClient.release();
         }
+
+        ImageCacheService cacheService = mApplication.getImageCacheService();
 
         BytesBuffer buffer = MediaItem.getBytesBufferPool().get();
         try {
@@ -103,6 +96,7 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         } finally {
             MediaItem.getBytesBufferPool().recycle(buffer);
         }
+
         Bitmap bitmap = onDecodeOriginal(jc, mType);
         if (jc.isCancelled()) return null;
 

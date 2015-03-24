@@ -18,6 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.drm.DrmHelper;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -203,6 +204,7 @@ public class PhotoView extends GLView {
     private EdgeView mEdgeView;
     private UndoBarView mUndoBar;
     private Texture mVideoPlayIcon;
+    private Texture mDrmIcon;
 
     private SynchronizedHandler mHandler;
 
@@ -306,6 +308,7 @@ public class PhotoView extends GLView {
             }
         });
         mVideoPlayIcon = new ResourceTexture(mContext, R.drawable.ic_control_play);
+        mDrmIcon = new ResourceTexture(mContext, R.drawable.drm_image);
         for (int i = -SCREEN_NAIL_MAX; i <= SCREEN_NAIL_MAX; i++) {
             if (i == 0) {
                 mPictures.put(i, new FullPicture());
@@ -740,6 +743,15 @@ public class PhotoView extends GLView {
                 drawLoadingFailMessage(canvas);
             }
 
+            if (getFilmMode()) {
+                MediaItem item = mModel.getMediaItem(0);
+                if (item != null) {
+                    if (DrmHelper.isDrmFile(item.getFilePath())) {
+                        drawDrmIcon(canvas, s);
+                    }
+                }
+            }
+
             // Draw a debug indicator showing which picture has focus (index ==
             // 0).
             //canvas.fillRect(-10, -10, 20, 20, 0x80FF00FF);
@@ -857,9 +869,18 @@ public class PhotoView extends GLView {
             if (mModel.isVideo(mIndex) || mModel.isGif(mIndex)) {
                 drawVideoPlayIcon(canvas, s);
             }
+
             if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
+
+            MediaItem item = mModel.getMediaItem(mIndex);
+            if (item != null) {
+                if (DrmHelper.isDrmFile(item.getFilePath())) {
+                    drawDrmIcon(canvas, s);
+                }
+            }
+
             canvas.restore();
         }
 
@@ -924,6 +945,13 @@ public class PhotoView extends GLView {
         int s = side / ICON_RATIO;
         // Draw the video play icon at the center
         mVideoPlayIcon.draw(canvas, -s / 2, -s / 2, s, s);
+    }
+
+    // Draw the Drm lock icon (in the place where the spinner was)
+    private void drawDrmIcon(GLCanvas canvas, int side) {
+        int s = side / ICON_RATIO;
+        // Draw the Drm lock icon at the center
+        mDrmIcon.draw(canvas, -s / 2, -s / 2, s, s);
     }
 
     // Draw the "no thumbnail" message
