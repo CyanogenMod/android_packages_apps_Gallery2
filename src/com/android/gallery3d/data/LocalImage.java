@@ -257,6 +257,10 @@ public class LocalImage extends LocalMediaItem {
     public int getSupportedOperations() {
         int operation = SUPPORT_DELETE | SUPPORT_INFO;
         if (DrmHelper.isDrmFile(getFilePath())) {
+            if (DrmHelper.isDrmFLBlocking(mApplication.getAndroidContext(),
+                    getFilePath())) {
+                operation |= SUPPORT_SETAS;
+            }
             operation |= SUPPORT_DRM_INFO | SUPPORT_FULL_IMAGE;
             if (DrmHelper.isShareableDrmFile(getFilePath())) {
                 operation |= SUPPORT_SHARE;
