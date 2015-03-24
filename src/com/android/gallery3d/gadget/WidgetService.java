@@ -19,8 +19,10 @@ package com.android.gallery3d.gadget;
 import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -121,7 +123,31 @@ public class WidgetService extends RemoteViewsService {
                 return null;
             }
             Bitmap bitmap = mSource.getImage(position);
-            if (bitmap == null) return getLoadingView();
+
+            boolean isDrm = false;
+            if (DrmHelper.isDrmFile(DrmHelper.getFilePath(
+                    mApp.getAndroidContext(), mSource.getContentUri(position)))) {
+                isDrm = true;
+            }
+
+            if (isDrm) {
+                if (bitmap == null) {
+                    RemoteViews rv = new RemoteViews(mApp.getAndroidContext()
+                            .getPackageName(),
+                            R.layout.appwidget_drm_empty_item);
+                    rv.setOnClickFillInIntent(
+                            R.id.appwidget_photo_item,
+                            new Intent().setFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP).setData(
+                                    mSource.getContentUri(position)));
+                    return rv;
+                }
+            } else {
+                if (bitmap == null) {
+                    return getLoadingView();
+                }
+            }
+
             RemoteViews views = new RemoteViews(
                     mApp.getAndroidContext().getPackageName(),
                     R.layout.appwidget_photo_item);
@@ -129,6 +155,13 @@ public class WidgetService extends RemoteViewsService {
             views.setOnClickFillInIntent(R.id.appwidget_photo_item, new Intent()
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .setData(mSource.getContentUri(position)));
+
+            if (isDrm) {
+                views.setViewVisibility(R.id.drm_icon, View.VISIBLE);
+            } else {
+                views.setViewVisibility(R.id.drm_icon, View.GONE);
+            }
+
             return views;
         }
 
