@@ -183,10 +183,6 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
                 ((FadeInTexture) content).isAnimating()) {
             renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
         }
-        if ((entry.mediaType == MediaObject.MEDIA_TYPE_DRM_VIDEO)
-                || (entry.mediaType == MediaObject.MEDIA_TYPE_DRM_IMAGE)) {
-            drawDrmOverlay(canvas, width, height, entry.mediaType);
-        }
         return renderRequestFlags;
     }
 

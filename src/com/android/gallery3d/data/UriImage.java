@@ -17,17 +17,13 @@
 package com.android.gallery3d.data;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmStore.DrmDeliveryType;
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapRegionDecoder;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore.Video.VideoColumns;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.app.PanoramaMetadataSupport;
@@ -63,12 +59,14 @@ public class UriImage extends MediaItem {
     private PanoramaMetadataSupport mPanoramaMetadata = new PanoramaMetadataSupport(this);
 
     private GalleryApp mApplication;
+    private String mFilePath;
 
     public UriImage(GalleryApp application, Path path, Uri uri, String contentType) {
         super(path, nextVersionNumber());
         mUri = uri;
         mApplication = Utils.checkNotNull(application);
         mContentType = contentType;
+        mFilePath = DrmHelper.getFilePath(mApplication.getAndroidContext(), uri);
     }
 
     @Override
@@ -176,6 +174,14 @@ public class UriImage extends MediaItem {
     private class RegionDecoderJob implements Job<BitmapRegionDecoder> {
         @Override
         public BitmapRegionDecoder run(JobContext jc) {
+            if (DrmHelper.isDrmFile(getFilePath())) {
+                BitmapRegionDecoder decoder = DrmHelper
+                        .createBitmapRegionDecoder(getFilePath(), false);
+                mWidth = decoder.getWidth();
+                mHeight = decoder.getHeight();
+                return decoder;
+            }
+
             if (!prepareInputFile(jc)) return null;
             BitmapRegionDecoder decoder = DecodeUtils.createBitmapRegionDecoder(
                     jc, mFileDescriptor.getFileDescriptor(), false);
@@ -194,6 +200,10 @@ public class UriImage extends MediaItem {
 
         @Override
         public Bitmap run(JobContext jc) {
+            if (DrmHelper.isDrmFile(getFilePath())) {
+                return DecodeUtils.ensureGLCompatibleBitmap(DrmHelper.getBitmap(getFilePath()));
+            }
+
             if (!prepareInputFile(jc)) return null;
             int targetSize = MediaItem.getTargetSize(mType);
             Options options = new Options();
@@ -216,45 +226,18 @@ public class UriImage extends MediaItem {
 
     @Override
     public int getSupportedOperations() {
-        int supported = SUPPORT_SETAS;
-        String filePath = null;
-        String scheme = mUri.getScheme();
-        if ("file".equals(scheme)) {
-            filePath = mUri.getPath();
-        } else {
-            Cursor cursor = null;
-            try {
-                cursor = mApplication.getContentResolver().query(mUri,
-                        new String[] {VideoColumns.DATA}, null, null, null);
-                if (cursor != null && cursor.moveToNext()) {
-                    filePath = cursor.getString(0);
-                }
-            } catch (Throwable t) {
-                Log.w(TAG, "cannot get path from: " + mUri);
-            } finally {
-                if (cursor != null) cursor.close();
+        int supported = 0;
+        if (DrmHelper.isDrmFile(getFilePath())) {
+            supported |= SUPPORT_DRM_INFO | SUPPORT_FULL_IMAGE;
+            if (DrmHelper.isShareableDrmFile(getFilePath())) {
+                supported |= SUPPORT_SHARE;
             }
-        }
-
-        if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
-            supported |= SUPPORT_DRM_INFO;
-            filePath = filePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
-            ContentValues values = drmClient.getMetadata(filePath);
-            int drmType = values.getAsInteger("DRM-TYPE");
-            Log.d(TAG, "getSupportedOperations:drmType returned= "
-                    + Integer.toString(drmType) + " for path= " + filePath);
-            if (drmType == DrmDeliveryType.SEPARATE_DELIVERY) {
-                if (isSharable()) supported |= SUPPORT_SHARE;
-            }
-            if (drmClient != null) drmClient.release();
         } else {
-            supported |= SUPPORT_EDIT | SUPPORT_PRINT;
-            if (isSharable()) supported |= SUPPORT_SHARE;
-        }
-
-        if (BitmapUtils.isSupportedByRegionDecoder(mContentType)) {
-            supported |= SUPPORT_FULL_IMAGE;
+            if (isSharable())
+                supported |= SUPPORT_SHARE | SUPPORT_PRINT | SUPPORT_SETAS;
+            if (BitmapUtils.isSupportedByRegionDecoder(mContentType)) {
+                supported |= SUPPORT_EDIT | SUPPORT_FULL_IMAGE;
+            }
         }
         return supported;
     }
@@ -279,6 +262,10 @@ public class UriImage extends MediaItem {
 
     @Override
     public int getMediaType() {
+        if (DrmHelper.isDrmFile(getFilePath())) {
+            return MEDIA_TYPE_DRM_IMAGE;
+        }
+
         return MEDIA_TYPE_IMAGE;
     }
 
@@ -337,12 +324,7 @@ public class UriImage extends MediaItem {
     }
 
     @Override
-    public void setConsumeRights(boolean flag) {
-        consumeRights = flag;
-    }
-
-    @Override
-    public boolean getConsumeRights() {
-        return consumeRights;
+    public String getFilePath() {
+        return mFilePath;
     }
 }
