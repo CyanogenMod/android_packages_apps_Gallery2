@@ -18,6 +18,7 @@ package com.android.gallery3d.app;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
@@ -37,7 +38,7 @@ import android.content.res.Configuration;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.drm.DrmManagerClient;
+import android.drm.DrmManagerClientWrapper;
 import android.drm.DrmStore.DrmDeliveryType;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -265,6 +266,18 @@ public class MovieActivity extends Activity {
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE,
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
 
+        actionBar.addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
+            @Override
+            public void onMenuVisibilityChanged(boolean isVisible) {
+                if (mPlayer != null) {
+                    if (isVisible) {
+                        mPlayer.cancelHidingController();
+                    } else {
+                        mPlayer.restartHidingController();
+                    }
+                }
+            }
+        });
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
         if (title != null) {
             actionBar.setTitle(title);
@@ -319,7 +332,7 @@ public class MovieActivity extends Activity {
         }
         Log.d(TAG, "onCreateOptionsMenu= " + path);
         if ((path != null) && ((path.endsWith(".dcf") || path.endsWith(".dm")))) {
-            DrmManagerClient drmClient = new DrmManagerClient(this);
+            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(this);
             ContentValues values = drmClient.getMetadata(path);
             int drmType = values.getAsInteger("DRM-TYPE");
             Log.d(TAG, "onCreateOptionsMenu:DRM-TYPE = " + Integer.toString(drmType));
