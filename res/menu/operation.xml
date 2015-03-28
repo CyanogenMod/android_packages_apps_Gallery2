@@ -70,9 +70,4 @@
             android:title="@string/show_on_map"
             android:showAsAction="never"
             android:visible="false" />
-    <item android:id="@+id/action_drm_info"
-            android:title="@string/drm_license_info"
-            android:enabled="true"
-            android:visible="false"
-            android:showAsAction="never" />
 </menu>

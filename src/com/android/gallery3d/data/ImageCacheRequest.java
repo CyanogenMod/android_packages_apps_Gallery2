@@ -16,9 +16,6 @@
 
 package com.android.gallery3d.data;
 
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmStore.Action;
-import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -35,18 +32,14 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
     private Path mPath;
     private int mType;
     private int mTargetSize;
-    private String mFilePath;
-    private String mMimeType;
     private long mTimeModified;
 
     public ImageCacheRequest(GalleryApp application,
-            Path path, long timeModified, int type, int targetSize, String filePath, String mimetype) {
+            Path path, long timeModified, int type, int targetSize) {
         mApplication = application;
         mPath = path;
         mType = type;
         mTargetSize = targetSize;
-        mFilePath = filePath;
-        mMimeType = mimetype;
         mTimeModified = timeModified;
     }
 
@@ -59,26 +52,6 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
     @Override
     public Bitmap run(JobContext jc) {
         ImageCacheService cacheService = mApplication.getImageCacheService();
-
-        if (mFilePath != null && mFilePath.endsWith(".dcf")) {
-            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mApplication.getAndroidContext());
-            mFilePath = mFilePath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-            int statusDisplay = drmClient.checkRightsStatus(mFilePath, Action.DISPLAY);
-            int statusPlay = drmClient.checkRightsStatus(mFilePath, Action.PLAY);
-           if (mMimeType == null) {
-                if ((RightsStatus.RIGHTS_VALID != statusDisplay)
-                                && (RightsStatus.RIGHTS_VALID != statusPlay)) {
-                    return null;
-                }
-            } else if (mMimeType.startsWith("video/")
-                    && RightsStatus.RIGHTS_VALID != statusPlay) {
-                return null;
-            } else if (mMimeType.startsWith("image/")
-                    && RightsStatus.RIGHTS_VALID != statusDisplay) {
-                return null;
-            }
-            if (drmClient != null) drmClient.release();
-        }
 
         BytesBuffer buffer = MediaItem.getBytesBufferPool().get();
         try {

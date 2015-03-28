@@ -24,7 +24,6 @@ import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumSetDataLoader;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataSourceType;
-import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
@@ -81,7 +80,6 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
         public Path setPath;
         public String title;
         public int totalCount;
-        public int mediaType;
         public int sourceType;
         public int cacheFlag;
         public int cacheStatus;
@@ -277,18 +275,6 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
         if (getDataVersion(cover) != entry.coverDataVersion) {
             entry.coverDataVersion = getDataVersion(cover);
             entry.rotation = (cover == null) ? 0 : cover.getRotation();
-
-            if (cover instanceof LocalMediaItem) {
-                String filePath = ((LocalMediaItem) cover).filePath;
-                if (filePath != null && (filePath.endsWith(".dcf") || filePath.endsWith(".dm"))) {
-                    if (entry.mediaType == MediaObject.MEDIA_TYPE_IMAGE) {
-                        entry.mediaType = MediaObject.MEDIA_TYPE_DRM_IMAGE;
-                    } else if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
-                        entry.mediaType = MediaObject.MEDIA_TYPE_DRM_VIDEO;
-                    }
-                }
-            }
-
             if (entry.coverLoader != null) {
                 entry.coverLoader.recycle();
                 entry.coverLoader = null;
