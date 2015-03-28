@@ -1121,7 +1121,6 @@ CHAR LIMIT = NONE] -->
     </plurals>
 
     <!-- The tips of trimming video -->
-    <string name="fail_trim">Sorry, this video file can not be trimmed</string>
     <string name="can_not_trim">Only mp4 and 3gp file can be trimmed</string>
 
     <string name="no_permission_for_drm">"Sorry, Drm file can not be shared"</string>
