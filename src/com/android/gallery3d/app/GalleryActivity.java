@@ -31,6 +31,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.text.TextUtils;
+import java.util.Locale;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
@@ -55,6 +57,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public static final String KEY_MEDIA_TYPES = "mediaTypes";
     public static final String KEY_DISMISS_KEYGUARD = "dismiss-keyguard";
     public static final String KEY_FROM_SNAPCAM = "from-snapcam";
+    public static final String KEY_TOTAL_NUMBER = "total-number";
 
     private static final String TAG = "GalleryActivity";
     private Dialog mVersionCheckDialog;
@@ -277,6 +280,13 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                 data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH, itemPath.toString());
                 if (!intent.getBooleanExtra(KEY_FROM_SNAPCAM, false)) {
                     data.putBoolean(PhotoPage.KEY_READONLY, true);
+                } else {
+                    int hintIndex = 0;
+                    if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                        hintIndex = intent.getIntExtra(KEY_TOTAL_NUMBER, 1) - 1;
+                    }
+                    data.putInt(PhotoPage.KEY_INDEX_HINT, hintIndex);
                 }
 
                 // TODO: Make the parameter "SingleItemOnly" public so other
