@@ -27,9 +27,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,8 +35,7 @@ import android.content.res.Configuration;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmStore.DrmDeliveryType;
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
@@ -53,7 +49,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Video.VideoColumns;
 import android.provider.OpenableColumns;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -245,6 +240,16 @@ public class MovieActivity extends Activity {
                 initEffects(mp.getAudioSessionId());
             }
         });
+
+        // DRM validation
+        Uri original = intent.getData();
+        String mimeType = intent.getType();
+        String filepath = DrmHelper.getFilePath(this, original);
+        if (DrmHelper.isDrmFile(filepath)) {
+            if (!DrmHelper.validateLicense(this, filepath, mimeType)) {
+                finish();
+            }
+        }
     }
 
     private void setActionBarLogoFromIntent(Intent intent) {
@@ -312,36 +317,6 @@ public class MovieActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        String path = null;
-        String scheme = mUri.getScheme();
-        if ("file".equals(scheme)) {
-            path = mUri.getPath();
-        } else {
-            Cursor cursor = null;
-            try {
-                cursor = getContentResolver().query(mUri,
-                        new String[] {VideoColumns.DATA}, null, null, null);
-                if (cursor != null && cursor.moveToNext()) {
-                    path = cursor.getString(0);
-                }
-            } catch (Throwable t) {
-                Log.d(TAG, "cannot get path from: " + mUri);
-            } finally {
-                if (cursor != null) cursor.close();
-            }
-        }
-        Log.d(TAG, "onCreateOptionsMenu= " + path);
-        if ((path != null) && ((path.endsWith(".dcf") || path.endsWith(".dm")))) {
-            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(this);
-            ContentValues values = drmClient.getMetadata(path);
-            int drmType = values.getAsInteger("DRM-TYPE");
-            Log.d(TAG, "onCreateOptionsMenu:DRM-TYPE = " + Integer.toString(drmType));
-            if (drmType != DrmDeliveryType.SEPARATE_DELIVERY) {
-                return true;
-            }
-            if (drmClient != null) drmClient.release();
-        }
-
         getMenuInflater().inflate(R.menu.movie, menu);
         MenuItem shareMenu = menu.findItem(R.id.action_share);
         ShareActionProvider provider = (ShareActionProvider) shareMenu.getActionProvider();

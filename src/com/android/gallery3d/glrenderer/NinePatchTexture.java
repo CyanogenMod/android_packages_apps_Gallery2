@@ -50,7 +50,7 @@ public class NinePatchTexture extends ResourceTexture {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeResource(
-                mContext.getResources(), mResId, options, false);
+                mContext.getResources(), mResId, options);
         mBitmap = bitmap;
         setSize(bitmap.getWidth(), bitmap.getHeight());
         byte[] chunkData = bitmap.getNinePatchChunk();
