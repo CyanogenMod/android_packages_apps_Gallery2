@@ -34,7 +34,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="step_option_desc">התאמה אישית מהירה לצעד קדימה/אחורה</string>
   <string name="setp_option_three_second">3 שניות</string>
   <string name="setp_option_six_second">6 שניות</string>
-  <string name="loop">"לופ"</string>
+  <string name="loop">"לולאה"</string>
   <string name="single">"יחיד"</string>
   <string name="stereo">"סטריאו"</string>
   <string name="speaker_on">רמקול פעיל</string>
