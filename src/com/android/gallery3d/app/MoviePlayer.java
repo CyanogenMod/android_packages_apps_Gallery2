@@ -191,16 +191,6 @@ public class MoviePlayer implements
         }
     };
 
-    private Runnable mDelayVideoRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (LOG) {
-                Log.v(TAG, "mDelayVideoRunnable.run()");
-            }
-            mVideoView.setVisibility(View.VISIBLE);
-        }
-    };
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -489,9 +479,7 @@ public class MoviePlayer implements
     public void onResume() {
         mDragging = false;// clear drag info
         if (mHasPaused) {
-            //M: same as launch case to delay transparent.
-            mVideoView.removeCallbacks(mDelayVideoRunnable);
-            mVideoView.postDelayed(mDelayVideoRunnable, BLACK_TIMEOUT);
+            mVideoView.setVisibility(View.VISIBLE);
 
             if (mServerTimeoutExt.handleOnResume() || mIsShowResumingDialog) {
                 mHasPaused = false;
