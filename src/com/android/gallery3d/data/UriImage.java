@@ -233,8 +233,8 @@ public class UriImage extends MediaItem {
                 supported |= SUPPORT_SHARE;
             }
         } else {
-            if (isSharable())
-                supported |= SUPPORT_SHARE | SUPPORT_PRINT | SUPPORT_SETAS;
+            supported = SUPPORT_PRINT | SUPPORT_SETAS;
+            if (isSharable()) supported |= SUPPORT_SHARE;
             if (BitmapUtils.isSupportedByRegionDecoder(mContentType)) {
                 supported |= SUPPORT_EDIT | SUPPORT_FULL_IMAGE;
             }
