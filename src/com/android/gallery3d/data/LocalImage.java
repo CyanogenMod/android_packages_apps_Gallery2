@@ -266,8 +266,8 @@ public class LocalImage extends LocalMediaItem {
                 operation |= SUPPORT_SHARE;
             }
         } else {
-            operation = SUPPORT_SHARE | SUPPORT_CROP | SUPPORT_PRINT | SUPPORT_SETAS;
-
+            operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
+                | SUPPORT_SETAS | SUPPORT_PRINT | SUPPORT_INFO;
             if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
                 operation |= SUPPORT_FULL_IMAGE | SUPPORT_EDIT;
             }
