@@ -190,15 +190,17 @@ public class LocalVideo extends LocalMediaItem {
 
     @Override
     public int getSupportedOperations() {
-        int operation = SUPPORT_DELETE | SUPPORT_PLAY | SUPPORT_INFO | SUPPORT_TRIM | SUPPORT_MUTE;
         if (DrmHelper.isDrmFile(getFilePath())) {
-            operation |= SUPPORT_DRM_INFO;
+            int operation = SUPPORT_DELETE | SUPPORT_PLAY | SUPPORT_INFO
+                    | SUPPORT_DRM_INFO;
             if (DrmHelper.isShareableDrmFile(getFilePath())) {
                 operation |= SUPPORT_SHARE;
             }
+            return operation;
         }
 
-        return operation;
+        return SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_PLAY | SUPPORT_INFO
+                | SUPPORT_TRIM | SUPPORT_MUTE;
     }
 
     @Override
