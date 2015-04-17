@@ -30,8 +30,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="step_option_name">Addım</string>
+  <string name="step_option_desc">Sürətli irəli/geri çəkmə aralıqlarını özəlləşdir</string>
   <string name="step_option_alternate">5 saniyə</string>
   <string name="step_option_default">10 saniyə</string>
+  <string name="loop">"Təkrar"</string>
   <string name="single">"Tək"</string>
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Səsucaldan AÇIQ</string>
