@@ -72,6 +72,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="default_title">"Titlul implicit"</string>
   <string name="more_image">Mai multe imagini</string>
   <string name="mute_nosupport">Nu puteţi dezactiva volumul: videoul nu este acceptat</string>
+  <string name="map_activity_not_found_err">Nu există nicio aplicaţie cu hărţi instalată care să arate locaţia.</string>
   <string name="bass_boost_strength">Amplificare Bas</string>
   <string name="virtualizer_strength">Efect 3D</string>
   <string name="audio_effects">Efecte audio</string>
