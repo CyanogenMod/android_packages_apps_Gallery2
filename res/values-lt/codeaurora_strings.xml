@@ -70,7 +70,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Vietovė"</string>
   <string name="delete_all">"Ištrinti visas"</string>
   <string name="default_title">"Numatytasis pavadinimas"</string>
-  <string name="more_image">Daugiau nuotraukų</string>
+  <string name="more_image">Daugiau vaizdų</string>
   <string name="mute_nosupport">Negalima nutildyti: vaizdo įrašas nepalaikomas</string>
   <string name="map_activity_not_found_err">Nėra įdiegtos žemėlapių programos tam, kad parodyti vietovę.</string>
   <string name="bass_boost_strength">Žemų tonų išryškinimas</string>
