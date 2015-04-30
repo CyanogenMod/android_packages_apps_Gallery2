@@ -304,12 +304,14 @@ public class ProcessingService extends Service {
         filtersManager.addBorders(this);
         filtersManager.addTools(this);
         filtersManager.addEffects();
+        filtersManager.addMakeups(this);
 
         FiltersManager highresFiltersManager = FiltersManager.getHighresManager();
         highresFiltersManager.addLooks(this);
         highresFiltersManager.addBorders(this);
         highresFiltersManager.addTools(this);
         highresFiltersManager.addEffects();
+//        highresFiltersManager.addMakeups(this);
     }
 
     private void tearDownPipeline() {

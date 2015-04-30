@@ -69,7 +69,7 @@ public abstract class MediaObject {
     public static final int CACHE_STATUS_CACHED_FULL = 3;
 
     private static long sVersionSerial = 0;
-    protected boolean consumeRights = false;
+
     protected long mDataVersion;
 
     protected final Path mPath;
@@ -145,14 +145,6 @@ public abstract class MediaObject {
     }
 
     public void cache(int flag) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setConsumeRights(boolean flag) {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean getConsumeRights() {
         throw new UnsupportedOperationException();
     }
 

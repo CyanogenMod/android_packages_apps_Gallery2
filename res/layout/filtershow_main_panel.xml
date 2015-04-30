@@ -95,6 +95,17 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_photoeditor_color"/>
 
+            <ImageButton
+                    android:id="@+id/makeupButton"
+                    android:layout_width="@dimen/thumbnail_size"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="2dip"
+                    android:background="@drawable/filtershow_button_background"
+                    android:scaleType="centerInside"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_photoeditor_makeup"/>
+
         </LinearLayout>
 
     </com.android.gallery3d.filtershow.CenteredLinearLayout>

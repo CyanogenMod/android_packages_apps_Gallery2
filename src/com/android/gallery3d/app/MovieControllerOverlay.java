@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -50,6 +51,7 @@ import org.codeaurora.gallery3d.video.ExtensionHelper;
 import org.codeaurora.gallery3d.video.ScreenModeManager;
 import org.codeaurora.gallery3d.video.ScreenModeManager.ScreenModeListener;
 
+import java.util.Locale;
 
 /**
  * The playback controller for the Movie Player.
@@ -840,10 +842,20 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
                 mListenerForRewind.onStopVideo();
             } else if (v == mRewind) {
                 Log.v(TAG, "ControllerRewindAndForwardExt onClick mRewind");
-                mListenerForRewind.onRewind();
+                if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault())
+                        == View.LAYOUT_DIRECTION_RTL) {
+                    mListenerForRewind.onForward();
+                } else {
+                    mListenerForRewind.onRewind();
+                }
             } else if (v == mForward) {
                 Log.v(TAG, "ControllerRewindAndForwardExt onClick mForward");
-                mListenerForRewind.onForward();
+                if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault())
+                        == View.LAYOUT_DIRECTION_RTL) {
+                    mListenerForRewind.onRewind();
+                } else {
+                    mListenerForRewind.onForward();
+                }
             }
         }
 

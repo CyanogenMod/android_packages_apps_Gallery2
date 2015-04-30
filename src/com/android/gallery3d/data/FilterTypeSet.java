@@ -102,7 +102,8 @@ public class FilterTypeSet extends MediaSet implements ContentListener {
         mBaseSet.enumerateMediaItems(new MediaSet.ItemConsumer() {
             @Override
             public void consume(int index, MediaItem item) {
-                if (item.getMediaType() == mMediaType) {
+                if (item.getMediaType() == mMediaType
+                        || item.getMediaType() == MediaObject.MEDIA_TYPE_DRM_IMAGE) {
                     if (index < 0 || index >= total) return;
                     Path path = item.getPath();
                     buf[index] = path;

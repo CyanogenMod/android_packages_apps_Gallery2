@@ -20,18 +20,11 @@ import android.annotation.TargetApi;
 import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.drm.DrmManagerClientWrapper;
-import android.drm.DrmStore.Action;
-import android.drm.DrmStore.DrmDeliveryType;
-import android.drm.DrmStore.RightsStatus;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
+import android.drm.DrmHelper;
 import android.graphics.Rect;
 import android.media.MediaFile;
 import android.net.Uri;
@@ -42,8 +35,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Video.VideoColumns;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +45,6 @@ import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
-import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.ComboAlbum;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.FilterDeleteSet;
@@ -87,11 +77,6 @@ import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.UsageStatistics;
 import com.android.gallery3d.util.ViewGifImage;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -99,8 +84,6 @@ public abstract class PhotoPage extends ActivityState implements
         PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
         PhotoPageBottomControls.Delegate, GalleryActionBar.OnAlbumModeSelectedListener {
     private static final String TAG = "PhotoPage";
-
-    public static final String BUY_LICENSE = "android.drmservice.intent.action.BUY_LICENSE";
 
     private static final int MSG_HIDE_BARS = 1;
     private static final int MSG_ON_FULL_SCREEN_CHANGED = 4;
@@ -590,16 +573,6 @@ public abstract class PhotoPage extends ActivityState implements
                                     PhotoPage.this);
                         }
                     }
-                    MediaItem item = mModel.getMediaItem(0);
-                    if (item != null
-                            && item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE
-                            && item.getConsumeRights() ==  true) {
-                        Log.d(TAG, "onDestroy,consume rights = true");
-                        item.setConsumeRights(false);
-                        Uri uri = item.getContentUri();
-                        Log.d(TAG, "onDestroy:uri=" + uri);
-                        consumeRights(uri);
-                    }
                 }
 
                 @Override
@@ -637,40 +610,6 @@ public abstract class PhotoPage extends ActivityState implements
                         }
                     }
                 });
-    }
-
-    private void consumeRights(Uri uri) {
-        Log.d(TAG, "consumeRights:uri=" + uri);
-        String filepath = null;
-        String scheme = uri.getScheme();
-        if ("file".equals(scheme)) {
-            filepath = uri.getPath();
-        } else {
-            Cursor cursor = null;
-            try {
-                cursor = mActivity.getContentResolver().query(uri,
-                        new String[] {VideoColumns.DATA}, null, null, null);
-                if (cursor != null && cursor.moveToNext()) {
-                    filepath = cursor.getString(0);
-                }
-            } catch (Throwable t) {
-                Log.w(TAG, "cannot get path from: " + uri);
-            } finally {
-                if (cursor != null) cursor.close();
-            }
-        }
-        Options options = new Options();
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(new File(filepath));
-            FileDescriptor fd = fis.getFD();
-            Log.d(TAG, "onLoadingFinished:calling decodeFileDescriptor with true");
-            BitmapFactory.decodeFileDescriptor(fd, new Rect(), options, true);
-        } catch(IOException e) {
-            Log.w(TAG, "IOException");
-        } finally {
-            Utils.closeSilently(fis);
-        }
     }
 
     @Override
@@ -748,40 +687,6 @@ public abstract class PhotoPage extends ActivityState implements
 
     private Intent createShareIntent(MediaObject mediaObject) {
         int type = mediaObject.getMediaType();
-        Uri uri = mediaObject.getContentUri();
-        Log.d(TAG, "updateShareURI:uri:" + uri);
-        String filepath = null;
-        String scheme = uri.getScheme();
-        if ("file".equals(scheme)) {
-            filepath = uri.getPath();
-        } else {
-            Cursor cursor = null;
-            try {
-                cursor = mApplication.getContentResolver().query(uri,
-                        new String[] {VideoColumns.DATA}, null, null, null);
-                if (cursor != null && cursor.moveToNext()) {
-                    filepath = cursor.getString(0);
-                }
-            } catch (Throwable t) {
-                Log.w(TAG, "cannot get path from: " + uri);
-            } finally {
-                if (cursor != null) cursor.close();
-            }
-        }
-
-        if (filepath != null && filepath.endsWith(".dcf")) {
-            DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(mActivity.getAndroidContext());
-            filepath = filepath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-            ContentValues values = drmClient.getMetadata(filepath);
-            int drmType = values.getAsInteger("DRM-TYPE");
-            Log.d(TAG, "updateShareURI:drmType returned= " + Integer.toString(drmType)
-                    + " for path= " + filepath);
-            if (drmType != DrmDeliveryType.SEPARATE_DELIVERY) {
-                return null;
-            }
-            if (drmClient != null) drmClient.release();
-        }
-
         return new Intent(Intent.ACTION_SEND)
                 .setType(MenuExecutor.getMimeType(type))
                 .putExtra(Intent.EXTRA_STREAM, mediaObject.getContentUri())
@@ -899,6 +804,20 @@ public abstract class PhotoPage extends ActivityState implements
             requestDeferredUpdate();
         } else {
             updateUIForCurrentPhoto();
+
+            // Manage DRM rights while image selection changed. this
+            // flow will comes for both image and video, but here
+            // we will consume rights for image files only.
+            // Do not consume rights of a GIF image and video here.
+            // ViewGifImage will take care of GIF rights consumption stub.
+            // MediaPlayer will handle the video rights consumption stub.
+            String mime = mCurrentPhoto.getMimeType();
+            if (!TextUtils.isEmpty(mime) && !mime.equals("image/gif")
+                    && !mime.startsWith("video/")) {
+                DrmHelper.manageDrmLicense(mActivity.getAndroidContext(),
+                        mHandler, mCurrentPhoto.getFilePath(),
+                        mCurrentPhoto.getMimeType());
+            }
         }
     }
 
@@ -1255,32 +1174,10 @@ public abstract class PhotoPage extends ActivityState implements
                 mMenuExecutor.onMenuClicked(item, confirmMsg, mConfirmDialogListener);
                 return true;
             case R.id.action_drm_info:
-                Uri uri = manager.getContentUri(path);
-                Log.d(TAG, "executeuri:" + uri);
-                String filepath = null;
-                String scheme = uri.getScheme();
-                if ("file".equals(scheme)) {
-                    filepath = uri.getPath();
-                } else {
-                    Cursor cursor = null;
-                    try {
-                        cursor = mActivity.getAndroidContext().getContentResolver().query(uri,
-                                new String[] {VideoColumns.DATA}, null, null, null);
-                        if (cursor != null && cursor.moveToNext()) {
-                            filepath = cursor.getString(0);
-                        }
-                    } catch (Throwable t) {
-                        Log.w(TAG, "cannot get path from: " + uri);
-                    } finally {
-                        if (cursor != null) cursor.close();
-                    }
+                String filepath = current.getFilePath();
+                if (DrmHelper.isDrmFile(filepath)) {
+                    DrmHelper.showDrmInfo(mActivity.getAndroidContext(), filepath);
                 }
-                filepath = filepath.replace("/storage/emulated/0", "/storage/emulated/legacy");
-                Intent drmintent = new Intent("android.drmservice.intent.action.SHOW_PROPERTIES");
-                drmintent.putExtra("DRM_FILE_PATH", filepath);
-                drmintent.putExtra("DRM_TYPE", "OMAV1");
-                Log.d(TAG,"-----filepath===" + path);
-                mActivity.getAndroidContext().sendBroadcast(drmintent);
                 return true;
             default :
                 return false;
@@ -1417,37 +1314,6 @@ public abstract class PhotoPage extends ActivityState implements
 
     public void playVideo(Activity activity, Uri uri, String title) {
         try {
-            String scheme = uri.getScheme();
-            Log.d(TAG, "playVideo:uri= " + uri);
-            String path = null;
-            if (scheme.equals("content")) {
-                Cursor c = activity.getContentResolver().query(uri,
-                        new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null);
-                if (c != null && c.getCount() > 0) {
-                    c.moveToFirst();
-                    path = c.getString(c.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-                    Log.d(TAG, "playVideo:path= " + path);
-                }
-                if (c != null) c.close();
-            } else {
-                path = uri.getPath();
-            }
-            if (path.endsWith(".dcf")) {
-                DrmManagerClientWrapper drmClient = new DrmManagerClientWrapper(activity);
-                path = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
-                int status = drmClient.checkRightsStatus(path, Action.PLAY);
-                if (RightsStatus.RIGHTS_VALID != status) {
-                    ContentValues values = drmClient.getMetadata(path);
-                    String address = values.getAsString("Rights-Issuer");
-                    Log.d(TAG, "playVideo, address= " + address);
-                    Intent intent = new Intent(BUY_LICENSE);
-                    intent.putExtra("DRM_FILE_PATH", address);
-                    activity.sendBroadcast(intent);
-                    return;
-                }
-                if (drmClient != null) drmClient.release();
-            }
-
             Intent intent = new Intent(Intent.ACTION_VIEW)
                     .setDataAndType(uri, "video/*")
                     .putExtra(Intent.EXTRA_TITLE, title)
@@ -1552,17 +1418,6 @@ public abstract class PhotoPage extends ActivityState implements
 
     @Override
     public void onCurrentImageUpdated() {
-        if (mSetPathString == null) {
-            MediaItem item = mModel.getMediaItem(0);
-            if (item.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE
-                    && item.getConsumeRights() == true) {
-                Log.d(TAG, "onCurrentImageUpdated,consume rights = true");
-                item.setConsumeRights(false);
-                Uri uri = item.getContentUri();
-                Log.d(TAG, "onCurrentImageUpdated:uri=" + uri);
-                consumeRights(uri);
-            }
-        }
         mActivity.getGLRoot().unfreeze();
     }
 
@@ -1589,6 +1444,23 @@ public abstract class PhotoPage extends ActivityState implements
             } else {
                 UsageStatistics.onContentViewChanged(
                         UsageStatistics.COMPONENT_CAMERA, "Unknown"); // TODO
+            }
+
+            // Manage DRM rights while image selection changed. this
+            // flow will comes for both image and video, but here
+            // we will consume rights for image files only.
+            // Do not consume rights of a GIF image and video here.
+            // ViewGifImage will take care of GIF rights consumption stub.
+            // MediaPlayer will handle the video rights consumption stub.
+            if ((mMediaSet != null && mMediaSet.getMediaItemCount() > 1)
+                    || !(this instanceof SinglePhotoPage)) {
+                String mime = mCurrentPhoto.getMimeType();
+                if (!TextUtils.isEmpty(mime) && !mime.equals("image/gif")
+                        && !mime.startsWith("video/")) {
+                    DrmHelper.manageDrmLicense(mActivity.getAndroidContext(),
+                            mHandler, mCurrentPhoto.getFilePath(),
+                            mCurrentPhoto.getMimeType());
+                }
             }
         }
     }
@@ -1784,6 +1656,9 @@ public abstract class PhotoPage extends ActivityState implements
 
     private static void viewAnimateGif(Activity activity, Uri uri) {
         Intent intent = new Intent(ViewGifImage.VIEW_GIF_ACTION, uri);
+        if (DrmHelper.isDrmFile(uri.toString())) {
+            intent.setDataAndType(uri, "image/gif");
+        }
         activity.startActivity(intent);
     }
 }

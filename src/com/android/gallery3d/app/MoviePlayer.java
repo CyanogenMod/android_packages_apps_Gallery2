@@ -470,8 +470,6 @@ public class MoviePlayer implements
         mVideoView.suspend();
         mResumeableTime = System.currentTimeMillis() + RESUMEABLE_TIMEOUT;
         mVideoView.setResumed(false);// avoid start after surface created
-        // Workaround for last-seek frame difference
-        mVideoView.setVisibility(View.INVISIBLE);
         long end2 = System.currentTimeMillis();
         // TODO comments by sunlei
         mOverlayExt.clearBuffering();
@@ -637,6 +635,7 @@ public class MoviePlayer implements
         }
         mTState = TState.PAUSED;
         mVideoView.pause();
+        setProgress();
         mController.showPaused();
     }
 
@@ -1356,6 +1355,12 @@ public class MoviePlayer implements
                             }
 
                         })
+                        .setOnCancelListener(new OnCancelListener() {
+                            public void onCancel(DialogInterface dialog) {
+                                mController.showEnded();
+                                onCompletion();
+                            }
+                        })
                         .create();
                 mServerTimeoutDialog.setOnDismissListener(new OnDismissListener() {
 
@@ -1363,6 +1368,7 @@ public class MoviePlayer implements
                         if (LOG) {
                             Log.v(TAG, "mServerTimeoutDialog.onDismiss()");
                         }
+                        mVideoView.setDialogShowState(false);
                         mIsShowDialog = false;
                     }
 
@@ -1373,6 +1379,7 @@ public class MoviePlayer implements
                         if (LOG) {
                             Log.v(TAG, "mServerTimeoutDialog.onShow()");
                         }
+                        mVideoView.setDialogShowState(true);
                         mIsShowDialog = true;
                     }
 

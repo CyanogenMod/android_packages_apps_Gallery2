@@ -522,9 +522,9 @@ public class PhotoDataAdapter implements PhotoPage.Model {
     @Override
     public boolean isVideo(int offset) {
         MediaItem item = getItem(mCurrentIndex + offset);
-        return (item == null)
-                ? false
-                : item.getMediaType() == MediaItem.MEDIA_TYPE_VIDEO;
+        return (item == null) ? false
+                : item.getMediaType() == MediaItem.MEDIA_TYPE_VIDEO
+                        || item.getMediaType() == MediaItem.MEDIA_TYPE_DRM_VIDEO;
     }
 
     @Override
@@ -1208,12 +1208,6 @@ public class PhotoDataAdapter implements PhotoPage.Model {
         }
 
         public synchronized void notifyDirty() {
-            while (mDirty) {
-                try {
-                    wait(NOTIFY_DIRTY_WAIT_TIME);
-                } catch (Exception ex) {
-                }
-            }
             mDirty = true;
             notifyAll();
         }
