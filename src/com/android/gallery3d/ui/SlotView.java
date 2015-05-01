@@ -625,12 +625,6 @@ public class SlotView extends GLView {
         public int getSlotIndexByPosition(float x, float y) {
             int absoluteX = Math.round(x) + (mIsWide ? mScrollPosition : 0);
             int absoluteY = Math.round(y) + (mIsWide ? 0 : mScrollPosition);
-            if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                // If RTL, recalculate the absoluteX.
-                absoluteX = mContentLength > mWidth ? (mContentLength - absoluteX) : mWidth
-                        - absoluteX;
-            }
             absoluteX -= mHorizontalPadding.get();
             absoluteY -= mVerticalPadding.get();
 
