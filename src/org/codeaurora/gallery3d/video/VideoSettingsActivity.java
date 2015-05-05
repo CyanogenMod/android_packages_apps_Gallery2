@@ -57,7 +57,7 @@ public class VideoSettingsActivity extends ListActivity {
         map.put(OPTION_NAME, getString(R.string.setp_option_name));
         map.put(OPTION_DESC, getString(R.string.step_option_desc));
         arrlist.add(map);
-        SimpleAdapter adapter = new SimpleAdapter(this, arrlist, android.R.layout.simple_expandable_list_item_2,
+        SimpleAdapter adapter = new SimpleAdapter(this, arrlist, android.R.layout.simple_list_item_2,
                 new String[] { OPTION_NAME, OPTION_DESC }, new int[] {
                 android.R.id.text1,  android.R.id.text2});
         setListAdapter(adapter);
