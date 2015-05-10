@@ -31,5 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="step_option_alternate">5 segundo</string>
   <string name="step_option_default">10 segundo</string>
+  <string name="input_url">"Sartu URLa"</string>
   <string name="previous">"Aurrekoa"</string>
+  <string name="delete_all">"Ezabatu guztiak"</string>
 </resources>
