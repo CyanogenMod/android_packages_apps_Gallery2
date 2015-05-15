@@ -30,6 +30,23 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">Urratsa</string>
+  <string name="step_option_desc">Pertsonalizatu aurrera/atzerako jauziak</string>
   <string name="setp_option_three_second">3 segundo</string>
   <string name="setp_option_six_second">6 segundo</string>
+  <string name="stereo">"Estereoa"</string>
+  <string name="speaker_on">Bozgorailua gaituta</string>
+  <string name="speaker_off">Bozgoragailua ezgaituta</string>
+  <string name="speaker_need_headset">Konektatu aurikularrak ezaugarri hau erabiltzeko.</string>
+  <string name="single_track">"Pista bakarra"</string>
+  <string name="input_url">"Sartu URLa"</string>
+  <string name="buffer_size">Buffer neurria</string>
+  <string name="setting">Ezarpenak</string>
+  <string name="media_controller_live">Zuzenean</string>
+  <string name="media_controller_playing">Erreproduzitzen</string>
+  <string name="bookmark_add">"Gehitu laster-marka"</string>
+  <string name="bookmark_exist">"Laster-marka badago aurretik"</string>
+  <string name="bookmark_add_success">"Laster-marka gehitu da"</string>
+  <string name="delete_all">"Ezabatu guztiak"</string>
+  <string name="mute_nosupport">Ezin da mututu: bideoa ez da onartzen</string>
 </resources>
