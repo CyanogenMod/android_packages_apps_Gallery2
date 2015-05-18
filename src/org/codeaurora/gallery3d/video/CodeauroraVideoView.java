@@ -95,6 +95,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean mHasGotMetaData = false;
     private boolean mOnResumed;
     private boolean mIsShowDialog = false;
+    private boolean mErrorDialogShowing = false;
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(final Message msg) {
@@ -277,7 +278,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                  * if we're attached to a window. When we're going away and no
                  * longer have a window, don't bother showing the user an error.
                  */
-                if (getWindowToken() != null) {
+                if (getWindowToken() != null && mErrorDialogShowing == false) {
                     final Resources r = mContext.getResources();
                     int messageId;
 
@@ -294,6 +295,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                                         /* If we get here, there is no onError listener, so
                                          * at least inform them that the video is over.
                                          */
+                                        mErrorDialogShowing = false;
                                         if (mOnCompletionListener != null) {
                                             mOnCompletionListener.onCompletion(mMediaPlayer);
                                         }
@@ -301,6 +303,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                                 })
                         .setCancelable(false)
                         .show();
+                     mErrorDialogShowing = true;
                 }
                 return true;
             }
