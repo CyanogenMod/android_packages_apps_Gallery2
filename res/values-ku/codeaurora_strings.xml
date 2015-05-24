@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">هەنگاو</string>
   <string name="step_option_desc">بەکەسیکردنی پلەی خێراییی پێشخستن/دواخستن</string>
+  <string name="setp_option_three_second">3 چرکە</string>
+  <string name="setp_option_six_second">6 چرکە</string>
   <string name="loop">"كلو"</string>
   <string name="single">"تاک"</string>
   <string name="stereo">"stereo"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"شوێن"</string>
   <string name="delete_all">"سڕینەوەی هەموو"</string>
   <string name="default_title">"سەردێڕی بنەڕەت"</string>
+  <string name="more_image">وێنەی زیاتر</string>
   <string name="mute_nosupport">ناتوانێت کپ بکرێت : ڤیدیۆ پشتگیری ناکرێت</string>
+  <string name="map_activity_not_found_err">هیچ بەرنامەیەکی نەخشە نیە بۆ پیشاندانی ناوچە.</string>
   <string name="bass_boost_strength">بەهێزکردنی بنچینەی دەنگ</string>
   <string name="virtualizer_strength">کاریگەریی 3D</string>
   <string name="audio_effects">کاریگه‌رییەکانی ده‌نگ</string>

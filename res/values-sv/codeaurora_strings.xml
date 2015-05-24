@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">Steg</string>
   <string name="step_option_desc">Anpassa snabbspolningssteg framåt/bakåt</string>
+  <string name="setp_option_three_second">3 sekunder</string>
+  <string name="setp_option_six_second">6 sekunder</string>
   <string name="loop">"Repetera"</string>
   <string name="single">"Enkel"</string>
   <string name="stereo">"Stereo"</string>
