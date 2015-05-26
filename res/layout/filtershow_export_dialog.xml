@@ -46,7 +46,7 @@
         <EditText
                 android:id="@+id/editableWidth"
                 android:layout_gravity="right|center_vertical"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:inputType="number"/>
 
         <TextView
@@ -56,7 +56,7 @@
         <EditText
                 android:id="@+id/editableHeight"
                 android:layout_gravity="left|center_vertical"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:inputType="number"/>
 
         <TextView
