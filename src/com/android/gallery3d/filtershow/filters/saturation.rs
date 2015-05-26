@@ -149,7 +149,6 @@ uchar4 __attribute__((kernel)) selectiveAdjust(const uchar4 in, uint32_t x,
     uint32_t y) {
     float4 pixel = rsUnpackColor8888(in);
 
-    float4 wsum = pixel;
     int hue = rgb2hue(in);
 
     float t = satLut[hue];

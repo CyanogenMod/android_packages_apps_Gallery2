@@ -38,8 +38,6 @@ static const float Bf = 0.114f;
 
 
 void setupVignetteParams() {
-    int k = 0;
-
     scalex = 1.f / radiusx;
     scaley = 1.f / radiusy;
 
