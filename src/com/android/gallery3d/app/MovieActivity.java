@@ -595,8 +595,9 @@ public class MovieActivity extends Activity {
 
     private boolean isBtHeadsetConnected() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if ((BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.HEADSET))
-            || (BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.A2DP))) {
+        if (adapter != null && adapter.isEnabled() &&
+            (BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.HEADSET)
+             || BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.A2DP))) {
             return true;
         }
         return false;
