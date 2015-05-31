@@ -47,6 +47,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.Gravity;
@@ -594,11 +595,14 @@ public class MovieActivity extends Activity {
     }
 
     private boolean isBtHeadsetConnected() {
+		boolean isBtDisabled = SystemProperties.getBoolean("config.disable_bluetooth", false);
+		if (!isBtDisabled){
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if ((BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.HEADSET))
             || (BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.A2DP))) {
             return true;
         }
+		}
         return false;
     }
 
