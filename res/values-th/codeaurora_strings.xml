@@ -30,7 +30,10 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_name">ขั้นตอน</string>
   <string name="step_option_desc">ปรับขั้นตอนไปข้างหน้าหรือถอยกลับ</string>
+  <string name="setp_option_three_second">3 วินาที</string>
+  <string name="setp_option_six_second">6 วินาที</string>
   <string name="loop">"วน"</string>
   <string name="single">"เดี่ยว"</string>
   <string name="stereo">"สเตอริโอ"</string>
@@ -67,7 +70,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"ตำแหน่ง"</string>
   <string name="delete_all">"ลบทั้งหมด"</string>
   <string name="default_title">"ชื่อเริ่มต้น"</string>
+  <string name="more_image">ภาพเพิ่มเติม</string>
   <string name="mute_nosupport">ไม่สามารถปิดเสียงได้ : วิดีโอไม่สนับสนุน</string>
+  <string name="map_activity_not_found_err">ไม่มีแอปแผนที่ติดตั้งอยู่จึงไม่สามารถแสดงตำแหน่งได้</string>
   <string name="bass_boost_strength">เพิ่มเสียงเบส</string>
   <string name="virtualizer_strength">เอฟเฟ็กต์ 3 มิติ</string>
   <string name="audio_effects">เอฟเฟคเสียง</string>
