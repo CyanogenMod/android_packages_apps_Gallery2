@@ -343,6 +343,13 @@ public class MovieActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mMovieHooker.onPrepareOptionsMenu(menu);
+
+        if (mMovieItem != null
+                && !DrmHelper.isShareableDrmFile(DrmHelper.getFilePath(this,
+                        mMovieItem.getUri()))) {
+            menu.removeItem(R.id.action_share);
+        }
+
         return true;
     }
 
