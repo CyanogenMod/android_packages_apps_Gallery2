@@ -18,6 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -78,6 +79,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     private Future<?> mMenuTask;
     private final Handler mMainHandler;
     private ActionMode mActionMode;
+    private boolean mShareMaxDialog = false;
 
     private static class GetAllPanoramaSupports implements PanoramaSupportCallback {
         private int mNumInfoRequired;
@@ -472,6 +474,19 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             mSharePanoramaActionProvider.setShareIntent(share_panorama_intent);
                         }
                         if (mShareMenuItem != null) {
+                            if (!canShare && !mShareMaxDialog) {
+                                AlertDialog.Builder shareMaxDialog = new AlertDialog.Builder(mActivity);
+                                shareMaxDialog
+                                    .setMessage(R.string.cannot_share_items)
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create();
+                                shareMaxDialog.show();
+                                mShareMaxDialog = true;
+                            }
+                            if (canShare && mShareMaxDialog) {
+                                mShareMaxDialog = false;
+                            }
+
                             mShareMenuItem.setEnabled(canShare);
                             mShareActionProvider.setShareIntent(share_intent);
                         }

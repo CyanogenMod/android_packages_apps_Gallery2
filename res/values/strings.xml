@@ -103,6 +103,8 @@
     <!-- Toast/alert after saving wallpaper -->
     <string name="wallpaper">Setting wallpaper\u2026</string>
     <string name="camera_setas_wallpaper">Wallpaper</string>
+    <!-- Toast message for share items -->
+    <string name="cannot_share_items">Max selected items for share is 300</string>
 
     <!-- Details dialog "OK" button. Dismisses dialog. -->
     <string name="delete">Delete</string>
