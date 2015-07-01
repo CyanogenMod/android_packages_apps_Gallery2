@@ -31,7 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="setp_option_name">דילוג</string>
-  <string name="step_option_desc">התאמה אישית מהירה לדילוג קדימה/אחורה</string>
+  <string name="step_option_desc">התאם אישית דילוג מהיר קדימה/אחורה</string>
   <string name="setp_option_three_second">3 שניות</string>
   <string name="setp_option_six_second">6 שניות</string>
   <string name="loop">"לולאה"</string>
@@ -42,7 +42,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_need_headset">חבר אוזניות כדי להשתמש בתכונה זו.</string>
   <string name="single_track">"מסלול יחיד"</string>
   <string name="input_url">"הזן כתובת URL"</string>
-  <string name="streaming_settings">"הגדרות זרימה"</string>
+  <string name="streaming_settings">"הגדרות שידור"</string>
   <string name="next">"הבא"</string>
   <string name="previous">"הקודם"</string>
   <string name="buffer_size">גודל המאגר</string>
@@ -57,7 +57,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="server_timeout_title">"זמן חכייה לשרת"</string>
   <string name="server_timeout_message">"להתחבר מחדש לשרת כדי להפעיל את הווידאו?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"החיבור נכשל, מנסה להתחבר מחדש ל- %1$d\u2026"</string>
-  <string name="media_controller_live">זמן אמת</string>
+  <string name="media_controller_live">חי</string>
   <string name="media_controller_playing">מנגן</string>
   <string name="media_controller_connecting">מתחבר\u2026</string>
   <string name="bookmark_add">"הוסף סימניה"</string>
