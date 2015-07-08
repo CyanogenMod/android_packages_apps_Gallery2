@@ -80,7 +80,7 @@ public class WidgetService extends RemoteViewsService {
         }
 
         @Override
-        public void onDestroy() {
+        public synchronized void onDestroy() {
             mSource.close();
             mSource = null;
         }
@@ -115,7 +115,11 @@ public class WidgetService extends RemoteViewsService {
         }
 
         @Override
-        public RemoteViews getViewAt(int position) {
+        public synchronized RemoteViews getViewAt(int position) {
+            if (mSource == null) {
+                // This instance has been destroyed, exit out
+                return null;
+            }
             Bitmap bitmap = mSource.getImage(position);
             if (bitmap == null) return getLoadingView();
             RemoteViews views = new RemoteViews(
