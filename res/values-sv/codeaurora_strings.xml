@@ -72,6 +72,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="default_title">"Förvald titel"</string>
   <string name="more_image">Fler bilder</string>
   <string name="mute_nosupport">Kan inte stänga av ljudet: video stöds inte</string>
+  <string name="map_activity_not_found_err">Det finns ingen kartapplikation installerad för att visa platsen.</string>
   <string name="bass_boost_strength">Basförstärkning</string>
   <string name="virtualizer_strength">3D-effekt</string>
   <string name="audio_effects">Ljudeffekter</string>
