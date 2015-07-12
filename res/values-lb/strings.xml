@@ -101,6 +101,7 @@
   <string name="group_by_size">No Gréisst</string>
   <string name="untagged">Ouni Etikett</string>
   <string name="no_location">Keng Plaz</string>
+  <string name="no_faces">Keng Gesiichter</string>
   <string name="no_connectivity">E puer Plaze konnte wéinst Netzwierkproblemer net identifizéiert ginn.</string>
   <string name="sync_album_error">Konnt d\'Fotoen aus dësem Album net eroflueden. Probéier méi spéit nees.</string>
   <string name="show_images_only">Just Biller</string>
@@ -179,7 +180,7 @@
   <string name="times">Zäiten</string>
   <string name="locations">Plazen</string>
   <string name="people">Leit</string>
-  <string name="tags">Etiquetten</string>
+  <string name="tags">Etiketten</string>
   <string name="group_by">Gruppéieren no</string>
   <string name="settings">Astellungen</string>
   <string name="add_account">Kont dobäisetzen</string>
@@ -433,4 +434,9 @@
     <item quantity="one">%1$d Foto</item>
     <item quantity="other">%1$d Fotoen</item>
   </plurals>
+  <string name="can_not_trim">Just MP4 an 3GP-Fichiere kënne geschnidde ginn</string>
+  <string name="text_makeup_whiten">Wäiss maachen</string>
+  <string name="text_makeup_Soften">Mëll maachen</string>
+  <string name="text_makeup_trimface">Gesiicht schneiden</string>
+  <string name="text_makeup_bigeye">Déck Aen</string>
 </resources>
