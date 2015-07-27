@@ -39,7 +39,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Difuzor pornit</string>
   <string name="speaker_off">Difuzor oprit</string>
-  <string name="speaker_need_headset">Conectaţi căştile pentru a utiliza această caracteristică.</string>
+  <string name="speaker_need_headset">Conectați căștile pentru a utiliza această caracteristică.</string>
   <string name="single_track">"Linie singulară"</string>
   <string name="input_url">"Introduceţi URL-ul"</string>
   <string name="streaming_settings">"Setările de streaming"</string>
