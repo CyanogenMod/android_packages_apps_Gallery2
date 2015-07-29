@@ -87,7 +87,7 @@ public class ImageFilterGrad extends ImageFilterRS {
         Type.Builder tb_float = new Type.Builder(rsCtx, Element.F32_4(rsCtx));
         tb_float.setX(in.getType().getX());
         tb_float.setY(in.getType().getY());
-        mScript = new ScriptC_grad(rsCtx, res, R.raw.grad);
+        mScript = new ScriptC_grad(rsCtx);
     }
 
 

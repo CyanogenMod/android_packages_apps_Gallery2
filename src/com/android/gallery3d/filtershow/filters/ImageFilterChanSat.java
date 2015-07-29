@@ -77,7 +77,7 @@ public class ImageFilterChanSat extends ImageFilterRS {
         Type.Builder tb_float = new Type.Builder(rsCtx, Element.F32_4(rsCtx));
         tb_float.setX(in.getType().getX());
         tb_float.setY(in.getType().getY());
-        mScript = new ScriptC_saturation(rsCtx, res, R.raw.saturation);
+        mScript = new ScriptC_saturation(rsCtx);
     }
 
 

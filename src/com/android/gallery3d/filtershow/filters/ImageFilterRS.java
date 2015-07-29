@@ -159,8 +159,7 @@ public abstract class ImageFilterRS extends ImageFilter {
 
     private static Allocation convertRGBAtoA(RenderScript RS, Bitmap bitmap) {
         if (RS != mRScache || mGreyConvert == null) {
-            mGreyConvert = new ScriptC_grey(RS, RS.getApplicationContext().getResources(),
-                                            R.raw.grey);
+            mGreyConvert = new ScriptC_grey(RS);
             mRScache = RS;
         }
 
