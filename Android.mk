@@ -37,8 +37,6 @@ LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
-LOCAL_MULTILIB := 32
-
 LOCAL_JAVA_LIBRARIES += org.apache.http.legacy
 
 include $(BUILD_PACKAGE)
