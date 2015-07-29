@@ -79,7 +79,7 @@ public class ImageFilterVignette extends ImageFilterRS {
     protected void createFilter(Resources res, float scaleFactor, int quality) {
         RenderScript rsCtx = getRenderScriptContext();
 
-        mScript = new ScriptC_vignette(rsCtx, res, R.raw.vignette);
+        mScript = new ScriptC_vignette(rsCtx);
     }
 
     @Override
