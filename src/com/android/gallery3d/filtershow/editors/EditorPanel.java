@@ -61,6 +61,10 @@ public class EditorPanel extends Fragment {
         int position = adapter.undo();
         masterImage.onHistoryItemClick(position);
         ((FilterShowActivity)getActivity()).invalidateViews();
+
+        if(!masterImage.hasFusionApplied()) {
+            masterImage.setFusionUnderlay(null);
+        }
     }
 
     @Override

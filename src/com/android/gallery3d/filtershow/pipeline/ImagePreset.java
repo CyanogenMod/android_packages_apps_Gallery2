@@ -16,6 +16,13 @@
 
 package com.android.gallery3d.filtershow.pipeline;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.renderscript.Allocation;
@@ -24,10 +31,11 @@ import android.util.JsonWriter;
 import android.util.Log;
 
 import com.android.gallery3d.R;
-import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.filters.BaseFiltersManager;
 import com.android.gallery3d.filtershow.filters.FilterCropRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterDualCamFusionRepresentation;
+import com.android.gallery3d.filtershow.filters.FilterDualCamSketchRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterFxRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterImageBorderRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
@@ -41,13 +49,6 @@ import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.State;
 import com.android.gallery3d.filtershow.state.StateAdapter;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Vector;
 
 public class ImagePreset {
 
@@ -163,6 +164,10 @@ public class ImagePreset {
 
     public void setDoApplyGeometry(boolean value) {
         mDoApplyGeometry = value;
+    }
+
+    public boolean getDoApplyGeometry() {
+        return mDoApplyGeometry;
     }
 
     public void setDoApplyFilters(boolean value) {
@@ -327,11 +332,17 @@ public class ImagePreset {
     }
 
     public void removeFilter(FilterRepresentation filterRepresentation) {
-        if (filterRepresentation.getFilterType() == FilterRepresentation.TYPE_BORDER) {
+        if (filterRepresentation.getFilterType() == FilterRepresentation.TYPE_BORDER
+                || filterRepresentation.getFilterType() == FilterRepresentation.TYPE_DUALCAM) {
             for (int i = 0; i < mFilters.size(); i++) {
-                if (mFilters.elementAt(i).getFilterType()
-                == filterRepresentation.getFilterType()) {
+                FilterRepresentation filter = mFilters.elementAt(i);
+                if (filter.getFilterType() == filterRepresentation.getFilterType()) {
                     mFilters.remove(i);
+
+                    // reset fusion underlay image.
+                    if(filter instanceof FilterDualCamFusionRepresentation) {
+                        MasterImage.getImage().setFusionUnderlay(null);
+                    }
                     break;
                 }
             }
@@ -350,7 +361,7 @@ public class ImagePreset {
         if (representation instanceof FilterUserPresetRepresentation) {
             ImagePreset preset = ((FilterUserPresetRepresentation) representation).getImagePreset();
             if (preset.nbFilters() == 1
-                && preset.contains(FilterRepresentation.TYPE_FX)) {
+                    && preset.contains(FilterRepresentation.TYPE_FX)) {
                 FilterRepresentation rep = preset.getFilterRepresentationForType(
                         FilterRepresentation.TYPE_FX);
                 addFilter(rep);
@@ -383,6 +394,11 @@ public class ImagePreset {
             if (!isNoneBorderFilter(representation)) {
                 mFilters.add(representation);
             }
+        } else if (representation.getFilterType() == FilterRepresentation.TYPE_DUALCAM) {
+            removeFilter(representation);
+            if (!isNoneDualCamFilter(representation)) {
+                mFilters.add(representation);
+            }
         } else if (representation.getFilterType() == FilterRepresentation.TYPE_FX) {
             boolean replaced = false;
             for (int i = 0; i < mFilters.size(); i++) {
@@ -402,12 +418,18 @@ public class ImagePreset {
         } else {
             mFilters.add(representation);
         }
-        // Enforces Filter type ordering for borders
+
+        // Enforces Filter type ordering for borders and dual cam
         FilterRepresentation border = null;
+        FilterRepresentation dualcam = null;
         for (int i = 0; i < mFilters.size();) {
             FilterRepresentation rep = mFilters.elementAt(i);
             if (rep.getFilterType() == FilterRepresentation.TYPE_BORDER) {
                 border = rep;
+                mFilters.remove(i);
+                continue;
+            } else if (rep.getFilterType() == FilterRepresentation.TYPE_DUALCAM) {
+                dualcam = rep;
                 mFilters.remove(i);
                 continue;
             }
@@ -415,6 +437,16 @@ public class ImagePreset {
         }
         if (border != null) {
             mFilters.add(border);
+        }
+        if (dualcam != null) {
+            int i = 0;
+            for (; i < mFilters.size(); i++) {
+                FilterRepresentation rep = mFilters.elementAt(i);
+                if (rep.getFilterType() != FilterRepresentation.TYPE_GEOMETRY) {
+                    break;
+                }
+            }
+            mFilters.add(i, dualcam);
         }
     }
 
@@ -426,6 +458,11 @@ public class ImagePreset {
     private boolean isNoneFxFilter(FilterRepresentation representation) {
         return representation instanceof FilterFxRepresentation &&
                 ((FilterFxRepresentation) representation).getNameResource() == R.string.none;
+    }
+
+    private boolean isNoneDualCamFilter(FilterRepresentation representation) {
+        return representation instanceof FilterDualCamSketchRepresentation &&
+                ((FilterDualCamSketchRepresentation) representation).getSketchResId() == 0;
     }
 
     public FilterRepresentation getRepresentation(FilterRepresentation filterRepresentation) {
@@ -440,6 +477,7 @@ public class ImagePreset {
 
     public Bitmap apply(Bitmap original, FilterEnvironment environment) {
         Bitmap bitmap = original;
+        bitmap = applyDualCamera(bitmap, environment);
         bitmap = applyFilters(bitmap, -1, -1, environment);
         return applyBorder(bitmap, environment);
     }
@@ -483,6 +521,25 @@ public class ImagePreset {
         return bitmap;
     }
 
+    public Bitmap applyDualCamera(Bitmap bitmap, FilterEnvironment environment) {
+        // Apply dual camera filters
+        // Returns a new bitmap.
+        for (FilterRepresentation representation:mFilters) {
+            if (representation.getFilterType() == FilterRepresentation.TYPE_DUALCAM) {
+                Bitmap tmp = bitmap;
+                bitmap = environment.applyRepresentation(representation, bitmap);
+                if (tmp != bitmap) {
+                    environment.cache(tmp);
+                }
+                if (environment.needsStop()) {
+                    return bitmap;
+                }
+            }
+        }
+
+        return bitmap;
+    }
+
     public Bitmap applyBorder(Bitmap bitmap, FilterEnvironment environment) {
         // get the border from the list of filters.
         FilterRepresentation border = getFilterRepresentationForType(
@@ -517,6 +574,10 @@ public class ImagePreset {
                     // for now, let's skip the border as it will be applied in
                     // applyBorder()
                     // TODO: might be worth getting rid of applyBorder.
+                    continue;
+                }
+                if (representation.getFilterType() == FilterRepresentation.TYPE_DUALCAM) {
+                    // skip the dual cam as it's already applied.
                     continue;
                 }
                 Bitmap tmp = bitmap;
@@ -659,7 +720,7 @@ public class ImagePreset {
             writer.endObject();
 
         } catch (IOException e) {
-           Log.e(LOGTAG,"Error encoding JASON",e);
+            Log.e(LOGTAG,"Error encoding JASON",e);
         }
     }
 

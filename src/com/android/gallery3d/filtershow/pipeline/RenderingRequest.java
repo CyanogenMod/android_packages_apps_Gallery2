@@ -84,6 +84,10 @@ public class RenderingRequest {
             request.setBounds(bounds);
             request.setDestination(destination);
             passedPreset.setPartialRendering(true, bounds);
+        } else if (type == GEOMETRY_RENDERING ||
+                type == FILTERS_RENDERING) {
+            passedPreset.setDoApplyGeometry(preset.getDoApplyGeometry());
+            passedPreset.setDoApplyFilters(preset.getDoApplyFilters());
         }
 
         request.setImagePreset(passedPreset);
