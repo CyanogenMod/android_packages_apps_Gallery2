@@ -201,7 +201,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
         compressedSize *= mExportCompressionMargin;
         float size = compressedSize / 1024.f / 1024.f;
         size = ((int) (size * 100)) / 100f;
-        String estimatedSize = "" + size + " Mb";
+        String estimatedSize = "" + size + " MB";
         mEstimatedSize.setText(estimatedSize);
     }
 
