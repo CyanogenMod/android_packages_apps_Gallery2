@@ -52,7 +52,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_rtp_min_port">Setează portul minim</string>
   <string name="set_rtp_max_port">Setează portul maxim</string>
   <string name="set_buffer_size">Setează dimensiune tampon</string>
-  <string name="set_apn">Selectaţi APN preferat</string>
+  <string name="set_apn">Selectați APN preferat</string>
   <string name="setting">Setări</string>
   <string name="server_timeout_title">"Expirare server"</string>
   <string name="server_timeout_message">"Reconectați la server pentru a reda video?"</string>
@@ -67,11 +67,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_add_success">"Semn de carte adăugat"</string>
   <string name="bookmark_list">"Semne de carte"</string>
   <string name="bookmark_title">"Titlu"</string>
-  <string name="bookmark_location">"Locaţie"</string>
-  <string name="delete_all">"Şterge toate"</string>
+  <string name="bookmark_location">"Locație"</string>
+  <string name="delete_all">"Șterge toate"</string>
   <string name="default_title">"Titlul implicit"</string>
   <string name="more_image">Mai multe imagini</string>
-  <string name="mute_nosupport">Nu puteţi dezactiva volumul: videoul nu este acceptat</string>
+  <string name="mute_nosupport">Nu puteți dezactiva volumul: videoul nu este acceptat</string>
   <string name="map_activity_not_found_err">Nu există nicio aplicație cu hărți instalată care să arate locația.</string>
   <string name="bass_boost_strength">Amplificare Bas</string>
   <string name="virtualizer_strength">Efect 3D</string>
