@@ -450,4 +450,7 @@
     <string name="text_makeup_Soften">磨皮</string>
     <string name="text_makeup_trimface">瘦脸</string>
     <string name="text_makeup_bigeye">大眼</string>
+    <!-- The tips of trimming video -->
+    <string name="fail_trim">抱歉，不能修剪该视频文件</string>
+    <string name="can_not_trim">只有MP4和3GP文件才能修剪</string>
 </resources>
