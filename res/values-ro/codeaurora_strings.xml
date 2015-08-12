@@ -41,7 +41,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_off">Difuzor oprit</string>
   <string name="speaker_need_headset">Conectați căștile pentru a utiliza această caracteristică.</string>
   <string name="single_track">"Linie singulară"</string>
-  <string name="input_url">"Introduceţi URL-ul"</string>
+  <string name="input_url">"Introduceți URL-ul"</string>
   <string name="streaming_settings">"Setările de streaming"</string>
   <string name="next">"Următoarea"</string>
   <string name="previous">"Înapoi"</string>
@@ -78,5 +78,5 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="audio_effects">Efecte audio</string>
   <string name="headset_plug">Conectați căști pentru aceste efecte.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
-  <string name="fail_trim">Ne pare rău, acest fişier video nu pot fi decupat</string>
+  <string name="fail_trim">Ne pare rău, acest fișier video nu poate fi tăiat</string>
 </resources>
