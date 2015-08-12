@@ -94,6 +94,7 @@
     <string name="crop_action" msgid="3427470284074377001">"剪裁"</string>
     <string name="trim_action" msgid="703098114452883524">"修剪"</string>
     <string name="mute_action" msgid="5296241754753306251">"静音"</string>
+    <string name="mute_nosupport">静音失败 : 视频格式不支持</string>
     <string name="set_as" msgid="3636764710790507868">"设置为"</string>
     <string name="video_mute_err" msgid="6392457611270600908">"无法将视频静音。"</string>
     <string name="video_err" msgid="7003051631792271009">"无法播放视频。"</string>
