@@ -31,6 +31,8 @@ LOCAL_PACKAGE_NAME := Gallery2
 
 LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
+LOCAL_PROGUARD_ENABLED := disabled
+
 LOCAL_SDK_VERSION := current
 
 LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
