@@ -167,7 +167,6 @@ public class SpeakerHooker extends MovieHooker {
         if (mAudioManager == null) {
             initAudioManager();
         }
-        mAudioManager.setSpeakerphoneOn(true);
         AudioSystem.setForceUse(AudioSystem.FOR_MEDIA,
                 AudioSystem.FORCE_SPEAKER);
     }
@@ -178,7 +177,6 @@ public class SpeakerHooker extends MovieHooker {
         }
         AudioSystem.setForceUse(AudioSystem.FOR_MEDIA,
                 AudioSystem.FORCE_NONE);
-        mAudioManager.setSpeakerphoneOn(false);
     }
 
     @Override
