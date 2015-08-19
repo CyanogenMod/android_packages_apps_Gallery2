@@ -39,9 +39,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Difuzor pornit</string>
   <string name="speaker_off">Difuzor oprit</string>
-  <string name="speaker_need_headset">Conectaţi căştile pentru a utiliza această caracteristică.</string>
+  <string name="speaker_need_headset">Conectați căștile pentru a utiliza această caracteristică.</string>
   <string name="single_track">"Linie singulară"</string>
-  <string name="input_url">"Introduceţi URL-ul"</string>
+  <string name="input_url">"Introduceți URL-ul"</string>
   <string name="streaming_settings">"Setările de streaming"</string>
   <string name="next">"Următoarea"</string>
   <string name="previous">"Înapoi"</string>
@@ -52,7 +52,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_rtp_min_port">Setează portul minim</string>
   <string name="set_rtp_max_port">Setează portul maxim</string>
   <string name="set_buffer_size">Setează dimensiune tampon</string>
-  <string name="set_apn">Selectaţi APN preferat</string>
+  <string name="set_apn">Selectați APN preferat</string>
   <string name="setting">Setări</string>
   <string name="server_timeout_title">"Expirare server"</string>
   <string name="server_timeout_message">"Reconectați la server pentru a reda video?"</string>
@@ -67,16 +67,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_add_success">"Semn de carte adăugat"</string>
   <string name="bookmark_list">"Semne de carte"</string>
   <string name="bookmark_title">"Titlu"</string>
-  <string name="bookmark_location">"Locaţie"</string>
-  <string name="delete_all">"Şterge toate"</string>
+  <string name="bookmark_location">"Locație"</string>
+  <string name="delete_all">"Șterge toate"</string>
   <string name="default_title">"Titlul implicit"</string>
   <string name="more_image">Mai multe imagini</string>
-  <string name="mute_nosupport">Nu puteţi dezactiva volumul: videoul nu este acceptat</string>
-  <string name="map_activity_not_found_err">Nu există nicio aplicaţie cu hărţi instalată care să arate locaţia.</string>
+  <string name="mute_nosupport">Nu puteți dezactiva volumul: videoul nu este acceptat</string>
+  <string name="map_activity_not_found_err">Nu există nicio aplicație cu hărți instalată care să arate locația.</string>
   <string name="bass_boost_strength">Amplificare Bas</string>
   <string name="virtualizer_strength">Efect 3D</string>
   <string name="audio_effects">Efecte audio</string>
   <string name="headset_plug">Conectați căști pentru aceste efecte.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
-  <string name="fail_trim">Ne pare rău, acest fişier video nu pot fi decupat</string>
+  <string name="fail_trim">Ne pare rău, acest fișier video nu poate fi tăiat</string>
 </resources>
