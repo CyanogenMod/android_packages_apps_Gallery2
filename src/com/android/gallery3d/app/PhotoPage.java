@@ -832,6 +832,16 @@ public abstract class PhotoPage extends ActivityState implements
             if (!mHaveImageEditor) {
                 supportedOperations &= ~MediaObject.SUPPORT_EDIT;
             }
+           // If current photo page is single item only, to cut some menu items
+           boolean singleItemOnly = mData.getBoolean("SingleItemOnly", false);
+           if (singleItemOnly) {
+               supportedOperations &= ~MediaObject.SUPPORT_DELETE;
+               supportedOperations &= ~MediaObject.SUPPORT_ROTATE;
+               supportedOperations &= ~MediaObject.SUPPORT_SHARE;
+               supportedOperations &= ~MediaObject.SUPPORT_CROP;
+               supportedOperations &= ~MediaObject.SUPPORT_INFO;
+               supportedOperations &= ~MediaObject.SUPPORT_SETAS;
+           }
         }
         MenuExecutor.updateMenuOperation(menu, supportedOperations);
     }
