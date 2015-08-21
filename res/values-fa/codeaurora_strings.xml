@@ -31,10 +31,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="setp_option_name">گام</string>
-  <string name="step_option_desc">سفارشی کردن گام سریع رو به جلو/عقب</string>
+  <string name="step_option_desc">سفارشی کردن گام رو به جلو/عقب سریع</string>
   <string name="setp_option_three_second">۳ ثانیه</string>
   <string name="setp_option_six_second">۶ ثانیه</string>
-  <string name="loop">"حلقه"</string>
+  <string name="loop">"تکرار"</string>
   <string name="single">"تکی"</string>
   <string name="stereo">"استریو"</string>
   <string name="speaker_on">بلندگو روشن</string>
@@ -58,12 +58,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="server_timeout_message">"برای پخش مجدد ویدیو دوباره به سرور متصل می‌شوید؟"</string>
   <string name="videoview_error_text_cannot_connect_retry">"اتصال ناموفق بود، تلاش مجدد برای اتصال به %1$d\u2026"</string>
   <string name="media_controller_live">زنده</string>
-  <string name="media_controller_playing">پخش</string>
+  <string name="media_controller_playing">در حال پخش</string>
   <string name="media_controller_connecting">اتصال\u2026</string>
   <string name="bookmark_add">"افزودن نشانک"</string>
   <string name="bookmark_display">"نمایش نشانک‌ها"</string>
   <string name="bookmark_empty">"بدون نشانک"</string>
-  <string name="bookmark_exist">"نشانک از قبل موجود است"</string>
+  <string name="bookmark_exist">"نشانک از قبل وجود دارد"</string>
   <string name="bookmark_add_success">"نشانک اضافه شد"</string>
   <string name="bookmark_list">"نشانک‌ها"</string>
   <string name="bookmark_title">"عنوان"</string>
@@ -71,12 +71,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="delete_all">"حذف همه"</string>
   <string name="default_title">"عنوان پیش‌فرض"</string>
   <string name="more_image">تصاویر بیشتر</string>
-  <string name="mute_nosupport">نمی‌توان قطع کرد: ویدیوی پشتیبانی نشده</string>
-  <string name="map_activity_not_found_err">برنامه‌ی نقشه‌ای برای نمایش مکان وجود ندارد.</string>
-  <string name="bass_boost_strength">افزایش صدای بم</string>
-  <string name="virtualizer_strength">جلوه 3D</string>
+  <string name="mute_nosupport">نمی‌توان قطع کرد: ویدیو پشتیبانی نمی‌شود</string>
+  <string name="map_activity_not_found_err">برنامه‌ی نقشه‌ای برای نمایش مکان نصب نشده است.</string>
+  <string name="bass_boost_strength">تقویت صدای بم</string>
+  <string name="virtualizer_strength">جلوه سه‌بعدی</string>
   <string name="audio_effects">جلوه‌های صوتی</string>
-  <string name="headset_plug">برای این جلوه‌ها هدفون را متصل کنید.</string>
+  <string name="headset_plug">برای استفاده از این جلوه‌ها هدفون را وصل کنید.</string>
   <string name="audio_effects_dialog_title">صدای اسنپدراگون+</string>
   <string name="fail_trim">متأسفانه این ویدیو بریده نمی‌شود</string>
 </resources>
