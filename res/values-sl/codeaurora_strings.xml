@@ -39,7 +39,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">VKLOPI zvočnik</string>
   <string name="speaker_off">IZKLOPI zvočnik</string>
-  <string name="speaker_need_headset">Priključite slušalke za uporabo te funkcije.</string>
+  <string name="speaker_need_headset">Priključite slušalke za uporabo te značilnosti.</string>
   <string name="single_track">"Posamezna skladba"</string>
   <string name="input_url">"Vnesite URL"</string>
   <string name="streaming_settings">"Nastavitve pretakanja"</string>
