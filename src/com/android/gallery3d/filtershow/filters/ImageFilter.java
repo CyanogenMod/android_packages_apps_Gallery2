@@ -35,7 +35,7 @@ public abstract class ImageFilter implements Cloneable {
     // TODO: Temporary, for dogfood note memory issues with toasts for better
     // feedback. Remove this when filters actually work in low memory
     // situations.
-    private static Activity sActivity = null;
+    protected static Activity sActivity = null;
 
     public static void setActivityForMemoryToasts(Activity activity) {
         sActivity = activity;

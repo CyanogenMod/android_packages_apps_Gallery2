@@ -340,5 +340,6 @@
 
     <string name="fusion_pick_point">Pick Segment</string>
     <string name="fusion_pick_underlay">Pick Underlay</string>
+    <string name="dualcam_no_segment_toast">No segment found at this point</string>
 
 </resources>

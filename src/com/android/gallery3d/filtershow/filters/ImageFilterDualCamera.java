@@ -36,20 +36,20 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
 
 public class ImageFilterDualCamera extends ImageFilter {
     private static final String TAG = ImageFilterDualCamera.class.getSimpleName();
+    private static Toast sSegmentToast;
 
     private FilterDualCamBasicRepresentation mParameters;
     private Paint mPaint = new Paint();
-    private Bitmap mFilteredBitmap = null;
-    private Point mPoint = null;
-    private int mIntensity = -1;
 
     public FilterRepresentation getDefaultRepresentation() {
         return null;
@@ -65,16 +65,6 @@ public class ImageFilterDualCamera extends ImageFilter {
     }
 
     @Override
-    public void freeResources() {
-        if(mFilteredBitmap != null)
-            mFilteredBitmap.recycle();
-
-        mFilteredBitmap = null;
-        mPoint = null;
-        mIntensity = -1;
-    }
-
-    @Override
     public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
         if (getParameters() == null) {
             return bitmap;
@@ -82,60 +72,67 @@ public class ImageFilterDualCamera extends ImageFilter {
 
         Point point = getParameters().getPoint();
         int intensity = getParameters().getValue();
+        Bitmap filteredBitmap = null;
 
         if(!point.equals(-1,-1)) {
 
-            // if parameters change, generate new filtered bitmap
-            if(!point.equals(mPoint) || mIntensity != intensity) {
-                mPoint = point;
-                mIntensity = intensity;
+            Rect originalBounds = MasterImage.getImage().getOriginalBounds();
+            int origW = originalBounds.width();
+            int origH = originalBounds.height();
 
-                if(mFilteredBitmap == null) {
-                    Rect originalBounds = MasterImage.getImage().getOriginalBounds();
-                    int origW = originalBounds.width();
-                    int origH = originalBounds.height();
+            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
 
-                    mFilteredBitmap = Bitmap.createBitmap(origW, origH, Bitmap.Config.ARGB_8888);
-                }
+            boolean result = false;
 
-                boolean result = false;
-
-                switch(mParameters.getTextId()) {
-                case R.string.focus:
-                    result = DualCameraNativeEngine.getInstance().applyFocus(mPoint.x, mPoint.y, mIntensity,
-                            mFilteredBitmap);
-                    break;
-                case R.string.halo:
-                    result = DualCameraNativeEngine.getInstance().applyHalo(mPoint.x, mPoint.y, mIntensity,
-                            mFilteredBitmap);
-                    break;
-                case R.string.blur:
-                    result = DualCameraNativeEngine.getInstance().applyBokeh(mPoint.x, mPoint.y, mIntensity,
-                            mFilteredBitmap);
-                    break;
-                }
-
-                if(result == false) {
-                    Log.e(TAG, "Imagelib API failed");
-                    return bitmap;
-                }
+            switch(mParameters.getTextId()) {
+            case R.string.focus:
+                result = DualCameraNativeEngine.getInstance().applyFocus(point.x, point.y, intensity,
+                        filteredBitmap);
+                break;
+            case R.string.halo:
+                result = DualCameraNativeEngine.getInstance().applyHalo(point.x, point.y, intensity,
+                        filteredBitmap);
+                break;
+            case R.string.blur:
+                result = DualCameraNativeEngine.getInstance().applyBokeh(point.x, point.y, intensity,
+                        filteredBitmap);
+                break;
             }
 
-            if(quality == FilterEnvironment.QUALITY_FINAL) {
-                mPaint.reset();
-                mPaint.setAntiAlias(true);
-                mPaint.setFilterBitmap(true);
-                mPaint.setDither(true);
-            }
+            if(result == false) {
+                Log.e(TAG, "Imagelib API failed");
+                sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sSegmentToast == null) {
+                            sSegmentToast = Toast.makeText(sActivity, R.string.dualcam_no_segment_toast, Toast.LENGTH_SHORT);
+                        }
+                        sSegmentToast.show();
+                    }
+                });
 
-            Canvas canvas = new Canvas(bitmap);
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
-            if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
-                Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
-                canvas.drawBitmap(mFilteredBitmap, originalToScreen, mPaint);
+                return bitmap;
             } else {
-                canvas.drawBitmap(mFilteredBitmap, null, new Rect(0,0,w,h), mPaint);
+
+                if(quality == FilterEnvironment.QUALITY_FINAL) {
+                    mPaint.reset();
+                    mPaint.setAntiAlias(true);
+                    mPaint.setFilterBitmap(true);
+                    mPaint.setDither(true);
+                }
+
+                Canvas canvas = new Canvas(bitmap);
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
+                if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
+                    Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
+                    canvas.drawBitmap(filteredBitmap, originalToScreen, mPaint);
+                } else {
+                    canvas.drawBitmap(filteredBitmap, null, new Rect(0,0,w,h), mPaint);
+                }
+
+                MasterImage.getImage().getBitmapCache().cache(filteredBitmap);
+
             }
         }
 
