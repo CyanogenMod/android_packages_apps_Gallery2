@@ -267,11 +267,11 @@ public class ProcessingService extends Service {
 
     public void completePreviewSaveImage(Uri result, boolean exit) {
         if (exit && !mNeedsAlive && !mFiltershowActivity.isSimpleEditAction()) {
-            mFiltershowActivity.completeSaveImage(result);
+            mFiltershowActivity.completeSaveImage(result, false);
         }
     }
 
-    public void completeSaveImage(Uri result, boolean exit) {
+    public void completeSaveImage(Uri result, boolean exit, boolean releaseDualCam) {
         if (SHOW_IMAGE) {
             // TODO: we should update the existing image in Gallery instead
             Intent viewImage = new Intent(Intent.ACTION_VIEW, result);
@@ -291,7 +291,7 @@ public class ProcessingService extends Service {
             mFiltershowActivity.updateUIAfterServiceStarted();
         } else if (exit || mFiltershowActivity.isSimpleEditAction()) {
             // terminate now
-            mFiltershowActivity.completeSaveImage(result);
+            mFiltershowActivity.completeSaveImage(result, releaseDualCam);
         }
     }
 

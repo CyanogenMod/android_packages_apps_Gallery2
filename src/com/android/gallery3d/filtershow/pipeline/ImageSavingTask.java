@@ -125,7 +125,7 @@ public class ImageSavingTask extends ProcessingTask {
     @Override
     public void onResult(Result message) {
         URIResult result = (URIResult) message;
-        mProcessingService.completeSaveImage(result.uri, result.exit);
+        mProcessingService.completeSaveImage(result.uri, result.exit, true);
     }
 
     @Override
