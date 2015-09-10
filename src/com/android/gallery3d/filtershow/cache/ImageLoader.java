@@ -108,7 +108,7 @@ public final class ImageLoader {
                     new String[] { MediaStore.Images.ImageColumns.ORIENTATION },
                     null, null, null);
             if (cursor != null && cursor.moveToNext()) {
-                int ori = cursor.getInt(0);
+                int ori = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION);
                 switch (ori) {
                     case 90:
                         return ORI_ROTATE_90;
