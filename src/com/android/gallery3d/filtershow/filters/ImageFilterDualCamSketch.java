@@ -78,8 +78,10 @@ public class ImageFilterDualCamSketch extends ImageFilter {
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int origW = originalBounds.width();
             int origH = originalBounds.height();
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
 
-            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
+            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(w, h, BitmapCache.FILTERS);
 
             result = DualCameraNativeEngine.getInstance().applySketch(point.x, point.y, filteredBitmap);
 
@@ -105,10 +107,9 @@ public class ImageFilterDualCamSketch extends ImageFilter {
                 }
 
                 Canvas canvas = new Canvas(bitmap);
-                int w = bitmap.getWidth();
-                int h = bitmap.getHeight();
+
                 if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
-                    Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
+                    Matrix originalToScreen = getImageToScreenMatrix(w, h, w, h);
                     canvas.drawBitmap(filteredBitmap, originalToScreen, mPaint);
                 } else {
                     canvas.drawBitmap(filteredBitmap, null, new Rect(0,0,w,h), mPaint);
