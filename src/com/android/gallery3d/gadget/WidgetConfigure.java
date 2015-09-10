@@ -18,11 +18,16 @@ package com.android.gallery3d.gadget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -37,6 +42,11 @@ import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.filtershow.crop.CropExtras;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class WidgetConfigure extends Activity {
     @SuppressWarnings("unused")
@@ -61,6 +71,7 @@ public class WidgetConfigure extends Activity {
 
     private int mAppWidgetId = -1;
     private Uri mPickedItem;
+    private Uri mCroppedItem;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -116,48 +127,91 @@ public class WidgetConfigure extends Activity {
         } else if (requestCode == REQUEST_GET_PHOTO) {
             setChoosenPhoto(data);
         } else if (requestCode == REQUEST_CROP_IMAGE) {
-            setPhotoWidget(data);
+            setPhotoWidget();
         } else {
             throw new AssertionError("unknown request: " + requestCode);
         }
     }
 
-    private void setPhotoWidget(Intent data) {
-        // Store the cropped photo in our database
-        Bitmap bitmap = (Bitmap) data.getParcelableExtra("data");
-        WidgetDatabaseHelper helper = new WidgetDatabaseHelper(this);
-        try {
-            helper.setPhoto(mAppWidgetId, mPickedItem, bitmap);
-            updateWidgetAndFinish(helper.getEntry(mAppWidgetId));
-        } finally {
-            helper.close();
-        }
+    private void setPhotoWidget() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = null;
+                InputStream stream = null;
+                try {
+                    stream = WidgetConfigure.this.getContentResolver()
+                            .openInputStream(mCroppedItem);
+                    if (stream != null) {
+                        bitmap = BitmapFactory.decodeStream(stream);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    getContentResolver().delete(mCroppedItem, null, null);
+                }
+                if (bitmap == null) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                    return;
+                }
+                WidgetDatabaseHelper helper = new WidgetDatabaseHelper(WidgetConfigure.this);
+                try {
+                    helper.setPhoto(mAppWidgetId, mPickedItem, bitmap);
+                    updateWidgetAndFinish(helper.getEntry(mAppWidgetId));
+                } finally {
+                    helper.close();
+                }
+            }
+        });
     }
 
-    private void setChoosenPhoto(Intent data) {
-        Resources res = getResources();
+    private void setChoosenPhoto(final Intent data) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Resources res = getResources();
 
-        float width = res.getDimension(R.dimen.appwidget_width);
-        float height = res.getDimension(R.dimen.appwidget_height);
+                float width = res.getDimension(R.dimen.appwidget_width);
+                float height = res.getDimension(R.dimen.appwidget_height);
 
-        // We try to crop a larger image (by scale factor), but there is still
-        // a bound on the binder limit.
-        float scale = Math.min(WIDGET_SCALE_FACTOR,
-                MAX_WIDGET_SIDE / Math.max(width, height));
+                // We try to crop a larger image (by scale factor), but there is still
+                // a bound on the binder limit.
+                float scale = Math.min(WIDGET_SCALE_FACTOR,
+                        MAX_WIDGET_SIDE / Math.max(width, height));
 
-        int widgetWidth = Math.round(width * scale);
-        int widgetHeight = Math.round(height * scale);
+                int widgetWidth = Math.round(width * scale);
+                int widgetHeight = Math.round(height * scale);
 
-        mPickedItem = data.getData();
-        Intent request = new Intent(CropActivity.CROP_ACTION, mPickedItem)
-                .putExtra(CropExtras.KEY_OUTPUT_X, widgetWidth)
-                .putExtra(CropExtras.KEY_OUTPUT_Y, widgetHeight)
-                .putExtra(CropExtras.KEY_ASPECT_X, widgetWidth)
-                .putExtra(CropExtras.KEY_ASPECT_Y, widgetHeight)
-                .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
-                .putExtra(CropExtras.KEY_SCALE, true)
-                .putExtra(CropExtras.KEY_RETURN_DATA, true);
-        startActivityForResult(request, REQUEST_CROP_IMAGE);
+                File newFile = new File(getCacheDir(), "crop_image.png");
+                mPickedItem = data.getData();
+                mCroppedItem = FileProvider.getUriForFile(WidgetConfigure.this,
+                        "com.android.gallery3d.fileprovider",
+                        new File(newFile.getAbsolutePath()));
+
+                Intent request = new Intent(CropActivity.CROP_ACTION)
+                        .putExtra(CropExtras.KEY_OUTPUT_X, widgetWidth)
+                        .putExtra(CropExtras.KEY_OUTPUT_Y, widgetHeight)
+                        .putExtra(CropExtras.KEY_ASPECT_X, widgetWidth)
+                        .putExtra(CropExtras.KEY_ASPECT_Y, widgetHeight)
+                        .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
+                        .putExtra(CropExtras.KEY_SCALE, true)
+                        .putExtra(CropExtras.KEY_RETURN_DATA, false)
+                .setDataAndType(mPickedItem, "image/*")
+                .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION |
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                request.putExtra(MediaStore.EXTRA_OUTPUT, mCroppedItem);
+                request.setClipData(ClipData.newRawUri(MediaStore.EXTRA_OUTPUT, mCroppedItem));
+                startActivityForResult(request, REQUEST_CROP_IMAGE);
+            }
+        });
     }
 
     private void setChoosenAlbum(Intent data) {
