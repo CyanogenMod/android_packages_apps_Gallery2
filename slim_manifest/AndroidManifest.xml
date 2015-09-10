@@ -233,6 +233,14 @@
             </intent-filter>
         </activity>
         <service android:name="com.android.gallery3d.app.BatchService" />
-
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.android.gallery3d.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>
