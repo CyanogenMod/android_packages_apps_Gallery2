@@ -562,7 +562,11 @@ public abstract class PhotoPage extends ActivityState implements
                 public void onLoadingFinished(boolean loadingFailed) {
                     if (!mModel.isEmpty()) {
                         MediaItem photo = mModel.getMediaItem(0);
-                        if (photo != null) updateCurrentPhoto(photo);
+                        if (photo != null) {
+                            updateCurrentPhoto(photo);
+                        } else {
+                            mModel.resume();
+                        }
                     } else if (mIsActive) {
                         // We only want to finish the PhotoPage if there is no
                         // deletion that the user can undo.
