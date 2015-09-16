@@ -71,7 +71,9 @@ public class ImageFilterDualCamera extends ImageFilter {
         }
 
         Point point = getParameters().getPoint();
-        int intensity = getParameters().getValue();
+        int value = getParameters().getValue();
+        int maxValue = getParameters().getMaximum();
+        float intensity = (float)value / (float)maxValue;
         Bitmap filteredBitmap = null;
 
         if(!point.equals(-1,-1)) {
@@ -91,10 +93,6 @@ public class ImageFilterDualCamera extends ImageFilter {
                 break;
             case R.string.halo:
                 result = DualCameraNativeEngine.getInstance().applyHalo(point.x, point.y, intensity,
-                        filteredBitmap);
-                break;
-            case R.string.blur:
-                result = DualCameraNativeEngine.getInstance().applyBokeh(point.x, point.y, intensity,
                         filteredBitmap);
                 break;
             }

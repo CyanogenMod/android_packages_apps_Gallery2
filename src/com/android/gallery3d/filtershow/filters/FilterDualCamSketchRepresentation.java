@@ -35,58 +35,25 @@ import com.android.gallery3d.filtershow.editors.EditorDualCamSketch;
 public class FilterDualCamSketchRepresentation extends FilterDualCamBasicRepresentation {
     private static final String LOGTAG = "FilterDualCamSketchRepresentation";
 
-    private int mSketchResource = 0;
-
-    public FilterDualCamSketchRepresentation(String name, int nameResId, int sketchResId) {
+    public FilterDualCamSketchRepresentation(String name, int nameResId) {
         super(name, 0, 0, 0);
         setFilterType(FilterRepresentation.TYPE_DUALCAM);
         setFilterClass(ImageFilterDualCamSketch.class);
         setEditorId(EditorDualCamSketch.ID);
         setTextId(nameResId);
         setShowParameterValue(false);
-        mSketchResource = sketchResId;
     }
 
     @Override
     public FilterRepresentation copy() {
         FilterDualCamSketchRepresentation representation =
-                new FilterDualCamSketchRepresentation(getName(), 0, 0);
+                new FilterDualCamSketchRepresentation(getName(), 0);
         copyAllParameters(representation);
         return representation;
     }
 
-    public void useParametersFrom(FilterRepresentation a) {
-        super.useParametersFrom(a);
-        if (a instanceof FilterDualCamSketchRepresentation) {
-            FilterDualCamSketchRepresentation representation = (FilterDualCamSketchRepresentation) a;
-            setSketchResId(representation.getSketchResId());
-        }
-    }
-
-    @Override
-    public boolean equals(FilterRepresentation representation) {
-        if (!super.equals(representation)) {
-            return false;
-        }
-        if (representation instanceof FilterDualCamSketchRepresentation) {
-            FilterDualCamSketchRepresentation dualCam = (FilterDualCamSketchRepresentation) representation;
-            if (dualCam.getSketchResId() == mSketchResource) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setSketchResId(int bmResource) {
-        mSketchResource = bmResource;
-    }
-
-    public int getSketchResId() {
-        return mSketchResource;
-    }
-
     @Override
     public String toString() {
-        return "dualcam - point: " + getPoint().toString() + ", sketchResId: " + mSketchResource;
+        return "dualcam - point: " + getPoint().toString();
     }
 }

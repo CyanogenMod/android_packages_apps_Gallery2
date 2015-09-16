@@ -80,21 +80,17 @@ public class DualCameraNativeEngine {
 
     native public boolean initDepthMap(Bitmap primaryRGBA, Bitmap auxiliaryRGBA, String mpoFilepath, String calibFilepath);
 
-    native public boolean loadDepthMap(Bitmap primaryRGBA, Bitmap depthMap);
-
     native public void releaseDepthMap();
 
     native public boolean getDepthMapSize(Point point);
 
     native public boolean getDepthMap(Bitmap dataBuffer);
 
-    native public boolean applyFocus(int focusPointX, int focusPointY, int intensity, Bitmap outBm);
+    native public boolean applyFocus(int focusPointX, int focusPointY, float intensity, Bitmap outBm);
 
-    native public boolean applyHalo(int focusPointX, int focusPointY, int intensity, Bitmap outBm);
+    native public boolean applyHalo(int focusPointX, int focusPointY, float intensity, Bitmap outBm);
 
-    native public boolean applyBokeh(int focusPointX, int focusPointY, int intensity, Bitmap outBm);
-
-    native public boolean applySketch(Bitmap sketchBm, int focusPointX, int focusPointY, Bitmap outBm);
+    native public boolean applySketch(int focusPointX, int focusPointY, Bitmap outBm);
 
     native public boolean getForegroundImg(int focusPointX, int focusPointY, Bitmap outBm);
 }

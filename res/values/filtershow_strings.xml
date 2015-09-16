@@ -194,8 +194,6 @@
     <string name="grad">Graduated</string>
     <!--  Label for the "refocus" dual camera effect  [CHAR LIMIT=15] -->
     <string name="focus">Focus</string>
-    <!--  Label for the "bokeh" dual camera effect  [CHAR LIMIT=15] -->
-    <string name="blur">Bokeh</string>
     <!--  Label for the "fusion" dual camera effect  [CHAR LIMIT=15] -->
     <string name="fusion">Fusion</string>
     <!--  Label for the "sketch" dual camera effect  [CHAR LIMIT=15] -->
