@@ -35,7 +35,9 @@ LOCAL_CERTIFICATE := platform
 
 LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
-#LOCAL_SDK_VERSION := current
+LOCAL_PROGUARD_ENABLED := disabled
+
+LOCAL_SDK_VERSION := current
 
 LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
 
@@ -45,7 +47,7 @@ endif
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
-LOCAL_MULTILIB := 32
+LOCAL_JAVA_LIBRARIES += org.apache.http.legacy
 
 include $(BUILD_PACKAGE)
 

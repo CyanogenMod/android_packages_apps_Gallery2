@@ -28,8 +28,8 @@ import android.provider.MediaStore.Video.VideoColumns;
 import com.android.gallery3d.filtershow.tools.SaveImage.ContentResolverQueryCallback;
 
 import java.io.File;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SaveVideoFileUtils {
     // This function can decide which folder to save the video file, and generate

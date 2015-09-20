@@ -22,7 +22,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
-import android.util.FloatMath;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -44,9 +43,9 @@ public class EyePosition {
     private static final float GYROSCOPE_RESTORE_FACTOR = 0.995f;
 
     private static final float USER_ANGEL = (float) Math.toRadians(10);
-    private static final float USER_ANGEL_COS = FloatMath.cos(USER_ANGEL);
-    private static final float USER_ANGEL_SIN = FloatMath.sin(USER_ANGEL);
-    private static final float MAX_VIEW_RANGE = (float) 0.5;
+    private static final float USER_ANGEL_COS = (float) Math.cos(USER_ANGEL);
+    private static final float USER_ANGEL_SIN = (float) Math.sin(USER_ANGEL);
+    private static final float MAX_VIEW_RANGE = 0.5f;
     private static final int NOT_STARTED = -1;
 
     private static final float USER_DISTANCE_METER = 0.3f;
@@ -128,8 +127,8 @@ public class EyePosition {
         float ty = -1 + t * y;
         float tz = t * z;
 
-        float length = FloatMath.sqrt(tx * tx + ty * ty + tz * tz);
-        float glength = FloatMath.sqrt(temp);
+        float length = (float) Math.sqrt(tx * tx + ty * ty + tz * tz);
+        float glength = (float) Math.sqrt(temp);
 
         mX = Utils.clamp((x * USER_ANGEL_COS / glength
                 + tx * USER_ANGEL_SIN / length) * mUserDistance,
@@ -137,7 +136,7 @@ public class EyePosition {
         mY = -Utils.clamp((y * USER_ANGEL_COS / glength
                 + ty * USER_ANGEL_SIN / length) * mUserDistance,
                 -mLimit, mLimit);
-        mZ = -FloatMath.sqrt(
+        mZ = (float) -Math.sqrt(
                 mUserDistance * mUserDistance - mX * mX - mY * mY);
         mListener.onEyePositionChanged(mX, mY, mZ);
     }
@@ -175,7 +174,7 @@ public class EyePosition {
         mY = Utils.clamp((float) (mY + y * t / Math.hypot(mZ, mY)),
                 -mLimit, mLimit) * GYROSCOPE_RESTORE_FACTOR;
 
-        mZ = -FloatMath.sqrt(
+        mZ = (float) -Math.sqrt(
                 mUserDistance * mUserDistance - mX * mX - mY * mY);
         mListener.onEyePositionChanged(mX, mY, mZ);
     }

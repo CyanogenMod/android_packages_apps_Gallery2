@@ -64,8 +64,10 @@
             android:hardwareAccelerated="true"
             android:largeHeap="true"
             android:restoreAnyVersion="true"
-            android:supportsRtl="true">
+            android:supportsRtl="true"
+            usesCleartextHttp="true">
         <uses-library android:name="com.google.android.media.effects" android:required="false" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity android:name="com.android.gallery3d.app.MovieActivity"
                 android:label="@string/movie_view_label"
                 android:configChanges="orientation|keyboardHidden|screenSize">
