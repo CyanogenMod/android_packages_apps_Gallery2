@@ -104,4 +104,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <!-- The tips of trimming video -->
     <string name="fail_trim">Sorry, this video file can not be trimmed</string>
+
+    <string name="no_permission_for_drm">Sorry, DRM protected files cannot be shared</string>
+    <string name="drm_license_info">DRM license info</string>
 </resources>
