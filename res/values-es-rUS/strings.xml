@@ -436,9 +436,4 @@
     <item quantity="one" msgid="6949174783125614798">"%1$d foto"</item>
     <item quantity="other" msgid="3813306834113858135">"%1$d fotos"</item>
   </plurals>
-
-    <string name="no_permission_for_drm">Los archivos DRM no pueden compartirse.</string>
-    <string name="drm_license_info">Información de licencia Drm</string>
-    <string name="mimetype_not_supported">No puede reproducirse este archivo.</string>
-    <string name="action_consumes_rights">Se agotarán los derechos para reproducir este multimedia.</string>
 </resources>
