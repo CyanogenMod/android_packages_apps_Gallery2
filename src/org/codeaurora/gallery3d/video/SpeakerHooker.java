@@ -197,11 +197,8 @@ public class SpeakerHooker extends MovieHooker {
     }
 
     private boolean isSpeakerOn() {
-        boolean isSpeakerOn = false;
-        if (mAudioManager == null) {
-            initAudioManager();
-        }
-        isSpeakerOn = mAudioManager.isSpeakerphoneOn();
+        boolean isSpeakerOn = (AudioSystem.FORCE_SPEAKER
+                == AudioSystem.getForceUse(AudioSystem.FOR_MEDIA)) ? true : false;
         return isSpeakerOn;
     }
 
