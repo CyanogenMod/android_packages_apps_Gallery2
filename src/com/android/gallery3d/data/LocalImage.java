@@ -20,7 +20,7 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
@@ -199,10 +199,10 @@ public class LocalImage extends LocalMediaItem {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-            if (DrmHelper.isDrmFile(mLocalFilePath)) {
-                return DecodeUtils.ensureGLCompatibleBitmap(DrmHelper
-                        .getBitmap(mLocalFilePath, options));
-            }
+//            if (DrmHelper.isDrmFile(mLocalFilePath)) {
+//                return DecodeUtils.ensureGLCompatibleBitmap(DrmHelper
+//                        .getBitmap(mLocalFilePath, options));
+//            }
 
             int targetSize = MediaItem.getTargetSize(type);
 
@@ -244,10 +244,10 @@ public class LocalImage extends LocalMediaItem {
 
         @Override
         public BitmapRegionDecoder run(JobContext jc) {
-            if (DrmHelper.isDrmFile(mLocalFilePath)) {
-                return DrmHelper.createBitmapRegionDecoder(mLocalFilePath,
-                        false);
-            }
+//            if (DrmHelper.isDrmFile(mLocalFilePath)) {
+//                return DrmHelper.createBitmapRegionDecoder(mLocalFilePath,
+//                        false);
+//            }
 
             return DecodeUtils.createBitmapRegionDecoder(jc, mLocalFilePath, false);
         }
@@ -256,16 +256,17 @@ public class LocalImage extends LocalMediaItem {
     @Override
     public int getSupportedOperations() {
         int operation = SUPPORT_DELETE | SUPPORT_INFO;
-        if (DrmHelper.isDrmFile(getFilePath())) {
-            if (DrmHelper.isDrmFLBlocking(mApplication.getAndroidContext(),
-                    getFilePath())) {
-                operation |= SUPPORT_SETAS;
-            }
-            operation |= SUPPORT_DRM_INFO | SUPPORT_FULL_IMAGE;
-            if (DrmHelper.isShareableDrmFile(getFilePath())) {
-                operation |= SUPPORT_SHARE;
-            }
-        } else {
+
+//        if (DrmHelper.isDrmFile(getFilePath())) {
+//            if (DrmHelper.isDrmFLBlocking(mApplication.getAndroidContext(),
+//                    getFilePath())) {
+//                operation |= SUPPORT_SETAS;
+//            }
+//            operation |= SUPPORT_DRM_INFO | SUPPORT_FULL_IMAGE;
+//            if (DrmHelper.isShareableDrmFile(getFilePath())) {
+//                operation |= SUPPORT_SHARE;
+//            }
+//        } else {
             operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
                 | SUPPORT_SETAS | SUPPORT_PRINT | SUPPORT_INFO;
             if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
@@ -279,7 +280,7 @@ public class LocalImage extends LocalMediaItem {
             if (GalleryUtils.isValidLocation(latitude, longitude)) {
                 operation |= SUPPORT_SHOW_ON_MAP;
             }
-        }
+//        }
         return operation;
     }
 
@@ -344,9 +345,9 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getMediaType() {
-        if (DrmHelper.isDrmFile(getFilePath())) {
-            return MEDIA_TYPE_DRM_IMAGE;
-        }
+//        if (DrmHelper.isDrmFile(getFilePath())) {
+//            return MEDIA_TYPE_DRM_IMAGE;
+//        }
 
         return MEDIA_TYPE_IMAGE;
     }

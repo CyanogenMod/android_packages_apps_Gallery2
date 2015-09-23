@@ -19,7 +19,7 @@ package com.android.gallery3d.gadget;
 import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
@@ -121,10 +121,10 @@ public class WidgetService extends RemoteViewsService {
             Bitmap bitmap = mSource.getImage(position);
 
             boolean isDrm = false;
-            if (DrmHelper.isDrmFile(DrmHelper.getFilePath(
-                    mApp.getAndroidContext(), mSource.getContentUri(position)))) {
-                isDrm = true;
-            }
+//            if (DrmHelper.isDrmFile(DrmHelper.getFilePath(
+//                    mApp.getAndroidContext(), mSource.getContentUri(position)))) {
+//                isDrm = true;
+//            }
 
             if (isDrm) {
                 if (bitmap == null) {

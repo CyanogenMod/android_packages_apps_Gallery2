@@ -371,6 +371,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                 if (LOG) {
                     Log.v(TAG, "surfaceCreated(" + holder + ")");
                 }
+                /*
                 if (mCurrentState == STATE_SUSPENDED) {
                     mSurfaceHolder = holder;
                     mMediaPlayer.setDisplay(mSurfaceHolder);
@@ -387,6 +388,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                         release(false);
                     }
                 }
+                */
                 mSurfaceHolder = holder;
                 openVideo();
             }
@@ -626,6 +628,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             if (LOG) {
                 Log.v(TAG, "surfaceCreated(" + holder + ")");
             }
+            /*
             if (mCurrentState == STATE_SUSPENDED) {
                 mSurfaceHolder = holder;
                 mMediaPlayer.setDisplay(mSurfaceHolder);
@@ -642,6 +645,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                     release(false);
                 }
             }
+            */
             mSurfaceHolder = holder;
             openVideo();
         }
@@ -774,6 +778,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
 
     public void suspend() {
         // HTTP streaming will call mMediaPlayer->suspend(), others will call release()
+        /*
         if (isHTTPStreaming(mUri) && mCurrentState != STATE_PREPARING) {
             if (mMediaPlayer != null) {
                 if (mMediaPlayer.suspend()) {
@@ -783,12 +788,14 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                 }
             }
         }
+        */
         release(false);
     }
 
     public void resume() {
         // HTTP streaming (with suspended status) will call mMediaPlayer->resume(), 
         // others will call openVideo()
+        /*
         if (mCurrentState == STATE_SUSPENDED) {
             if (mSurfaceHolder != null) {
                 // The surface hasn't been destroyed
@@ -811,6 +818,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                 return;
             }
         }
+        */
         openVideo();
     }
 

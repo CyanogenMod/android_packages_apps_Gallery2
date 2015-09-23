@@ -24,7 +24,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -261,9 +261,9 @@ public class MenuExecutor {
                 // DRM files can be set as wallpaper only. Don't show other options
                 // to set as.
                 Uri uri = intent.getData();
-                if (DrmHelper.isDrmFile(DrmHelper.getFilePath(mActivity, uri))) {
-                    intent.setPackage("com.android.gallery3d");
-                }
+//                if (DrmHelper.isDrmFile(DrmHelper.getFilePath(mActivity, uri))) {
+//                    intent.setPackage("com.android.gallery3d");
+//                }
 
                 Activity activity = mActivity;
                 activity.startActivity(Intent.createChooser(
@@ -282,20 +282,20 @@ public class MenuExecutor {
             case R.id.action_show_on_map:
                 title = R.string.show_on_map;
                 break;
-            case R.id.action_drm_info:
-                DataManager manager = mActivity.getDataManager();
-                Path path = getSingleSelectedPath();
-                Uri uri = manager.getContentUri(path);
-                String filepath = null;
-                String scheme = uri.getScheme();
-                if ("file".equals(scheme)) {
-                    filepath = uri.getPath();
-                } else {
-                    filepath = DrmHelper.getFilePath(mActivity, uri);
-                }
-                DrmHelper.showDrmInfo(mActivity, filepath);
-                title = R.string.drm_license_info;
-                break;
+//            case R.id.action_drm_info:
+//                DataManager manager = mActivity.getDataManager();
+//                Path path = getSingleSelectedPath();
+//                Uri uri = manager.getContentUri(path);
+//                String filepath = null;
+//                String scheme = uri.getScheme();
+//                if ("file".equals(scheme)) {
+//                    filepath = uri.getPath();
+//                } else {
+//                    filepath = DrmHelper.getFilePath(mActivity, uri);
+//                }
+//                DrmHelper.showDrmInfo(mActivity, filepath);
+//                title = R.string.drm_license_info;
+//                break;
             default:
                 return;
         }

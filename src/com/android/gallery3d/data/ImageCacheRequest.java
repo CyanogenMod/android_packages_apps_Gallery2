@@ -16,7 +16,7 @@
 
 package com.android.gallery3d.data;
 
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -63,13 +63,13 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
 
     @Override
     public Bitmap run(JobContext jc) {
-        if (!TextUtils.isEmpty(mFilePath) && !TextUtils.isEmpty(mMimeType)
-                && !mMimeType.startsWith("video/")) {
-            if (DrmHelper.isDrmFile(mFilePath)
-                    && mType != MediaItem.TYPE_MICROTHUMBNAIL) {
-                return onDecodeOriginal(jc, mType);
-            }
-        }
+//        if (!TextUtils.isEmpty(mFilePath) && !TextUtils.isEmpty(mMimeType)
+//                && !mMimeType.startsWith("video/")) {
+//            if (DrmHelper.isDrmFile(mFilePath)
+//                    && mType != MediaItem.TYPE_MICROTHUMBNAIL) {
+//                return onDecodeOriginal(jc, mType);
+//            }
+//        }
 
         ImageCacheService cacheService = mApplication.getImageCacheService();
 

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.res.AssetManager;
 import android.database.Cursor;
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -47,17 +47,17 @@ public class GIFView extends ImageView implements GifAction {
         mUri = uri;
 
         // Let decode the GIF image from byte stream instead of file stream
-        String filepath = DrmHelper.getFilePath(mContext, mUri);
-        if (DrmHelper.isDrmFile(filepath)) {
-            byte[] bytes = DrmHelper.getDrmImageBytes(filepath);
-            DrmHelper.manageDrmLicense(mContext, this.getHandler(), filepath,
-                    "image/gif");
-            if (bytes == null) {
-                return false;
-            }
-            startDecode(bytes);
-            return true;
-        }
+//        String filepath = DrmHelper.getFilePath(mContext, mUri);
+//        if (DrmHelper.isDrmFile(filepath)) {
+//            byte[] bytes = DrmHelper.getDrmImageBytes(filepath);
+//            DrmHelper.manageDrmLicense(mContext, this.getHandler(), filepath,
+//                    "image/gif");
+//            if (bytes == null) {
+//                return false;
+//            }
+//            startDecode(bytes);
+//            return true;
+//        }
 
         InputStream is = getInputStream(uri);
         if (is == null || (getFileSize (is) == 0)) {

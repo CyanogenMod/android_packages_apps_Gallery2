@@ -18,7 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.drm.DrmHelper;
+//import android.drm.DrmHelper;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -743,14 +743,14 @@ public class PhotoView extends GLView {
                 drawLoadingFailMessage(canvas);
             }
 
-            if (getFilmMode()) {
-                MediaItem item = mModel.getMediaItem(0);
-                if (item != null) {
-                    if (DrmHelper.isDrmFile(item.getFilePath())) {
-                        drawDrmIcon(canvas, s);
-                    }
-                }
-            }
+//            if (getFilmMode()) {
+//                MediaItem item = mModel.getMediaItem(0);
+//                if (item != null) {
+//                    if (DrmHelper.isDrmFile(item.getFilePath())) {
+//                        drawDrmIcon(canvas, s);
+//                    }
+//                }
+//            }
 
             // Draw a debug indicator showing which picture has focus (index ==
             // 0).
@@ -874,12 +874,12 @@ public class PhotoView extends GLView {
                 drawLoadingFailMessage(canvas);
             }
 
-            MediaItem item = mModel.getMediaItem(mIndex);
-            if (item != null) {
-                if (DrmHelper.isDrmFile(item.getFilePath())) {
-                    drawDrmIcon(canvas, s);
-                }
-            }
+//            MediaItem item = mModel.getMediaItem(mIndex);
+//            if (item != null) {
+//                if (DrmHelper.isDrmFile(item.getFilePath())) {
+//                    drawDrmIcon(canvas, s);
+//                }
+//            }
 
             canvas.restore();
         }
