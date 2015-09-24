@@ -16,21 +16,32 @@
 
 package com.android.gallery3d.app;
 
+import java.util.Locale;
+
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemProperties;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-import android.text.TextUtils;
-import java.util.Locale;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
@@ -38,8 +49,14 @@ import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
+import com.android.gallery3d.mpo.MpoParser;
 import com.android.gallery3d.picasasource.PicasaSource;
+import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.util.ThreadPool.Job;
+import com.android.gallery3d.util.ThreadPool.JobContext;
 
 public final class GalleryActivity extends AbstractGalleryActivity implements OnCancelListener {
     public static final String EXTRA_SLIDESHOW = "slideshow";
@@ -76,6 +93,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         } else {
             initializeByIntent();
         }
+
+        boolean ddmBulk = SystemProperties.getBoolean("persist.gallery.dualcam.ddmbulk", false);
+        if(ddmBulk)
+            startBulkMpoProcess();
     }
 
     private void initializeByIntent() {
@@ -259,6 +280,12 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     }
 
     @Override
+    protected void onDestroy() {
+        cancelBulkMpoProcess();
+        super.onDestroy();
+    }
+
+    @Override
     public void onCancel(DialogInterface dialog) {
         if (dialog == mVersionCheckDialog) {
             mVersionCheckDialog = null;
@@ -284,5 +311,152 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
             return dispatchTouchEvent(touchEvent);
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    private Future<?> mMpoTask;
+    private Toast mToast;
+    private String mToastStr;
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            String toastMsg = null;
+
+            switch(msg.what) {
+            case 0:
+                startBulkMpoProcess();
+                break;
+            case 1:
+                toastMsg = "MPO bulk process START";
+                break;
+            case 2:
+                toastMsg = "MPO bulk process CANCELLED";
+                break;
+            case 3:
+                toastMsg = "MPO bulk process DONE";
+                break;
+            case 4:
+                toastMsg = "MPO bulk process FAILED";
+                break;
+            case 5:
+                toastMsg = "MPO bulk processing image (" + msg.arg1 + "/" + msg.arg2 + ")";
+                break;
+            }
+
+            if(toastMsg != null) {
+                mToastStr = toastMsg;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mToast == null) {
+                            mToast = Toast.makeText(GalleryActivity.this, mToastStr, Toast.LENGTH_SHORT);
+                        } else {
+                            mToast.setText(mToastStr);
+                        }
+                        mToast.show();
+                    }
+                });
+            }
+            return false;
+        }
+    });
+
+    private void startBulkMpoProcess() {
+        try {
+            mMpoTask = getBatchServiceThreadPoolIfAvailable().submit(new BatchMpoJob(this));
+        } catch (Exception e) {
+            mHandler.sendEmptyMessageDelayed(0, 50);
+        }
+    }
+
+    private void cancelBulkMpoProcess() {
+        if(mMpoTask != null) {
+            mMpoTask.cancel();
+            mMpoTask = null;
+        }
+    }
+
+    private class BatchMpoJob implements Job<Void> {
+        private Context mContext;
+        private ContentResolver mContentResolver;
+
+        public BatchMpoJob(Context context) {
+            mContext = context;
+            mContentResolver = mContext.getContentResolver();
+        }
+
+        @Override
+        public Void run(JobContext jc) {
+            mHandler.sendEmptyMessage(1);
+
+            Cursor allPhotos = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    new String[]{MediaStore.Images.ImageColumns._ID}, null, null, null);
+
+            if(allPhotos != null) {
+                try {
+                    boolean cancelled = false;
+                    int count = allPhotos.getCount();
+                    while(allPhotos.moveToNext()) {
+                        if (jc.isCancelled()) {
+                            cancelled = true;
+                            break;
+                        }
+
+                        int position = allPhotos.getPosition() + 1;
+                        long id = allPhotos.getLong(0);
+                        Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                        loadMpo(mContext, uri);
+                        mHandler.sendMessage(mHandler.obtainMessage(5, position, count));
+                    }
+
+                    if(cancelled)
+                        mHandler.sendEmptyMessage(2);
+                    else
+                        mHandler.sendEmptyMessage(3);
+                } finally {
+                    allPhotos.close();
+                }
+            } else {
+                mHandler.sendEmptyMessage(4);
+            }
+            return null;
+        }
+
+        private boolean loadMpo(Context context, Uri uri) {
+            boolean loaded = false;
+            MpoParser parser = MpoParser.parse(context, uri);
+            byte[] primaryMpoData = parser.readImgData(true);
+            byte[] auxiliaryMpoData = parser.readImgData(false);
+
+            if(primaryMpoData != null && auxiliaryMpoData != null) {
+                Bitmap primaryBm = BitmapFactory.decodeByteArray(primaryMpoData, 0, primaryMpoData.length);
+                primaryMpoData = null;
+
+                if(primaryBm == null) {
+                    return false;
+                }
+
+                // check for pre-generated dm file
+                String mpoFilepath = ImageLoader.getLocalPathFromUri(context, uri);
+                // read auxiliary image and generate depth map.
+                Bitmap auxiliaryBm = BitmapFactory.decodeByteArray(auxiliaryMpoData, 0, auxiliaryMpoData.length);
+                auxiliaryMpoData = null;
+
+                if(auxiliaryBm == null) {
+                    primaryBm.recycle();
+                    primaryBm = null;
+                    return false;
+                }
+
+                DualCameraNativeEngine.getInstance().initDepthMap(
+                        primaryBm, auxiliaryBm, mpoFilepath,
+                        DualCameraNativeEngine.getInstance().getCalibFilepath(context));
+
+                primaryBm.recycle();
+                primaryBm = null;
+                auxiliaryBm.recycle();
+                auxiliaryBm = null;
+            }
+            return loaded;
+        }
     }
 }
