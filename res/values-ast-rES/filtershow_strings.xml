@@ -18,7 +18,6 @@
   <string name="title_activity_filter_show">Editor de semeyes</string>
   <string name="cannot_load_image">Fallu al cargar la imaxe!</string>
   <string name="cannot_edit_original">Nun pue editase l\'orixinal</string>
-  <string name="original_picture_text">@string/original</string>
   <string name="setting_wallpaper">Afitando fondu de pantalla...</string>
   <string name="download_failure">Nun pudo descargase la semeya porque la rede nun ta disponible.</string>
   <string name="original">Orixinal</string>
@@ -57,7 +56,6 @@
   <string name="aspect7to5_effect">7:5</string>
   <string name="aspect9to16_effect">16:9</string>
   <string name="aspectNone_effect">Nengún</string>
-  <string name="aspectOriginal_effect">@string/original</string>
   <string name="Fixed">Fixu</string>
   <string name="tinyplanet">Pequeñu planeta</string>
   <string name="exposure" msgid="1229093066434614811">Esposición</string>

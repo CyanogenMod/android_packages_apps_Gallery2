@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">برای استفاده از این جلوه‌ها هدفون را وصل کنید.</string>
   <string name="audio_effects_dialog_title">صدای اسنپدراگون+</string>
   <string name="fail_trim">متأسفانه این ویدیو بریده نمی‌شود</string>
+  <string name="no_permission_for_drm">با عرض پوزش فایل محافظت شده DRM را نمی‌توان به اشتراک گذاشت</string>
+  <string name="drm_license_info">اطلاعات مجوز DRM</string>
 </resources>

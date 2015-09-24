@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">插上耳机来享受这些效果。</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">抱歉，此视频文件不能被修剪</string>
+  <string name="no_permission_for_drm">抱歉，受 DRM 保护的文件不能共享</string>
+  <string name="drm_license_info">DRM 许可证信息</string>
 </resources>

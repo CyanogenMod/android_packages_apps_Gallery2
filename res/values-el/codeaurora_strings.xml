@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Συνδέστε ακουστικά για αυτά τα εφέ.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Δυστυχώς δεν είναι δυνατή η περικοπή αυτού του αρχείου βίντεο</string>
+  <string name="no_permission_for_drm">Συγγνώμη, δεν είναι δυνατή η κοινή χρήση αρχείων με προστασία DRM</string>
+  <string name="drm_license_info">Πληροφορίες άδειας DRM</string>
 </resources>
