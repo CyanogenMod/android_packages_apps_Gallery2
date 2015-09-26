@@ -104,7 +104,7 @@ public abstract class CommonControllerOverlay extends FrameLayout implements
         mPlayPauseReplayView = new ImageView(context);
         mPlayPauseReplayView.setContentDescription(
                 context.getResources().getString(R.string.accessibility_play_video));
-        mPlayPauseReplayView.setBackgroundResource(R.drawable.bg_vidcontrol);
+        mPlayPauseReplayView.setBackgroundResource(R.color.nocolor);
         mPlayPauseReplayView.setScaleType(ScaleType.CENTER);
         mPlayPauseReplayView.setFocusable(true);
         mPlayPauseReplayView.setClickable(true);
