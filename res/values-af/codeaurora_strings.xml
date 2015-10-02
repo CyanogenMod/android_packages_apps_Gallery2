@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Prop in oorfone vir hierdie effekte.</string>
   <string name="audio_effects_dialog_title">Snapdragon Oudio+</string>
   <string name="fail_trim">Jammer, hierdie video lêer kan nie afgewerk word nie</string>
+  <string name="no_permission_for_drm">Jammer, maar DRM beskermde leërs kan nie gedeel word nie</string>
+  <string name="drm_license_info">DRM lisensie inligting</string>
 </resources>
