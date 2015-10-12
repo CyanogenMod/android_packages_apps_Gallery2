@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Conecta unos auriculares para estos efectos.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Este vídeo no puede ser recortado</string>
+  <string name="no_permission_for_drm">Lo sentimos, pero no se pueden compartir los archivos protegidos por DRM</string>
+  <string name="drm_license_info">Información de la licencia DRM</string>
 </resources>
