@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Collega le cuffie per questi effetti.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Questo file video non può essere tagliato</string>
+  <string name="no_permission_for_drm">Spiacente, i file protetti da DRM non possono essere condivisi</string>
+  <string name="drm_license_info">Info licenza DRM</string>
 </resources>

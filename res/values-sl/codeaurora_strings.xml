@@ -43,7 +43,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="single_track">"Posamezna skladba"</string>
   <string name="input_url">"Vnesite URL"</string>
   <string name="streaming_settings">"Nastavitve pretakanja"</string>
-  <string name="next">"Naslednji"</string>
+  <string name="next">"Naprej"</string>
   <string name="previous">"Prejšnji"</string>
   <string name="buffer_size">Velikost medpomnilnika</string>
   <string name="apn">Priljubljeni APN</string>
@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Priključite slušalke za te učinke.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Žal te datoteke video posnetka ni mogoče obrezati</string>
+  <string name="no_permission_for_drm">Žal datotek zaščitenih z DRM-om ni mogoče deliti</string>
+  <string name="drm_license_info">Podatki licence DRM</string>
 </resources>

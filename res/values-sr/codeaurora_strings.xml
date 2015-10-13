@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Прикључи слушалице за ове ефекте.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Жао нам је, овај видео фајл не може бити скраћен</string>
+  <string name="no_permission_for_drm">Извини, DRM заштићене фајлове није могуће делити</string>
+  <string name="drm_license_info">Информације о DRM лиценци</string>
 </resources>

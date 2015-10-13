@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Kytke kuulokkeet käyttääksesi näitä tehosteita.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Videotiedostoa ei voi leikata</string>
+  <string name="no_permission_for_drm">Valitettavasti DRM-suojattuja tiedostoja ei voi jakaa</string>
+  <string name="drm_license_info">DRM-lisenssin tiedot</string>
 </resources>

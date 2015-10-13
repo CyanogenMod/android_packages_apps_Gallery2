@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Endolla els auriculars per aquests efectes.</string>
   <string name="audio_effects_dialog_title">So Snapdragon+</string>
   <string name="fail_trim">Ho sento, aquest fitxer de vídeo no es pot retallar</string>
+  <string name="no_permission_for_drm">Ho sento, no es poden compartir arxius DRM protegits</string>
+  <string name="drm_license_info">Informació de llicència DRM</string>
 </resources>

@@ -30,6 +30,9 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="setp_option_three_second">3 saniyə</string>
+  <string name="setp_option_six_second">6 saniyə</string>
+  <string name="single">"Tək"</string>
   <string name="stereo">"Stereo"</string>
   <string name="speaker_on">Səsucaldan AÇIQ</string>
   <string name="speaker_off">Səsucaldan QAPALI</string>
@@ -54,8 +57,25 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="media_controller_live">Canlı</string>
   <string name="media_controller_playing">Oynadılır</string>
   <string name="media_controller_connecting">Bağlanır\u2026</string>
+  <string name="bookmark_add">"Əlfəcin əlavə et"</string>
+  <string name="bookmark_display">"Əlfəcinləri göstər"</string>
+  <string name="bookmark_empty">"Əlfəcin yoxdur"</string>
+  <string name="bookmark_exist">"Əlfəcin artıq mövcuddur"</string>
+  <string name="bookmark_add_success">"Əlfəcin əlavə edildi"</string>
+  <string name="bookmark_list">"Əlfəcinlər"</string>
+  <string name="bookmark_title">"Başlıq"</string>
+  <string name="bookmark_location">"Yer"</string>
   <string name="delete_all">"Hamısını sil"</string>
   <string name="default_title">"Standart başlıq"</string>
+  <string name="more_image">Daha çox təsvir</string>
+  <string name="mute_nosupport">Səsi kəsilə bilmir : video dəstəklənmir</string>
+  <string name="map_activity_not_found_err">Yeri göstərmək üçün quraşdırılmış xəritə tətbiqetməsi yoxdur.</string>
+  <string name="bass_boost_strength">Bas yüksəldici</string>
   <string name="virtualizer_strength">3D effekti</string>
   <string name="audio_effects">Səs effekti</string>
+  <string name="headset_plug">Bu effektlər üçün qulaqcıq taxın.</string>
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <string name="fail_trim">Bağışlayın, bu video fayl kəsilə bilməz</string>
+  <string name="no_permission_for_drm">Bağışlayın, DRM qorumalı fayllar paylaşıla bilməz</string>
+  <string name="drm_license_info">DRM lisenziya məlumatı</string>
 </resources>
