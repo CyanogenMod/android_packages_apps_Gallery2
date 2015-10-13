@@ -99,11 +99,11 @@ public class ImageFilterDualCamera extends ImageFilter {
             switch(mParameters.getTextId()) {
             case R.string.focus:
                 result = DualCameraNativeEngine.getInstance().applyFocus(point.x, point.y, intensity,
-                        filteredBitmap);
+                        quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
                 break;
             case R.string.halo:
                 result = DualCameraNativeEngine.getInstance().applyHalo(point.x, point.y, intensity,
-                        filteredBitmap);
+                        quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
                 break;
             }
 

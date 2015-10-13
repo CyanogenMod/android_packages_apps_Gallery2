@@ -98,7 +98,8 @@ public class ImageFilterDualCamFusion extends ImageFilter {
             filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(filteredW, filteredH, BitmapCache.FILTERS);
             filteredBitmap.setHasAlpha(true);
 
-            boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y, filteredBitmap);
+            boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y,
+                    quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
 
             if(result == false) {
                 Log.e(TAG, "Imagelib API failed");

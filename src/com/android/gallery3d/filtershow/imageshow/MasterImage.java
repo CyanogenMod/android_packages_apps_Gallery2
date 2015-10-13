@@ -62,7 +62,7 @@ public class MasterImage implements RenderingRequestCaller {
     private boolean DEBUG  = false;
     private static final boolean DISABLEZOOM = false;
     public static final int SMALL_BITMAP_DIM = 160;
-    public static final int MAX_BITMAP_DIM = 900;
+    public static final int MAX_BITMAP_DIM = 1280;
     private static MasterImage sMasterImage = null;
 
     private boolean mSupportsHighRes = false;
