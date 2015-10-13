@@ -16,6 +16,11 @@
 
 package com.android.gallery3d.filtershow;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,16 +35,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
@@ -63,7 +65,6 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
@@ -77,27 +78,15 @@ import com.android.gallery3d.filtershow.category.CategoryView;
 import com.android.gallery3d.filtershow.category.MainPanel;
 import com.android.gallery3d.filtershow.category.SwipableView;
 import com.android.gallery3d.filtershow.data.UserPresetsManager;
-import com.android.gallery3d.filtershow.editors.BasicEditor;
 import com.android.gallery3d.filtershow.editors.Editor;
-import com.android.gallery3d.filtershow.editors.EditorChanSat;
-import com.android.gallery3d.filtershow.editors.EditorColorBorder;
-import com.android.gallery3d.filtershow.editors.EditorCrop;
-import com.android.gallery3d.filtershow.editors.EditorDraw;
-import com.android.gallery3d.filtershow.editors.EditorGrad;
-import com.android.gallery3d.filtershow.editors.EditorMakeup;
+import com.android.gallery3d.filtershow.editors.EditorDualCamFusion;
 import com.android.gallery3d.filtershow.editors.EditorManager;
-import com.android.gallery3d.filtershow.editors.EditorMirror;
 import com.android.gallery3d.filtershow.editors.EditorPanel;
-import com.android.gallery3d.filtershow.editors.EditorRedEye;
-import com.android.gallery3d.filtershow.editors.EditorRotate;
-import com.android.gallery3d.filtershow.editors.EditorStraighten;
-import com.android.gallery3d.filtershow.editors.EditorTinyPlanet;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
-import com.android.gallery3d.filtershow.filters.FilterStraightenRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
@@ -115,6 +104,7 @@ import com.android.gallery3d.filtershow.presets.PresetManagementDialog;
 import com.android.gallery3d.filtershow.presets.UserPresetsAdapter;
 import com.android.gallery3d.filtershow.provider.SharedImageProvider;
 import com.android.gallery3d.filtershow.state.StateAdapter;
+import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 import com.android.gallery3d.filtershow.tools.XmpPresets;
 import com.android.gallery3d.filtershow.tools.XmpPresets.XMresults;
@@ -123,13 +113,6 @@ import com.android.gallery3d.filtershow.ui.FramedTextButton;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.photos.data.GalleryBitmapPool;
 import com.thundersoft.hz.selfportrait.makeup.engine.MakeupEngine;
-
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Vector;
 
 public class FilterShowActivity extends FragmentActivity implements OnItemClickListener,
         OnShareTargetSelectedListener, DialogInterface.OnShowListener,
@@ -151,6 +134,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private Editor mCurrentEditor = null;
 
     private static final int SELECT_PICTURE = 1;
+    public static final int SELECT_FUSION_UNDERLAY = 2;
     private static final String LOGTAG = "FilterShowActivity";
 
     private boolean mShowingTinyPlanet = false;
@@ -182,6 +166,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryFiltersAdapter = null;
     private CategoryAdapter mCategoryVersionsAdapter = null;
     private CategoryAdapter mCategoryMakeupAdapter = null;
+    private CategoryAdapter mCategoryDualCamAdapter = null;
     private int mCurrentPanel = MainPanel.LOOKS;
     private Vector<FilterUserPresetRepresentation> mVersions =
             new Vector<FilterUserPresetRepresentation>();
@@ -264,7 +249,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         setupMasterImage();
         setupMenu();
         setDefaultValues();
-        fillEditors();
         getWindow().setBackgroundDrawable(new ColorDrawable(0));
         loadXML();
 
@@ -385,6 +369,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillEffects();
         fillVersions();
         fillMakeup();
+        fillDualCamera();
     }
 
     public void setupStatePanel() {
@@ -492,6 +477,21 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    private void fillDualCamera() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getDualCamera();
+        if (mCategoryDualCamAdapter != null) {
+            mCategoryDualCamAdapter.clear();
+        }
+        mCategoryDualCamAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : filtersRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategoryDualCamAdapter.add(new Action(this, representation));
+        }
+    }
+
     private void fillTools() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getTools();
@@ -530,7 +530,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (loadUri != null) {
             startLoadBitmap(loadUri);
         } else {
-            pickImage();
+            pickImage(SELECT_PICTURE);
         }
     }
 
@@ -538,22 +538,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mEditorPlaceHolder.setContainer((FrameLayout) findViewById(R.id.editorContainer));
         EditorManager.addEditors(mEditorPlaceHolder);
         mEditorPlaceHolder.setOldViews(mImageViews);
-    }
-
-    private void fillEditors() {
-        mEditorPlaceHolder.addEditor(new EditorChanSat());
-        mEditorPlaceHolder.addEditor(new EditorGrad());
-        mEditorPlaceHolder.addEditor(new EditorDraw());
-        mEditorPlaceHolder.addEditor(new EditorColorBorder());
-        mEditorPlaceHolder.addEditor(new BasicEditor());
-        mEditorPlaceHolder.addEditor(new ImageOnlyEditor());
-        mEditorPlaceHolder.addEditor(new EditorTinyPlanet());
-        mEditorPlaceHolder.addEditor(new EditorRedEye());
-        mEditorPlaceHolder.addEditor(new EditorCrop());
-        mEditorPlaceHolder.addEditor(new EditorMirror());
-        mEditorPlaceHolder.addEditor(new EditorRotate());
-        mEditorPlaceHolder.addEditor(new EditorStraighten());
-        mEditorPlaceHolder.addEditor(new EditorMakeup());
     }
 
     private void setDefaultValues() {
@@ -622,6 +606,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public CategoryAdapter getCategoryVersionsAdapter() {
         return mCategoryVersionsAdapter;
+    }
+
+    public CategoryAdapter getCategoryDualCamAdapter() {
+        return mCategoryDualCamAdapter;
     }
 
     public void removeFilterRepresentation(FilterRepresentation filterRepresentation) {
@@ -729,6 +717,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         ImagePreset preset = mMasterImage.getPreset();
         mCategoryLooksAdapter.reflectImagePreset(preset);
         mCategoryBordersAdapter.reflectImagePreset(preset);
+        mCategoryDualCamAdapter.reflectImagePreset(preset);
     }
 
     public View getMainStatePanelContainer(int id) {
@@ -790,7 +779,30 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 Log.d(LOGTAG, "FilterShowActivity.LoadHighresBitmapTask.onPostExecute(): highResPreviewScale is " + highResPreviewScale);
                 mBoundService.setHighresPreviewScaleFactor(highResPreviewScale);
             }
+
+            if(DualCameraNativeEngine.getInstance().isLibLoaded()) {
+                LoadMpoDataTask mpoLoad = new LoadMpoDataTask();
+                mpoLoad.execute();
+            }
             MasterImage.getImage().warnListeners();
+        }
+    }
+
+    private class LoadMpoDataTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return MasterImage.getImage().loadMpo();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            MasterImage.getImage().warnListeners();
+
+            Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
+            if (currentPanel instanceof MainPanel) {
+                MainPanel mainPanel = (MainPanel) currentPanel;
+                mainPanel.enableDualCameraButton(result);
+            }
         }
     }
 
@@ -881,6 +893,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mCategoryBordersAdapter.imageLoaded();
             mCategoryGeometryAdapter.imageLoaded();
             mCategoryFiltersAdapter.imageLoaded();
+            mCategoryDualCamAdapter.imageLoaded();
             if(mCategoryMakeupAdapter != null) {
                 mCategoryMakeupAdapter.imageLoaded();
             }
@@ -929,6 +942,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
         mUserPresetsManager.close();
         doUnbindService();
+        if(DualCameraNativeEngine.getInstance().isLibLoaded())
+            DualCameraNativeEngine.getInstance().releaseDepthMap();
         super.onDestroy();
     }
 
@@ -1060,6 +1075,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
             MakeupEngine.getMakeupObj().setContext(getBaseContext());
         }
+
+        DualCameraNativeEngine.createInstance();
     }
 
     @Override
@@ -1402,12 +1419,12 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         invalidateViews();
     }
 
-    public void pickImage() {
+    public void pickImage(int requestCode) {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_PICK);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)),
-                SELECT_PICTURE);
+                requestCode);
     }
 
     @Override
@@ -1416,6 +1433,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
                 startLoadBitmap(selectedImageUri);
+            } else if (requestCode == SELECT_FUSION_UNDERLAY) {
+                Uri underlayImageUri = data.getData();
+                // find fusion representation
+                EditorDualCamFusion editor = (EditorDualCamFusion)getEditor(EditorDualCamFusion.ID);
+                editor.setUnderlayImageUri(underlayImageUri);
             }
         }
     }

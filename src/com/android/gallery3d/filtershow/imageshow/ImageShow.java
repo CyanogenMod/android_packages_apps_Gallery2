@@ -16,6 +16,9 @@
 
 package com.android.gallery3d.filtershow.imageshow;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -30,11 +33,11 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.NinePatchDrawable;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -51,12 +54,9 @@ import com.android.gallery3d.filtershow.filters.ImageFilter;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.tools.SaveImage;
 
-import java.io.File;
-import java.util.ArrayList;
-
 public class ImageShow extends View implements OnGestureListener,
-        ScaleGestureDetector.OnScaleGestureListener,
-        OnDoubleTapListener {
+                                                ScaleGestureDetector.OnScaleGestureListener,
+                                                OnDoubleTapListener {
 
     private static final String LOGTAG = "ImageShow";
     private static final boolean ENABLE_ZOOMED_COMPARISON = false;
@@ -70,14 +70,15 @@ public class ImageShow extends View implements OnGestureListener,
     private GestureDetector mGestureDetector = null;
     private ScaleGestureDetector mScaleGestureDetector = null;
 
+    private RectF mFusionBounds = new RectF();
     protected Rect mImageBounds = new Rect();
     private boolean mOriginalDisabled = false;
     private boolean mTouchShowOriginal = false;
     private long mTouchShowOriginalDate = 0;
     private final long mTouchShowOriginalDelayMin = 200; // 200ms
     private int mShowOriginalDirection = 0;
-    private static int UNVEIL_HORIZONTAL = 1;
-    private static int UNVEIL_VERTICAL = 2;
+    private static final int UNVEIL_HORIZONTAL = 1;
+    private static final int UNVEIL_VERTICAL = 2;
 
     private NinePatchDrawable mShadow = null;
     private Rect mShadowBounds = new Rect();
@@ -110,6 +111,8 @@ public class ImageShow extends View implements OnGestureListener,
     private ValueAnimator mAnimatorTranslateX = null;
     private ValueAnimator mAnimatorTranslateY = null;
 
+    protected boolean mAllowScaleAndTranslate = false;
+
     private enum InteractionMode {
         NONE,
         SCALE,
@@ -141,6 +144,10 @@ public class ImageShow extends View implements OnGestureListener,
 
     public boolean hasModifications() {
         return MasterImage.getImage().hasModifications();
+    }
+
+    public boolean hasFusionApplied() {
+        return MasterImage.getImage().hasFusionApplied();
     }
 
     public void resetParameter() {
@@ -273,6 +280,34 @@ public class ImageShow extends View implements OnGestureListener,
             mActivity.stopLoadingIndicator();
         }
 
+        Bitmap fusionUnderlay = MasterImage.getImage().getFusionUnderlay();
+        if(fusionUnderlay != null) {
+            float canvWidth = canvas.getWidth();
+            float canvHeight = canvas.getHeight();
+            float width, height;
+            float underlayAspect = (float)fusionUnderlay.getWidth() / (float)fusionUnderlay.getHeight();
+
+            if(canvHeight * underlayAspect > canvWidth) {
+                // width is constraint
+                width = canvWidth;
+                height = canvWidth / underlayAspect;
+            } else {
+                // height is constraint
+                height = canvHeight;
+                width = canvHeight * underlayAspect;
+            }
+
+            // center in canvas
+            mFusionBounds.top = (canvHeight - height)/2;
+            mFusionBounds.bottom = mFusionBounds.top + height;
+            mFusionBounds.left = (canvWidth - width)/2;
+            mFusionBounds.right = mFusionBounds.left + width;
+
+            canvas.drawBitmap(fusionUnderlay, null, mFusionBounds, null);
+            canvas.clipRect(mFusionBounds, Region.Op.REPLACE);
+            MasterImage.getImage().setFusionBounds(canvas, mFusionBounds);
+        }
+
         canvas.save();
 
         mShadowDrawn = false;
@@ -350,7 +385,7 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     public void drawImageAndAnimate(Canvas canvas,
-                                    Bitmap image) {
+            Bitmap image) {
         if (image == null) {
             return;
         }
@@ -365,6 +400,8 @@ public class ImageShow extends View implements OnGestureListener,
         RectF d = new RectF(0, 0, image.getWidth(), image.getHeight());
         m.mapRect(d);
         d.roundOut(mImageBounds);
+
+        master.setImageBounds(canvas, mImageBounds);
 
         boolean showAnimatedImage = master.onGoingNewLookAnimation();
         if (!showAnimatedImage && mDidStartAnimation) {
@@ -477,12 +514,20 @@ public class ImageShow extends View implements OnGestureListener,
 
             if (needsToDrawImage) {
                 drawShadow(canvas, previousBounds); // as needed
+
+                if(hasFusionApplied() || this instanceof ImageFusion) {
+                    previousImage.setHasAlpha(true);
+                }
                 canvas.drawBitmap(previousImage, mp, mPaint);
             }
 
             canvas.restore();
         } else {
             drawShadow(canvas, mImageBounds); // as needed
+
+            if(hasFusionApplied() || this instanceof ImageFusion) {
+                image.setHasAlpha(true);
+            }
             canvas.drawBitmap(image, m, mPaint);
         }
 
@@ -504,7 +549,7 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     private void drawShadow(Canvas canvas, Rect d) {
-        if (!mShadowDrawn) {
+        if (!mShadowDrawn && !hasFusionApplied() && !(this instanceof ImageFusion)) {
             mShadowBounds.set(d.left - mShadowMargin, d.top - mShadowMargin,
                     d.right + mShadowMargin, d.bottom + mShadowMargin);
             mShadow.setBounds(mShadowBounds);
@@ -614,9 +659,12 @@ public class ImageShow extends View implements OnGestureListener,
         int action = event.getAction();
         action = action & MotionEvent.ACTION_MASK;
 
-        mGestureDetector.onTouchEvent(event);
+        if(!hasFusionApplied() || mAllowScaleAndTranslate)
+            mGestureDetector.onTouchEvent(event);
         boolean scaleInProgress = scaleInProgress();
-        mScaleGestureDetector.onTouchEvent(event);
+        if(!hasFusionApplied() || mAllowScaleAndTranslate)
+            mScaleGestureDetector.onTouchEvent(event);
+
         if (mInteractionMode == InteractionMode.SCALE) {
             return true;
         }
@@ -642,7 +690,8 @@ public class ImageShow extends View implements OnGestureListener,
             mTouch.y = ey;
 
             float scaleFactor = MasterImage.getImage().getScaleFactor();
-            if (scaleFactor > 1 && (!ENABLE_ZOOMED_COMPARISON || event.getPointerCount() == 2)) {
+            if ((scaleFactor > 1 && (!ENABLE_ZOOMED_COMPARISON || event.getPointerCount() == 2) && !hasFusionApplied())
+                    || mAllowScaleAndTranslate) {
                 float translateX = (mTouch.x - mTouchDown.x) / scaleFactor;
                 float translateY = (mTouch.y - mTouchDown.y) / scaleFactor;
                 Point originalTranslation = MasterImage.getImage().getOriginalTranslation();
@@ -654,7 +703,7 @@ public class ImageShow extends View implements OnGestureListener,
             } else if (enableComparison() && !mOriginalDisabled
                     && (System.currentTimeMillis() - mTouchShowOriginalDate
                             > mTouchShowOriginalDelayMin)
-                    && event.getPointerCount() == 1) {
+                            && event.getPointerCount() == 1) {
                 mTouchShowOriginal = true;
             }
         }
@@ -668,7 +717,8 @@ public class ImageShow extends View implements OnGestureListener,
             mTouchDown.y = 0;
             mTouch.x = 0;
             mTouch.y = 0;
-            if (MasterImage.getImage().getScaleFactor() <= 1) {
+            if (!(mAllowScaleAndTranslate || hasFusionApplied()) &&
+                    MasterImage.getImage().getScaleFactor() <= 1) {
                 MasterImage.getImage().setScaleFactor(1);
                 MasterImage.getImage().resetTranslation();
             }
@@ -684,7 +734,7 @@ public class ImageShow extends View implements OnGestureListener,
     }
 
     private void startAnimTranslation(int fromX, int toX,
-                                      int fromY, int toY, int delay) {
+            int fromY, int toY, int delay) {
         if (fromX == toX && fromY == toY) {
             return;
         }
@@ -729,8 +779,8 @@ public class ImageShow extends View implements OnGestureListener,
 
         if (x != translation.x || y != translation.y) {
             startAnimTranslation(x, translation.x,
-                                 y, translation.y,
-                                 mAnimationSnapDelay);
+                    y, translation.y,
+                    mAnimationSnapDelay);
         }
     }
 
@@ -740,6 +790,9 @@ public class ImageShow extends View implements OnGestureListener,
 
     @Override
     public boolean onDoubleTap(MotionEvent arg0) {
+        if(hasFusionApplied())
+            return true;
+
         mZoomIn = !mZoomIn;
         float scale = 1.0f;
         final float x = arg0.getX();
@@ -754,7 +807,7 @@ public class ImageShow extends View implements OnGestureListener,
             mAnimatorScale = ValueAnimator.ofFloat(
                     MasterImage.getImage().getScaleFactor(),
                     scale
-            );
+                    );
             float translateX = (getWidth() / 2 - x);
             float translateY = (getHeight() / 2 - y);
             Point translation = MasterImage.getImage().getTranslation();
@@ -770,8 +823,8 @@ public class ImageShow extends View implements OnGestureListener,
             constrainTranslation(translation, scale);
 
             startAnimTranslation(startTranslateX, translation.x,
-                                 startTranslateY, translation.y,
-                                 mAnimationZoomDelay);
+                    startTranslateY, translation.y,
+                    mAnimationZoomDelay);
             mAnimatorScale.setDuration(mAnimationZoomDelay);
             mAnimatorScale.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -809,7 +862,7 @@ public class ImageShow extends View implements OnGestureListener,
 
     private void constrainTranslation(Point translation, float scale) {
         int currentEdgeEffect = 0;
-        if (scale <= 1) {
+        if (mAllowScaleAndTranslate || scale <= 1) {
             mCurrentEdgeEffect = 0;
             mEdgeEffect.finish();
             return;
@@ -929,9 +982,11 @@ public class ImageShow extends View implements OnGestureListener,
         if (scaleFactor > MasterImage.getImage().getMaxScaleFactor()) {
             scaleFactor = MasterImage.getImage().getMaxScaleFactor();
         }
-        if (scaleFactor < 1.0f) {
+
+        if (!mAllowScaleAndTranslate && scaleFactor < 1.0f) {
             scaleFactor = 1.0f;
         }
+
         MasterImage.getImage().setScaleFactor(scaleFactor);
         scaleFactor = img.getScaleFactor();
         float focusx = detector.getFocusX();
@@ -961,7 +1016,8 @@ public class ImageShow extends View implements OnGestureListener,
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
         mInteractionMode = InteractionMode.NONE;
-        if (MasterImage.getImage().getScaleFactor() < 1) {
+        if (!mAllowScaleAndTranslate &&
+                MasterImage.getImage().getScaleFactor() < 1) {
             MasterImage.getImage().setScaleFactor(1);
             invalidate();
         }

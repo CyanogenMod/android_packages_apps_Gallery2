@@ -48,6 +48,7 @@ public class FilterRepresentation {
     public static final byte TYPE_TINYPLANET = 6;
     public static final byte TYPE_GEOMETRY = 7;
     public static final byte TYPE_MAKEUP = 8;
+    public static final byte TYPE_DUALCAM = 9;
     protected static final String NAME_TAG = "Name";
 
     public FilterRepresentation(String name) {

@@ -28,7 +28,7 @@ import java.util.Vector;
 
 public class CacheProcessing {
     private static final String LOGTAG = "CacheProcessing";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final boolean NO_CACHING = false;
     private Vector<CacheStep> mSteps = new Vector<CacheStep>();
 

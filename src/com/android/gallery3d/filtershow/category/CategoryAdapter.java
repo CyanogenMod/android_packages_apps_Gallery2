@@ -85,6 +85,9 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         if (category == MainPanel.BORDERS) {
             mSelectedPosition = 0;
         }
+        if (category == MainPanel.DUALCAM) {
+            mSelectedPosition = 0;
+        }
         if (category == MainPanel.VERSIONS) {
             mAddButtonText = getContext().getString(R.string.filtershow_add_button_versions);
         }
@@ -210,6 +213,11 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
             }
         } else if (mCategory == MainPanel.BORDERS) {
             int pos = preset.getPositionForType(FilterRepresentation.TYPE_BORDER);
+            if (pos != -1) {
+                rep = preset.getFilterRepresentation(pos);
+            }
+        } else if (mCategory == MainPanel.DUALCAM) {
+            int pos = preset.getPositionForType(FilterRepresentation.TYPE_DUALCAM);
             if (pos != -1) {
                 rep = preset.getFilterRepresentation(pos);
             }

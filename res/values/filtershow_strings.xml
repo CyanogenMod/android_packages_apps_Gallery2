@@ -192,6 +192,16 @@
     <string name="downsample">Downsample</string>
     <!--  Label for the "neutral density graduated filter" filter effect  [CHAR LIMIT=15] -->
     <string name="grad">Graduated</string>
+    <!--  Label for the "refocus" dual camera effect  [CHAR LIMIT=15] -->
+    <string name="focus">Focus</string>
+    <!--  Label for the "bokeh" dual camera effect  [CHAR LIMIT=15] -->
+    <string name="blur">Bokeh</string>
+    <!--  Label for the "fusion" dual camera effect  [CHAR LIMIT=15] -->
+    <string name="fusion">Fusion</string>
+    <!--  Label for the "sketch" dual camera effect  [CHAR LIMIT=15] -->
+    <string name="sketch">Sketch</string>
+    <!--  Label for the "halo" dual camera effect  [CHAR LIMIT=15] -->
+    <string name="halo">Halo</string>
     <!--  Label for the Brightness effect  [CHAR LIMIT=20] -->
     <string name="editor_grad_brightness">Brightness</string>
     <!--  Label for the Contrast filter effect  [CHAR LIMIT=20] -->
@@ -327,5 +337,8 @@
     <string name="filtershow_exif_exposure_time">Exposure Time</string>
     <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
     <string name="filtershow_exif_copyright">Copyright</string>
+
+    <string name="fusion_pick_point">Pick Segment</string>
+    <string name="fusion_pick_underlay">Pick Underlay</string>
 
 </resources>

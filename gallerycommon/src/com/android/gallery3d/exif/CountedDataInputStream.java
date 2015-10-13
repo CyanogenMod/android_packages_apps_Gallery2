@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
-class CountedDataInputStream extends FilterInputStream {
+public class CountedDataInputStream extends FilterInputStream {
 
     private int mCount = 0;
 
@@ -32,7 +32,7 @@ class CountedDataInputStream extends FilterInputStream {
     private final byte mByteArray[] = new byte[8];
     private final ByteBuffer mByteBuffer = ByteBuffer.wrap(mByteArray);
 
-    protected CountedDataInputStream(InputStream in) {
+    public CountedDataInputStream(InputStream in) {
         super(in);
     }
 
