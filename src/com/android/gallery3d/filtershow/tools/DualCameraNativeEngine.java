@@ -78,12 +78,9 @@ public class DualCameraNativeEngine {
         return calibFile.getAbsolutePath();
     }
 
-    native public void initDepthMap(ByteBuffer primaryRGBA, int primaryWidth, int primaryHeight, int primaryStride,
-            ByteBuffer auxiliaryRGBA, int auxiliaryWidth, int auxiliaryHeight, int auxiliaryStride,
-            String mpoFilepath, String calibFilepath);
+    native public boolean initDepthMap(Bitmap primaryRGBA, Bitmap auxiliaryRGBA, String mpoFilepath, String calibFilepath);
 
-    native public void loadDepthMap(ByteBuffer primaryRGBA, int primaryWidth, int primaryHeight, int primaryStride,
-            ByteBuffer depthMap, int depthMapWidth, int depthMapHeight, int depthMapStride);
+    native public boolean loadDepthMap(Bitmap primaryRGBA, Bitmap depthMap);
 
     native public void releaseDepthMap();
 

@@ -876,17 +876,6 @@ public class MasterImage implements RenderingRequestCaller {
                 return false;
             }
 
-            int primaryWidth = primaryBm.getWidth();
-            int primaryHeight = primaryBm.getHeight();
-            int primaryStride = primaryBm.getRowBytes();
-
-            Log.v(LOGTAG, "primary info: " + primaryWidth + "x" + primaryHeight + ", s:" + primaryStride);
-
-            ByteBuffer primaryMpoBuffer = ByteBuffer.allocateDirect(primaryBm.getByteCount());
-            primaryBm.copyPixelsToBuffer(primaryMpoBuffer);
-            primaryBm.recycle();
-            primaryBm = null;
-
             // check for pre-generated dm file
             String mpoFilepath = ImageLoader.getLocalPathFromUri(getActivity(), getUri());
             String depthFilepath = MpoParser.getDepthmapFilepath(mpoFilepath);
@@ -905,24 +894,19 @@ public class MasterImage implements RenderingRequestCaller {
                 auxiliaryMpoData = null;
 
                 if(auxiliaryBm == null) {
+                    primaryBm.recycle();
+                    primaryBm = null;
                     return false;
                 }
 
-                int auxiliaryWidth = auxiliaryBm.getWidth();
-                int auxiliaryHeight = auxiliaryBm.getHeight();
-                int auxiliaryStride = auxiliaryBm.getRowBytes();
+                DualCameraNativeEngine.getInstance().initDepthMap(
+                        primaryBm, auxiliaryBm, mpoFilepath,
+                        DualCameraNativeEngine.getInstance().getCalibFilepath(mActivity));
 
-                Log.v(LOGTAG, "auxiliary info: " + auxiliaryWidth + "x" + auxiliaryHeight + ", s:" + auxiliaryStride);
-
-                ByteBuffer auxiliaryMpoBuffer = ByteBuffer.allocateDirect(auxiliaryBm.getByteCount());
-                auxiliaryBm.copyPixelsToBuffer(auxiliaryMpoBuffer);
+                primaryBm.recycle();
+                primaryBm = null;
                 auxiliaryBm.recycle();
                 auxiliaryBm = null;
-
-                DualCameraNativeEngine.getInstance().initDepthMap(
-                        primaryMpoBuffer, primaryWidth, primaryHeight, primaryStride,
-                        auxiliaryMpoBuffer, auxiliaryWidth, auxiliaryHeight, auxiliaryStride,
-                        mpoFilepath, DualCameraNativeEngine.getInstance().getCalibFilepath(mActivity));
 
                 Point size = new Point();
                 boolean result = DualCameraNativeEngine.getInstance().getDepthMapSize(size);

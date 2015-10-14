@@ -37,18 +37,20 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
 
 public class ImageFilterDualCamFusion extends ImageFilter {
     private static final String TAG = ImageFilterDualCamFusion.class.getSimpleName();
+    private static Toast sSegmentToast;
 
     private FilterDualCamFusionRepresentation mParameters;
     private Paint mPaint = new Paint();
-    private Bitmap mFilteredBitmap = null;
-    private Point mPoint = null;
 
     public ImageFilterDualCamFusion() {
         mName = "Fusion";
@@ -68,14 +70,6 @@ public class ImageFilterDualCamFusion extends ImageFilter {
     }
 
     @Override
-    public void freeResources() {
-        if (mFilteredBitmap != null)
-            mFilteredBitmap.recycle();
-        mFilteredBitmap = null;
-        mPoint = null;
-    }
-
-    @Override
     public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
         if (getParameters() == null) {
             return bitmap;
@@ -84,53 +78,53 @@ public class ImageFilterDualCamFusion extends ImageFilter {
         Point point = getParameters().getPoint();
 
         if(!point.equals(-1,-1)) {
-            long startTime = System.currentTimeMillis();
-            Log.e(TAG, "dual cam fusion - start processing: " + startTime);
+            Bitmap filteredBitmap = null;
+            Rect originalBounds = MasterImage.getImage().getOriginalBounds();
+            int origW = originalBounds.width();
+            int origH = originalBounds.height();
 
-            if(!point.equals(mPoint)) {
-                mPoint = point;
+            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
+            filteredBitmap.setHasAlpha(true);
 
-                if(mFilteredBitmap == null) {
-                    Rect originalBounds = MasterImage.getImage().getOriginalBounds();
-                    int origW = originalBounds.width();
-                    int origH = originalBounds.height();
+            boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y, filteredBitmap);
 
-                    mFilteredBitmap = Bitmap.createBitmap(origW, origH, Bitmap.Config.ARGB_8888);
-                    mFilteredBitmap.setHasAlpha(true);
-                }
-
-
-                boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(mPoint.x, mPoint.y,
-                        mFilteredBitmap);
-
-                if(result == false) {
-                    Log.e(TAG, "Imagelib API failed");
-                    return bitmap;
-                }
-            }
-
-            mPaint.reset();
-            if(quality == FilterEnvironment.QUALITY_FINAL) {
-                mPaint.setAntiAlias(true);
-                mPaint.setFilterBitmap(true);
-                mPaint.setDither(true);
-            }
-
-            bitmap.setHasAlpha(true);
-
-            Canvas canvas = new Canvas(bitmap);
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
-
-            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-            if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
-                Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
-                canvas.drawBitmap(mFilteredBitmap, originalToScreen, null);
+            if(result == false) {
+                Log.e(TAG, "Imagelib API failed");
+                sActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sSegmentToast == null) {
+                            sSegmentToast = Toast.makeText(sActivity, R.string.dualcam_no_segment_toast, Toast.LENGTH_SHORT);
+                        }
+                        sSegmentToast.show();
+                    }
+                });
+                return bitmap;
             } else {
-                canvas.drawBitmap(mFilteredBitmap, null, new Rect(0,0,w,h), null);
-            }
 
-            Log.e(TAG, "dual cam fusion - finish processing: " + (System.currentTimeMillis()-startTime));
+                mPaint.reset();
+                if(quality == FilterEnvironment.QUALITY_FINAL) {
+                    mPaint.setAntiAlias(true);
+                    mPaint.setFilterBitmap(true);
+                    mPaint.setDither(true);
+                }
+
+                bitmap.setHasAlpha(true);
+
+                Canvas canvas = new Canvas(bitmap);
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
+
+                canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+                if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
+                    Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
+                    canvas.drawBitmap(filteredBitmap, originalToScreen, null);
+                } else {
+                    canvas.drawBitmap(filteredBitmap, null, new Rect(0,0,w,h), null);
+                }
+
+                MasterImage.getImage().getBitmapCache().cache(filteredBitmap);
+            }
         }
 
         return bitmap;
