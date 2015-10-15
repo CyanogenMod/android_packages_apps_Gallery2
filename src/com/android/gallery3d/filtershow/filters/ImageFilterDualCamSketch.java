@@ -29,9 +29,7 @@
 
 package com.android.gallery3d.filtershow.filters;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -52,9 +50,6 @@ public class ImageFilterDualCamSketch extends ImageFilter {
 
     private FilterDualCamSketchRepresentation mParameters;
     private Paint mPaint = new Paint();
-    private Bitmap mSketchBm = null;
-    private int mSketchResId = 0;
-    private Resources mResources = null;
 
     public FilterRepresentation getDefaultRepresentation() {
         return null;
@@ -69,19 +64,6 @@ public class ImageFilterDualCamSketch extends ImageFilter {
         return mParameters;
     }
 
-    public void setResources(Resources resources) {
-        mResources = resources;
-    }
-
-    @Override
-    public void freeResources() {
-        if (mSketchBm != null)
-            mSketchBm.recycle();
-
-        mSketchBm = null;
-        mSketchResId = 0;
-    }
-
     @Override
     public Bitmap apply(Bitmap bitmap, float scaleFactor, int quality) {
         if (getParameters() == null) {
@@ -90,20 +72,6 @@ public class ImageFilterDualCamSketch extends ImageFilter {
 
         Point point = getParameters().getPoint();
         if(!point.equals(-1,-1)) {
-
-            int sketchResId = getParameters().getSketchResId();
-            if (sketchResId == 0) {
-                return bitmap;
-            }
-
-            if (mSketchBm == null || mSketchResId != sketchResId) {
-                loadSketchImage(sketchResId);
-            }
-
-            if (mSketchBm == null) {
-                return bitmap;
-            }
-
             boolean result = false;
             Bitmap filteredBitmap = null;
 
@@ -113,7 +81,7 @@ public class ImageFilterDualCamSketch extends ImageFilter {
 
             filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
 
-            result = DualCameraNativeEngine.getInstance().applySketch(mSketchBm, point.x, point.y, filteredBitmap);
+            result = DualCameraNativeEngine.getInstance().applySketch(point.x, point.y, filteredBitmap);
 
             if(result == false) {
                 Log.e(TAG, "Imagelib API failed");
@@ -151,24 +119,5 @@ public class ImageFilterDualCamSketch extends ImageFilter {
         }
 
         return bitmap;
-    }
-
-    private void loadSketchImage(int sketchResId) {
-        if(mResources == null) {
-            Log.w(TAG, "resources not set");
-            return;
-        }
-
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inScaled = false;
-        mSketchResId = sketchResId;
-        if (mSketchResId != 0) {
-            mSketchBm = BitmapFactory.decodeResource(mResources, mSketchResId, o);
-            if(mSketchBm == null) {
-                Log.w(TAG, "could not decode sketch image");
-            }
-        } else {
-            Log.w(TAG, "bad sketch resource for filter: " + mName);
-        }
     }
 }

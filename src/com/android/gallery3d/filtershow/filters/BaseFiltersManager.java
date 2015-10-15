@@ -376,32 +376,29 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     public void addDualCam(Context context) {
         int[] textId = {
                 R.string.focus,
-                R.string.halo,
-                R.string.blur
+                R.string.halo
         };
 
         int[] overlayId = {
                 R.drawable.filtershow_dualcam_focus,
-                R.drawable.filtershow_dualcam_halo,
-                R.drawable.filtershow_dualcam_blur
+                R.drawable.filtershow_dualcam_halo
         };
 
         String[] serializationNames = {
                 "DUAL_CAM_FOCUS",
-                "DUAL_CAM_HALO",
-                "DUAL_CAM_BLUR"
+                "DUAL_CAM_HALO"
         };
 
         // intensity range as defined by ddm lib
         int[][] minMaxValues = {
                 {0,5,10},
-                {0,3,7},
-                {0,4,9}
+                {0,5,10}
         };
 
         FilterDualCamSketchRepresentation none =
-                new FilterDualCamSketchRepresentation(context.getString(R.string.none), 0, 0);
+                new FilterDualCamSketchRepresentation(context.getString(R.string.none), R.string.none);
         none.setEditorId(ImageOnlyEditor.ID);
+        none.setSerializationName("DUAL_CAM_NONE");
         mDualCam.add(none);
 
         for (int i = 0; i < textId.length; i++) {
@@ -417,7 +414,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         }
 
         FilterDualCamSketchRepresentation sketch = new FilterDualCamSketchRepresentation(
-                context.getString(R.string.sketch), R.string.sketch, R.raw.sketch);
+                context.getString(R.string.sketch), R.string.sketch);
         sketch.setOverlayId(R.drawable.filtershow_dualcam_sketch);
         sketch.setOverlayOnly(true);
         sketch.setSerializationName("DUAL_CAM_SKETCH");
@@ -443,7 +440,5 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         filterBorder.setResources(resources);
         ImageFilterFx filterFx = (ImageFilterFx) getFilter(ImageFilterFx.class);
         filterFx.setResources(resources);
-        ImageFilterDualCamSketch filterSketch = (ImageFilterDualCamSketch) getFilter(ImageFilterDualCamSketch.class);
-        filterSketch.setResources(resources);
     }
 }
