@@ -17,6 +17,7 @@
 package com.android.gallery3d.data;
 
 import android.annotation.TargetApi;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import com.android.gallery3d.ui.Log;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -307,5 +309,47 @@ public class DecodeUtils {
             Options options) {
         decodeBounds(jc, fileDescriptor, options);
         return GalleryBitmapPool.getInstance().get(options.outWidth, options.outHeight);
+    }
+
+    public static Bitmap decodeBitmap(Resources res, int resId, int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize (use 1024 as maximum size, the minimum supported
+        // by all the gles20 devices)
+        options.inSampleSize = calculateBitmapRatio(
+                                    options,
+                                    Math.min(reqWidth, 1024),
+                                    Math.min(reqHeight, 1024));
+
+        // Decode the bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        options.inPreferQualityOverSpeed = false;
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inDither = true;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    private static int calculateBitmapRatio(Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            // Calculate ratios of height and width to requested height and width
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value, this will guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+
+        return inSampleSize;
     }
 }

@@ -41,7 +41,7 @@ public class StyleChooser implements Control {
         int n = mParameter.getNumberOfStyles();
         mIconButton.clear();
         Resources res = context.getResources();
-        int dim = res.getDimensionPixelSize(R.dimen.draw_style_icon_dim);
+        int dim = mTopView.getMeasuredWidth() / n;
         LayoutParams lp = new LayoutParams(dim, dim);
         for (int i = 0; i < n; i++) {
             final ImageButton button = new ImageButton(context);

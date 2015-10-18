@@ -21,7 +21,7 @@
     <ImageView
         android:id="@+id/menu_scenemode_indicator"
         style="@style/MenuIndicator"
-        android:layout_gravity="left|top"
+        android:layout_gravity="start|top"
         android:src="@drawable/ic_indicator_sce_off" />
 
     <ImageView
@@ -33,13 +33,13 @@
     <ImageView
         android:id="@+id/menu_flash_indicator"
         style="@style/MenuIndicator"
-        android:layout_gravity="right|top"
+        android:layout_gravity="end|top"
         android:src="@drawable/ic_indicator_flash_auto" />
 
     <ImageView
         android:id="@+id/menu_exposure_indicator"
         style="@style/MenuIndicator"
-        android:layout_gravity="left|bottom"
+        android:layout_gravity="start|bottom"
         android:src="@drawable/ic_indicator_ev_0" />
 
     <ImageView
@@ -51,7 +51,7 @@
     <ImageView
         android:id="@+id/menu_wb_indicator"
         style="@style/MenuIndicator"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
         android:src="@drawable/ic_indicator_wb_off" />
 
 </FrameLayout>

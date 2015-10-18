@@ -18,11 +18,11 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.Element;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.Script.LaunchOptions;
-import android.support.v8.renderscript.Type;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.Script;
+import android.renderscript.Type;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
@@ -132,7 +132,7 @@ public class ImageFilterChanSat extends ImageFilterRS {
         int width = in.getType().getX();
         int height = in.getType().getY();
 
-        LaunchOptions options = new LaunchOptions();
+        Script.LaunchOptions options = new Script.LaunchOptions();
         int ty;
         options.setX(0, width);
 

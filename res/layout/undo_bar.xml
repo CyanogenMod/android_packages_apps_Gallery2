@@ -27,5 +27,5 @@
     <TextView android:id="@+id/undo_button"
             style="@style/UndoButton"
             android:text="@string/undo"
-            android:drawableLeft="@drawable/ic_menu_revert_holo_dark"/>
+            android:drawableStart="@drawable/ic_menu_revert_holo_dark"/>
 </LinearLayout>

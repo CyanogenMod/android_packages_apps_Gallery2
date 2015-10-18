@@ -23,7 +23,7 @@
               android:padding="10dip">
 
 <ProgressBar android:id="@+id/progress_bar"
-             android:layout_alignParentRight="true"
+             android:layout_alignParentEnd="true"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:gravity="center_vertical"

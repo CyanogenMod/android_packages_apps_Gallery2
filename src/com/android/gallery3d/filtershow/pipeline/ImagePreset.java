@@ -18,7 +18,7 @@ package com.android.gallery3d.filtershow.pipeline;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.support.v8.renderscript.Allocation;
+import android.renderscript.Allocation;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -67,9 +67,11 @@ public class ImagePreset {
     }
 
     public ImagePreset(ImagePreset source) {
-        for (int i = 0; i < source.mFilters.size(); i++) {
-            FilterRepresentation sourceRepresentation = source.mFilters.elementAt(i);
-            mFilters.add(sourceRepresentation.copy());
+        if (source != null && source.mFilters != null) {
+            for (int i = 0; i < source.mFilters.size(); i++) {
+                FilterRepresentation sourceRepresentation = source.mFilters.elementAt(i);
+                mFilters.add(sourceRepresentation.copy());
+            }
         }
     }
 
@@ -237,7 +239,7 @@ public class ImagePreset {
                 FilterRepresentation a = preset.mFilters.elementAt(i);
                 FilterRepresentation b = mFilters.elementAt(i);
 
-                if (!a.same(b)) {
+                if (!a.equals(b)) {
                     return false;
                 }
             }

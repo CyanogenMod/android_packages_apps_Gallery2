@@ -16,8 +16,10 @@
 
 package com.android.gallery3d.data;
 
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import com.android.gallery3d.app.GalleryApp;
 import com.android.gallery3d.common.BitmapUtils;
@@ -32,6 +34,8 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
     private Path mPath;
     private int mType;
     private int mTargetSize;
+    private String mFilePath;
+    private String mMimeType;
     private long mTimeModified;
 
     public ImageCacheRequest(GalleryApp application,
@@ -43,6 +47,14 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         mTimeModified = timeModified;
     }
 
+    public ImageCacheRequest(GalleryApp application,
+            Path path, long timeModified, int type, int targetSize, String filepath, String mimeType) {
+        this(application, path, timeModified, type,
+                targetSize);
+        mFilePath = filepath;
+        mMimeType = mimeType;
+    }
+
     private String debugTag() {
         return mPath + "," + mTimeModified + "," +
                 ((mType == MediaItem.TYPE_THUMBNAIL) ? "THUMB" :
@@ -51,6 +63,14 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
 
     @Override
     public Bitmap run(JobContext jc) {
+        if (!TextUtils.isEmpty(mFilePath) && !TextUtils.isEmpty(mMimeType)
+                && !mMimeType.startsWith("video/")) {
+            if (DrmHelper.isDrmFile(mFilePath)
+                    && mType != MediaItem.TYPE_MICROTHUMBNAIL) {
+                return onDecodeOriginal(jc, mType);
+            }
+        }
+
         ImageCacheService cacheService = mApplication.getImageCacheService();
 
         BytesBuffer buffer = MediaItem.getBytesBufferPool().get();
@@ -76,6 +96,7 @@ abstract class ImageCacheRequest implements Job<Bitmap> {
         } finally {
             MediaItem.getBytesBufferPool().recycle(buffer);
         }
+
         Bitmap bitmap = onDecodeOriginal(jc, mType);
         if (jc.isCancelled()) return null;
 

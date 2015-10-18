@@ -139,6 +139,8 @@ public class DetailsHelper {
                 return context.getString(R.string.exposure_time);
             case MediaDetails.INDEX_ISO:
                 return context.getString(R.string.iso);
+            case MediaDetails.INDEX_DATETIME_ORIGINAL:
+                return context.getString(R.string.record_time);
             default:
                 return "Unknown key" + key;
         }

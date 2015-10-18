@@ -37,7 +37,7 @@
         <item name="android:actionBarStyle">@style/Holo.ActionBar</item>
         <item name="android:colorBackground">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowBackground">@drawable/filtershow_tiled_background</item>
+        <item name="android:windowBackground">@color/filtershow_background</item>
     </style>
     <style name="Holo.ActionBar" parent="android:Widget.Holo.ActionBar">
         <item name="android:displayOptions">useLogo|showHome</item>
@@ -128,8 +128,8 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/setting_row_height</item>
-        <item name="android:paddingLeft">@dimen/setting_item_list_margin</item>
-        <item name="android:paddingRight">@dimen/setting_item_list_margin</item>
+        <item name="android:paddingStart">@dimen/setting_item_list_margin</item>
+        <item name="android:paddingEnd">@dimen/setting_item_list_margin</item>
         <item name="android:background">@drawable/setting_picker</item>
     </style>
     <style name="OnViewfinderLabel">
@@ -138,8 +138,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingTop">3dp</item>
         <item name="android:paddingBottom">3dp</item>
         <item name="android:textColor">@android:color/white</item>
@@ -150,8 +150,8 @@
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
     </style>
     <style name="EffectSettingGrid">
-        <item name="android:layout_marginLeft">@dimen/setting_item_list_margin</item>
-        <item name="android:layout_marginRight">@dimen/setting_item_list_margin</item>
+        <item name="android:layout_marginStart">@dimen/setting_item_list_margin</item>
+        <item name="android:layout_marginEnd">@dimen/setting_item_list_margin</item>
         <item name="android:paddingBottom">3dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -166,8 +166,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">9dp</item>
         <item name="android:paddingBottom">9dp</item>
-        <item name="android:paddingLeft">2dp</item>
-        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
         <item name="android:background">@drawable/setting_picker</item>
     </style>
     <style name="EffectSettingItemTitle">
@@ -188,12 +188,12 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">@dimen/effect_setting_type_text_min_height</item>
-        <item name="android:paddingLeft">@dimen/effect_setting_type_text_left_padding</item>
+        <item name="android:paddingStart">@dimen/effect_setting_type_text_left_padding</item>
     </style>
     <style name="EffectTypeSeparator">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
         <item name="android:layout_marginBottom">14dp</item>
         <item name="android:layout_height">2dp</item>
         <item name="android:background">#2c2c2c</item>
@@ -215,8 +215,8 @@
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:minHeight">48dip</item>
         <item name="android:minWidth">64dip</item>
-        <item name="android:paddingLeft">4dip</item>
-        <item name="android:paddingRight">4dip</item>
+        <item name="android:paddingStart">4dip</item>
+        <item name="android:paddingEnd">4dip</item>
     </style>
 
     <style name="ReviewControlText_xlarge">
@@ -224,8 +224,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@drawable/bg_pressed_exit_fading</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">2dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">10dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">18sp</item>
@@ -240,7 +240,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/popup_title_color</item>
-        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
     </style>
     <style name="PanoCustomDialogText_xlarge">
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
@@ -266,9 +266,9 @@
         <item name="android:layout_height">match_parent</item>
     </style>
     <style name="UndoBar">
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:layout_marginRight">4dp</item>
-        <item name="android:paddingLeft">16dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:paddingStart">16dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:layout_gravity">bottom</item>
@@ -284,12 +284,12 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
     </style>
     <style name="UndoButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textStyle">bold</item>

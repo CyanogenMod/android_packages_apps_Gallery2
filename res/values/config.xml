@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<!-- Copyright (c) 2014, The Linux Foundation. All rights reserved.
+     Not a Contribution.
+
+     Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,4 +22,7 @@
 <resources>
     <!-- Maximum recording length in milliseconds. 0 means unlimited. -->
     <integer name="max_video_recording_length">0</integer>
+    <bool name="config_show_more_images">false</bool>
+
+    <bool name="config_scroll_horizontal">false</bool>
 </resources>

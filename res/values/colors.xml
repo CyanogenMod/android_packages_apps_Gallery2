@@ -15,7 +15,10 @@
 -->
 <resources>
     <color name="default_background">#000</color>
-
+    <color name="primary">#37474F</color>
+    <color name="primary_dark">#263238</color>
+    <color name="accent">#607D8B</color>
+    <color name="material_blue_grey_950">#ff21272b</color>
     <!-- configuration for album set page -->
     <color name="albumset_background">#1A1A1A</color>
     <color name="albumset_placeholder">#333</color>
@@ -70,4 +73,8 @@
     <color name="face_detect_fail">#80d05060</color>
     <color name="gray">#FFAAAAAA</color>
 
+    <color name="highlight">#f41e26</color>
+    <color name="lowlight">#650101</color>
+    <color name="grey">#e7e7e7</color>
+    <color name="disabled_knob">#575757</color>
 </resources>

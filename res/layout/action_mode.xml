@@ -14,35 +14,22 @@
      limitations under the License.
 -->
 
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/navigation_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <ImageView android:layout_gravity="right"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/dropdown_ic_arrow_normal_holo_dark" />
-        <Button android:id="@+id/selection_menu"
-                style="?android:attr/actionButtonStyle"
-                android:divider="?android:attr/listDividerAlertDialog"
-                android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-                android:textColor="?android:attr/actionMenuTextColor"
-                android:singleLine="true"
-                android:gravity="left|center_vertical"
-                android:paddingRight="25dip"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-    </FrameLayout>
-    <ImageView android:layout_marginLeft="16dip"
-            android:layout_marginRight="8dip"
+    <Button android:id="@+id/selection_menu"
+            style="?android:attr/actionButtonStyle"
+            android:divider="?android:attr/listDividerAlertDialog"
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+            android:textColor="?android:attr/actionMenuTextColor"
+            android:singleLine="true"
+            android:gravity="left|center_vertical"
+            android:paddingRight="25dip"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:src="@drawable/cab_divider_vertical_dark" />
-</LinearLayout>
+            android:layout_height="match_parent" />
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:src="@drawable/dropdown_ic_arrow"
+               android:layout_toRightOf="@id/selection_menu"/>
+
+</RelativeLayout>

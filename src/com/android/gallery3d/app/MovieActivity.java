@@ -18,31 +18,63 @@ package com.android.gallery3d.app;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.ActionBar.OnMenuVisibilityListener;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.KeyguardManager;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
 import android.content.AsyncQueryHandler;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.AudioEffect.Descriptor;
+import android.media.audiofx.BassBoost;
+import android.media.audiofx.Virtualizer;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ShareActionProvider;
+import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.ui.Knob;
+import org.codeaurora.gallery3d.ext.IActivityHooker;
+import org.codeaurora.gallery3d.ext.IMovieItem;
+import org.codeaurora.gallery3d.ext.MovieItem;
+import org.codeaurora.gallery3d.ext.MovieUtils;
+import org.codeaurora.gallery3d.video.ExtensionHelper;
+import org.codeaurora.gallery3d.video.MovieTitleHelper;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothProfile;
 
 /**
  * This activity plays a video from a specified URI.
@@ -53,14 +85,77 @@ import com.android.gallery3d.common.Utils;
  */
 public class MovieActivity extends Activity {
     @SuppressWarnings("unused")
-    private static final String TAG = "MovieActivity";
-    public static final String KEY_LOGO_BITMAP = "logo-bitmap";
-    public static final String KEY_TREAT_UP_AS_BACK = "treat-up-as-back";
+    private static final String  TAG = "MovieActivity";
+    private static final boolean LOG = false;
+    public  static final String  KEY_LOGO_BITMAP = "logo-bitmap";
+    public  static final String  KEY_TREAT_UP_AS_BACK = "treat-up-as-back";
+    private static final String  VIDEO_SDP_MIME_TYPE = "application/sdp";
+    private static final String  VIDEO_SDP_TITLE = "rtsp://";
+    private static final String  VIDEO_FILE_SCHEMA = "file";
+    private static final String  VIDEO_MIME_TYPE = "video/*";
+    private static final String  SHARE_HISTORY_FILE = "video_share_history_file";
 
     private MoviePlayer mPlayer;
-    private boolean mFinishOnCompletion;
-    private Uri mUri;
-    private boolean mTreatUpAsBack;
+    private boolean     mFinishOnCompletion;
+    private Uri         mUri;
+
+    private static final short BASSBOOST_MAX_STRENGTH   = 1000;
+    private static final short VIRTUALIZER_MAX_STRENGTH = 1000;
+
+    private boolean mIsHeadsetOn = false;
+    private boolean mVirtualizerSupported = false;
+    private boolean mBassBoostSupported = false;
+
+    static enum Key {
+        global_enabled, bb_strength, virt_strength
+    };
+
+    private BassBoost   mBassBoostEffect;
+    private Virtualizer mVirtualizerEffect;
+    private AlertDialog mEffectDialog;
+    private ToggleButton mSwitch;
+    private Knob        mBassBoostKnob;
+    private Knob        mVirtualizerKnob;
+
+    private SharedPreferences   mPrefs;
+    private ShareActionProvider mShareProvider;
+    private IMovieItem          mMovieItem;
+    private IActivityHooker     mMovieHooker;
+    private KeyguardManager     mKeyguardManager;
+
+    private boolean mResumed        = false;
+    private boolean mControlResumed = false;
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final String action = intent.getAction();
+            final AudioManager audioManager =
+                (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                mIsHeadsetOn = (intent.getIntExtra("state", 0) == 1)
+                        || audioManager.isBluetoothA2dpOn();
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)
+                    || action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                final int deviceClass = ((BluetoothDevice)
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE))
+                        .getBluetoothClass().getDeviceClass();
+                if ((deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES)
+                        || (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET)) {
+                    mIsHeadsetOn = action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)
+                            || audioManager.isWiredHeadsetOn();
+                }
+            } else if (action.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+                mIsHeadsetOn = false;
+            }
+            if (mEffectDialog != null) {
+                if (!mIsHeadsetOn && !isBtHeadsetConnected() && mEffectDialog.isShowing()) {
+                    mEffectDialog.dismiss();
+                    showHeadsetPlugToast();
+                }
+            }
+        }
+    };
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void setSystemUiVisibility(View rootView) {
@@ -84,16 +179,24 @@ public class MovieActivity extends Activity {
         setSystemUiVisibility(rootView);
 
         Intent intent = getIntent();
+
+        mMovieHooker = ExtensionHelper.getHooker(this);
+        initMovieInfo(intent);
+
         initializeActionBar(intent);
         mFinishOnCompletion = intent.getBooleanExtra(
                 MediaStore.EXTRA_FINISH_ON_COMPLETION, true);
-        mTreatUpAsBack = intent.getBooleanExtra(KEY_TREAT_UP_AS_BACK, false);
-        mPlayer = new MoviePlayer(rootView, this, intent.getData(), savedInstanceState,
+        mPrefs = getSharedPreferences(getApplicationContext().getPackageName(),
+                Context.MODE_PRIVATE);
+        mPlayer = new MoviePlayer(rootView, this, mMovieItem, savedInstanceState,
                 !mFinishOnCompletion) {
             @Override
             public void onCompletion() {
                 if (mFinishOnCompletion) {
-                    finish();
+                    finishActivity();
+                    mControlResumed = false;
+                    Bookmarker mBookmarker = new Bookmarker(MovieActivity.this);
+                    mBookmarker.setBookmark(mMovieItem.getUri(), 0, 1);
                 }
             }
         };
@@ -114,6 +217,39 @@ public class MovieActivity extends Activity {
         // We set the background in the theme to have the launching animation.
         // But for the performance (and battery), we remove the background here.
         win.setBackgroundDrawable(null);
+        mMovieHooker.init(this, intent);
+        mMovieHooker.setParameter(null, mPlayer.getMoviePlayerExt());
+        mMovieHooker.setParameter(null, mMovieItem);
+        mMovieHooker.setParameter(null, mPlayer.getVideoSurface());
+        mMovieHooker.onCreate(savedInstanceState);
+
+        // Determine available/supported effects
+        final Descriptor[] effects = AudioEffect.queryEffects();
+        for (final Descriptor effect : effects) {
+            if (effect.type.equals(AudioEffect.EFFECT_TYPE_VIRTUALIZER)) {
+                mVirtualizerSupported = true;
+            } else if (effect.type.equals(AudioEffect.EFFECT_TYPE_BASS_BOOST)) {
+                mBassBoostSupported = true;
+            }
+        }
+
+        mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mPlayer.onPrepared(mp);
+                initEffects(mp.getAudioSessionId());
+            }
+        });
+
+        // DRM validation
+        Uri original = intent.getData();
+        String mimeType = intent.getType();
+        String filepath = DrmHelper.getFilePath(this, original);
+        if (DrmHelper.isDrmFile(filepath)) {
+            if (!DrmHelper.validateLicense(this, filepath, mimeType)) {
+                finish();
+            }
+        }
     }
 
     private void setActionBarLogoFromIntent(Intent intent) {
@@ -132,9 +268,21 @@ public class MovieActivity extends Activity {
         }
         setActionBarLogoFromIntent(intent);
         actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_HOME_AS_UP,
-                ActionBar.DISPLAY_HOME_AS_UP);
+                ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE,
+                ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
 
+        actionBar.addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
+            @Override
+            public void onMenuVisibilityChanged(boolean isVisible) {
+                if (mPlayer != null) {
+                    if (isVisible) {
+                        mPlayer.cancelHidingController();
+                    } else {
+                        mPlayer.restartHidingController();
+                    }
+                }
+            }
+        });
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
         if (title != null) {
             actionBar.setTitle(title);
@@ -170,24 +318,193 @@ public class MovieActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.movie, menu);
-
-        // Document says EXTRA_STREAM should be a content: Uri
-        // So, we only share the video if it's "content:".
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        if (ContentResolver.SCHEME_CONTENT.equals(mUri.getScheme())) {
-            shareItem.setVisible(true);
-            ((ShareActionProvider) shareItem.getActionProvider())
-                    .setShareIntent(createShareIntent());
-        } else {
-            shareItem.setVisible(false);
+        MenuItem shareMenu = menu.findItem(R.id.action_share);
+        ShareActionProvider provider = (ShareActionProvider) shareMenu.getActionProvider();
+        mShareProvider = provider;
+        if (mShareProvider != null) {
+            // share provider is singleton, we should refresh our history file.
+            mShareProvider.setShareHistoryFileName(SHARE_HISTORY_FILE);
         }
+        refreshShareProvider(mMovieItem);
+
+        final MenuItem mi = menu.add(R.string.audio_effects);
+        mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onAudioEffectsMenuItemClick();
+                return true;
+            }
+        });
+        mMovieHooker.onCreateOptionsMenu(menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        mMovieHooker.onPrepareOptionsMenu(menu);
+        return true;
+    }
+
+    private void onAudioEffectsMenuItemClick() {
+        if (!mIsHeadsetOn && !isBtHeadsetConnected()) {
+            showHeadsetPlugToast();
+        } else {
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View content = factory.inflate(R.layout.audio_effects_dialog, null);
+            final View title = factory.inflate(R.layout.audio_effects_title, null);
+
+            boolean enabled = mPrefs.getBoolean(Key.global_enabled.toString(), false);
+
+            mSwitch = (ToggleButton) title.findViewById(R.id.audio_effects_switch);
+            mSwitch.setChecked(enabled);
+            mSwitch.setBackgroundResource(enabled ?
+                    R.drawable.switch_thumb_activated : R.drawable.switch_thumb_off);
+
+            mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mSwitch.setBackgroundResource(isChecked ?
+                            R.drawable.switch_thumb_activated : R.drawable.switch_thumb_off);
+                    if(mBassBoostEffect != null) {
+                        mBassBoostEffect.setEnabled(isChecked);
+                    }
+                    if(mVirtualizerEffect != null) {
+                        mVirtualizerEffect.setEnabled(isChecked);
+                    }
+                    mBassBoostKnob.setEnabled(isChecked);
+                    mVirtualizerKnob.setEnabled(isChecked);
+                }
+            });
+
+            mBassBoostKnob = (Knob) content.findViewById(R.id.bBStrengthKnob);
+            mBassBoostKnob.setEnabled(enabled);
+            mBassBoostKnob.setMax(BASSBOOST_MAX_STRENGTH);
+            mBassBoostKnob.setValue(mPrefs.getInt(Key.bb_strength.toString(), 0));
+            mBassBoostKnob.setOnKnobChangeListener(new Knob.OnKnobChangeListener() {
+                @Override
+                public void onValueChanged(Knob knob, int value, boolean fromUser) {
+                    if(mBassBoostEffect != null) {
+                        mBassBoostEffect.setStrength((short) value);
+                    }
+                }
+
+                @Override
+                public boolean onSwitchChanged(Knob knob, boolean enabled) {
+                    return false;
+                }
+            });
+
+            mVirtualizerKnob = (Knob) content.findViewById(R.id.vIStrengthKnob);
+            mVirtualizerKnob.setEnabled(enabled);
+            mVirtualizerKnob.setMax(VIRTUALIZER_MAX_STRENGTH);
+            mVirtualizerKnob.setValue(mPrefs.getInt(Key.virt_strength.toString(), 0));
+            mVirtualizerKnob.setOnKnobChangeListener(new Knob.OnKnobChangeListener() {
+                @Override
+                public void onValueChanged(Knob knob, int value, boolean fromUser) {
+                    if(mVirtualizerEffect != null) {
+                        mVirtualizerEffect.setStrength((short) value);
+                    }
+                }
+
+                @Override
+                public boolean onSwitchChanged(Knob knob, boolean enabled) {
+                    return false;
+                }
+            });
+
+            mEffectDialog = new AlertDialog.Builder(MovieActivity.this,
+                    AlertDialog.THEME_HOLO_DARK)
+                .setCustomTitle(title)
+                .setView(content)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = mPrefs.edit();
+                        editor.putBoolean(Key.global_enabled.toString(), mSwitch.isChecked());
+                        editor.putInt(Key.bb_strength.toString(), mBassBoostKnob.getValue());
+                        editor.putInt(Key.virt_strength.toString(),
+                                mVirtualizerKnob.getValue());
+                        editor.commit();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean enabled = mPrefs.getBoolean(Key.global_enabled.toString(), false);
+                        if(mBassBoostEffect != null) {
+                            mBassBoostEffect.setStrength((short)
+                                    mPrefs.getInt(Key.bb_strength.toString(), 0));
+                            mBassBoostEffect.setEnabled(enabled);
+                        }
+                        if(mVirtualizerEffect != null) {
+                            mVirtualizerEffect.setStrength((short)
+                                mPrefs.getInt(Key.virt_strength.toString(), 0));
+                            mVirtualizerEffect.setEnabled(enabled);
+                        }
+                    }
+                })
+                .setCancelable(false)
+                .create();
+            mEffectDialog.show();
+            mEffectDialog.findViewById(com.android.internal.R.id.titleDivider)
+                .setBackgroundResource(R.color.highlight);
+        }
+    }
+
+    public void initEffects(int sessionId) {
+        // Singleton instance
+        if ((mBassBoostEffect == null) && mBassBoostSupported) {
+            mBassBoostEffect = new BassBoost(0, sessionId);
+        }
+
+        if ((mVirtualizerEffect == null) && mVirtualizerSupported) {
+            mVirtualizerEffect = new Virtualizer(0, sessionId);
+        }
+
+        if (mIsHeadsetOn || isBtHeadsetConnected()) {
+            if (mPrefs.getBoolean(Key.global_enabled.toString(), false)) {
+                if (mBassBoostSupported) {
+                    mBassBoostEffect.setStrength((short)
+                        mPrefs.getInt(Key.bb_strength.toString(), 0));
+                    mBassBoostEffect.setEnabled(true);
+                }
+                if (mVirtualizerSupported) {
+                    mVirtualizerEffect.setStrength((short)
+                        mPrefs.getInt(Key.virt_strength.toString(), 0));
+                    mVirtualizerEffect.setEnabled(true);
+                }
+            } else {
+                if (mBassBoostSupported) {
+                    mBassBoostEffect.setStrength((short)
+                        mPrefs.getInt(Key.bb_strength.toString(), 0));
+                }
+                if (mVirtualizerSupported) {
+                    mVirtualizerEffect.setStrength((short)
+                        mPrefs.getInt(Key.virt_strength.toString(), 0));
+                }
+            }
+        }
+
+    }
+
+    public void releaseEffects() {
+        if (mBassBoostEffect != null) {
+            mBassBoostEffect.setEnabled(false);
+            mBassBoostEffect.release();
+            mBassBoostEffect = null;
+        }
+        if (mVirtualizerEffect != null) {
+            mVirtualizerEffect.setEnabled(false);
+            mVirtualizerEffect.release();
+            mVirtualizerEffect = null;
+        }
     }
 
     private Intent createShareIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
-        intent.putExtra(Intent.EXTRA_STREAM, mUri);
+        intent.putExtra(Intent.EXTRA_STREAM, mMovieItem.getUri());
         return intent;
     }
 
@@ -195,19 +512,23 @@ public class MovieActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (mTreatUpAsBack) {
-                finish();
-            } else {
-                startActivity(new Intent(this, GalleryActivity.class));
-                finish();
-            }
+         // If click back up button, we will always finish current activity and 
+         // back to previous one.
+            finish();
             return true;
         } else if (id == R.id.action_share) {
             startActivity(Intent.createChooser(createShareIntent(),
                     getString(R.string.share)));
             return true;
         }
-        return false;
+        return mMovieHooker.onOptionsItemSelected(item);
+    }
+
+    public void showHeadsetPlugToast() {
+        final Toast toast = Toast.makeText(getApplicationContext(), R.string.headset_plug,
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, toast.getXOffset() / 2, toast.getYOffset() / 2);
+        toast.show();
     }
 
     @Override
@@ -216,6 +537,8 @@ public class MovieActivity extends Activity {
                 .requestAudioFocus(null, AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         super.onStart();
+        mMovieHooker.onStart();
+        registerScreenReceiver();
     }
 
     @Override
@@ -223,18 +546,72 @@ public class MovieActivity extends Activity {
         ((AudioManager) getSystemService(AUDIO_SERVICE))
                 .abandonAudioFocus(null);
         super.onStop();
+        if (mControlResumed && mPlayer != null) {
+            mPlayer.onStop();
+            mControlResumed = false;
+        }
+        mMovieHooker.onStop();
+        unregisterScreenReceiver();
     }
 
     @Override
     public void onPause() {
-        mPlayer.onPause();
+        // Audio track will be deallocated for local video playback,
+        // thus recycle effect here.
+        releaseEffects();
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            // Do nothing
+        }
+        mResumed = false;
+        if (mControlResumed && mPlayer != null) {
+            mControlResumed = !mPlayer.onPause();
+        }
         super.onPause();
+        mMovieHooker.onPause();
     }
 
     @Override
     public void onResume() {
-        mPlayer.onResume();
+        invalidateOptionsMenu();
+
+        if ((mVirtualizerSupported) || (mBassBoostSupported)) {
+            final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+            intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+            intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            intentFilter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            registerReceiver(mReceiver, intentFilter);
+        }
+
+        mResumed = true;
+        if (!isKeyguardLocked() && !mControlResumed && mPlayer != null) {
+            mPlayer.onResume();
+            mControlResumed = true;
+            //initEffects(mPlayer.getAudioSessionId());
+        }
+        enhanceActionBar();
         super.onResume();
+        mMovieHooker.onResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ||
+            this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mPlayer.setDefaultScreenMode();
+        }
+    }
+
+    private boolean isBtHeadsetConnected() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null && adapter.isEnabled() &&
+            (BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.HEADSET)
+             || BluetoothProfile.STATE_CONNECTED == adapter.getProfileConnectionState(BluetoothProfile.A2DP))) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -245,8 +622,24 @@ public class MovieActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        releaseEffects();
         mPlayer.onDestroy();
         super.onDestroy();
+        mMovieHooker.onDestroy();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (LOG) {
+            Log.v(TAG, "onWindowFocusChanged(" + hasFocus + ") isKeyguardLocked="
+                    + isKeyguardLocked()
+                    + ", mResumed=" + mResumed + ", mControlResumed=" + mControlResumed);
+        }
+        if (hasFocus && !isKeyguardLocked() && mResumed && !mControlResumed && mPlayer != null) {
+            mPlayer.onResume();
+            mControlResumed = true;
+        }
     }
 
     @Override
@@ -259,5 +652,157 @@ public class MovieActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         return mPlayer.onKeyUp(keyCode, event)
                 || super.onKeyUp(keyCode, event);
+    }
+
+    private boolean isSharable() {
+        String scheme = mUri.getScheme();
+        return ContentResolver.SCHEME_FILE.equals(scheme)
+                || (ContentResolver.SCHEME_CONTENT.equals(scheme) && MediaStore.AUTHORITY
+                        .equals(mUri.getAuthority()));
+    }
+    private void initMovieInfo(Intent intent) {
+        Uri original = intent.getData();
+        String mimeType = intent.getType();
+        if (VIDEO_SDP_MIME_TYPE.equalsIgnoreCase(mimeType)
+                && VIDEO_FILE_SCHEMA.equalsIgnoreCase(original.getScheme())) {
+            mMovieItem = new MovieItem(VIDEO_SDP_TITLE + original, mimeType, null);
+        } else {
+            mMovieItem = new MovieItem(original, mimeType, null);
+        }
+        mMovieItem.setOriginalUri(original);
+    }
+
+    // we do not stop live streaming when other dialog overlays it.
+    private BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (LOG) {
+                Log.v(TAG, "onReceive(" + intent.getAction() + ") mControlResumed="
+                        + mControlResumed);
+            }
+            if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                // Only stop video.
+                if (mControlResumed) {
+                    mPlayer.onStop();
+                    mControlResumed = false;
+                }
+            } else if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+                if (!mControlResumed) {
+                    mPlayer.onResume();
+                    mControlResumed = true;
+                }
+            }
+        }
+
+    };
+
+    private void registerScreenReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        registerReceiver(mScreenReceiver, filter);
+    }
+
+    private void unregisterScreenReceiver() {
+        unregisterReceiver(mScreenReceiver);
+    }
+
+    private boolean isKeyguardLocked() {
+        if (mKeyguardManager == null) {
+            mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        }
+        // isKeyguardSecure excludes the slide lock case.
+        boolean locked = (mKeyguardManager != null)
+                && mKeyguardManager.inKeyguardRestrictedInputMode();
+        if (LOG) {
+            Log.v(TAG, "isKeyguardLocked() locked=" + locked + ", mKeyguardManager="
+                    + mKeyguardManager);
+        }
+        return locked;
+    }
+
+    public void refreshMovieInfo(IMovieItem info) {
+        mMovieItem = info;
+        setActionBarTitle(info.getTitle());
+        refreshShareProvider(info);
+        mMovieHooker.setParameter(null, mMovieItem);
+    }
+
+    private void refreshShareProvider(IMovieItem info) {
+        // we only share the video if it's "content:".
+        if (mShareProvider != null) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            if (MovieUtils.isLocalFile(info.getUri(), info.getMimeType())) {
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_STREAM, info.getUri());
+            } else {
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(info.getUri()));
+            }
+            mShareProvider.setShareIntent(intent);
+        }
+    }
+
+    private void enhanceActionBar() {
+        final IMovieItem movieItem = mMovieItem;// remember original item
+        final Uri uri = mMovieItem.getUri();
+        final String scheme = mMovieItem.getUri().getScheme();
+        final String authority = mMovieItem.getUri().getAuthority();
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String title = null;
+                if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+                    title = MovieTitleHelper.getTitleFromMediaData(MovieActivity.this, uri);
+                } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+                    title = MovieTitleHelper.getTitleFromDisplayName(MovieActivity.this, uri);
+                    if (title == null) {
+                        title = MovieTitleHelper.getTitleFromData(MovieActivity.this, uri);
+                    }
+                }
+                if (title == null) {
+                    title = MovieTitleHelper.getTitleFromUri(uri);
+                }
+                if (LOG) {
+                    Log.v(TAG, "enhanceActionBar() task return " + title);
+                }
+                return title;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (LOG) {
+                    Log.v(TAG, "onPostExecute(" + result + ") movieItem=" + movieItem
+                            + ", mMovieItem=" + mMovieItem);
+                }
+                movieItem.setTitle(result);
+                if (movieItem == mMovieItem) {
+                    setActionBarTitle(result);
+                }
+            };
+        }.execute();
+        if (LOG) {
+            Log.v(TAG, "enhanceActionBar() " + mMovieItem);
+        }
+    }
+
+    public void setActionBarTitle(String title) {
+        if (LOG) {
+            Log.v(TAG, "setActionBarTitle(" + title + ")");
+        }
+        ActionBar actionBar = getActionBar();
+        if (title != null) {
+            actionBar.setTitle(title);
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        finishActivity();
+    }
+    private void finishActivity(){
+        MovieActivity.this.finish();
+        overridePendingTransition(0,0);
+        return;
     }
 }

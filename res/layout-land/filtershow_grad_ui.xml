@@ -30,14 +30,14 @@
 
         <TextView
                 android:id="@+id/controlName1"
-                android:layout_gravity="left"
-                android:layout_marginLeft="8dip"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dip"
                 android:text="@string/editor_grad_brightness" />
 
         <TextView
                 android:id="@+id/gradBrightnessValue"
-                android:layout_gravity="right"
-                android:layout_marginRight="8dip"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dip"
                 android:textStyle="bold" />
 
         <SeekBar
@@ -58,14 +58,14 @@
 
         <TextView
                 android:id="@+id/controlName2"
-                android:layout_gravity="left"
-                android:layout_marginLeft="8dip"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dip"
                 android:text="@string/editor_grad_saturation"/>
 
         <TextView
                 android:id="@+id/gradSaturationValue"
-                android:layout_gravity="right"
-                android:layout_marginRight="8dip"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dip"
                 android:textStyle="bold" />
 
         <SeekBar
@@ -84,14 +84,14 @@
 
         <TextView
                 android:id="@+id/controlName3"
-                android:layout_gravity="left"
-                android:layout_marginLeft="8dip"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dip"
                 android:text="@string/editor_grad_contrast"/>
 
         <TextView
                 android:id="@+id/gradContrastValue"
-                android:layout_gravity="right"
-                android:layout_marginRight="8dip"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dip"
                 android:textStyle="bold" />
 
         <SeekBar
@@ -120,7 +120,7 @@
             android:background="@drawable/filtershow_button_background"
             android:src="@drawable/filtershow_addpoint"
             android:paddingBottom="8dp"
-            android:layout_marginLeft="48dp" />
+            android:layout_marginStart="48dp" />
 
         <View
             android:layout_width="wrap_content"
@@ -136,9 +136,9 @@
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
-            android:src="@drawable/ic_menu_trash_holo_light"
+            android:src="@drawable/ic_menu_trash"
             android:paddingBottom="8dp"
-            android:layout_marginRight="48dp" />
+            android:layout_marginEnd="48dp" />
 
     </LinearLayout>
 

@@ -84,6 +84,7 @@ import com.android.gallery3d.filtershow.editors.EditorColorBorder;
 import com.android.gallery3d.filtershow.editors.EditorCrop;
 import com.android.gallery3d.filtershow.editors.EditorDraw;
 import com.android.gallery3d.filtershow.editors.EditorGrad;
+import com.android.gallery3d.filtershow.editors.EditorMakeup;
 import com.android.gallery3d.filtershow.editors.EditorManager;
 import com.android.gallery3d.filtershow.editors.EditorMirror;
 import com.android.gallery3d.filtershow.editors.EditorPanel;
@@ -100,6 +101,7 @@ import com.android.gallery3d.filtershow.filters.FilterStraightenRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
+import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
 import com.android.gallery3d.filtershow.history.HistoryItem;
 import com.android.gallery3d.filtershow.history.HistoryManager;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
@@ -120,6 +122,7 @@ import com.android.gallery3d.filtershow.ui.ExportDialog;
 import com.android.gallery3d.filtershow.ui.FramedTextButton;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.photos.data.GalleryBitmapPool;
+import com.thundersoft.hz.selfportrait.makeup.engine.MakeupEngine;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -178,6 +181,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryGeometryAdapter = null;
     private CategoryAdapter mCategoryFiltersAdapter = null;
     private CategoryAdapter mCategoryVersionsAdapter = null;
+    private CategoryAdapter mCategoryMakeupAdapter = null;
     private int mCurrentPanel = MainPanel.LOOKS;
     private Vector<FilterUserPresetRepresentation> mVersions =
             new Vector<FilterUserPresetRepresentation>();
@@ -195,6 +199,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private DialogInterface mCurrentDialog = null;
     private PopupMenu mCurrentMenu = null;
     private boolean mLoadingVisible = true;
+    private boolean mLoadingComplete = false;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -283,6 +288,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         doBindService();
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
         setContentView(R.layout.filtershow_splashscreen);
+        mLoadingComplete = false;
     }
 
     public boolean isShowingImageStatePanel() {
@@ -351,8 +357,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.filtershow_actionbar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(
-                getResources().getColor(R.color.background_screen)));
 
         mSaveButton = actionBar.getCustomView();
         mSaveButton.setOnClickListener(new OnClickListener() {
@@ -380,6 +384,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillTools();
         fillEffects();
         fillVersions();
+        fillMakeup();
     }
 
     public void setupStatePanel() {
@@ -468,6 +473,25 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    private void fillMakeup() {
+        if(!SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+            return;
+        }
+
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> makeups = filtersManager.getMakeup();
+        if (mCategoryMakeupAdapter != null) {
+            mCategoryMakeupAdapter.clear();
+        }
+        mCategoryMakeupAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation makeup : makeups) {
+            if (makeup.getTextId() != 0) {
+                makeup.setName(getString(makeup.getTextId()));
+            }
+            mCategoryMakeupAdapter.add(new Action(this, makeup));
+        }
+    }
+
     private void fillTools() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getTools();
@@ -483,7 +507,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             }
         }
         if (!found) {
-            FilterRepresentation representation = new FilterDrawRepresentation();
+            FilterRepresentation representation =
+                    new FilterDrawRepresentation(getString(R.string.imageDraw));
             Action action = new Action(this, representation);
             action.setIsDoubleAction(true);
             mCategoryGeometryAdapter.add(action);
@@ -528,6 +553,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mEditorPlaceHolder.addEditor(new EditorMirror());
         mEditorPlaceHolder.addEditor(new EditorRotate());
         mEditorPlaceHolder.addEditor(new EditorStraighten());
+        mEditorPlaceHolder.addEditor(new EditorMakeup());
     }
 
     private void setDefaultValues() {
@@ -558,24 +584,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private void fillBorders() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> borders = filtersManager.getBorders();
+        mCategoryBordersAdapter = new CategoryAdapter(this);
 
         for (int i = 0; i < borders.size(); i++) {
             FilterRepresentation filter = borders.get(i);
-            filter.setName(getString(R.string.borders));
+            filter.setName(getString(R.string.borders) + "" + i);
             if (i == 0) {
                 filter.setName(getString(R.string.none));
             }
-        }
-
-        if (mCategoryBordersAdapter != null) {
-            mCategoryBordersAdapter.clear();
-        }
-        mCategoryBordersAdapter = new CategoryAdapter(this);
-        for (FilterRepresentation representation : borders) {
-            if (representation.getTextId() != 0) {
-                representation.setName(getString(representation.getTextId()));
-            }
-            mCategoryBordersAdapter.add(new Action(this, representation, Action.FULL_VIEW));
+            mCategoryBordersAdapter.add(new Action(this, filter, Action.FULL_VIEW));
         }
     }
 
@@ -589,6 +606,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public CategoryAdapter getCategoryBordersAdapter() {
         return mCategoryBordersAdapter;
+    }
+
+    public CategoryAdapter getCategoryMakeupAdapter() {
+        return mCategoryMakeupAdapter;
     }
 
     public CategoryAdapter getCategoryGeometryAdapter() {
@@ -744,16 +765,16 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             MasterImage master = MasterImage.getImage();
             Rect originalBounds = master.getOriginalBounds();
             if (master.supportsHighRes()) {
-                int highresPreviewSize = master.getOriginalBitmapLarge().getWidth() * 2;
-                if (highresPreviewSize > originalBounds.width()) {
-                    highresPreviewSize = originalBounds.width();
-                }
+                int highresPreviewSize = Math.min(MasterImage.MAX_BITMAP_DIM, getScreenImageSize());
+                Log.d(LOGTAG, "FilterShowActivity.LoadHighresBitmapTask.doInBackground(): after, highresPreviewSize is " + highresPreviewSize);
                 Rect bounds = new Rect();
                 Bitmap originalHires = ImageLoader.loadOrientedConstrainedBitmap(master.getUri(),
                         master.getActivity(), highresPreviewSize,
                         master.getOrientation(), bounds);
                 master.setOriginalBounds(bounds);
                 master.setOriginalBitmapHighres(originalHires);
+                Log.d(LOGTAG, "FilterShowActivity.LoadHighresBitmapTask.doInBackground(): originalHires.WH is (" + originalHires.getWidth()
+                        + ", " + originalHires.getHeight() +"), bounds is " + bounds.toString());
                 mBoundService.setOriginalBitmapHighres(originalHires);
                 master.warnListeners();
             }
@@ -766,6 +787,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             if (highresBitmap != null) {
                 float highResPreviewScale = (float) highresBitmap.getWidth()
                         / (float) MasterImage.getImage().getOriginalBounds().width();
+                Log.d(LOGTAG, "FilterShowActivity.LoadHighresBitmapTask.onPostExecute(): highResPreviewScale is " + highResPreviewScale);
                 mBoundService.setHighresPreviewScaleFactor(highResPreviewScale);
             }
             MasterImage.getImage().warnListeners();
@@ -793,6 +815,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
         public LoadBitmapTask() {
             mBitmapSize = getScreenImageSize();
+            Log.d(LOGTAG, "FilterShowActivity.LoadBtimapTask(): mBitmapSize is " + mBitmapSize);
         }
 
         @Override
@@ -849,6 +872,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
             float previewScale = (float) largeBitmap.getWidth()
                     / (float) MasterImage.getImage().getOriginalBounds().width();
+            Log.d(LOGTAG, "FilterShowActivity.LoadBitmapTask.onPostExecute(): previewScale is " + previewScale);
             mBoundService.setPreviewScaleFactor(previewScale);
             if (!mShowingTinyPlanet) {
                 mCategoryFiltersAdapter.removeTinyPlanet();
@@ -857,10 +881,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mCategoryBordersAdapter.imageLoaded();
             mCategoryGeometryAdapter.imageLoaded();
             mCategoryFiltersAdapter.imageLoaded();
+            if(mCategoryMakeupAdapter != null) {
+                mCategoryMakeupAdapter.imageLoaded();
+            }
             mLoadBitmapTask = null;
 
             MasterImage.getImage().warnListeners();
             loadActions();
+            mLoadingComplete = false;
 
             if (mOriginalPreset != null) {
                 MasterImage.getImage().setLoadedPreset(mOriginalPreset);
@@ -1030,6 +1058,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (mShareActionProvider != null) {
             mShareActionProvider.setOnShareTargetSelectedListener(this);
         }
+        if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+            MakeupEngine.getMakeupObj().setContext(getBaseContext());
+        }
     }
 
     @Override
@@ -1162,6 +1193,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void enableSave(boolean enable) {
+        mLoadingComplete = true;
         if (mSaveButton != null) {
             mSaveButton.setEnabled(enable);
         }
@@ -1329,6 +1361,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
         if (currentPanel instanceof MainPanel) {
             if (!mImageShow.hasModifications()) {
+                if (!mLoadingComplete) {
+                    Log.v(LOGTAG,"Background processing is ON, rejecting back key event");
+                    return;
+                }
                 done();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

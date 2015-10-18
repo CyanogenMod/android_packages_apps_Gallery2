@@ -17,7 +17,6 @@
 package com.android.gallery3d.exif;
 
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -101,8 +100,6 @@ public class ExifTag {
     private Object mValue;
     // Value offset in exif header.
     private int mOffset;
-
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("yyyy:MM:dd kk:mm:ss");
 
     /**
      * Returns true if the given IFD is a valid IFD.
@@ -314,13 +311,17 @@ public class ExifTag {
      * Sets a string value into this tag. This method should be used for tags of
      * type {@link #TYPE_ASCII}. The string is converted to an ASCII string.
      * Characters that cannot be converted are replaced with '?'. The length of
-     * the string must be equal to either (component count -1) or (component
-     * count). The final byte will be set to the string null terminator '\0',
-     * overwriting the last character in the string if the value.length is equal
-     * to the component count. This method will fail if:
+     * the string must be equal to either
+     * <ul>
+     * <li>component count - 1 when the terminating '\0' is not present</li>
+     * <li>component count when the terminating '\0' is present</li>
+     * <li>to comply with some non-conformant implementations, the terminating
+     * '\0' will be appended if it's not present and component count equals
+     * the string length; the component count will be updated in that case</li>
+     * This method will fail if:
      * <ul>
      * <li>The data type is not {@link #TYPE_ASCII} or {@link #TYPE_UNDEFINED}.</li>
-     * <li>The length of the string is not equal to (component count -1) or
+     * <li>The length of the string is not equal to (component count - 1) or
      * (component count) in the definition for this tag.</li>
      * </ul>
      */
@@ -331,11 +332,20 @@ public class ExifTag {
 
         byte[] buf = value.getBytes(US_ASCII);
         byte[] finalBuf = buf;
-        if (buf.length > 0) {
-            finalBuf = (buf[buf.length - 1] == 0 || mDataType == TYPE_UNDEFINED) ? buf : Arrays
-                .copyOf(buf, buf.length + 1);
-        } else if (mDataType == TYPE_ASCII && mComponentCountActual == 1) {
-            finalBuf = new byte[] { 0 };
+        if (mDataType == TYPE_ASCII) {
+            if (buf.length > 0) {
+                if (buf[buf.length - 1] != 0) {
+                    finalBuf = Arrays.copyOf(buf, buf.length + 1);
+                    // Apply the workaround for non conformant implementations
+                    // (e.g. Samsung Wave 2): Accept a string with missing
+                    // termination character
+                    if (mComponentCountActual == buf.length) {
+                        mComponentCountActual++;
+                    }
+                }
+            } else if (mComponentCountActual == 1) {
+                finalBuf = new byte[] { 0 };
+            }
         }
         int count = finalBuf.length;
         if (checkBadComponentCount(count)) {
@@ -524,9 +534,10 @@ public class ExifTag {
      * @return true on success
      */
     public boolean setTimeValue(long time) {
-        // synchronized on TIME_FORMAT as SimpleDateFormat is not thread safe
-        synchronized (TIME_FORMAT) {
-            return setValue(TIME_FORMAT.format(new Date(time)));
+        // synchronized on DATETIME_FORMAT as SimpleDateFormat is not thread
+        // safe
+        synchronized (ExifInterface.DATETIME_FORMAT) {
+            return setValue(ExifInterface.DATETIME_FORMAT.format(new Date(time)));
         }
     }
 

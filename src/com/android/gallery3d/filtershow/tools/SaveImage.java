@@ -247,7 +247,7 @@ public class SaveImage {
         if (mimeType == null) {
             mimeType = ImageLoader.getMimeType(mSelectedImageUri);
         }
-        if (mimeType.equals(ImageLoader.JPEG_MIME_TYPE)) {
+        if (ImageLoader.JPEG_MIME_TYPE.equals(mimeType)) {
             InputStream inStream = null;
             try {
                 inStream = mContext.getContentResolver().openInputStream(source);
@@ -256,6 +256,8 @@ public class SaveImage {
                 Log.w(LOGTAG, "Cannot find file: " + source, e);
             } catch (IOException e) {
                 Log.w(LOGTAG, "Cannot read exif for: " + source, e);
+            } catch (NullPointerException e) {
+                Log.w(LOGTAG, "Invalid exif data for: " + source, e);
             } finally {
                 Utils.closeSilently(inStream);
             }
@@ -346,9 +348,9 @@ public class SaveImage {
         // newSourceUri is then pointing to the new location.
         // If no file is moved, newSourceUri will be the same as mSourceUri.
         Uri newSourceUri = mSourceUri;
-        if (!flatten) {
-            newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile);
-        }
+        /*
+         * if (!flatten) { newSourceUri = moveSrcToAuxIfNeeded(mSourceUri, mDestinationFile); }
+         */
 
         Uri savedUri = mSelectedImageUri;
         if (mPreviewImage != null) {
@@ -380,7 +382,7 @@ public class SaveImage {
                     // After this call, mSelectedImageUri will be actually
                     // pointing at the new file mDestinationFile.
                     savedUri = SaveImage.linkNewFileToUri(mContext, mSelectedImageUri,
-                            mDestinationFile, time, !flatten);
+                            mDestinationFile, time, false);
                 }
             }
             if (mCallback != null) {
@@ -700,7 +702,7 @@ public class SaveImage {
         values.put(Images.Media.TITLE, file.getName());
         values.put(Images.Media.DISPLAY_NAME, file.getName());
         values.put(Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(Images.Media.DATE_TAKEN, time);
+        values.put(Images.Media.DATE_TAKEN, time * 1000);
         values.put(Images.Media.DATE_MODIFIED, time);
         values.put(Images.Media.DATE_ADDED, time);
         values.put(Images.Media.ORIENTATION, 0);

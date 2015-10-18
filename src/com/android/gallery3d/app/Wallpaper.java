@@ -44,6 +44,11 @@ public class Wallpaper extends Activity {
     private static final String IMAGE_TYPE = "image/*";
     private static final String KEY_STATE = "activity-state";
     private static final String KEY_PICKED_ITEM = "picked-item";
+    private static final String KEY_ASPECT_X = "aspectX";
+    private static final String KEY_ASPECT_Y = "aspectY";
+    private static final String KEY_SPOTLIGHT_X = "spotlightX";
+    private static final String KEY_SPOTLIGHT_Y = "spotlightY";
+    private static final String KEY_FROM_SCREENCOLOR = "fromScreenColor";
 
     private static final int STATE_INIT = 0;
     private static final int STATE_PHOTO_PICKED = 1;
@@ -100,7 +105,14 @@ public class Wallpaper extends Activity {
             }
             case STATE_PHOTO_PICKED: {
                 Intent cropAndSetWallpaperIntent;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                boolean fromScreenColor = false;
+
+                // Do this for screencolor select and crop image to preview.
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    fromScreenColor = extras.getBoolean(KEY_FROM_SCREENCOLOR, false);
+                }
+                if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) && (!fromScreenColor)) {
                     WallpaperManager wpm = WallpaperManager.getInstance(getApplicationContext());
                     try {
                         cropAndSetWallpaperIntent = wpm.getCropAndSetWallpaperIntent(mPickedItem);
@@ -114,11 +126,23 @@ public class Wallpaper extends Activity {
                     }
                 }
 
-                int width = getWallpaperDesiredMinimumWidth();
-                int height = getWallpaperDesiredMinimumHeight();
-                Point size = getDefaultDisplaySize(new Point());
-                float spotlightX = (float) size.x / width;
-                float spotlightY = (float) size.y / height;
+                int width,height;
+                float spotlightX,spotlightY;
+
+                if (fromScreenColor) {
+                    width = extras.getInt(KEY_ASPECT_X, 0);
+                    height = extras.getInt(KEY_ASPECT_Y, 0);
+                    spotlightX = extras.getFloat(KEY_SPOTLIGHT_X, 0);
+                    spotlightY = extras.getFloat(KEY_SPOTLIGHT_Y, 0);
+                } else {
+                    width = getWallpaperDesiredMinimumWidth();
+                    height = getWallpaperDesiredMinimumHeight();
+                    Point size = getDefaultDisplaySize(new Point());
+                    spotlightX = (float) size.x / width;
+                    spotlightY = (float) size.y / height;
+                }
+
+                //Don't set wallpaper from screencolor.
                 cropAndSetWallpaperIntent = new Intent(CropActivity.CROP_ACTION)
                     .setClass(this, CropActivity.class)
                     .setDataAndType(mPickedItem, IMAGE_TYPE)
@@ -131,7 +155,7 @@ public class Wallpaper extends Activity {
                     .putExtra(CropExtras.KEY_SPOTLIGHT_Y, spotlightY)
                     .putExtra(CropExtras.KEY_SCALE, true)
                     .putExtra(CropExtras.KEY_SCALE_UP_IF_NEEDED, true)
-                    .putExtra(CropExtras.KEY_SET_AS_WALLPAPER, true);
+                    .putExtra(CropExtras.KEY_SET_AS_WALLPAPER, !fromScreenColor);
                 startActivity(cropAndSetWallpaperIntent);
                 finish();
             }

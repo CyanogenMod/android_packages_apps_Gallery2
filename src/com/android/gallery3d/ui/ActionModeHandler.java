@@ -272,7 +272,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         ArrayList<MediaObject> selected = new ArrayList<MediaObject>();
         DataManager manager = mActivity.getDataManager();
         for (Path path : unexpandedPaths) {
-            if (jc.isCancelled()) {
+            if (jc.isCancelled() || !mSelectionManager.inSelectionMode()) {
                 return null;
             }
             selected.add(manager.getMediaObject(path));

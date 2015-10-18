@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -134,7 +138,7 @@ public class AlbumSetPage extends ActivityState implements
 
             int slotViewTop = mActionBar.getHeight() + mConfig.paddingTop;
             int slotViewBottom = bottom - top - mConfig.paddingBottom;
-            int slotViewRight = right - left;
+            int slotViewRight = right - left - mConfig.paddingRight;
 
             if (mShowDetails) {
                 mDetailsHelper.layout(left, slotViewTop, right, bottom);
@@ -142,7 +146,7 @@ public class AlbumSetPage extends ActivityState implements
                 mAlbumSetView.setHighlightItemPath(null);
             }
 
-            mSlotView.layout(0, slotViewTop, slotViewRight, slotViewBottom);
+            mSlotView.layout(mConfig.paddingLeft, slotViewTop, slotViewRight, slotViewBottom);
         }
 
         @Override
@@ -543,6 +547,13 @@ public class AlbumSetPage extends ActivityState implements
             inflater.inflate(R.menu.albumset, menu);
             boolean wasShowingClusterMenu = mShowClusterMenu;
             mShowClusterMenu = !inAlbum;
+            if (mShowClusterMenu != wasShowingClusterMenu) {
+                if (mShowClusterMenu) {
+                    mActionBar.enableClusterMenu(mSelectedAction, this);
+                } else {
+                    mActionBar.disableClusterMenu(true);
+                }
+            }
             boolean selectAlbums = !inAlbum &&
                     mActionBar.getClusterTypeAction() == FilterUtils.CLUSTER_BY_ALBUM;
             MenuItem selectItem = menu.findItem(R.id.action_select);
@@ -560,15 +571,13 @@ public class AlbumSetPage extends ActivityState implements
             helpItem.setVisible(helpIntent != null);
             if (helpIntent != null) helpItem.setIntent(helpIntent);
 
+            MenuItem moreItem = menu.findItem(R.id.action_more_image);
+            moreItem.setVisible(mActivity.getResources().getBoolean(
+                    R.bool.config_show_more_images));
+
+
             mActionBar.setTitle(mTitle);
             mActionBar.setSubtitle(mSubtitle);
-            if (mShowClusterMenu != wasShowingClusterMenu) {
-                if (mShowClusterMenu) {
-                    mActionBar.enableClusterMenu(mSelectedAction, this);
-                } else {
-                    mActionBar.disableClusterMenu(true);
-                }
-            }
         }
         return true;
     }
@@ -577,6 +586,11 @@ public class AlbumSetPage extends ActivityState implements
     protected boolean onItemSelected(MenuItem item) {
         Activity activity = mActivity;
         switch (item.getItemId()) {
+            case R.id.action_more_image:
+                Uri moreUri = Uri.parse(mActivity.getString(R.string.website_for_more_image));
+                Intent moreIntent = new Intent(Intent.ACTION_VIEW, moreUri);
+                mActivity.startActivity(moreIntent);
+                return true;
             case R.id.action_cancel:
                 activity.setResult(Activity.RESULT_CANCELED);
                 activity.finish();
