@@ -17,9 +17,7 @@
 package com.android.gallery3d.data;
 
 import android.content.ContentResolver;
-import android.drm.DrmHelper;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.android.gallery3d.app.GalleryApp;
@@ -75,19 +73,6 @@ class UriSource extends MediaSource {
     @Override
     public Path findPathByUri(Uri uri, String type) {
         String mimeType = getMimeType(uri);
-        if (DrmHelper.isDrmMimeType(mimeType)) {
-            String path = DrmHelper.getFilePath(
-                    mApplication.getAndroidContext(), uri);
-            if (!TextUtils.isEmpty(path)) {
-                try {
-                    return Path.fromString("/uri/"
-                            + URLEncoder.encode(path, CHARSET_UTF_8) + "/"
-                            + URLEncoder.encode(type, CHARSET_UTF_8));
-                } catch (UnsupportedEncodingException e) {
-                    throw new AssertionError(e);
-                }
-            }
-        }
 
         // Try to find a most specific type but it has to be started with "image/"
         if ((type == null) || (IMAGE_TYPE_ANY.equals(type)

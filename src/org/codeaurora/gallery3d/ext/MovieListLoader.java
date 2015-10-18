@@ -172,14 +172,9 @@ public class MovieListLoader implements IMovieListLoader {
                             }
                             cursor.close();
                         }
-                        try {
-                            long curId = Long.parseLong(uri.getPathSegments().get(3));
-                            movieList = fillUriList(MediaStore.Video.Media.BUCKET_ID + "=? ",
-                                    new String[]{String.valueOf(bucketId)}, curId, params[0]);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Exception while creating movie list. " + e);
-                            return null;
-                        }
+                        long curId = Long.parseLong(uri.getPathSegments().get(3));
+                        movieList = fillUriList(MediaStore.Video.Media.BUCKET_ID + "=? ",
+                                new String[]{String.valueOf(bucketId)}, curId, params[0]);
                     } else if (uristr.toLowerCase().startsWith("file://")) {
                         String data = Uri.decode(uri.toString());
                         data = data.replaceAll("'", "''");

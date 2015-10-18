@@ -183,6 +183,7 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
                 ((FadeInTexture) content).isAnimating()) {
             renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
         }
+
         return renderRequestFlags;
     }
 

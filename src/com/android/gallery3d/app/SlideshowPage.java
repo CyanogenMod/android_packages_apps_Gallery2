@@ -16,12 +16,8 @@
 
 package com.android.gallery3d.app;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +37,9 @@ import com.android.gallery3d.ui.SlideshowView;
 import com.android.gallery3d.ui.SynchronizedHandler;
 import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.FutureListener;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class SlideshowPage extends ActivityState {
     private static final String TAG = "SlideshowPage";
@@ -339,15 +338,6 @@ public class SlideshowPage extends ActivityState {
                 mData = mMediaSet.getMediaItem(index, DATA_SIZE);
                 mDataStart = index;
                 dataEnd = index + mData.size();
-
-                // Consume license once in each element of the slide-show
-                // This is a non-blocking loop operation
-                for (int i = 0; i < mData.size(); i++) {
-                    String path = mData.get(i).getFilePath();
-                    if (DrmHelper.isDrmFile(path)) {
-                        DrmHelper.consumeDrmRights(path, "image/*");
-                    }
-                }
             }
 
             return (index < mDataStart || index >= dataEnd) ? null : mData.get(index - mDataStart);
