@@ -16,8 +16,10 @@
 
 package com.android.gallery3d.ui;
 
+
 import com.android.gallery3d.app.AbstractGalleryActivity;
-import com.android.gallery3d.app.AlbumDataLoader;
+import com.android.gallery3d.app.TimeLineDataLoader;
+import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.glrenderer.ColorTexture;
@@ -26,21 +28,20 @@ import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.glrenderer.Texture;
 import com.android.gallery3d.glrenderer.TiledTexture;
 
-public class AlbumSlotRenderer extends AbstractSlotRenderer {
+import java.util.ArrayList;
+
+public class TimeLineSlotRenderer extends AbstractSlotRenderer {
+
     @SuppressWarnings("unused")
     private static final String TAG = "AlbumView";
-
-    public interface SlotFilter {
-        public boolean acceptSlot(int index);
-    }
 
     private final int mPlaceholderColor;
     private static final int CACHE_SIZE = 96;
 
-    private AlbumSlidingWindow mDataWindow;
+    private TimeLineSlidingWindow mDataWindow;
     private final AbstractGalleryActivity mActivity;
     private final ColorTexture mWaitLoadingTexture;
-    private final SlotView mSlotView;
+    private final TimeLineSlotView mSlotView;
     private final SelectionManager mSelectionManager;
 
     private int mPressedIndex = -1;
@@ -48,18 +49,29 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
     private Path mHighlightItemPath = null;
     private boolean mInSelectionMode;
 
-    private SlotFilter mSlotFilter;
+    private AlbumSlotRenderer.SlotFilter mSlotFilter;
+    private final LabelSpec mLabelSpec;
 
-    public AlbumSlotRenderer(AbstractGalleryActivity activity, SlotView slotView,
-            SelectionManager selectionManager, int placeholderColor) {
+    public static class LabelSpec {
+
+        public int timeLineTitleHeight;
+        public int timeLineTitleFontSize;
+        public int timeLineTitleTextColor;
+        public int timeLineNumberTextColor;
+        public int timeLineTitleBackgroundColor;
+}
+    public TimeLineSlotRenderer(AbstractGalleryActivity activity, TimeLineSlotView slotView,
+                                    SelectionManager selectionManager, LabelSpec labelSpec,
+                                    int placeholderColor) {
         super(activity);
         mActivity = activity;
         mSlotView = slotView;
+        mLabelSpec = labelSpec;
         mSelectionManager = selectionManager;
         mPlaceholderColor = placeholderColor;
-
         mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
         mWaitLoadingTexture.setSize(1, 1);
+
     }
 
     public void setPressedIndex(int index) {
@@ -80,67 +92,19 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
         mSlotView.invalidate();
     }
 
-    public void setModel(AlbumDataLoader model) {
-        if (mDataWindow != null) {
-            mDataWindow.setListener(null);
-            mSlotView.setSlotCount(0);
-            mDataWindow = null;
-        }
-        if (model != null) {
-            mDataWindow = new AlbumSlidingWindow(mActivity, model, CACHE_SIZE);
-            mDataWindow.setListener(new MyDataModelListener());
-            mSlotView.setSlotCount(model.size());
-        }
-    }
-
-    private static Texture checkTexture(Texture texture) {
+    protected static Texture checkContentTexture(Texture texture) {
         return (texture instanceof TiledTexture)
                 && !((TiledTexture) texture).isReady()
                 ? null
                 : texture;
     }
 
-    @Override
-    public int renderSlot(GLCanvas canvas, int index, int pass, int width, int height) {
-        if (mSlotFilter != null && !mSlotFilter.acceptSlot(index)) return 0;
-
-        AlbumSlidingWindow.AlbumEntry entry = mDataWindow.get(index);
-
-        int renderRequestFlags = 0;
-
-        Texture content = checkTexture(entry.content);
-        if (content == null) {
-            content = mWaitLoadingTexture;
-            entry.isWaitDisplayed = true;
-        } else if (entry.isWaitDisplayed) {
-            entry.isWaitDisplayed = false;
-            content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
-            entry.content = content;
-        }
-        drawContent(canvas, content, width, height, entry.rotation);
-        if ((content instanceof FadeInTexture) &&
-                ((FadeInTexture) content).isAnimating()) {
-            renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
-        }
-
-        if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
-            drawVideoOverlay(canvas, width, height);
-        } else if ((entry.mediaType == MediaObject.MEDIA_TYPE_DRM_VIDEO)
-                || (entry.mediaType == MediaObject.MEDIA_TYPE_DRM_IMAGE)) {
-            drawDrmOverlay(canvas, width, height, entry.mediaType);
-        }
-
-        if (entry.isPanorama) {
-            drawPanoramaIcon(canvas, width, height);
-        }
-
-        renderRequestFlags |= renderOverlay(canvas, index, entry, width, height);
-
-        return renderRequestFlags;
+    public ArrayList<MediaItem> getAllMediaItems() {
+        return mDataWindow.getAllMediaItems();
     }
 
-    private int renderOverlay(GLCanvas canvas, int index,
-            AlbumSlidingWindow.AlbumEntry entry, int width, int height) {
+    protected int renderOverlay(GLCanvas canvas, int index,
+            TimeLineSlidingWindow.AlbumEntry entry, int width, int height) {
         int renderRequestFlags = 0;
         if (mPressedIndex == index) {
             if (mAnimatePressedUp) {
@@ -155,13 +119,14 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             }
         } else if ((entry.path != null) && (mHighlightItemPath == entry.path)) {
             drawSelectedFrame(canvas, width, height);
-        } else if (mInSelectionMode && mSelectionManager.isItemSelected(entry.path)) {
+        } else if (mInSelectionMode && entry.mediaType != MediaItem.MEDIA_TYPE_TIMELINE_TITLE
+                && mSelectionManager.isItemSelected(entry.path)) {
             drawSelectedFrame(canvas, width, height);
         }
         return renderRequestFlags;
     }
 
-    private class MyDataModelListener implements AlbumSlidingWindow.Listener {
+    protected class MyDataModelListener implements TimeLineSlidingWindow.Listener {
         @Override
         public void onContentChanged() {
             mSlotView.invalidate();
@@ -172,6 +137,17 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             mSlotView.setSlotCount(size);
             mSlotView.invalidate();
         }
+
+        @Override
+        public void onVersionChanged() {
+            mSlotView.onVersionChanged();
+        }
+
+        @Override
+        public int getTitleWidth() {
+            return mSlotView.getTitleWidth();
+        }
+
     }
 
     public void resume() {
@@ -196,10 +172,56 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
 
     @Override
     public void onSlotSizeChanged(int width, int height) {
-        // Do nothing
+        if (mDataWindow != null) {
+            mDataWindow.onSlotSizeChanged(width, height);
+        }
     }
 
-    public void setSlotFilter(SlotFilter slotFilter) {
+    public void setSlotFilter(AlbumSlotRenderer.SlotFilter slotFilter) {
         mSlotFilter = slotFilter;
+    }
+
+    public void setModel(TimeLineDataLoader model) {
+        if (mDataWindow != null) {
+            mDataWindow.setListener(null);
+            mSlotView.setSlotCount(0);
+            mDataWindow = null;
+        }
+        if (model != null) {
+            mDataWindow = new TimeLineSlidingWindow(mActivity, model, CACHE_SIZE, mLabelSpec,
+                    mSelectionManager, mSlotView);
+            mDataWindow.setListener(new MyDataModelListener());
+            mSlotView.setSlotCount(model.size());
+        }
+    }
+
+    @Override
+    public int renderSlot(GLCanvas canvas, int index, int pass, int width, int height) {
+        if (mSlotFilter != null && !mSlotFilter.acceptSlot(index)) return 0;
+
+        TimeLineSlidingWindow.AlbumEntry entry = mDataWindow.get(index);
+        int renderRequestFlags = 0;
+            Texture content = checkContentTexture(entry.content);
+            if (content == null) {
+                content = mWaitLoadingTexture;
+                entry.isWaitDisplayed = true;
+            } else if (entry.isWaitDisplayed) {
+                entry.isWaitDisplayed = false;
+                content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
+                entry.content = content;
+            }
+            drawContent(canvas, content, width, height, entry.rotation);
+            if ((content instanceof FadeInTexture) &&
+                    ((FadeInTexture) content).isAnimating()) {
+                renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
+            }
+
+            if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
+                drawVideoOverlay(canvas, width, height, true, 0);
+            }
+
+            renderRequestFlags |= renderOverlay(canvas, index, entry, width, height);
+
+        return renderRequestFlags;
     }
 }

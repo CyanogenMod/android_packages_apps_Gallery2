@@ -19,8 +19,6 @@ package com.android.gallery3d.app;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.text.TextUtils;
-import android.view.View;
 
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.ContentListener;
@@ -28,6 +26,7 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
+import com.android.gallery3d.data.ClusterAlbumSet;
 import com.android.gallery3d.ui.SynchronizedHandler;
 
 import java.util.ArrayList;
@@ -35,12 +34,12 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.Locale;
 
-public class AlbumDataLoader {
+public class TimeLineDataLoader {
     @SuppressWarnings("unused")
-    private static final String TAG = "AlbumDataAdapter";
+    private static final String TAG = "TimeLineDataLoader";
     private static final int DATA_CACHE_SIZE = 1000;
+    private boolean mNewVersion = false;
 
     private static final int MSG_LOAD_START = 1;
     private static final int MSG_LOAD_FINISH = 2;
@@ -56,7 +55,9 @@ public class AlbumDataLoader {
     public static interface DataListener {
         public void onContentChanged(int index);
         public void onSizeChanged(int size);
+        public void onVersionChanged();
     }
+
 
     private int mActiveStart = 0;
     private int mActiveEnd = 0;
@@ -64,6 +65,7 @@ public class AlbumDataLoader {
     private int mContentStart = 0;
     private int mContentEnd = 0;
 
+    private ArrayList<MediaItem> mTotalMediaItems;
     private final MediaSet mSource;
     private long mSourceVersion = MediaObject.INVALID_DATA_VERSION;
 
@@ -78,9 +80,8 @@ public class AlbumDataLoader {
     // the data version on which last loading failed
     private long mFailedVersion = MediaObject.INVALID_DATA_VERSION;
 
-    public AlbumDataLoader(AbstractGalleryActivity context, MediaSet mediaSet) {
+    public TimeLineDataLoader(AbstractGalleryActivity context, MediaSet mediaSet) {
         mSource = mediaSet;
-
         mData = new MediaItem[DATA_CACHE_SIZE];
         mItemVersion = new long[DATA_CACHE_SIZE];
         mSetVersion = new long[DATA_CACHE_SIZE];
@@ -121,13 +122,29 @@ public class AlbumDataLoader {
         mSource.removeContentListener(mSourceListener);
     }
 
+
+    public MediaSet getMediaSet(int index) {
+    	MediaSet mediaSet = ((ClusterAlbumSet)mSource).getAlbumFromindex(index);
+        return mediaSet;
+    }
+
     public MediaItem get(int index) {
-        if (!isActive(index)
-                && View.LAYOUT_DIRECTION_LTR == TextUtils
-                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+        if (!isActive(index)) {
             return mSource.getMediaItem(index, 1).get(0);
         }
         return mData[index % mData.length];
+    }
+
+    public MediaItem getTimeLineTitleItem(int index) {
+       return ((ClusterAlbumSet)mSource).getTimelineTitleMediaItem(index);
+    }
+
+    public int getTimeLineTitlesCount() {
+        return ((ClusterAlbumSet) mSource).getSubMediaSetCount();
+    }
+
+    public ArrayList<MediaItem> getAllMediaItems() {
+        return mTotalMediaItems;
     }
 
     public int getActiveStart() {
@@ -170,8 +187,6 @@ public class AlbumDataLoader {
             mContentStart = contentStart;
             mContentEnd = contentEnd;
         }
-        long[] itemVersion = mItemVersion;
-        long[] setVersion = mSetVersion;
         if (contentStart >= end || start >= contentEnd) {
             for (int i = start, n = end; i < n; ++i) {
                 clearSlot(i % DATA_CACHE_SIZE);
@@ -287,6 +302,9 @@ public class AlbumDataLoader {
         @Override
         public Void call() throws Exception {
             UpdateInfo info = mUpdateInfo;
+            if ( info.version != mSourceVersion) {
+                mNewVersion = true;
+            }
             mSourceVersion = info.version;
             if (mSize != info.size) {
                 mSize = info.size;
@@ -312,14 +330,16 @@ public class AlbumDataLoader {
                 int index = i % DATA_CACHE_SIZE;
                 mSetVersion[index] = info.version;
                 MediaItem updateItem = items.get(i - info.reloadStart);
-                long itemVersion = updateItem.getDataVersion();
-                if (mItemVersion[index] != itemVersion) {
-                    mItemVersion[index] = itemVersion;
-                    mData[index] = updateItem;
-                    if (mDataListener != null && i >= mActiveStart && i < mActiveEnd) {
-                        mDataListener.onContentChanged(i);
+                if (updateItem != null) {
+                    long itemVersion = updateItem.getDataVersion();
+                    if (mItemVersion[index] != itemVersion) {
+                        mItemVersion[index] = itemVersion;
+                        mData[index] = updateItem;
+                        if (mDataListener != null && i >= mActiveStart && i < mActiveEnd) {
+                            mDataListener.onContentChanged(i);
+                        }
                     }
-                }
+               }
             }
             return null;
         }
@@ -354,19 +374,17 @@ public class AlbumDataLoader {
 
         @Override
         public void run() {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
             boolean updateComplete = false;
             while (mActive) {
                 synchronized (this) {
                     if (mActive && !mDirty && updateComplete) {
                         updateLoading(false);
                         if (mFailedVersion != MediaObject.INVALID_DATA_VERSION) {
-                            Log.d(TAG, "reload pause");
                         }
                         Utils.waitWithoutInterrupt(this);
                         if (mActive && (mFailedVersion != MediaObject.INVALID_DATA_VERSION)) {
-                            Log.d(TAG, "reload resume");
                         }
                         continue;
                     }
@@ -376,7 +394,9 @@ public class AlbumDataLoader {
                 long version = mSource.reload();
                 UpdateInfo info = executeAndWait(new GetUpdateInfo(version));
                 updateComplete = info == null;
-                if (updateComplete) continue;
+                if (updateComplete) {
+                    continue;
+                }
                 if (info.version != version) {
                     info.size = mSource.getMediaItemCount();
                     info.version = version;
@@ -384,7 +404,13 @@ public class AlbumDataLoader {
                 if (info.reloadCount > 0) {
                     info.items = mSource.getMediaItem(info.reloadStart, info.reloadCount);
                 }
+
                 executeAndWait(new UpdateContent(info));
+                if (mNewVersion) {
+                    mNewVersion = false;
+                    mTotalMediaItems = mSource.getMediaItem(0, mSource.getMediaItemCount());
+                    mDataListener.onVersionChanged();
+                }
             }
             updateLoading(false);
         }

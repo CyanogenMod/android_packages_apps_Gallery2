@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Not a Contribution
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,221 +22,135 @@ package com.android.gallery3d.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.view.View;
 
-import com.android.gallery3d.R;
-import com.android.gallery3d.data.DataSourceType;
-import com.android.photos.data.GalleryBitmapPool;
 import com.android.gallery3d.util.ThreadPool;
 import com.android.gallery3d.util.ThreadPool.JobContext;
+import com.android.photos.data.GalleryBitmapPool;
+import com.android.gallery3d.R;
 
-import java.util.Locale;
+public class TimeLineTitleMaker {
 
-public class AlbumLabelMaker {
+    private final String TAG = "TimelineTitleMaker";
     private static final int BORDER_SIZE = 0;
 
-    private final AlbumSetSlotRenderer.LabelSpec mSpec;
+    private final TimeLineSlotRenderer.LabelSpec mSpec;
     private final TextPaint mTitlePaint;
     private final TextPaint mCountPaint;
     private final Context mContext;
+    private final TimeLineSlotView mTimeLineSlotView;
 
-    private int mLabelWidth;
-    private int mBitmapWidth;
-    private int mBitmapHeight;
-
-    private final LazyLoadedBitmap mLocalSetIcon;
-    private final LazyLoadedBitmap mPicasaIcon;
-    private final LazyLoadedBitmap mCameraIcon;
-
-    public AlbumLabelMaker(Context context, AlbumSetSlotRenderer.LabelSpec spec) {
+    public TimeLineTitleMaker(Context context, TimeLineSlotRenderer.LabelSpec spec, TimeLineSlotView slotView) {
         mContext = context;
         mSpec = spec;
-        mTitlePaint = getTextPaint(spec.titleFontSize, spec.titleColor, false);
-        mCountPaint = getTextPaint(spec.countFontSize, spec.countColor, false);
-
-        mLocalSetIcon = new LazyLoadedBitmap(R.drawable.frame_overlay_gallery_folder);
-        mPicasaIcon = new LazyLoadedBitmap(R.drawable.frame_overlay_gallery_picasa);
-        mCameraIcon = new LazyLoadedBitmap(R.drawable.frame_overlay_gallery_camera);
+        mTimeLineSlotView = slotView;
+        mTitlePaint = getTextPaint(spec.timeLineTitleFontSize, spec.timeLineTitleTextColor , true);
+        mCountPaint = getTextPaint(spec.timeLineTitleFontSize, spec.timeLineNumberTextColor, true);
     }
 
-    public static int getBorderSize() {
-        return BORDER_SIZE;
-    }
-
-    private Bitmap getOverlayAlbumIcon(int sourceType) {
-        switch (sourceType) {
-            case DataSourceType.TYPE_CAMERA:
-                return mCameraIcon.get();
-            case DataSourceType.TYPE_LOCAL:
-                return mLocalSetIcon.get();
-            case DataSourceType.TYPE_PICASA:
-                return mPicasaIcon.get();
-        }
-        return null;
-    }
-
-    private static TextPaint getTextPaint(int textSize, int color, boolean isBold) {
+    private static TextPaint getTextPaint(
+            int textSize, int color, boolean isBold) {
         TextPaint paint = new TextPaint();
         paint.setTextSize(textSize);
         paint.setAntiAlias(true);
         paint.setColor(color);
-        //paint.setShadowLayer(2f, 0f, 0f, Color.LTGRAY);
+        paint.setTypeface(Typeface.SANS_SERIF);
         if (isBold) {
             paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         }
         return paint;
     }
 
-    private class LazyLoadedBitmap {
-        private Bitmap mBitmap;
-        private int mResId;
-
-        public LazyLoadedBitmap(int resId) {
-            mResId = resId;
-        }
-
-        public synchronized Bitmap get() {
-            if (mBitmap == null) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                mBitmap = BitmapFactory.decodeResource(
-                        mContext.getResources(), mResId, options);
-            }
-            return mBitmap;
-        }
-    }
-
-    public synchronized void setLabelWidth(int width) {
-        if (mLabelWidth == width) return;
-        mLabelWidth = width;
-        int borders = 2 * BORDER_SIZE;
-        mBitmapWidth = width + borders;
-        mBitmapHeight = mSpec.labelBackgroundHeight + borders;
-    }
-
-    public ThreadPool.Job<Bitmap> requestLabel(
-            String title, String count, int sourceType) {
-        return new AlbumLabelJob(title, count, sourceType);
+    public ThreadPool.Job<Bitmap> requestTimeLineTitle( String title,
+            int photoCount, int videoCount) {
+        return new TimeLineTitle(title,photoCount, videoCount, mContext );
     }
 
     static void drawText(Canvas canvas,
-            int x, int y, String text, int lengthLimit, TextPaint p) {
-        // The TextPaint cannot be used concurrently
-        synchronized (p) {
-            text = TextUtils.ellipsize(
-                    text, p, lengthLimit, TextUtils.TruncateAt.END).toString();
-            canvas.drawText(text, x, y - p.getFontMetricsInt().ascent, p);
-        }
+                         int x, int y, String text, int lengthLimit, TextPaint p) {
+        text = TextUtils.ellipsize(
+                text, p, lengthLimit, TextUtils.TruncateAt.END).toString();
+        canvas.drawText(text, x, y - p.getFontMetricsInt().ascent, p);
     }
 
-    private class AlbumLabelJob implements ThreadPool.Job<Bitmap> {
-        private final String mTitle;
-        private final String mCount;
-        private final int mSourceType;
-
-        public AlbumLabelJob(String title, String count, int sourceType) {
+    private class TimeLineTitle implements ThreadPool.Job<Bitmap> {
+        private String mTitle;
+        private int mVideoCount;
+        private int mImageCount;
+        private Context mContext;
+        public TimeLineTitle(String title, int imageCount, int videoCount, Context context) {
             mTitle = title;
-            mCount = count;
-            mSourceType = sourceType;
+            mImageCount = imageCount;
+            mVideoCount = videoCount;
+            mContext = context;
+
         }
 
         @Override
         public Bitmap run(JobContext jc) {
-            AlbumSetSlotRenderer.LabelSpec s = mSpec;
-
-            String title = mTitle;
-            String count = mCount;
-            Bitmap icon = getOverlayAlbumIcon(mSourceType);
+            TimeLineSlotRenderer.LabelSpec spec = mSpec;
 
             Bitmap bitmap;
-            int labelWidth;
-
+            int width = mTimeLineSlotView.getTitleWidth();
+            int height= spec.timeLineTitleHeight;
             synchronized (this) {
-                labelWidth = mLabelWidth;
-                bitmap = GalleryBitmapPool.getInstance().get(mBitmapWidth, mBitmapHeight);
+                bitmap = GalleryBitmapPool.getInstance().get(width, height);
             }
-
             if (bitmap == null) {
                 int borders = 2 * BORDER_SIZE;
-                bitmap = Bitmap.createBitmap(labelWidth + borders,
-                        s.labelBackgroundHeight + borders, Config.ARGB_8888);
+                bitmap = Bitmap.createBitmap(width + borders,
+                        height + borders, Config.ARGB_8888);
             }
-
+            if (bitmap == null) {
+                return null;
+            }
             Canvas canvas = new Canvas(bitmap);
             canvas.clipRect(BORDER_SIZE, BORDER_SIZE,
                     bitmap.getWidth() - BORDER_SIZE,
                     bitmap.getHeight() - BORDER_SIZE);
-            canvas.drawColor(mSpec.backgroundColor, PorterDuff.Mode.SRC);
+            canvas.drawColor(mSpec.timeLineTitleBackgroundColor, PorterDuff.Mode.SRC);
 
             canvas.translate(BORDER_SIZE, BORDER_SIZE);
 
-            if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                    .getLayoutDirectionFromLocale(Locale.getDefault())) {// RTL
-                // draw title
-                if (jc.isCancelled()) return null;
-                int strLength = (int) mTitlePaint.measureText(title);
-                int x = labelWidth - (s.leftMargin + s.iconSize) - strLength;
-                // TODO: is the offset relevant in new reskin?
-                // int y = s.titleOffset;
-                int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-                drawText(canvas, x, y, title, labelWidth - s.leftMargin - x -
-                        s.titleRightMargin, mTitlePaint);
 
-                // draw count
-                if (jc.isCancelled()) return null;
-                x = s.leftMargin + 10;// plus 10 to get a much bigger margin
-                y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-                drawText(canvas, x, y, count,
-                        labelWidth - x, mCountPaint);
-                // draw the icon
-                if (icon != null) {
-                    if (jc.isCancelled()) return null;
-                    float scale = (float) s.iconSize / icon.getWidth();
-                    canvas.translate(labelWidth - s.leftMargin - s.iconSize,
-                            (s.labelBackgroundHeight -
-                            Math.round(scale * icon.getHeight())) / 2f);
-                    canvas.scale(scale, scale);
-                    canvas.drawBitmap(icon, 0, 0, null);
+            StringBuilder sb = new StringBuilder();
+            if(mImageCount != 0) {
+                sb.append(mContext.getResources().getQuantityString(R.plurals.number_of_photos, mImageCount, mImageCount));
+                if(mVideoCount!=0) {
+                     sb.append(mContext.getResources().getQuantityString(
+                             R.plurals.number_of_videos, mVideoCount, mVideoCount));
                 }
-            } else { // LTR
-                // draw title
-                if (jc.isCancelled()) return null;
-                int x = s.leftMargin + s.iconSize;
-                // TODO: is the offset relevant in new reskin?
-                // int y = s.titleOffset;
-                int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-                drawText(canvas, x, y, title, labelWidth - s.leftMargin - x -
-                        s.titleRightMargin, mTitlePaint);
-
-                // draw count
-                if (jc.isCancelled()) return null;
-                x = labelWidth - s.titleRightMargin;
-                y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-                drawText(canvas, x, y, count,
-                        labelWidth - x, mCountPaint);
-
-                // draw the icon
-                if (icon != null) {
-                    if (jc.isCancelled()) return null;
-                    float scale = (float) s.iconSize / icon.getWidth();
-                    canvas.translate(s.leftMargin, (s.labelBackgroundHeight -
-                            Math.round(scale * icon.getHeight())) / 2f);
-                    canvas.scale(scale, scale);
-                    canvas.drawBitmap(icon, 0, 0, null);
+            } else {
+                if(mVideoCount != 0) {
+                    sb.append(mContext.getResources().getQuantityString(
+                            R.plurals.number_of_videos, mVideoCount, mVideoCount));
                 }
             }
+            String countString = sb.toString();
 
+            if (jc.isCancelled()) return null;
+
+
+            int x;
+            int y = 0;
+            if (mTitle != null) {
+                mTitle = mTitle.toUpperCase();
+                x = 16;
+                y = (height/2)-14;
+                drawText(canvas, x, y, mTitle, width-x, mTitlePaint);
+            }
+
+            if (countString != null) {
+                y = (height/2)-14;
+                x = width - countString.length()- 100;
+                drawText(canvas, x, y, countString,
+                        width - x, mCountPaint);
+            }
             return bitmap;
         }
-    }
-
-    public void recycleLabel(Bitmap label) {
-        GalleryBitmapPool.getInstance().put(label);
     }
 }

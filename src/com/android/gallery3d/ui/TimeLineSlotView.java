@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Not a Contribution
+ *
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.gallery3d.ui;
 
 import android.graphics.Rect;
-import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
+import android.os.SystemProperties;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,51 +30,47 @@ import android.view.animation.DecelerateInterpolator;
 import com.android.gallery3d.anim.Animation;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.glrenderer.GLCanvas;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 
-public class SlotView extends GLView {
+public class TimeLineSlotView extends GLView {
     @SuppressWarnings("unused")
-    private static final String TAG = "SlotView";
+    private static final String TAG = "TimeLineSlotView";
 
-    private static final boolean WIDE = true;
-    private static final int INDEX_NONE = -1;
+    public static final int INDEX_NONE = -1;
+    private static final int mainKey = SystemProperties.getInt("qemu.hw.mainkeys", 1);
 
     public static final int RENDER_MORE_PASS = 1;
     public static final int RENDER_MORE_FRAME = 2;
 
+    private int mWidth  = 0;
+
     public interface Listener {
         public void onDown(int index);
         public void onUp(boolean followedByLongPress);
-        public void onSingleTapUp(int index);
-        public void onLongTap(int index);
+        public void onSingleTapUp(int index, boolean isTitle);
+        public void onLongTap(int index, boolean isTitle);
         public void onScrollPositionChanged(int position, int total);
     }
 
     public static class SimpleListener implements Listener {
         @Override public void onDown(int index) {}
         @Override public void onUp(boolean followedByLongPress) {}
-        @Override public void onSingleTapUp(int index) {}
-        @Override public void onLongTap(int index) {}
+        @Override public void onSingleTapUp(int index, boolean isTitle) {}
+        @Override public void onLongTap(int index, boolean isTitle) {}
         @Override public void onScrollPositionChanged(int position, int total) {}
-    }
-
-    public static interface SlotRenderer {
-        public void prepareDrawing();
-        public void onVisibleRangeChanged(int visibleStart, int visibleEnd);
-        public void onSlotSizeChanged(int width, int height);
-        public int renderSlot(GLCanvas canvas, int index, int pass, int width, int height);
     }
 
     private final GestureDetector mGestureDetector;
     private final ScrollerHelper mScroller;
-    private final Paper mPaper = new Paper();
 
     private Listener mListener;
-    private UserInteractionListener mUIListener;
-
-    private boolean mMoreAnimation = false;
     private SlotAnimation mAnimation = null;
     private final Layout mLayout = new Layout();
     private int mStartIndex = INDEX_NONE;
@@ -79,15 +78,12 @@ public class SlotView extends GLView {
     // whether the down action happened while the view is scrolling.
     private boolean mDownInScrolling;
     private int mOverscrollEffect = OVERSCROLL_3D;
-    private final Handler mHandler;
 
-    private SlotRenderer mRenderer;
+    private TimeLineSlotRenderer mRenderer;
 
     private int[] mRequestRenderSlots = new int[16];
 
     public static final int OVERSCROLL_3D = 0;
-    public static final int OVERSCROLL_SYSTEM = 1;
-    public static final int OVERSCROLL_NONE = 2;
 
     // to prevent allocating memory
     private final Rect mTempRect = new Rect();
@@ -95,17 +91,15 @@ public class SlotView extends GLView {
     // Flag to check whether it is come from Photo Page.
     private boolean isFromPhotoPage = false;
 
-    public SlotView(AbstractGalleryActivity activity, Spec spec) {
+    public TimeLineSlotView(AbstractGalleryActivity activity, Spec spec) {
         mGestureDetector = new GestureDetector(activity, new MyGestureListener());
         mScroller = new ScrollerHelper(activity);
-        mHandler = new SynchronizedHandler(activity.getGLRoot());
         setSlotSpec(spec);
     }
 
-    public void setSlotRenderer(SlotRenderer slotDrawer) {
+    public void setSlotRenderer(TimeLineSlotRenderer slotDrawer) {
         mRenderer = slotDrawer;
         if (mRenderer != null) {
-            mRenderer.onSlotSizeChanged(mLayout.mSlotWidth, mLayout.mSlotHeight);
             mRenderer.onVisibleRangeChanged(getVisibleStart(), getVisibleEnd());
         }
     }
@@ -116,27 +110,28 @@ public class SlotView extends GLView {
             return;
         }
         Rect rect = mLayout.getSlotRect(index, mTempRect);
-        int position = WIDE
-                ? (rect.left + rect.right - getWidth()) / 2
-                : (rect.top + rect.bottom - getHeight()) / 2;
+        int position = (rect.top + rect.bottom - getHeight()) / 2;
+
         setScrollPosition(position);
     }
 
     public void makeSlotVisible(int index) {
         Rect rect = mLayout.getSlotRect(index, mTempRect);
-        int visibleBegin = WIDE ? mScrollX : mScrollY;
-        int visibleLength = WIDE ? getWidth() : getHeight();
+        int visibleBegin = mScrollY;
+        int visibleLength = getHeight();
         int visibleEnd = visibleBegin + visibleLength;
-        int slotBegin = WIDE ? rect.left : rect.top;
-        int slotEnd = WIDE ? rect.right : rect.bottom;
+        int slotBegin = rect.top;
+        int slotEnd = rect.bottom;
 
         int position = visibleBegin;
         if (visibleLength < slotEnd - slotBegin) {
             position = visibleBegin;
         } else if (slotBegin < visibleBegin) {
             position = slotBegin;
-        } else if (slotEnd > visibleEnd) {
+        } else if (slotEnd > visibleEnd && mainKey == 1) {
             position = slotEnd - visibleLength;
+        } else if (slotBegin > visibleEnd && mainKey == 0) {
+            position = slotBegin - visibleLength;
         }
 
         setScrollPosition(position);
@@ -149,13 +144,15 @@ public class SlotView extends GLView {
         isFromPhotoPage = flag;
     }
 
+
     public void setScrollPosition(int position) {
-        if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                .getLayoutDirectionFromLocale(Locale.getDefault())
-                && position == 0 && !isFromPhotoPage) {
-            // If RTL and not from Photo Page, set position to max.
-            position = mLayout.getScrollLimit();
-        }
+        /*if (View.LAYOUT_DIRECTION_RTL == TextUtils
+            .getLayoutDirectionFromLocale(Locale.getDefault())
+            && position == 0 && !isFromPhotoPage) {
+        // If RTL and not from Photo Page, set position to max.
+        position = mLayout.getScrollLimit();
+    }*/
+
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
         updateScrollPosition(position, false);
@@ -166,13 +163,9 @@ public class SlotView extends GLView {
     }
 
     @Override
-    public void addComponent(GLView view) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     protected void onLayout(boolean changeSize, int l, int t, int r, int b) {
         if (!changeSize) return;
+        mWidth = r - l;
 
         // Make sure we are still at a resonable scroll position after the size
         // is changed (like orientation change). We choose to keep the center
@@ -182,7 +175,6 @@ public class SlotView extends GLView {
         mLayout.setSize(r - l, b - t);
         makeSlotVisible(visibleIndex);
         if (mOverscrollEffect == OVERSCROLL_3D) {
-            mPaper.setSize(r - l, b - t);
         }
     }
 
@@ -199,12 +191,8 @@ public class SlotView extends GLView {
     }
 
     private void updateScrollPosition(int position, boolean force) {
-        if (!force && (WIDE ? position == mScrollX : position == mScrollY)) return;
-        if (WIDE) {
-            mScrollX = position;
-        } else {
-            mScrollY = position;
-        }
+        if (!force && (position == mScrollY)) return;
+        mScrollY = position;
         mLayout.setScrollPosition(position);
         onScrollPositionChanged(position);
     }
@@ -220,7 +208,6 @@ public class SlotView extends GLView {
 
     @Override
     protected boolean onTouch(MotionEvent event) {
-        if (mUIListener != null) mUIListener.onUserInteraction();
         mGestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -228,7 +215,6 @@ public class SlotView extends GLView {
                 mScroller.forceFinished();
                 break;
             case MotionEvent.ACTION_UP:
-                mPaper.onRelease();
                 invalidate();
                 break;
         }
@@ -237,15 +223,6 @@ public class SlotView extends GLView {
 
     public void setListener(Listener listener) {
         mListener = listener;
-    }
-
-    public void setUserInteractionListener(UserInteractionListener listener) {
-        mUIListener = listener;
-    }
-
-    public void setOverscrollEffect(int kind) {
-        mOverscrollEffect = kind;
-        mScroller.setOverfling(kind == OVERSCROLL_SYSTEM);
     }
 
     private static int[] expandIntArray(int array[], int capacity) {
@@ -264,13 +241,11 @@ public class SlotView extends GLView {
 
         long animTime = AnimationTime.get();
         boolean more = mScroller.advanceAnimation(animTime);
-        more |= mLayout.advanceAnimation(animTime);
         int oldX = mScrollX;
         updateScrollPosition(mScroller.getPosition(), false);
 
-        boolean paperActive = false;
         if (mOverscrollEffect == OVERSCROLL_3D) {
-            // Check if an edge is reached and notify mPaper if so.
+            // Check if an edge is reached and notify mPaper if so
             int newX = mScrollX;
             int limit = mLayout.getScrollLimit();
             if (oldX > 0 && newX == 0 || oldX < limit && newX == limit) {
@@ -279,13 +254,13 @@ public class SlotView extends GLView {
 
                 // I don't know why, but getCurrVelocity() can return NaN.
                 if (!Float.isNaN(v)) {
-                    mPaper.edgeReached(v);
+                    //mPaper.edgeReached(v);
                 }
+                //paperActive = mPaper.advanceAnimation();
             }
-            paperActive = mPaper.advanceAnimation();
         }
 
-        more |= paperActive;
+        //more |= paperActive;
 
         if (mAnimation != null) {
             more |= mAnimation.calculate(animTime);
@@ -295,10 +270,10 @@ public class SlotView extends GLView {
 
         int requestCount = 0;
         int requestedSlot[] = expandIntArray(mRequestRenderSlots,
-                mLayout.mVisibleEnd - mLayout.mVisibleStart);
+                mLayout.getVisibleEnd() - mLayout.getVisibleStart());
 
-        for (int i = mLayout.mVisibleEnd - 1; i >= mLayout.mVisibleStart; --i) {
-            int r = renderItem(canvas, i, 0, paperActive);
+        for (int i = mLayout.getVisibleEnd() - 1; i >= mLayout.getVisibleStart(); --i) {
+            int r = renderItem(canvas, i, 0, false);
             if ((r & RENDER_MORE_FRAME) != 0) more = true;
             if ((r & RENDER_MORE_PASS) != 0) requestedSlot[requestCount++] = i;
         }
@@ -307,8 +282,8 @@ public class SlotView extends GLView {
             int newCount = 0;
             for (int i = 0; i < requestCount; ++i) {
                 int r = renderItem(canvas,
-                        requestedSlot[i], pass, paperActive);
-                if ((r & RENDER_MORE_FRAME) != 0) more = true;
+                        requestedSlot[i], pass, false);
+                if ((r & RENDER_MORE_FRAME) != 0) more = false;
                 if ((r & RENDER_MORE_PASS) != 0) requestedSlot[newCount++] = i;
             }
             requestCount = newCount;
@@ -318,27 +293,15 @@ public class SlotView extends GLView {
 
         if (more) invalidate();
 
-        final UserInteractionListener listener = mUIListener;
-        if (mMoreAnimation && !more && listener != null) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onUserInteractionEnd();
-                }
-            });
-        }
-        mMoreAnimation = more;
     }
 
     private int renderItem(
             GLCanvas canvas, int index, int pass, boolean paperActive) {
+
         canvas.save(GLCanvas.SAVE_FLAG_ALPHA | GLCanvas.SAVE_FLAG_MATRIX);
         Rect rect = mLayout.getSlotRect(index, mTempRect);
-        if (paperActive) {
-            canvas.multiplyMatrix(mPaper.getTransform(rect, mScrollX), 0);
-        } else {
-            canvas.translate(rect.left, rect.top, 0);
-        }
+        if (rect == null) return 0;
+        canvas.translate(rect.left, rect.top, 0);
         if (mAnimation != null && mAnimation.isActive()) {
             mAnimation.apply(canvas, index, rect);
         }
@@ -391,277 +354,6 @@ public class SlotView extends GLView {
         }
     }
 
-    // This Spec class is used to specify the size of each slot in the SlotView.
-    // There are two ways to do it:
-    //
-    // (1) Specify slotWidth and slotHeight: they specify the width and height
-    //     of each slot. The number of rows and the gap between slots will be
-    //     determined automatically.
-    // (2) Specify rowsLand, rowsPort, and slotGap: they specify the number
-    //     of rows in landscape/portrait mode and the gap between slots. The
-    //     width and height of each slot is determined automatically.
-    //
-    // The initial value of -1 means they are not specified.
-    public static class Spec {
-        public int slotWidth = -1;
-        public int slotHeight = -1;
-        public int slotHeightAdditional = 0;
-
-        public int rowsLand = -1;
-        public int rowsPort = -1;
-        public int slotGap = -1;
-    }
-
-    public class Layout {
-
-        private int mVisibleStart;
-        private int mVisibleEnd;
-
-        private int mSlotCount;
-        private int mSlotWidth;
-        private int mSlotHeight;
-        private int mSlotGap;
-
-        private Spec mSpec;
-
-        private int mWidth;
-        private int mHeight;
-
-        private int mUnitCount;
-        private int mContentLength;
-        private int mScrollPosition;
-
-        private IntegerAnimation mVerticalPadding = new IntegerAnimation();
-        private IntegerAnimation mHorizontalPadding = new IntegerAnimation();
-
-        public void setSlotSpec(Spec spec) {
-            mSpec = spec;
-        }
-
-        public boolean setSlotCount(int slotCount) {
-            if (slotCount == mSlotCount) return false;
-            if (mSlotCount != 0) {
-                mHorizontalPadding.setEnabled(true);
-                mVerticalPadding.setEnabled(true);
-            }
-            mSlotCount = slotCount;
-            int hPadding = mHorizontalPadding.getTarget();
-            int vPadding = mVerticalPadding.getTarget();
-            initLayoutParameters();
-            return vPadding != mVerticalPadding.getTarget()
-                    || hPadding != mHorizontalPadding.getTarget();
-        }
-
-        public Rect getSlotRect(int index, Rect rect) {
-            int col, row;
-            if (WIDE) {
-                if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                    // If RTL, recalculate the columns and rows.
-                    int count = ((mSlotCount + mUnitCount - 1) / mUnitCount);
-                    col = count - index / mUnitCount - 1;
-                    row = index % mUnitCount;
-                } else {
-                    col = index / mUnitCount;
-                    row = index - col * mUnitCount;
-                }
-            } else {
-                row = index / mUnitCount;
-                col = index - row * mUnitCount;
-            }
-
-            int x = mHorizontalPadding.get() + col * (mSlotWidth + mSlotGap);
-            int y = mVerticalPadding.get() + row * (mSlotHeight + mSlotGap);
-            rect.set(x, y, x + mSlotWidth, y + mSlotHeight);
-            return rect;
-        }
-
-        public int getSlotWidth() {
-            return mSlotWidth;
-        }
-
-        public int getSlotHeight() {
-            return mSlotHeight;
-        }
-
-        // Calculate
-        // (1) mUnitCount: the number of slots we can fit into one column (or row).
-        // (2) mContentLength: the width (or height) we need to display all the
-        //     columns (rows).
-        // (3) padding[]: the vertical and horizontal padding we need in order
-        //     to put the slots towards to the center of the display.
-        //
-        // The "major" direction is the direction the user can scroll. The other
-        // direction is the "minor" direction.
-        //
-        // The comments inside this method are the description when the major
-        // directon is horizontal (X), and the minor directon is vertical (Y).
-        private void initLayoutParameters(
-                int majorLength, int minorLength,  /* The view width and height */
-                int majorUnitSize, int minorUnitSize,  /* The slot width and height */
-                int[] padding) {
-            int unitCount = (minorLength + mSlotGap) / (minorUnitSize + mSlotGap);
-            if (unitCount == 0) unitCount = 1;
-            mUnitCount = unitCount;
-
-            // We put extra padding above and below the column.
-            int availableUnits = Math.min(mUnitCount, mSlotCount);
-            int usedMinorLength = availableUnits * minorUnitSize +
-                    (availableUnits - 1) * mSlotGap;
-            padding[0] = (minorLength - usedMinorLength) / 2;
-
-            // Then calculate how many columns we need for all slots.
-            int count = ((mSlotCount + mUnitCount - 1) / mUnitCount);
-            mContentLength = count * majorUnitSize + (count - 1) * mSlotGap;
-
-            // If the content length is less then the screen width, put
-            // extra padding in left and right.
-            padding[1] = Math.max(0, (majorLength - mContentLength) / 2);
-        }
-
-        private void initLayoutParameters() {
-            // Initialize mSlotWidth and mSlotHeight from mSpec
-            if (mSpec.slotWidth != -1) {
-                mSlotGap = 0;
-                mSlotWidth = mSpec.slotWidth;
-                mSlotHeight = mSpec.slotHeight;
-            } else {
-                int rows = (mWidth > mHeight) ? mSpec.rowsLand : mSpec.rowsPort;
-                mSlotGap = mSpec.slotGap;
-                mSlotHeight = Math.max(1, (mHeight - (rows - 1) * mSlotGap) / rows);
-                mSlotWidth = mSlotHeight - mSpec.slotHeightAdditional;
-            }
-
-            if (mRenderer != null) {
-                mRenderer.onSlotSizeChanged(mSlotWidth, mSlotHeight);
-            }
-
-            int[] padding = new int[2];
-            if (WIDE) {
-                initLayoutParameters(mWidth, mHeight, mSlotWidth, mSlotHeight, padding);
-                mVerticalPadding.startAnimateTo(padding[0]);
-                mHorizontalPadding.startAnimateTo(padding[1]);
-            } else {
-                initLayoutParameters(mHeight, mWidth, mSlotHeight, mSlotWidth, padding);
-                mVerticalPadding.startAnimateTo(padding[1]);
-                mHorizontalPadding.startAnimateTo(padding[0]);
-            }
-            updateVisibleSlotRange();
-        }
-
-        public void setSize(int width, int height) {
-            mWidth = width;
-            mHeight = height;
-            initLayoutParameters();
-        }
-
-        private void updateVisibleSlotRange() {
-            int position = mScrollPosition;
-
-            if (WIDE) {
-                if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                    // If RTL, recalculate the position.
-                    position = mContentLength > mWidth ? (mContentLength - position - mWidth)
-                            : position;
-                    position = Math.max(0, position);
-                }
-                int startCol = position / (mSlotWidth + mSlotGap);
-                int start = Math.max(0, mUnitCount * startCol);
-                int endCol = (position + mWidth + mSlotWidth + mSlotGap - 1) /
-                        (mSlotWidth + mSlotGap);
-                int end = Math.min(mSlotCount, mUnitCount * endCol);
-                setVisibleRange(start, end);
-            } else {
-                int startRow = position / (mSlotHeight + mSlotGap);
-                int start = Math.max(0, mUnitCount * startRow);
-                int endRow = (position + mHeight + mSlotHeight + mSlotGap - 1) /
-                        (mSlotHeight + mSlotGap);
-                int end = Math.min(mSlotCount, mUnitCount * endRow);
-                setVisibleRange(start, end);
-            }
-        }
-
-        public void setScrollPosition(int position) {
-            if (mScrollPosition == position) return;
-            mScrollPosition = position;
-            updateVisibleSlotRange();
-        }
-
-        private void setVisibleRange(int start, int end) {
-            if (start == mVisibleStart && end == mVisibleEnd) return;
-            if (start < end) {
-                mVisibleStart = start;
-                mVisibleEnd = end;
-            } else {
-                mVisibleStart = mVisibleEnd = 0;
-            }
-            if (mRenderer != null) {
-                mRenderer.onVisibleRangeChanged(mVisibleStart, mVisibleEnd);
-            }
-        }
-
-        public int getVisibleStart() {
-            return mVisibleStart;
-        }
-
-        public int getVisibleEnd() {
-            return mVisibleEnd;
-        }
-
-        public int getSlotIndexByPosition(float x, float y) {
-            int absoluteX = Math.round(x) + (WIDE ? mScrollPosition : 0);
-            int absoluteY = Math.round(y) + (WIDE ? 0 : mScrollPosition);
-            if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                // If RTL, recalculate the absoluteX.
-                absoluteX = mContentLength > mWidth ? (mContentLength - absoluteX) : mWidth
-                        - absoluteX;
-            }
-            absoluteX -= mHorizontalPadding.get();
-            absoluteY -= mVerticalPadding.get();
-
-            if (absoluteX < 0 || absoluteY < 0) {
-                return INDEX_NONE;
-            }
-
-            int columnIdx = absoluteX / (mSlotWidth + mSlotGap);
-            int rowIdx = absoluteY / (mSlotHeight + mSlotGap);
-
-            if (!WIDE && columnIdx >= mUnitCount) {
-                return INDEX_NONE;
-            }
-
-            if (WIDE && rowIdx >= mUnitCount) {
-                return INDEX_NONE;
-            }
-
-            if (absoluteX % (mSlotWidth + mSlotGap) >= mSlotWidth) {
-                return INDEX_NONE;
-            }
-
-            if (absoluteY % (mSlotHeight + mSlotGap) >= mSlotHeight) {
-                return INDEX_NONE;
-            }
-
-            int index = WIDE
-                    ? (columnIdx * mUnitCount + rowIdx)
-                    : (rowIdx * mUnitCount + columnIdx);
-
-            return index >= mSlotCount ? INDEX_NONE : index;
-        }
-
-        public int getScrollLimit() {
-            int limit = WIDE ? mContentLength - mWidth : mContentLength - mHeight;
-            return limit <= 0 ? 0 : limit;
-        }
-
-        public boolean advanceAnimation(long animTime) {
-            // use '|' to make sure both sides will be executed
-            return mVerticalPadding.calculate(animTime) | mHorizontalPadding.calculate(animTime);
-        }
-    }
-
     private class MyGestureListener implements GestureDetector.OnGestureListener {
         private boolean isDown;
 
@@ -700,9 +392,7 @@ public class SlotView extends GLView {
             cancelDown(false);
             int scrollLimit = mLayout.getScrollLimit();
             if (scrollLimit == 0) return false;
-            float velocity = WIDE ? velocityX : velocityY;
-            mScroller.fling((int) -velocity, 0, scrollLimit);
-            if (mUIListener != null) mUIListener.onUserInteractionBegin();
+            mScroller.fling((int) -velocityY, 0, scrollLimit);
             invalidate();
             return true;
         }
@@ -711,11 +401,10 @@ public class SlotView extends GLView {
         public boolean onScroll(MotionEvent e1,
                 MotionEvent e2, float distanceX, float distanceY) {
             cancelDown(false);
-            float distance = WIDE ? distanceX : distanceY;
             int overDistance = mScroller.startScroll(
-                    Math.round(distance), 0, mLayout.getScrollLimit());
+                    Math.round(distanceY), 0, mLayout.getScrollLimit());
             if (mOverscrollEffect == OVERSCROLL_3D && overDistance != 0) {
-                mPaper.overScroll(overDistance);
+                //mPaper.overScroll(overDistance);
             }
             invalidate();
             return true;
@@ -725,9 +414,19 @@ public class SlotView extends GLView {
         public boolean onSingleTapUp(MotionEvent e) {
             cancelDown(false);
             if (mDownInScrolling) return true;
-            int index = mLayout.getSlotIndexByPosition(e.getX(), e.getY());
-            if (index != INDEX_NONE) mListener.onSingleTapUp(index);
-            return true;
+            RectSlot slot = mLayout.getRectSlotByPosition(e.getX(), e.getY());
+                if (slot == null) {
+                    return true;
+                }
+                int index = slot.slotIndex;
+                if (index != INDEX_NONE) {
+                    if (slot.mediaType == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                        mListener.onSingleTapUp(index, true);
+                        return true;
+                    }
+                    mListener.onSingleTapUp(index, false);
+                }
+                return true;
         }
 
         @Override
@@ -736,8 +435,18 @@ public class SlotView extends GLView {
             if (mDownInScrolling) return;
             lockRendering();
             try {
-                int index = mLayout.getSlotIndexByPosition(e.getX(), e.getY());
-                if (index != INDEX_NONE) mListener.onLongTap(index);
+                RectSlot slot = mLayout.getRectSlotByPosition(e.getX(), e.getY());
+                if (slot == null) return;
+
+                int index = slot.slotIndex;
+                if (index != INDEX_NONE) {
+                    if (slot.mediaType == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                       mListener.onLongTap(index, true);
+
+                    } else {
+                    mListener.onLongTap(index, false);
+                    }
+                }
             } finally {
                 unlockRendering();
             }
@@ -758,8 +467,13 @@ public class SlotView extends GLView {
             mStartIndex = INDEX_NONE;
         }
         // Reset the scroll position to avoid scrolling over the updated limit.
-        setScrollPosition(WIDE ? mScrollX : mScrollY);
+        setScrollPosition(mScrollY);
         return changed;
+    }
+
+    public void onVersionChanged() {
+        mLayout.createSlots();
+        invalidate();
     }
 
     public int getVisibleStart() {
@@ -788,48 +502,286 @@ public class SlotView extends GLView {
         return r;
     }
 
-    private static class IntegerAnimation extends Animation {
-        private int mTarget;
-        private int mCurrent = 0;
-        private int mFrom = 0;
-        private boolean mEnabled = false;
+    public int getTitleWidth() {
+        return mWidth;
+    }
 
-        public void setEnabled(boolean enabled) {
-            mEnabled = enabled;
+    // This Spec class is used to specify the size of each slot in the SlotView.
+    // There are two ways to do it:
+    //
+    // Specify colsLand, colsPort, and slotGap: they specify the number
+    // of rows in landscape/portrait mode and the gap between slots. The
+    // width and height of each slot is determined automatically.
+    //
+    // The initial value of -1 means they are not specified.
+    public static class Spec {
+        public int colsLand = -1;
+        public int colsPort = -1;
+        public int titleHeight = -1;
+        public int slotGapPort = -1;
+        public int slotGapLand = -1;
+    }
+
+    public class Layout {
+
+        private int mVisibleStart;
+        private int mVisibleEnd;
+
+        public int mSlotCount;
+        private int mSlotWidth;
+        private int mSlotHeight;
+        private int mSlotGap;
+
+        private Spec mSpec;
+
+        private int mWidth;
+        private int mHeight;
+
+        private int mUnitCount;
+        private int mContentLength;
+        private int mScrollPosition;
+
+        private ArrayList<Integer> mHeightList;
+        private HashMap<Integer, RectSlot> mMediaSlotMap;
+
+        public void setSlotSpec(TimeLineSlotView.Spec spec) {
+            mSpec = spec;
         }
 
-        public void startAnimateTo(int target) {
-            if (!mEnabled) {
-                mTarget = mCurrent = target;
-                return;
+        public boolean setSlotCount(int slotCount) {
+            if (slotCount == mSlotCount) return false;
+            mSlotCount = slotCount;
+            initLayoutParameters();
+            updateVisibleSlotRange();
+            return true;
+        }
+
+        public Rect getSlotRect(int index, Rect rect) {
+            if (index >= mVisibleStart && index < mVisibleEnd && mVisibleEnd != 0) {
+                RectSlot slot = getRectSlot(index);
+                if (slot == null) {
+                    return null;
+                }
+                return getSlotRect(slot, rect);
             }
-            if (target == mTarget) return;
-
-            mFrom = mCurrent;
-            mTarget = target;
-            setDuration(180);
-            start();
+            return rect;
         }
 
-        public int get() {
-            return mCurrent;
+        private void initLayoutParameters() {
+            mUnitCount = (mWidth > mHeight) ? mSpec.colsLand : mSpec.colsPort;
+            mSlotGap = (mWidth > mHeight) ? mSpec.slotGapLand: mSpec.slotGapPort;
+            mSlotWidth = Math.round((mWidth - (mUnitCount - 1) * mSlotGap) / mUnitCount);
+            mSlotHeight = mSlotWidth;
+            if (mRenderer != null) {
+                mRenderer.onSlotSizeChanged(mSlotWidth, mSlotHeight);
+            }
         }
 
-        public int getTarget() {
-            return mTarget;
+        private void setSize(int width, int height) {
+            mWidth = width;
+            mHeight = height;
+            initLayoutParameters();
+            createSlots();
+            updateVisibleSlotRange();
         }
 
-        @Override
-        protected void onCalculate(float progress) {
-            mCurrent = Math.round(mFrom + progress * (mTarget - mFrom));
-            if (progress == 1f) mEnabled = false;
+        public void setScrollPosition(int position) {
+            if (mScrollPosition == position) return;
+            mScrollPosition = position;
+            updateVisibleSlotRange();
+        }
+
+        private Rect getSlotRect(RectSlot slot, Rect rect) {
+            if (rect == null) {
+                Log.e(TAG, "LAYOUT: null rect passed");
+                Utils.assertTrue(false);
+            }
+            int x = 0;
+            int y = 0;
+            int w = mSlotWidth;
+            int h = 0;
+            if (slot.mediaType == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                 x = 0;
+                 y = slot.totalHeight - (mSpec.titleHeight);
+                 w = mWidth;
+                 h = mSpec.titleHeight;
+            } else {
+                 x = slot.slotCol * (mSlotWidth + mSlotGap);
+                 y = slot.totalHeight -(mSlotHeight);
+                 w = mSlotWidth;
+                 h = mSlotHeight;
+            }
+            rect.set(x, y, x + w, y + h);
+            return rect;
+        }
+
+        private synchronized void updateVisibleSlotRange() {
+            int position = mScrollPosition;
+            if(mHeightList!= null && mHeightList.size()>0 ) {
+                int indexStart = Arrays.binarySearch(mHeightList.toArray(new Integer[0]), position);
+                int indexEnd = Arrays.binarySearch(mHeightList.toArray(new Integer[0]), position+mHeight);
+                if(indexStart<0) {
+                    indexStart = (indexStart * (- 1)) - 1;
+                } if (indexEnd<0) {
+                    indexEnd = (indexEnd * (- 1)) - 1;
+                }
+                int startSlotIndex = mHeightList.indexOf(mHeightList.get(indexStart));
+                if(indexEnd> mHeightList.size()-1) {
+                    indexEnd = mHeightList.size()-1;
+                }
+                int endSlotIndex = mHeightList.lastIndexOf(mHeightList.get(indexEnd));
+
+
+                int endSlotIndexStr = mHeightList.indexOf(mHeightList.get(indexEnd));
+                if(((endSlotIndex-endSlotIndexStr) % mUnitCount) == (mUnitCount-1) && (startSlotIndex>mUnitCount)) {
+                    startSlotIndex= startSlotIndex-mUnitCount;
+                }
+
+            setVisibleRange(startSlotIndex, Math.min(mSlotCount, endSlotIndex + 1));
+            }
+        }
+
+        private void setVisibleRange(int start, int end) {
+            if (start == mVisibleStart && end == mVisibleEnd) return;
+            if (start < end) {
+                mVisibleStart = start;
+                mVisibleEnd = end;
+            } else {
+                mVisibleStart = mVisibleEnd = 0;
+            }
+            if (mRenderer != null) {
+                mRenderer.onVisibleRangeChanged(mVisibleStart, mVisibleEnd);
+            }
+        }
+
+        public int getVisibleStart() {
+            return mVisibleStart;
+        }
+
+        public int getVisibleEnd() {
+            return mVisibleEnd;
+        }
+
+        public int getSlotIndexByPosition(float x, float y) {
+            RectSlot slot = getRectSlotByPosition(x, y);
+            if (slot == null) return INDEX_NONE;
+
+            return slot.slotIndex;
+
+        }
+
+        public RectSlot getRectSlotByPosition(float x, float y) {
+            int absoluteX = Math.round(x);
+            int absoluteY = Math.round(y) + mScrollPosition;
+
+            if (absoluteX < 0 || absoluteY < 0) {
+                return null;
+            }
+            if (absoluteY > mContentLength)
+                return null;
+
+            int columnIdx = absoluteX / (mSlotWidth + mSlotGap);
+
+            RectSlot rectSlot;
+
+            int index = Arrays.binarySearch(mHeightList.toArray(new Integer[0]), absoluteY);
+            if(index<0){
+                index = (index*-1) -1;
+            }
+            if(index >= mHeightList.size()) {
+                index = mHeightList.size()-1;
+            }
+            int startIndex = mHeightList.indexOf(mHeightList.get(index));
+            int maxIndex = mHeightList.lastIndexOf(mHeightList.get(index));
+            if(mMediaSlotMap.get(startIndex).mediaType == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                return mMediaSlotMap.get(startIndex);
+            }
+            for(int i= startIndex;(i< startIndex+mUnitCount) && (i<=maxIndex); i++) {
+                rectSlot = mMediaSlotMap.get(i);
+                if(rectSlot.slotCol== columnIdx)  {
+                    return rectSlot;
+                }
+            }
+            return null;
+        }
+
+        public int getScrollLimit() {
+            if (mHeightList != null && mHeightList.size() > 0) {
+                return Math.max(0, mContentLength -mHeight);
+            }
+            return 0;
+        }
+
+
+
+        public void createSlots() {
+            ArrayList<MediaItem> mediaItemlist = new ArrayList<MediaItem>();
+            if (mRenderer != null) {
+                mediaItemlist = mRenderer.getAllMediaItems();
+                }
+            if (mediaItemlist != null && mediaItemlist.size() > 0) {
+                if (mHeightList == null) {
+                    mHeightList =  new ArrayList<Integer>();
+                }
+                if (mMediaSlotMap == null) {
+                    mMediaSlotMap =  new HashMap<Integer, RectSlot>();
+                }
+                mHeightList.clear();
+                mMediaSlotMap.clear();
+                boolean isPrevTitle = false;
+                int j = 0;
+                int col = 0;
+                int totalHieght = 0;
+                for (int i = 0; i < mediaItemlist.size(); ++i) {
+                    MediaItem info = mediaItemlist.get(i);
+
+                    if (info.getMediaType() == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                        totalHieght += (mSpec.titleHeight+mSlotGap);
+                        isPrevTitle = true;
+                        col =0;
+                    } else {
+                        if (isPrevTitle) {
+                            j =0;
+                            isPrevTitle = false;
+                        } else {
+                            ++j;
+                        }
+                        if(j%mUnitCount == 0) {
+                            totalHieght += (mSlotHeight+mSlotGap);
+                            col =0;
+                        } else {
+                            col = j%mUnitCount;
+                        }
+
+                    }
+                    mHeightList.add(totalHieght);
+                    RectSlot rectslot = new RectSlot(info.getMediaType(), i, col, totalHieght);
+                    mMediaSlotMap.put(rectslot.slotIndex, rectslot);
+                }
+                mContentLength = mHeightList.get(mHeightList.size() -1);
+                mSlotCount = mediaItemlist.size();
+            }
+            updateVisibleSlotRange();
+        }
+
+        public RectSlot getRectSlot(int slotIndex) {
+            return mMediaSlotMap.get(slotIndex);
         }
     }
 
-    /**
-     * Get the SlotView's max scroll value.
-     */
-    public int getScrollLimit() {
-        return mLayout.getScrollLimit();
+
+
+    public static class RectSlot {
+        public int mediaType;
+        public int slotIndex;
+        public int slotCol;
+        public int totalHeight;
+
+        public RectSlot(int type, int index, int col, int height) {
+            mediaType = type;
+            slotIndex = index;
+            slotCol = col;
+            totalHeight = height;
+        }
     }
 }
