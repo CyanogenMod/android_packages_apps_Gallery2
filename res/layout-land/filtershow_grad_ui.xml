@@ -118,7 +118,7 @@
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
-            android:src="@drawable/filtershow_addpoint"
+            android:src="@drawable/addspot"
             android:paddingBottom="8dp"
             android:layout_marginStart="48dp" />
 
@@ -136,7 +136,7 @@
             android:scaleType="centerInside"
             android:layout_weight="0"
             android:background="@drawable/filtershow_button_background"
-            android:src="@drawable/ic_menu_trash_holo_light"
+            android:src="@drawable/delete"
             android:paddingBottom="8dp"
             android:layout_marginEnd="48dp" />
 

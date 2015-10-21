@@ -82,7 +82,7 @@ import java.util.Locale;
 
 public abstract class PhotoPage extends ActivityState implements
         PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
-        PhotoPageBottomControls.Delegate, GalleryActionBar.OnAlbumModeSelectedListener {
+        PhotoPageBottomControls.Delegate {
     private static final String TAG = "PhotoPage";
 
     private static final int MSG_HIDE_BARS = 1;
@@ -123,7 +123,8 @@ public abstract class PhotoPage extends ActivityState implements
     public static final String KEY_SHOW_WHEN_LOCKED = "show_when_locked";
     public static final String KEY_IN_CAMERA_ROLL = "in_camera_roll";
     public static final String KEY_READONLY = "read-only";
-
+    public static final String KEY_FROM_VIDEOS_SCREEN = "from-video-screen";
+    public static final String KEY_FROM_TIMELINE_SCREEN = "from-timeline-screen";
 
     // Bundle key, used for checking whether it is from widget
     public static final String KEY_IS_FROM_WIDGET = "is_from_widget";
@@ -178,6 +179,8 @@ public abstract class PhotoPage extends ActivityState implements
     private boolean mStartInFilmstrip;
     private boolean mHasCameraScreennailOrPlaceholder = false;
     private boolean mRecenterCameraOnResume = true;
+    private boolean mIsFromVideoScreen;
+    private boolean mIsFromTimelineScreen;
 
     // These are only valid after the panorama callback
     private boolean mIsPanorama;
@@ -201,6 +204,10 @@ public abstract class PhotoPage extends ActivityState implements
             new MyMenuVisibilityListener();
 
     private int mLastSystemUiVis = 0;
+
+    private ShareActionProvider mShareActionProvider;
+    private Intent mShareIntent;
+    private boolean mIsPhotoChanged = true;
 
     private final PanoramaSupportCallback mUpdatePanoramaMenuItemsCallback = new PanoramaSupportCallback() {
         @Override
@@ -270,6 +277,7 @@ public abstract class PhotoPage extends ActivityState implements
     public void onCreate(Bundle data, Bundle restoreState) {
         super.onCreate(data, restoreState);
         mActionBar = mActivity.getGalleryActionBar();
+        mActionBar.setBackGroundTransparent();
         mSelectionManager = new SelectionManager(mActivity, false);
         mMenuExecutor = new MenuExecutor(mActivity, mSelectionManager);
 
@@ -279,6 +287,8 @@ public abstract class PhotoPage extends ActivityState implements
         mApplication = (GalleryApp) ((Activity) mActivity).getApplication();
         mOrientationManager = mActivity.getOrientationManager();
         mActivity.getGLRoot().setOrientationSource(mOrientationManager);
+        mIsFromVideoScreen = data.getBoolean(KEY_FROM_VIDEOS_SCREEN, false);
+        mIsFromTimelineScreen = data.getBoolean(KEY_FROM_TIMELINE_SCREEN, false);
 
         mHandler = new SynchronizedHandler(mActivity.getGLRoot()) {
             @Override
@@ -469,6 +479,9 @@ public abstract class PhotoPage extends ActivityState implements
             mSetPathString = "/filter/delete/{" + mSetPathString + "}";
             mMediaSet = (FilterDeleteSet) mActivity.getDataManager()
                     .getMediaSet(mSetPathString);
+            if(mMediaSet != null && mIsFromTimelineScreen) {
+                mMediaSet.setClusterKind(-1);
+            }
             if (mMediaSet == null) {
                 Log.w(TAG, "failed to restore " + mSetPathString);
             }
@@ -527,6 +540,7 @@ public abstract class PhotoPage extends ActivityState implements
                 public void onPhotoChanged(int index, Path item) {
                     int oldIndex = mCurrentIndex;
                     mCurrentIndex = index;
+                    mIsPhotoChanged = true;
 
                     if (mHasCameraScreennailOrPlaceholder) {
                         if (mCurrentIndex > 0) {
@@ -552,7 +566,10 @@ public abstract class PhotoPage extends ActivityState implements
                     if (!mSkipUpdateCurrentPhoto) {
                         if (item != null) {
                             MediaItem photo = mModel.getMediaItem(0);
-                            if (photo != null) updateCurrentPhoto(photo);
+                            if (photo != null) {
+                                mActionBar.setTitle(photo.getName());
+                                updateCurrentPhoto(photo);
+                            }
                         }
                         updateBars();
                     }
@@ -635,19 +652,36 @@ public abstract class PhotoPage extends ActivityState implements
         if (mCurrentPhoto == null) {
             return false;
         }
-        switch(control) {
-            case R.id.photopage_bottom_control_edit:
-                return mHaveImageEditor && mShowBars && !mReadOnlyView
-                        && !mPhotoView.getFilmMode()
-                        && (mCurrentPhoto.getSupportedOperations() & MediaItem.SUPPORT_EDIT) != 0
-                        && mCurrentPhoto.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE;
-            case R.id.photopage_bottom_control_panorama:
-                return mIsPanorama;
-            case R.id.photopage_bottom_control_tiny_planet:
-                return mHaveImageEditor && mShowBars
-                        && mIsPanorama360 && !mPhotoView.getFilmMode();
-            default:
-                return false;
+        if (mIsPhotoChanged) {
+            if (mCurrentPhoto.getMediaType() == MediaObject.MEDIA_TYPE_VIDEO) {
+                mBottomControls.setSharePositionForVideo(mActivity);
+            } else {
+                mBottomControls.setSharePositionForImage();
+            }
+            mIsPhotoChanged = false;
+        }
+        switch (control) {
+        case R.id.photopage_bottom_controls:
+            return mShowBars;
+        case R.id.photopage_bottom_control_edit:
+            return mHaveImageEditor
+                    && mShowBars
+                    && !mReadOnlyView
+                    && !mPhotoView.getFilmMode()
+                    && (mCurrentPhoto.getSupportedOperations() & MediaItem.SUPPORT_EDIT) != 0
+                    && mCurrentPhoto.getMediaType() == MediaObject.MEDIA_TYPE_IMAGE;
+            // case R.id.photopage_bottom_control_panorama:
+            // return mIsPanorama;
+            // case R.id.photopage_bottom_control_tiny_planet:
+            // return mHaveImageEditor && mShowBars
+            // && mIsPanorama360 && !mPhotoView.getFilmMode();
+        case R.id.photopage_bottom_control_share:
+            mShareIntent = new Intent(Intent.ACTION_SEND);
+            return mShowBars;
+        case R.id.photopage_bottom_control_delete:
+            return mShowBars;
+        default:
+            return false;
         }
     }
 
@@ -657,15 +691,39 @@ public abstract class PhotoPage extends ActivityState implements
             case R.id.photopage_bottom_control_edit:
                 launchPhotoEditor();
                 return;
-            case R.id.photopage_bottom_control_panorama:
-                mActivity.getPanoramaViewHelper()
-                        .showPanorama(mCurrentPhoto.getContentUri());
+            case R.id.photopage_bottom_control_share:
+                 if (mModel != null && mModel.getMediaItem(0) != null) {
+                 Uri uri = Uri.parse(mModel.getMediaItem(0).getFilePath());
+                 mShareIntent.setType(MenuExecutor.getMimeType(mModel
+                    .getMediaItem(0).getMediaType()));
+                 mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                 mActivity.startActivity(Intent.createChooser(mShareIntent,
+                    "Share via"));
+                 }
+                 return;
+
+            case R.id.photopage_bottom_control_delete:
+                 String confirmMsg = null;
+                 confirmMsg = mActivity.getResources().getQuantityString(
+                    R.plurals.delete_selection, 1);
+                 if (mModel != null && mModel.getMediaItem(0) != null) {
+                 Path path = mModel.getMediaItem(0).getPath();
+                 mSelectionManager.deSelectAll();
+                 mSelectionManager.toggle(path);
+                 MenuItem item = null;
+                 mMenuExecutor.onMenuClicked(item, confirmMsg,
+                    mConfirmDialogListener);
+                 }
                 return;
-            case R.id.photopage_bottom_control_tiny_planet:
-                launchTinyPlanet();
-                return;
-            default:
-                return;
+            // case R.id.photopage_bottom_control_panorama:
+            // mActivity.getPanoramaViewHelper()
+            // .showPanorama(mCurrentPhoto.getContentUri());
+            // return;
+            // case R.id.photopage_bottom_control_tiny_planet:
+            // launchTinyPlanet();
+            // return;
+        default:
+            return;
         }
     }
 
@@ -950,6 +1008,17 @@ public abstract class PhotoPage extends ActivityState implements
                 onUpPressed();
             } else {
                 super.onBackPressed();
+                mActionBar.setBackGroundDefault();
+                int count = mActivity.getStateManager().getStateCount();
+                if(mIsFromTimelineScreen) {
+                    mMediaSet.setClusterKind(0);
+                }
+                if (mIsFromVideoScreen || count == 1 || mIsFromTimelineScreen) {
+                    mActivity.getToolbar().setNavigationContentDescription(
+                            "drawer");
+                    mActivity.getToolbar().setNavigationIcon(R.drawable.drawer);
+                    ((GalleryActivity)mActivity).toggleNavDrawer(true);
+                }
             }
         }
     }
@@ -1024,7 +1093,7 @@ public abstract class PhotoPage extends ActivityState implements
         mActionBar.createActionBarMenu(R.menu.photo, menu);
         mHaveImageEditor = GalleryUtils.isEditorAvailable(mActivity, "image/*");
         updateMenuOperations();
-        mActionBar.setTitle(mMediaSet != null ? mMediaSet.getName() : "");
+        //mActionBar.setTitle(mMediaSet != null ? mMediaSet.getName() : "");
         return true;
     }
 
@@ -1124,7 +1193,7 @@ public abstract class PhotoPage extends ActivityState implements
                         SlideshowPage.class, REQUEST_SLIDESHOW, data);
                 return true;
             }
-            case R.id.action_crop: {
+            /*case R.id.action_crop: {
                 Activity activity = mActivity;
                 Intent intent = new Intent(CropActivity.CROP_ACTION);
                 intent.setClass(activity, CropActivity.class);
@@ -1134,7 +1203,7 @@ public abstract class PhotoPage extends ActivityState implements
                         ? REQUEST_CROP_PICASA
                         : REQUEST_CROP);
                 return true;
-            }
+            }*/
             case R.id.action_trim: {
                 Intent intent = new Intent(mActivity, TrimVideo.class);
                 intent.setData(manager.getContentUri(path));
@@ -1160,10 +1229,10 @@ public abstract class PhotoPage extends ActivityState implements
                 launchPhotoEditor();
                 return true;
             }
-            case R.id.action_simple_edit: {
+            /*case R.id.action_simple_edit: {
                 launchSimpleEditor();
                 return true;
-            }
+            }*/
             case R.id.action_details: {
                 if (mShowDetails) {
                     hideDetails();
@@ -1180,8 +1249,8 @@ public abstract class PhotoPage extends ActivityState implements
                 confirmMsg = mActivity.getResources().getQuantityString(
                         R.plurals.delete_selection, 1);
             case R.id.action_setas:
-            case R.id.action_rotate_ccw:
-            case R.id.action_rotate_cw:
+            //case R.id.action_rotate_ccw:
+            //case R.id.action_rotate_cw:
             case R.id.action_show_on_map:
                 mSelectionManager.deSelectAll();
                 mSelectionManager.toggle(path);
@@ -1372,11 +1441,11 @@ public abstract class PhotoPage extends ActivityState implements
             case REQUEST_EDIT:
                 setCurrentPhotoByIntent(data);
                 break;
-            case REQUEST_CROP:
+         /*case REQUEST_CROP:
                 if (resultCode == Activity.RESULT_OK) {
                     setCurrentPhotoByIntent(data);
                 }
-                break;
+                break;*/
             case REQUEST_CROP_PICASA: {
                 if (resultCode == Activity.RESULT_OK) {
                     Context context = mActivity.getAndroidContext();
@@ -1422,9 +1491,9 @@ public abstract class PhotoPage extends ActivityState implements
         mHandler.removeMessages(MSG_REFRESH_BOTTOM_CONTROLS);
         refreshBottomControlsWhenReady();
         mActionBar.removeOnMenuVisibilityListener(mMenuVisibilityListener);
-        if (mShowSpinner) {
-            mActionBar.disableAlbumModeMenu(true);
-        }
+        // if (mShowSpinner) {
+        // mActionBar.disableAlbumModeMenu(true);
+        // }
         onCommitDeleteImage();
         mMenuExecutor.pause();
         if (mMediaSet != null) mMediaSet.clearDeletion();
@@ -1438,14 +1507,14 @@ public abstract class PhotoPage extends ActivityState implements
     @Override
     public void onFilmModeChanged(boolean enabled) {
         refreshBottomControlsWhenReady();
-        if (mShowSpinner) {
+        /*if (mShowSpinner) {
             if (enabled) {
                 mActionBar.enableAlbumModeMenu(
                         GalleryActionBar.ALBUM_FILMSTRIP_MODE_SELECTED, this);
             } else {
                 mActionBar.disableAlbumModeMenu(true);
             }
-        }
+        }*/
         if (enabled) {
             mHandler.removeMessages(MSG_HIDE_BARS);
             UsageStatistics.onContentViewChanged(
@@ -1538,13 +1607,17 @@ public abstract class PhotoPage extends ActivityState implements
         mModel.resume();
         mPhotoView.resume();
         mActionBar.setDisplayOptions(
-                ((mSecureAlbum == null) && (mSetPathString != null)), false);
+                ((mSecureAlbum == null) && (mSetPathString != null)), true);
         mActionBar.addOnMenuVisibilityListener(mMenuVisibilityListener);
         refreshBottomControlsWhenReady();
-        if (mShowSpinner && mPhotoView.getFilmMode()) {
-            mActionBar.enableAlbumModeMenu(
-                    GalleryActionBar.ALBUM_FILMSTRIP_MODE_SELECTED, this);
+        if (((mSecureAlbum == null) && (mSetPathString != null))) {
+            mActivity.getToolbar().setNavigationContentDescription("back");
+            mActivity.getToolbar().setNavigationIcon(R.drawable.back);
         }
+        // if (mShowSpinner && mPhotoView.getFilmMode()) {
+        // mActionBar.enableAlbumModeMenu(
+        // GalleryActionBar.ALBUM_FILMSTRIP_MODE_SELECTED, this);
+        // }
         if (!mShowBars) {
             mActionBar.hide();
             mActivity.getGLRoot().setLightsOutMode(true);
@@ -1595,12 +1668,12 @@ public abstract class PhotoPage extends ActivityState implements
         }
     }
 
-    @Override
+    /*@Override
     public void onAlbumModeSelected(int mode) {
         if (mode == GalleryActionBar.ALBUM_GRID_MODE_SELECTED) {
             switchToGrid();
         }
-    }
+    }*/
 
     @Override
     public void refreshBottomControlsWhenReady() {

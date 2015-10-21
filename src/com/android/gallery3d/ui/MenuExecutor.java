@@ -183,9 +183,9 @@ public class MenuExecutor {
         supportPrint &= PrintHelper.systemSupportsPrint();
         boolean supportDrmInfo = (supported & MediaObject.SUPPORT_DRM_INFO) != 0;
         setMenuItemVisible(menu, R.id.action_delete, supportDelete);
-        setMenuItemVisible(menu, R.id.action_rotate_ccw, supportRotate);
-        setMenuItemVisible(menu, R.id.action_rotate_cw, supportRotate);
-        setMenuItemVisible(menu, R.id.action_crop, supportCrop);
+        //setMenuItemVisible(menu, R.id.action_rotate_ccw, supportRotate);
+        //setMenuItemVisible(menu, R.id.action_rotate_cw, supportRotate);
+        //setMenuItemVisible(menu, R.id.action_crop, supportCrop);
         setMenuItemVisible(menu, R.id.action_trim, supportTrim);
         setMenuItemVisible(menu, R.id.action_mute, supportMute);
         // Hide panorama until call to updateMenuForPanorama corrects it
@@ -204,8 +204,8 @@ public class MenuExecutor {
             boolean disablePanorama360Options) {
         setMenuItemVisible(menu, R.id.action_share_panorama, shareAsPanorama360);
         if (disablePanorama360Options) {
-            setMenuItemVisible(menu, R.id.action_rotate_ccw, false);
-            setMenuItemVisible(menu, R.id.action_rotate_cw, false);
+            //setMenuItemVisible(menu, R.id.action_rotate_ccw, false);
+            //setMenuItemVisible(menu, R.id.action_rotate_cw, false);
         }
     }
 
@@ -242,11 +242,11 @@ public class MenuExecutor {
                     mSelectionManager.selectAll();
                 }
                 return;
-            case R.id.action_crop: {
+            /*case R.id.action_crop: {
                 Intent intent = getIntentBySingleSelectedPath(CropActivity.CROP_ACTION);
                 ((Activity) mActivity).startActivity(intent);
                 return;
-            }
+            }*/
             case R.id.action_edit: {
                 Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_EDIT)
                         .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -273,12 +273,15 @@ public class MenuExecutor {
             case R.id.action_delete:
                 title = R.string.delete;
                 break;
-            case R.id.action_rotate_cw:
+            case R.id.photopage_bottom_control_delete:
+                title = R.string.delete;
+                break;
+            /*case R.id.action_rotate_cw:
                 title = R.string.rotate_right;
                 break;
             case R.id.action_rotate_ccw:
                 title = R.string.rotate_left;
-                break;
+                break;*/
             case R.id.action_show_on_map:
                 title = R.string.show_on_map;
                 break;
@@ -335,7 +338,14 @@ public class MenuExecutor {
 
     public void onMenuClicked(MenuItem menuItem, String confirmMsg,
             final ProgressListener listener) {
-        final int action = menuItem.getItemId();
+        final int action;
+        if (menuItem == null) {
+            action = R.id.photopage_bottom_control_delete;
+        }
+        else
+        {
+           action = menuItem.getItemId();
+        }
 
         if (confirmMsg != null) {
             if (listener != null) listener.onConfirmDialogShown();
@@ -401,12 +411,15 @@ public class MenuExecutor {
             case R.id.action_delete:
                 manager.delete(path);
                 break;
-            case R.id.action_rotate_cw:
+            case R.id.photopage_bottom_control_delete:
+                manager.delete(path);
+                break;
+            /*case R.id.action_rotate_cw:
                 manager.rotate(path, 90);
                 break;
             case R.id.action_rotate_ccw:
                 manager.rotate(path, -90);
-                break;
+                break;*/
             case R.id.action_toggle_full_caching: {
                 MediaObject obj = manager.getMediaObject(path);
                 int cacheFlag = obj.getCacheFlag();

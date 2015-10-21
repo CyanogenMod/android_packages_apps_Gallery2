@@ -16,24 +16,48 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:custom="http://schemas.android.com/apk/res/com.android.gallery3d"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/edit_actionbar_background"
+    android:orientation="horizontal" >
 
-    <com.android.gallery3d.filtershow.category.IconView
-            android:id="@+id/addButton"
+    <!-- <com.android.gallery3d.filtershow.category.IconView -->
+    <!-- android:id="@+id/addButton" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="@dimen/category_panel_height" -->
+    <!-- android:src="@drawable/filtershow_add"/> -->
+
+
+    <!-- <ListView -->
+    <!-- android:id="@+id/listItems" -->
+    <!-- android:orientation="vertical" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="@dimen/category_panel_height" -->
+    <!-- android:layout_margin="8dip" -->
+    <!-- android:divider="@android:color/transparent" -->
+    <!-- android:dividerHeight="8dip" -->
+    <!-- android:layout_weight="1"/> -->
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scrollbars="none" >
+
+        <com.android.gallery3d.filtershow.category.CategoryTrack
+            android:id="@+id/listItems"
             android:layout_width="match_parent"
             android:layout_height="@dimen/category_panel_height"
-            android:src="@drawable/filtershow_add"/>
-
-    <ListView
-            android:id="@+id/listItems"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="8dip"
             android:divider="@android:color/transparent"
-            android:dividerHeight="8dip"
-            android:layout_weight="1"/>
+            android:dividerPadding="8dip"
+            custom:iconSize="@dimen/category_panel_icon_size" />
+    </HorizontalScrollView>
+
+    <com.android.gallery3d.filtershow.category.IconView
+        android:id="@+id/addButton"
+        android:layout_width="@dimen/category_panel_height"
+        android:layout_height="@dimen/category_panel_height"
+        android:src="@drawable/filtershow_add" />
 
 </LinearLayout>

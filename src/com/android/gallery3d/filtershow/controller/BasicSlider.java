@@ -21,14 +21,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.Editor;
 
 public class BasicSlider implements Control {
     private SeekBar mSeekBar;
+    private TextView mFilterValue,mFilterText;
     private ParameterInteger mParameter;
     Editor mEditor;
 
@@ -42,8 +45,12 @@ public class BasicSlider implements Control {
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout lp = (LinearLayout) inflater.inflate(
                 R.layout.filtershow_seekbar, container, true);
+        LinearLayout lpBasicFilterContainer = (LinearLayout) lp.findViewById(R.id.basicFilterContainer);
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
+        mFilterText = (TextView)lpBasicFilterContainer.findViewById(R.id.tvFilterName);
+        mFilterValue = (TextView)lpBasicFilterContainer.findViewById(R.id.tvFilterValue);
         mSeekBar.setVisibility(View.VISIBLE);
+        mEditor.setBasicFilterUI(mFilterText, mFilterValue);
         updateUI();
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 

@@ -81,10 +81,8 @@ public class ImageFilterDualCamera extends ImageFilter {
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int origW = originalBounds.width();
             int origH = originalBounds.height();
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
 
-            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(w, h, BitmapCache.FILTERS);
+            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
 
             boolean result = false;
 
@@ -122,9 +120,10 @@ public class ImageFilterDualCamera extends ImageFilter {
                 }
 
                 Canvas canvas = new Canvas(bitmap);
-
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
                 if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
-                    Matrix originalToScreen = getImageToScreenMatrix(w, h, w, h);
+                    Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
                     canvas.drawBitmap(filteredBitmap, originalToScreen, mPaint);
                 } else {
                     canvas.drawBitmap(filteredBitmap, null, new Rect(0,0,w,h), mPaint);

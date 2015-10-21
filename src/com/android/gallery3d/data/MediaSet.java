@@ -62,6 +62,14 @@ public abstract class MediaSet extends MediaObject {
         return 0;
     }
 
+    public int getImageItemCount(){
+      return 0;
+    }
+
+    public int getVideoItemCount(){
+      return 0;
+    }
+
     // Returns the media items in the range [start, start + count).
     //
     // The number of media items returned may be less than the specified count
@@ -350,4 +358,6 @@ public abstract class MediaSet extends MediaObject {
             if (listener != null) listener.onSyncDone(MediaSet.this, mResult);
         }
     }
+
+    public void setClusterKind(int kind){};
 }

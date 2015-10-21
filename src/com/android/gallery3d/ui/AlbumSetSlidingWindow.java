@@ -39,6 +39,7 @@ import com.android.gallery3d.util.ThreadPool;
 public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
     private static final String TAG = "AlbumSetSlidingWindow";
     private static final int MSG_UPDATE_ALBUM_ENTRY = 1;
+    public static final String KEY_ALBUM = "AlbumSet";
 
     public static interface Listener {
         public void onSizeChanged(int size);
@@ -527,7 +528,7 @@ public class AlbumSetSlidingWindow implements AlbumSetDataLoader.DataListener {
 
         mSlotWidth = width;
         mLoadingLabel = null;
-        mLabelMaker.setLabelWidth(mSlotWidth);
+        mLabelMaker.setLabelWidth(mSlotWidth,KEY_ALBUM);
 
         if (!mIsActive) return;
 

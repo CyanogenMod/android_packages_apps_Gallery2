@@ -307,7 +307,7 @@ public class PhotoView extends GLView {
                 mEdgeView.onAbsorb(velocity, direction);
             }
         });
-        mVideoPlayIcon = new ResourceTexture(mContext, R.drawable.ic_control_play);
+        mVideoPlayIcon = new ResourceTexture(mContext, R.drawable.play_detail);
         mDrmIcon = new ResourceTexture(mContext, R.drawable.drm_image);
         for (int i = -SCREEN_NAIL_MAX; i <= SCREEN_NAIL_MAX; i++) {
             if (i == 0) {

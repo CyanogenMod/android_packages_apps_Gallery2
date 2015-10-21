@@ -82,10 +82,8 @@ public class ImageFilterDualCamFusion extends ImageFilter {
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int origW = originalBounds.width();
             int origH = originalBounds.height();
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
 
-            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(w, h, BitmapCache.FILTERS);
+            filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(origW, origH, BitmapCache.FILTERS);
             filteredBitmap.setHasAlpha(true);
 
             boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y, filteredBitmap);
@@ -114,10 +112,12 @@ public class ImageFilterDualCamFusion extends ImageFilter {
                 bitmap.setHasAlpha(true);
 
                 Canvas canvas = new Canvas(bitmap);
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
 
                 canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                 if(getEnvironment().getImagePreset().getDoApplyGeometry()) {
-                    Matrix originalToScreen = getImageToScreenMatrix(w, h, w, h);
+                    Matrix originalToScreen = getOriginalToScreenMatrix(w, h);
                     canvas.drawBitmap(filteredBitmap, originalToScreen, null);
                 } else {
                     canvas.drawBitmap(filteredBitmap, null, new Rect(0,0,w,h), null);

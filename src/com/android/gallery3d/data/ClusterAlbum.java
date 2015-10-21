@@ -17,6 +17,7 @@
 package com.android.gallery3d.data;
 
 import java.util.ArrayList;
+import com.android.gallery3d.util.GalleryUtils;
 
 public class ClusterAlbum extends MediaSet implements ContentListener {
     @SuppressWarnings("unused")
@@ -26,13 +27,22 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
     private DataManager mDataManager;
     private MediaSet mClusterAlbumSet;
     private MediaItem mCover;
+    private final int INVALID_COUNT = -1;
+    private int mImageCount = INVALID_COUNT;
+    private int mVideoCount = INVALID_COUNT;
+    private int mKind = -1;
+
+
+    private TimeLineTitleMediaItem mTimelineTitleMediaItem;
 
     public ClusterAlbum(Path path, DataManager dataManager,
-            MediaSet clusterAlbumSet) {
+            MediaSet clusterAlbumSet, int kind) {
         super(path, nextVersionNumber());
         mDataManager = dataManager;
         mClusterAlbumSet = clusterAlbumSet;
         mClusterAlbumSet.addContentListener(this);
+        mKind = kind;
+        mTimelineTitleMediaItem = new TimeLineTitleMediaItem(path);
     }
 
     public void setCoverMediaItem(MediaItem cover) {
@@ -48,12 +58,16 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
         mPaths = paths;
     }
 
-    ArrayList<Path> getMediaItems() {
+    public ArrayList<Path> getMediaItems() {
         return mPaths;
     }
 
     public void setName(String name) {
         mName = name;
+        mTimelineTitleMediaItem.setTitle(name);
+        /*if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            mTimelineTitleMediaItem = new TimeLineTitleMediaItem(name);
+        }*/
     }
 
     @Override
@@ -63,12 +77,52 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
 
     @Override
     public int getMediaItemCount() {
+        if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            return mPaths.size()+1;
+        }
         return mPaths.size();
+    }
+
+    public void setImageItemCount(int count) {
+        mImageCount = count;
+        if (mTimelineTitleMediaItem != null && mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            mTimelineTitleMediaItem.setImageCount(count);
+        }
+    }
+
+    public void setVideoItemCount(int count) {
+        mVideoCount = count;
+        if (mTimelineTitleMediaItem != null && mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            mTimelineTitleMediaItem.setVideoCount(count);
+        }
     }
 
     @Override
     public ArrayList<MediaItem> getMediaItem(int start, int count) {
-        return getMediaItemFromPath(mPaths, start, count, mDataManager);
+        //return getMediaItemFromPath(mPaths, start, count, mDataManager);
+        if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            if (mPaths.size() <= 0) return null;
+            if (start == 0) {
+                ArrayList<MediaItem> mediaItemList = new ArrayList<MediaItem>();
+                mediaItemList.addAll(getMediaItemFromPath(mPaths, start, count - 1, mDataManager));
+                mediaItemList.add(0, mTimelineTitleMediaItem);
+                return mediaItemList;
+            } else {
+                return getMediaItemFromPath(mPaths, start - 1, count, mDataManager);
+            }
+        } else {
+            return getMediaItemFromPath(mPaths, start, count, mDataManager);
+        }
+    }
+
+    @Override
+    public int getImageItemCount() {
+        return mImageCount;
+    }
+
+    @Override
+    public int getVideoItemCount() {
+        return mVideoCount;
     }
 
     public static ArrayList<MediaItem> getMediaItemFromPath(
@@ -102,6 +156,9 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
 
     @Override
     public int getTotalMediaItemCount() {
+        if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            return mPaths.size()+1;
+        }
         return mPaths.size();
     }
 
@@ -139,5 +196,13 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
     @Override
     public boolean isLeafAlbum() {
         return true;
+    }
+
+    public TimeLineTitleMediaItem getTimelineTitle() {
+        return mTimelineTitleMediaItem;
+    }
+
+    public void setClusterKind(int kind) {
+        mKind = kind;
     }
 }

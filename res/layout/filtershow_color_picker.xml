@@ -17,14 +17,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/background_main_toolbar">
+              android:background="@color/albumset_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:id="@+id/RelativeLayout1"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:background="@color/background_main_toolbar">
+                  android:background="@color/albumset_background">
 
         <com.android.gallery3d.filtershow.colorpicker.ColorCompareView
                 android:id="@+id/btnSelect"
@@ -66,7 +66,7 @@
                     android:background="@android:color/transparent"
                     android:layout_weight=".1"
                     android:gravity="center"
-                    android:src="@drawable/ic_menu_cancel_holo_light"
+                    android:src="@drawable/cancel2"
                     android:textSize="18dip"/>
 
             <ImageView
@@ -81,7 +81,7 @@
                     android:layout_weight=".1"
                     android:background="@android:color/transparent"
                     android:gravity="center"
-                    android:src="@drawable/ic_menu_done_holo_light"
+                    android:src="@drawable/done2"
                     android:textSize="18dip"/>
         </LinearLayout>
     </LinearLayout>

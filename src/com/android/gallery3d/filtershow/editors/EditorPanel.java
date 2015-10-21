@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.history.HistoryManager;
@@ -80,39 +82,14 @@ public class EditorPanel extends Fragment {
             return mMainView;
         }
         mMainView = (LinearLayout) inflater.inflate(R.layout.filtershow_editor_panel, null);
-
-        View actionControl = mMainView.findViewById(R.id.panelAccessoryViewList);
+        //TextView mFilterText = (TextView) mMainView.findViewById(R.id.tvFilterName);
         View editControl = mMainView.findViewById(R.id.controlArea);
-        ImageButton cancelButton = (ImageButton) mMainView.findViewById(R.id.cancelFilter);
-        ImageButton applyButton = (ImageButton) mMainView.findViewById(R.id.applyFilter);
-        Button editTitle = (Button) mMainView.findViewById(R.id.applyEffect);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelCurrentFilter();
-                FilterShowActivity activity = (FilterShowActivity) getActivity();
-                activity.backToMain();
-            }
-        });
-
         Button toggleState = (Button) mMainView.findViewById(R.id.toggle_state);
         mEditor = activity.getEditor(mEditorID);
         if (mEditor != null) {
-            mEditor.setUpEditorUI(actionControl, editControl, editTitle, toggleState);
+            mEditor.setUpEditorUI(editControl, toggleState);
             mEditor.reflectCurrentFilter();
-            if (mEditor.useUtilityPanel()) {
-                mEditor.openUtilityPanel((LinearLayout) actionControl);
-            }
         }
-        applyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FilterShowActivity activity = (FilterShowActivity) getActivity();
-                mEditor.finalApplyCalled();
-                activity.backToMain();
-            }
-        });
-
         showImageStatePanel(activity.isShowingImageStatePanel());
         return mMainView;
     }

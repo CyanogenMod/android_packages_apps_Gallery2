@@ -25,10 +25,13 @@ public class HistoryManager {
     private static final String LOGTAG = "HistoryManager";
 
     private Vector<HistoryItem> mHistoryItems = new Vector<HistoryItem>();
+    private Vector<HistoryItem> mHistoryItemsActiveFilter = new Vector<HistoryItem>();
     private int mCurrentPresetPosition = 0;
+    private int mComparePresetPosition = 0;
     private MenuItem mUndoMenuItem = null;
     private MenuItem mRedoMenuItem = null;
     private MenuItem mResetMenuItem = null;
+    private int mActiveFilter = -1;
 
     public void setMenuItems(MenuItem undoItem, MenuItem redoItem, MenuItem resetItem) {
         mUndoMenuItem = undoItem;
@@ -128,6 +131,7 @@ public class HistoryManager {
 
     public void addHistoryItem(HistoryItem preset) {
         insert(preset, 0);
+        insertActiveFilter(preset, 0);
         updateMenuItems();
     }
 
@@ -168,6 +172,48 @@ public class HistoryManager {
         notifyDataSetChanged();
         updateMenuItems();
         return mCurrentPresetPosition;
+    }
+
+    public int backToOriginal() {
+        saveComparePresetPosition();
+            mCurrentPresetPosition = getCount() - 1;
+        return mCurrentPresetPosition;
+    }
+
+    public int backToCurrent() {
+        mCurrentPresetPosition = getCurrentPresetPosition();
+        return mCurrentPresetPosition;
+    }
+    public int setActiveFilter(int value)
+    {
+        mActiveFilter = value;
+        return mActiveFilter;
+    }
+    private void insertActiveFilter(HistoryItem preset, int position)
+    {
+        mHistoryItemsActiveFilter.add(preset);
+    }
+    public void resetActiveFilter()
+    {
+        mHistoryItemsActiveFilter.clear();
+    }
+    public int undoCurrentFilter()
+    {
+        mCurrentPresetPosition = mCurrentPresetPosition + mHistoryItemsActiveFilter.size();
+        if (mCurrentPresetPosition >= getCount()) {
+            mCurrentPresetPosition = getCount() - 1;
+        }
+        updateMenuItems();
+        return mCurrentPresetPosition;
+    }
+
+    public void saveComparePresetPosition()
+    {
+        mComparePresetPosition = mCurrentPresetPosition ;
+    }
+    public int getCurrentPresetPosition()
+    {
+        return mComparePresetPosition;
     }
 
 }

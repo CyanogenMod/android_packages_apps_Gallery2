@@ -69,7 +69,7 @@ public class IconView extends View {
     private void setup(Context context) {
         Resources res = getResources();
         mTextColor = res.getColor(R.color.filtershow_categoryview_text);
-        mBackgroundColor = res.getColor(R.color.filtershow_categoryview_background);
+        mBackgroundColor = res.getColor(android.R.color.transparent);
         mMargin = res.getDimensionPixelOffset(R.dimen.category_panel_margin);
         mTextSize = res.getDimensionPixelSize(R.dimen.category_panel_text_size);
     }
@@ -80,7 +80,7 @@ public class IconView extends View {
         }
         mPaint.setTextSize(mTextSize);
         if (getOrientation() == VERTICAL) {
-            text = text.toUpperCase();
+//            text = text.toUpperCase();
             // TODO: set this in xml
             mPaint.setTypeface(Typeface.DEFAULT_BOLD);
         }
@@ -108,7 +108,7 @@ public class IconView extends View {
             // justify to the left.
             x = mMargin;
         }
-        int y = canvas.getHeight() - 2*mMargin;
+        int y = canvas.getHeight() / 2 ;//- 2*mMargin;
         canvas.drawText(text, x, y, mPaint);
     }
 

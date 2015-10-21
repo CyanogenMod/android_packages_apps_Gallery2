@@ -23,6 +23,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -44,6 +45,7 @@ import com.android.gallery3d.app.PackagesMonitor;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.ui.SharedPreferencesCompat;
 import com.android.gallery3d.ui.TiledScreenNail;
 import com.android.gallery3d.util.IntentHelper;
 import com.android.gallery3d.util.ThreadPool.CancelListener;
@@ -420,5 +422,19 @@ public class GalleryUtils {
         int w = item.getWidth();
         int h = item.getHeight();
         return (h > 0 && w / h >= 2);
+    }
+ // Newly added methods
+   public static int getIntPref(Context context, String name, int def) {
+        SharedPreferences prefs =
+            context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        return prefs.getInt(name, def);
+    }
+
+    public static void setIntPref(Context context, String name, int value) {
+        SharedPreferences prefs =
+            context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        Editor ed = prefs.edit();
+        ed.putInt(name, value);
+        ed.commit();
     }
 }

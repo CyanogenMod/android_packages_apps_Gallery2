@@ -446,6 +446,9 @@ public final class GeometryMathUtils {
             bw = bitmapHeight;
         }
         float scale = GeometryMathUtils.scale(bw, bh, viewWidth, viewHeight);
+        if (scale > 3.0f) {
+            scale = 3.0f;
+        }
         scale *= SHOW_SCALE;
         float s = Math.min(viewWidth / (float) bitmapWidth, viewHeight / (float) bitmapHeight);
         Matrix m = getFullGeometryMatrix(holder, bitmapWidth, bitmapHeight);

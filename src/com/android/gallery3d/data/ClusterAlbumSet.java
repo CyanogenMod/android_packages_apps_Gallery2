@@ -20,9 +20,12 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.android.gallery3d.app.GalleryApp;
-
+import com.android.gallery3d.util.GalleryUtils;
+import com.android.gallery3d.common.Utils;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ClusterAlbumSet extends MediaSet implements ContentListener {
     @SuppressWarnings("unused")
@@ -32,6 +35,10 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     private int mKind;
     private ArrayList<ClusterAlbum> mAlbums = new ArrayList<ClusterAlbum>();
     private boolean mFirstReloadDone;
+
+    private  int mTotalMediaItemCount;
+    private ArrayList<Integer> mAlbumItemCountList;
+    private ArrayList<TimeLineTitleMediaItem> mTimelineTitleMediaList;
 
     public ClusterAlbumSet(Path path, GalleryApp application,
             MediaSet baseSet, int kind) {
@@ -59,14 +66,20 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
 
     @Override
     public long reload() {
-        if (mBaseSet.reload() > mDataVersion) {
-            if (mFirstReloadDone) {
-                updateClustersContents();
-            } else {
-                updateClusters();
-                mFirstReloadDone = true;
+        synchronized(this){
+            if (mBaseSet.reload() > mDataVersion) {
+                if (mFirstReloadDone) {
+                    updateClustersContents();
+                } else {
+                    updateClusters();
+                    mFirstReloadDone = true;
+                }
+                mDataVersion = nextVersionNumber();
             }
-            mDataVersion = nextVersionNumber();
+            if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+                calculateTotalItemsCount();
+                createTimelineTitleMediaList();
+            }
         }
         return mDataVersion;
     }
@@ -117,22 +130,24 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             synchronized (DataManager.LOCK) {
                 album = (ClusterAlbum) dataManager.peekMediaObject(childPath);
                 if (album == null) {
-                    album = new ClusterAlbum(childPath, dataManager, this);
+                    album = new ClusterAlbum(childPath, dataManager, this, mKind);
                 }
             }
             album.setMediaItems(clustering.getCluster(i));
             album.setName(childName);
             album.setCoverMediaItem(clustering.getClusterCover(i));
+            album.setImageItemCount(clustering.getClusterImageCount(i));
+            album.setVideoItemCount(clustering.getClusterVideoCount(i));
             mAlbums.add(album);
         }
     }
 
-    private void updateClustersContents() {
-        final HashSet<Path> existing = new HashSet<Path>();
+    protected void updateClustersContents() {
+        final HashMap<Path, Integer> existing = new HashMap<Path, Integer>();
         mBaseSet.enumerateTotalMediaItems(new MediaSet.ItemConsumer() {
             @Override
             public void consume(int index, MediaItem item) {
-                existing.add(item.getPath());
+                existing.put(item.getPath(), item.getMediaType());
             }
         });
 
@@ -144,16 +159,111 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             ArrayList<Path> oldPaths = mAlbums.get(i).getMediaItems();
             ArrayList<Path> newPaths = new ArrayList<Path>();
             int m = oldPaths.size();
+            int imageCount = 0;
+            int videoCount = 0;
+            int mediaType = MEDIA_TYPE_UNKNOWN;
+            ClusterAlbum album = mAlbums.get(i);
             for (int j = 0; j < m; j++) {
                 Path p = oldPaths.get(j);
-                if (existing.contains(p)) {
+                if (existing.containsKey(p)) {
                     newPaths.add(p);
+                    mediaType = existing.get(p);
+                    existing.remove(p);
+                    if(mediaType == MediaObject.MEDIA_TYPE_IMAGE) {
+                        imageCount++;
+                    } else if(mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
+                        videoCount++;
+                    }
                 }
             }
-            mAlbums.get(i).setMediaItems(newPaths);
+            album.setImageItemCount(imageCount);
+            album.setVideoItemCount(videoCount);
+            album.setMediaItems(newPaths);
             if (newPaths.isEmpty()) {
                 mAlbums.remove(i);
             }
         }
+
+        updateClusters();
     }
+
+  private void calculateTotalItemsCount() {
+      mTotalMediaItemCount = 0;
+      if( mAlbums != null && mAlbums.size() > 0) {
+          mAlbumItemCountList = new ArrayList<Integer>();
+          for(ClusterAlbum album: mAlbums) {
+              int count = album.getMediaItemCount();
+              mTotalMediaItemCount = mTotalMediaItemCount + count;
+              mAlbumItemCountList.add(mTotalMediaItemCount);
+          }
+      }
+  }
+
+  private void createTimelineTitleMediaList() {
+      if (mTimelineTitleMediaList == null) {
+          mTimelineTitleMediaList = new ArrayList<TimeLineTitleMediaItem>();
+      }
+      mTimelineTitleMediaList.clear();
+      for(ClusterAlbum album: mAlbums) {
+          mTimelineTitleMediaList.add(album.getTimelineTitle());
+      }
+  }
+
+  public TimeLineTitleMediaItem getTimelineTitleMediaItem(int index) {
+      if (mTimelineTitleMediaList == null || index >= mTimelineTitleMediaList.size()) {
+          return null;
+      }
+      return mTimelineTitleMediaList.get(index);
+  }
+
+  @Override
+  public int getMediaItemCount() {
+      return mTotalMediaItemCount;
+  }
+
+  @Override
+  public ArrayList<MediaItem> getMediaItem(int start, int count) {
+      if ((start + count) > mTotalMediaItemCount ) {
+          count  = mTotalMediaItemCount - start;
+      }
+      if (count <= 0) return null;
+      ArrayList<MediaItem> mediaItems = new ArrayList<MediaItem>();
+      int startAlbum = findTimelineAlbumIndex(start);
+      int endAlbum = findTimelineAlbumIndex(start + count - 1);
+      int pAlbumCount = 0;
+      int s;
+      int lCount;
+      if (startAlbum > 0) {
+          pAlbumCount = mAlbumItemCountList.get(startAlbum -1);
+      }
+      s = start - pAlbumCount;
+      for (int i = startAlbum; i <= endAlbum && i < mAlbums.size(); ++i) {
+          int albumCount = mAlbums.get(i).getTotalMediaItemCount();
+          lCount = Math.min(albumCount - s, count);
+          ArrayList<MediaItem> items = mAlbums.get(i).getMediaItem(s, lCount);
+          if (items != null)
+              mediaItems.addAll(items);
+          count -= lCount;
+          s = 0;
+      }
+      return mediaItems;
+  }
+
+  public int findTimelineAlbumIndex(int itemIndex) {
+      int index = Arrays.binarySearch(mAlbumItemCountList.toArray(new Integer[0]), itemIndex);
+      if (index <  mTotalMediaItemCount && index >=  0)
+          return index + 1;
+      if (index < 0) {
+          index = (index * (-1)) - 1;
+      }
+      return index;
+  }
+
+  public ClusterAlbum getAlbumFromindex(int index) {
+      int albumIndex = findTimelineAlbumIndex(index);
+      if (albumIndex >= 0 && albumIndex < mAlbums.size()) {
+          return mAlbums.get(albumIndex);
+      }
+      return null;
+  }
 }

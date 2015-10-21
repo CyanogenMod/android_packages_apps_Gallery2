@@ -52,6 +52,8 @@ public abstract class MediaObject {
     public static final int MEDIA_TYPE_DRM_VIDEO = 5;
     public static final int MEDIA_TYPE_DRM_IMAGE = 6;
     public static final int MEDIA_TYPE_ALL = MEDIA_TYPE_IMAGE | MEDIA_TYPE_VIDEO;
+    //TYPE for Timeline Title
+    public static final int MEDIA_TYPE_TIMELINE_TITLE= 7;
 
     public static final String MEDIA_TYPE_IMAGE_STRING = "image";
     public static final String MEDIA_TYPE_VIDEO_STRING = "video";
@@ -83,6 +85,10 @@ public abstract class MediaObject {
         path.setObject(this);
         mPath = path;
         mDataVersion = version;
+    }
+
+    public MediaObject(Path path) {
+        mPath = path;
     }
 
     public Path getPath() {

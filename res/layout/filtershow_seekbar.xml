@@ -19,14 +19,52 @@
     android:id="@+id/top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:visibility="visible" >
+
+    <LinearLayout
+        android:id="@+id/basicFilterContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvFilterValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="left|center_vertical"
+            android:paddingLeft="23dp"
+            android:paddingTop="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvFilterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvFilterValue"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingTop="14dp"
+            android:text="@string/apply_effect"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <SeekBar
         android:id="@+id/primarySeekBar"
+        style="@style/FilterShowSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/FilterShowSlider"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginRight="34dp"
+        android:layout_toRightOf="@+id/tvFilterName"
+        android:layout_weight="1"
+        android:paddingTop="20dp"
         android:visibility="gone" />
 
 </LinearLayout>

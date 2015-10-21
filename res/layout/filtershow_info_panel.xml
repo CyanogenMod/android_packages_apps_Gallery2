@@ -19,8 +19,8 @@
               android:minWidth="340dp"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@color/background_main_toolbar"
-              android:padding="16dp">
+              android:background="@color/albumset_background"
+              android:padding="24dp">
 
     <ScrollView
             android:layout_width="match_parent"
@@ -35,29 +35,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:weightSum="1"
                     >
 
                 <TextView
                         android:id="@+id/imageName"
                         style="?android:textAppearanceSmall"
                         android:textStyle="bold"
-                        android:textColor="#80ffffff"
+                        android:textSize="16sp"
+                        android:textColor="@color/albumlist_label_title"
                         android:layout_gravity="start"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="start"/>
+                        android:gravity="start"
+                        android:ellipsize="end"
+                        android:layout_weight="0.65"
+                        android:maxLines="1"/>
 
                 <TextView
                         android:id="@+id/imageSize"
                         style="?android:textAppearanceSmall"
                         android:textAllCaps="true"
-                        android:textColor="#80ffffff"
+                        android:textSize="16sp"
+                        android:textColor="@color/albumlist_label_title"
                         android:textStyle="bold"
                         android:layout_gravity="end"
+                        android:layout_weight="0.35"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="end"/>
 
             </LinearLayout>
@@ -91,8 +96,9 @@
                     style="?android:textAppearanceLarge"
                     android:id="@+id/exifLabel"
                     android:textStyle="bold"
-                    android:textColor="#fff"
-                    android:layout_marginTop="16dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/filtershow_info_text"
+                    android:layout_marginTop="24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -102,8 +108,11 @@
                     android:id="@+id/exifData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/albumlist_label_title"
                     android:layout_gravity="start"
+                    android:layout_marginBottom="32dp"
                     />
         </LinearLayout>
     </ScrollView>

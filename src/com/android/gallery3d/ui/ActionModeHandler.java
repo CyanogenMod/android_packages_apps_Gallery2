@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ShareActionProvider;
+import android.widget.Toolbar;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 
 import com.android.gallery3d.R;
@@ -80,6 +81,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     private final Handler mMainHandler;
     private ActionMode mActionMode;
     private boolean mShareMaxDialog = false;
+    private Toolbar mToolbar;
 
     private static class GetAllPanoramaSupports implements PanoramaSupportCallback {
         private int mNumInfoRequired;
@@ -131,11 +133,13 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         mMenuExecutor = new MenuExecutor(activity, selectionManager);
         mMainHandler = new Handler(activity.getMainLooper());
         mNfcAdapter = NfcAdapter.getDefaultAdapter(mActivity.getAndroidContext());
+        mToolbar = mActivity.getToolbar();
     }
 
     public void startActionMode() {
         Activity a = mActivity;
-        mActionMode = a.startActionMode(this);
+//      mActionMode = a.startActionMode(this);
+        mActionMode = mActivity.getToolbar().startActionMode(this);
         View customView = LayoutInflater.from(a).inflate(
                 R.layout.action_mode, null);
         mActionMode.setCustomView(customView);
@@ -238,6 +242,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(R.menu.operation, menu);
+        mActivity.getToolbar().setVisibility(View.INVISIBLE);
 
         mMenu = menu;
         mSharePanoramaMenuItem = menu.findItem(R.id.action_share_panorama);
@@ -262,6 +267,8 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         mSelectionManager.leaveSelectionMode();
+        mActivity.getToolbar().setVisibility(View.VISIBLE);
+
     }
 
     private ArrayList<MediaObject> getSelectedMediaObjects(JobContext jc) {
@@ -279,7 +286,6 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
             }
             selected.add(manager.getMediaObject(path));
         }
-
         return selected;
     }
     // Menu options are determined by selection set itself.
@@ -401,9 +407,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
 
         // Disable share actions until share intent is in good shape
         if (mSharePanoramaMenuItem != null) mSharePanoramaMenuItem.setEnabled(false);
-        if (mShareMenuItem != null && mSelectionManager.inSelectAllMode()) {
-            mShareMenuItem.setVisible(false);
-        }
+        if (mShareMenuItem != null) mShareMenuItem.setEnabled(false);
 
         // Generate sharing intent and update supported operations in the background
         // The task can take a long time and be canceled in the mean time.
@@ -489,7 +493,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                                 mShareMaxDialog = false;
                             }
 
-                            mShareMenuItem.setVisible(canShare);
+                            mShareMenuItem.setEnabled(canShare);
                             mShareActionProvider.setShareIntent(share_intent);
                         }
                     }

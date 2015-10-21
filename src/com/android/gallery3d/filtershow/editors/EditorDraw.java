@@ -61,11 +61,11 @@ public class EditorDraw extends ParametricEditor implements FilterView {
     private static final int MODE_STYLE = FilterDrawRepresentation.PARAM_STYLE;
     private static final int MODE_COLOR = FilterDrawRepresentation.PARAM_COLOR;
     int[] brushIcons = {
-            R.drawable.brush_flat,
-            R.drawable.brush_round,
-            R.drawable.brush_gauss,
-            R.drawable.brush_marker,
-            R.drawable.brush_spatter
+            R.drawable.square,
+            R.drawable.round,
+            R.drawable.feather,
+            R.drawable.rectangle,
+            R.drawable.random
     };
 
     int[] mBasColors = {
@@ -257,7 +257,7 @@ public class EditorDraw extends ParametricEditor implements FilterView {
                 R.layout.filtershow_draw_ui, (ViewGroup) editControl, true);
 
         mTabletUI = new EditorDrawTabletUI(this, mContext, lp);
-        mDrawString = mContext.getResources().getString(R.string.imageDraw).toUpperCase();
+        mDrawString = mContext.getResources().getString(R.string.imageDraw);
         setMenuIcon(true);
 
     }

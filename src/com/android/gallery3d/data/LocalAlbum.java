@@ -75,7 +75,11 @@ public class LocalAlbum extends MediaSet {
             mProjection = LocalImage.PROJECTION;
             mItemPath = LocalImage.ITEM_PATH;
         } else {
+            if (mBucketId == -1) {
+                mWhereClause = null;
+            } else {
             mWhereClause = VideoColumns.BUCKET_ID + " = ?";
+            }
             mOrderClause = VideoColumns.DATE_TAKEN + " DESC, "
                     + VideoColumns._ID + " DESC";
             mBaseUri = Video.Media.EXTERNAL_CONTENT_URI;
@@ -88,9 +92,10 @@ public class LocalAlbum extends MediaSet {
 
     public LocalAlbum(Path path, GalleryApp application, int bucketId,
             boolean isImage) {
-        this(path, application, bucketId, isImage,
-                BucketHelper.getBucketName(
-                application.getContentResolver(), bucketId));
+        this(path, application, bucketId, isImage, bucketId == -1 ? application
+                .getAndroidContext().getString(R.string.videos_title)
+                : BucketHelper.getBucketName(application.getContentResolver(),
+                        bucketId));
     }
 
     @Override
@@ -118,10 +123,16 @@ public class LocalAlbum extends MediaSet {
                 .appendQueryParameter("limit", start + "," + count).build();
         ArrayList<MediaItem> list = new ArrayList<MediaItem>();
         GalleryUtils.assertNotInRenderThread();
-        Cursor cursor = mResolver.query(
+        Cursor cursor;
+        if (mBucketId == -1) {
+            cursor = mResolver.query(uri, mProjection, mWhereClause, null,
+                    mOrderClause);
+        } else {
+            cursor = mResolver.query(
                 uri, mProjection, mWhereClause,
                 new String[]{String.valueOf(mBucketId)},
                 mOrderClause);
+        }
         if (cursor == null) {
             Log.w(TAG, "query fail: " + uri);
             return list;
@@ -229,9 +240,15 @@ public class LocalAlbum extends MediaSet {
     @Override
     public int getMediaItemCount() {
         if (mCachedCount == INVALID_COUNT) {
-            Cursor cursor = mResolver.query(
+            Cursor cursor;
+            if (mBucketId == -1) {
+                cursor = mResolver.query(mBaseUri, COUNT_PROJECTION,
+                        mWhereClause, null, mOrderClause);
+            } else {
+                cursor = mResolver.query(
                     mBaseUri, COUNT_PROJECTION, mWhereClause,
                     new String[]{String.valueOf(mBucketId)}, null);
+            }
             if (cursor == null) {
                 Log.w(TAG, "query fail");
                 return 0;

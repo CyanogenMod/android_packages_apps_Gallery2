@@ -112,23 +112,50 @@
     <!-- configuration for legacy album set page -->
     <integer name="albumset_rows_land">2</integer>
     <integer name="albumset_rows_port">3</integer>
-    <dimen name="albumset_padding_top">7dp</dimen>
-    <dimen name="albumset_padding_bottom">7dp</dimen>
-    <dimen name="albumset_slot_gap">7dp</dimen>
+    <integer name="albumset_cols_land">3</integer>
+    <integer name="albumset_cols_port">2</integer>
 
-    <dimen name="albumset_label_background_height">30dp</dimen>
-    <dimen name="albumset_title_offset">10dp</dimen>
-    <dimen name="albumset_count_offset">10dp</dimen>
-    <dimen name="albumset_title_font_size">12sp</dimen>
-    <dimen name="albumset_count_font_size">9sp</dimen>
+    <dimen name="albumset_padding_top">4dp</dimen>
+    <dimen name="albumset_padding_bottom">4dp</dimen>
+    <dimen name="albumset_padding_left">4dp</dimen>
+    <dimen name="albumset_padding_right">4dp</dimen>
+    <dimen name="albumset_slot_gap">4dp</dimen>
+    <dimen name="albumset_label_background_height">48dp</dimen>
+    <dimen name="albumset_title_offset">12dp</dimen>
+    <dimen name="albumset_count_offset">18dp</dimen>
+    <dimen name="albumset_title_font_size">16sp</dimen>
+    <dimen name="albumset_count_font_size">16sp</dimen>
     <dimen name="albumset_left_margin">2dp</dimen>
     <dimen name="albumset_title_right_margin">20dp</dimen>
+    <dimen name="albumset_title_left_margin">12dp</dimen>
+    <dimen name="albumset_count_right_margin">18dp</dimen>
     <dimen name="albumset_icon_size">25dp</dimen>
+
+      <!-- configuration for albumset page in Landscape-->
+    <dimen name="albumset_slot_gap_land">29dp</dimen>
+    <dimen name="albumset_padding_top_land">30dp</dimen>
+    <dimen name="albumset_padding_bottom_land">30dp</dimen>
+    <dimen name="albumset_padding_left_land">30dp</dimen>
+    <dimen name="albumset_padding_right_land">30dp</dimen>
 
     <!-- configuration for album page -->
     <integer name="album_rows_land">2</integer>
     <integer name="album_rows_port">4</integer>
-    <dimen name="album_slot_gap">5dp</dimen>
+    <integer name="album_cols_land">5</integer>
+    <integer name="album_cols_port">3</integer>
+
+    <dimen name="album_slot_gap">3dp</dimen>
+    <dimen name="album_padding_top">3dp</dimen>
+    <dimen name="album_padding_bottom">3dp</dimen>
+    <dimen name="album_padding_left">3dp</dimen>
+    <dimen name="album_padding_right">3dp</dimen>
+
+      <!-- configuration for album page in Landscape-->
+    <dimen name="album_slot_gap_land">7dp</dimen>
+    <dimen name="album_padding_top_land">16dp</dimen>
+    <dimen name="album_padding_bottom_land">7dp</dimen>
+    <dimen name="album_padding_left_land">16dp</dimen>
+    <dimen name="album_padding_right_land">16dp</dimen>
 
     <!-- configuration for manage page -->
     <dimen name="cache_pin_size">24dp</dimen>
@@ -152,4 +179,32 @@
     <dimen name="photoeditor_text_padding">10dp</dimen>
     <dimen name="photoeditor_original_text_size">18dp</dimen>
     <dimen name="photoeditor_original_text_margin">4dp</dimen>
+    <dimen name="timeline_grid_vertical_space">3dp</dimen>
+    <dimen name="slot_width">174dp</dimen>
+    <dimen name="slot_height">174dp</dimen>
+    <dimen name="toolbar_height">84dp</dimen>
+    <dimen name="slot_width_album">116dp</dimen>
+    <dimen name="slot_height_album">116dp</dimen>
+
+    <!-- configuration for album page in listview -->
+    <integer name="albumlist_cols_land">1</integer>
+    <integer name="albumlist_cols_port">1</integer>
+
+    <dimen name="albumlist_padding_top">18dp</dimen>
+    <dimen name="slot_height_albumlist">40dp</dimen>
+    <dimen name="albumlist_slot_gap">18dp</dimen>
+    <dimen name="albumlist_thumb_size">40dp</dimen>
+    <dimen name="albumlist_left_margin">16dp</dimen>
+    <dimen name="albumlist_title_margin">16dp</dimen>
+    <dimen name="albumlist_title_font_size">16sp</dimen>
+    <dimen name="albumlist_label_background_height">40dp</dimen>
+    <dimen name= "edit_main_font">13sp</dimen>
+    <dimen name="dialog_text_size">14sp</dimen>
+
+    <dimen name="timeline_port_slot_gap">3dp</dimen>
+    <dimen name="timeline_land_slot_gap">7dp</dimen>
+    <dimen name="timeline_land_margin">16dp</dimen>
+    <dimen name="timeline_port_margin">3dp</dimen>
+    <dimen name="timeline_title_height">48dp</dimen>
+    <dimen name="timeline_title_font_size">14sp</dimen>
 </resources>

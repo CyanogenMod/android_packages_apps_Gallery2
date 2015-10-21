@@ -14,14 +14,20 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:background="@drawable/filtershow_button_background"
-    android:id="@+id/filtershow_done"
-    android:textAllCaps="true"
-    android:text="@string/save"
-    android:gravity="center_vertical"
-    android:textSize="14sp"
-    android:drawableStart="@drawable/menu_save_photo"
-    android:drawablePadding="8dip" />
+    android:layout_height="@dimen/toolbar_height" >
+
+    <TextView
+        android:id="@+id/filtershow_done"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:drawablePadding="24dp"
+        android:drawableStart="@drawable/done"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp"
+        android:text="@string/save"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+</LinearLayout>

@@ -258,4 +258,8 @@ public class FilterDeleteSet extends MediaSet implements ContentListener {
     public int getNumberOfDeletions() {
         return mCurrent.size();
     }
+
+    public void setClusterKind(int kind) {
+        mBaseSet.setClusterKind(kind);
+    }
 }

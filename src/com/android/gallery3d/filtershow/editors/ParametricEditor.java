@@ -115,12 +115,12 @@ public class ParametricEditor extends Editor {
         if (mShowParameter == SHOW_VALUE_INT & useCompact(context)) {
            if (getLocalRepresentation() instanceof FilterBasicRepresentation) {
             FilterBasicRepresentation interval = (FilterBasicRepresentation) getLocalRepresentation();
-                apply += " " + effectName.toUpperCase() + " " + interval.getStateRepresentation();
+                apply += " " + effectName + " " + interval.getStateRepresentation();
            } else {
-                apply += " " + effectName.toUpperCase() + " " + parameterValue;
+                apply += " " + effectName + " " + parameterValue;
            }
         } else {
-            apply += " " + effectName.toUpperCase();
+            apply += " " + effectName;
         }
         return apply;
     }
@@ -172,11 +172,15 @@ public class ParametricEditor extends Editor {
         if (param != null) {
             control(param, editControl);
         } else {
-            mSeekBar = new SeekBar(editControl.getContext());
+            /*mSeekBar = new SeekBar(editControl.getContext());
             LayoutParams lp = new LinearLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             mSeekBar.setLayoutParams(lp);
-            ((LinearLayout) editControl).addView(mSeekBar);
+            ((LinearLayout) editControl).addView(mSeekBar);*/
+            mSeekBar = (SeekBar) editControl.findViewById(R.id.primarySeekBar);
+            if (mSeekBar != null) {
+                mSeekBar.setVisibility(View.VISIBLE);
+            }
             mSeekBar.setOnSeekBarChangeListener(this);
         }
     }

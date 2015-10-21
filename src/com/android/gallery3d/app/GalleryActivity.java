@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Not a Contribution
+ *
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +20,7 @@
 package com.android.gallery3d.app;
 
 import java.util.Locale;
-
+import android.os.Handler;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -36,13 +39,30 @@ import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.InputDevice;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+import android.widget.Toolbar.OnMenuItemClickListener;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.text.TextUtils;
 
+import java.util.ArrayList;
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
@@ -74,19 +94,24 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
 
     private static final String TAG = "GalleryActivity";
     private Dialog mVersionCheckDialog;
+    private ListView mDrawerListView;
+    private DrawerLayout mDrawerLayout;
+    public static boolean mIsparentActivityFInishing;
+    NavigationDrawerListAdapter mNavigationAdapter;
+    public Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
-        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (getIntent().getBooleanExtra(KEY_DISMISS_KEYGUARD, false)) {
             getWindow().addFlags(
                     WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         }
 
-        setContentView(R.layout.main);
+        setContentView(R.layout.gallery_main);
+        initView();
 
         if (savedInstanceState != null) {
             getStateManager().restoreFromState(savedInstanceState);
@@ -97,6 +122,208 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         boolean ddmBulk = SystemProperties.getBoolean("persist.gallery.dualcam.ddmbulk", false);
         if(ddmBulk)
             startBulkMpoProcess();
+    }
+
+    private static class ActionItem {
+        public int action;
+        public int title;
+        public int icon;
+
+        public ActionItem(int action, int title, int icon) {
+            this.action = action;
+            this.title = title;
+            this.icon = icon;
+        }
+    }
+
+    private static final ActionItem[] sActionItems = new ActionItem[] {
+            new ActionItem(FilterUtils.CLUSTER_BY_TIME,
+                    R.string.timeline_title, R.drawable.timeline),
+            new ActionItem(FilterUtils.CLUSTER_BY_ALBUM, R.string.albums_title,
+                    R.drawable.albums),
+            new ActionItem(FilterUtils.CLUSTER_BY_VIDEOS,
+                    R.string.videos_title, R.drawable.videos) };
+
+    public void initView() {
+        mDrawerListView = (ListView) findViewById(R.id.navList);
+        mNavigationAdapter = new NavigationDrawerListAdapter(this);
+        mDrawerListView.setAdapter(mNavigationAdapter);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setActionBar(mToolbar);
+
+        mDrawerListView
+                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                            int position, long id) {
+                        getGLRoot().lockRenderThread();
+                        showScreen(position);
+
+                        mNavigationAdapter.setClickPosition(position);
+                        mDrawerListView.invalidateViews();
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        getGLRoot().unlockRenderThread();
+                    }
+                });
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mDrawerLayout.setDrawerListener(new DrawerListener() {
+
+                @Override
+                public void onDrawerStateChanged(int arg0) {
+                    if (getStateManager().getStateCount() == 1)
+                    {
+                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    } else {
+                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    }
+                }
+
+                @Override
+                public void onDrawerSlide(View arg0, float arg1) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(View arg0) {
+
+                }
+
+                @Override
+                public void onDrawerClosed(View arg0) {
+
+                }
+            });
+        mToolbar.setNavigationContentDescription("drawer");
+        mToolbar.setNavigationOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mToolbar.getNavigationContentDescription().equals("drawer")) {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+
+                } else {
+                    mToolbar.setNavigationContentDescription("drawer");
+                    mToolbar.setNavigationIcon(R.drawable.drawer);
+                    onBackPressed();
+                }
+            }
+        });
+        setToolbar(mToolbar);
+    }
+
+    public void toggleNavDrawer(boolean setDrawerVisibility)
+    {
+        if (mDrawerLayout != null) {
+            if (setDrawerVisibility) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            }
+            else {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
+       }
+    }
+
+    public void showScreen(int position) {
+        if (position > 2) {
+            position = 1;
+        }
+        // Bundle data = new Bundle();
+        // int clusterType;
+        // String newPath;
+        String basePath = getDataManager().getTopSetPath(
+                DataManager.INCLUDE_ALL);
+        switch (position) {
+
+        case 0:
+            startTimelinePage(); //Timeline view
+            break;
+        case 1:
+            startAlbumPage(); // Albums View
+            break;
+        case 2:
+            startVideoPage(); // Videos view
+            break;
+        default:
+            break;
+        }
+
+        mNavigationAdapter.setClickPosition(position);
+
+        mDrawerListView.invalidateViews();
+        mToolbar.setTitle(getResources().getStringArray(
+                R.array.title_array_nav_items)[position]);
+
+        mDrawerListView.setItemChecked(position, true);
+        mDrawerListView.setSelection(position);
+        mToolbar.setNavigationContentDescription("drawer");
+        mToolbar.setNavigationIcon(R.drawable.drawer);
+    }
+
+    private class NavigationDrawerListAdapter extends BaseAdapter {
+
+        private int curTab = 0;
+        Context mContext;
+
+        public NavigationDrawerListAdapter(Context context) {
+            mContext = context;
+
+        }
+
+        @Override
+        public int getCount() {
+            return sActionItems.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return sActionItems[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(
+                        com.android.gallery3d.R.layout.drawer_list_item, null);
+            } else {
+                view = convertView;
+            }
+
+            TextView titleView = (TextView) view.findViewById(R.id.itemTitle);
+            ImageView iconView = (ImageView) view.findViewById(R.id.ivItem);
+
+            titleView.setText(sActionItems[position].title);
+            iconView.setImageResource(sActionItems[position].icon);
+
+            if (curTab == position) {
+                view.setBackgroundResource(R.drawable.drawer_item_selected_bg);
+            } else {
+                view.setBackgroundColor(android.R.color.transparent);
+            }
+
+            return view;
+        }
+
+        public void setClickPosition(int position) {
+            curTab = position;
+        }
+    }
+
+    public static int getActionTitle(Context context, int type) {
+        for (ActionItem item : sActionItems) {
+            if (item.action == type) {
+                return item.title;
+            }
+        }
+        return -1;
     }
 
     private void initializeByIntent() {
@@ -120,16 +347,72 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                 || ACTION_REVIEW.equalsIgnoreCase(action)){
             startViewAction(intent);
         } else {
-            startDefaultPage();
+            startTimelinePage();
+            mToolbar.setTitle(R.string.albums_title);
         }
     }
 
-    public void startDefaultPage() {
+    public void startAlbumPage() {
         PicasaSource.showSignInReminder(this);
         Bundle data = new Bundle();
-        data.putString(AlbumSetPage.KEY_MEDIA_PATH,
-                getDataManager().getTopSetPath(DataManager.INCLUDE_ALL));
-        getStateManager().startState(AlbumSetPage.class, data);
+        int clusterType = FilterUtils.CLUSTER_BY_ALBUM;
+        data.putString(AlbumSetPage.KEY_MEDIA_PATH, getDataManager()
+                .getTopSetPath(DataManager.INCLUDE_ALL));
+        if (getStateManager().getStateCount() == 0)
+            getStateManager().startState(AlbumSetPage.class, data);
+        else {
+            ActivityState state = getStateManager().getTopState();
+            String oldClass = state.getClass().getSimpleName();
+            String newClass = AlbumSetPage.class.getSimpleName();
+            if (!oldClass.equals(newClass)) {
+             getStateManager().switchState(getStateManager().getTopState(),
+                    AlbumSetPage.class, data);
+            }
+        }
+        mVersionCheckDialog = PicasaSource.getVersionCheckDialog(this);
+        if (mVersionCheckDialog != null) {
+            mVersionCheckDialog.setOnCancelListener(this);
+        }
+    }
+
+   private void startTimelinePage() {
+        String newBPath = getDataManager().getTopSetPath(DataManager.INCLUDE_ALL);
+        String newPath = FilterUtils.switchClusterPath(newBPath, FilterUtils.CLUSTER_BY_TIME);
+        Bundle data = new Bundle();
+        data.putString(TimeLinePage.KEY_MEDIA_PATH, newPath);
+        if (getStateManager().getStateCount() == 0)
+            getStateManager().startState(TimeLinePage.class, data);
+        else {
+            ActivityState state = getStateManager().getTopState();
+            String oldClass = state.getClass().getSimpleName();
+            String newClass = TimeLinePage.class.getSimpleName();
+            if (!oldClass.equals(newClass)) {
+            getStateManager().switchState(getStateManager().getTopState(),
+                    TimeLinePage.class, data);
+            }
+        }
+        mVersionCheckDialog = PicasaSource.getVersionCheckDialog(this);
+        if (mVersionCheckDialog != null) {
+            mVersionCheckDialog.setOnCancelListener(this);
+        }
+    }
+
+   public void startVideoPage() {
+        PicasaSource.showSignInReminder(this);
+        String basePath = getDataManager().getTopSetPath(
+                DataManager.INCLUDE_ALL);
+        Bundle data = new Bundle();
+        int clusterType = FilterUtils.CLUSTER_BY_VIDEOS;
+        String newPath = FilterUtils.switchClusterPath(basePath, clusterType);
+        data.putString(AlbumPage.KEY_MEDIA_PATH, newPath);
+        data.putBoolean(AlbumPage.KEY_IS_VIDEOS_SCREEN, true);
+        ActivityState state = getStateManager().getTopState();
+        String oldClass = state.getClass().getSimpleName();
+        String newClass = AlbumPage.class.getSimpleName();
+        if (!oldClass.equals(newClass)) {
+        getStateManager().switchState(getStateManager().getTopState(),
+                AlbumPage.class, data);
+        }
         mVersionCheckDialog = PicasaSource.getVersionCheckDialog(this);
         if (mVersionCheckDialog != null) {
             mVersionCheckDialog.setOnCancelListener(this);
@@ -224,7 +507,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                         getStateManager().startState(AlbumSetPage.class, data);
                     }
                 } else {
-                    startDefaultPage();
+                    startTimelinePage();
                 }
             } else {
                 Path itemPath = dm.findPathByUri(uri, contentType);

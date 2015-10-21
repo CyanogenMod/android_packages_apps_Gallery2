@@ -77,7 +77,7 @@ class ClusterSource extends MediaSource {
                 MediaSet parent = dataManager.getMediaSet(path.getParent());
                 // The actual content in the ClusterAlbum will be filled later
                 // when the reload() method in the parent is run.
-                return new ClusterAlbum(path, dataManager, parent);
+                return new ClusterAlbum(path, dataManager, parent, matchType);
             }
             default:
                 throw new RuntimeException("bad path: " + path);
