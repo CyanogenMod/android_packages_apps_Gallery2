@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">음향 효과를 사용하려면 헤드폰을 연결하세요.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">죄송합니다. 이 동영상은 잘라낼 수 없습니다.</string>
+  <string name="no_permission_for_drm">죄송합니다. DRM으로 보호된 파일은 공유할 수 없습니다.</string>
+  <string name="drm_license_info">DRM 라이선스 정보</string>
 </resources>
