@@ -19,16 +19,19 @@ package com.android.gallery3d.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+//import android.drm.DrmHelper;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
@@ -59,6 +62,7 @@ import com.android.gallery3d.util.Future;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.MediaSetUtils;
 
+import java.util.Locale;
 
 public class AlbumPage extends ActivityState implements GalleryActionBar.ClusterRunner,
         SelectionManager.SelectionListener, MediaSet.SyncListener, GalleryActionBar.OnAlbumModeSelectedListener {
@@ -81,6 +85,9 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     private static final int BIT_LOADING_SYNC = 2;
 
     private static final float USER_DISTANCE_METER = 0.3f;
+
+    // Data cache size, equal to AlbumDataLoader.DATA_CACHE_SIZE
+    private static final int DATA_CACHE_SIZE = 256;
 
     private boolean mIsActive = false;
     private AlbumSlotRenderer mAlbumView;
@@ -266,6 +273,17 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     }
 
     private void pickPhoto(int slotIndex) {
+        if ((View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault()))
+                && !mGetContent) {
+            // Fetch corresponding slotIndex from another side, (RTL)
+            if (slotIndex > DATA_CACHE_SIZE / 2
+                    && slotIndex < mAlbumDataAdapter.size() - DATA_CACHE_SIZE / 2) {
+                slotIndex = mAlbumDataAdapter.size() - slotIndex - 2;
+            } else {
+                slotIndex = mAlbumDataAdapter.size() - slotIndex - 1;
+            }
+        }
         pickPhoto(slotIndex, false);
     }
 
@@ -278,10 +296,31 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         }
 
         MediaItem item = mAlbumDataAdapter.get(slotIndex);
-        if (item == null) return; // Item not ready yet, ignore the click
+
+        // Checking it is RTL or not
+        boolean isLayoutRtl = (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())) ? true : false;
+
+        // When not RTL, return directly to ignore the click
+        if (!isLayoutRtl && item == null) {
+            return;
+        }
+
         if (mGetContent) {
+            if (isLayoutRtl && item == null) {
+                return; // Item not ready yet, ignore the click
+            }
+//            if (DrmHelper.isDrmFile(DrmHelper.getFilePath(
+//                    mActivity.getAndroidContext(), item.getContentUri()))) {
+//                Toast.makeText(mActivity, R.string.no_permission_for_drm,
+//                        Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             onGetContent(item);
         } else if (mLaunchedFromPhotoPage) {
+            if (isLayoutRtl && item == null) {
+                return; // Item not ready yet, ignore the click
+            }
             TransitionStore transitions = mActivity.getTransitionStore();
             transitions.put(
                     PhotoPage.KEY_ALBUMPAGE_TRANSITION,
@@ -297,8 +336,12 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                     mSlotView.getSlotRect(slotIndex, mRootPane));
             data.putString(PhotoPage.KEY_MEDIA_SET_PATH,
                     mMediaSetPath.toString());
-            data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH,
-                    item.getPath().toString());
+
+            // Item not ready yet, don't pass the photo path to bundle
+            if (!isLayoutRtl && item != null) {
+                data.putString(PhotoPage.KEY_MEDIA_ITEM_PATH,
+                        item.getPath().toString());
+            }
             data.putInt(PhotoPage.KEY_ALBUMPAGE_TRANSITION,
                     PhotoPage.MSG_ALBUMPAGE_STARTED);
             data.putBoolean(PhotoPage.KEY_START_IN_FILMSTRIP,
@@ -574,8 +617,17 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     }
 
     private void switchToFilmstrip() {
-        if (mAlbumDataAdapter.size() < 1) return;
+        // Invalid album, return back directly.
+        if (mAlbumDataAdapter.size() < 1) {
+            return;
+        }
+
         int targetPhoto = mSlotView.getVisibleStart();
+        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())) {
+            // Fetch corresponding index from another side, only in RTL
+            targetPhoto = mAlbumDataAdapter.size() - targetPhoto - 1;
+        }
         prepareAnimationBackToFilmstrip(targetPhoto);
         if(mLaunchedFromPhotoPage) {
             onBackPressed();
@@ -642,7 +694,22 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             case REQUEST_PHOTO: {
                 if (data == null) return;
                 mFocusIndex = data.getIntExtra(PhotoPage.KEY_RETURN_INDEX_HINT, 0);
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    // Fetch corresponding index from another side, only in RTL
+                    mFocusIndex = mAlbumDataAdapter.size() - mFocusIndex - 1;
+                    // Prepare to jump to mFocusIndex position, only enabled in RTL
+                    mSlotView.setIsFromPhotoPage(true);
+                }
+
+                // Let picture of mFocusIndex visible
                 mSlotView.makeSlotVisible(mFocusIndex);
+
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    // Reset variable
+                    mSlotView.setIsFromPhotoPage(false);
+                }
                 break;
             }
             case REQUEST_DO_ANIMATION: {

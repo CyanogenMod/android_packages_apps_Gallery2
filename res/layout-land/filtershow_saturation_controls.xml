@@ -25,11 +25,11 @@
                     android:text="@string/editor_chan_sat_red"
                     android:textStyle="bold"
                     android:textColor="#ff8080"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/redValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/redSeekBar"
                     android:layout_width="match_parent"
@@ -42,11 +42,11 @@
                     android:text="@string/editor_chan_sat_yellow"
                     android:textStyle="bold"
                     android:textColor="#ffff80"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/yellowValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/yellowSeekBar"
                     android:layout_width="match_parent"
@@ -59,11 +59,11 @@
                     android:text="@string/editor_chan_sat_green"
                     android:textStyle="bold"
                     android:textColor="#80ff80"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/greenValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/greenSeekBar"
                     android:layout_width="match_parent"
@@ -76,11 +76,11 @@
                     android:text="@string/editor_chan_sat_cyan"
                     android:textStyle="bold"
                     android:textColor="#80ffff"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/cyanValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/cyanSeekBar"
                     android:layout_width="match_parent"
@@ -93,11 +93,11 @@
                     android:text="@string/editor_chan_sat_blue"
                     android:textStyle="bold"
                     android:textColor="#8080ff"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/blueValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/blueSeekBar"
                     android:layout_width="match_parent"
@@ -110,11 +110,11 @@
                     android:text="@string/editor_chan_sat_magenta"
                     android:textStyle="bold"
                     android:textColor="#ff80ff"
-                    android:layout_marginLeft="8dp"/>
+                    android:layout_marginStart="8dp"/>
             <TextView
                     android:layout_gravity="right|center_vertical"
                     android:id="@+id/magentaValue"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginEnd="16dp"/>
             <SeekBar
                     android:id="@+id/magentaSeekBar"
                     android:layout_width="match_parent"
@@ -137,11 +137,11 @@
         <TextView
                 android:layout_gravity="left|center_vertical"
                 android:text="@string/editor_chan_sat_main"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginStart="8dp"/>
         <TextView
                 android:layout_gravity="right|center_vertical"
                 android:id="@+id/mainValue"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginEnd="16dp"/>
         <SeekBar
                 android:id="@+id/mainSeekbar"
                 android:layout_width="match_parent"

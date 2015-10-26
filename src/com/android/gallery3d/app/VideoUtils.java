@@ -156,11 +156,16 @@ public class VideoUtils {
 
             if (selectCurrentTrack) {
                 extractor.selectTrack(i);
-                int dstIndex = muxer.addTrack(format);
-                indexMap.put(i, dstIndex);
-                if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
-                    int newSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
-                    bufferSize = newSize > bufferSize ? newSize : bufferSize;
+                try {
+                    int dstIndex = muxer.addTrack(format);
+                    indexMap.put(i, dstIndex);
+                    if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                        int newSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
+                        bufferSize = newSize > bufferSize ? newSize : bufferSize;
+                    }
+                } catch (IllegalArgumentException e) {
+                    Log.e(LOGTAG, "Unsupported format '" + mime + "'");
+                    throw new IOException("Muxer does not support " + mime);
                 }
             }
         }
@@ -221,6 +226,11 @@ public class VideoUtils {
         } catch (IllegalStateException e) {
             // Swallow the exception due to malformed source.
             Log.w(LOGTAG, "The source video file is malformed");
+            File f = new File(dstPath);
+            if (f.exists()) {
+                f.delete();
+            }
+            throw e;
         } finally {
             muxer.release();
         }

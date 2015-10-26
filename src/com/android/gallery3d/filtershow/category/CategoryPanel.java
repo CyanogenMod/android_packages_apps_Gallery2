@@ -29,7 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
-
+import android.util.Log;
 public class CategoryPanel extends Fragment implements View.OnClickListener {
 
     public static final String FRAGMENT_TAG = "CategoryPanel";
@@ -82,10 +82,25 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
+            case MainPanel.DUALCAM: {
+                mAdapter = activity.getCategoryDualCamAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.DUALCAM);
+                }
+                activity.updateCategories();
+                break;
+            }
             case MainPanel.VERSIONS: {
                 mAdapter = activity.getCategoryVersionsAdapter();
                 if (mAdapter != null) {
                     mAdapter.initializeSelection(MainPanel.VERSIONS);
+                }
+                break;
+            }
+           case MainPanel.MAKEUP: {
+                mAdapter = activity.getCategoryMakeupAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.MAKEUP);
                 }
                 break;
             }
@@ -148,7 +163,7 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
             return;
         }
         FilterShowActivity activity = (FilterShowActivity) getActivity();
-        if (activity.isShowingImageStatePanel() && mAdapter.showAddButton()) {
+        if (activity.isShowingImageStatePanel() && mAdapter != null && mAdapter.showAddButton()) {
             mAddButton.setVisibility(View.VISIBLE);
             if (mAdapter != null) {
                 mAddButton.setText(mAdapter.getAddButtonText());

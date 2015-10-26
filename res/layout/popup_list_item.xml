@@ -21,8 +21,8 @@
     android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
     android:singleLine="true"
     android:gravity="center_vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:minWidth="196dp"
 />

@@ -107,8 +107,16 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
 
         mOriginalBounds = MasterImage.getImage().getOriginalBounds();
         ImagePreset preset = MasterImage.getImage().getPreset();
+        if (mOriginalBounds == null || preset == null) return null;
         mOriginalBounds = preset.finalGeometryRect(mOriginalBounds.width(),
                 mOriginalBounds.height());
+        if (preset != null) {
+            mOriginalBounds = preset.finalGeometryRect(mOriginalBounds.width(),
+                    mOriginalBounds.height());
+        }
+        if (mOriginalBounds == null) {
+            return null;
+        }
         mRatio = mOriginalBounds.width() / (float) mOriginalBounds.height();
         mWidthText.setText("" + mOriginalBounds.width());
         mHeightText.setText("" + mOriginalBounds.height());
@@ -193,7 +201,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
         compressedSize *= mExportCompressionMargin;
         float size = compressedSize / 1024.f / 1024.f;
         size = ((int) (size * 100)) / 100f;
-        String estimatedSize = "" + size + " Mb";
+        String estimatedSize = "" + size + " MB";
         mEstimatedSize.setText(estimatedSize);
     }
 

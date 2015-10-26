@@ -55,14 +55,14 @@
 
                 <TextView
                         android:id="@+id/controlName1"
-                        android:layout_gravity="left"
-                        android:layout_marginLeft="8dip"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="8dip"
                         android:text="@string/draw_size"/>
 
                 <TextView
                         android:id="@+id/drawSizeValue"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="8dip"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="8dip"
                         android:textStyle="bold"/>
 
                 <SeekBar
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/draw_color"
-                    android:layout_marginLeft="8dip"
+                    android:layout_marginStart="8dip"
                     android:id="@+id/textView"
                     android:visibility="gone"/>
 
@@ -114,8 +114,8 @@
                     android:id="@+id/btnSelect"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="18dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
                     />
@@ -126,7 +126,7 @@
                     android:layout_height="@dimen/draw_ui_width"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
-                    android:layout_marginRight="1dp"/>
+                    android:layout_marginEnd="1dp"/>
 
             <com.android.gallery3d.filtershow.colorpicker.ColorHueView
                     android:id="@+id/ColorHueView"
@@ -149,8 +149,8 @@
             android:orientation="horizontal"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp">
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp">
 
 
             <LinearLayout
@@ -166,7 +166,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginEnd="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button02"
@@ -174,7 +174,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginEnd="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button03"
@@ -182,7 +182,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginEnd="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button04"
@@ -190,7 +190,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginEnd="4dp"/>
 
                 <Button
                         android:id="@+id/draw_color_button05"
@@ -198,7 +198,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginEnd="4dp"/>
 
             </LinearLayout>
 

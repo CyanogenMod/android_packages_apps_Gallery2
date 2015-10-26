@@ -32,15 +32,15 @@
     <include layout="@layout/menu_indicators_keyguard"
         android:layout_width="64dip"
         android:layout_height="64dip"
-        android:layout_toRightOf="@id/shutter"
+        android:layout_toEndOf="@id/shutter"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="6dip"
-        android:layout_marginRight="-5dip" />
+        android:layout_marginEnd="-5dip" />
 
     <ImageView
         android:id="@+id/camera_switcher"
         style="@style/SwitcherButton"
-        android:layout_toLeftOf="@id/shutter"
+        android:layout_toStartOf="@id/shutter"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="2dip"
         android:scaleType="center"
@@ -50,7 +50,7 @@
     <ImageView
         android:id="@+id/camera_switcher_ind"
         style="@style/SwitcherButton"
-        android:layout_toLeftOf="@id/shutter"
+        android:layout_toStartOf="@id/shutter"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="2dip"
         android:scaleType="center"

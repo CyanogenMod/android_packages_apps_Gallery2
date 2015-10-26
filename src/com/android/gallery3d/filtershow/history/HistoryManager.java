@@ -68,7 +68,7 @@ public class HistoryManager {
     }
 
     public boolean canUndo() {
-        if (mCurrentPresetPosition == getCount() - 1) {
+        if (mCurrentPresetPosition >= getCount() - 1) {
             return false;
         }
         return true;

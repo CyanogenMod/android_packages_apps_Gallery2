@@ -19,7 +19,7 @@
         android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <VideoView android:id="@+id/surface_view"
+    <org.codeaurora.gallery3d.video.CodeauroraVideoView android:id="@+id/surface_view"
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -18,6 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -78,6 +79,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     private Future<?> mMenuTask;
     private final Handler mMainHandler;
     private ActionMode mActionMode;
+    private boolean mShareMaxDialog = false;
 
     private static class GetAllPanoramaSupports implements PanoramaSupportCallback {
         private int mNumInfoRequired;
@@ -272,7 +274,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         ArrayList<MediaObject> selected = new ArrayList<MediaObject>();
         DataManager manager = mActivity.getDataManager();
         for (Path path : unexpandedPaths) {
-            if (jc.isCancelled()) {
+            if (jc.isCancelled() || !mSelectionManager.inSelectionMode()) {
                 return null;
             }
             selected.add(manager.getMediaObject(path));
@@ -399,7 +401,9 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
 
         // Disable share actions until share intent is in good shape
         if (mSharePanoramaMenuItem != null) mSharePanoramaMenuItem.setEnabled(false);
-        if (mShareMenuItem != null) mShareMenuItem.setEnabled(false);
+        if (mShareMenuItem != null && mSelectionManager.inSelectAllMode()) {
+            mShareMenuItem.setVisible(false);
+        }
 
         // Generate sharing intent and update supported operations in the background
         // The task can take a long time and be canceled in the mean time.
@@ -472,7 +476,20 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             mSharePanoramaActionProvider.setShareIntent(share_panorama_intent);
                         }
                         if (mShareMenuItem != null) {
-                            mShareMenuItem.setEnabled(canShare);
+                            if (!canShare && !mShareMaxDialog) {
+                                AlertDialog.Builder shareMaxDialog = new AlertDialog.Builder(mActivity);
+                                shareMaxDialog
+                                    .setMessage(R.string.cannot_share_items)
+                                    .setPositiveButton(R.string.ok, null)
+                                    .create();
+                                shareMaxDialog.show();
+                                mShareMaxDialog = true;
+                            }
+                            if (canShare && mShareMaxDialog) {
+                                mShareMaxDialog = false;
+                            }
+
+                            mShareMenuItem.setVisible(canShare);
                             mShareActionProvider.setShareIntent(share_intent);
                         }
                     }
