@@ -39,6 +39,7 @@ public class EditorManager {
         editorPlaceHolder.addEditor(new EditorDualCamera());
         editorPlaceHolder.addEditor(new EditorDualCamFusion());
         editorPlaceHolder.addEditor(new EditorDualCamSketch());
+        editorPlaceHolder.addEditor(new TrueScannerEditor());
     }
 
 }

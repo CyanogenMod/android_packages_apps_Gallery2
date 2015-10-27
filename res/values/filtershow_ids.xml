@@ -54,4 +54,5 @@
     <item type="id" name="editorDualCam" />
     <item type="id" name="editorDualCamSketch" />
     <item type="id" name="editorDualCamFusion" />
+    <item type="id" name="trueScannerEditor" />
 </resources>

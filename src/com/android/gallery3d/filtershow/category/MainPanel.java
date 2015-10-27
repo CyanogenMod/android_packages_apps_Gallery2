@@ -31,6 +31,7 @@ import android.util.Log;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
+import com.android.gallery3d.filtershow.filters.TrueScannerActs;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.StatePanel;
 import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
@@ -51,6 +52,7 @@ public class MainPanel extends Fragment {
     private View mEffectsTextContainer;
     private FrameLayout mCategoryFragment;
     private View mBottomView;
+    private ImageButton trueScannerButton;
 
     public static final String FRAGMENT_TAG = "MainPanel";
     public static final String EDITOR_TAG = "coming-from-editor-panel";
@@ -61,6 +63,7 @@ public class MainPanel extends Fragment {
     public static final int MAKEUP = 4;
     public static final int DUALCAM = 5;
     public static final int VERSIONS = 6;
+    public static final int TRUESCANNER = 7;
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
@@ -98,6 +101,10 @@ public class MainPanel extends Fragment {
                 dualCamButton.setSelected(value);
                 break;
             }
+            case TRUESCANNER: {
+                //trueScannerButton.setSelected(value);
+                break;
+            }
         }
     }
 
@@ -129,25 +136,31 @@ public class MainPanel extends Fragment {
         mBottomView = mMainView.findViewById(R.id.bottom_panel);
         mEffectsContainer = mMainView.findViewById(R.id.effectsContainer);
         mEffectsTextContainer = mMainView.findViewById(R.id.effectsText);
-        if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+        if (SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
             makeupButton = (ImageButton) mMainView.findViewById(R.id.makeupButton);
             makeupButton.setVisibility(View.VISIBLE);
             TextView beautify = (TextView) mEffectsTextContainer
                     .findViewById(R.id.tvBeautify);
             beautify.setVisibility(View.VISIBLE);
         }
-           boolean showPanel = false;
+        boolean showPanel = false;
         if (getArguments() != null) {
             showPanel = getArguments().getBoolean(EDITOR_TAG);
         }
 
-        if(makeupButton != null) {
+        if (makeupButton != null) {
             makeupButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showPanel(MAKEUP);
                 }
             });
+        }
+        TextView trueScannerTv = (TextView) mMainView.findViewById(R.id.tvTrueScanner);
+        trueScannerButton = (ImageButton) mMainView.findViewById(R.id.trueScannerButton);
+        if (!TrueScannerActs.isTrueScannerEnabled()) {
+            trueScannerTv.setVisibility(View.GONE);
+            trueScannerButton.setVisibility(View.GONE);
         }
 
         looksButton.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +195,13 @@ public class MainPanel extends Fragment {
         });
 
         updateDualCameraButton();
+
+        trueScannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPanel(TRUESCANNER);
+            }
+        });
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         //showImageStatePanel(activity.isShowingImageStatePanel());
@@ -290,6 +310,16 @@ public class MainPanel extends Fragment {
         selection(mCurrentSelected, true);
     }
 
+    public void loadCategoryTrueScannerPanel() {
+        boolean fromRight = isRightAnimation(TRUESCANNER);
+        selection(mCurrentSelected, false);
+        CategoryPanel categoryPanel = new CategoryPanel();
+        categoryPanel.setAdapter(TRUESCANNER);
+        setCategoryFragment(categoryPanel, fromRight);
+        mCurrentSelected = TRUESCANNER;
+        selection(mCurrentSelected, true);
+    }
+
     public void loadCategoryFiltersPanel() {
         /*if (mCurrentSelected == FILTERS) {
             return;
@@ -359,6 +389,10 @@ public class MainPanel extends Fragment {
             }
             case DUALCAM: {
                 loadCategoryDualCamPanel();
+                break;
+            }
+            case TRUESCANNER: {
+                loadCategoryTrueScannerPanel();
                 break;
             }
             case VERSIONS: {
