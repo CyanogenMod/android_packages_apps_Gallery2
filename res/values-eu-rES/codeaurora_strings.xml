@@ -55,7 +55,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_apn">Ezarri APN hobetsia</string>
   <string name="setting">Ezarpenak</string>
   <string name="server_timeout_title">"Zerbitzariaren denbora-muga"</string>
-  <string name="server_timeout_message">"Zerbitzarira birkonektatu bideoa ikusteko?"</string>
+  <string name="server_timeout_message">"Zerbitzarira birkonektatu bideoa erreproduzitzeko?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Konexioak huts egin du, %1$d birkonektatzen\u2026"</string>
   <string name="media_controller_live">Zuzenean</string>
   <string name="media_controller_playing">Erreproduzitzen</string>
