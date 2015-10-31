@@ -370,16 +370,41 @@ public final class GeometryMathUtils {
     }
 
     public static Matrix getOriginalToScreen(GeometryHolder holder, boolean rotate,
-            float originalWidth,
-            float originalHeight, float viewWidth, float viewHeight) {
+            float originalWidth, float originalHeight, float viewWidth, float viewHeight) {
+        return getOriginalToScreen(holder, null, rotate, originalWidth, originalHeight, viewWidth, viewHeight);
+    }
+
+    public static Matrix getOriginalToScreen(GeometryHolder holder, RectF outCrop,
+            boolean rotate, float originalWidth, float originalHeight,
+            float viewWidth, float viewHeight) {
+        RectF crop = new RectF();
+        Matrix m;
         int orientation = MasterImage.getImage().getZoomOrientation();
-        int rotation = getRotationForOrientation(orientation);
-        Rotation prev = holder.rotation;
-        rotation = (rotation + prev.value()) % 360;
-        holder.rotation = Rotation.fromValue(rotation);
-        Matrix m = getCropSelectionToScreenMatrix(null, holder, (int) originalWidth,
-                (int) originalHeight, (int) viewWidth, (int) viewHeight);
-        holder.rotation = prev;
+
+        if (orientation == ImageLoader.ORI_ROTATE_90 ||
+                orientation == ImageLoader.ORI_ROTATE_270 ||
+                orientation == ImageLoader.ORI_TRANSPOSE ||
+                orientation == ImageLoader.ORI_TRANSVERSE) {
+
+            crop = getTrueCropRect(holder, (int)originalHeight, (int)originalWidth);
+        } else {
+            crop = getTrueCropRect(holder, (int)originalWidth, (int)originalHeight);
+        }
+
+        float scale = scale(crop.width(), crop.height(), viewWidth, viewHeight);
+
+        m = getFullGeometryMatrix(holder, (int)originalWidth, (int)originalHeight);
+        if(orientation != ImageLoader.ORI_NORMAL) {
+            addOrientationToMatrix(m, (int)originalWidth, (int)originalHeight, orientation);
+        }
+
+        m.postScale(scale, scale);
+        GeometryMathUtils.scaleRect(crop, scale);
+        m.postTranslate(viewWidth / 2f - crop.centerX(), viewHeight / 2f - crop.centerY());
+        crop.offset(viewWidth / 2f - crop.centerX(), viewHeight / 2f - crop.centerY());
+        if(outCrop != null) {
+            outCrop.set(crop);
+        }
         return m;
     }
 
@@ -426,7 +451,7 @@ public final class GeometryMathUtils {
     }
 
     // Gives matrix for rotated, straightened, mirrored bitmap centered at 0,0.
-    private static Matrix getFullGeometryMatrix(GeometryHolder holder, int bitmapWidth,
+    public static Matrix getFullGeometryMatrix(GeometryHolder holder, int bitmapWidth,
             int bitmapHeight) {
         float centerX = bitmapWidth / 2f;
         float centerY = bitmapHeight / 2f;
@@ -489,5 +514,33 @@ public final class GeometryMathUtils {
         GeometryHolder holder = unpackGeometry(res);
         return getCropSelectionToScreenMatrix(outCrop, holder, bitmapWidth, bitmapHeight,
                 viewWidth, viewHeight);
+    }
+
+    public static void addOrientationToMatrix(Matrix matrix, int w, int h, int orientation) {
+        switch (orientation) {
+            case ImageLoader.ORI_ROTATE_90:
+                matrix.preRotate(90, w/2, h/2);
+                break;
+            case ImageLoader.ORI_ROTATE_180:
+                matrix.preRotate(180, w/2, h/2);
+                break;
+            case ImageLoader.ORI_ROTATE_270:
+                matrix.preRotate(270, w/2, h/2);
+                break;
+            case ImageLoader.ORI_FLIP_HOR:
+                matrix.preScale(-1, 1);
+                break;
+            case ImageLoader.ORI_FLIP_VERT:
+                matrix.preScale(1, -1);
+                break;
+            case ImageLoader.ORI_TRANSPOSE:
+                matrix.preScale(1, -1);
+                matrix.preRotate(90, w / 2f, h / 2f);
+                break;
+            case ImageLoader.ORI_TRANSVERSE:
+                matrix.preScale(1, -1);
+                matrix.preRotate(270, w / 2f, h / 2f);
+                break;
+        }
     }
 }

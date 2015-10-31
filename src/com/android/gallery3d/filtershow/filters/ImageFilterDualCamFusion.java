@@ -36,14 +36,16 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.cache.BitmapCache;
+import com.android.gallery3d.filtershow.cache.ImageLoader;
 import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
-import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils.GeometryHolder;
+import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.pipeline.FilterEnvironment;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
@@ -82,23 +84,35 @@ public class ImageFilterDualCamFusion extends ImageFilter {
 
         if(!point.equals(-1,-1)) {
             Bitmap filteredBitmap = null;
+            boolean result = false;
+            int orientation = MasterImage.getImage().getOrientation();
+            Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int filteredW;
             int filteredH;
 
             if(quality == FilterEnvironment.QUALITY_FINAL) {
-                Rect originalBounds = MasterImage.getImage().getOriginalBounds();
                 filteredW = originalBounds.width();
                 filteredH = originalBounds.height();
             } else {
                 Bitmap originalBmp = MasterImage.getImage().getOriginalBitmapHighres();
                 filteredW = originalBmp.getWidth();
                 filteredH = originalBmp.getHeight();
+
+                // image is rotated
+                if (orientation == ImageLoader.ORI_ROTATE_90 ||
+                        orientation == ImageLoader.ORI_ROTATE_270 ||
+                        orientation == ImageLoader.ORI_TRANSPOSE ||
+                        orientation == ImageLoader.ORI_TRANSVERSE) {
+                    int tmp = filteredW;
+                    filteredW = filteredH;
+                    filteredH = tmp;
+                }
             }
 
             filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(filteredW, filteredH, BitmapCache.FILTERS);
             filteredBitmap.setHasAlpha(true);
 
-            boolean result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y,
+            result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y,
                     quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
 
             if(result == false) {
@@ -116,8 +130,8 @@ public class ImageFilterDualCamFusion extends ImageFilter {
             } else {
 
                 mPaint.reset();
+                mPaint.setAntiAlias(true);
                 if(quality == FilterEnvironment.QUALITY_FINAL) {
-                    mPaint.setAntiAlias(true);
                     mPaint.setFilterBitmap(true);
                     mPaint.setDither(true);
                 }
@@ -128,15 +142,23 @@ public class ImageFilterDualCamFusion extends ImageFilter {
                 ImagePreset preset = getEnvironment().getImagePreset();
                 int bmWidth = bitmap.getWidth();
                 int bmHeight = bitmap.getHeight();
+                GeometryHolder holder;
+                if(preset.getDoApplyGeometry()) {
+                    holder = GeometryMathUtils.unpackGeometry(preset.getGeometryFilters());
+                } else {
+                    holder = new GeometryHolder();
+                }
+
+                RectF crop = new RectF();
+                Matrix m = GeometryMathUtils.getOriginalToScreen(holder, crop, true,
+                        filteredW, filteredH, bmWidth, bmHeight);
 
                 canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-                if(preset.getDoApplyGeometry()) {
-                    GeometryHolder holder = GeometryMathUtils.unpackGeometry(preset.getGeometryFilters());
-                    GeometryMathUtils.drawTransformedCropped(holder, canvas, filteredBitmap, bmWidth, bmHeight);
-                } else {
-                    canvas.drawBitmap(filteredBitmap, null,
-                            new Rect(0, 0,bmWidth, bmHeight), mPaint);
-                }
+
+                canvas.save();
+                canvas.clipRect(crop);
+                canvas.drawBitmap(filteredBitmap, m, mPaint);
+                canvas.restore();
 
                 MasterImage.getImage().getBitmapCache().cache(filteredBitmap);
             }
