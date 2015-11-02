@@ -38,8 +38,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0"
-                    android:layout_marginRight="8dp"
-                    android:layout_gravity="right|center_vertical" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="end|center_vertical" />
         </LinearLayout>
 
         <View style="@style/PopupTitleSeparator" />
@@ -54,8 +54,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dip"
-                    android:paddingLeft="16dip"
-                    android:paddingRight="16dip"
+                    android:paddingStart="16dip"
+                    android:paddingEnd="16dip"
                     android:paddingBottom="16dip"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/set_time_interval_help"/>

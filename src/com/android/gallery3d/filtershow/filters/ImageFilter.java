@@ -19,7 +19,8 @@ package com.android.gallery3d.filtershow.filters;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.support.v8.renderscript.Allocation;
+import android.renderscript.Allocation;
+import android.graphics.Rect;
 import android.widget.Toast;
 
 import com.android.gallery3d.filtershow.imageshow.GeometryMathUtils;
@@ -35,7 +36,7 @@ public abstract class ImageFilter implements Cloneable {
     // TODO: Temporary, for dogfood note memory issues with toasts for better
     // feedback. Remove this when filters actually work in low memory
     // situations.
-    private static Activity sActivity = null;
+    protected static Activity sActivity = null;
 
     public static void setActivityForMemoryToasts(Activity activity) {
         sActivity = activity;
@@ -90,6 +91,13 @@ public abstract class ImageFilter implements Cloneable {
     protected Matrix getOriginalToScreenMatrix(int w, int h) {
         return GeometryMathUtils.getImageToScreenMatrix(getEnvironment().getImagePreset()
                 .getGeometryFilters(), true, MasterImage.getImage().getOriginalBounds(), w, h);
+    }
+
+    protected Matrix getImageToScreenMatrix(int imageWidth, int imageHeight, int viewWidth,
+            int viewHeight) {
+        Rect imageDimens = new Rect(0, 0, imageWidth, imageHeight);
+        return GeometryMathUtils.getImageToScreenMatrix(getEnvironment().getImagePreset()
+                .getGeometryFilters(), true, imageDimens, viewWidth, viewHeight);
     }
 
     public void setEnvironment(FilterEnvironment environment) {

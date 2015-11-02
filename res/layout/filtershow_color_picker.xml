@@ -30,8 +30,8 @@
                 android:id="@+id/btnSelect"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="0dp"
                 />
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="256dp"
                 android:layout_marginTop="0dp"
-                android:layout_marginRight="1dp"/>
+                android:layout_marginEnd="1dp"/>
 
         <com.android.gallery3d.filtershow.colorpicker.ColorHueView
                 android:id="@+id/ColorHueView"

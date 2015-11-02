@@ -87,6 +87,11 @@ public abstract class MediaSet extends MediaObject {
         return 0;
     }
 
+    public int getCurrectSize() {
+        // Dummy method, need to be override in implementation classes
+        return 0;
+    }
+
     public MediaSet getSubMediaSet(int index) {
         throw new IndexOutOfBoundsException();
     }

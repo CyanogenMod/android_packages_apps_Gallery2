@@ -18,6 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
+//import android.drm.DrmHelper;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -91,6 +92,9 @@ public class PhotoView extends GLView {
 
         // Returns true if the item is a Video.
         public boolean isVideo(int offset);
+
+        // Returns true if the item is a Gif.
+        public boolean isGif(int offset);
 
         // Returns true if the item can be deleted.
         public boolean isDeletable(int offset);
@@ -200,6 +204,7 @@ public class PhotoView extends GLView {
     private EdgeView mEdgeView;
     private UndoBarView mUndoBar;
     private Texture mVideoPlayIcon;
+    private Texture mDrmIcon;
 
     private SynchronizedHandler mHandler;
 
@@ -303,6 +308,7 @@ public class PhotoView extends GLView {
             }
         });
         mVideoPlayIcon = new ResourceTexture(mContext, R.drawable.ic_control_play);
+        mDrmIcon = new ResourceTexture(mContext, R.drawable.drm_image);
         for (int i = -SCREEN_NAIL_MAX; i <= SCREEN_NAIL_MAX; i++) {
             if (i == 0) {
                 mPictures.put(i, new FullPicture());
@@ -593,7 +599,6 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -606,7 +611,6 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(0);
             mIsPanorama = mModel.isPanorama(0);
             mIsStaticCamera = mModel.isStaticCamera(0);
-            mIsVideo = mModel.isVideo(0);
             mIsDeletable = mModel.isDeletable(0);
             mLoadingState = mModel.getLoadingState(0);
             setScreenNail(mModel.getScreenNail(0));
@@ -731,10 +735,22 @@ public class PhotoView extends GLView {
             // Draw the play video icon and the message.
             canvas.translate((int) (cx + 0.5f), (int) (cy + 0.5f));
             int s = (int) (scale * Math.min(r.width(), r.height()) + 0.5f);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            //Full pic locates at index 0 of the array in PhotoDataAdapter
+            if (mModel.isVideo(0) || mModel.isGif(0)) {
+                drawVideoPlayIcon(canvas, s);
+            }
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
+
+//            if (getFilmMode()) {
+//                MediaItem item = mModel.getMediaItem(0);
+//                if (item != null) {
+//                    if (DrmHelper.isDrmFile(item.getFilePath())) {
+//                        drawDrmIcon(canvas, s);
+//                    }
+//                }
+//            }
 
             // Draw a debug indicator showing which picture has focus (index ==
             // 0).
@@ -774,7 +790,6 @@ public class PhotoView extends GLView {
         private boolean mIsCamera;
         private boolean mIsPanorama;
         private boolean mIsStaticCamera;
-        private boolean mIsVideo;
         private boolean mIsDeletable;
         private int mLoadingState = Model.LOADING_INIT;
         private Size mSize = new Size();
@@ -788,7 +803,6 @@ public class PhotoView extends GLView {
             mIsCamera = mModel.isCamera(mIndex);
             mIsPanorama = mModel.isPanorama(mIndex);
             mIsStaticCamera = mModel.isStaticCamera(mIndex);
-            mIsVideo = mModel.isVideo(mIndex);
             mIsDeletable = mModel.isDeletable(mIndex);
             mLoadingState = mModel.getLoadingState(mIndex);
             setScreenNail(mModel.getScreenNail(mIndex));
@@ -852,10 +866,21 @@ public class PhotoView extends GLView {
                 invalidate();
             }
             int s = Math.min(drawW, drawH);
-            if (mIsVideo) drawVideoPlayIcon(canvas, s);
-            if (mLoadingState == Model.LOADING_FAIL) {
+            if (mModel.isVideo(mIndex) || mModel.isGif(mIndex)) {
+                drawVideoPlayIcon(canvas, s);
+            }
+
+            if (mLoadingState == Model.LOADING_FAIL ) {
                 drawLoadingFailMessage(canvas);
             }
+
+//            MediaItem item = mModel.getMediaItem(mIndex);
+//            if (item != null) {
+//                if (DrmHelper.isDrmFile(item.getFilePath())) {
+//                    drawDrmIcon(canvas, s);
+//                }
+//            }
+
             canvas.restore();
         }
 
@@ -920,6 +945,13 @@ public class PhotoView extends GLView {
         int s = side / ICON_RATIO;
         // Draw the video play icon at the center
         mVideoPlayIcon.draw(canvas, -s / 2, -s / 2, s, s);
+    }
+
+    // Draw the Drm lock icon (in the place where the spinner was)
+    private void drawDrmIcon(GLCanvas canvas, int side) {
+        int s = side / ICON_RATIO;
+        // Draw the Drm lock icon at the center
+        mDrmIcon.draw(canvas, -s / 2, -s / 2, s, s);
     }
 
     // Draw the "no thumbnail" message
@@ -1128,6 +1160,7 @@ public class PhotoView extends GLView {
         }
 
         private void deleteAfterAnimation(int duration) {
+            if (mHandler.hasMessages(MSG_DELETE_ANIMATION_DONE)) return;
             MediaItem item = mModel.getMediaItem(mTouchBoxIndex);
             if (item == null) return;
             mListener.onCommitDeleteImage();
@@ -1854,4 +1887,5 @@ public class PhotoView extends GLView {
         }
         return effect;
     }
+
 }

@@ -18,14 +18,18 @@ package com.android.gallery3d.ui;
 
 import android.graphics.Rect;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.android.gallery3d.anim.Animation;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.glrenderer.GLCanvas;
+
+import java.util.Locale;
 
 public class SlotView extends GLView {
     @SuppressWarnings("unused")
@@ -88,6 +92,9 @@ public class SlotView extends GLView {
     // to prevent allocating memory
     private final Rect mTempRect = new Rect();
 
+    // Flag to check whether it is come from Photo Page.
+    private boolean isFromPhotoPage = false;
+
     public SlotView(AbstractGalleryActivity activity, Spec spec) {
         mGestureDetector = new GestureDetector(activity, new MyGestureListener());
         mScroller = new ScrollerHelper(activity);
@@ -135,7 +142,20 @@ public class SlotView extends GLView {
         setScrollPosition(position);
     }
 
+    /**
+     * Set the flag which used for check whether it is come from Photo Page.
+     */
+    public void setIsFromPhotoPage(boolean flag) {
+        isFromPhotoPage = flag;
+    }
+
     public void setScrollPosition(int position) {
+        if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                .getLayoutDirectionFromLocale(Locale.getDefault())
+                && position == 0 && !isFromPhotoPage) {
+            // If RTL and not from Photo Page, set position to max.
+            position = mLayout.getScrollLimit();
+        }
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
         updateScrollPosition(position, false);
@@ -435,8 +455,16 @@ public class SlotView extends GLView {
         public Rect getSlotRect(int index, Rect rect) {
             int col, row;
             if (WIDE) {
-                col = index / mUnitCount;
-                row = index - col * mUnitCount;
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    // If RTL, recalculate the columns and rows.
+                    int count = ((mSlotCount + mUnitCount - 1) / mUnitCount);
+                    col = count - index / mUnitCount - 1;
+                    row = index % mUnitCount;
+                } else {
+                    col = index / mUnitCount;
+                    row = index - col * mUnitCount;
+                }
             } else {
                 row = index / mUnitCount;
                 col = index - row * mUnitCount;
@@ -531,6 +559,13 @@ public class SlotView extends GLView {
             int position = mScrollPosition;
 
             if (WIDE) {
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    // If RTL, recalculate the position.
+                    position = mContentLength > mWidth ? (mContentLength - position - mWidth)
+                            : position;
+                    position = Math.max(0, position);
+                }
                 int startCol = position / (mSlotWidth + mSlotGap);
                 int start = Math.max(0, mUnitCount * startCol);
                 int endCol = (position + mWidth + mSlotWidth + mSlotGap - 1) /
@@ -577,7 +612,12 @@ public class SlotView extends GLView {
         public int getSlotIndexByPosition(float x, float y) {
             int absoluteX = Math.round(x) + (WIDE ? mScrollPosition : 0);
             int absoluteY = Math.round(y) + (WIDE ? 0 : mScrollPosition);
-
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                // If RTL, recalculate the absoluteX.
+                absoluteX = mContentLength > mWidth ? (mContentLength - absoluteX) : mWidth
+                        - absoluteX;
+            }
             absoluteX -= mHorizontalPadding.get();
             absoluteY -= mVerticalPadding.get();
 
@@ -784,5 +824,12 @@ public class SlotView extends GLView {
             mCurrent = Math.round(mFrom + progress * (mTarget - mFrom));
             if (progress == 1f) mEnabled = false;
         }
+    }
+
+    /**
+     * Get the SlotView's max scroll value.
+     */
+    public int getScrollLimit() {
+        return mLayout.getScrollLimit();
     }
 }

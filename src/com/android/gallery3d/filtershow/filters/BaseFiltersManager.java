@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.android.gallery3d.R;
+import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
 import com.android.gallery3d.filtershow.pipeline.ImagePreset;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     protected ArrayList<FilterRepresentation> mBorders = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mTools = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mEffects = new ArrayList<FilterRepresentation>();
+    protected ArrayList<FilterRepresentation> mMakeup = new ArrayList<FilterRepresentation>();
+    protected ArrayList<FilterRepresentation> mDualCam = new ArrayList<FilterRepresentation>();
     private static int mImageBorderSize = 4; // in percent
 
     protected void init() {
@@ -50,7 +53,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
                     mFilters.put(filterClass, (ImageFilter) filterInstance);
 
                     FilterRepresentation rep =
-                        ((ImageFilter) filterInstance).getDefaultRepresentation();
+                            ((ImageFilter) filterInstance).getDefaultRepresentation();
                     if (rep != null) {
                         addRepresentation(rep);
                     }
@@ -140,6 +143,16 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         filters.add(ImageFilterFx.class);
         filters.add(ImageFilterBorder.class);
         filters.add(ImageFilterColorBorder.class);
+        filters.add(ImageFilterDualCamera.class);
+        filters.add(ImageFilterDualCamFusion.class);
+        filters.add(ImageFilterDualCamSketch.class);
+
+        if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+            filters.add(ImageFilterMakeupWhiten.class);
+            filters.add(ImageFilterMakeupSoften.class);
+            filters.add(ImageFilterMakeupTrimface.class);
+            filters.add(ImageFilterMakeupBigeye.class);
+        }
     }
 
     public ArrayList<FilterRepresentation> getLooks() {
@@ -150,6 +163,10 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         return mBorders;
     }
 
+    public ArrayList<FilterRepresentation> getDualCamera() {
+        return mDualCam;
+    }
+
     public ArrayList<FilterRepresentation> getTools() {
         return mTools;
     }
@@ -158,8 +175,11 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         return mEffects;
     }
 
-    public void addBorders(Context context) {
+    public ArrayList<FilterRepresentation> getMakeup() {
+        return mMakeup;
+    }
 
+    public void addBorders(Context context) {
         // Do not localize
         String[] serializationNames = {
                 "FRAME_4X5",
@@ -303,6 +323,16 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         mEffects.add(getRepresentation(ImageFilterNegative.class));
         mEffects.add(getRepresentation(ImageFilterEdge.class));
         mEffects.add(getRepresentation(ImageFilterKMeans.class));
+        mEffects.add(getRepresentation(ImageFilterRedEye.class));
+    }
+
+    public void addMakeups(Context context) {
+        if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
+            mMakeup.add(getRepresentation(ImageFilterMakeupWhiten.class));
+            mMakeup.add(getRepresentation(ImageFilterMakeupSoften.class));
+            mMakeup.add(getRepresentation(ImageFilterMakeupTrimface.class));
+            mMakeup.add(getRepresentation(ImageFilterMakeupBigeye.class));
+        }
     }
 
     public void addTools(Context context) {
@@ -343,8 +373,59 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         mTools.add(getRepresentation(ImageFilterDraw.class));
     }
 
+    public void addDualCam(Context context) {
+        int[] textId = {
+                R.string.focus,
+                R.string.halo
+        };
+
+        int[] overlayId = {
+                R.drawable.filtershow_dualcam_focus,
+                R.drawable.filtershow_dualcam_halo
+        };
+
+        String[] serializationNames = {
+                "DUAL_CAM_FOCUS",
+                "DUAL_CAM_HALO"
+        };
+
+        // intensity range as defined by ddm lib
+        int[][] minMaxValues = {
+                {0,5,10},
+                {0,5,10}
+        };
+
+        FilterDualCamSketchRepresentation none =
+                new FilterDualCamSketchRepresentation(context.getString(R.string.none), R.string.none);
+        none.setEditorId(ImageOnlyEditor.ID);
+        none.setSerializationName("DUAL_CAM_NONE");
+        mDualCam.add(none);
+
+        for (int i = 0; i < textId.length; i++) {
+            FilterRepresentation dualCam =
+                    new FilterDualCamBasicRepresentation(context.getString(textId[i]),
+                            minMaxValues[i][0], minMaxValues[i][1], minMaxValues[i][2]);
+            dualCam.setTextId(textId[i]);
+            dualCam.setOverlayId(overlayId[i]);
+            dualCam.setOverlayOnly(true);
+            dualCam.setSerializationName(serializationNames[i]);
+            mDualCam.add(dualCam);
+            addRepresentation(dualCam);
+        }
+
+        FilterDualCamSketchRepresentation sketch = new FilterDualCamSketchRepresentation(
+                context.getString(R.string.sketch), R.string.sketch);
+        sketch.setOverlayId(R.drawable.filtershow_dualcam_sketch);
+        sketch.setOverlayOnly(true);
+        sketch.setSerializationName("DUAL_CAM_SKETCH");
+        mDualCam.add(sketch);
+        addRepresentation(sketch);
+
+        mDualCam.add(getRepresentation(ImageFilterDualCamFusion.class));
+    }
+
     public void removeRepresentation(ArrayList<FilterRepresentation> list,
-                                          FilterRepresentation representation) {
+            FilterRepresentation representation) {
         for (int i = 0; i < list.size(); i++) {
             FilterRepresentation r = list.get(i);
             if (r.getFilterClass() == representation.getFilterClass()) {

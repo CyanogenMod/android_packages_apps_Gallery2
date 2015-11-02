@@ -68,9 +68,16 @@ public class ColorChooser implements Control {
             Color.colorToHSV(palette[i], hsvo);
             hsvo[OPACITY_OFFSET] = (0xFF & (palette[i] >> 24)) / (float) 255;
             button.setTag(hsvo);
+
+            String colorString = "(" + Integer.toHexString(palette[i]) + ")";
+            boolean colorSelect = false;
+            if (parameter.getValueString().equals(colorString)) {
+                mSelectedButton = i;
+                colorSelect = true;
+            }
             GradientDrawable sd = ((GradientDrawable) button.getBackground());
             sd.setColor(palette[i]);
-            sd.setStroke(3, (mSelectedButton == i) ? mSelected : mTransparent);
+            sd.setStroke(3, colorSelect? mSelected : mTransparent);
 
             final int buttonNo = i;
             button.setOnClickListener(new View.OnClickListener() {

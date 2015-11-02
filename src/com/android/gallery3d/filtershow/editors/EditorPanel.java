@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class EditorPanel extends Fragment {
         super.onAttach(activity);
         FilterShowActivity filterShowActivity = (FilterShowActivity) activity;
         mEditor = filterShowActivity.getEditor(mEditorID);
+        Log.d(LOGTAG, "EditorPanle.onAttach(): mEditorID is " + mEditorID + ", mEditor is " + mEditor);
     }
 
     public void cancelCurrentFilter() {
@@ -59,6 +61,10 @@ public class EditorPanel extends Fragment {
         int position = adapter.undo();
         masterImage.onHistoryItemClick(position);
         ((FilterShowActivity)getActivity()).invalidateViews();
+
+        if(!masterImage.hasFusionApplied()) {
+            masterImage.setFusionUnderlay(null);
+        }
     }
 
     @Override

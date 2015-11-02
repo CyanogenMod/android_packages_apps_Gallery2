@@ -27,6 +27,8 @@ public interface ControllerOverlay {
     void onSeekEnd(int time, int trimStartTime, int trimEndTime);
     void onShown();
     void onHidden();
+    // get current video is from RTSP
+    boolean onIsRTSP();
     void onReplay();
   }
 
@@ -53,4 +55,10 @@ public interface ControllerOverlay {
 
   void setTimes(int currentTime, int totalTime,
           int trimStartTime, int trimEndTime);
+
+  //set view enabled (play/pause asynchronous processing)
+  void setViewEnabled(boolean isEnabled);
+
+  //view from disable to resume (play/pause asynchronous processing)
+  void setPlayPauseReplayResume();
 }

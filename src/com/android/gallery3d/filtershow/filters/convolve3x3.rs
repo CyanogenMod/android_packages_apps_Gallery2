@@ -31,15 +31,15 @@ void root(const uchar4 *in, uchar4 *out, const void *usrData, uint32_t x, uint32
     uint32_t y1 = min((int32_t)y+1, gHeight-1);
     uint32_t y2 = max((int32_t)y-1, 0);
 
-    float4 p00 = rsUnpackColor8888(gPixels[x1 + gWidth * y1]);
-    float4 p01 = rsUnpackColor8888(gPixels[x + gWidth * y1]);
-    float4 p02 = rsUnpackColor8888(gPixels[x2 + gWidth * y1]);
-    float4 p10 = rsUnpackColor8888(gPixels[x1 + gWidth * y]);
-    float4 p11 = rsUnpackColor8888(gPixels[x + gWidth * y]);
-    float4 p12 = rsUnpackColor8888(gPixels[x2 + gWidth * y]);
-    float4 p20 = rsUnpackColor8888(gPixels[x1 + gWidth * y2]);
-    float4 p21 = rsUnpackColor8888(gPixels[x + gWidth * y2]);
-    float4 p22 = rsUnpackColor8888(gPixels[x2 + gWidth * y2]);
+    float4 p00 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x1, y1)));
+    float4 p01 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x, y1)));
+    float4 p02 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x2, y1)));
+    float4 p10 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x1, y)));
+    float4 p11 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x, y)));
+    float4 p12 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x2, y)));
+    float4 p20 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x1, y2)));
+    float4 p21 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x, y2)));
+    float4 p22 = rsUnpackColor8888(*((uchar4 *)rsGetElementAt(gIn, x2, y2)));
 
     p00 *= gCoeffs[0];
     p01 *= gCoeffs[1];

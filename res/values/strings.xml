@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<!-- Copyright (c) 2014, The Linux Foundation. All rights reserved.
+     Not a Contribution.
+
+     Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -103,6 +106,8 @@
     <!-- Toast/alert after saving wallpaper -->
     <string name="wallpaper">Setting wallpaper\u2026</string>
     <string name="camera_setas_wallpaper">Wallpaper</string>
+    <!-- Toast message for share items -->
+    <string name="cannot_share_items">Selected items for share should less than 300</string>
 
     <!-- Details dialog "OK" button. Dismisses dialog. -->
     <string name="delete">Delete</string>
@@ -233,6 +238,10 @@
          have location information in them [CHAR LIMIT=20]-->
     <string name="no_location">No location</string>
 
+    <!-- When grouping photos by peoples, the label used for photos that don't
+        have people information in them [CHAR LIMIT=20]-->
+    <string name="no_faces">No faces</string>
+
     <!-- This toast message is shown when network connection is lost while doing clustering -->
     <string name="no_connectivity">Some locations couldn\'t be identified due to network problems.</string>
 
@@ -277,6 +286,10 @@
     <!-- A label describing that the current screen is for the user to pick
          some albums to be viewable offline [CHAR LIMIT=30] -->
     <string name="make_available_offline">Make available offline</string>
+
+    <!-- A label describing to link website [CHAR LIMIT=30] -->
+    <string name="more_image">More Images</string>
+    <string name="website_for_more_image"></string>
 
     <!-- A label of a menu item for user to sync the content [CHAR LIMIT=30] -->
     <string name="sync_picasa_albums">Refresh</string>
@@ -521,6 +534,9 @@
 
     <!-- Toast if the trimmed video is too short to trim. [CHAR LIMIT=80] -->
     <string name="trim_too_short">Can not trim : target video is too short</string>
+
+    <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+    <string name="mute_nosupport">Can not mute : not supported video</string>
 
     <!-- Text to show with progress bar while stitching in Gallery -->
     <string name="pano_progress_text">Rendering panorama</string>
@@ -1094,6 +1110,9 @@ CHAR LIMIT = NONE] -->
     <!-- Positive answer for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = 20] -->
     <string name="remember_location_yes">Yes</string>
 
+    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+    <string name="map_activity_not_found_err">There is no map app for show location.</string>
+
     <!-- Menu item to launch the camera app [CHAR LIMIT=25] -->
     <string name="menu_camera">Camera</string>
     <!-- Menu item to search for photos [CHAR LIMIT=25] -->
@@ -1115,4 +1134,33 @@ CHAR LIMIT = NONE] -->
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>
     </plurals>
+
+    <!-- The label for the bass boost knob of the audio effects dialog. -->
+    <string name="bass_boost_strength">Bass boost</string>
+
+    <!-- The label for the 3d effect knob of the audio effects dialog. -->
+    <string name="virtualizer_strength">3D effect</string>
+
+    <!-- The label for the audio effects menu. -->
+    <string name="audio_effects">Audio effects</string>
+
+    <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+    <string name="headset_plug">Plug in headphones for these effects.</string>
+
+    <!-- The title of the audio effects dialog. -->
+    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+
+    <!-- The tips of trimming video -->
+    <string name="fail_trim">Sorry, this video file can not be trimmed</string>
+    <string name="can_not_trim">Only mp4 and 3gp file can be trimmed</string>
+
+    <string name="no_permission_for_drm">"Sorry, Drm file can not be shared"</string>
+    <string name="drm_license_info">Drm license info</string>
+    <string name="mimetype_not_supported">This file can not be played</string>
+    <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
+    <string name="text_makeup_whiten">Whiten</string>
+    <string name="text_makeup_Soften">Soften</string>
+    <string name="text_makeup_trimface">Trimface</string>
+    <string name="text_makeup_bigeye">Bigeye</string>
+
 </resources>

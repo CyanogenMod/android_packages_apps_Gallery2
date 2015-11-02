@@ -17,9 +17,6 @@
 package com.android.gallery3d.filtershow.editors;
 
 import com.android.gallery3d.filtershow.EditorPlaceHolder;
-import com.android.gallery3d.filtershow.editors.BasicEditor;
-import com.android.gallery3d.filtershow.editors.EditorCurves;
-import com.android.gallery3d.filtershow.editors.EditorZoom;
 
 public class EditorManager {
 
@@ -36,6 +33,12 @@ public class EditorManager {
         editorPlaceHolder.addEditor(new EditorRotate());
         editorPlaceHolder.addEditor(new EditorStraighten());
         editorPlaceHolder.addEditor(new EditorCrop());
+        editorPlaceHolder.addEditor(new BasicEditor());
+        editorPlaceHolder.addEditor(new ImageOnlyEditor());
+        editorPlaceHolder.addEditor(new EditorRedEye());
+        editorPlaceHolder.addEditor(new EditorDualCamera());
+        editorPlaceHolder.addEditor(new EditorDualCamFusion());
+        editorPlaceHolder.addEditor(new EditorDualCamSketch());
     }
 
 }

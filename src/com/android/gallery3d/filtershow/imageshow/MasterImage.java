@@ -16,20 +16,29 @@
 
 package com.android.gallery3d.filtershow.imageshow;
 
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Vector;
+
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.gallery3d.exif.ExifTag;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.BitmapCache;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
+import com.android.gallery3d.filtershow.filters.FilterDualCamFusionRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRotateRepresentation;
@@ -44,9 +53,8 @@ import com.android.gallery3d.filtershow.pipeline.RenderingRequestCaller;
 import com.android.gallery3d.filtershow.pipeline.SharedBuffer;
 import com.android.gallery3d.filtershow.pipeline.SharedPreset;
 import com.android.gallery3d.filtershow.state.StateAdapter;
-
-import java.util.List;
-import java.util.Vector;
+import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
+import com.android.gallery3d.mpo.MpoParser;
 
 public class MasterImage implements RenderingRequestCaller {
 
@@ -72,6 +80,7 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mOriginalBitmapLarge = null;
     private Bitmap mOriginalBitmapHighres = null;
     private Bitmap mTemporaryThumbnail = null;
+
     private int mOrientation;
     private Rect mOriginalBounds;
     private final Vector<ImageShow> mLoadListeners = new Vector<ImageShow>();
@@ -85,6 +94,10 @@ public class MasterImage implements RenderingRequestCaller {
     private Bitmap mPreviousImage = null;
     private int mShadowMargin = 15; // not scaled, fixed in the asset
     private Rect mPartialBounds = new Rect();
+
+    private Bitmap mFusionUnderlay = null;
+    private Rect mImageBounds = null;
+    private Rect mFusionBounds = null;
 
     private ValueAnimator mAnimator = null;
     private float mMaskScale = 1;
@@ -211,6 +224,9 @@ public class MasterImage implements RenderingRequestCaller {
         int sh = (int) (sw * (float) mOriginalBitmapLarge.getHeight() / mOriginalBitmapLarge
                 .getWidth());
         mOriginalBitmapSmall = Bitmap.createScaledBitmap(mOriginalBitmapLarge, sw, sh, true);
+        Log.d(LOGTAG, "MasterImage.loadBitmap(): OriginalBitmapLarge.WH is (" + mOriginalBitmapLarge.getWidth() + ", "
+                + mOriginalBitmapLarge.getHeight() + "), OriginalBitmapSmall.WH is (" + sw + ", " + sh + "), originalBounds is "
+                + originalBounds.toString());
         mZoomOrientation = mOrientation;
         warnListeners();
         return true;
@@ -271,6 +287,9 @@ public class MasterImage implements RenderingRequestCaller {
     public void onHistoryItemClick(int position) {
         HistoryItem historyItem = mHistory.getItem(position);
         // We need a copy from the history
+        if (historyItem == null) {
+            return;
+        }
         ImagePreset newPreset = new ImagePreset(historyItem.getImagePreset());
         // don't need to add it to the history
         setPreset(newPreset, historyItem.getFilterRepresentation(), false);
@@ -319,6 +338,15 @@ public class MasterImage implements RenderingRequestCaller {
                 return !mPreset.equals(loadedPreset);
             }
         }
+    }
+
+    public synchronized boolean hasFusionApplied() {
+        FilterRepresentation representation =
+                mPreset.getFilterWithSerializationName(FilterDualCamFusionRepresentation.SERIALIZATION_NAME);
+        if(representation instanceof FilterDualCamFusionRepresentation) {
+            return true;
+        }
+        return false;
     }
 
     public SharedBuffer getPreviewBuffer() {
@@ -612,11 +640,11 @@ public class MasterImage implements RenderingRequestCaller {
                 mImageShowSize.x / 2.0f,
                 mImageShowSize.y / 2.0f);
         m.postTranslate(translation.x * getScaleFactor(),
-                        translation.y * getScaleFactor());
+                translation.y * getScaleFactor());
         return m;
     }
 
-    private Matrix getImageToScreenMatrix(boolean reflectRotation) {
+    public Matrix getImageToScreenMatrix(boolean reflectRotation) {
         if (getOriginalBounds() == null || mImageShowSize.x == 0 || mImageShowSize.y == 0) {
             return new Matrix();
         }
@@ -832,5 +860,101 @@ public class MasterImage implements RenderingRequestCaller {
 
     public boolean hasTinyPlanet() {
         return mPreset.contains(FilterRepresentation.TYPE_TINYPLANET);
+    }
+
+    public boolean loadMpo() {
+        boolean loaded = false;
+        MpoParser parser = MpoParser.parse(getActivity(), getUri());
+        byte[] primaryMpoData = parser.readImgData(true);
+        byte[] auxiliaryMpoData = parser.readImgData(false);
+
+        if(primaryMpoData != null && auxiliaryMpoData != null) {
+            Bitmap primaryBm = BitmapFactory.decodeByteArray(primaryMpoData, 0, primaryMpoData.length);
+            primaryMpoData = null;
+
+            if(primaryBm == null) {
+                return false;
+            }
+
+            // check for pre-generated dm file
+            String mpoFilepath = ImageLoader.getLocalPathFromUri(getActivity(), getUri());
+            String depthFilepath = MpoParser.getDepthmapFilepath(mpoFilepath);
+            File depthFile = new File(depthFilepath);
+            if(depthFile.exists()) {
+                // TODO: read from depth map file and init DDM
+                //                ByteBuffer depthMap = MpoParser.readDepthMapFile(depthFilepath);
+                //
+                //                DualCameraNativeEngine.getInstance().loadDepthMap(
+                //                        mPrimaryMpoImg, primaryWidth, primaryHeight, primaryStride,
+                //                        depthMap, depthMapWidth, depthMapHeight, depthMapStride);
+
+            } else {
+                // read auxiliary image and generate depth map.
+                Bitmap auxiliaryBm = BitmapFactory.decodeByteArray(auxiliaryMpoData, 0, auxiliaryMpoData.length);
+                auxiliaryMpoData = null;
+
+                if(auxiliaryBm == null) {
+                    primaryBm.recycle();
+                    primaryBm = null;
+                    return false;
+                }
+
+                DualCameraNativeEngine.getInstance().initDepthMap(
+                        primaryBm, auxiliaryBm, mpoFilepath,
+                        DualCameraNativeEngine.getInstance().getCalibFilepath(mActivity));
+
+                primaryBm.recycle();
+                primaryBm = null;
+                auxiliaryBm.recycle();
+                auxiliaryBm = null;
+
+                Point size = new Point();
+                boolean result = DualCameraNativeEngine.getInstance().getDepthMapSize(size);
+                if(result) {
+                    Log.v(LOGTAG, "get depthmapsize returned true. size: " + size.x + "x" + size.y);
+
+                    Bitmap depthMap = Bitmap.createBitmap(size.x, size.y, Config.ALPHA_8);
+                    if(DualCameraNativeEngine.getInstance().getDepthMap(depthMap)) {
+                        loaded = true;
+
+                        // TODO: write and read depth map.
+                        // MpoParser.writeDepthMapFile(depthFilepath, depthMap);
+                    } else {
+                        Log.w(LOGTAG, "get depthmap returned false");
+                    }
+
+                    depthMap.recycle();
+                    depthMap = null;
+                } else {
+                    Log.w(LOGTAG, "get depthmapsize returned false");
+                }
+            }
+        }
+        return loaded;
+    }
+
+    public void setFusionUnderlay(Bitmap underlay) {
+        mFusionUnderlay = underlay;
+    }
+
+    public Bitmap getFusionUnderlay() {
+        return mFusionUnderlay;
+    }
+
+    public void setFusionBounds(Canvas canvas, RectF bounds) {
+        if(mFusionBounds == null) mFusionBounds = new Rect();
+        bounds.roundOut(mFusionBounds);
+    }
+
+    public Rect getFusionBounds() {
+        return mFusionBounds;
+    }
+
+    public void setImageBounds(Canvas canvas, Rect bounds) {
+        mImageBounds = bounds;
+    }
+
+    public Rect getImageBounds() {
+        return mImageBounds;
     }
 }

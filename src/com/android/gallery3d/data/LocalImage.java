@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+//import android.drm.DrmHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
@@ -173,7 +174,7 @@ public class LocalImage extends LocalMediaItem {
     @Override
     public Job<Bitmap> requestImage(int type) {
         return new LocalImageRequest(mApplication, mPath, dateModifiedInSec,
-                type, filePath);
+                type, filePath, mimeType);
     }
 
     public static class LocalImageRequest extends ImageCacheRequest {
@@ -186,10 +187,23 @@ public class LocalImage extends LocalMediaItem {
             mLocalFilePath = localFilePath;
         }
 
+        LocalImageRequest(GalleryApp application, Path path, long timeModified,
+                int type, String localFilePath, String mimeType) {
+            super(application, path, timeModified, type,
+                    MediaItem.getTargetSize(type),localFilePath, mimeType);
+            mLocalFilePath = localFilePath;
+        }
+
         @Override
         public Bitmap onDecodeOriginal(JobContext jc, final int type) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+//            if (DrmHelper.isDrmFile(mLocalFilePath)) {
+//                return DecodeUtils.ensureGLCompatibleBitmap(DrmHelper
+//                        .getBitmap(mLocalFilePath, options));
+//            }
+
             int targetSize = MediaItem.getTargetSize(type);
 
             // try to decode from JPEG EXIF
@@ -230,25 +244,43 @@ public class LocalImage extends LocalMediaItem {
 
         @Override
         public BitmapRegionDecoder run(JobContext jc) {
+//            if (DrmHelper.isDrmFile(mLocalFilePath)) {
+//                return DrmHelper.createBitmapRegionDecoder(mLocalFilePath,
+//                        false);
+//            }
+
             return DecodeUtils.createBitmapRegionDecoder(jc, mLocalFilePath, false);
         }
     }
 
     @Override
     public int getSupportedOperations() {
-        int operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
+        int operation = SUPPORT_DELETE | SUPPORT_INFO;
+
+//        if (DrmHelper.isDrmFile(getFilePath())) {
+//            if (DrmHelper.isDrmFLBlocking(mApplication.getAndroidContext(),
+//                    getFilePath())) {
+//                operation |= SUPPORT_SETAS;
+//            }
+//            operation |= SUPPORT_DRM_INFO | SUPPORT_FULL_IMAGE;
+//            if (DrmHelper.isShareableDrmFile(getFilePath())) {
+//                operation |= SUPPORT_SHARE;
+//            }
+//        } else {
+            operation = SUPPORT_DELETE | SUPPORT_SHARE | SUPPORT_CROP
                 | SUPPORT_SETAS | SUPPORT_PRINT | SUPPORT_INFO;
-        if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
-            operation |= SUPPORT_FULL_IMAGE | SUPPORT_EDIT;
-        }
+            if (BitmapUtils.isSupportedByRegionDecoder(mimeType)) {
+                operation |= SUPPORT_FULL_IMAGE | SUPPORT_EDIT;
+            }
 
-        if (BitmapUtils.isRotationSupported(mimeType)) {
-            operation |= SUPPORT_ROTATE;
-        }
+            if (BitmapUtils.isRotationSupported(mimeType)) {
+                operation |= SUPPORT_ROTATE;
+            }
 
-        if (GalleryUtils.isValidLocation(latitude, longitude)) {
-            operation |= SUPPORT_SHOW_ON_MAP;
-        }
+            if (GalleryUtils.isValidLocation(latitude, longitude)) {
+                operation |= SUPPORT_SHOW_ON_MAP;
+            }
+//        }
         return operation;
     }
 
@@ -313,6 +345,10 @@ public class LocalImage extends LocalMediaItem {
 
     @Override
     public int getMediaType() {
+//        if (DrmHelper.isDrmFile(getFilePath())) {
+//            return MEDIA_TYPE_DRM_IMAGE;
+//        }
+
         return MEDIA_TYPE_IMAGE;
     }
 
