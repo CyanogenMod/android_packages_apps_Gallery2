@@ -30,7 +30,6 @@
 package com.android.gallery3d.filtershow.tools;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -49,6 +48,14 @@ public class DualCameraNativeEngine {
             mLibLoaded = false;
         }
     }
+
+    // Status of Depth Map loading for current image
+    public static enum DdmStatus {
+        DDM_IDLE,
+        DDM_LOADING,
+        DDM_LOADED,
+        DDM_FAILED
+    };
 
     public static final String DEPTH_MAP_EXT = "dm";
     private static final String CALIBRATION_FILENAME = "ddm_calib_file.dat";

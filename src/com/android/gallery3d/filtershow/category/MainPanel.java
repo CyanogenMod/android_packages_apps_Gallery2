@@ -34,6 +34,7 @@ import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
 import com.android.gallery3d.filtershow.state.StatePanel;
 import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine;
+import com.android.gallery3d.filtershow.tools.DualCameraNativeEngine.DdmStatus;
 
 public class MainPanel extends Fragment {
 
@@ -57,9 +58,9 @@ public class MainPanel extends Fragment {
     public static final int BORDERS = 1;
     public static final int GEOMETRY = 2;
     public static final int FILTERS = 3;
-    public static final int DUALCAM = 4;
-    public static final int VERSIONS = 5;
-    public static final int MAKEUP = 6;
+    public static final int MAKEUP = 4;
+    public static final int DUALCAM = 5;
+    public static final int VERSIONS = 6;
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
@@ -179,7 +180,8 @@ public class MainPanel extends Fragment {
                 showPanel(DUALCAM);
             }
         });
-        enableDualCameraButton(DualCameraNativeEngine.getInstance().isLibLoaded());
+
+        updateDualCameraButton();
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         //showImageStatePanel(activity.isShowingImageStatePanel());
@@ -425,8 +427,10 @@ public class MainPanel extends Fragment {
         transaction.commit();
     }
 
-    public void enableDualCameraButton(boolean enable) {
+    public void updateDualCameraButton() {
         if(dualCamButton != null) {
+            DdmStatus status = MasterImage.getImage().getDepthMapLoadingStatus();
+            boolean enable = (status == DdmStatus.DDM_LOADED);
             dualCamButton.setVisibility(enable?View.VISIBLE:View.GONE);
             TextView tvDualCam = (TextView) mEffectsTextContainer
                     .findViewById(R.id.tvDualCam);

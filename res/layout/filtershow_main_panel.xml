@@ -108,6 +108,7 @@
                     android:background="@android:color/transparent"
                     android:padding="2dip"
                     android:scaleType="centerInside"
+                    android:visibility="gone"
                     android:src="@drawable/dualcamera"/>
         </LinearLayout>
 

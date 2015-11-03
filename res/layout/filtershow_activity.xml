@@ -21,25 +21,10 @@
     android:layout_height="match_parent"
     android:background="#212121" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" >
-
-            <ProgressBar
-                android:id="@+id/loading"
-                style="@android:style/Widget.Holo.ProgressBar.Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@null"
-                android:indeterminate="true"
-                android:indeterminateOnly="true" />
 
             <RelativeLayout
                 android:id="@+id/imageContainer"
@@ -90,7 +75,6 @@
                     android:layout_weight="1" />
             </com.android.gallery3d.filtershow.CenteredLinearLayout>
         </FrameLayout>
-    </LinearLayout>
 
     <com.android.gallery3d.filtershow.category.CategorySelected
         android:id="@+id/categorySelectedIndicator"
