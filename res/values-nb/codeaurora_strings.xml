@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Plugg inn hodetelefoner for effekter.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio +</string>
   <string name="fail_trim">Beklager, denne videofilen kan ikke trimmes</string>
+  <string name="no_permission_for_drm">Beklager, DRM-beskyttede filer ikke kan deles</string>
+  <string name="drm_license_info">DRM lisensinfo</string>
 </resources>
