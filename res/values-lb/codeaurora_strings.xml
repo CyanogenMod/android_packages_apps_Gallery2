@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Schléiss Kopfhörer u fir dës Effekter.</string>
   <string name="audio_effects_dialog_title">Snapdragon-Audio+</string>
   <string name="fail_trim">Dëse Video ka leider net geschnidde ginn</string>
+  <string name="no_permission_for_drm">Pardon, DRM-geschützt Fichiere kënnen net gedeelt ginn</string>
+  <string name="drm_license_info">DRM-Lizenzinformatiounen</string>
 </resources>
