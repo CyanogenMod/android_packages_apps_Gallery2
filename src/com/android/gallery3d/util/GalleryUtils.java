@@ -45,7 +45,6 @@ import com.android.gallery3d.app.PackagesMonitor;
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
-import com.android.gallery3d.ui.SharedPreferencesCompat;
 import com.android.gallery3d.ui.TiledScreenNail;
 import com.android.gallery3d.util.IntentHelper;
 import com.android.gallery3d.util.ThreadPool.CancelListener;

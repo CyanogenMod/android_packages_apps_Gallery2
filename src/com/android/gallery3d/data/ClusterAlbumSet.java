@@ -38,7 +38,6 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
 
     private  int mTotalMediaItemCount;
     private ArrayList<Integer> mAlbumItemCountList;
-    private ArrayList<TimeLineTitleMediaItem> mTimelineTitleMediaList;
 
     public ClusterAlbumSet(Path path, GalleryApp application,
             MediaSet baseSet, int kind) {
@@ -78,7 +77,6 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             }
             if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
                 calculateTotalItemsCount();
-                createTimelineTitleMediaList();
             }
         }
         return mDataVersion;
@@ -199,23 +197,6 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
       }
   }
 
-  private void createTimelineTitleMediaList() {
-      if (mTimelineTitleMediaList == null) {
-          mTimelineTitleMediaList = new ArrayList<TimeLineTitleMediaItem>();
-      }
-      mTimelineTitleMediaList.clear();
-      for(ClusterAlbum album: mAlbums) {
-          mTimelineTitleMediaList.add(album.getTimelineTitle());
-      }
-  }
-
-  public TimeLineTitleMediaItem getTimelineTitleMediaItem(int index) {
-      if (mTimelineTitleMediaList == null || index >= mTimelineTitleMediaList.size()) {
-          return null;
-      }
-      return mTimelineTitleMediaList.get(index);
-  }
-
   @Override
   public int getMediaItemCount() {
       return mTotalMediaItemCount;
@@ -230,13 +211,9 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
       ArrayList<MediaItem> mediaItems = new ArrayList<MediaItem>();
       int startAlbum = findTimelineAlbumIndex(start);
       int endAlbum = findTimelineAlbumIndex(start + count - 1);
-      int pAlbumCount = 0;
       int s;
       int lCount;
-      if (startAlbum > 0) {
-          pAlbumCount = mAlbumItemCountList.get(startAlbum -1);
-      }
-      s = start - pAlbumCount;
+      s =  mAlbums.get(startAlbum).getTotalMediaItemCount() - (mAlbumItemCountList.get(startAlbum) - start);
       for (int i = startAlbum; i <= endAlbum && i < mAlbums.size(); ++i) {
           int albumCount = mAlbums.get(i).getTotalMediaItemCount();
           lCount = Math.min(albumCount - s, count);
@@ -260,9 +237,9 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
   }
 
   public ClusterAlbum getAlbumFromindex(int index) {
-      int albumIndex = findTimelineAlbumIndex(index);
-      if (albumIndex >= 0 && albumIndex < mAlbums.size()) {
-          return mAlbums.get(albumIndex);
+      int aIndex = findTimelineAlbumIndex(index);
+      if (aIndex < mAlbums.size() && aIndex >= 0) {
+          return mAlbums.get(aIndex);
       }
       return null;
   }

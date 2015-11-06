@@ -693,7 +693,7 @@ public abstract class PhotoPage extends ActivityState implements
                 return;
             case R.id.photopage_bottom_control_share:
                  if (mModel != null && mModel.getMediaItem(0) != null) {
-                 Uri uri = Uri.parse(mModel.getMediaItem(0).getFilePath());
+                 Uri uri = mActivity.getDataManager().getContentUri(mModel.getMediaItem(0).getPath());
                  mShareIntent.setType(MenuExecutor.getMimeType(mModel
                     .getMediaItem(0).getMediaType()));
                  mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);

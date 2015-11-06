@@ -695,8 +695,7 @@ public class TimeLinePage extends ActivityState implements
                 mRootPane.invalidate();
                 break;
             }
-            case SelectionManager.SELECT_ALL_MODE:
-            case SelectionManager.SELECT_NONE_MODE: {
+            case SelectionManager.SELECT_ALL_MODE: {
                 mActionModeHandler.updateSupportedOperation();
                 mRootPane.invalidate();
                 break;
@@ -801,8 +800,7 @@ public class TimeLinePage extends ActivityState implements
             if (mSelectionManager.getSelected(false) == null) return -1;
             Path id = mSelectionManager.getSelected(false).get(0);
             mIndex = mAlbumDataAdapter.findItem(id);
-            int albumIndex = ((ClusterAlbumSet) mMediaSet).findTimelineAlbumIndex(mIndex);
-            return mIndex - albumIndex - 1;
+            return mIndex;
         }
 
         @Override

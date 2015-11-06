@@ -428,6 +428,9 @@ public class MainPanel extends Fragment {
     public void enableDualCameraButton(boolean enable) {
         if(dualCamButton != null) {
             dualCamButton.setVisibility(enable?View.VISIBLE:View.GONE);
+            TextView tvDualCam = (TextView) mEffectsTextContainer
+                    .findViewById(R.id.tvDualCam);
+            tvDualCam.setVisibility(enable?View.VISIBLE:View.GONE);
         }
     }
 }

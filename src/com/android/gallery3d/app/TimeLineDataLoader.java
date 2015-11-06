@@ -135,10 +135,6 @@ public class TimeLineDataLoader {
         return mData[index % mData.length];
     }
 
-    public MediaItem getTimeLineTitleItem(int index) {
-       return ((ClusterAlbumSet)mSource).getTimelineTitleMediaItem(index);
-    }
-
     public int getTimeLineTitlesCount() {
         return ((ClusterAlbumSet) mSource).getSubMediaSetCount();
     }

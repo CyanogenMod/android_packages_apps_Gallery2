@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -121,7 +122,7 @@ public class TimeLineTitleMaker {
             if(mImageCount != 0) {
                 sb.append(mContext.getResources().getQuantityString(R.plurals.number_of_photos, mImageCount, mImageCount));
                 if(mVideoCount!=0) {
-                     sb.append(mContext.getResources().getQuantityString(
+                    sb.append("  " +mContext.getResources().getQuantityString(
                              R.plurals.number_of_videos, mVideoCount, mVideoCount));
                 }
             } else {
@@ -140,13 +141,18 @@ public class TimeLineTitleMaker {
             if (mTitle != null) {
                 mTitle = mTitle.toUpperCase();
                 x = 16;
-                y = (height/2)-14;
+                y = (height - spec.timeLineTitleFontSize)/2;
                 drawText(canvas, x, y, mTitle, width-x, mTitlePaint);
             }
 
             if (countString != null) {
-                y = (height/2)-14;
-                x = width - countString.length()- 100;
+
+                Rect mediaCountBounds = new Rect();
+                mCountPaint.getTextBounds(
+                        countString, 0, countString.length(), mediaCountBounds);
+                int w = mediaCountBounds.width();
+                y = (height - spec.timeLineTitleFontSize)/2;
+                x = width - countString.length() -w;
                 drawText(canvas, x, y, countString,
                         width - x, mCountPaint);
             }
