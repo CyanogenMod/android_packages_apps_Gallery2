@@ -17,7 +17,6 @@
 
 package com.thundersoft.hz.selfportrait.makeup.engine;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.Log;
@@ -44,16 +43,6 @@ public class MakeupEngine {
         }
 
         return mInstance;
-    }
-
-    private Context mContext;
-
-    public void setContext(Context context) {
-        mContext = context;
-    }
-
-    public Context getContext() {
-        return mContext;
     }
 
     /**

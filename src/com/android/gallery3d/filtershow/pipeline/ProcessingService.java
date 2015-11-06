@@ -185,6 +185,8 @@ public class ProcessingService extends Service {
     public void onDestroy() {
         tearDownPipeline();
         mProcessingTaskController.quit();
+        MasterImage.setMaster(null);
+        mFiltershowActivity = null;
     }
 
     @Override

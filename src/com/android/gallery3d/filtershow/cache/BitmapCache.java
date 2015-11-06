@@ -216,4 +216,8 @@ public class BitmapCache {
     private Long calcKey(long w, long h) {
         return (w << 32) | h;
     }
+
+    public synchronized void clear() {
+        mBitmapCache.clear();
+    }
 }

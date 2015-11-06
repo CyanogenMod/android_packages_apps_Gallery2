@@ -79,5 +79,24 @@ public class SharedBuffer {
         return false;
     }
 
+    public synchronized void reset() {
+        if(mProducer != null) {
+            mProducer.remove();
+        }
+        mProducer = null;
+
+        if(mConsumer != null) {
+            mConsumer.remove();
+        }
+        mConsumer = null;
+
+        if(mIntermediate != null) {
+            mIntermediate.remove();
+        }
+        mIntermediate = null;
+
+        mNeedsSwap = false;
+        mNeedsRepaint = true;
+    }
 }
 

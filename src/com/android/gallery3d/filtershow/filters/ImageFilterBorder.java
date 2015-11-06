@@ -16,6 +16,9 @@
 
 package com.android.gallery3d.filtershow.filters;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,9 +26,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
-import java.util.HashMap;
-import java.lang.ref.WeakReference;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
 public class ImageFilterBorder extends ImageFilter {
     private static final float NINEPATCH_ICON_SCALING = 10;
@@ -71,6 +73,7 @@ public class ImageFilterBorder extends ImageFilter {
         }
         float scale2 = scaleFactor * 2.0f;
         float scale1 = 1 / scale2;
+
         return applyHelper(bitmap, scale1, scale2);
     }
 
@@ -84,7 +87,13 @@ public class ImageFilterBorder extends ImageFilter {
     public Drawable getDrawable(int rsc) {
         Drawable drawable = (mDrawables.get(rsc) != null) ? mDrawables.get(rsc).get() : null;
         if (drawable == null && mResources != null && rsc != 0) {
-            drawable = new BitmapDrawable(mResources, BitmapFactory.decodeResource(mResources, rsc));
+            DisplayMetrics dm = mResources.getDisplayMetrics();
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            if(dm.densityDpi > DisplayMetrics.DENSITY_MEDIUM) {
+                opt.inTargetDensity = DisplayMetrics.DENSITY_MEDIUM;
+            }
+            drawable = new BitmapDrawable(mResources, BitmapFactory.decodeResource(mResources, rsc, opt));
+            //drawable = new BitmapDrawable(mResources, BitmapFactory.decodeResource(mResources, rsc));
             mDrawables.put(rsc, new WeakReference<Drawable>(drawable));
         }
         return drawable;

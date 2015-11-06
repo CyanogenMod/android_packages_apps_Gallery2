@@ -130,11 +130,6 @@ public class ImageSavingTask extends ProcessingTask {
 
     @Override
     public void onUpdate(Update message) {
-        if (message instanceof UpdatePreviewSaved){
-            Uri uri = ((UpdatePreviewSaved) message).uri;
-            boolean exit = ((UpdatePreviewSaved) message).exit;
-            mProcessingService.completePreviewSaveImage(uri, exit);
-        }
         if (message instanceof UpdateBitmap) {
             Bitmap bitmap = ((UpdateBitmap) message).bitmap;
             mProcessingService.updateNotificationWithBitmap(bitmap);
