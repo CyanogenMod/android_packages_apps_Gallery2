@@ -8,11 +8,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := android-support-v13
 LOCAL_STATIC_JAVA_LIBRARIES += com.android.gallery3d.common2
 LOCAL_STATIC_JAVA_LIBRARIES += xmp_toolkit
 LOCAL_STATIC_JAVA_LIBRARIES += mp4parser
-LOCAL_STATIC_JAVA_LIBRARIES += android-support-v8-renderscript
-
-LOCAL_RENDERSCRIPT_TARGET_API := 18
-LOCAL_RENDERSCRIPT_COMPATIBILITY := 18
-LOCAL_RENDERSCRIPT_FLAGS := -rs-package-name=android.support.v8.renderscript
 
 LOCAL_SRC_FILES := \
     $(call all-java-files-under, src) \
@@ -29,7 +24,7 @@ LOCAL_OVERRIDES_PACKAGES := Gallery Gallery3D GalleryNew3D
 
 LOCAL_SDK_VERSION := current
 
-LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
+LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters libjni_jpegstream
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
