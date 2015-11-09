@@ -18,7 +18,7 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v8.renderscript.*;
+import android.renderscript.*;
 import android.util.Log;
 import android.content.res.Resources;
 import com.android.gallery3d.R;
