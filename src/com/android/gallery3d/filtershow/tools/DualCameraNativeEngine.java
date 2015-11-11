@@ -94,11 +94,11 @@ public class DualCameraNativeEngine {
 
     native public boolean getDepthMap(Bitmap dataBuffer);
 
-    native public boolean applyFocus(int focusPointX, int focusPointY, float intensity, boolean isPreview, Bitmap outBm);
+    native public boolean applyFocus(int focusPointX, int focusPointY, float intensity, int[] roiRect, boolean isPreview, Bitmap outBm);
 
-    native public boolean applyHalo(int focusPointX, int focusPointY, float intensity, boolean isPreview, Bitmap outBm);
+    native public boolean applyHalo(int focusPointX, int focusPointY, float intensity, int[] roiRect, boolean isPreview, Bitmap outBm);
 
-    native public boolean applySketch(int focusPointX, int focusPointY, boolean isPreview, Bitmap outBm);
+    native public boolean applySketch(int focusPointX, int focusPointY, int[] roiRect, boolean isPreview, Bitmap outBm);
 
-    native public boolean getForegroundImg(int focusPointX, int focusPointY, boolean isPreview, Bitmap outBm);
+    native public boolean getForegroundImg(int focusPointX, int focusPointY, int[] roiRect, boolean isPreview, Bitmap outBm);
 }

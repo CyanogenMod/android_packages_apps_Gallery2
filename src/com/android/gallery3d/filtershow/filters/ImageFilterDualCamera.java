@@ -87,6 +87,7 @@ public class ImageFilterDualCamera extends ImageFilter {
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int filteredW;
             int filteredH;
+            int[] roiRect = new int[4];
 
             if(quality == FilterEnvironment.QUALITY_FINAL) {
                 filteredW = originalBounds.width();
@@ -112,11 +113,11 @@ public class ImageFilterDualCamera extends ImageFilter {
             switch(mParameters.getTextId()) {
             case R.string.focus:
                 result = DualCameraNativeEngine.getInstance().applyFocus(point.x, point.y, intensity,
-                        quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
+                        roiRect, quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
                 break;
             case R.string.halo:
                 result = DualCameraNativeEngine.getInstance().applyHalo(point.x, point.y, intensity,
-                        quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
+                        roiRect, quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
                 break;
             }
 

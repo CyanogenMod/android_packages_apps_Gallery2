@@ -89,6 +89,7 @@ public class ImageFilterDualCamFusion extends ImageFilter {
             Rect originalBounds = MasterImage.getImage().getOriginalBounds();
             int filteredW;
             int filteredH;
+            int[] roiRect = new int[4];
 
             if(quality == FilterEnvironment.QUALITY_FINAL) {
                 filteredW = originalBounds.width();
@@ -113,7 +114,7 @@ public class ImageFilterDualCamFusion extends ImageFilter {
             filteredBitmap.setHasAlpha(true);
 
             result = DualCameraNativeEngine.getInstance().getForegroundImg(point.x, point.y,
-                    quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
+                    roiRect, quality != FilterEnvironment.QUALITY_FINAL, filteredBitmap);
 
             if(result == false) {
                 Log.e(TAG, "Imagelib API failed");
