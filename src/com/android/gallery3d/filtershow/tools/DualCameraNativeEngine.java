@@ -52,6 +52,7 @@ public class DualCameraNativeEngine {
     // Status of Depth Map loading for current image
     public static enum DdmStatus {
         DDM_IDLE,
+        DDM_PARSING,
         DDM_LOADING,
         DDM_LOADED,
         DDM_FAILED

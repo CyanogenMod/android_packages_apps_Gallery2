@@ -922,10 +922,8 @@ public class MasterImage implements RenderingRequestCaller {
         return mPreset.contains(FilterRepresentation.TYPE_TINYPLANET);
     }
 
-    public boolean loadMpo() {
+    public boolean loadMpo(byte[] auxiliaryMpoData) {
         boolean loaded = false;
-        MpoParser parser = MpoParser.parse(getActivity(), getUri());
-        byte[] auxiliaryMpoData = parser.readImgData(false);
 
         if(auxiliaryMpoData != null) {
             Bitmap primaryBm = ImageLoader.loadBitmap(getActivity(), getUri(), null);
@@ -938,7 +936,6 @@ public class MasterImage implements RenderingRequestCaller {
             String mpoFilepath = ImageLoader.getLocalPathFromUri(getActivity(), getUri());
             // read auxiliary image and generate depth map.
             Bitmap auxiliaryBm = BitmapFactory.decodeByteArray(auxiliaryMpoData, 0, auxiliaryMpoData.length);
-            auxiliaryMpoData = null;
 
             if(auxiliaryBm == null) {
                 primaryBm.recycle();
@@ -1005,6 +1002,11 @@ public class MasterImage implements RenderingRequestCaller {
 
     public Rect getImageBounds() {
         return mImageBounds;
+    }
+
+    public boolean isDepthMapParsingDone() {
+        return (mDepthMapLoadingStatus == DdmStatus.DDM_LOADING ||
+                mDepthMapLoadingStatus == DdmStatus.DDM_FAILED);
     }
 
     public boolean isDepthMapLoadingDone() {

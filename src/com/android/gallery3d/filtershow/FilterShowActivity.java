@@ -122,6 +122,7 @@ import com.android.gallery3d.filtershow.tools.XmpPresets;
 import com.android.gallery3d.filtershow.tools.XmpPresets.XMresults;
 import com.android.gallery3d.filtershow.ui.ExportDialog;
 import com.android.gallery3d.filtershow.ui.FramedTextButton;
+import com.android.gallery3d.mpo.MpoParser;
 import com.android.gallery3d.util.GalleryUtils;
 import com.android.photos.data.GalleryBitmapPool;
 import com.thundersoft.hz.selfportrait.makeup.engine.MakeupEngine;
@@ -165,6 +166,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private LoadBitmapTask mLoadBitmapTask;
     private LoadHighresBitmapTask mHiResBitmapTask;
+    private ParseMpoDataTask mParseMpoTask;
     private LoadMpoDataTask mLoadMpoTask;
 
     private Uri mOriginalImageUri = null;
@@ -767,8 +769,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mLoadBitmapTask.execute(uri);
 
         if(DualCameraNativeEngine.getInstance().isLibLoaded()) {
-            mLoadMpoTask = new LoadMpoDataTask();
-            mLoadMpoTask.execute();
+            mParseMpoTask = new ParseMpoDataTask();
+            mParseMpoTask.execute();
         } else {
             MasterImage.getImage().setDepthMapLoadingStatus(DdmStatus.DDM_FAILED);
         }
@@ -877,6 +879,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             return;
         }
 
+        if (representation.getFilterType() == FilterRepresentation.TYPE_DUALCAM &&
+                MasterImage.getImage().getDepthMapLoadingStatus() == DdmStatus.DDM_FAILED) {
+            Toast.makeText(this, getString(R.string.dualcam_filter_not_supported), Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (representation instanceof FilterRotateRepresentation) {
             FilterRotateRepresentation r = (FilterRotateRepresentation) representation;
             r.rotateCW();
@@ -995,20 +1002,51 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
-    private class LoadMpoDataTask extends AsyncTask<Void, Void, Boolean> {
+    private class ParseMpoDataTask extends AsyncTask<Void, Void, byte[]> {
         @Override
-        protected Boolean doInBackground(Void... params) {
-            return MasterImage.getImage().loadMpo();
+        protected void onPreExecute() {
+            MasterImage.getImage().setDepthMapLoadingStatus(DdmStatus.DDM_PARSING);
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            MasterImage.getImage().setDepthMapLoadingStatus(result?DdmStatus.DDM_LOADED:DdmStatus.DDM_FAILED);
+        protected byte[] doInBackground(Void... params) {
+            MpoParser parser = MpoParser.parse(FilterShowActivity.this, MasterImage.getImage().getUri());
+            return parser.readImgData(false);
+        }
+
+        @Override
+        protected void onPostExecute(byte[] result) {
+            if(result == null) {
+                // parse failed
+                MasterImage.getImage().setDepthMapLoadingStatus(DdmStatus.DDM_FAILED);
+            } else {
+                mLoadMpoTask = new LoadMpoDataTask();
+                mLoadMpoTask.execute(result);
+            }
+
             Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
             if (currentPanel instanceof MainPanel) {
                 MainPanel mainPanel = (MainPanel) currentPanel;
                 mainPanel.updateDualCameraButton();
             }
+        }
+    }
+
+    private class LoadMpoDataTask extends AsyncTask<byte[], Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            MasterImage.getImage().setDepthMapLoadingStatus(DdmStatus.DDM_LOADING);
+        }
+
+        @Override
+        protected Boolean doInBackground(byte[]... params) {
+            return MasterImage.getImage().loadMpo(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            MasterImage.getImage().setDepthMapLoadingStatus(result?DdmStatus.DDM_LOADED:DdmStatus.DDM_FAILED);
+            stopLoadingIndicator();
         }
     }
 
@@ -1166,6 +1204,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
         if(mHiResBitmapTask != null) {
             mHiResBitmapTask.cancel(false);
+        }
+
+        if(mParseMpoTask != null) {
+            mParseMpoTask.cancel(false);
         }
 
         if(mLoadMpoTask != null) {

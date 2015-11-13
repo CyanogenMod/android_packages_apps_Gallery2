@@ -339,6 +339,7 @@
     <string name="fusion_pick_point">Pick Segment</string>
     <string name="fusion_pick_underlay">Pick Underlay</string>
     <string name="dualcam_no_segment_toast">No segment found at this point</string>
+    <string name="dualcam_filter_not_supported">Dual camera filters not supported for this image</string>
 
     <string name="color">Color</string>
     <string name="frames">Frames</string>

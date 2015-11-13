@@ -275,7 +275,7 @@ public class ImageShow extends View implements OnGestureListener,
             if(img.getLoadedPreset() != null
                     && !img.getLoadedPreset().equals(img.getCurrentPreset())) {
                 return;
-            } else if (img.isDepthMapLoadingDone()) {
+            } else if (img.isDepthMapParsingDone()) {
                 mActivity.stopLoadingIndicator();
             }
         }

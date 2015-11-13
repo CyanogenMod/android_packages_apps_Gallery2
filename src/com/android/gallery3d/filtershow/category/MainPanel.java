@@ -329,6 +329,12 @@ public class MainPanel extends Fragment {
         setCategoryFragment(categoryPanel, fromRight);
         mCurrentSelected = DUALCAM;
         selection(mCurrentSelected, true);
+
+        if(MasterImage.getImage().isDepthMapLoadingDone() == false) {
+            FilterShowActivity activity = (FilterShowActivity) getActivity();
+            if(activity.isLoadingVisible() == false)
+                activity.startLoadingIndicator();
+        }
     }
 
     public void showPanel(int currentPanel) {
@@ -430,7 +436,8 @@ public class MainPanel extends Fragment {
     public void updateDualCameraButton() {
         if(dualCamButton != null) {
             DdmStatus status = MasterImage.getImage().getDepthMapLoadingStatus();
-            boolean enable = (status == DdmStatus.DDM_LOADED);
+            boolean enable = (status == DdmStatus.DDM_LOADING || 
+                               status == DdmStatus.DDM_LOADED);
             dualCamButton.setVisibility(enable?View.VISIBLE:View.GONE);
             TextView tvDualCam = (TextView) mEffectsTextContainer
                     .findViewById(R.id.tvDualCam);
