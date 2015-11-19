@@ -54,6 +54,12 @@
             android:normalScreens="true" android:largeScreens="true"
             android:anyDensity="true" />
 
+    <permission android:name="com.android.gallery3d.filtershow.permission.READ"
+                android:protectionLevel="signature" />
+
+    <permission android:name="com.android.gallery3d.filtershow.permission.WRITE"
+                android:protectionLevel="signature" />
+
     <application android:icon="@mipmap/ic_launcher_gallery" android:label="@string/app_name"
             android:name="com.android.gallery3d.app.GalleryAppImpl"
             android:logo="@mipmap/ic_launcher_gallery"
@@ -271,12 +277,6 @@
                 <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
-
-        <permission android:name="com.android.gallery3d.filtershow.permission.READ"
-                    android:protectionLevel="signature" />
-
-        <permission android:name="com.android.gallery3d.filtershow.permission.WRITE"
-                    android:protectionLevel="signature" />
 
         <provider
             android:name="com.android.gallery3d.filtershow.provider.SharedImageProvider"
