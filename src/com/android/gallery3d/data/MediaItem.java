@@ -57,6 +57,9 @@ public abstract class MediaItem extends MediaObject {
     public MediaItem(Path path, long version) {
         super(path, version);
     }
+    public MediaItem(Path path) {
+        super(path);
+    }
 
     public long getDateInMs() {
         return 0;

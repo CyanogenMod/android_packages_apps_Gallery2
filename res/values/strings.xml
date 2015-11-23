@@ -107,7 +107,7 @@
     <string name="wallpaper">Setting wallpaper\u2026</string>
     <string name="camera_setas_wallpaper">Wallpaper</string>
     <!-- Toast message for share items -->
-    <string name="cannot_share_items">Selected items for share should less than 300</string>
+    <string name="cannot_share_items">Max selected items for share is 300</string>
 
     <!-- Details dialog "OK" button. Dismisses dialog. -->
     <string name="delete">Delete</string>
@@ -542,7 +542,7 @@
     <string name="pano_progress_text">Rendering panorama</string>
 
     <!-- The label on the button that will save an edited image -->
-    <string name="save" msgid="8140440041190264400">Save</string>
+    <string name="save" msgid="8140440041190264400">Done</string>
 
     <!-- A label representing the action of importing media item(s) [CHAR LIMIT=20] -->
     <string name="ingest_import">@string/Import</string>
@@ -1135,6 +1135,11 @@ CHAR LIMIT = NONE] -->
         <item quantity="other">%1$d photos</item>
     </plurals>
 
+    <plurals name="number_of_videos">
+        <item quantity="one">%1$d video</item>
+        <item quantity="other">%1$d videos</item>
+    </plurals>
+
     <!-- The label for the bass boost knob of the audio effects dialog. -->
     <string name="bass_boost_strength">Bass boost</string>
 
@@ -1160,7 +1165,25 @@ CHAR LIMIT = NONE] -->
     <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
     <string name="text_makeup_whiten">Whiten</string>
     <string name="text_makeup_Soften">Soften</string>
+
+    <string-array name="title_array_nav_items">
+        <item>Timeline</item>
+        <item>Albums</item>
+        <item>Videos</item>
+    </string-array>
+
+    <string name="navigation_drawer_title">Gallery</string>
+    <!-- Timeline screen title -->
+    <string name="timeline_title">Timeline</string>
+    <!-- Albums screen title -->
+    <string name="albums_title">Albums</string>
+    <!-- Videos screen title -->
+    <string name="videos_title">Videos</string>
+    <string name="action_viewtype_list">List view</string>
+    <string name="action_viewtype_grid">Grid view</string>
+    <string name="tvEmptyAlbum">No photos found</string>
+    <string name="tvEmptyVideos">No videos found</string>
     <string name="text_makeup_trimface">Trimface</string>
     <string name="text_makeup_bigeye">Bigeye</string>
-
+    <string name="drawer_desc">drawer</string>
 </resources>

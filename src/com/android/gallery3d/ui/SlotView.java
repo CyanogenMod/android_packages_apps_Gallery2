@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.ui;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import com.android.gallery3d.R;
 import com.android.gallery3d.anim.Animation;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
@@ -35,7 +37,7 @@ public class SlotView extends GLView {
     @SuppressWarnings("unused")
     private static final String TAG = "SlotView";
 
-    private static final boolean WIDE = true;
+    private static final boolean WIDE = false;
     private static final int INDEX_NONE = -1;
 
     public static final int RENDER_MORE_PASS = 1;
@@ -94,11 +96,13 @@ public class SlotView extends GLView {
 
     // Flag to check whether it is come from Photo Page.
     private boolean isFromPhotoPage = false;
+    private Activity mActivity;
 
     public SlotView(AbstractGalleryActivity activity, Spec spec) {
         mGestureDetector = new GestureDetector(activity, new MyGestureListener());
         mScroller = new ScrollerHelper(activity);
         mHandler = new SynchronizedHandler(activity.getGLRoot());
+        mActivity = activity;
         setSlotSpec(spec);
     }
 
@@ -410,6 +414,9 @@ public class SlotView extends GLView {
         public int rowsLand = -1;
         public int rowsPort = -1;
         public int slotGap = -1;
+        public int slotGapLand = -1;
+        public int colsLand = -1;
+        public int colsPort = -1;
     }
 
     public class Layout {
@@ -508,7 +515,7 @@ public class SlotView extends GLView {
             int availableUnits = Math.min(mUnitCount, mSlotCount);
             int usedMinorLength = availableUnits * minorUnitSize +
                     (availableUnits - 1) * mSlotGap;
-            padding[0] = (minorLength - usedMinorLength) / 2;
+            padding[0] = 0;//mActivity.getResources().getDimensionPixelSize(R.dimen.toolbar_height);
 
             // Then calculate how many columns we need for all slots.
             int count = ((mSlotCount + mUnitCount - 1) / mUnitCount);
@@ -516,20 +523,20 @@ public class SlotView extends GLView {
 
             // If the content length is less then the screen width, put
             // extra padding in left and right.
-            padding[1] = Math.max(0, (majorLength - mContentLength) / 2);
+            padding[1] = 0 ;//Math.max(0, (majorLength - mContentLength) / 2);
         }
 
         private void initLayoutParameters() {
             // Initialize mSlotWidth and mSlotHeight from mSpec
             if (mSpec.slotWidth != -1) {
-                mSlotGap = 0;
-                mSlotWidth = mSpec.slotWidth;
-                mSlotHeight = mSpec.slotHeight;
+                mSlotGap = (mWidth > mHeight) ? mSpec.slotGapLand : mSpec.slotGap;
+                int cols = (mWidth > mHeight) ? mSpec.colsLand : mSpec.colsPort;
+                mSlotHeight = Math.max(1, (mWidth - (cols - 1) * mSlotGap) / cols) ;
+                mSlotWidth = mSlotHeight ;//mSpec.slotWidth;
             } else {
-                int rows = (mWidth > mHeight) ? mSpec.rowsLand : mSpec.rowsPort;
-                mSlotGap = mSpec.slotGap;
-                mSlotHeight = Math.max(1, (mHeight - (rows - 1) * mSlotGap) / rows);
-                mSlotWidth = mSlotHeight - mSpec.slotHeightAdditional;
+                mSlotGap = (mWidth > mHeight) ? mSpec.slotGapLand : mSpec.slotGap;;
+                mSlotHeight = mSpec.slotHeight;//Math.max(1, (mHeight - (rows - 1) * mSlotGap) / rows);
+                mSlotWidth = mWidth;//mSlotHeight - mSpec.slotHeightAdditional;
             }
 
             if (mRenderer != null) {

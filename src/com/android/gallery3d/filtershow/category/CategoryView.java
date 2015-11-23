@@ -64,7 +64,7 @@ public class CategoryView extends IconView
 
         mSelectPaint.setColor(mSelectionColor);
         mBorderPaint = new Paint(mSelectPaint);
-        mBorderPaint.setColor(Color.BLACK);
+//        mBorderPaint.setColor(Color.BLACK);
         mBorderStroke = mSelectionStroke / 3;
     }
 

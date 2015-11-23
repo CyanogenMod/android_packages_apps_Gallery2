@@ -70,6 +70,7 @@ public class ImageRotate extends ImageShow {
         if (image == null) {
             return;
         }
+        toggleComparisonButtonVisibility();
         GeometryMathUtils.initializeHolder(mDrawHolder, mLocalRep);
         GeometryMathUtils.drawTransformedCropped(mDrawHolder, canvas, image, canvas.getWidth(),
                 canvas.getHeight());

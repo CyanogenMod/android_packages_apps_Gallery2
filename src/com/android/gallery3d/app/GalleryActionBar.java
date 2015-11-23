@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toolbar;
 import android.widget.TwoLineListItem;
 
 import com.android.gallery3d.R;
@@ -41,7 +44,7 @@ import com.android.gallery3d.common.ApiHelper;
 
 import java.util.ArrayList;
 
-public class GalleryActionBar implements OnNavigationListener {
+public class GalleryActionBar {
     @SuppressWarnings("unused")
     private static final String TAG = "GalleryActionBar";
 
@@ -53,9 +56,9 @@ public class GalleryActionBar implements OnNavigationListener {
     private AbstractGalleryActivity mActivity;
     private ActionBar mActionBar;
     private int mCurrentIndex;
-    private ClusterAdapter mAdapter = new ClusterAdapter();
+//    private ClusterAdapter mAdapter = new ClusterAdapter();
 
-    private AlbumModeAdapter mAlbumModeAdapter;
+//    private AlbumModeAdapter mAlbumModeAdapter;
     private OnAlbumModeSelectedListener mAlbumModeListener;
     private int mLastAlbumModeSelected;
     private CharSequence [] mAlbumModes;
@@ -107,7 +110,7 @@ public class GalleryActionBar implements OnNavigationListener {
                 R.string.group_by_tags)
     };
 
-    private class ClusterAdapter extends BaseAdapter {
+    /*private class ClusterAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -134,9 +137,9 @@ public class GalleryActionBar implements OnNavigationListener {
             view.setText(sClusterItems[position].spinnerTitle);
             return convertView;
         }
-    }
+    }*/
 
-    private class AlbumModeAdapter extends BaseAdapter {
+       /*private class AlbumModeAdapter extends BaseAdapter {
         @Override
         public int getCount() {
             return mAlbumModes.length;
@@ -174,7 +177,7 @@ public class GalleryActionBar implements OnNavigationListener {
             view.setText((CharSequence) getItem(position));
             return convertView;
         }
-    }
+    }*/
 
     public static String getClusterByTypeString(Context context, int type) {
         for (ActionItem item : sClusterItems) {
@@ -210,104 +213,105 @@ public class GalleryActionBar implements OnNavigationListener {
         return mActionBar != null ? mActionBar.getHeight() : 0;
     }
 
-    public void setClusterItemEnabled(int id, boolean enabled) {
-        for (ActionItem item : sClusterItems) {
-            if (item.action == id) {
-                item.enabled = enabled;
-                return;
-            }
-        }
-    }
+//    public void setClusterItemEnabled(int id, boolean enabled) {
+//        for (ActionItem item : sClusterItems) {
+//            if (item.action == id) {
+//                item.enabled = enabled;
+//                return;
+//            }
+//        }
+//    }
 
-    public void setClusterItemVisibility(int id, boolean visible) {
-        for (ActionItem item : sClusterItems) {
-            if (item.action == id) {
-                item.visible = visible;
-                return;
-            }
-        }
-    }
+//    public void setClusterItemVisibility(int id, boolean visible) {
+//        for (ActionItem item : sClusterItems) {
+//            if (item.action == id) {
+//                item.visible = visible;
+//                return;
+//            }
+//        }
+//    }
 
-    public int getClusterTypeAction() {
-        return sClusterItems[mCurrentIndex].action;
-    }
+//    public int getClusterTypeAction() {
+//        return sClusterItems[mCurrentIndex].action;
+//    }
 
-    public void enableClusterMenu(int action, ClusterRunner runner) {
-        if (mActionBar != null) {
-            // Don't set cluster runner until action bar is ready.
-            mClusterRunner = null;
-            mActionBar.setListNavigationCallbacks(mAdapter, this);
-            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            setSelectedAction(action);
-            mClusterRunner = runner;
-        }
-    }
+//    public void enableClusterMenu(int action, ClusterRunner runner) {
+//        if (mActionBar != null) {
+//            // Don't set cluster runner until action bar is ready.
+//            mClusterRunner = null;
+////            mActionBar.setListNavigationCallbacks(mAdapter, this);
+//            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//            setSelectedAction(action);
+//            mClusterRunner = runner;
+//        }
+//    }
 
     // The only use case not to hideMenu in this method is to ensure
     // all elements disappear at the same time when exiting gallery.
     // hideMenu should always be true in all other cases.
-    public void disableClusterMenu(boolean hideMenu) {
-        if (mActionBar != null) {
-            mClusterRunner = null;
-            if (hideMenu) {
-                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            }
-        }
-    }
+//    public void disableClusterMenu(boolean hideMenu) {
+//        if (mActionBar != null) {
+//            mClusterRunner = null;
+//            if (hideMenu) {
+//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//            }
+//        }
+//    }
 
     public void onConfigurationChanged() {
         if (mActionBar != null && mAlbumModeListener != null) {
-            OnAlbumModeSelectedListener listener = mAlbumModeListener;
-            enableAlbumModeMenu(mLastAlbumModeSelected, listener);
+//            OnAlbumModeSelectedListener listener = mAlbumModeListener;
+//            enableAlbumModeMenu(mLastAlbumModeSelected, listener);
+
         }
     }
 
-    public void enableAlbumModeMenu(int selected, OnAlbumModeSelectedListener listener) {
-        if (mActionBar != null) {
-            if (mAlbumModeAdapter == null) {
-                // Initialize the album mode options if they haven't been already
-                Resources res = mActivity.getResources();
-                mAlbumModes = new CharSequence[] {
-                        res.getString(R.string.switch_photo_filmstrip),
-                        res.getString(R.string.switch_photo_grid)};
-                mAlbumModeAdapter = new AlbumModeAdapter();
-            }
-            mAlbumModeListener = null;
-            mLastAlbumModeSelected = selected;
-            mActionBar.setListNavigationCallbacks(mAlbumModeAdapter, this);
-            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            mActionBar.setSelectedNavigationItem(selected);
-            mAlbumModeListener = listener;
-        }
-    }
+//    public void enableAlbumModeMenu(int selected, OnAlbumModeSelectedListener listener) {
+//        if (mActionBar != null) {
+//            if (mAlbumModeAdapter == null) {
+//                // Initialize the album mode options if they haven't been already
+//                Resources res = mActivity.getResources();
+//                mAlbumModes = new CharSequence[] {
+//                        res.getString(R.string.switch_photo_filmstrip),
+//                        res.getString(R.string.switch_photo_grid)};
+//                mAlbumModeAdapter = new AlbumModeAdapter();
+//            }
+//            mAlbumModeListener = null;
+//            mLastAlbumModeSelected = selected;
+//            mActionBar.setListNavigationCallbacks(mAlbumModeAdapter, this);
+//            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//            mActionBar.setSelectedNavigationItem(selected);
+//            mAlbumModeListener = listener;
+//        }
+//    }
 
-    public void disableAlbumModeMenu(boolean hideMenu) {
-        if (mActionBar != null) {
-            mAlbumModeListener = null;
-            if (hideMenu) {
-                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            }
-        }
-    }
+//    public void disableAlbumModeMenu(boolean hideMenu) {
+//        if (mActionBar != null) {
+//            mAlbumModeListener = null;
+//            if (hideMenu) {
+//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//            }
+//        }
+//    }
 
-    public void showClusterDialog(final ClusterRunner clusterRunner) {
-        createDialogData();
-        final ArrayList<Integer> actions = mActions;
-        new AlertDialog.Builder(mContext).setTitle(R.string.group_by).setItems(
-                mTitles, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Need to lock rendering when operations invoked by system UI (main thread) are
-                // modifying slot data used in GL thread for rendering.
-                mActivity.getGLRoot().lockRenderThread();
-                try {
-                    clusterRunner.doCluster(actions.get(which).intValue());
-                } finally {
-                    mActivity.getGLRoot().unlockRenderThread();
-                }
-            }
-        }).create().show();
-    }
+//    public void showClusterDialog(final ClusterRunner clusterRunner) {
+//        createDialogData();
+//        final ArrayList<Integer> actions = mActions;
+//        new AlertDialog.Builder(mContext).setTitle(R.string.group_by).setItems(
+//                mTitles, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Need to lock rendering when operations invoked by system UI (main thread) are
+//                // modifying slot data used in GL thread for rendering.
+//                mActivity.getGLRoot().lockRenderThread();
+//                try {
+//                    clusterRunner.doCluster(actions.get(which).intValue());
+//                } finally {
+//                    mActivity.getGLRoot().unlockRenderThread();
+//                }
+//            }
+//        }).create().show();
+//    }
 
     @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setHomeButtonEnabled(boolean enabled) {
@@ -355,39 +359,39 @@ public class GalleryActionBar implements OnNavigationListener {
         if (mActionBar != null) mActionBar.removeOnMenuVisibilityListener(listener);
     }
 
-    public boolean setSelectedAction(int type) {
-        if (mActionBar == null) return false;
+//    public boolean setSelectedAction(int type) {
+//        if (mActionBar == null) return false;
+//
+//        for (int i = 0, n = sClusterItems.length; i < n; i++) {
+//            ActionItem item = sClusterItems[i];
+//            if (item.action == type) {
+//                mActionBar.setSelectedNavigationItem(i);
+//                mCurrentIndex = i;
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-        for (int i = 0, n = sClusterItems.length; i < n; i++) {
-            ActionItem item = sClusterItems[i];
-            if (item.action == type) {
-                mActionBar.setSelectedNavigationItem(i);
-                mCurrentIndex = i;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        if (itemPosition != mCurrentIndex && mClusterRunner != null
-                || mAlbumModeListener != null) {
-            // Need to lock rendering when operations invoked by system UI (main thread) are
-            // modifying slot data used in GL thread for rendering.
-            mActivity.getGLRoot().lockRenderThread();
-            try {
-                if (mAlbumModeListener != null) {
-                    mAlbumModeListener.onAlbumModeSelected(itemPosition);
-                } else {
-                    mClusterRunner.doCluster(sClusterItems[itemPosition].action);
-                }
-            } finally {
-                mActivity.getGLRoot().unlockRenderThread();
-            }
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+//        if (itemPosition != mCurrentIndex && mClusterRunner != null
+//                || mAlbumModeListener != null) {
+//            // Need to lock rendering when operations invoked by system UI (main thread) are
+//            // modifying slot data used in GL thread for rendering.
+//            mActivity.getGLRoot().lockRenderThread();
+//            try {
+//                if (mAlbumModeListener != null) {
+//                    mAlbumModeListener.onAlbumModeSelected(itemPosition);
+//                } else {
+//                    mClusterRunner.doCluster(sClusterItems[itemPosition].action);
+//                }
+//            } finally {
+//                mActivity.getGLRoot().unlockRenderThread();
+//            }
+//        }
+//        return false;
+//    }
 
     private Menu mActionBarMenu;
     private ShareActionProvider mSharePanoramaActionProvider;
@@ -435,4 +439,17 @@ public class GalleryActionBar implements OnNavigationListener {
                 onShareListener);
         }
     }
+
+    public void setBackGroundTransparent()
+    {
+        mActionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(66, 0, 0, 0)));
+
+    }
+
+    public void setBackGroundDefault()
+    {
+        mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#e53935")));
+    }
+
+
 }

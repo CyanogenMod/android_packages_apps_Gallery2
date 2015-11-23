@@ -17,8 +17,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dip"
-    android:background="@color/background_main_toolbar" >
+    android:layout_height="80dp"
+    android:background="@color/edit_actionbar_background" >
 
     <ImageButton
         android:id="@+id/fxButton"

@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toolbar;
 import android.os.Handler;
 
 import com.android.gallery3d.R;
@@ -62,6 +63,7 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     private boolean mDisableToggleStatusBar;
     private PanoramaViewHelper mPanoramaViewHelper;
     private static final int ONRESUME_DELAY = 50;
+    private Toolbar mToolbar;
 
     private AlertDialog mAlertDialog = null;
     private BroadcastReceiver mMountReceiver = new BroadcastReceiver() {
@@ -76,7 +78,6 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mOrientationManager = new OrientationManager(this);
-        toggleStatusBarByOrientation();
         getWindow().setBackgroundDrawable(null);
         mPanoramaViewHelper = new PanoramaViewHelper(this);
         mPanoramaViewHelper.onCreate();
@@ -100,7 +101,6 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         mStateManager.onConfigurationChange(config);
         getGalleryActionBar().onConfigurationChanged();
         invalidateOptionsMenu();
-        toggleStatusBarByOrientation();
     }
 
     @Override
@@ -314,18 +314,6 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         mDisableToggleStatusBar = true;
     }
 
-    // Shows status bar in portrait view, hide in landscape view
-    private void toggleStatusBarByOrientation() {
-        if (mDisableToggleStatusBar) return;
-
-        Window win = getWindow();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-    }
-
     public TransitionStore getTransitionStore() {
         return mTransitionStore;
     }
@@ -392,4 +380,12 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
             Log.e(TAG, "Error printing an image", fnfe);
         }
     }
+
+   public Toolbar getToolbar() {
+       return mToolbar;
+   }
+
+   public void setToolbar(Toolbar toolbar) {
+       mToolbar = toolbar ;
+   }
 }

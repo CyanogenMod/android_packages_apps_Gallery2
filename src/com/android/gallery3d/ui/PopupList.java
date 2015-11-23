@@ -17,7 +17,9 @@
 package com.android.gallery3d.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -154,9 +156,10 @@ public class PopupList {
     private PopupWindow createPopupWindow() {
         PopupWindow popup = new PopupWindow(mContext);
         popup.setOnDismissListener(mOnDismissListener);
+        popup.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
 
-        popup.setBackgroundDrawable(mContext.getResources().getDrawable(
-                R.drawable.menu_dropdown_panel_holo_dark));
+//        popup.setBackgroundDrawable(mContext.getResources().getDrawable(
+//                R.drawable.menu_dropdown_panel_holo_dark));
 
         mContentList = new ListView(mContext, null,
                 android.R.attr.dropDownListViewStyle);

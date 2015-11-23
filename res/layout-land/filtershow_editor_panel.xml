@@ -16,124 +16,97 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/top"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:visibility="visible">
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible" >
 
-    <RelativeLayout
+    <!-- <RelativeLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="match_parent" > -->
+
+    <Button
+        android:id="@+id/toggle_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/background_main_toolbar"
+        android:text="@string/imageState"
+        android:visibility="gone" />
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/applyBar" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="48dip" -->
+    <!-- android:layout_above="@id/bottomControlLineBottom" -->
+    <!-- android:background="@color/background_main_toolbar" -->
+    <!-- android:baselineAligned="false" -->
+    <!-- android:orientation="horizontal" -->
+    <!-- android:visibility="visible" > -->
+
+
+    <!-- <ImageButton -->
+    <!-- android:id="@+id/cancelFilter" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:layout_gravity="left|center_vertical" -->
+    <!-- android:layout_weight=".1" -->
+    <!-- android:background="@android:color/transparent" -->
+    <!-- android:gravity="center" -->
+    <!-- android:src="@drawable/ic_menu_cancel_holo_light" -->
+    <!-- android:textSize="18dip" /> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/panelAccessoryViewList" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:layout_weight="1" -->
+    <!-- android:orientation="horizontal" -->
+    <!-- android:visibility="visible" > -->
+
+
+    <!-- <com.android.gallery3d.filtershow.editors.SwapButton -->
+    <!-- android:id="@+id/applyEffect" -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:layout_gravity="center" -->
+    <!-- android:background="@android:color/transparent" -->
+    <!-- android:drawableEnd="@drawable/filtershow_menu_marker_rtl" -->
+    <!-- android:text="@string/apply_effect" -->
+    <!-- android:textSize="18dip" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <ImageButton -->
+    <!-- android:id="@+id/applyFilter" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="fill_parent" -->
+    <!-- android:layout_gravity="right|center_vertical" -->
+    <!-- android:layout_weight=".1" -->
+    <!-- android:background="@android:color/transparent" -->
+    <!-- android:gravity="center" -->
+    <!-- android:src="@drawable/ic_menu_done_holo_light" -->
+    <!-- android:textSize="18dip" /> -->
+    <!-- </LinearLayout> -->
+
+    <LinearLayout
+        android:id="@+id/controlArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+
+        <SeekBar
+            android:id="@+id/primarySeekBar"
+            style="@style/FilterShowSlider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone" />
+    </LinearLayout>
+    <!-- </RelativeLayout> -->
 
-        <Button
-                android:id="@+id/toggle_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/imageState"
-                android:background="@color/background_main_toolbar"
-                android:layout_alignParentTop="true"
-                />
-
-        <View
-                android:id="@+id/bottomControlLineBottom"
-                android:background="@color/toolbar_separation_line"
-                android:layout_height="1dip"
-                android:layout_width="match_parent"
-                android:layout_alignParentBottom="true"
-                />
-        <LinearLayout
-                android:id="@+id/applyBar"
-                android:layout_width="match_parent"
-                android:layout_height="48dip"
-                android:background="@color/background_main_toolbar"
-                android:orientation="horizontal"
-                android:baselineAligned="false"
-                android:visibility="visible"
-                android:layout_above="@id/bottomControlLineBottom"
-                >
-
-            <ImageButton
-                    android:id="@+id/cancelFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="left|center_vertical"
-                    android:background="@android:color/transparent"
-                    android:layout_weight=".1"
-                    android:gravity="center"
-                    android:src="@drawable/ic_menu_cancel_holo_light"
-                    android:textSize="18dip"/>
-
-            <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="fill_parent"
-                    android:src="@drawable/filtershow_vertical_bar"/>
-
-            <LinearLayout
-                    android:id="@+id/panelAccessoryViewList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                <com.android.gallery3d.filtershow.editors.SwapButton
-                        android:id="@+id/applyEffect"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:text="@string/apply_effect"
-                        android:textSize="18dip"
-                        android:drawableEnd="@drawable/filtershow_menu_marker_rtl"
-                        android:textAllCaps="true"/>
-
-            </LinearLayout>
-
-            <ImageView
-                    android:layout_width="2dp"
-                    android:layout_height="fill_parent"
-                    android:src="@drawable/filtershow_vertical_bar"/>
-
-            <ImageButton
-                    android:id="@+id/applyFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_weight=".1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center"
-                    android:src="@drawable/ic_menu_done_holo_light"
-                    android:textSize="18dip"/>
-        </LinearLayout>
-        <View
-                android:id="@+id/bottomControlLineTop"
-                android:background="@color/toolbar_separation_line"
-                android:layout_height="1dip"
-                android:layout_width="match_parent"
-                android:layout_above="@id/applyBar"
-                />
-
-        <LinearLayout
-                android:id="@+id/controlArea"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:layout_above="@id/bottomControlLineTop"
-                android:layout_below="@id/toggle_state"
-                android:gravity="bottom"
-                android:visibility="visible">
-
-            <SeekBar
-                    android:id="@+id/primarySeekBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    style="@style/FilterShowSlider"
-                    android:visibility="gone"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
 </LinearLayout>

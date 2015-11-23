@@ -26,4 +26,12 @@ public abstract class Clustering {
     public MediaItem getClusterCover(int index) {
         return null;
     }
+
+    public int getClusterImageCount(int index) {
+        return 0;
+    }
+
+    public int getClusterVideoCount(int index) {
+        return 0;
+    }
 }

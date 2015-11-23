@@ -1,0 +1,44 @@
+<!--
+  Copyright (c) 2015, The Linux Foundation. All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are
+  met:
+      * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of The Linux Foundation nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+  ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+  BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+  IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="32dp"
+        android:height="32dp"
+        android:viewportWidth="32.0"
+        android:viewportHeight="32.0">
+    <path
+        android:pathData="M24.934,8.228h-4.467L16,3.761l-4.468,4.467H7.065c-1.234,0 -2.233,1 -2.233,2.233v15.441c0,1.232 0.999,2.338 2.233,2.338h17.869c1.233,0 2.233,-1.104 2.233,-2.338V10.461C27.168,9.228 26.168,8.228 24.934,8.228zM25.178,26.25H6.822V10.252h5.285l3.932,-3.699l3.886,3.699h5.253V26.25z"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M23.143,12.216"
+        android:fillColor="#FFFFFF"/>
+    <path
+        android:pathData="M8.923,12.216h14.153v11.966h-14.153z"
+        android:fillColor="#FFFFFF"/>
+</vector>

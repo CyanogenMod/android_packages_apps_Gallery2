@@ -58,7 +58,7 @@ public class FilterDualCamFusionRepresentation extends FilterRepresentation {
         setEditorId(EditorDualCamFusion.ID);
         setShowParameterValue(false);
         setTextId(R.string.fusion);
-        setOverlayId(R.drawable.filtershow_dualcam_fusion);
+        setOverlayId(R.drawable.fusion);
         setOverlayOnly(true);
     }
 

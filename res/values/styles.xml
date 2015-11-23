@@ -19,17 +19,23 @@
         <item name="listPreferredItemHeightSmall">48dp</item>
         <item name="switchStyle">@android:style/Widget.CompoundButton</item>
     </style>
-    <style name="Theme.Gallery.Dialog" parent="android:Theme.Holo.Dialog"/>
-    <style name="Theme.Gallery" parent="Theme.GalleryBase">
-        <item name="android:displayOptions"></item>
+
+    <style name="Theme.Gallery.Dialog" parent="android:Theme.Holo.Dialog" />
+
+    <style name="Theme.Gallery" parent="android:Theme.Material.Light">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:actionBarStyle">@style/Holo.ActionBar</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:colorBackground">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:actionOverflowButtonStyle">@style/EditOverflow</item>
+        <item name="android:logo">@android:color/transparent</item>
     </style>
     <style name="Theme.FilterShow" parent="Theme.Gallery">
         <item name="android:windowBackground">@null</item>
+        <item name="android:actionBarStyle">@style/FilterShowActionBar</item>
     </style>
     <style name="Theme.Crop" parent="Theme.GalleryBase">
         <item name="android:displayOptions"></item>
@@ -296,5 +302,38 @@
         <item name="android:textColor">@color/gray</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:background">@drawable/bg_pressed</item>
+    </style>
+
+    <style name="AppTheme" parent="android:Theme.Material.Light">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/multiselect_background</item>
+        <item name="android:actionModeShareDrawable">@drawable/multiselect_share</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyOverFlow</item>
+        <item name="android:homeAsUpIndicator">@drawable/back</item>
+        <item name="android:actionModeCloseDrawable">@drawable/multiselected_back</item>
+    </style>
+
+    <style name="QueryTheme" parent="android:Theme.Material">
+        <item name="android:statusBarColor">#ab5810</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="android:Theme.Material" />
+
+    <style name="ToolbarPopUpTheme" parent="android:Theme.Material.Light" />
+
+    <!-- Styles -->
+    <style name="MyOverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/multiselect_more</item>
+    </style>
+    <style name="EditOverflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/more</item>
+    </style>
+     <style name="FilterShowActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/edit_actionbar_background</item>
     </style>
 </resources>

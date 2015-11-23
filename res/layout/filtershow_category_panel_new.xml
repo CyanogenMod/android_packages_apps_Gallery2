@@ -20,7 +20,7 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@color/filtershow_categoryview_background">
+              android:background="@color/edit_actionbar_background">
 
     <HorizontalScrollView
             android:layout_width="0dp"

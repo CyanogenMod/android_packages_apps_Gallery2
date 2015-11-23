@@ -41,7 +41,7 @@ public class EditorStraighten extends Editor implements EditorInfo {
     public String calculateUserMessage(Context context, String effectName, Object parameterValue) {
         String apply = context.getString(R.string.apply_effect);
         apply += " " + effectName;
-        return apply.toUpperCase();
+        return apply;
     }
 
     @Override

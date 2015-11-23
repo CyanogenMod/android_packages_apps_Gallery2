@@ -19,68 +19,64 @@
     xmlns:app="http://schemas.android.com/apk/res/com.example.imagefilterharness"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal"
     android:orientation="horizontal" >
+
     <LinearLayout
-            android:id="@+id/listColors"
-            android:layout_weight="5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        android:id="@+id/listColors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:orientation="horizontal" >
 
         <Button
-                android:id="@+id/draw_color_button01"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/filtershow_color_picker_circle"
-                android:layout_marginEnd="4dp"/>
+            android:id="@+id/draw_color_button01"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/filtershow_color_picker_circle" />
 
         <Button
-                android:id="@+id/draw_color_button02"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/filtershow_color_picker_circle"
-                android:layout_marginEnd="4dp"/>
+            android:id="@+id/draw_color_button02"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/filtershow_color_picker_circle" />
 
         <Button
-                android:id="@+id/draw_color_button03"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/filtershow_color_picker_circle"
-                android:layout_marginEnd="4dp"/>
+            android:id="@+id/draw_color_button03"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/filtershow_color_picker_circle" />
 
         <Button
-                android:id="@+id/draw_color_button04"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/filtershow_color_picker_circle"
-                android:layout_marginEnd="4dp"/>
+            android:id="@+id/draw_color_button04"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/filtershow_color_picker_circle" />
 
         <Button
-                android:id="@+id/draw_color_button05"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/filtershow_color_picker_circle"
-                android:layout_marginEnd="4dp"/>
-
+            android:id="@+id/draw_color_button05"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/filtershow_color_picker_circle" />
     </LinearLayout>
 
     <FrameLayout
-            android:background="@color/background_main_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="16dp" >
+
+        <Button
             android:id="@+id/draw_color_popupbutton"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_action_overflow"
-            />
+            android:layout_gravity="center"
+            android:background="@drawable/more2" />
     </FrameLayout>
-</LinearLayout>
 
+</LinearLayout>

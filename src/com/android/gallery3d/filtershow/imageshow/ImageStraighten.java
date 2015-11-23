@@ -223,6 +223,9 @@ public class ImageStraighten extends ImageShow {
             ih = imageHeight;
         }
         float scale = GeometryMathUtils.scale(iw, ih, viewWidth, viewHeight);
+        if (scale > 3.0f) {
+            scale = 3.0f;
+        }
         scale *= GeometryMathUtils.SHOW_SCALE;
         GeometryMathUtils.scaleRect(tmp, scale);
         getUntranslatedStraightenCropBounds(tmp, mAngle);

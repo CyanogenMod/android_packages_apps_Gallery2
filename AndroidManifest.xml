@@ -24,7 +24,7 @@
 
     <original-package android:name="com.android.gallery3d" />
 
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18"/>
 
     <permission android:name="com.android.gallery3d.permission.GALLERY_PROVIDER"
             android:protectionLevel="signatureOrSystem" />
@@ -59,7 +59,6 @@
 
     <application android:icon="@mipmap/ic_launcher_gallery" android:label="@string/app_name"
             android:name="com.android.gallery3d.app.GalleryAppImpl"
-            android:theme="@style/Theme.Gallery"
             android:logo="@mipmap/ic_launcher_gallery"
             android:hardwareAccelerated="true"
             android:largeHeap="true"
@@ -118,7 +117,8 @@
              </intent-filter>
         </activity>
 
-        <activity android:name="com.android.gallery3d.app.GalleryActivity" android:label="@string/app_name"
+        <activity android:name="com.android.gallery3d.app.GalleryActivity"
+                android:theme="@style/AppTheme"
                 android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -292,7 +292,6 @@
 
         <activity
             android:name="com.android.gallery3d.filtershow.FilterShowActivity"
-            android:label="@string/title_activity_filter_show"
             android:theme="@style/Theme.FilterShow"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
@@ -399,6 +398,7 @@
         <service android:name="com.android.camera.MediaSaveService" />
 
         <activity android:name="org.codeaurora.gallery3d.video.SettingsActivity"
+                android:theme="@android:style/Theme.Material.Light"
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:label="@string/streaming_settings" >
             <intent-filter>
@@ -426,6 +426,7 @@
         </activity>
         <activity android:name="org.codeaurora.gallery3d.video.VideoSettingsActivity"
                 android:label="@string/movie_view_label"
+                android:theme="@android:style/Theme.Material.Light"
                 android:configChanges="orientation|keyboardHidden|screenSize|mnc|mcc">
         </activity>
     </application>

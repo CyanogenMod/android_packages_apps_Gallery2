@@ -44,6 +44,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.android.gallery3d.R;
@@ -124,6 +125,7 @@ public class ImageShow extends View implements OnGestureListener,
     private Paint mMaskPaint = new Paint();
     private Matrix mShaderMatrix = new Matrix();
     private boolean mDidStartAnimation = false;
+    private boolean isScalingUpAllowed = true;
 
     private static Bitmap convertToAlphaMask(Bitmap b) {
         Bitmap a = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ALPHA_8);
@@ -324,7 +326,7 @@ public class ImageShow extends View implements OnGestureListener,
         }
 
 //        drawHighresImage(canvas, fullHighres);
-        drawCompareImage(canvas, getGeometryOnlyImage());
+        //drawCompareImage(canvas, getGeometryOnlyImage());
 
         canvas.restore();
 
@@ -1029,6 +1031,31 @@ public class ImageShow extends View implements OnGestureListener,
             return true;
         }
         return false;
+    }
+
+    public void scaleImage(boolean isScaled, Context context) {
+        float scale = 1.0f;
+        Bitmap bitmap = MasterImage.getImage().getOriginalBitmapLarge();
+        int bitmapWidth = bitmap.getWidth();
+        int bitmapheight = bitmap.getHeight();
+
+//        int width = MasterImage.getImage().getOriginalBounds().width();
+//        int height = MasterImage.getImage().getOriginalBounds().height();
+        int width = getWidth();
+        int height = getHeight();
+        int scaledWidth = context.getResources().getDimensionPixelSize(R.dimen.scaled_image_width);
+        int scaledHeight = context.getResources().getDimensionPixelSize(R.dimen.scaled_image_height);
+        if (isScaled) {
+          scale = (float) scaledHeight / height  ;
+        }
+        MasterImage.getImage().setScaleFactor(scale);
+
+        invalidate();
+    }
+
+    public void toggleComparisonButtonVisibility()
+    {
+       mActivity.toggleComparisonButtonVisibility();
     }
 
 }

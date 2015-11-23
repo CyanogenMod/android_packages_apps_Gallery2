@@ -261,6 +261,7 @@ public class ImageCrop extends ImageShow {
         if (!mValidDraw || bitmap == null) {
             return;
         }
+        toggleComparisonButtonVisibility();
         forceStateConsistency();
         mImageBounds.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
         // If display matrix doesn't exist, create it and its dependencies

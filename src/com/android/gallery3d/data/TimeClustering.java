@@ -108,6 +108,7 @@ public class TimeClustering extends Clustering {
                 if (index < 0 || index >= total) return;
                 SmallItem s = new SmallItem();
                 s.path = item.getPath();
+                s.mediaType = item.getMediaType();
                 s.dateInMs = item.getDateInMs();
                 item.getLatLong(latLng);
                 s.lat = latLng[0];
@@ -187,6 +188,19 @@ public class TimeClustering extends Clustering {
         mLargeClusterSplitTime = mClusterSplitTime / PARTITION_CLUSTER_SPLIT_TIME_FACTOR;
         mMinClusterSize = Utils.clamp(mMinClusterSize, MIN_MIN_CLUSTER_SIZE, MAX_MIN_CLUSTER_SIZE);
         mMaxClusterSize = Utils.clamp(mMaxClusterSize, MIN_MAX_CLUSTER_SIZE, MAX_MAX_CLUSTER_SIZE);
+    }
+
+    @Override
+    public int getClusterImageCount(int index) {
+        // TODO Auto-generated method stub
+        return mClusters.get(index).mPhotoCount;
+
+    }
+
+    @Override
+    public int getClusterVideoCount(int index) {
+        // TODO Auto-generated method stub
+        return mClusters.get(index).mVideoCount;
     }
 
     private void compute(SmallItem currentItem) {
@@ -343,12 +357,15 @@ class SmallItem {
     Path path;
     long dateInMs;
     double lat, lng;
+    int mediaType;
 }
 
 class Cluster {
     @SuppressWarnings("unused")
     private static final String TAG = "Cluster";
     private static final String MMDDYY_FORMAT = "MMddyy";
+    public int mPhotoCount = 0;
+    public int mVideoCount = 0;
 
     // This is for TimeClustering only.
     public boolean mGeographicallySeparatedFromPrevCluster = false;
@@ -359,6 +376,11 @@ class Cluster {
     }
 
     public void addItem(SmallItem item) {
+        if(item.mediaType == MediaObject.MEDIA_TYPE_IMAGE) {
+            mPhotoCount++;
+        } else if(item.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
+           mVideoCount++;
+        }
         mItems.add(item);
     }
 

@@ -31,9 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.controller.Control;
+import com.android.gallery3d.filtershow.filters.FilterBasicRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
@@ -62,6 +64,9 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     public static byte SHOW_VALUE_UNDEFINED = -1;
     public static byte SHOW_VALUE_OFF = 0;
     public static byte SHOW_VALUE_INT = 1;
+    private View mActionButton, mEditControl;
+    private TextView mBasicFilterText;
+    private TextView mBasicFilterValue;
 
     public static void hackFixStrings(Menu menu) {
         int count = menu.size();
@@ -72,7 +77,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
     }
 
     public String calculateUserMessage(Context context, String effectName, Object parameterValue) {
-        return effectName.toUpperCase() + " " + parameterValue;
+        return effectName + " " + parameterValue;
     }
 
     protected Editor(int id) {
@@ -91,16 +96,37 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         return true;
     }
 
-    public void setUpEditorUI(View actionButton, View editControl,
+    /*public void setUpEditorUI(View actionButton, View editControl,
                               Button editTitle, Button stateButton) {
         mEditTitle = editTitle;
         mFilterTitle = stateButton;
         mButton = editTitle;
         MasterImage.getImage().resetGeometryImages(false);
         setUtilityPanelUI(actionButton, editControl);
+    }*/
+
+    public void setUpEditorUI(View editControl, Button stateButton) {
+
+        mFilterTitle = stateButton;
+        MasterImage.getImage().resetGeometryImages(false);
+        mEditControl = editControl;
+        setUtilityPanelUI(null, editControl);
     }
 
-    public boolean showsPopupIndicator() {
+    public void setUpEditorUI(Button editTitle, View actionButton,
+            View editControl) {
+        mEditTitle = editTitle;
+        mButton = editTitle;
+        setUtilityPanelUI(actionButton, editControl);
+    }
+
+    public void setBasicFilterUI(TextView textFilterName,
+            TextView textFilterValue) {
+        mBasicFilterText = textFilterName;
+        mBasicFilterValue = textFilterValue;
+    }
+
+     public boolean showsPopupIndicator() {
         return false;
     }
 
@@ -257,6 +283,19 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
             s = mContext.getString(mLocalRepresentation.getTextId());
         }
         mButton.setText(calculateUserMessage(mContext, s, ""));
+        if (mLocalRepresentation instanceof FilterBasicRepresentation
+                && mBasicFilterText != null) {
+            mBasicFilterText.setText(s);
+            String text = calculateUserMessage(mContext, s, "");
+            String[] split = text.split("[+-]");
+            int length = split.length;
+            if (length == 2)
+            mBasicFilterValue.setText(split[1] != null ? split[1] : "");
+            mBasicFilterText.setVisibility(View.VISIBLE);
+            mBasicFilterValue.setVisibility(View.VISIBLE);
+            mButton.setVisibility(View.INVISIBLE);
+
+        }
     }
 
     /**
@@ -285,7 +324,7 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
 
     protected void setMenuIcon(boolean on) {
         mEditTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0, 0, on ? R.drawable.filtershow_menu_marker_rtl : 0, 0);
+                0, 0, on ? R.drawable.spinner_triangle : 0, 0);
     }
 
     protected void createMenu(int[] strId, View button) {

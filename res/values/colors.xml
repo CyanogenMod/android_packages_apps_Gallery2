@@ -14,18 +14,20 @@
      limitations under the License.
 -->
 <resources>
-    <color name="default_background">#000</color>
+
+    <color name="default_background">#fafafa</color>
 
     <!-- configuration for album set page -->
-    <color name="albumset_background">#1A1A1A</color>
-    <color name="albumset_placeholder">#333</color>
-    <color name="albumset_label_background">#EE414143</color>
-    <color name="albumset_label_title">#FBFBFB</color>
-    <color name="albumset_label_count">#A9ABAD</color>
+    <color name="albumset_background">#fafafa</color>
+    <color name="albumset_placeholder">#75000000</color>
+    <color name="albumset_label_background">#8A000000</color> <!-- 54% alpha -->
+    <color name="albumset_label_title">#FFFFFF</color>
+    <color name="albumset_label_count">#FFFFFF</color>
+    <color name="albumlist_label_title">#8E000000</color>
 
     <!-- configuration for album page -->
-    <color name="album_background">#1A1A1A</color>
-    <color name="album_placeholder">#333</color>
+    <color name="album_background">#fafafa</color>
+    <color name="album_placeholder">#75000000</color>
 
     <!-- configuration for photo page -->
     <color name="photo_background">#1A1A1A</color>
@@ -74,4 +76,12 @@
     <color name="lowlight">#650101</color>
     <color name="grey">#e7e7e7</color>
     <color name="disabled_knob">#575757</color>
+    <color name="toolbar_theme">#e53935</color>
+    <color name="multiselect_background">#ffffff</color>
+    <color name="edit_background">#212121</color>
+    <color name="edit_actionbar_background">#8A000000</color>
+    <color name="dialog_button_color">#009688</color>
+    <color name="timeline_title_text_color">#26000000</color>
+    <color name="timeline_title_number_text_color">#1a000000</color>
+    <color name="timeline_title_background_color">#fafafa</color>
 </resources>

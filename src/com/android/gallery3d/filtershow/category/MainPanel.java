@@ -22,8 +22,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.util.Log;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
@@ -43,8 +46,13 @@ public class MainPanel extends Fragment {
     private ImageButton filtersButton;
     private ImageButton dualCamButton;
     private ImageButton makeupButton;
+    private View mEffectsContainer;
+    private View mEffectsTextContainer;
+    private FrameLayout mCategoryFragment;
+    private View mBottomView;
 
     public static final String FRAGMENT_TAG = "MainPanel";
+    public static final String EDITOR_TAG = "coming-from-editor-panel";
     public static final int LOOKS = 0;
     public static final int BORDERS = 1;
     public static final int GEOMETRY = 2;
@@ -55,6 +63,7 @@ public class MainPanel extends Fragment {
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
+    private boolean isEffectClicked;
 
     private void selection(int position, boolean value) {
         if (value) {
@@ -114,9 +123,21 @@ public class MainPanel extends Fragment {
         geometryButton = (ImageButton) mMainView.findViewById(R.id.geometryButton);
         filtersButton = (ImageButton) mMainView.findViewById(R.id.colorsButton);
         dualCamButton = (ImageButton) mMainView.findViewById(R.id.dualCamButton);
+        mCategoryFragment = (FrameLayout) mMainView
+                .findViewById(R.id.category_panel_container);
+        mBottomView = mMainView.findViewById(R.id.bottom_panel);
+        mEffectsContainer = mMainView.findViewById(R.id.effectsContainer);
+        mEffectsTextContainer = mMainView.findViewById(R.id.effectsText);
         if(SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
             makeupButton = (ImageButton) mMainView.findViewById(R.id.makeupButton);
             makeupButton.setVisibility(View.VISIBLE);
+            TextView beautify = (TextView) mEffectsTextContainer
+                    .findViewById(R.id.tvBeautify);
+            beautify.setVisibility(View.VISIBLE);
+        }
+           boolean showPanel = false;
+        if (getArguments() != null) {
+            showPanel = getArguments().getBoolean(EDITOR_TAG);
         }
 
         if(makeupButton != null) {
@@ -161,8 +182,10 @@ public class MainPanel extends Fragment {
         enableDualCameraButton(DualCameraNativeEngine.getInstance().isLibLoaded());
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
-        showImageStatePanel(activity.isShowingImageStatePanel());
-        showPanel(activity.getCurrentPanel());
+        //showImageStatePanel(activity.isShowingImageStatePanel());
+        if (showPanel) {
+            showPanel(activity.getCurrentPanel());
+        }
         return mMainView;
     }
 
@@ -173,12 +196,38 @@ public class MainPanel extends Fragment {
         return true;
     }
 
+    public boolean isCategoryPanelVisible() {
+        return (View.VISIBLE == mCategoryFragment.getVisibility());
+    }
+
+    public void toggleEffectsTrayVisibility(boolean isCategoryTrayVisible) {
+        if (isCategoryTrayVisible) {
+            mCategoryFragment.setVisibility(View.GONE);
+            mEffectsContainer.setVisibility(View.VISIBLE);
+            mEffectsTextContainer.setVisibility(View.VISIBLE);
+        } else {
+            mCategoryFragment.setVisibility(View.VISIBLE);
+            mEffectsContainer.setVisibility(View.GONE);
+            mEffectsTextContainer.setVisibility(View.GONE);
+        }
+    }
+
     private void setCategoryFragment(CategoryPanel category, boolean fromRight) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        FilterShowActivity activity = (FilterShowActivity) getActivity();
         if (fromRight) {
             transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
         } else {
             transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left);
+        }
+        if (isEffectClicked) {
+            toggleEffectsTrayVisibility(false);
+            activity.setActionBar(isEffectClicked);
+            isEffectClicked = false;
+        } else {
+            toggleEffectsTrayVisibility(true);
+            activity.setActionBar(isEffectClicked);
+
         }
         transaction.replace(R.id.category_panel_container, category, CategoryPanel.FRAGMENT_TAG);
         transaction.commitAllowingStateLoss();
@@ -198,9 +247,9 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryBorderPanel() {
-        if (mCurrentSelected == BORDERS) {
+        /*if (mCurrentSelected == BORDERS) {
             return;
-        }
+        }*/
         boolean fromRight = isRightAnimation(BORDERS);
         selection(mCurrentSelected, false);
         CategoryPanel categoryPanel = new CategoryPanel();
@@ -211,7 +260,7 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryMakeupPanel() {
-        if (makeupButton == null || mCurrentSelected == MAKEUP) {
+        if (makeupButton == null) {
             return;
         }
         boolean fromRight = isRightAnimation(MAKEUP);
@@ -224,9 +273,9 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryGeometryPanel() {
-        if (mCurrentSelected == GEOMETRY) {
+        /*if (mCurrentSelected == GEOMETRY) {
             return;
-        }
+        }*/
         if (MasterImage.getImage().hasTinyPlanet()) {
             return;
         }
@@ -240,9 +289,9 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryFiltersPanel() {
-        if (mCurrentSelected == FILTERS) {
+        /*if (mCurrentSelected == FILTERS) {
             return;
-        }
+        }*/
         boolean fromRight = isRightAnimation(FILTERS);
         selection(mCurrentSelected, false);
         CategoryPanel categoryPanel = new CategoryPanel();
@@ -253,9 +302,9 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryVersionsPanel() {
-        if (mCurrentSelected == VERSIONS) {
+        /*if (mCurrentSelected == VERSIONS) {
             return;
-        }
+        }*/
         FilterShowActivity activity = (FilterShowActivity) getActivity();
         activity.updateVersions();
         boolean fromRight = isRightAnimation(VERSIONS);
@@ -268,9 +317,9 @@ public class MainPanel extends Fragment {
     }
 
     public void loadCategoryDualCamPanel() {
-        if (mCurrentSelected == DUALCAM) {
+        /*if (mCurrentSelected == DUALCAM) {
             return;
-        }
+        }*/
         boolean fromRight = isRightAnimation(DUALCAM);
         selection(mCurrentSelected, false);
         CategoryPanel categoryPanel = new CategoryPanel();
@@ -281,9 +330,11 @@ public class MainPanel extends Fragment {
     }
 
     public void showPanel(int currentPanel) {
+        isEffectClicked = true;
+        FilterShowActivity activity = (FilterShowActivity) getActivity();
         switch (currentPanel) {
             case LOOKS: {
-                loadCategoryLookPanel(false);
+                loadCategoryLookPanel(true);
                 break;
             }
             case BORDERS: {
@@ -310,6 +361,13 @@ public class MainPanel extends Fragment {
                 loadCategoryMakeupPanel();
                 break;
             }
+        }
+     if (currentPanel > 0) {
+            activity.setScaleImage(true);
+            activity.adjustCompareButton(true);
+        } else {
+            activity.setScaleImage(false);
+            activity.adjustCompareButton(false);
         }
     }
 
@@ -370,6 +428,9 @@ public class MainPanel extends Fragment {
     public void enableDualCameraButton(boolean enable) {
         if(dualCamButton != null) {
             dualCamButton.setVisibility(enable?View.VISIBLE:View.GONE);
+            TextView tvDualCam = (TextView) mEffectsTextContainer
+                    .findViewById(R.id.tvDualCam);
+            tvDualCam.setVisibility(enable?View.VISIBLE:View.GONE);
         }
     }
 }

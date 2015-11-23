@@ -16,7 +16,7 @@
 
 <resources>
     <!-- Specify the screen orientation -->
-    <bool name="only_use_portrait">true</bool>
+    <bool name="only_use_portrait">false</bool>
 
     <!-- Text size for the state panel -->
     <dimen name="state_panel_text_size">16dip</dimen>
@@ -28,7 +28,7 @@
     <dimen name="category_panel_icon_size">64dip</dimen>
 
     <!-- Category Panel Text Size -->
-    <dimen name="category_panel_text_size">13dip</dimen>
+    <dimen name="category_panel_text_size">13sp</dimen>
 
     <!-- Category Panel Text Size -->
     <dimen name="category_panel_margin">4dip</dimen>
@@ -65,4 +65,16 @@
 
     <!-- Glow effect size -->
     <dimen name="edge_glow_size">50dip</dimen>
+    <dimen name="swap_button_width">168dp</dimen>
+    <dimen name="swap_button_height">32dp</dimen>
+    <dimen name="compare_margin_top">104dp</dimen>
+    <dimen name="compare_margin_right">10dp</dimen>
+    <dimen name="compare_margin_top_scaled">96dp</dimen>
+    <dimen name="compare_margin_right_scaled">60dp</dimen>
+    <dimen name="color_button_width">36dp</dimen>
+    <dimen name="color_button_height">36dp</dimen>
+    <dimen name="seekbar_width_filter">216dp</dimen>
+    <dimen name="scaled_image_height">454dp</dimen>
+    <dimen name="scaled_image_width">330dp</dimen>
+
 </resources>

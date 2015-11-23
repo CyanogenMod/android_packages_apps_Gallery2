@@ -12,7 +12,7 @@ LOCAL_STATIC_JAVA_LIBRARIES += xmp_toolkit
 LOCAL_STATIC_JAVA_LIBRARIES += mp4parser
 #LOCAL_STATIC_JAVA_LIBRARIES += android-support-v8-renderscript
 
-LOCAL_RENDERSCRIPT_TARGET_API := 18
+#LOCAL_RENDERSCRIPT_TARGET_API := 18
 #LOCAL_RENDERSCRIPT_COMPATIBILITY := 18
 #LOCAL_RENDERSCRIPT_FLAGS := -rs-package-name=android.support.v8.renderscript
 
@@ -45,7 +45,7 @@ LOCAL_PROGUARD_ENABLED := disabled
 
 #LOCAL_SDK_VERSION := current
 
-LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters librsjni libjni_jpegstream
+LOCAL_JNI_SHARED_LIBRARIES := libjni_eglfence libjni_filtershow_filters libjni_jpegstream
 LOCAL_SHARED_LIBRARIES += libjni_dualcamera
 
 ifeq ($(TARGET_TS_MAKEUP), true)

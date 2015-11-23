@@ -147,6 +147,20 @@ public class SelectionManager {
         }
     }
 
+    public void toggleTimeLineSet(ArrayList<Path> paths) {
+        if (mClickedSet.containsAll(paths))
+            mClickedSet.removeAll(paths);
+        else {
+            enterSelectionMode();
+            mClickedSet.addAll(paths);
+        }
+        int count = getSelectedCount();
+        if (count == (mSourceMediaSet.getMediaItemCount() - mSourceMediaSet.getSubMediaSetCount()))
+            selectAll();
+        if (mListener != null) mListener.onSelectionChange(paths.get(0), isItemSelected(paths.get(0)));
+        if (count == 0 && mAutoLeave)
+            leaveSelectionMode();
+    }
     private static boolean expandMediaSet(ArrayList<Path> items, MediaSet set, int maxSelection) {
         int subCount = set.getSubMediaSetCount();
         for (int i = 0; i < subCount; i++) {

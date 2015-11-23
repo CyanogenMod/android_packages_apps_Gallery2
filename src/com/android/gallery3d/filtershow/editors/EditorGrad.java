@@ -51,8 +51,8 @@ public class EditorGrad extends ParametricEditor
     private static final int MODE_BRIGHTNESS = FilterGradRepresentation.PARAM_BRIGHTNESS;
     private static final int MODE_SATURATION = FilterGradRepresentation.PARAM_SATURATION;
     private static final int MODE_CONTRAST = FilterGradRepresentation.PARAM_CONTRAST;
-    private static final int ADD_ICON = R.drawable.ic_grad_add;
-    private static final int DEL_ICON = R.drawable.ic_grad_del;
+    private static final int ADD_ICON = R.drawable.addspot;
+    private static final int DEL_ICON = R.drawable.delete;
     private int mSliderMode = MODE_BRIGHTNESS;
     ImageGrad mImageGrad;
     ParamAdapter []mAdapters = new ParamAdapter[3];
@@ -215,7 +215,7 @@ public class EditorGrad extends ParametricEditor
             if (mSliderMode != mMode) {
                 mSliderMode = mMode;
                 mEffectName = mContext.getResources().getString(getModeNameid(mMode));
-                mEffectName = mEffectName.toUpperCase();
+//                mEffectName = mEffectName.toUpperCase();
             }
             mTextView.setText(Integer.toString(value));
             mView.invalidate();
@@ -311,7 +311,7 @@ public class EditorGrad extends ParametricEditor
             return mEffectName;
         }
         int val = rep.getParameter(mSliderMode);
-        return mEffectName.toUpperCase() + ((val > 0) ? " +" : " ") + val;
+        return mEffectName + ((val > 0) ? " +" : " ") + val;
     }
 
     private FilterGradRepresentation getGradRepresentation() {

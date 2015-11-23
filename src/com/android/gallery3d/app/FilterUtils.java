@@ -63,6 +63,7 @@ public class FilterUtils {
     public static final int CLUSTER_BY_TAG = 8;
     public static final int CLUSTER_BY_SIZE = 16;
     public static final int CLUSTER_BY_FACE = 32;
+    public static final int CLUSTER_BY_VIDEOS = 64;
 
     public static final int FILTER_IMAGE_ONLY = 1;
     public static final int FILTER_VIDEO_ONLY = 2;
@@ -95,7 +96,7 @@ public class FilterUtils {
         setMenuItemApplied(actionBar, CLUSTER_BY_FACE,
                 (ctype & CLUSTER_BY_FACE) != 0, (ccurrent & CLUSTER_BY_FACE) != 0);
 
-        actionBar.setClusterItemVisibility(CLUSTER_BY_ALBUM, !inAlbum || ctype == 0);
+//        actionBar.setClusterItemVisibility(CLUSTER_BY_ALBUM, !inAlbum || ctype == 0);
 
         setMenuItemApplied(actionBar, R.id.action_cluster_album, ctype == 0,
                 ccurrent == 0);
@@ -165,11 +166,11 @@ public class FilterUtils {
 
     private static void setMenuItemApplied(
             GalleryActionBar model, int id, boolean applied, boolean updateTitle) {
-        model.setClusterItemEnabled(id, !applied);
+//        model.setClusterItemEnabled(id, !applied);
     }
 
     private static void setMenuItemAppliedEnabled(GalleryActionBar model, int id, boolean applied, boolean enabled, boolean updateTitle) {
-        model.setClusterItemEnabled(id, enabled);
+//        model.setClusterItemEnabled(id, enabled);
     }
 
     // Add a specified filter to the path.
@@ -208,6 +209,8 @@ public class FilterUtils {
             case CLUSTER_BY_FACE:
                 kind = "face";
                 break;
+            case CLUSTER_BY_VIDEOS:
+                return "/local/video/-1";
             default: /* CLUSTER_BY_ALBUM */
                 return base;
         }

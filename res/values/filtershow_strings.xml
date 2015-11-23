@@ -340,4 +340,9 @@
     <string name="fusion_pick_underlay">Pick Underlay</string>
     <string name="dualcam_no_segment_toast">No segment found at this point</string>
 
+    <string name="color">Color</string>
+    <string name="frames">Frames</string>
+    <string name="beautify">Beautify</string>
+    <string name="dualcam">Dual Camera</string>
+
 </resources>

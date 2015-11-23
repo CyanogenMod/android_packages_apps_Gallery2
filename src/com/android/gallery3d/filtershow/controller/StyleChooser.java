@@ -45,7 +45,7 @@ public class StyleChooser implements Control {
         LayoutParams lp = new LayoutParams(dim, dim);
         for (int i = 0; i < n; i++) {
             final ImageButton button = new ImageButton(context);
-            button.setScaleType(ScaleType.CENTER_CROP);
+            button.setScaleType(ScaleType.CENTER_INSIDE);
             button.setLayoutParams(lp);
             button.setBackgroundResource(android.R.color.transparent);
             mIconButton.add(button);

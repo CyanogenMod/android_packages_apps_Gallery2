@@ -37,7 +37,9 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 //import android.drm.DrmHelper;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.media.audiofx.AudioEffect.Descriptor;
@@ -270,6 +272,7 @@ public class MovieActivity extends Activity {
         actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE,
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(66, 0, 0, 0)));
 
         actionBar.addOnMenuVisibilityListener(new OnMenuVisibilityListener() {
             @Override

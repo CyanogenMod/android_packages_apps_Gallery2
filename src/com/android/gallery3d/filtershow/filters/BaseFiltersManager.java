@@ -380,8 +380,8 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         };
 
         int[] overlayId = {
-                R.drawable.filtershow_dualcam_focus,
-                R.drawable.filtershow_dualcam_halo
+                R.drawable.focus,
+                R.drawable.halo
         };
 
         String[] serializationNames = {
@@ -415,7 +415,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
 
         FilterDualCamSketchRepresentation sketch = new FilterDualCamSketchRepresentation(
                 context.getString(R.string.sketch), R.string.sketch);
-        sketch.setOverlayId(R.drawable.filtershow_dualcam_sketch);
+        sketch.setOverlayId(R.drawable.sketch);
         sketch.setOverlayOnly(true);
         sketch.setSerializationName("DUAL_CAM_SKETCH");
         mDualCam.add(sketch);

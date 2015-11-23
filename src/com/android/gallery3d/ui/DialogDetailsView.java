@@ -21,8 +21,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.res.Resources;
 import android.text.TextUtils;
 import android.text.format.Formatter;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,7 @@ public class DialogDetailsView implements DetailsViewContainer {
     private MediaDetails mDetails;
     private final DetailsSource mSource;
     private int mIndex;
-    private Dialog mDialog;
+    private AlertDialog mDialog;
     private CloseListener mListener;
 
     public DialogDetailsView(AbstractGalleryActivity activity, DetailsSource source) {
@@ -94,17 +96,19 @@ public class DialogDetailsView implements DetailsViewContainer {
         ListView detailsList = (ListView) LayoutInflater.from(mActivity.getAndroidContext()).inflate(
                 R.layout.details_list, null, false);
         detailsList.setAdapter(mAdapter);
-        mDialog = new AlertDialog.Builder(mActivity)
-            .setView(detailsList)
-            .setTitle(title)
-            .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    mDialog.dismiss();
-                }
-            })
-            .create();
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
+         builder.setView(detailsList);
+        builder.setTitle(title);
+        builder.setPositiveButton(R.string.close,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        mDialog.dismiss();
+                    }
+                });
+
+        mDialog = builder.create();
         mDialog.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -113,6 +117,24 @@ public class DialogDetailsView implements DetailsViewContainer {
                 }
             }
         });
+        mDialog.show();
+        Resources r = mActivity.getResources();
+
+        int buttonColor = r.getColor(R.color.dialog_button_color);
+        mDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                .setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(
+                buttonColor);
+
+        builder.setView(detailsList);
+        builder.setTitle(title);
+        builder.setPositiveButton(R.string.close,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        mDialog.dismiss();
+                    }
+                });
     }
 
 

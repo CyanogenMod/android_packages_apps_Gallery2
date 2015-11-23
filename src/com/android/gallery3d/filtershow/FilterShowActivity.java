@@ -20,6 +20,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -47,22 +48,31 @@ import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.print.PrintHelper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
@@ -129,6 +139,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private ImageShow mImageShow = null;
 
     private View mSaveButton = null;
+    private View mDoneButton = null, mCancelButton = null;
 
     private EditorPlaceHolder mEditorPlaceHolder = new EditorPlaceHolder(this);
     private Editor mCurrentEditor = null;
@@ -185,6 +196,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private PopupMenu mCurrentMenu = null;
     private boolean mLoadingVisible = true;
     private boolean mReleaseDualCamOnDestory = true;
+    private FrameLayout mCategoryFragment;
+    private View mEffectsContainer;
+    private View mEffectsTextContainer;
+    private ImageButton imgComparison;
+    private String mPopUpText, mExit;
+    RelativeLayout rlImageContainer;
+    boolean isOrientationChanged;
+    private boolean isComingFromEditorScreen;
 
     public ProcessingService getProcessingService() {
         return mBoundService;
@@ -262,7 +281,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         boolean onlyUsePortrait = getResources().getBoolean(R.bool.only_use_portrait);
         if (onlyUsePortrait) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -282,7 +300,13 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (findViewById(R.id.main_panel_container) == null) {
             return;
         }
+        Fragment main = getSupportFragmentManager().findFragmentByTag(
+                        MainPanel.FRAGMENT_TAG);
         MainPanel panel = new MainPanel();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(MainPanel.EDITOR_TAG, isComingFromEditorScreen);
+        panel.setArguments(bundle);
+        isComingFromEditorScreen = false;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_panel_container, panel, MainPanel.FRAGMENT_TAG);
         transaction.commitAllowingStateLoss();
@@ -300,6 +324,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             public void run() {
                 EditorPanel panel = new EditorPanel();
                 panel.setEditor(currentId);
+                setActionBarForEffects(currentEditor);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.remove(getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG));
                 transaction.replace(R.id.main_panel_container, panel, MainPanel.FRAGMENT_TAG);
@@ -336,20 +361,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private void loadXML() {
         setContentView(R.layout.filtershow_activity);
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(R.layout.filtershow_actionbar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(
-                getResources().getColor(R.color.background_screen)));
-
-        mSaveButton = actionBar.getCustomView();
-        mSaveButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveImage();
-            }
-        });
+        Resources r = getResources();
+        setActionBar(false);
+        mPopUpText = r.getString(R.string.save_and_exit).toUpperCase(
+                Locale.getDefault());
+        mExit = r.getString(R.string.exit).toUpperCase(Locale.getDefault());
+        int marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
+        int marginRight = r.getDimensionPixelSize(R.dimen.compare_margin_right);
+        imgComparison = (ImageButton) findViewById(R.id.imgComparison);
+        rlImageContainer = (RelativeLayout) findViewById(R.id.imageContainer);
 
         mImageShow = (ImageShow) findViewById(R.id.imageShow);
         mImageViews.add(mImageShow);
@@ -360,6 +380,181 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         mImageShow.attach();
 
         setupStatePanel();
+
+        imgComparison.setOnTouchListener(new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                action = action & MotionEvent.ACTION_MASK;
+                if (action == MotionEvent.ACTION_DOWN) {
+
+                    HistoryManager adapter = mMasterImage.getHistory();
+                    int position = adapter.backToOriginal();// adapter.undo();
+                    mMasterImage.onHistoryItemClick(position);
+                    v.setPressed(true);
+                    backToMain();
+                    invalidateViews();
+                }
+                if (action == MotionEvent.ACTION_UP
+                        || action == MotionEvent.ACTION_CANCEL
+                        || action == MotionEvent.ACTION_OUTSIDE) {
+                    v.setPressed(false);
+                    HistoryManager adapter = mMasterImage.getHistory();
+                    int position = adapter.backToCurrent();
+                    mMasterImage.onHistoryItemClick(position);
+                    invalidateViews();
+
+                }
+
+                return false;
+            }
+        });
+    }
+
+    public void toggleComparisonButtonVisibility() {
+            if (imgComparison.getVisibility() == View.VISIBLE)
+                imgComparison.setVisibility(View.GONE);
+    }
+
+    public void setActionBar(boolean isEffectClicked) {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources()
+                .getColor(R.color.edit_actionbar_background)));
+        if (!isEffectClicked) {
+            actionBar.setCustomView(R.layout.filtershow_actionbar);
+            mSaveButton = actionBar.getCustomView();
+            mSaveButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveImage();
+                }
+            });
+            invalidateOptionsMenu();
+        } else {
+            mMenu.clear();
+            final Fragment main = getSupportFragmentManager().findFragmentByTag(
+                    MainPanel.FRAGMENT_TAG);
+
+            actionBar.setCustomView(R.layout.filtershow_actionbar_new);
+            mCancelButton = actionBar.getCustomView().findViewById(
+                    R.id.imgCancel);
+            mDoneButton = actionBar.getCustomView().findViewById(R.id.imgDone);
+            mCancelButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainPanel mainPanel = (MainPanel) main;
+                    mainPanel.toggleEffectsTrayVisibility(true);
+                    setActionBar(false);
+                    HistoryManager adapter = mMasterImage.getHistory();
+                    int position = adapter.undoCurrentFilter();
+                     mMasterImage.onHistoryItemClick(position);
+                     adapter.resetActiveFilter();
+                    backToMain();
+                    invalidateViews();
+                }
+            });
+            mDoneButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // saveImage();
+                    MainPanel mainPanel = (MainPanel) main;
+                    mainPanel.toggleEffectsTrayVisibility(true);
+                    setActionBar(false);
+                    HistoryManager adapter = mMasterImage
+                            .getHistory();
+                    adapter.resetActiveFilter();
+                }
+            });
+            isEffectClicked = false;
+        }
+
+    }
+
+    public void setActionBarForEffects(final Editor currentEditor) {
+        View view;
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.filtershow_editor_panel, null);
+        View editControl = view.findViewById(R.id.controlArea);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources()
+                .getColor(R.color.edit_actionbar_background)));
+        actionBar.setCustomView(R.layout.filtershow_actionbar_effects);
+        ImageButton cancelButton = (ImageButton) actionBar.getCustomView()
+                .findViewById(R.id.cancelFilter);
+        ImageButton applyButton = (ImageButton) actionBar.getCustomView()
+                .findViewById(R.id.applyFilter);
+        Button editTitle = (Button) actionBar.getCustomView().findViewById(
+                R.id.applyEffect);
+        editTitle.setTransformationMethod(null);
+        View actionControl = actionBar.getCustomView().findViewById(
+                R.id.panelAccessoryViewList);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelCurrentFilter();
+                FilterShowActivity.this.backToMain();
+                setActionBar(false);
+            }
+        });
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentEditor.finalApplyCalled();
+                FilterShowActivity.this.backToMain();
+                setActionBar(false);
+            }
+        });
+
+        if (currentEditor != null) {
+            currentEditor.setUpEditorUI(editTitle, actionControl, editControl);
+            currentEditor.reflectCurrentFilter();
+            if (currentEditor.useUtilityPanel()) {
+                currentEditor.openUtilityPanel((LinearLayout) actionControl);
+            }
+        }
+    }
+
+    public void cancelCurrentFilter() {
+        MasterImage masterImage = MasterImage.getImage();
+        HistoryManager adapter = masterImage.getHistory();
+
+        int position = adapter.undo();
+        masterImage.onHistoryItemClick(position);
+        invalidateViews();
+    }
+
+    private void toggleEffectsTrayVisibility(boolean isEffectTrayEnabled) {
+        if (isEffectTrayEnabled) {
+            mCategoryFragment.setVisibility(View.VISIBLE);
+            mEffectsContainer.setVisibility(View.GONE);
+            mEffectsTextContainer.setVisibility(View.GONE);
+        } else {
+            mCategoryFragment.setVisibility(View.GONE);
+            mEffectsContainer.setVisibility(View.VISIBLE);
+            mEffectsTextContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void adjustCompareButton(boolean scaled) {
+        Resources r = getResources();
+        int marginTop, marginRight;
+        if (scaled) {
+            marginTop = r
+                    .getDimensionPixelSize(R.dimen.compare_margin_top_scaled);
+            marginRight = r
+                    .getDimensionPixelSize(R.dimen.compare_margin_right_scaled);
+        } else {
+            marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
+            marginRight = r.getDimensionPixelSize(R.dimen.compare_margin_right);
+
+        }
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imgComparison
+                .getLayoutParams();
+        params.setMargins(0, marginTop, marginRight, 0);
+        imgComparison.setLayoutParams(params);
     }
 
     public void fillCategories() {
@@ -705,6 +900,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public void setCurrentPanel(int currentPanel) {
         mCurrentPanel = currentPanel;
+        HistoryManager adapter = mMasterImage.getHistory();
+        adapter.setActiveFilter(currentPanel);
     }
 
     public int getCurrentPanel() {
@@ -1030,16 +1227,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
         getMenuInflater().inflate(R.menu.filtershow_activity_menu, menu);
-        MenuItem showState = menu.findItem(R.id.showImageStateButton);
-        if (mShowingImageStatePanel) {
-            showState.setTitle(R.string.hide_imagestate_panel);
-        } else {
-            showState.setTitle(R.string.show_imagestate_panel);
-        }
-        mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_share)
-                .getActionProvider();
+        mShareActionProvider = (ShareActionProvider) menu.findItem(
+                                R.id.menu_share).getActionProvider();
         mShareActionProvider.setShareIntent(getDefaultShareIntent());
         mShareActionProvider.setOnShareTargetSelectedListener(this);
         mMenu = menu;
@@ -1051,14 +1243,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (mMenu == null || mMasterImage == null) {
             return;
         }
-        MenuItem undoItem = mMenu.findItem(R.id.undoButton);
-        MenuItem redoItem = mMenu.findItem(R.id.redoButton);
+        //MenuItem undoItem = mMenu.findItem(R.id.undoButton);
+        //MenuItem redoItem = mMenu.findItem(R.id.redoButton);
         MenuItem resetItem = mMenu.findItem(R.id.resetHistoryButton);
         MenuItem printItem = mMenu.findItem(R.id.printButton);
         if (!PrintHelper.systemSupportsPrint()) {
             printItem.setVisible(false);
         }
-        mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
+        //mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
     }
 
     @Override
@@ -1085,7 +1277,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.undoButton: {
+            /*case R.id.undoButton: {
                 HistoryManager adapter = mMasterImage.getHistory();
                 int position = adapter.undo();
                 mMasterImage.onHistoryItemClick(position);
@@ -1099,15 +1291,15 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 mMasterImage.onHistoryItemClick(position);
                 invalidateViews();
                 return true;
-            }
+            }*/
             case R.id.resetHistoryButton: {
                 resetHistory();
                 return true;
             }
-            case R.id.showImageStateButton: {
+            /*case R.id.showImageStateButton: {
                 toggleImageStatePanel();
                 return true;
-            }
+            }*/
             case R.id.exportFlattenButton: {
                 showExportOptionsDialog();
                 return true;
@@ -1303,9 +1495,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (mMasterImage == null) {
             return;
         }
-        loadXML();
-        fillCategories();
-        loadMainPanel();
+        //loadXML();
+        //fillCategories();
+        //loadMainPanel();
 
         if (mCurrentMenu != null) {
             mCurrentMenu.dismiss();
@@ -1376,28 +1568,81 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     @Override
     public void onBackPressed() {
-        Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(MainPanel.FRAGMENT_TAG);
+       if (imgComparison != null && imgComparison.getVisibility() == View.GONE) {
+           imgComparison.setVisibility(View.VISIBLE);
+       }
+       Fragment currentPanel = getSupportFragmentManager().findFragmentByTag(
+                MainPanel.FRAGMENT_TAG);
+
         if (currentPanel instanceof MainPanel) {
-            if (!mImageShow.hasModifications()) {
-                done();
+            MainPanel mainPanel = (MainPanel) currentPanel;
+            if (mainPanel.isCategoryPanelVisible()) {
+                if (mImageShow.hasModifications()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.unsaved).setTitle(
+                            R.string.save_before_exit);
+                    builder.setPositiveButton(mPopUpText,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int id) {
+                                    // saveImage();
+                                    HistoryManager adapter = mMasterImage
+                                            .getHistory();
+                                    adapter.resetActiveFilter();
+                                }
+                            });
+                    builder.setNegativeButton(mExit,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int id) {
+                                    HistoryManager adapter = mMasterImage
+                                            .getHistory();
+                                    int position = adapter.undoCurrentFilter();
+                                     mMasterImage.onHistoryItemClick(position);
+                                     adapter.resetActiveFilter();
+                                    backToMain();
+                                    invalidateViews();
+                                }
+                            });
+                    builder.show();
+                }
+                setActionBar(false);
+                mainPanel.toggleEffectsTrayVisibility(true);
+                invalidateOptionsMenu();
+                if (MasterImage.getImage().getScaleFactor() < 1)
+                    setScaleImage(false);
+                adjustCompareButton(false);
+
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(R.string.unsaved).setTitle(R.string.save_before_exit);
-                builder.setPositiveButton(R.string.save_and_exit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        saveImage();
-                    }
-                });
-                builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        done();
-                    }
-                });
-                builder.show();
+                if (!mImageShow.hasModifications()) {
+                    done();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.unsaved).setTitle(
+                            R.string.save_before_exit);
+                    builder.setPositiveButton(R.string.save_and_exit,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int id) {
+                                    saveImage();
+                                }
+                            });
+                    builder.setNegativeButton(R.string.exit,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                        int id) {
+                                    done();
+                                }
+                            });
+                    builder.show();
+                }
             }
         } else {
+            isComingFromEditorScreen = true;
             backToMain();
         }
     }
@@ -1570,5 +1815,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 hint.setAlpha(1);
             }
         });
+    }
+
+    public void setScaleImage(boolean isScaled) {
+        mImageShow.scaleImage(isScaled,getBaseContext());
     }
 }

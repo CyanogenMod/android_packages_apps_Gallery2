@@ -27,6 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_margin="7dp"
+        android:paddingStart="8dp"
+        android:textSize="16sp"
+        android:textColor="@color/albumset_label_background"
         android:text="@string/select_output_settings"/>
 
     <GridLayout
@@ -35,34 +38,43 @@
         android:layout_height="wrap_content"
         android:alignmentMode="alignBounds"
         android:useDefaultMargins="true"
+        android:layout_marginTop="24dp"
         android:columnOrderPreserved="false"
         android:columnCount="5">
 
         <TextView
                 android:text="@string/size"
                 android:layout_marginStart="8dp"
-                android:layout_gravity="start|center_vertical"/>
+                android:layout_gravity="start|center_vertical"
+                android:paddingStart="8dp"
+                android:textSize="16sp"
+                android:textColor="@color/albumlist_label_title"/>
 
         <EditText
                 android:id="@+id/editableWidth"
                 android:layout_gravity="right|center_vertical"
+                android:gravity="center"
                 android:layout_width="70dp"
                 android:inputType="number"/>
 
         <TextView
                 android:text="@string/x"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:textColor="@color/albumlist_label_title"/>
 
         <EditText
                 android:id="@+id/editableHeight"
                 android:layout_gravity="left|center_vertical"
                 android:layout_width="70dp"
+                android:gravity="center"
                 android:inputType="number"/>
 
         <TextView
                 android:id="@+id/estimadedSize"
                 android:layout_marginEnd="8dp"
-                android:layout_gravity="end|center_vertical"/>
+                android:layout_gravity="end|center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/albumlist_label_title"/>
 
         <LinearLayout
                 android:layout_columnSpan="5"
@@ -73,7 +85,9 @@
                 android:text="@string/quality"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_margin="8dp" />
+                android:layout_margin="8dp"
+                android:textSize="16sp"
+                android:textColor="@color/albumlist_label_title" />
 
             <SeekBar
                 android:id="@+id/qualitySeekBar"
@@ -92,7 +106,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_gravity="end|center_vertical" />
+                android:textSize="16sp"
+                android:textColor="@color/albumlist_label_title"
+                android:layout_gravity="end|center_vertical"
+                />
 
         </LinearLayout>
 
@@ -103,23 +120,27 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            style="?android:attr/buttonBarStyle">
+            style="?android:attr/buttonBarStyle"
+            android:gravity="right">
 
         <Button
                 android:id="@+id/cancel"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="@string/cancel"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:textSize="14sp"
+                android:layout_marginRight="8dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textColor="#009688"/>
 
         <Button
                 android:id="@+id/done"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:textSize="14sp"
                 android:text="@string/done"
-                style="?android:attr/buttonBarButtonStyle"/>
+                style="?android:attr/buttonBarButtonStyle"
+                android:textColor="#009688"/>
 
     </LinearLayout>
 
