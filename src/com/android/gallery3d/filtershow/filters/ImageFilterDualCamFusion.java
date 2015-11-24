@@ -108,6 +108,18 @@ public class ImageFilterDualCamFusion extends ImageFilter {
                     filteredW = filteredH;
                     filteredH = tmp;
                 }
+
+                // non even width or height
+                if(filteredW%2 != 0 || filteredH%2 != 0) {
+                    float aspect = (float)filteredH / (float)filteredW;
+                    if(filteredW >= filteredH) {
+                        filteredW = MasterImage.MAX_BITMAP_DIM;
+                        filteredH = (int)(filteredW * aspect);
+                    } else {
+                        filteredH = MasterImage.MAX_BITMAP_DIM;
+                        filteredW = (int)(filteredH / aspect);
+                    }
+                }
             }
 
             filteredBitmap = MasterImage.getImage().getBitmapCache().getBitmap(filteredW, filteredH, BitmapCache.FILTERS);
