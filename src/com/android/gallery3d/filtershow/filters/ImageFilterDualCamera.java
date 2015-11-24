@@ -166,6 +166,26 @@ public class ImageFilterDualCamera extends ImageFilter {
                     holder = new GeometryHolder();
                 }
 
+                RectF roiRectF = new RectF();
+                roiRectF.left = (float)roiRect[0]/(float)filteredW;
+                roiRectF.top = (float)roiRect[1]/(float)filteredH;
+                roiRectF.right = (float)(roiRect[0] + roiRect[2])/(float)filteredW;
+                roiRectF.bottom = (float)(roiRect[1] + roiRect[3])/(float)filteredH;
+
+                // Check for ROI cropping
+                if(!FilterCropRepresentation.getNil().equals(roiRectF)) {
+                    if(FilterCropRepresentation.getNil().equals(holder.crop)) {
+                        // no crop filter, set crop to be roiRect
+                        holder.crop.set(roiRectF);
+                    } else if(roiRectF.contains(holder.crop) == false) {
+                        // take smaller intersecting area between roiRect and crop rect
+                        holder.crop.left = Math.max(holder.crop.left, roiRectF.left);
+                        holder.crop.top = Math.max(holder.crop.top, roiRectF.top);
+                        holder.crop.right = Math.min(holder.crop.right, roiRectF.right);
+                        holder.crop.bottom = Math.min(holder.crop.bottom, roiRectF.bottom);
+                    }
+                }
+
                 RectF crop = new RectF();
                 Matrix m = GeometryMathUtils.getOriginalToScreen(holder, crop, true,
                         filteredW, filteredH, bmWidth, bmHeight);
