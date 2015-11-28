@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Csatlakoztassa a fejhallgatót az effektek használatához.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Sajnáljuk, de ez a videófájl nem vágható</string>
+  <string name="no_permission_for_drm">Sajnáljuk, DRM védett fájlok nem oszthatók meg</string>
+  <string name="drm_license_info">DRM liszensz információ</string>
 </resources>

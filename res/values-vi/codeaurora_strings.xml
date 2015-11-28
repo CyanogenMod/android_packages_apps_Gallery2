@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Cắm tai nghe cho những hiệu ứng này.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Xin lỗi, không thể cắt video này</string>
+  <string name="no_permission_for_drm">Rất tiếc, không thể chia sẻ tập tin được bảo vệ DRM</string>
+  <string name="drm_license_info">Thông tin bản quyền DRM</string>
 </resources>
