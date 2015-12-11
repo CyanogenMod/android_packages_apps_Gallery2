@@ -161,7 +161,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
 
                         mNavigationAdapter.setClickPosition(position);
                         mDrawerListView.invalidateViews();
-                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        mDrawerLayout.closeDrawer(Gravity.START);
                         getGLRoot().unlockRenderThread();
                     }
                 });
@@ -199,7 +199,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
             @Override
             public void onClick(View v) {
                 if (mToolbar.getNavigationContentDescription().equals("drawer")) {
-                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                    mDrawerLayout.openDrawer(Gravity.START);
 
                 } else {
                     mToolbar.setNavigationContentDescription("drawer");

@@ -1168,8 +1168,9 @@ public class PhotoDataAdapter implements PhotoPage.Model {
                         // If RTL and it's not from widget, the index don't need to be amended
                         if (View.LAYOUT_DIRECTION_RTL == TextUtils
                                 .getLayoutDirectionFromLocale(Locale.getDefault())
+                                && info.contentStart < info.contentEnd
                                 && !mIsFromWidget) {
-                            index = info.indexHint;
+                            index = info.size - findIndexOfTarget(info) - 1;
                         } else {
                             index = findIndexOfTarget(info);
                             mIsFromWidget = false;
