@@ -82,3 +82,7 @@
 -keep class com.android.gallery3d.jpegstream.JPEGOutputStream { *; }
 -keep class com.android.gallery3d.jpegstream.JPEGInputStream { *; }
 -keep class com.android.gallery3d.jpegstream.StreamUtils { *; }
+
+
+# TODO: remove or rename android.util.Pools.java from our source.
+-dontwarn android.util.Pools*
