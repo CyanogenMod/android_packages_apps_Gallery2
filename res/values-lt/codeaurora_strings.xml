@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Prijunkite ausines dėl šių efektų.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Atsiprašome, šis vaizdo įrašas negali būti apkarpytas</string>
+  <string name="no_permission_for_drm">Atsiprašome, DRM apsaugoti failai negali būti dalijamiesi</string>
+  <string name="drm_license_info">DRM licencijos informacija</string>
 </resources>
