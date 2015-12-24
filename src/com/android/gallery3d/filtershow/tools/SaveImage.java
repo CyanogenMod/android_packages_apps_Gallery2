@@ -359,12 +359,47 @@ public class SaveImage {
 
         Uri savedUri = mSelectedImageUri;
         if (mPreviewImage != null) {
+            Bitmap previewBmp;
+            // Check for Fusion
+            FilterDualCamFusionRepresentation fusionRep =
+                    (FilterDualCamFusionRepresentation) preset.getFilterWithSerializationName(
+                    FilterDualCamFusionRepresentation.SERIALIZATION_NAME);
+            boolean hasFusion = (fusionRep != null && fusionRep.hasUnderlay());
+            if(hasFusion) {
+                // fusion. decode underlay image and get dest rect
+                Uri underLayUri = Uri.parse(fusionRep.getUnderlay());
+                Bitmap underlay = ImageLoader.loadConstrainedBitmap(underLayUri, mContext,
+                    Math.max(mPreviewImage.getWidth(), mPreviewImage.getHeight()), null, false);
+                RectF destRect = new RectF();
+                Rect imageBounds = MasterImage.getImage().getImageBounds();
+                Rect underlayBounds = MasterImage.getImage().getFusionBounds();
+                float underlayScaleFactor = (float)underlay.getWidth()
+                    / (float)underlayBounds.width();
+
+                destRect.left = (imageBounds.left - underlayBounds.left) * underlayScaleFactor;
+                destRect.right = (imageBounds.right - underlayBounds.left) * underlayScaleFactor;
+                destRect.top = (imageBounds.top - underlayBounds.top) * underlayScaleFactor;
+                destRect.bottom = (imageBounds.bottom - underlayBounds.top) * underlayScaleFactor;
+
+                Canvas canvas = new Canvas(underlay);
+                Paint paint = new Paint();
+                paint.reset();
+                paint.setAntiAlias(true);
+                paint.setFilterBitmap(true);
+                paint.setDither(true);
+
+                canvas.drawBitmap(mPreviewImage, null, destRect, paint);
+                previewBmp = underlay;
+            } else {
+                previewBmp = mPreviewImage;
+            }
+
             if (flatten) {
                 Object xmp = getPanoramaXMPData(newSourceUri, preset);
                 ExifInterface exif = getExifData(newSourceUri);
                 long time = System.currentTimeMillis();
                 updateExifData(exif, time);
-                if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
+                if (putExifData(mDestinationFile, exif, previewBmp, quality)) {
                     putPanoramaXMPData(mDestinationFile, xmp);
                     ContentValues values = getContentValues(mContext, mSelectedImageUri, mDestinationFile, time);
                     Object result = mContext.getContentResolver().insert(
@@ -377,7 +412,7 @@ public class SaveImage {
                 long time = System.currentTimeMillis();
                 updateExifData(exif, time);
                 // If we succeed in writing the bitmap as a jpeg, return a uri.
-                if (putExifData(mDestinationFile, exif, mPreviewImage, quality)) {
+                if (putExifData(mDestinationFile, exif, previewBmp, quality)) {
                     putPanoramaXMPData(mDestinationFile, xmp);
                     // mDestinationFile will save the newSourceUri info in the XMP.
                     if (!flatten) {
@@ -390,6 +425,13 @@ public class SaveImage {
                             mDestinationFile, time, false);
                 }
             }
+
+            if(hasFusion) {
+                // recycle bitmap
+                previewBmp.recycle();
+                previewBmp = null;
+            }
+
             if (mCallback != null) {
                 mCallback.onPreviewSaved(savedUri);
             }
