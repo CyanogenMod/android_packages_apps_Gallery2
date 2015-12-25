@@ -49,10 +49,6 @@
   <string name="wallpaper">دانانی دیوارپۆش\u2026</string>
   <string name="camera_setas_wallpaper">دیوارپۆش</string>
   <string name="delete">سڕینه‌وه‌</string>
-  <plurals name="delete_selection">
-    <item quantity="one">سڕینەوەی بڕگه‌ی دیاریکراو؟</item>
-    <item quantity="other">سڕینەوەی بڕگه‌ دیاریکراوەکان؟</item>
-  </plurals>
   <string name="confirm">دووپاتکردنەوە</string>
   <string name="cancel">لابردن</string>
   <string name="share">به‌شداری پێکردن</string>
@@ -67,18 +63,6 @@
   <string name="details_title">%1$d له‌ %2$d دانه‌:</string>
   <string name="close">داخستن</string>
   <string name="switch_to_camera">گۆڕین بۆ كامێرا</string>
-  <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d دیاریکرا</item>
-    <item quantity="other">%1$d دیاریکراون</item>
-  </plurals>
-  <plurals name="number_of_albums_selected">
-    <item quantity="one">%1$d دیاریکرا</item>
-    <item quantity="other">%1$d دیاریکراون</item>
-  </plurals>
-  <plurals name="number_of_groups_selected">
-    <item quantity="one">%1$d دیاریکرا</item>
-    <item quantity="other">%1$d دیاریکراون</item>
-  </plurals>
   <string name="show_on_map">پیشاندانی لەسەر نەخشە</string>
   <string name="rotate_left">سووڕاندنەوە بۆ چەپ</string>
   <string name="rotate_right">سووڕاندنەوە بۆ ڕاست</string>
@@ -152,10 +136,6 @@
   <string name="ffx_x_process">كرداری X</string>
   <string name="ffx_washout">ژاوەژاو</string>
   <string name="ffx_washout_color">Litho</string>
-  <plurals name="make_albums_available_offline">
-    <item quantity="one">دروستکردنی ئه‌لبومی ده‌رهێڵی</item>
-    <item quantity="other">دروستکردنی ئه‌لبومی ده‌رهێڵی</item>
-  </plurals>
   <string name="try_to_set_local_album_available_offline">
         ئەم بڕگەیە له‌ ناوخۆدا پاشەکەوتکراوە و به‌بێ هێڵیش به‌رده‌سته‌.</string>
   <string name="set_label_all_albums">هه‌موو ئه‌لبومه‌كانم</string>
@@ -204,10 +184,6 @@
   <string name="pano_progress_text">نواندنی پانۆرامایی</string>
   <string name="save" msgid="8140440041190264400">پاشەکەوتکردن</string>
   <string name="ingest_scanning" msgid="2048262851775139720">پشكنینی ناوه‌ڕۆك...</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="one">%1$d بڕگە پشکنرا</item>
-    <item quantity="other">%1$d بڕگە پشکنرا</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">جیاكردنه‌وه‌...</string>
   <string name="ingest_scanning_done">پشكنین ته‌واو بوو</string>
   <string name="ingest_importing">دانان...</string>
@@ -233,10 +209,6 @@
   <string name="pref_camera_recordlocation_title">کۆگاکردنی شوێن</string>
   <string name="pref_camera_location_label">شوێن</string>
   <string name="pref_camera_timer_title">کاتژمێری بەرەوژێرژمار</string>
-  <plurals name="pref_camera_timer_entry">
-    <item quantity="one">١ چرکە</item>
-    <item quantity="other">%d چرکە</item>
-  </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">توتە لە ماوەی ژماردنی بەرەوژێر</string>
   <string name="setting_off">کوژاندن</string>
@@ -427,8 +399,4 @@
   <string name="tab_albums">ئەلبوم</string>
   <string name="camera_menu_more_label">بەربژاردەی زیاتر</string>
   <string name="camera_menu_settings_label">ڕێکخستنەکان</string>
-  <plurals name="number_of_photos">
-    <item quantity="one">%1$d وێنه‌</item>
-    <item quantity="other">%1$d وێنه‌</item>
-  </plurals>
 </resources>

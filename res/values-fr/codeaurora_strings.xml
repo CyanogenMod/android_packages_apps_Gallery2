@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Brancher un casque pour ces effets.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Désolé, cette vidéo ne peut pas être coupé</string>
+  <string name="no_permission_for_drm">Désolé, les fichiers protégés par DRM ne peuvent pas être partagés</string>
+  <string name="drm_license_info">Infos sur la licence DRM</string>
 </resources>

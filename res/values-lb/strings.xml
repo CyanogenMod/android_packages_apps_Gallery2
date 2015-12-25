@@ -49,10 +49,6 @@
   <string name="wallpaper">Hannergrondbild gëtt gesat\u2026</string>
   <string name="camera_setas_wallpaper">Hannergrondbild</string>
   <string name="delete">Läschen</string>
-  <plurals name="delete_selection">
-    <item quantity="one">Ausgewielt Element läschen?</item>
-    <item quantity="other">Ausgewielt Elementer läschen?</item>
-  </plurals>
   <string name="confirm">Bestätegen</string>
   <string name="cancel">Ofbriechen</string>
   <string name="share">Deelen</string>
@@ -67,18 +63,6 @@
   <string name="details_title">%1$d / %2$d Elementer:</string>
   <string name="close">Zoumaachen</string>
   <string name="switch_to_camera">Op d\'Kamera wiesselen</string>
-  <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d ausgewielt</item>
-    <item quantity="other">%1$d ausgewielt</item>
-  </plurals>
-  <plurals name="number_of_albums_selected">
-    <item quantity="one">%1$d ausgewielt</item>
-    <item quantity="other">%1$d ausgewielt</item>
-  </plurals>
-  <plurals name="number_of_groups_selected">
-    <item quantity="one">%1$d ausgewielt</item>
-    <item quantity="other">%1$d ausgewielt</item>
-  </plurals>
   <string name="show_on_map">Op der Kaart uweisen</string>
   <string name="rotate_left">Lénks rotéieren</string>
   <string name="rotate_right">Riets rotéieren</string>
@@ -152,10 +136,6 @@
   <string name="ffx_x_process">X Process</string>
   <string name="ffx_washout">Latte</string>
   <string name="ffx_washout_color">Litho</string>
-  <plurals name="make_albums_available_offline">
-    <item quantity="one">Den Album gëtt offline disponibel gemaach.</item>
-    <item quantity="other">D\'Albe ginn offline disponibel gemaach.</item>
-  </plurals>
   <string name="try_to_set_local_album_available_offline">Dëst Element ass lokal gespäichert an och offiline disponibel.</string>
   <string name="set_label_all_albums">All d\'Alben</string>
   <string name="set_label_local_albums">Lokal Alben</string>
@@ -203,14 +183,6 @@
   <string name="pano_progress_text">Panorama gëtt gerendert</string>
   <string name="save" msgid="8140440041190264400">Späicheren</string>
   <string name="ingest_scanning" msgid="2048262851775139720">Inhalt gëtt gescannt...</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="one">%1$d Element gescannt</item>
-    <item quantity="other">%1$d Elementer gescannt</item>
-  </plurals>
-  <plurals name="ingest_number_of_items_selected">
-    <item quantity="one">%1$d Element ausgewielt</item>
-    <item quantity="other">%1$d Elementer ausgewielt</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">Gëtt zortéiert...</string>
   <string name="ingest_scanning_done">Scannen ofgeschloss</string>
   <string name="ingest_importing">Gëtt importéiert...</string>
@@ -236,10 +208,6 @@
   <string name="pref_camera_recordlocation_title">Plaz späicheren</string>
   <string name="pref_camera_location_label">PLAZ</string>
   <string name="pref_camera_timer_title">Countdown-Timer</string>
-  <plurals name="pref_camera_timer_entry">
-    <item quantity="one">1 Sekonn</item>
-    <item quantity="other">%d Sekonnen</item>
-  </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">Piipse während dem Countdown</string>
   <string name="setting_off">Aus</string>
@@ -430,10 +398,6 @@
   <string name="tab_albums">Alben</string>
   <string name="camera_menu_more_label">MÉI OPTIOUNEN</string>
   <string name="camera_menu_settings_label">ASTELLUNGEN</string>
-  <plurals name="number_of_photos">
-    <item quantity="one">%1$d Foto</item>
-    <item quantity="other">%1$d Fotoen</item>
-  </plurals>
   <string name="can_not_trim">Just MP4 an 3GP-Fichiere kënne geschnidde ginn</string>
   <string name="text_makeup_whiten">Wäiss maachen</string>
   <string name="text_makeup_Soften">Mëll maachen</string>

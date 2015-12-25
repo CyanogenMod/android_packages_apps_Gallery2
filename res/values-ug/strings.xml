@@ -47,9 +47,6 @@
   <string name="wallpaper">تام قەغەز تەڭشەۋاتىدۇ\u2026</string>
   <string name="camera_setas_wallpaper">تام قەغىزى</string>
   <string name="delete">ئۆچۈر</string>
-  <plurals name="delete_selection">
-    <item quantity="other">تاللىغان تۈرنى ئۆچۈرەمدۇ؟</item>
-  </plurals>
   <string name="confirm">جەزملە</string>
   <string name="cancel">ۋاز كەچ</string>
   <string name="share">ھەمبەھىر</string>
@@ -64,15 +61,6 @@
   <string name="details_title">%2$d دىن %1$d تۈر:</string>
   <string name="close">ياپ</string>
   <string name="switch_to_camera">كامېراغا ئالماشتۇر</string>
-  <plurals name="number_of_items_selected">
-    <item quantity="other">%1$d تاللاندى</item>
-  </plurals>
-  <plurals name="number_of_albums_selected">
-    <item quantity="other">%1$d تاللاندى</item>
-  </plurals>
-  <plurals name="number_of_groups_selected">
-    <item quantity="other">%1$d تاللاندى</item>
-  </plurals>
   <string name="show_on_map">خەرىتىدە كۆرسەت</string>
   <string name="rotate_left">سولغا ئايلاندۇر</string>
   <string name="rotate_right">ئوڭغا ئايلاندۇر</string>
@@ -143,9 +131,6 @@
   <string name="ffx_x_process">ئەكسى يۇيۇش</string>
   <string name="ffx_washout">لاتتې قەھۋە</string>
   <string name="ffx_washout_color">تاش باسما</string>
-  <plurals name="make_albums_available_offline">
-    <item quantity="other">ئالبۇمنى تورسىز ئىشلەتكىلى بولىدۇ.</item>
-  </plurals>
   <string name="try_to_set_local_album_available_offline">بۇ تۈر يەرلىك ئورۇنغا ساقلاندى، تورسىز ئىشلەتكىلى بولىدۇ.</string>
   <string name="set_label_all_albums">ھەممە ئالبۇم</string>
   <string name="set_label_local_albums">يەرلىك ئالبۇم</string>
@@ -193,9 +178,6 @@
   <string name="pano_progress_text">پۈتۈن مەنزىرە سۈرەتنى رەڭلەۋاتىدۇ</string>
   <string name="save" msgid="8140440041190264400">ساقلا</string>
   <string name="ingest_scanning" msgid="2048262851775139720">مەزمۇننى تەكشۈرۈۋاتىدۇ…</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="other">%1$d تۈر تارالدى</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">تەرتىپلەۋاتىدۇ…</string>
   <string name="ingest_scanning_done">تەكشۈرۈش تامام</string>
   <string name="ingest_importing">ئەكىرىۋاتىدۇ…</string>
@@ -221,9 +203,6 @@
   <string name="pref_camera_recordlocation_title">ساقلاش ئورنى</string>
   <string name="pref_camera_location_label">ئورنى</string>
   <string name="pref_camera_timer_title">تەتۈر سانىغۇچ ۋاقىت خاتىرىلىگۈچ</string>
-  <plurals name="pref_camera_timer_entry">
-    <item quantity="other">1 سېكۇنت</item>
-  </plurals>
   <string name="pref_camera_timer_sound_title">تەتۈر ساناۋاتقاندا ئەسكەرتىش ئاۋازى چىقار</string>
   <string name="setting_off">تاقاق</string>
   <string name="setting_on">ئوچۇق</string>
@@ -408,7 +387,4 @@
   <string name="tab_albums">سۈرەت توپلىمى</string>
   <string name="camera_menu_more_label">تېخىمۇ كۆپ تاللانما</string>
   <string name="camera_menu_settings_label">تەڭشەكلەر</string>
-  <plurals name="number_of_photos">
-    <item quantity="other">%d سۈرەت</item>
-  </plurals>
 </resources>
