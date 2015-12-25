@@ -30,7 +30,9 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="setp_option_name">ขั้นตอน</string>
-  <string name="step_option_desc">ปรับขั้นตอนไปข้างหน้า/ถอยกลับ</string>
-  <string name="setp_option_three_second">3 วินาที</string>
+  <string name="setp_option_name">Etapa</string>
+  <string name="step_option_desc">Personalizar a velocidade de avance/retroceso</string>
+  <string name="setp_option_three_second">3 segundos</string>
+  <string name="loop">"Bucle"</string>
+  <string name="single">"Único"</string>
 </resources>

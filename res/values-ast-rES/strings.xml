@@ -49,10 +49,6 @@
   <string name="wallpaper">Afitando fondu de pantalla...</string>
   <string name="camera_setas_wallpaper">Fondu de pantalla</string>
   <string name="delete">Desaniciar</string>
-  <plurals name="delete_selection">
-    <item quantity="one">¿Desaniciar elementu esbilláu?</item>
-    <item quantity="other">¿Desaniciar elementos esbillaos?</item>
-  </plurals>
   <string name="confirm">Confirmar</string>
   <string name="cancel">Encaboxar</string>
   <string name="share">Compartir</string>
@@ -67,18 +63,6 @@
   <string name="details_title">Elementu: %1$d de %2$d</string>
   <string name="close">Zarrar</string>
   <string name="switch_to_camera">Cambiar a la cámara</string>
-  <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d esbilláu</item>
-    <item quantity="other">%1$d esbillaos</item>
-  </plurals>
-  <plurals name="number_of_albums_selected">
-    <item quantity="one">%1$d esbilláu</item>
-    <item quantity="other">%1$d esbillaos</item>
-  </plurals>
-  <plurals name="number_of_groups_selected">
-    <item quantity="one">%1$d esbilláu</item>
-    <item quantity="other">%1$d esbillaos</item>
-  </plurals>
   <string name="show_on_map">Amosar nel mapa</string>
   <string name="rotate_left">Xirar a la esquierda</string>
   <string name="rotate_right">Xirar a la derecha</string>
@@ -151,10 +135,6 @@
   <string name="ffx_x_process">Procesamientu X</string>
   <string name="ffx_washout">Latte</string>
   <string name="ffx_washout_color">Litho</string>
-  <plurals name="make_albums_available_offline">
-    <item quantity="one">Faciendo que l\'álbum pueda vese ensin conexón</item>
-    <item quantity="other">Faciendo que los álbumes puedan vese ensin conexón...</item>
-  </plurals>
   <string name="try_to_set_local_album_available_offline">L\'elementu almacenóse de forma llocal y ta disponible ensin conexón.</string>
   <string name="set_label_all_albums">Tolos álbumes</string>
   <string name="set_label_local_albums">Álbumes llocales</string>
@@ -202,14 +182,6 @@
   <string name="pano_progress_text">Creando panorámica...</string>
   <string name="save" msgid="8140440041190264400">Guardar</string>
   <string name="ingest_scanning" msgid="2048262851775139720">Analizando conteníu...</string>
-  <plurals name="ingest_number_of_items_scanned">
-    <item quantity="one">%1$d elementu analizáu</item>
-    <item quantity="other">%1$d elementos analizaos</item>
-  </plurals>
-  <plurals name="ingest_number_of_items_selected">
-    <item quantity="one">%1$d elementu esbilláu</item>
-    <item quantity="other">%1$d elementos esbillaos</item>
-  </plurals>
   <string name="ingest_sorting" msgid="624687230903648118">Ordenando...</string>
   <string name="ingest_scanning_done">Análisis completu</string>
   <string name="ingest_importing">Importando...</string>
@@ -235,10 +207,6 @@
   <string name="pref_camera_recordlocation_title">Amestar llocalización</string>
   <string name="pref_camera_location_label">LLOCALIZACIÓN</string>
   <string name="pref_camera_timer_title">Temporizador de cuenta atrás</string>
-  <plurals name="pref_camera_timer_entry">
-    <item quantity="one">1 segundu</item>
-    <item quantity="other">%d segundos</item>
-  </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <string name="pref_camera_timer_sound_title">Usar pitíu</string>
   <string name="setting_off">Desactiváu</string>
@@ -429,8 +397,4 @@
   <string name="tab_albums">Álbumes</string>
   <string name="camera_menu_more_label">MÁS OPCIONES</string>
   <string name="camera_menu_settings_label">AXUSTES</string>
-  <plurals name="number_of_photos">
-    <item quantity="one">%1$d semeya</item>
-    <item quantity="other">%1$d semeyes</item>
-  </plurals>
 </resources>
