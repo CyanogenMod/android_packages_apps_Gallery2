@@ -103,7 +103,6 @@ public class MoviePlayer implements
 
     private static final String VIRTUALIZE_EXTRA = "virtualize";
     private static final long BLACK_TIMEOUT = 500;
-    private static final int DELAY_REMOVE_MS = 10000;
     public static final int SERVER_TIMEOUT = 8801;
 
     // If we resume the acitivty with in RESUMEABLE_TIMEOUT, we will keep playing.
@@ -427,7 +426,6 @@ public class MoviePlayer implements
     public void setDefaultScreenMode() {
         addBackground();
         mController.setDefaultScreenMode();
-        removeBackground();
     }
 
     public boolean onPause() {
@@ -745,7 +743,6 @@ public class MoviePlayer implements
     public void onHidden() {
         mShowing = false;
         showSystemUi(false);
-        removeBackground();
     }
 
     @Override
@@ -1025,31 +1022,11 @@ public class MoviePlayer implements
         return mVideoView;
     }
 
-    // Wait for any animation, ten seconds should be enough
-    private final Runnable mRemoveBackground = new Runnable() {
-        @Override
-        public void run() {
-            if (LOG) {
-                Log.v(TAG, "mRemoveBackground.run()");
-            }
-            mRootView.setBackground(null);
-        }
-    };
-
-    private void removeBackground() {
-        if (LOG) {
-            Log.v(TAG, "removeBackground()");
-        }
-        mHandler.removeCallbacks(mRemoveBackground);
-        mHandler.postDelayed(mRemoveBackground, DELAY_REMOVE_MS);
-    }
-
     // add background for removing ghost image.
     private void addBackground() {
         if (LOG) {
             Log.v(TAG, "addBackground()");
         }
-        mHandler.removeCallbacks(mRemoveBackground);
         mRootView.setBackgroundColor(Color.BLACK);
     }
 
