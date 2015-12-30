@@ -331,17 +331,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     }
 
     private void pickPhoto(int slotIndex) {
-        if ((View.LAYOUT_DIRECTION_RTL == TextUtils
-                .getLayoutDirectionFromLocale(Locale.getDefault()))
-                && !mGetContent) {
-            // Fetch corresponding slotIndex from another side, (RTL)
-            if (slotIndex > DATA_CACHE_SIZE / 2
-                    && slotIndex < mAlbumDataAdapter.size() - DATA_CACHE_SIZE / 2) {
-                slotIndex = mAlbumDataAdapter.size() - slotIndex - 2;
-            } else {
-                slotIndex = mAlbumDataAdapter.size() - slotIndex - 1;
-            }
-        }
         pickPhoto(slotIndex, false);
     }
 

@@ -28,11 +28,14 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.android.gallery3d.util.ThreadPool;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 import com.android.photos.data.GalleryBitmapPool;
 import com.android.gallery3d.R;
+
+import java.util.Locale;
 
 public class TimeLineTitleMaker {
 
@@ -44,6 +47,8 @@ public class TimeLineTitleMaker {
     private final TextPaint mCountPaint;
     private final Context mContext;
     private final TimeLineSlotView mTimeLineSlotView;
+
+    private final int TIMELINETITLE_START_X = 16;
 
     public TimeLineTitleMaker(Context context, TimeLineSlotRenderer.LabelSpec spec, TimeLineSlotView slotView) {
         mContext = context;
@@ -140,8 +145,17 @@ public class TimeLineTitleMaker {
             int y = 0;
             if (mTitle != null) {
                 mTitle = mTitle.toUpperCase();
-                x = 16;
+                x = TIMELINETITLE_START_X;
                 y = (height - spec.timeLineTitleFontSize)/2;
+                // re-calculate x for RTL
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    Rect titleBounds = new Rect();
+                    mTitlePaint.getTextBounds(
+                        mTitle, 0, mTitle.length(), titleBounds);
+                    int w = titleBounds.width();
+                    x = width - mTitle.length() - w;
+                }
                 drawText(canvas, x, y, mTitle, width-x, mTitlePaint);
             }
 
@@ -153,6 +167,11 @@ public class TimeLineTitleMaker {
                 int w = mediaCountBounds.width();
                 y = (height - spec.timeLineTitleFontSize)/2;
                 x = width - countString.length() -w;
+                // re-calculate x for RTL
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    x = TIMELINETITLE_START_X;
+                }
                 drawText(canvas, x, y, countString,
                         width - x, mCountPaint);
             }

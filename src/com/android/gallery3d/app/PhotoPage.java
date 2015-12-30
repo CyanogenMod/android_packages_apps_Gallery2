@@ -496,30 +496,6 @@ public abstract class PhotoPage extends ActivityState implements
                     return;
                 }
             }
-
-            // If it is from widget, need to re-calcuate index and range
-            if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                    .getLayoutDirectionFromLocale(Locale.getDefault())
-                    && mIsFromWidget) {
-                int nMediaItemCount = mMediaSet.getMediaItemCount();
-                ArrayList<MediaItem> mediaItemList = mMediaSet.getMediaItem(0, nMediaItemCount);
-                int nItemIndex;
-                for (nItemIndex = 0; nItemIndex < nMediaItemCount; nItemIndex++) {
-                    if (mediaItemList.get(nItemIndex).getPath().toString()
-                            .equals(itemPath.toString())) {
-                        int nIndex;
-                        if (nItemIndex > DATA_CACHE_SIZE / 2
-                                && nItemIndex < (mMediaSet.getMediaItemCount() -
-                                        DATA_CACHE_SIZE / 2)) {
-                            nIndex = mMediaSet.getMediaItemCount() - nItemIndex - 2;
-                        } else {
-                            nIndex = mMediaSet.getMediaItemCount() - nItemIndex - 1;
-                        }
-                        itemPath = mMediaSet.getMediaItem(nIndex, 1).get(0).getPath();
-                        break;
-                    }
-                }
-            }
             PhotoDataAdapter pda = new PhotoDataAdapter(
                     mActivity, mPhotoView, mMediaSet, itemPath, mCurrentIndex,
                     mAppBridge == null ? -1 : 0,

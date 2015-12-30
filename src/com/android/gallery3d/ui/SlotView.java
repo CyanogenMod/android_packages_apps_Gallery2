@@ -154,12 +154,6 @@ public class SlotView extends GLView {
     }
 
     public void setScrollPosition(int position) {
-        if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                .getLayoutDirectionFromLocale(Locale.getDefault())
-                && position == 0 && !isFromPhotoPage) {
-            // If RTL and not from Photo Page, set position to max.
-            position = mLayout.getScrollLimit();
-        }
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
         updateScrollPosition(position, false);
@@ -462,19 +456,21 @@ public class SlotView extends GLView {
         public Rect getSlotRect(int index, Rect rect) {
             int col, row;
             if (WIDE) {
+                col = index / mUnitCount;
+                row = index - col * mUnitCount;
                 if (View.LAYOUT_DIRECTION_RTL == TextUtils
                         .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                    // If RTL, recalculate the columns and rows.
-                    int count = ((mSlotCount + mUnitCount - 1) / mUnitCount);
-                    col = count - index / mUnitCount - 1;
-                    row = index % mUnitCount;
-                } else {
-                    col = index / mUnitCount;
-                    row = index - col * mUnitCount;
+                    // If RTL, recalculate the columns.
+                    col = mUnitCount - (index - row * mUnitCount) - 1;
                 }
             } else {
                 row = index / mUnitCount;
                 col = index - row * mUnitCount;
+                if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                    // If RTL, recalculate the columns.
+                    col = mUnitCount - (index - row * mUnitCount) - 1;
+                }
             }
 
             int x = mHorizontalPadding.get() + col * (mSlotWidth + mSlotGap);
@@ -619,12 +615,6 @@ public class SlotView extends GLView {
         public int getSlotIndexByPosition(float x, float y) {
             int absoluteX = Math.round(x) + (WIDE ? mScrollPosition : 0);
             int absoluteY = Math.round(y) + (WIDE ? 0 : mScrollPosition);
-            if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                // If RTL, recalculate the absoluteX.
-                absoluteX = mContentLength > mWidth ? (mContentLength - absoluteX) : mWidth
-                        - absoluteX;
-            }
             absoluteX -= mHorizontalPadding.get();
             absoluteY -= mVerticalPadding.get();
 
@@ -634,6 +624,15 @@ public class SlotView extends GLView {
 
             int columnIdx = absoluteX / (mSlotWidth + mSlotGap);
             int rowIdx = absoluteY / (mSlotHeight + mSlotGap);
+            if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                    .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                // If RTL, recalculate the columnIdx/rowIdx.
+                if (WIDE) {
+                    rowIdx = mUnitCount - rowIdx - 1;
+                } else {
+                    columnIdx = mUnitCount - columnIdx - 1;
+                }
+            }
 
             if (!WIDE && columnIdx >= mUnitCount) {
                 return INDEX_NONE;

@@ -755,6 +755,10 @@ public class TimeLineSlotView extends GLView {
 
                     }
                     mHeightList.add(totalHieght);
+                    if (View.LAYOUT_DIRECTION_RTL == TextUtils
+                            .getLayoutDirectionFromLocale(Locale.getDefault())) {
+                        col = mUnitCount - col -1;
+                    }
                     RectSlot rectslot = new RectSlot(info.getMediaType(), i, col, totalHieght);
                     mMediaSlotMap.put(rectslot.slotIndex, rectslot);
                 }
