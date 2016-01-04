@@ -48,7 +48,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="buffer_size">Ara bellek boyutu</string>
   <string name="apn">Tercih edilen APN</string>
   <string name="rtp_min_port">Min bağlantı noktası</string>
-  <string name="rtp_max_port">Max bağlantı noktası</string>
+  <string name="rtp_max_port">Maks bağlantı noktası</string>
   <string name="set_rtp_min_port">Min bağlantı noktasını ayarla</string>
   <string name="set_rtp_max_port">Max bağlantı noktasını ayarla</string>
   <string name="set_buffer_size">Ara bellek boyutunu ayarla</string>
@@ -79,6 +79,4 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Bu efektler için kulaklık takın.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Üzgünüz, bu video kesilemiyor</string>
-  <string name="no_permission_for_drm">Üzgünüz, DHY korumalı dosyalar paylaşılamaz</string>
-  <string name="drm_license_info">DHY lisans bilgisi</string>
 </resources>
