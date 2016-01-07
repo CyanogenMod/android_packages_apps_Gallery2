@@ -43,6 +43,9 @@ public class SelectionManager {
     private boolean mInSelectionMode;
     private boolean mAutoLeave = true;
     private int mTotal;
+    /** mTotalSelectable is the count of items
+     * exclude not selectable such as Title item in TimeLine. */
+    private int mTotalSelectable;
 
     public interface SelectionListener {
         public void onSelectionModeChange(int mode);
@@ -54,6 +57,7 @@ public class SelectionManager {
         mClickedSet = new HashSet<Path>();
         mIsAlbumSet = isAlbumSet;
         mTotal = -1;
+        mTotalSelectable = -1;
     }
 
     // Whether we will leave selection mode automatically once the number of
@@ -70,6 +74,7 @@ public class SelectionManager {
         mInverseSelection = true;
         mClickedSet.clear();
         mTotal = -1;
+        mTotalSelectable = -1;
         enterSelectionMode();
         if (mListener != null) mListener.onSelectionModeChange(SELECT_ALL_MODE);
     }
@@ -119,10 +124,25 @@ public class SelectionManager {
         return mTotal;
     }
 
+    /**
+     * Some items is not selectable. such as Title item in TimeLine.
+     *
+     * @return total selectable count.
+     */
+    private int getTotalSelectableCount() {
+        if (mSourceMediaSet == null) return -1;
+        if (mTotalSelectable < 0) {
+            mTotalSelectable = mIsAlbumSet
+                    ? mSourceMediaSet.getSubMediaSetCount()
+                    : mSourceMediaSet.getSelectableItemCount();
+        }
+        return mTotalSelectable;
+    }
+
     public int getSelectedCount() {
         int count = mClickedSet.size();
         if (mInverseSelection) {
-            count = getTotalCount() - count;
+            count = getTotalSelectableCount() - count;
         }
         return count;
     }

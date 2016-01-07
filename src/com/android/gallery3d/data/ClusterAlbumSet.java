@@ -36,7 +36,10 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     private ArrayList<ClusterAlbum> mAlbums = new ArrayList<ClusterAlbum>();
     private boolean mFirstReloadDone;
 
-    private  int mTotalMediaItemCount;
+    private int mTotalMediaItemCount;
+    /** mTotalSelectableMediaItemCount is the count of items
+     * exclude not selectable such as Title item in TimeLine. */
+    private int mTotalSelectableMediaItemCount;
     private ArrayList<Integer> mAlbumItemCountList;
 
     public ClusterAlbumSet(Path path, GalleryApp application,
@@ -77,6 +80,7 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             }
             if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
                 calculateTotalItemsCount();
+                calculateTotalSelectableItemsCount();
             }
         }
         return mDataVersion;
@@ -183,6 +187,21 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
         }
 
         updateClusters();
+    }
+
+    private void calculateTotalSelectableItemsCount() {
+        mTotalSelectableMediaItemCount = 0;
+        if (mAlbums != null && mAlbums.size() > 0) {
+            for (ClusterAlbum album : mAlbums) {
+                int count = album.getSelectableItemCount();
+                mTotalSelectableMediaItemCount += count;
+            }
+        }
+    }
+
+    @Override
+    public int getSelectableItemCount() {
+        return mTotalSelectableMediaItemCount;
     }
 
   private void calculateTotalItemsCount() {
