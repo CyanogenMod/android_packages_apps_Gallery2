@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
@@ -501,9 +502,11 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
                 mParentMediaSetString != null;
         //GalleryActionBar actionBar = mActivity.getGalleryActionBar();
         mActionBar.setDisplayOptions(enableHomeButton, true);
-        if (enableHomeButton) {
-            mActivity.getToolbar().setNavigationContentDescription("back");
-            mActivity.getToolbar().setNavigationIcon(R.drawable.back);
+
+        Toolbar toolBar = mActivity.getToolbar();
+        if (enableHomeButton && toolBar != null) {
+            toolBar.setNavigationContentDescription("back");
+            toolBar.setNavigationIcon(R.drawable.back);
         }
         // Set the reload bit here to prevent it exit this page in clearLoadingBit().
         setLoadingBit(BIT_LOADING_RELOAD);
