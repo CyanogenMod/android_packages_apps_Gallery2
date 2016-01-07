@@ -153,4 +153,7 @@
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"光圈值"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"曝光时间"</string>
     <string name="filtershow_exif_copyright" msgid="8801875918803737581">"版权"</string>
+
+    <string name="color">滤镜</string>
+    <string name="frames">相框</string>
 </resources>
