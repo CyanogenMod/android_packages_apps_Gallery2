@@ -244,13 +244,16 @@ public class AlbumSetPage extends ActivityState implements
     WeakReference<Toast> mEmptyAlbumToast = null;
 
     private void showEmptyAlbumToast(int toastLength) {
+        //CRs-Fixed:951767 java.lang.NullPointerException: Attempt to invoke virtual method
+        // 'void android.widget.RelativeLayout.addView(android.view.View
+        RelativeLayout galleryRoot = (RelativeLayout) ((Activity) mActivity)
+                .findViewById(R.id.gallery_root);
+        if (galleryRoot == null) return ;
         tvEmptyAlbum = new TextView(mActivity);
         tvEmptyAlbum.setText(R.string.tvEmptyAlbum);
         tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
         tvEmptyAlbum.setGravity(Gravity.CENTER);
         tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        RelativeLayout galleryRoot = (RelativeLayout) ((Activity) mActivity)
-                .findViewById(R.id.gallery_root);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
