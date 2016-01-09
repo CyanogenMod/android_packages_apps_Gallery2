@@ -1172,18 +1172,18 @@ CHAR LIMIT = NONE] -->
         <item>Videos</item>
     </string-array>
 
-    <string name="navigation_drawer_title">Gallery</string>
+    <string name="navigation_drawer_title" translatable="false">@string/app_name</string>
     <!-- Timeline screen title -->
     <string name="timeline_title">Timeline</string>
     <!-- Albums screen title -->
-    <string name="albums_title">Albums</string>
+    <string name="albums_title" translatable="false">@string/tab_albums</string>
     <!-- Videos screen title -->
     <string name="videos_title">Videos</string>
     <string name="action_viewtype_list">List view</string>
-    <string name="action_viewtype_grid">Grid view</string>
+    <string name="action_viewtype_grid" translatable="false">@string/switch_photo_grid</string>
     <string name="tvEmptyAlbum">No photos found</string>
     <string name="tvEmptyVideos">No videos found</string>
     <string name="text_makeup_trimface">Trimface</string>
     <string name="text_makeup_bigeye">Bigeye</string>
-    <string name="drawer_desc">drawer</string>
+    <string name="drawer_desc" translatable="false">drawer</string>
 </resources>

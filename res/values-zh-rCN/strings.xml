@@ -443,6 +443,11 @@
     <item quantity="other" msgid="3813306834113858135">"%1$d张照片"</item>
   </plurals>
 
+    <plurals name="number_of_videos">
+      <item quantity="one">%1$d个视频</item>
+      <item quantity="other">%1$d个视频</item>
+    </plurals>
+
     <string name="bass_boost_strength" msgid="882301530007752270">"低音增强"</string>
     <string name="virtualizer_strength" msgid="5035111173763913313">"3D 音效"</string>
     <string name="audio_effects" msgid="612896145300512593">"音效"</string>
@@ -454,4 +459,12 @@
     <!-- The tips of trimming video -->
     <string name="fail_trim">抱歉，不能修剪该视频文件</string>
     <string name="can_not_trim">只有MP4和3GP文件才能修剪</string>
+
+    <!-- Timeline screen title -->
+    <string name="timeline_title">时间轴</string>
+    <!-- Videos screen title -->
+    <string name="videos_title">视频</string>
+    <string name="action_viewtype_list">列表视图</string>
+    <string name="tvEmptyAlbum">没有图片</string>
+    <string name="tvEmptyVideos">没有视频</string>
 </resources>
