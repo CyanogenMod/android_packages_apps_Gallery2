@@ -165,6 +165,15 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
     }
 
     @Override
+    public int getMediaType() {
+        // return correct type of Timeline Title.
+        if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            return MEDIA_TYPE_TIMELINE_TITLE;
+        }
+        return super.getMediaType();
+    }
+
+    @Override
     public long reload() {
         if (mClusterAlbumSet.reload() > mDataVersion) {
             mDataVersion = nextVersionNumber();
