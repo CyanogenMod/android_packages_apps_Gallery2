@@ -368,8 +368,7 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         }
         String path = ImageLoader.getLocalPathFromUri(this, uri);
         if (path != null) {
-            Uri localUri = Uri.parse(path);
-            path = localUri.getLastPathSegment();
+            path = getLastPathSegment(path);
         } else {
             path = uri.getLastPathSegment();
         }
@@ -379,6 +378,21 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
         } catch (FileNotFoundException fnfe) {
             Log.e(TAG, "Error printing an image", fnfe);
         }
+    }
+
+    private String getLastPathSegment(String path) {
+        if (path == null) return null;
+        Uri localUri = Uri.parse(path);
+        String lastPathSegment = localUri.getLastPathSegment();
+
+        // uri.getLastPathSegment will return null if localUri contains
+        // spacial characters such as ':', so use other way to get it.
+        if (lastPathSegment == null) {
+            // use substring to get last path segment.
+            int indexOfLastPathSegment = path.lastIndexOf("/") + 1;
+            lastPathSegment = path.substring(indexOfLastPathSegment, path.length());
+        }
+        return lastPathSegment;
     }
 
    public Toolbar getToolbar() {
