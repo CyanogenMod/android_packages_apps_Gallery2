@@ -48,7 +48,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="buffer_size">Ara bellek boyutu</string>
   <string name="apn">Tercih edilen APN</string>
   <string name="rtp_min_port">Min bağlantı noktası</string>
-  <string name="rtp_max_port">Max bağlantı noktası</string>
+  <string name="rtp_max_port">Maks bağlantı noktası</string>
   <string name="set_rtp_min_port">Min bağlantı noktasını ayarla</string>
   <string name="set_rtp_max_port">Max bağlantı noktasını ayarla</string>
   <string name="set_buffer_size">Ara bellek boyutunu ayarla</string>
