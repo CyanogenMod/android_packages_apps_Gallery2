@@ -688,22 +688,25 @@ public class TimeLineSlotView extends GLView {
 
             RectSlot rectSlot;
 
-            int index = Arrays.binarySearch(mHeightList.toArray(new Integer[0]), absoluteY);
-            if(index<0){
-                index = (index*-1) -1;
-            }
-            if(index >= mHeightList.size()) {
-                index = mHeightList.size()-1;
-            }
-            int startIndex = mHeightList.indexOf(mHeightList.get(index));
-            int maxIndex = mHeightList.lastIndexOf(mHeightList.get(index));
-            if(mMediaSlotMap.get(startIndex).mediaType == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
-                return mMediaSlotMap.get(startIndex);
-            }
-            for(int i= startIndex;(i< startIndex+mUnitCount) && (i<=maxIndex); i++) {
-                rectSlot = mMediaSlotMap.get(i);
-                if(rectSlot.slotCol== columnIdx)  {
-                    return rectSlot;
+            if (mHeightList != null && mHeightList.size() > 0) {
+                int index = Arrays.binarySearch(mHeightList.toArray(new Integer[0]), absoluteY);
+                if (index < 0) {
+                    index = (index * -1) - 1;
+                }
+                if (index >= mHeightList.size()) {
+                    index = mHeightList.size() - 1;
+                }
+                int startIndex = mHeightList.indexOf(mHeightList.get(index));
+                int maxIndex = mHeightList.lastIndexOf(mHeightList.get(index));
+                if (mMediaSlotMap.get(startIndex).mediaType == 
+                        MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+                    return mMediaSlotMap.get(startIndex);
+                }
+                for (int i = startIndex; (i < startIndex + mUnitCount) && (i <= maxIndex); i++) {
+                    rectSlot = mMediaSlotMap.get(i);
+                    if (rectSlot.slotCol == columnIdx) {
+                        return rectSlot;
+                    }
                 }
             }
             return null;
