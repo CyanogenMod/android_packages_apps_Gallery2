@@ -759,6 +759,8 @@ public class TimeLinePage extends ActivityState implements
                 mShowedEmptyToastForSelf = true;
                 showEmptyAlbumToast(Toast.LENGTH_LONG);
                 mSlotView.invalidate();
+            } else {
+                hideEmptyAlbumToast();
             }
             return;
         }
@@ -859,25 +861,26 @@ public class TimeLinePage extends ActivityState implements
     }
 
     private void showEmptyAlbumToast(int toastLength) {
-        tvEmptyAlbum = new TextView(mActivity);
-        tvEmptyAlbum.setText(R.string.tvEmptyAlbum);
-        tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
-        tvEmptyAlbum.setGravity(Gravity.CENTER);
-        tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        RelativeLayout galleryRoot = (RelativeLayout) ((Activity) mActivity)
-                .findViewById(R.id.gallery_root);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-        galleryRoot.addView(tvEmptyAlbum, lp);
+        RelativeLayout galleryRoot = (RelativeLayout) mActivity.findViewById(R.id.gallery_root);
+        if (galleryRoot == null) return;
+        if (tvEmptyAlbum == null) {
+            tvEmptyAlbum = new TextView(mActivity);
+            tvEmptyAlbum.setText(R.string.tvEmptyAlbum);
+            tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
+            tvEmptyAlbum.setGravity(Gravity.CENTER);
+            tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            galleryRoot.addView(tvEmptyAlbum, lp);
+        }
+        tvEmptyAlbum.setVisibility(View.VISIBLE);
     }
 
     private void hideEmptyAlbumToast() {
-
-    if (tvEmptyAlbum != null)
-    {
-        tvEmptyAlbum.setVisibility(View.GONE);
-    }
+        if (tvEmptyAlbum != null) {
+            tvEmptyAlbum.setVisibility(View.GONE);
+        }
     }
 }
