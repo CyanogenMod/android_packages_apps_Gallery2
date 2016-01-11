@@ -210,7 +210,7 @@ public abstract class UploadedTexture extends BasicTexture {
     private void uploadToCanvas(GLCanvas canvas) {
 
         Bitmap bitmap = getBitmap();
-        if (bitmap != null) {
+        if (bitmap != null && !bitmap.isRecycled()) {
             try {
                 int bWidth = bitmap.getWidth();
                 int bHeight = bitmap.getHeight();
@@ -269,7 +269,9 @@ public abstract class UploadedTexture extends BasicTexture {
             mContentValid = true;
         } else {
             mState = STATE_ERROR;
-            throw new RuntimeException("Texture load fail, no bitmap");
+            if(bitmap == null) {
+                throw new RuntimeException("Texture load fail, no bitmap");
+            }
         }
     }
 
