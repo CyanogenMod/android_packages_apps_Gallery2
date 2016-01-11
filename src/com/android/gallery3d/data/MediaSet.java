@@ -227,8 +227,10 @@ public abstract class MediaSet extends MediaObject {
         start += enumerateMediaItems(consumer, startIndex);
         int m = getSubMediaSetCount();
         for (int i = 0; i < m; i++) {
-            start += getSubMediaSet(i).enumerateTotalMediaItems(
-                    consumer, startIndex + start);
+            MediaSet set = getSubMediaSet(i);
+            if (set != null) {
+                start += set.enumerateTotalMediaItems(consumer, startIndex + start);
+            }
         }
         return start;
     }
