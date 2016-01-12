@@ -216,18 +216,17 @@ public class AlbumLabelMaker {
                 if (jc.isCancelled()) return null;
                 int strLength = (int) mTitlePaint.measureText(title);
                 if (!isAlbumListViewShown) {
-                int x = labelWidth - s.leftMargin - strLength;
-                // TODO: is the offset relevant in new reskin?
-                // int y = s.titleOffset;
-                int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-                drawText(canvas, x, y, title, labelWidth - s.leftMargin - x, mTitlePaint);
+                    int x = labelWidth - s.leftMargin - strLength;
+                    // TODO: is the offset relevant in new reskin?
+                    // int y = s.titleOffset;
+                    int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
+                    drawText(canvas, x, y, title, labelWidth - s.leftMargin - x, mTitlePaint);
 
-                // draw count
-                if (jc.isCancelled()) return null;
-                x = s.leftMargin + 10 - s.titleRightMargin;// plus 10 to get a much bigger margin
-                y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-                drawText(canvas, x, y, count,
-                        labelWidth - x, mCountPaint);
+                    // draw count
+                    if (jc.isCancelled()) return null;
+                    x = s.leftMargin + 10;// plus 10 to get a much bigger margin
+                    y = (s.labelBackgroundHeight - s.countFontSize) / 2;
+                    drawText(canvas, x, y, count, labelWidth - x, mCountPaint);
                 } else {
                     int x = labelWidth
                             - (s1.leftMargin + s1.iconSize)
