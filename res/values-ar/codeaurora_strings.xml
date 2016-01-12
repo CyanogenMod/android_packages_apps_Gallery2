@@ -80,4 +80,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">قم بتوصيل سماعات الرأس لاستخدام هذه الآثار.</string>
   <string name="audio_effects_dialog_title">صوت سناب دراغون+ </string>
   <string name="fail_trim">عذراً، لا يمكن الاقتطاع من ملف الفيديو هذا</string>
+  <string name="no_permission_for_drm">معذرة، يتعذر مشاركة الملفات المحمية لإدارة الحقوق الرقمية</string>
+  <string name="drm_license_info">معلومات ترخيص إدارة الحقوق الرقمية</string>
 </resources>
