@@ -242,7 +242,12 @@ public class DataManager implements StitchingChangeListener {
 
     // The following methods forward the request to the proper object.
     public int getSupportedOperations(Path path) {
-        return getMediaObject(path).getSupportedOperations();
+        int support = 0;
+        MediaObject mediaObject = getMediaObject(path);
+        if (mediaObject != null) {
+            support = mediaObject.getSupportedOperations();
+        }
+        return support;
     }
 
     public void getPanoramaSupport(Path path, PanoramaSupportCallback callback) {
@@ -250,7 +255,10 @@ public class DataManager implements StitchingChangeListener {
     }
 
     public void delete(Path path) {
-        getMediaObject(path).delete();
+        MediaObject mediaObject = getMediaObject(path);
+        if (mediaObject != null) {
+            mediaObject.delete();
+        }
     }
 
     public void rotate(Path path, int degrees) {
