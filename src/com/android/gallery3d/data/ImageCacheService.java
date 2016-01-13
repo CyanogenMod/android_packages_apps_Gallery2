@@ -64,6 +64,9 @@ public class ImageCacheService {
             LookupRequest request = new LookupRequest();
             request.key = cacheKey;
             request.buffer = buffer.data;
+            if (mCache == null) {
+                return false;
+            }
             synchronized (mCache) {
                 if (!mCache.lookup(request)) return false;
             }
@@ -87,6 +90,9 @@ public class ImageCacheService {
         ByteBuffer buffer = ByteBuffer.allocate(key.length + value.length);
         buffer.put(key);
         buffer.put(value);
+        if (mCache == null) {
+            return;
+        }
         synchronized (mCache) {
             try {
                 mCache.insert(cacheKey, buffer.array());
@@ -101,6 +107,9 @@ public class ImageCacheService {
 
         byte[] key = makeKey(path, timeModified, type);
         long cacheKey = Utils.crc64Long(key);
+        if (mCache == null) {
+            return;
+        }
         synchronized (mCache) {
             try {
                 mCache.clearEntry(cacheKey);
