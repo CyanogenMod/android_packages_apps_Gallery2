@@ -93,12 +93,13 @@ public class HistogramView extends View {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setARGB(100, 255, 255, 255);
+        mPaint.setARGB(100, 0, 0, 0);
         mPaint.setStrokeWidth((int) Math.ceil(wl));
 
         // Draw grid
         mPaint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(dx, 0, dx + w, h, mPaint);
+        mPaint.setARGB(100, 200, 200, 200);
         canvas.drawLine(dx + w / 3, 0, dx + w / 3, h, mPaint);
         canvas.drawLine(dx + 2 * w / 3, 0, dx + 2 * w / 3, h, mPaint);
 
