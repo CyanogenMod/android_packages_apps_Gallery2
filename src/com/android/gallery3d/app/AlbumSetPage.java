@@ -249,21 +249,23 @@ public class AlbumSetPage extends ActivityState implements
         RelativeLayout galleryRoot = (RelativeLayout) ((Activity) mActivity)
                 .findViewById(R.id.gallery_root);
         if (galleryRoot == null) return ;
-        tvEmptyAlbum = new TextView(mActivity);
-        tvEmptyAlbum.setText(R.string.tvEmptyAlbum);
-        tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
-        tvEmptyAlbum.setGravity(Gravity.CENTER);
-        tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-        galleryRoot.addView(tvEmptyAlbum, lp);
+        if (tvEmptyAlbum == null) {
+            tvEmptyAlbum = new TextView(mActivity);
+            tvEmptyAlbum.setText(R.string.tvEmptyAlbum);
+            tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
+            tvEmptyAlbum.setGravity(Gravity.CENTER);
+            tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            galleryRoot.addView(tvEmptyAlbum, lp);
+        }
+        tvEmptyAlbum.setVisibility(View.VISIBLE);
     }
 
     private void hideEmptyAlbumToast() {
-        if (tvEmptyAlbum != null)
-        {
+        if (tvEmptyAlbum != null) {
             tvEmptyAlbum.setVisibility(View.GONE);
         }
     }
@@ -448,6 +450,9 @@ public class AlbumSetPage extends ActivityState implements
                     showCameraButton();
                 }
                 return;
+            } else {
+                hideEmptyAlbumToast();
+                hideCameraButton();
             }
         }
         // Hide the empty album toast if we are in the root instance of

@@ -848,23 +848,23 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         mLoadingBits &= ~loadTaskBit;
         if (mLoadingBits == 0 && mIsActive) {
             if (mAlbumDataAdapter.size() == 0) {
-                if (mIsVideoScreen)
-                {
+                if (mIsVideoScreen) {
                     mShowedEmptyToastForSelf = true;
                     showEmptyAlbumToast(Toast.LENGTH_LONG);
+                } else {
+                    Intent result = new Intent();
+                    result.putExtra(KEY_EMPTY_ALBUM, true);
+                    setStateResult(Activity.RESULT_OK, result);
+                    mActivity.getStateManager().finishState(this);
                 }
-                else {
-                Intent result = new Intent();
-                result.putExtra(KEY_EMPTY_ALBUM, true);
-                setStateResult(Activity.RESULT_OK, result);
-                mActivity.getStateManager().finishState(this);
-              }
                 return;
+            } else {
+                hideEmptyAlbumToast();
             }
         }
         if (mShowedEmptyToastForSelf && mIsVideoScreen) {
-                mShowedEmptyToastForSelf = false;
-                hideEmptyAlbumToast();
+            mShowedEmptyToastForSelf = false;
+            hideEmptyAlbumToast();
         }
     }
 
@@ -940,26 +940,26 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
     }
 
 
-
-     private void showEmptyAlbumToast(int toastLength) {
+    private void showEmptyAlbumToast(int toastLength) {
+        RelativeLayout galleryRoot = (RelativeLayout) mActivity.findViewById(R.id.gallery_root);
+        if (galleryRoot == null) return;
+        if (tvEmptyAlbum == null) {
             tvEmptyAlbum = new TextView(mActivity);
             tvEmptyAlbum.setText(R.string.tvEmptyVideos);
             tvEmptyAlbum.setTextColor(Color.parseColor("#8A000000"));
             tvEmptyAlbum.setGravity(Gravity.CENTER);
-            tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-            RelativeLayout galleryRoot = (RelativeLayout) ((Activity) mActivity)
-                    .findViewById(R.id.gallery_root);
+            tvEmptyAlbum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
             galleryRoot.addView(tvEmptyAlbum, lp);
         }
+        tvEmptyAlbum.setVisibility(View.VISIBLE);
+    }
 
     private void hideEmptyAlbumToast() {
-
-        if (tvEmptyAlbum != null)
-        {
+        if (tvEmptyAlbum != null) {
             tvEmptyAlbum.setVisibility(View.GONE);
         }
     }
