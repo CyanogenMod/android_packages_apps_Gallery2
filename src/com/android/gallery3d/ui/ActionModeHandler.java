@@ -284,10 +284,22 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
             if (jc.isCancelled() || !mSelectionManager.inSelectionMode()) {
                 return null;
             }
-            selected.add(manager.getMediaObject(path));
+            MediaObject mediaObject = manager.getMediaObject(path);
+            if (checkMediaTypeSelectable(mediaObject.getMediaType())) {
+                selected.add(mediaObject);
+            }
         }
         return selected;
     }
+
+    /** Some Media Item is not selectable such as Title item in TimeLine. */
+    private boolean checkMediaTypeSelectable(int type) {
+        if (type == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+            return false;
+        }
+        return true;
+    }
+
     // Menu options are determined by selection set itself.
     // We cannot expand it because MenuExecuter executes it based on
     // the selection set instead of the expanded result.
