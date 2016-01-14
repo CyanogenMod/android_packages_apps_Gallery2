@@ -83,6 +83,11 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
         return mPaths.size();
     }
 
+    @Override
+    public int getSelectableItemCount() {
+        return mPaths.size();
+    }
+
     public void setImageItemCount(int count) {
         mImageCount = count;
         if (mTimelineTitleMediaItem != null && mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {

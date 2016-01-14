@@ -335,7 +335,10 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         final Intent intent = new Intent();
         for (Path path : expandedPaths) {
             if (jc.isCancelled()) return null;
-            uris.add(manager.getContentUri(path));
+            Uri uri = manager.getContentUri(path);
+            if (uri != null) {
+                uris.add(uri);
+            }
         }
 
         final int size = uris.size();
@@ -371,7 +374,10 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
             type |= manager.getMediaType(path);
 
             if ((support & MediaObject.SUPPORT_SHARE) != 0) {
-                uris.add(manager.getContentUri(path));
+                Uri uri = manager.getContentUri(path);
+                if (uri != null) {
+                    uris.add(uri);
+                }
             }
         }
 
