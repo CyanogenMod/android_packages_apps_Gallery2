@@ -47,7 +47,7 @@
     <color name="gradcontrol_line_color">#FFFFFF</color>
     <color name="gradcontrol_line_shadow">#000000</color>
     <color name="draw_rect_border">#888888</color>
-    <color name="color_chooser_unslected_border">#00000000</color>
+    <color name="color_chooser_unslected_border">#3d4040</color>
     <color name="color_chooser_slected_border">#a7a7a7</color>
 
 </resources>
