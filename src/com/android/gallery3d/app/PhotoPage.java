@@ -655,7 +655,7 @@ public abstract class PhotoPage extends ActivityState implements
             mShareIntent = new Intent(Intent.ACTION_SEND);
             return mShowBars;
         case R.id.photopage_bottom_control_delete:
-            return mShowBars;
+            return mShowBars && !mReadOnlyView;
         default:
             return false;
         }
