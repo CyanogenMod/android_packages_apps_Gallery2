@@ -17,6 +17,7 @@
 package com.android.gallery3d.filtershow.info;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ public class InfoPanel extends DialogFragment {
 
         HistogramView histogramView = (HistogramView) mMainView.findViewById(R.id.histogramView);
         histogramView.setBitmap(bitmap);
+        histogramView.setBackgroundColor(Color.DKGRAY);
 
         Uri uri = MasterImage.getImage().getUri();
         String path = ImageLoader.getLocalPathFromUri(getActivity(), uri);
