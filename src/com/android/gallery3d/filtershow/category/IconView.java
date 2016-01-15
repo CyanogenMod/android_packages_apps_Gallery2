@@ -108,8 +108,14 @@ public class IconView extends View {
             // justify to the left.
             x = mMargin;
         }
-        int y = canvas.getHeight() / 2 ;//- 2*mMargin;
+        int y = canvas.getHeight() - getTextHeight(mPaint) / 2 - mMargin;
         canvas.drawText(text, x, y, mPaint);
+    }
+
+    private int getTextHeight(Paint paint){
+        paint.setTextSize(mTextSize);
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        return (int)(Math.ceil(fontMetrics.descent - fontMetrics.ascent) + 2);
     }
 
     protected void drawOutlinedText(Canvas canvas, String text) {
