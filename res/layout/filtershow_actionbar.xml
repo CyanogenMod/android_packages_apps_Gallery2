@@ -25,7 +25,7 @@
         android:drawablePadding="24dp"
         android:drawableStart="@drawable/done"
         android:gravity="center_vertical"
-        android:paddingBottom="20dp"
+        android:paddingBottom="14dp"
         android:text="@string/save"
         android:textColor="#ffffff"
         android:textSize="20sp" />
