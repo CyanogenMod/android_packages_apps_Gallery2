@@ -19,6 +19,7 @@ package com.android.gallery3d.ui;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaItem;
+import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 
@@ -227,7 +228,7 @@ public class SelectionManager {
                                 return null;
                             }
                         } else {
-                            selected.add(id);
+                            addPathIfSelectable(selected, id);
                             if (selected.size() > maxSelection) {
                                 return null;
                             }
@@ -242,7 +243,7 @@ public class SelectionManager {
                             return null;
                         }
                     } else {
-                        selected.add(id);
+                        addPathIfSelectable(selected, id);
                         if (selected.size() > maxSelection) {
                             return null;
                         }
@@ -259,7 +260,7 @@ public class SelectionManager {
                     for (MediaItem item : list) {
                         Path id = item.getPath();
                         if (!mClickedSet.contains(id)) {
-                            selected.add(id);
+                            addPathIfSelectable(selected, id);
                             if (selected.size() > maxSelection) {
                                 return null;
                             }
@@ -269,7 +270,7 @@ public class SelectionManager {
                 }
             } else {
                 for (Path id : mClickedSet) {
-                    selected.add(id);
+                    addPathIfSelectable(selected, id);
                     if (selected.size() > maxSelection) {
                         return null;
                     }
@@ -277,6 +278,15 @@ public class SelectionManager {
             }
         }
         return selected;
+    }
+
+    private void addPathIfSelectable(ArrayList<Path> selected, Path path) {
+        if (mDataManager != null) {
+            MediaObject mediaObject = mDataManager.getMediaObject(path);
+            if (mediaObject != null && mediaObject.isSelectable()) {
+                selected.add(path);
+            }
+        }
     }
 
     public void setSourceMediaSet(MediaSet set) {

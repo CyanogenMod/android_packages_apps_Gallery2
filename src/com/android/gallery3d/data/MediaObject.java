@@ -173,4 +173,12 @@ public abstract class MediaObject {
         }
         throw new IllegalArgumentException();
     }
+
+    /** Some Media Item is not selectable such as Title item in TimeLine. */
+    public boolean isSelectable() {
+        if (getMediaType() == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
+            return false;
+        }
+        return true;
+    }
 }
