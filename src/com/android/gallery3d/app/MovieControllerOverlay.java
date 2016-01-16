@@ -559,7 +559,11 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             mAlwaysShowBottom = alwaysShow;
             if (!alwaysShow) { // clear background
                 setBackgroundDrawable(null);
-                setBackgroundColor(Color.TRANSPARENT);
+                if (mState == State.PAUSED || mState == State.PLAYING) {
+                    setBackgroundColor(Color.TRANSPARENT);
+                }else {
+                    setBackgroundColor(Color.BLACK);
+                }
             } else {
                 setBackgroundResource(R.drawable.media_default_bkg);
                 if (foreShow) {
@@ -875,8 +879,13 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         }
 
         public void onShow() {
-            Log.v(TAG, "ControllerRewindAndForwardExt onShow");
+            Log.v(TAG, "ControllerRewindAndForwardExt onShow: "+mState);
             mContollerButtons.setVisibility(View.VISIBLE);
+            if (mState == State.PAUSED || mState == State.PLAYING) {
+                setBackgroundColor(Color.TRANSPARENT);
+            } else {
+                setBackgroundColor(Color.BLACK);
+            }
         }
 
         public void onLayout(int l, int r, int b) {
