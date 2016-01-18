@@ -55,4 +55,5 @@
     <item type="id" name="editorDualCamSketch" />
     <item type="id" name="editorDualCamFusion" />
     <item type="id" name="trueScannerEditor" />
+    <item type="id" name="hazeBusterEditor" />
 </resources>

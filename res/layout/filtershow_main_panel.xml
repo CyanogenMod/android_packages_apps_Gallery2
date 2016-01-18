@@ -120,6 +120,16 @@
                 android:padding="2dip"
                 android:scaleType="centerInside"
                 android:src="@drawable/truescanner"/>
+
+           <ImageButton
+                android:id="@+id/hazeBusterButton"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:padding="2dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/hazebuster"/>
         </LinearLayout>
 
         <LinearLayout
@@ -196,6 +206,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/trueScanner"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/edit_main_font" />
+
+            <TextView
+                android:id="@+id/tvHazeBuster"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/hazeBuster"
                 android:gravity="center"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/edit_main_font" />

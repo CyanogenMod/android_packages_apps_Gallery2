@@ -1189,4 +1189,5 @@ CHAR LIMIT = NONE] -->
     <string name="drawer_desc" translatable="false">drawer</string>
     <string name="truescanner_normal">Normal</string>
     <string name="truescanner_white">WhiteBoard</string>
+    <string name="hazebuster_acts">Haze Buster</string>
 </resources>

@@ -30,6 +30,7 @@ import android.util.Log;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
+import com.android.gallery3d.filtershow.filters.HazeBusterActs;
 import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
 import com.android.gallery3d.filtershow.filters.TrueScannerActs;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
@@ -53,6 +54,7 @@ public class MainPanel extends Fragment {
     private FrameLayout mCategoryFragment;
     private View mBottomView;
     private ImageButton trueScannerButton;
+    private ImageButton hazeBusterButton;
 
     public static final String FRAGMENT_TAG = "MainPanel";
     public static final String EDITOR_TAG = "coming-from-editor-panel";
@@ -64,6 +66,7 @@ public class MainPanel extends Fragment {
     public static final int DUALCAM = 5;
     public static final int VERSIONS = 6;
     public static final int TRUESCANNER = 7;
+    public static final int HAZEBUSTER = 8;
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
@@ -102,7 +105,9 @@ public class MainPanel extends Fragment {
                 break;
             }
             case TRUESCANNER: {
-                //trueScannerButton.setSelected(value);
+                break;
+            }
+            case HAZEBUSTER: {
                 break;
             }
         }
@@ -163,6 +168,13 @@ public class MainPanel extends Fragment {
             trueScannerButton.setVisibility(View.GONE);
         }
 
+        hazeBusterButton = (ImageButton) mMainView.findViewById(R.id.hazeBusterButton);
+        TextView hazeBusterTv = (TextView) mMainView.findViewById(R.id.tvHazeBuster);
+        if(!HazeBusterActs.isHazeBusterEnabled()) {
+            hazeBusterTv.setVisibility(View.GONE);
+            hazeBusterButton.setVisibility(View.GONE);
+        }
+
         looksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,6 +212,13 @@ public class MainPanel extends Fragment {
             @Override
             public void onClick(View v) {
                 showPanel(TRUESCANNER);
+            }
+        });
+
+        hazeBusterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPanel(HAZEBUSTER);
             }
         });
 
@@ -320,6 +339,16 @@ public class MainPanel extends Fragment {
         selection(mCurrentSelected, true);
     }
 
+    public void loadCategoryHazeBusterPanel() {
+        boolean fromRight = isRightAnimation(HAZEBUSTER);
+        selection(mCurrentSelected, false);
+        CategoryPanel categoryPanel = new CategoryPanel();
+        categoryPanel.setAdapter(HAZEBUSTER);
+        setCategoryFragment(categoryPanel, fromRight);
+        mCurrentSelected = HAZEBUSTER;
+        selection(mCurrentSelected, true);
+    }
+
     public void loadCategoryFiltersPanel() {
         /*if (mCurrentSelected == FILTERS) {
             return;
@@ -393,6 +422,10 @@ public class MainPanel extends Fragment {
             }
             case TRUESCANNER: {
                 loadCategoryTrueScannerPanel();
+                break;
+            }
+            case HAZEBUSTER: {
+                loadCategoryHazeBusterPanel();
                 break;
             }
             case VERSIONS: {

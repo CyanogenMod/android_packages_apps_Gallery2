@@ -40,6 +40,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     protected ArrayList<FilterRepresentation> mMakeup = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mDualCam = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mTrueScanner = new ArrayList<FilterRepresentation>();
+    protected ArrayList<FilterRepresentation> mHazeBuster = new ArrayList<FilterRepresentation>();
     private static int mImageBorderSize = 4; // in percent
 
     protected void init() {
@@ -48,6 +49,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         Vector<Class> filters = new Vector<Class>();
         addFilterClasses(filters);
         addTrueScannerClasses(filters);
+        addHazeBusterClasses(filters);
         for (Class filterClass : filters) {
             try {
                 Object filterInstance = filterClass.newInstance();
@@ -162,6 +164,10 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         filters.add(TrueScannerWhiteBoardActs.class);
     }
 
+    protected void addHazeBusterClasses(Vector<Class> filters) {
+        filters.add(HazeBusterActs.class);
+    }
+
     public ArrayList<FilterRepresentation> getLooks() {
         return mLooks;
     }
@@ -187,6 +193,9 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     }
     public ArrayList<FilterRepresentation> getTrueScanner() {
         return mTrueScanner;
+    }
+    public ArrayList<FilterRepresentation> getHazeBuster() {
+        return mHazeBuster;
     }
 
     public void addBorders(Context context) {
@@ -348,6 +357,10 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     public void addTrueScanner() {
         mTrueScanner.add(getRepresentation(TrueScannerActs.class));
         mTrueScanner.add(getRepresentation(TrueScannerWhiteBoardActs.class));
+    }
+
+    public void addHazeBuster() {
+        mHazeBuster.add(getRepresentation(HazeBusterActs.class));
     }
 
     public void addTools(Context context) {

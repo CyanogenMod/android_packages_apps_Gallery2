@@ -184,6 +184,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryGeometryAdapter = null;
     private CategoryAdapter mCategoryFiltersAdapter = null;
     private CategoryAdapter mCategoryTrueScannerAdapter = null;
+    private CategoryAdapter mCategoryHazeBusterAdapter = null;
     private CategoryAdapter mCategoryVersionsAdapter = null;
     private CategoryAdapter mCategoryMakeupAdapter = null;
     private CategoryAdapter mCategoryDualCamAdapter = null;
@@ -575,6 +576,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillTools();
         fillEffects();
         fillTrueScanner();
+        fillHazeBuster();
         fillVersions();
         fillMakeup();
         fillDualCamera();
@@ -712,6 +714,21 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 representation.setName(getString(representation.getTextId()));
             }
             mCategoryTrueScannerAdapter.add(new Action(this, representation));
+        }
+    }
+
+    private void fillHazeBuster() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> hazeBusterRepresentations = filtersManager.getHazeBuster();
+        if (mCategoryHazeBusterAdapter != null) {
+            mCategoryHazeBusterAdapter.clear();
+        }
+        mCategoryHazeBusterAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : hazeBusterRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategoryHazeBusterAdapter.add(new Action(this, representation));
         }
     }
 
@@ -855,6 +872,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public CategoryAdapter getCategoryTrueScannerAdapter() {
         return mCategoryTrueScannerAdapter;
+    }
+
+    public CategoryAdapter getCategoryHazeBusterAdapter() {
+        return mCategoryHazeBusterAdapter;
     }
 
     public CategoryAdapter getCategoryVersionsAdapter() {

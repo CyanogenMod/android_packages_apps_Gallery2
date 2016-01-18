@@ -96,6 +96,13 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
+            case MainPanel.HAZEBUSTER: {
+                mAdapter = activity.getCategoryHazeBusterAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.HAZEBUSTER);
+                }
+                break;
+            }
             case MainPanel.VERSIONS: {
                 mAdapter = activity.getCategoryVersionsAdapter();
                 if (mAdapter != null) {
