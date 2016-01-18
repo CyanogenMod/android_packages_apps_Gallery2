@@ -99,6 +99,9 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public static boolean mIsparentActivityFInishing;
     NavigationDrawerListAdapter mNavigationAdapter;
     public Toolbar mToolbar;
+    /** DrawerLayout is not supported in some entrances.
+     * such as Intent.ACTION_VIEW, Intent.ACTION_GET_CONTENT, Intent.PICK. */
+    private boolean mDrawerLayoutSupported = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,15 +170,9 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                 });
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mDrawerLayout.setDrawerListener(new DrawerListener() {
-
                 @Override
                 public void onDrawerStateChanged(int arg0) {
-                    if (getStateManager().getStateCount() == 1)
-                    {
-                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    } else {
-                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    }
+                    toggleNavDrawer(getStateManager().getStateCount() == 1);
                 }
 
                 @Override
@@ -211,16 +208,14 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         setToolbar(mToolbar);
     }
 
-    public void toggleNavDrawer(boolean setDrawerVisibility)
-    {
+    public void toggleNavDrawer(boolean setDrawerVisibility) {
         if (mDrawerLayout != null) {
-            if (setDrawerVisibility) {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            if (setDrawerVisibility && mDrawerLayoutSupported) {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            } else {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
-            else {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-       }
+        }
     }
 
     public void showScreen(int position) {
@@ -331,8 +326,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         String action = intent.getAction();
 
         if (Intent.ACTION_GET_CONTENT.equalsIgnoreCase(action)) {
+            mDrawerLayoutSupported = false;
             startGetContent(intent);
         } else if (Intent.ACTION_PICK.equalsIgnoreCase(action)) {
+            mDrawerLayoutSupported = false;
             // We do NOT really support the PICK intent. Handle it as
             // the GET_CONTENT. However, we need to translate the type
             // in the intent here.
@@ -345,8 +342,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
             startGetContent(intent);
         } else if (Intent.ACTION_VIEW.equalsIgnoreCase(action)
                 || ACTION_REVIEW.equalsIgnoreCase(action)){
+            mDrawerLayoutSupported = false;
             startViewAction(intent);
         } else {
+            mDrawerLayoutSupported = true;
             startTimelinePage();
             mToolbar.setTitle(R.string.albums_title);
         }
