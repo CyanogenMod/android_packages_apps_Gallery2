@@ -74,6 +74,8 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     };
     private IntentFilter mMountFilter = new IntentFilter(Intent.ACTION_MEDIA_MOUNTED);
 
+    private static final String DEFAULT_PRINT_JOB_NAME = "print job";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,6 +369,9 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
             return;
         }
         String printJobName = getLastPathSegment(uri);
+        if (printJobName == null) {
+            printJobName = DEFAULT_PRINT_JOB_NAME;
+        }
         PrintHelper printer = new PrintHelper(this);
         try {
             printer.printBitmap(printJobName, uri);
@@ -376,8 +381,8 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     }
 
     private String getLastPathSegment(Uri uri) {
-        String path = "";
-        if (uri == null) return path;
+        if (uri == null) return null;
+        String path = null;
         try {
             path = ImageLoader.getLocalPathFromUri(this, uri);
         } catch (IllegalArgumentException e) {
