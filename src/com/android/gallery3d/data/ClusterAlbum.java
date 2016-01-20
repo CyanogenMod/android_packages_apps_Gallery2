@@ -193,11 +193,16 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
 
     @Override
     public int getSupportedOperations() {
+        // Timeline title item doesn't support anything, just its sub objects supported.
+        if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
+            return 0;
+        }
         return SUPPORT_SHARE | SUPPORT_DELETE | SUPPORT_INFO;
     }
 
     @Override
     public void delete() {
+        if ((getSupportedOperations() & MediaObject.SUPPORT_DELETE) == 0) return;
         ItemConsumer consumer = new ItemConsumer() {
             @Override
             public void consume(int index, MediaItem item) {
