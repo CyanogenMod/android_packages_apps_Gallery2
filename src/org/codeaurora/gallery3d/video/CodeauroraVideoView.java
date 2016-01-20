@@ -1,6 +1,7 @@
 package org.codeaurora.gallery3d.video;
 
 import android.app.AlertDialog;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -96,6 +97,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean mOnResumed;
     private boolean mIsShowDialog = false;
     private boolean mErrorDialogShowing = false;
+    private KeyguardManager mKeyguardManager;
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(final Message msg) {
@@ -965,6 +967,21 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         setVideoURI(uri, headers);
     }
 
+    private boolean isKeyguardLocked() {
+        if (mKeyguardManager == null) {
+            mKeyguardManager =
+                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        }
+        // isKeyguardSecure excludes the slide lock case.
+        boolean locked = (mKeyguardManager != null)
+                && mKeyguardManager.inKeyguardRestrictedInputMode();
+        if (LOG) {
+            Log.v(TAG, "isKeyguardLocked() locked=" + locked + ", mKeyguardManager="
+                    + mKeyguardManager);
+        }
+        return locked;
+    }
+
     private void doPreparedIfReady(final MediaPlayer mp) {
         if (LOG) {
             Log.v(TAG, "doPreparedIfReady() mHasGotPreparedCallBack=" + mHasGotPreparedCallBack
@@ -972,7 +989,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                     + mNeedWaitLayout
                     + ", mCurrentState=" + mCurrentState);
         }
-        if (mHasGotPreparedCallBack && mHasGotMetaData && !mNeedWaitLayout) {
+        if (mHasGotPreparedCallBack && mHasGotMetaData && !mNeedWaitLayout && !isKeyguardLocked()) {
             doPrepared(mp);
         }
     }
