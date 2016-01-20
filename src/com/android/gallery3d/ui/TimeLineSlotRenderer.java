@@ -201,6 +201,7 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
 
         TimeLineSlidingWindow.AlbumEntry entry = mDataWindow.get(index);
         int renderRequestFlags = 0;
+        if (entry != null) {
             Texture content = checkContentTexture(entry.content);
             if (content == null) {
                 content = mWaitLoadingTexture;
@@ -221,7 +222,7 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
             }
 
             renderRequestFlags |= renderOverlay(canvas, index, entry, width, height);
-
+        }
         return renderRequestFlags;
     }
 }
