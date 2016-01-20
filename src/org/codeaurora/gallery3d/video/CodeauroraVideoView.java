@@ -273,6 +273,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                     }
                 }
 
+                mMediaPlayer.reset();
                 /* Otherwise, pop up an error dialog so the user knows that
                  * something bad has happened. Only try and pop up the dialog
                  * if we're attached to a window. When we're going away and no
@@ -299,6 +300,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
                                         if (mOnCompletionListener != null) {
                                             mOnCompletionListener.onCompletion(mMediaPlayer);
                                         }
+                                        release(true);
                                     }
                                 })
                         .setCancelable(false)
