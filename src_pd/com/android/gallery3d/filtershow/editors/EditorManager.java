@@ -41,5 +41,6 @@ public class EditorManager {
         editorPlaceHolder.addEditor(new EditorDualCamSketch());
         editorPlaceHolder.addEditor(new TrueScannerEditor());
         editorPlaceHolder.addEditor(new HazeBusterEditor());
+        editorPlaceHolder.addEditor(new SeeStraightEditor());
     }
 }

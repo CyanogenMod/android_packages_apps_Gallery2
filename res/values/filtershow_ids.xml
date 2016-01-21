@@ -56,4 +56,5 @@
     <item type="id" name="editorDualCamFusion" />
     <item type="id" name="trueScannerEditor" />
     <item type="id" name="hazeBusterEditor" />
+    <item type="id" name="seeStraightEditor" />
 </resources>

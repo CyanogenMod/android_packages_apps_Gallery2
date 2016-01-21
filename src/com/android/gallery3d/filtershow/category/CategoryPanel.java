@@ -103,6 +103,13 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
+            case MainPanel.SEESTRAIGHT: {
+                mAdapter = activity.getCategorySeeStraightAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.SEESTRAIGHT);
+                }
+                break;
+            }
             case MainPanel.VERSIONS: {
                 mAdapter = activity.getCategoryVersionsAdapter();
                 if (mAdapter != null) {

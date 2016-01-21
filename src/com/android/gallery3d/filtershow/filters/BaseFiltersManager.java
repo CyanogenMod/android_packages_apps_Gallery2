@@ -41,6 +41,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     protected ArrayList<FilterRepresentation> mDualCam = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mTrueScanner = new ArrayList<FilterRepresentation>();
     protected ArrayList<FilterRepresentation> mHazeBuster = new ArrayList<FilterRepresentation>();
+    protected ArrayList<FilterRepresentation> mSeeStraight = new ArrayList<FilterRepresentation>();
     private static int mImageBorderSize = 4; // in percent
 
     protected void init() {
@@ -50,6 +51,7 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         addFilterClasses(filters);
         addTrueScannerClasses(filters);
         addHazeBusterClasses(filters);
+        addSeeStraightClasses(filters);
         for (Class filterClass : filters) {
             try {
                 Object filterInstance = filterClass.newInstance();
@@ -168,6 +170,10 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         filters.add(HazeBusterActs.class);
     }
 
+    protected void addSeeStraightClasses(Vector<Class> filters) {
+        filters.add(SeeStraightActs.class);
+    }
+
     public ArrayList<FilterRepresentation> getLooks() {
         return mLooks;
     }
@@ -196,6 +202,9 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     }
     public ArrayList<FilterRepresentation> getHazeBuster() {
         return mHazeBuster;
+    }
+    public ArrayList<FilterRepresentation> getSeeStraight() {
+        return mSeeStraight;
     }
 
     public void addBorders(Context context) {
@@ -361,6 +370,10 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
 
     public void addHazeBuster() {
         mHazeBuster.add(getRepresentation(HazeBusterActs.class));
+    }
+
+    public void addSeeStraight() {
+        mSeeStraight.add(getRepresentation(SeeStraightActs.class));
     }
 
     public void addTools(Context context) {

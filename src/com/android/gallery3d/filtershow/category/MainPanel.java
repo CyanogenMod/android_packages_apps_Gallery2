@@ -31,6 +31,7 @@ import android.util.Log;
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.filters.HazeBusterActs;
+import com.android.gallery3d.filtershow.filters.SeeStraightActs;
 import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
 import com.android.gallery3d.filtershow.filters.TrueScannerActs;
 import com.android.gallery3d.filtershow.imageshow.MasterImage;
@@ -55,6 +56,7 @@ public class MainPanel extends Fragment {
     private View mBottomView;
     private ImageButton trueScannerButton;
     private ImageButton hazeBusterButton;
+    private ImageButton seeStraightButton;
 
     public static final String FRAGMENT_TAG = "MainPanel";
     public static final String EDITOR_TAG = "coming-from-editor-panel";
@@ -67,6 +69,7 @@ public class MainPanel extends Fragment {
     public static final int VERSIONS = 6;
     public static final int TRUESCANNER = 7;
     public static final int HAZEBUSTER = 8;
+    public static final int SEESTRAIGHT = 9;
 
     private int mCurrentSelected = -1;
     private int mPreviousToggleVersions = -1;
@@ -108,6 +111,9 @@ public class MainPanel extends Fragment {
                 break;
             }
             case HAZEBUSTER: {
+                break;
+            }
+            case SEESTRAIGHT: {
                 break;
             }
         }
@@ -175,6 +181,13 @@ public class MainPanel extends Fragment {
             hazeBusterButton.setVisibility(View.GONE);
         }
 
+        seeStraightButton = (ImageButton) mMainView.findViewById(R.id.seeStraightButton);
+        TextView seeStraightTv = (TextView) mMainView.findViewById(R.id.tvSeeStraight);
+        if(!SeeStraightActs.isSeeStraightEnabled()) {
+            seeStraightButton.setVisibility(View.GONE);
+            seeStraightTv.setVisibility(View.GONE);
+        }
+
         looksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,6 +232,13 @@ public class MainPanel extends Fragment {
             @Override
             public void onClick(View v) {
                 showPanel(HAZEBUSTER);
+            }
+        });
+
+        seeStraightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPanel(SEESTRAIGHT);
             }
         });
 
@@ -349,6 +369,16 @@ public class MainPanel extends Fragment {
         selection(mCurrentSelected, true);
     }
 
+    public void loadCategorySeeStraightPanel() {
+        boolean fromRight = isRightAnimation(SEESTRAIGHT);
+        selection(mCurrentSelected, false);
+        CategoryPanel categoryPanel = new CategoryPanel();
+        categoryPanel.setAdapter(SEESTRAIGHT);
+        setCategoryFragment(categoryPanel, fromRight);
+        mCurrentSelected = SEESTRAIGHT;
+        selection(mCurrentSelected, true);
+    }
+
     public void loadCategoryFiltersPanel() {
         /*if (mCurrentSelected == FILTERS) {
             return;
@@ -426,6 +456,10 @@ public class MainPanel extends Fragment {
             }
             case HAZEBUSTER: {
                 loadCategoryHazeBusterPanel();
+                break;
+            }
+            case SEESTRAIGHT: {
+                loadCategorySeeStraightPanel();
                 break;
             }
             case VERSIONS: {

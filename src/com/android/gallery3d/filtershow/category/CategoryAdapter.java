@@ -97,6 +97,10 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
             mSelectedPosition = 0;
         }
 
+        if (category == MainPanel.SEESTRAIGHT) {
+            mSelectedPosition = 0;
+        }
+
         if (category == MainPanel.VERSIONS) {
             mAddButtonText = getContext().getString(R.string.filtershow_add_button_versions);
         }

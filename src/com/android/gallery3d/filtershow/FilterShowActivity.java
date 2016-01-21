@@ -185,6 +185,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryFiltersAdapter = null;
     private CategoryAdapter mCategoryTrueScannerAdapter = null;
     private CategoryAdapter mCategoryHazeBusterAdapter = null;
+    private CategoryAdapter mCategorySeeStraightAdapter = null;
     private CategoryAdapter mCategoryVersionsAdapter = null;
     private CategoryAdapter mCategoryMakeupAdapter = null;
     private CategoryAdapter mCategoryDualCamAdapter = null;
@@ -577,6 +578,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillEffects();
         fillTrueScanner();
         fillHazeBuster();
+        fillSeeStraight();
         fillVersions();
         fillMakeup();
         fillDualCamera();
@@ -732,6 +734,21 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         }
     }
 
+    private void fillSeeStraight() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> hazeBusterRepresentations = filtersManager.getSeeStraight();
+        if (mCategorySeeStraightAdapter != null) {
+            mCategorySeeStraightAdapter.clear();
+        }
+        mCategorySeeStraightAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : hazeBusterRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategorySeeStraightAdapter.add(new Action(this, representation));
+        }
+    }
+
     private void fillTools() {
         FiltersManager filtersManager = FiltersManager.getManager();
         ArrayList<FilterRepresentation> filtersRepresentations = filtersManager.getTools();
@@ -876,6 +893,10 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public CategoryAdapter getCategoryHazeBusterAdapter() {
         return mCategoryHazeBusterAdapter;
+    }
+
+    public CategoryAdapter getCategorySeeStraightAdapter() {
+        return mCategorySeeStraightAdapter;
     }
 
     public CategoryAdapter getCategoryVersionsAdapter() {
