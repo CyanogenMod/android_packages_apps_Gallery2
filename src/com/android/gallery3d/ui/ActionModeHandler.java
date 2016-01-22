@@ -285,19 +285,11 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 return null;
             }
             MediaObject mediaObject = manager.getMediaObject(path);
-            if (checkMediaTypeSelectable(mediaObject.getMediaType())) {
+            if (mediaObject != null && mediaObject.isSelectable()) {
                 selected.add(mediaObject);
             }
         }
         return selected;
-    }
-
-    /** Some Media Item is not selectable such as Title item in TimeLine. */
-    private boolean checkMediaTypeSelectable(int type) {
-        if (type == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
-            return false;
-        }
-        return true;
     }
 
     // Menu options are determined by selection set itself.
@@ -452,9 +444,9 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 }
                 int numSelected = selected.size();
                 final boolean canSharePanoramas =
-                        numSelected < MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT;
+                        numSelected <= MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT;
                 final boolean canShare =
-                        numSelected < MAX_SELECTED_ITEMS_FOR_SHARE_INTENT;
+                        numSelected <= MAX_SELECTED_ITEMS_FOR_SHARE_INTENT;
 
                 final GetAllPanoramaSupports supportCallback = canSharePanoramas ?
                         new GetAllPanoramaSupports(selected, jc)
