@@ -98,6 +98,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean mIsShowDialog = false;
     private boolean mErrorDialogShowing = false;
     private KeyguardManager mKeyguardManager;
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener;
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(final Message msg) {
@@ -449,6 +450,8 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             mMediaPlayer = null;
             mCurrentState = STATE_IDLE;
             mTargetState  = STATE_IDLE;
+            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            am.abandonAudioFocus(null);
         }
     }
 
@@ -467,6 +470,9 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         }
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
         try {
             mMediaPlayer = new MediaPlayer();
             if (mAudioSession != 0) {
@@ -616,6 +622,10 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         mOnInfoListener = l;
     }
 
+    public void setOnAudioFocusChangeListener(AudioManager.OnAudioFocusChangeListener l) {
+        mAudioFocusListener = l;
+    }
+
     SurfaceHolder.Callback mSHCallback = new SurfaceHolder.Callback() {
         public void surfaceChanged(SurfaceHolder holder, int format,
                                     int w, int h) {
@@ -681,6 +691,8 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
             if (cleartargetstate) {
                 mTargetState  = STATE_IDLE;
             }
+            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            am.abandonAudioFocus(null);
         }
     }
 

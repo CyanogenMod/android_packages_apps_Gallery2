@@ -139,6 +139,9 @@ public class MoviePlayer implements
     // If the time bar is visible.
     private boolean mShowing;
 
+    // used to track what type of audio focus loss caused the video to pause
+    private boolean mPausedByTransientLossOfFocus = false;
+
     private Virtualizer mVirtualizer;
 
     private MovieActivity mActivityContext;//for dialog and toast context
@@ -218,6 +221,28 @@ public class MoviePlayer implements
         }
     };
 
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    switch (focusChange) {
+                        case AudioManager.AUDIOFOCUS_GAIN:
+                            if (mPausedByTransientLossOfFocus) {
+                                onPlayVideo();
+                                mPausedByTransientLossOfFocus = false;
+                            }
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS:
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                            if (mVideoView != null && mVideoView.isPlaying()) {
+                                onPauseVideo();
+                                mPausedByTransientLossOfFocus = true;
+                            }
+                            break;
+                        default:
+                    }
+                }
+            };
+
     public MoviePlayer(View rootView, final MovieActivity movieActivity,
             IMovieItem info, Bundle savedInstance, boolean canReplay) {
         mContext = movieActivity.getApplicationContext();
@@ -234,6 +259,7 @@ public class MoviePlayer implements
 
         mVideoView.setOnErrorListener(this);
         mVideoView.setOnCompletionListener(this);
+        mVideoView.setOnAudioFocusChangeListener(mAudioFocusListener);
 
         if (mVirtualizer != null) {
             mVirtualizer.release();
@@ -684,17 +710,25 @@ public class MoviePlayer implements
     @Override
     public void onPlayPause() {
         if (mVideoView.isPlaying()) {
-            if (mVideoView.canPause()) {
-                pauseVideo();
-                //set view disabled(play/pause asynchronous processing)
-                mController.setViewEnabled(true);
-                if (mControllerRewindAndForwardExt != null) {
-                    mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
-                            .canStop(), false, false);
-                }
-            }
+            onPauseVideo();
         } else {
-            playVideo();
+            onPlayVideo();
+        }
+    }
+
+    private void onPlayVideo() {
+        playVideo();
+        //set view disabled(play/pause asynchronous processing)
+        mController.setViewEnabled(true);
+        if (mControllerRewindAndForwardExt != null) {
+            mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                    .canStop(), false, false);
+        }
+    }
+
+    private void onPauseVideo() {
+        if (mVideoView.canPause()) {
+            pauseVideo();
             //set view disabled(play/pause asynchronous processing)
             mController.setViewEnabled(true);
             if (mControllerRewindAndForwardExt != null) {
