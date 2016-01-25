@@ -174,7 +174,7 @@ public class SinglePhotoDataAdapter extends TileImageViewAdapter
         Future<?> task = mTask;
         task.cancel();
         task.waitDone();
-        if (task.get() == null) {
+        if (task.get() == null || task.isDone()) {
             mTask = null;
         }
         if (mBitmapScreenNail != null) {
