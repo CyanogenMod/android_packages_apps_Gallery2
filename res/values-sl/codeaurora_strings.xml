@@ -55,7 +55,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_apn">Izberite priljubljeni APN</string>
   <string name="setting">Nastavitve</string>
   <string name="server_timeout_title">"Časovna omejitev strežnika"</string>
-  <string name="server_timeout_message">"Ponovno se poveži na strežnik za predvajanje video posnetka?"</string>
+  <string name="server_timeout_message">"Ponovno se poveži na strežnik za predvajanje videoposnetka?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Povezava je spodletela, poskušanje ponovne povezave na %1$d \u2026"</string>
   <string name="media_controller_live">V živo</string>
   <string name="media_controller_playing">Predvaja se</string>
@@ -71,14 +71,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="delete_all">"Izbriši vse"</string>
   <string name="default_title">"Privzeti naslov"</string>
   <string name="more_image">Več slik</string>
-  <string name="mute_nosupport">Utišanje ni mogoče: video posnetki niso podprti</string>
-  <string name="map_activity_not_found_err">Ni nameščenega programa za zemljevide, da bi se prikazala lokacija.</string>
+  <string name="mute_nosupport">Utišanje ni mogoče: videoposnetki niso podprti</string>
   <string name="bass_boost_strength">Ojačevalec nizkih tonov</string>
   <string name="virtualizer_strength">Učinki 3D</string>
   <string name="audio_effects">Zvočni učinki</string>
   <string name="headset_plug">Priključite slušalke za te učinke.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
-  <string name="fail_trim">Žal te datoteke video posnetka ni mogoče obrezati</string>
+  <string name="fail_trim">Žal te datoteke videoposnetka ni mogoče obrezati</string>
   <string name="no_permission_for_drm">Žal datotek zaščitenih z DRM-om ni mogoče deliti</string>
   <string name="drm_license_info">Podatki licence DRM</string>
 </resources>
