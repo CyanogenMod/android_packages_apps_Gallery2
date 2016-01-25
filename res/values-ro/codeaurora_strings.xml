@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Conectați căști pentru aceste efecte.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Ne pare rău, acest fișier video nu poate fi tăiat</string>
+  <string name="no_permission_for_drm">Scuze, fișierele protejate DRM nu pot fi partajate</string>
+  <string name="drm_license_info">Informații licență DRM</string>
 </resources>
