@@ -287,6 +287,7 @@ public class SettingsActivity extends PreferenceActivity {
     
     private void setApnListener() {
         final String SUBSCRIPTION_KEY = "subscription";
+        final String SUB_ID = "sub_id";
         mApn.setSummary(getDefaultApnName());
         mApn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -299,6 +300,7 @@ public class SettingsActivity extends PreferenceActivity {
                     Log.d("SettingActivity", "Can't get subscription for Exception: " + e);
                 } finally {
                     intent.putExtra(SUBSCRIPTION_KEY, subscription);
+                    intent.putExtra(SUB_ID, subscription);
                 }
                 startActivityForResult(intent, SELECT_APN);
                 return true;
