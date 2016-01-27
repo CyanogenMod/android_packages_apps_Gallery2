@@ -98,7 +98,11 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     private boolean mIsShowDialog = false;
     private boolean mErrorDialogShowing = false;
     private KeyguardManager mKeyguardManager;
-    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener;
+    private AudioFocusChangeListener mAudioFocusListener;
+
+    public interface AudioFocusChangeListener extends AudioManager.OnAudioFocusChangeListener {
+        public void onAudioFocusRequestFailed();
+    }
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(final Message msg) {
@@ -622,7 +626,7 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
         mOnInfoListener = l;
     }
 
-    public void setOnAudioFocusChangeListener(AudioManager.OnAudioFocusChangeListener l) {
+    public void setOnAudioFocusChangeListener(AudioFocusChangeListener l) {
         mAudioFocusListener = l;
     }
 
@@ -778,8 +782,18 @@ public class CodeauroraVideoView extends SurfaceView implements MediaPlayerContr
     public void start() {
         if (mIsShowDialog) return;
         if (isInPlaybackState()) {
-            mMediaPlayer.start();
-            mCurrentState = STATE_PLAYING;
+            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            int result = am.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN);
+            if (result != AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+                mMediaPlayer.start();
+                mCurrentState = STATE_PLAYING;
+            } else {
+                Log.w(TAG, "requestAudioFocus failed.");
+                if (mAudioFocusListener != null) {
+                    mAudioFocusListener.onAudioFocusRequestFailed();
+                }
+            }
         }
         mTargetState = STATE_PLAYING;
     }

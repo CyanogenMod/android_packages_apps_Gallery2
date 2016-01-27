@@ -1372,6 +1372,10 @@ public abstract class PhotoPage extends ActivityState implements
     }
 
     public void playVideo(Activity activity, Uri uri, String title) {
+        if (GalleryUtils.isTelephonyCallInProgress()) {
+            Log.w(TAG, "CS/CSVT Call is in progress, can't play video");
+            return;
+        }
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW)
                     .setDataAndType(uri, "video/*")
