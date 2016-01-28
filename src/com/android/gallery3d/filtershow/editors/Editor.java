@@ -145,10 +145,12 @@ public class Editor implements OnSeekBarChangeListener, SwapButton.SwapButtonLis
         mSeekBar = (SeekBar) lp.findViewById(R.id.primarySeekBar);
         mSeekBar.setOnSeekBarChangeListener(this);
         mSeekBar.setVisibility(View.GONE);
+        editControl.setVisibility(View.GONE);
         if (context.getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT) {
             if (showsSeekBar()) {
-               mSeekBar.setVisibility(View.VISIBLE);
+                mSeekBar.setVisibility(View.VISIBLE);
+                editControl.setVisibility(View.VISIBLE);
             }
         }
 
