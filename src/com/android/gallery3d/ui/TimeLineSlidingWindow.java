@@ -278,6 +278,22 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
         mData[slotIndex % mData.length] = entry;
     }
 
+    private void updateAllTimelineTitleContent(boolean needRequest) {
+        for (int slotIndex = mContentStart, n = mContentEnd; slotIndex < n; ++slotIndex) {
+            AlbumEntry entry = mData[slotIndex % mData.length];
+            if (entry == null) {
+                continue;
+            }
+            if (entry.mediaType == MediaItem.MEDIA_TYPE_TIMELINE_TITLE) {
+                freeSlotContent(slotIndex);
+                prepareSlotContent(slotIndex);
+                if (needRequest) {
+                    requestSlotImage(slotIndex);
+                }
+            }
+        }
+    }
+
     private void updateAllImageRequests() {
         mActiveRequestCount = 0;
         for (int i = mActiveStart, n = mActiveEnd; i < n; ++i) {
@@ -385,21 +401,15 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
     }
 
     public void onSlotSizeChanged(int width, int height) {
-        if (mSlotWidth == width) return;
+        if (mSlotWidth == width) {
+            updateAllTimelineTitleContent(true);
+            return;
+        }
 
         mSlotWidth = width;
 
         if (!mIsActive) return;
-        for (int slotIndex = mContentStart, n = mContentEnd; slotIndex < n; ++slotIndex) {
-            AlbumEntry entry = mData[slotIndex % mData.length];
-            if (entry == null) {
-                continue;
-            }
-            if (entry.mediaType == MediaItem.MEDIA_TYPE_TIMELINE_TITLE) {
-                freeSlotContent(slotIndex);
-                prepareSlotContent(slotIndex);
-            }
-        }
+        updateAllTimelineTitleContent(false);
         updateAllImageRequests();
         updateTextureUploadQueue();
     }
