@@ -410,7 +410,6 @@
         </activity>
         <receiver android:name="org.codeaurora.gallery3d.video.DmReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="streaming.action.WRITE_SETTINGS" />
             </intent-filter>
         </receiver>
