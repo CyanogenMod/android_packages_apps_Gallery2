@@ -221,19 +221,31 @@ public class MoviePlayer implements
         }
     };
 
-    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener =
-            new AudioManager.OnAudioFocusChangeListener() {
+    private CodeauroraVideoView.AudioFocusChangeListener mAudioFocusListener =
+            new CodeauroraVideoView.AudioFocusChangeListener() {
+                @Override
+                public void onAudioFocusRequestFailed() {
+                    Log.d(TAG, "pause video because onAudioFocusRequestFailed.");
+                    onPauseVideo();
+                }
+
+                @Override
                 public void onAudioFocusChange(int focusChange) {
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_GAIN:
-                            if (mPausedByTransientLossOfFocus) {
+                            boolean isTargetPlaying = (mVideoView != null &&
+                                    mVideoView.isTargetPlaying());
+                            Log.d(TAG, "AUDIOFOCUS_GAIN isTargetPlaying : " + isTargetPlaying);
+                            if (mPausedByTransientLossOfFocus || isTargetPlaying) {
                                 onPlayVideo();
                                 mPausedByTransientLossOfFocus = false;
                             }
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            if (mVideoView != null && mVideoView.isPlaying()) {
+                            boolean isPlaying = (mVideoView != null && mVideoView.isPlaying());
+                            Log.d(TAG, "AUDIOFOCUS_LOSS isPlaying : " + isPlaying);
+                            if (isPlaying) {
                                 onPauseVideo();
                                 mPausedByTransientLossOfFocus = true;
                             }
@@ -643,14 +655,21 @@ public class MoviePlayer implements
         doStartVideo(enableFasten, position, duration, true);
     }
 
-    private void playVideo() {
+    private boolean playVideo() {
         if (LOG) {
             Log.v(TAG, "playVideo()");
         }
+
+        if (GalleryUtils.isTelephonyCallInProgress()) {
+            Log.w(TAG, "CS/CSVT Call is in progress, can't play video");
+            return false;
+        }
+
         mTState = TState.PLAYING;
         mVideoView.start();
         mController.showPlaying();
         setProgress();
+        return true;
     }
 
     private void pauseVideo() {
@@ -717,17 +736,19 @@ public class MoviePlayer implements
     }
 
     private void onPlayVideo() {
-        playVideo();
-        //set view disabled(play/pause asynchronous processing)
-        mController.setViewEnabled(true);
-        if (mControllerRewindAndForwardExt != null) {
-            mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
-                    .canStop(), false, false);
+        boolean result = playVideo();
+        if (result) {
+            //set view disabled(play/pause asynchronous processing)
+            mController.setViewEnabled(true);
+            if (mControllerRewindAndForwardExt != null) {
+                mControllerRewindAndForwardExt.showControllerButtonsView(mPlayerExt
+                        .canStop(), false, false);
+            }
         }
     }
 
     private void onPauseVideo() {
-        if (mVideoView.canPause()) {
+        if (mVideoView != null && mVideoView.canPause()) {
             pauseVideo();
             //set view disabled(play/pause asynchronous processing)
             mController.setViewEnabled(true);

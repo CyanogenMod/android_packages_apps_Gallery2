@@ -34,6 +34,8 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -435,5 +437,23 @@ public class GalleryUtils {
         Editor ed = prefs.edit();
         ed.putInt(name, value);
         ed.commit();
+    }
+
+    public static boolean isTelephonyCallInProgress() {
+        TelephonyManager telephonyManager = TelephonyManager.getDefault();
+
+        int count = telephonyManager.getPhoneCount();
+        for (int i = 0; i < count; i++) {
+            int[] subId = SubscriptionManager.getSubId(i);
+            if (subId != null && subId.length > 0) {
+                int telephony_state = telephonyManager.getCallState(subId[0]);
+
+                if (telephony_state == TelephonyManager.CALL_STATE_OFFHOOK
+                        || telephony_state == TelephonyManager.CALL_STATE_RINGING) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
