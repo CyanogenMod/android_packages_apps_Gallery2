@@ -288,10 +288,13 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         if (mInCameraApp) {
             GalleryUtils.startGalleryActivity(mActivity);
         } else if (mActivity.getStateManager().getStateCount() > 1) {
-            mActivity.getToolbar().setNavigationContentDescription(mActivity.getResources().
-                    getString(R.string.drawer_desc));
-            mActivity.getToolbar().setNavigationIcon(R.drawable.drawer);
-            ((GalleryActivity)mActivity).toggleNavDrawer(true);
+            Toolbar toolbar = mActivity.getToolbar();
+            if (toolbar != null) {
+                toolbar.setNavigationContentDescription(
+                        mActivity.getResources().getString(R.string.drawer_desc));
+                toolbar.setNavigationIcon(R.drawable.drawer);
+                ((GalleryActivity) mActivity).toggleNavDrawer(true);
+            }
             super.onBackPressed();
         } else if (mParentMediaSetString != null) {
             Bundle data = new Bundle(getData());
