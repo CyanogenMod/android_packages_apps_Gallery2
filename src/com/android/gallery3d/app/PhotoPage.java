@@ -673,8 +673,10 @@ public abstract class PhotoPage extends ActivityState implements
                  mShareIntent.setType(MenuExecutor.getMimeType(mModel
                     .getMediaItem(0).getMediaType()));
                  mShareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                 String shareTitle = mActivity.getResources().
+                         getString(R.string.share_dialogue_title);
                  mActivity.startActivity(Intent.createChooser(mShareIntent,
-                    "Share via"));
+                    shareTitle));
                  }
                  return;
 
