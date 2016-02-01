@@ -739,9 +739,28 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     private void setupEditors() {
-        mEditorPlaceHolder.setContainer((FrameLayout) findViewById(R.id.editorContainer));
+        FrameLayout editorContainer = (FrameLayout) findViewById(R.id.editorContainer);
+        LayoutParams layoutParams = (LayoutParams) editorContainer.getLayoutParams();
+        // if topMargin is not set in xml, set a default value here.
+        if (layoutParams.topMargin == 0) {
+            layoutParams.topMargin = getActionBarHeight() + getStatusBarHeight();
+            editorContainer.setLayoutParams(layoutParams);
+        }
+
+        mEditorPlaceHolder.setContainer(editorContainer);
         EditorManager.addEditors(mEditorPlaceHolder);
         mEditorPlaceHolder.setOldViews(mImageViews);
+    }
+
+    private int getActionBarHeight() {
+        ActionBar actionBar = getActionBar();
+        return actionBar == null ? 0 : actionBar.getHeight();
+    }
+
+    private int getStatusBarHeight() {
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        return frame.top;
     }
 
     private void setDefaultValues() {
