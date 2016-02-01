@@ -368,7 +368,6 @@ public class TileImageView extends GLView {
 
         if (mTileDecoder != null) {
             mTileDecoder.cancel();
-            mTileDecoder.get();
             mTileDecoder = null;
         }
 
