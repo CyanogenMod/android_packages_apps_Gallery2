@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Koppla in hörlurar för dessa effekter.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Tyvärr, denna videofil kan inte klippas</string>
+  <string name="no_permission_for_drm">Tyvärr, DRM-skyddade filer kan inte delas</string>
+  <string name="drm_license_info">Information om DRM-licens</string>
 </resources>
