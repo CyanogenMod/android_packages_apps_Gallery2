@@ -982,7 +982,8 @@ public class MoviePlayer implements
     }
 
     public boolean isFullBuffer() {
-        if (mStreamingType == STREAMING_RTSP || mStreamingType == STREAMING_SDP) {
+        if (mStreamingType == STREAMING_RTSP || mStreamingType == STREAMING_SDP
+                || mStreamingType == STREAMING_HTTP) {
             return false;
         }
         return true;
