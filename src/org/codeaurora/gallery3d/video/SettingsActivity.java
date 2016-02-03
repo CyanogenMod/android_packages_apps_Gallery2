@@ -2,7 +2,6 @@ package org.codeaurora.gallery3d.video;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -93,68 +92,6 @@ public class SettingsActivity extends PreferenceActivity {
         ab.setTitle(R.string.setting);
     }
     
-    private String getApnKey() {
-        // to find default key
-        String key = null;
-        Cursor cursor = getContentResolver().query(PREFERAPN_URI, new String[] {
-                "_id"
-        }, null, null, Telephony.Carriers.DEFAULT_SORT_ORDER);
-        if (cursor.getCount() > 0 && cursor.moveToFirst()) {
-            key = cursor.getString(COLUMN_ID_INDEX);
-            Log.v("settingActivty", "default apn key = " + key);
-        }
-        cursor.close();
-        return key;
-    }
-    
-    private String getApnName(String key) {
-        String name = null;
-        // to find default proxy
-        String where = getOperatorNumericSelection();
-
-        Cursor cursor = getContentResolver().query(Telephony.Carriers.CONTENT_URI, new String[] {
-                "_id", "name", "apn", "type"
-        }, where, null, Telephony.Carriers.DEFAULT_SORT_ORDER);
-
-        while (cursor != null && cursor.moveToNext()) {
-            String curKey = cursor.getString(cursor.getColumnIndex("_id"));
-            String curName = cursor.getString(cursor.getColumnIndex("name"));
-            if (curKey.equals(key)) {
-                Log.d("rtsp", "getDefaultApnName, find, key=" + curKey + ",curName=" + curName);
-                name = curName;
-                break;
-            }
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-        return name;
-        
-    }
-
-    private String getDefaultApnName() {
-        return getApnName(getApnKey());
-    }
-
-    private String getSelectedApnKey() {
-        String key = null;
-
-        Cursor cursor = getContentResolver().query(PREFERAPN_URI, new String[] {
-                "_id", "name"
-        }, null, null, null);
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            key = cursor.getString(NAME_INDEX);
-        }
-        cursor.close();
-
-        Log.w("rtsp", "getSelectedApnKey key = " + key);
-        if (null == key)
-            return new String("null");
-        return key;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SELECT_APN) {
@@ -288,7 +225,6 @@ public class SettingsActivity extends PreferenceActivity {
     private void setApnListener() {
         final String SUBSCRIPTION_KEY = "subscription";
         final String SUB_ID = "sub_id";
-        mApn.setSummary(getDefaultApnName());
         mApn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(Settings.ACTION_APN_SETTINGS);
