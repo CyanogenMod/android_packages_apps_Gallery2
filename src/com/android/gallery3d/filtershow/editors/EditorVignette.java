@@ -128,8 +128,7 @@ public class EditorVignette extends ParametricEditor {
             }
 
             mImageVignette.setRepresentation(rep);
-            String text = mContext.getString(rep.getTextId());
-            mFilterTitle.setText(text);
+            super.reflectCurrentFilter();
             updateText();
         }
     }

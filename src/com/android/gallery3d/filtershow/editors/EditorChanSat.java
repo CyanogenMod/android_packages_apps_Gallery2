@@ -162,8 +162,7 @@ public class EditorChanSat extends ParametricEditor implements OnSeekBarChangeLi
             value = rep.getValue(FilterChanSatRepresentation.MODE_MAGENTA);
             mMagentaBar.setProgress(value + 100);
             mMagentaValue.setText("" + value);
-            String text = mContext.getString(rep.getTextId());
-            mFilterTitle.setText(text);
+            super.reflectCurrentFilter();
             updateText();
         }
     }
