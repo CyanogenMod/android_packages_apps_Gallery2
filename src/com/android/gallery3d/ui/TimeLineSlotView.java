@@ -297,10 +297,9 @@ public class TimeLineSlotView extends GLView {
 
     private int renderItem(
             GLCanvas canvas, int index, int pass, boolean paperActive) {
-
-        canvas.save(GLCanvas.SAVE_FLAG_ALPHA | GLCanvas.SAVE_FLAG_MATRIX);
         Rect rect = mLayout.getSlotRect(index, mTempRect);
         if (rect == null) return 0;
+        canvas.save(GLCanvas.SAVE_FLAG_ALPHA | GLCanvas.SAVE_FLAG_MATRIX);
         canvas.translate(rect.left, rect.top, 0);
         if (mAnimation != null && mAnimation.isActive()) {
             mAnimation.apply(canvas, index, rect);
