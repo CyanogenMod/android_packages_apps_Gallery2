@@ -37,8 +37,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="loop">"Endlosschleife"</string>
   <string name="single">"Einzeln"</string>
   <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Lautsprecher an</string>
-  <string name="speaker_off">Lautsprecher aus</string>
+  <string name="speaker_on">Lautsprecher AN</string>
+  <string name="speaker_off">Lautsprecher AUS</string>
   <string name="speaker_need_headset">Für diese Funktionen müssen Sie Kopfhörer verwenden.</string>
   <string name="single_track">"Einzelner Titel"</string>
   <string name="input_url">"Geben Sie eine URL ein"</string>
@@ -59,7 +59,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="videoview_error_text_cannot_connect_retry">"Verbindung fehlgeschlagen, neuer Verbindungsversuch zu %1$d\u2026"</string>
   <string name="media_controller_live">Live</string>
   <string name="media_controller_playing">Derzeit läuft</string>
-  <string name="media_controller_connecting">Verbinde\u2026</string>
+  <string name="media_controller_connecting">Wird verbunden\u2026</string>
   <string name="bookmark_add">"Lesezeichen hinzufügen"</string>
   <string name="bookmark_display">"Lesezeichen anzeigen"</string>
   <string name="bookmark_empty">"Keine Lesezeichen"</string>

@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Підключіть навушники для цих ефектів.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Даний відеофайл не може бути обрізаний</string>
+  <string name="no_permission_for_drm">Вибачте, але відправка захищених DRM файлів неможлива</string>
+  <string name="drm_license_info">Відомості про ліцензію DRM</string>
 </resources>
