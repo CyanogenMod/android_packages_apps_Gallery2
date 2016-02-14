@@ -79,4 +79,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="headset_plug">Ühenda kõrvaklapid nende efektide jaoks.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <string name="fail_trim">Vabandust, seda videofaili ei saa kärpida</string>
+  <string name="no_permission_for_drm">Vabandust, DRM kaitstud faile ei saa jagada</string>
+  <string name="drm_license_info">DRM litsensi info</string>
 </resources>

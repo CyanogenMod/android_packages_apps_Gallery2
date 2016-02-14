@@ -73,7 +73,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="more_image">他の画像</string>
   <string name="mute_nosupport">ミュートにできません: 動画がサポートされていません</string>
   <string name="map_activity_not_found_err">位置情報を表示するマップアプリがインストールされていません。</string>
-  <string name="bass_boost_strength">バスブースト</string>
+  <string name="bass_boost_strength">バス\nブースト</string>
   <string name="virtualizer_strength">3D効果</string>
   <string name="audio_effects">オーディオ効果</string>
   <string name="headset_plug">これらの効果を使用するにはヘッドホンを接続してください。</string>
