@@ -37,8 +37,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="loop">"Endlosschleife"</string>
   <string name="single">"Einzeln"</string>
   <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Lautsprecher an</string>
-  <string name="speaker_off">Lautsprecher aus</string>
+  <string name="speaker_on">Lautsprecher AN</string>
+  <string name="speaker_off">Lautsprecher AUS</string>
   <string name="speaker_need_headset">Für diese Funktionen müssen Sie Kopfhörer verwenden.</string>
   <string name="single_track">"Einzelner Titel"</string>
   <string name="input_url">"Geben Sie eine URL ein"</string>
@@ -59,7 +59,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="videoview_error_text_cannot_connect_retry">"Verbindung fehlgeschlagen, neuer Verbindungsversuch zu %1$d\u2026"</string>
   <string name="media_controller_live">Live</string>
   <string name="media_controller_playing">Derzeit läuft</string>
-  <string name="media_controller_connecting">Verbinde\u2026</string>
+  <string name="media_controller_connecting">Verbindung wird hergestellt\u2026</string>
   <string name="bookmark_add">"Lesezeichen hinzufügen"</string>
   <string name="bookmark_display">"Lesezeichen anzeigen"</string>
   <string name="bookmark_empty">"Keine Lesezeichen"</string>
@@ -71,14 +71,14 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="delete_all">"Alle löschen"</string>
   <string name="default_title">"Standardtitel"</string>
   <string name="more_image">Weitere Bilder</string>
-  <string name="mute_nosupport">Stummschalten nicht möglich – das Video wird nicht unterstützt</string>
-  <string name="map_activity_not_found_err">Es ist keine Karten-App installiert, um die Position anzuzeigen.</string>
+  <string name="mute_nosupport">Stummschalten nicht möglich – das Video wird nicht unterstützt.</string>
+  <string name="map_activity_not_found_err">Es ist keine Karten-App installiert, um den Standort anzuzeigen.</string>
   <string name="bass_boost_strength">Bassverstärkung</string>
   <string name="virtualizer_strength">3D-Effekt</string>
   <string name="audio_effects">Audioeffekte</string>
   <string name="headset_plug">Schließen Sie Kopfhörer für diese Effekte an.</string>
   <string name="audio_effects_dialog_title">Snapdragon-Audio+</string>
-  <string name="fail_trim">Diese Videodatei kann nicht gekürzt werden</string>
-  <string name="no_permission_for_drm">Durch DRM geschützte Dateien können leider nicht geteilt werden</string>
+  <string name="fail_trim">Diese Videodatei kann nicht gekürzt werden.</string>
+  <string name="no_permission_for_drm">Durch DRM geschützte Dateien können leider nicht geteilt werden.</string>
   <string name="drm_license_info">DRM-Lizenzinformationen</string>
 </resources>
