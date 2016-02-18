@@ -725,48 +725,48 @@ public class TimeLineSlotView extends GLView {
             ArrayList<MediaItem> mediaItemlist = new ArrayList<MediaItem>();
             if (mRenderer != null) {
                 mediaItemlist = mRenderer.getAllMediaItems();
-                }
+            }
+            if (mHeightList == null) {
+                mHeightList = new ArrayList<Integer>();
+            }
+            if (mMediaSlotMap == null) {
+                mMediaSlotMap = new HashMap<Integer, RectSlot>();
+            }
+            mHeightList.clear();
+            mMediaSlotMap.clear();
             if (mediaItemlist != null && mediaItemlist.size() > 0) {
-                if (mHeightList == null) {
-                    mHeightList =  new ArrayList<Integer>();
-                }
-                if (mMediaSlotMap == null) {
-                    mMediaSlotMap =  new HashMap<Integer, RectSlot>();
-                }
-                mHeightList.clear();
-                mMediaSlotMap.clear();
                 boolean isPrevTitle = false;
                 int j = 0;
                 int col = 0;
-                int totalHieght = 0;
+                int totalHeight = 0;
                 for (int i = 0; i < mediaItemlist.size(); ++i) {
                     MediaItem info = mediaItemlist.get(i);
 
                     if (info.getMediaType() == MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
-                        totalHieght += (mSpec.titleHeight+mSlotGap);
+                        totalHeight += (mSpec.titleHeight + mSlotGap);
                         isPrevTitle = true;
-                        col =0;
+                        col = 0;
                     } else {
                         if (isPrevTitle) {
-                            j =0;
+                            j = 0;
                             isPrevTitle = false;
                         } else {
                             ++j;
                         }
-                        if(j%mUnitCount == 0) {
-                            totalHieght += (mSlotHeight+mSlotGap);
-                            col =0;
+                        if (j % mUnitCount == 0) {
+                            totalHeight += (mSlotHeight + mSlotGap);
+                            col = 0;
                         } else {
-                            col = j%mUnitCount;
+                            col = j % mUnitCount;
                         }
 
                     }
-                    mHeightList.add(totalHieght);
+                    mHeightList.add(totalHeight);
                     if (View.LAYOUT_DIRECTION_RTL == TextUtils
                             .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                        col = mUnitCount - col -1;
+                        col = mUnitCount - col - 1;
                     }
-                    RectSlot rectslot = new RectSlot(info.getMediaType(), i, col, totalHieght);
+                    RectSlot rectslot = new RectSlot(info.getMediaType(), i, col, totalHeight);
                     mMediaSlotMap.put(rectslot.slotIndex, rectslot);
                 }
                 mContentLength = mHeightList.get(mHeightList.size() -1);
