@@ -31,7 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="setp_option_name">Pas</string>
-  <string name="step_option_desc">Personalitza el pas endavant/rebobina ràpid</string>
+  <string name="step_option_desc">Personalitza el salt ràpid endavant/rebobina ràpid</string>
   <string name="setp_option_three_second">3 segons</string>
   <string name="setp_option_six_second">6 segons</string>
   <string name="loop">"Bucle"</string>

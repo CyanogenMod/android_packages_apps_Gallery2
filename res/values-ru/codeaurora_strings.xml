@@ -31,7 +31,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="setp_option_name">Шаг перемотки</string>
-  <string name="step_option_desc">Настройка интервала для быстрого просмотра вперёд или назад</string>
+  <string name="step_option_desc">Настройка интервала для быстрой перемотки вперёд или назад</string>
   <string name="setp_option_three_second">3 секунды</string>
   <string name="setp_option_six_second">6 секунд</string>
   <string name="loop">"Зациклить"</string>
@@ -40,21 +40,21 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_on">Вкл. динамик</string>
   <string name="speaker_off">Выкл. динамик</string>
   <string name="speaker_need_headset">Подключите наушники для использования этой функции.</string>
-  <string name="single_track">"Одна дорожка"</string>
+  <string name="single_track">"Один трек"</string>
   <string name="input_url">"Введите URL"</string>
   <string name="streaming_settings">"Потоковая передача"</string>
-  <string name="next">"След. трек"</string>
-  <string name="previous">"Пред. трек"</string>
-  <string name="buffer_size">Размер буфера</string>
+  <string name="next">"След."</string>
+  <string name="previous">"Пред."</string>
+  <string name="buffer_size">Размер буфера передачи</string>
   <string name="apn">Точка доступа по умолчанию</string>
   <string name="rtp_min_port">Минимальный порт</string>
   <string name="rtp_max_port">Максимальный порт</string>
-  <string name="set_rtp_min_port">Установка минимального номера порта</string>
-  <string name="set_rtp_max_port">Установка максимального номера порта</string>
+  <string name="set_rtp_min_port">Установка мин. номера порта</string>
+  <string name="set_rtp_max_port">Установка макс. номера порта</string>
   <string name="set_buffer_size">Установка размера буфера передачи</string>
   <string name="set_apn">Предпочтительная точка доступа</string>
   <string name="setting">Настройки</string>
-  <string name="server_timeout_title">"Тайм-аут сервера"</string>
+  <string name="server_timeout_title">"Время ожидания сервера"</string>
   <string name="server_timeout_message">"Переподключиться к серверу для воспроизведения видеофайла?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Сбой связи. Повторное подключение к %1$d\u2026"</string>
   <string name="media_controller_live">Прямой эфир</string>
@@ -63,7 +63,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_add">"Добавить закладку"</string>
   <string name="bookmark_display">"Показать закладки"</string>
   <string name="bookmark_empty">"Нет закладок"</string>
-  <string name="bookmark_exist">"Закладка уже существует"</string>
+  <string name="bookmark_exist">"Закладка уже создана"</string>
   <string name="bookmark_add_success">"Закладка добавлена"</string>
   <string name="bookmark_list">"Закладки"</string>
   <string name="bookmark_title">"Название"</string>
@@ -78,7 +78,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="audio_effects">Аудиоэффекты</string>
   <string name="headset_plug">Подключите наушники для использования эффектов.</string>
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
-  <string name="fail_trim">Данный видеофайл не может быть обрезан</string>
-  <string name="no_permission_for_drm">Отправка защищённых DRM файлов невозможна</string>
+  <string name="fail_trim">Этот видеофайл невозможно обрезать</string>
+  <string name="no_permission_for_drm">Отправка файлов с защитой DRM невозможна</string>
   <string name="drm_license_info">Сведения о лицензии DRM</string>
 </resources>
