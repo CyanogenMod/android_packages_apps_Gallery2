@@ -78,7 +78,7 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
         int side = Math.min(width, height) / 6;
         if (!isGridViewShown)
             width = thumbSize;
-        mVideoPlayIcon.draw(canvas, (width - side) / 2, (height - side) / 2, side, side);
+        mVideoPlayIcon.draw(canvas, width / 8 - side / 2, height * 7 / 8 - side / 2, side, side);
     }
 
     protected void drawDrmOverlay(GLCanvas canvas, int width, int height, int Drm_mediaType,
