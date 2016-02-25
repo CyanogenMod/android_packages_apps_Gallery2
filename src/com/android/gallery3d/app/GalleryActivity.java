@@ -21,6 +21,8 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.Manifest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.InputDevice;
@@ -55,6 +57,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     private static final String TAG = "GalleryActivity";
     private Dialog mVersionCheckDialog;
 
+    private static final int PERMISSION_REQUEST_STORAGE = 1;
+    private Bundle mSavedInstanceState;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +74,37 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
 
         setContentView(R.layout.main);
 
-        if (savedInstanceState != null) {
-            getStateManager().restoreFromState(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, PERMISSION_REQUEST_STORAGE);
+        } else {
+            init();
+        }
+    }
+
+    private void init() {
+        if (mSavedInstanceState != null) {
+            getStateManager().restoreFromState(mSavedInstanceState);
         } else {
             initializeByIntent();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+            int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                } else {
+                    finish();
+                }
+            }
         }
     }
 
@@ -233,7 +266,6 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
 
     @Override
     protected void onResume() {
-        Utils.assertTrue(getStateManager().getStateCount() > 0);
         super.onResume();
         if (mVersionCheckDialog != null) {
             mVersionCheckDialog.show();
