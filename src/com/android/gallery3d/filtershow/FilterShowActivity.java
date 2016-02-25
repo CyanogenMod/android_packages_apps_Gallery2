@@ -446,7 +446,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             });
             invalidateOptionsMenu();
         } else {
-            mMenu.clear();
+            if (mMenu != null) {
+                mMenu.clear();
+            }
             final Fragment main = getSupportFragmentManager().findFragmentByTag(
                     MainPanel.FRAGMENT_TAG);
 
