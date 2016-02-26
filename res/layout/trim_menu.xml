@@ -18,6 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true">
+    <ImageView
+        android:id="@+id/exit_trim"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/cancel"/>
     <TextView
         android:id="@+id/start_trim"
         android:layout_marginStart="8dp"
@@ -25,8 +30,9 @@
         android:layout_height="match_parent"
         android:text="@string/save"
         android:textAllCaps="true"
-        android:textSize="14sp"
+        android:layout_gravity="right"
+        android:textSize="16sp"
+        android:textColor="@color/primary_text"
         android:gravity="left|center_vertical"
-        android:drawableStart="@drawable/menu_save_photo"
         android:drawablePadding="8dp" />
 </FrameLayout>
