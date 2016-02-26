@@ -295,13 +295,6 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                         || intent.getBooleanExtra("SingleItemOnly", false);
                 if (!singleItemOnly) {
                     data.putString(PhotoPage.KEY_MEDIA_SET_PATH, albumPath.toString());
-                    // when FLAG_ACTIVITY_NEW_TASK is set, (e.g. when intent is fired
-                    // from notification), back button should behave the same as up button
-                    // rather than taking users back to the home screen
-                    if (intent.getBooleanExtra(PhotoPage.KEY_TREAT_BACK_AS_UP, false)
-                            || ((intent.getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0)) {
-                        data.putBoolean(PhotoPage.KEY_TREAT_BACK_AS_UP, true);
-                    }
                 }
                 data.putBoolean("SingleItemOnly", singleItemOnly);
                 getStateManager().startState(SinglePhotoPage.class, data);
