@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Стъпка</string>
   <string name="step_option_desc">Бърза настройка стъпка напред или назад</string>
   <string name="setp_option_three_second">3 секунди</string>
@@ -49,10 +50,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="apn">Предпочитан APN</string>
   <string name="rtp_min_port">Минимален порт</string>
   <string name="rtp_max_port">Максимален порт</string>
-  <string name="set_rtp_min_port">Задаване мин порт</string>
+  <string name="set_rtp_min_port">Задаване минимален порт</string>
   <string name="set_rtp_max_port">Задаване максимален порт</string>
-  <string name="set_buffer_size">Задаване буферен размер</string>
-  <string name="set_apn">Изберете предпочитан APN</string>
+  <string name="set_buffer_size">Задаване размер на буфера</string>
+  <string name="set_apn">Изберете предпочитана точка за достъп</string>
   <string name="setting">Настройки</string>
   <string name="server_timeout_title">"Време за изчакване на сървъра"</string>
   <string name="server_timeout_message">"Да се свържа ли повторно със сървъра, за да изпълни видеото?"</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Местоположение"</string>
   <string name="delete_all">"Изтрий всички"</string>
   <string name="default_title">"Заглавие по подразбиране"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Още снимки</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Не може да изключите звука: видеото не се поддържа</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Няма инсталирано приложение което да покаже местоположението.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Усилване на баса</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D ефект</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Аудио ефекти</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Включете слушалки за тези ефекти.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Аудио +</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">За съжаление, този видео файл не може да бъде орязан</string>
   <string name="no_permission_for_drm">За съжаление DRM защитените файлове не могат да бъдат споделени</string>
   <string name="drm_license_info">DRM лицензна информация</string>

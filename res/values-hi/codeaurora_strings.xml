@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">चरण</string>
   <string name="step_option_desc">फ़ास्ट फॉरवर्ड/रीवाइंड चरण को मनपसंद बनाएँ</string>
   <string name="setp_option_three_second">3 सेकंड</string>
@@ -70,13 +71,22 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"स्थान"</string>
   <string name="delete_all">"सब हटाएँ"</string>
   <string name="default_title">"डिफ़ॉल्ट शीर्षक"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">और छवियाँ</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">मूक नहीं कर सके : वीडियो समर्थित नहीं है</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">स्थान दर्शाने के लिए कोई नक्शा ऐप स्थापित नहीं है।</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">मंद्र वर्धन</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3डी प्रभाव</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">ऑडियो प्रभाव</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">इन प्रभावों के लिए हेडफ़ोन डालें।</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">स्नैपड्रैगन ऑडियो+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">क्षमा करें, इस वीडियो फ़ाइल को ट्रिम नहीं कर सकते</string>
 </resources>
