@@ -807,9 +807,6 @@ public class MasterImage implements RenderingRequestCaller {
             notifyObservers();
             needsCheckModification = true;
         }
-        if (needsCheckModification) {
-            mActivity.enableSave(hasModifications());
-        }
     }
 
     public float getScaleFactor() {
