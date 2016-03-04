@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Korak</string>
   <string name="step_option_desc">Prilagodi korak za pomik najprej/nazaj</string>
   <string name="setp_option_three_second">3 sekunde</string>
@@ -70,13 +71,22 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Mesto"</string>
   <string name="delete_all">"Izbriši vse"</string>
   <string name="default_title">"Privzeti naslov"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Več slik</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Utišanje ni mogoče: videoposnetki niso podprti</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Ojačevalec nizkih tonov</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">Učinki 3D</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Zvočni učinki</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Priključite slušalke za te učinke.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Žal te datoteke videoposnetka ni mogoče obrezati</string>
   <string name="no_permission_for_drm">Žal datotek zaščitenih z DRM-om ni mogoče deliti</string>
   <string name="drm_license_info">Podatki licence DRM</string>

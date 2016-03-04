@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Krok</string>
   <string name="step_option_desc">Dostosuj stopnie przewijania/cofania</string>
   <string name="setp_option_three_second">3 sekundy</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Lokalizacja"</string>
   <string name="delete_all">"Usuń wszystkie"</string>
   <string name="default_title">"Domyślny tytuł"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Więcej zdjęć</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Nie można wyciszyć: film nieobsługiwany</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Nie ma aplikacji mapy zainstalowanej, aby zobaczyć lokalizację.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Podbicie basu</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">Efekt 3D</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Efekty dźwiękowe</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Podłącz słuchawki dla tych efektów.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Niestety, ten plik wideo nie może zostać przycięty</string>
   <string name="no_permission_for_drm">Wybacz, ale pliki chronione DRM nie mogą być udostępniane</string>
   <string name="drm_license_info">Informacje o licencji DRM</string>

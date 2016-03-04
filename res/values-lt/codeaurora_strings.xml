@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Žingsnis</string>
   <string name="step_option_desc">Tinkinti greito prasukimo / atsukimo žingsnį</string>
   <string name="setp_option_three_second">3 sek.</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Vietovė"</string>
   <string name="delete_all">"Ištrinti visas"</string>
   <string name="default_title">"Numatytasis pavadinimas"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Daugiau vaizdų</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Negalima nutildyti: vaizdo įrašas nepalaikomas</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Nėra įdiegtos žemėlapių programos tam, kad parodyti vietovę.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Žemų tonų išryškinimas</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D efektas</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Garso efektai</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Prijunkite ausines dėl šių efektų.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Atsiprašome, šis vaizdo įrašas negali būti apkarpytas</string>
   <string name="no_permission_for_drm">Atsiprašome, DRM apsaugoti failai negali būti dalijamiesi</string>
   <string name="drm_license_info">DRM licencijos informacija</string>

@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Addım</string>
   <string name="step_option_desc">Sürətli irəli/geri çəkmə aralıqlarını özəlləşdir</string>
   <string name="setp_option_three_second">3 saniyə</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Yer"</string>
   <string name="delete_all">"Hamısını sil"</string>
   <string name="default_title">"Standart başlıq"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Daha çox təsvir</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Səsi kəsilə bilmir : video dəstəklənmir</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Yeri göstərmək üçün quraşdırılmış xəritə tətbiqetməsi yoxdur.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Bas yüksəldici</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D effekti</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Səs effekti</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Bu effektlər üçün qulaqcıq taxın.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Bağışlayın, bu video fayl kəsilə bilməz</string>
   <string name="no_permission_for_drm">Bağışlayın, DRM qorumalı fayllar paylaşıla bilməz</string>
   <string name="drm_license_info">DRM lisenziya məlumatı</string>
