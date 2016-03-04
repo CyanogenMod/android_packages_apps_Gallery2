@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Step</string>
   <string name="step_option_desc">Customize fast forward/rewind step</string>
   <string name="setp_option_three_second">3 seconds</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Location"</string>
   <string name="delete_all">"Delete all"</string>
   <string name="default_title">"Default title"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">More images</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Can not mute : video not supported</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">There is no maps app installed to show the location.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Bass boost</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D effect</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Audio effects</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Plug in headphones for these effects.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Sorry, this video file can not be trimmed</string>
   <string name="no_permission_for_drm">Sorry, DRM protected files cannot be shared</string>
   <string name="drm_license_info">DRM license info</string>

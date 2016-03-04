@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Шаг перемотки</string>
   <string name="step_option_desc">Настройка интервала для быстрой перемотки вперёд или назад</string>
   <string name="setp_option_three_second">3 секунды</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Местоположение"</string>
   <string name="delete_all">"Удалить все"</string>
   <string name="default_title">"Заголовок по умолчанию"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Другие изображения</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Невозможно отключить звук: видеофайл не поддерживается</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Приложение для работы с картами не установлено. Показ местоположения невозможен.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Усил. баса</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D-эффект</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Аудиоэффекты</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Подключите наушники для использования эффектов.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Этот видеофайл невозможно обрезать</string>
   <string name="no_permission_for_drm">Отправка файлов с защитой DRM невозможна</string>
   <string name="drm_license_info">Сведения о лицензии DRM</string>

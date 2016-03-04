@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Βήμα</string>
   <string name="step_option_desc">Προσαρμόστε το βήμα fast forward/rewind</string>
   <string name="setp_option_three_second">3 δευτερόλεπτα</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Τοποθεσία"</string>
   <string name="delete_all">"Διαγραφή όλων"</string>
   <string name="default_title">"Προεπιλεγμένος τίτλος"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Περισσότερες εικόνες</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Δεν είναι δυνατή η σίγαση: το βίντεο δεν υποστηρίζεται</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Δεν υπάρχει εγκατεστημένη καμία εφαρμογή χαρτών ώστε να δείτε την τοποθεσία.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Ενίσχυση μπάσου</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">Εφέ 3D</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Ηχητικά εφέ</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Συνδέστε ακουστικά για αυτά τα εφέ.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Δυστυχώς δεν είναι δυνατή η περικοπή αυτού του αρχείου βίντεο</string>
   <string name="no_permission_for_drm">Συγγνώμη, δεν είναι δυνατή η κοινή χρήση αρχείων με προστασία DRM</string>
   <string name="drm_license_info">Πληροφορίες άδειας DRM</string>

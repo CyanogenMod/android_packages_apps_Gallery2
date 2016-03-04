@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Lépés</string>
   <string name="step_option_desc">Gyors előre-/hátralépés testreszabása</string>
   <string name="setp_option_three_second">3 másodperc</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Hely"</string>
   <string name="delete_all">"Összes törlése"</string>
   <string name="default_title">"Alapértelmezett név"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">További képek</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Nem némítható: videó nem támogatott</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Nincs telepítve térkép alkalmazás a hely megjelenítéséhez.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Mélyhang kiemelése</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D hatás</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Hangeffektek</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Csatlakoztassa a fejhallgatót az effektek használatához.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Sajnáljuk, de ez a videófájl nem vágható</string>
   <string name="no_permission_for_drm">Sajnáljuk, DRM védett fájlok nem oszthatók meg</string>
   <string name="drm_license_info">DRM liszensz információ</string>
