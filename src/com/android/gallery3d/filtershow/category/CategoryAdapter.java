@@ -88,6 +88,19 @@ public class CategoryAdapter extends ArrayAdapter<Action> {
         if (category == MainPanel.DUALCAM) {
             mSelectedPosition = 0;
         }
+
+        if (category == MainPanel.TRUESCANNER) {
+            mSelectedPosition = 0;
+        }
+
+        if (category == MainPanel.HAZEBUSTER) {
+            mSelectedPosition = 0;
+        }
+
+        if (category == MainPanel.SEESTRAIGHT) {
+            mSelectedPosition = 0;
+        }
+
         if (category == MainPanel.VERSIONS) {
             mAddButtonText = getContext().getString(R.string.filtershow_add_button_versions);
         }

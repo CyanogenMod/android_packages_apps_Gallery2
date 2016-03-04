@@ -1187,4 +1187,8 @@ CHAR LIMIT = NONE] -->
     <string name="text_makeup_trimface">Trimface</string>
     <string name="text_makeup_bigeye">Bigeye</string>
     <string name="drawer_desc" translatable="false">drawer</string>
+    <string name="truescanner_normal">Normal</string>
+    <string name="truescanner_white">WhiteBoard</string>
+    <string name="hazebuster_acts">Haze Buster</string>
+    <string name="seestraight_acts">See Straight</string>
 </resources>
