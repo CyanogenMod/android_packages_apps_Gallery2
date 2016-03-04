@@ -1034,6 +1034,8 @@ public class ImageShow extends View implements OnGestureListener,
     public void scaleImage(boolean isScaled, Context context) {
         float scale = 1.0f;
         Bitmap bitmap = MasterImage.getImage().getOriginalBitmapLarge();
+        if(bitmap == null)
+            return;
         int bitmapWidth = bitmap.getWidth();
         int bitmapheight = bitmap.getHeight();
 

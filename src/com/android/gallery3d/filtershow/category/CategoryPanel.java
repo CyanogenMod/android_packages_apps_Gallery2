@@ -88,6 +88,26 @@ public class CategoryPanel extends Fragment implements View.OnClickListener {
                     mAdapter.initializeSelection(MainPanel.DUALCAM);
                 }
                 activity.updateCategories();
+            }
+            case MainPanel.TRUESCANNER: {
+                mAdapter = activity.getCategoryTrueScannerAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.TRUESCANNER);
+                }
+                break;
+            }
+            case MainPanel.HAZEBUSTER: {
+                mAdapter = activity.getCategoryHazeBusterAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.HAZEBUSTER);
+                }
+                break;
+            }
+            case MainPanel.SEESTRAIGHT: {
+                mAdapter = activity.getCategorySeeStraightAdapter();
+                if (mAdapter != null) {
+                    mAdapter.initializeSelection(MainPanel.SEESTRAIGHT);
+                }
                 break;
             }
             case MainPanel.VERSIONS: {

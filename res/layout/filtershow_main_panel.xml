@@ -110,6 +110,36 @@
                     android:scaleType="centerInside"
                     android:visibility="gone"
                     android:src="@drawable/dualcamera"/>
+
+           <ImageButton
+                android:id="@+id/trueScannerButton"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:padding="2dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/truescanner"/>
+
+           <ImageButton
+                android:id="@+id/hazeBusterButton"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:padding="2dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/hazebuster"/>
+
+            <ImageButton
+                android:id="@+id/seeStraightButton"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/filtershow_button_background"
+                android:padding="2dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/seestraight"/>
         </LinearLayout>
 
         <LinearLayout
@@ -179,6 +209,36 @@
                 android:textColor="#ffffff"
                 android:textSize="@dimen/edit_main_font"
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvTrueScanner"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/trueScanner"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/edit_main_font" />
+
+            <TextView
+                android:id="@+id/tvHazeBuster"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/hazeBuster"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/edit_main_font" />
+
+            <TextView
+                android:id="@+id/tvSeeStraight"
+                android:layout_width="@dimen/thumbnail_size"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/seeStraight"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/edit_main_font" />
         </LinearLayout>
     </com.android.gallery3d.filtershow.CenteredLinearLayout>
 </LinearLayout>

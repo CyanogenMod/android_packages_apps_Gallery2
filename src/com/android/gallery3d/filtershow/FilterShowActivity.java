@@ -94,6 +94,7 @@ import com.android.gallery3d.filtershow.editors.EditorDualCamFusion;
 import com.android.gallery3d.filtershow.editors.EditorManager;
 import com.android.gallery3d.filtershow.editors.EditorPanel;
 import com.android.gallery3d.filtershow.editors.ImageOnlyEditor;
+import com.android.gallery3d.filtershow.editors.TrueScannerEditor;
 import com.android.gallery3d.filtershow.filters.FilterDrawRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterMirrorRepresentation;
 import com.android.gallery3d.filtershow.filters.FilterRepresentation;
@@ -102,6 +103,7 @@ import com.android.gallery3d.filtershow.filters.FilterUserPresetRepresentation;
 import com.android.gallery3d.filtershow.filters.FiltersManager;
 import com.android.gallery3d.filtershow.filters.ImageFilter;
 import com.android.gallery3d.filtershow.filters.SimpleMakeupImageFilter;
+import com.android.gallery3d.filtershow.filters.TrueScannerActs;
 import com.android.gallery3d.filtershow.history.HistoryItem;
 import com.android.gallery3d.filtershow.history.HistoryManager;
 import com.android.gallery3d.filtershow.imageshow.ImageShow;
@@ -181,6 +183,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private CategoryAdapter mCategoryBordersAdapter = null;
     private CategoryAdapter mCategoryGeometryAdapter = null;
     private CategoryAdapter mCategoryFiltersAdapter = null;
+    private CategoryAdapter mCategoryTrueScannerAdapter = null;
+    private CategoryAdapter mCategoryHazeBusterAdapter = null;
+    private CategoryAdapter mCategorySeeStraightAdapter = null;
     private CategoryAdapter mCategoryVersionsAdapter = null;
     private CategoryAdapter mCategoryMakeupAdapter = null;
     private CategoryAdapter mCategoryDualCamAdapter = null;
@@ -571,6 +576,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         fillBorders();
         fillTools();
         fillEffects();
+        fillTrueScanner();
+        fillHazeBuster();
+        fillSeeStraight();
         fillVersions();
         fillMakeup();
         fillDualCamera();
@@ -693,6 +701,51 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 representation.setName(getString(representation.getTextId()));
             }
             mCategoryDualCamAdapter.add(new Action(this, representation));
+        }
+    }
+
+    private void fillTrueScanner() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> trueScannerRepresentations = filtersManager.getTrueScanner();
+        if (mCategoryTrueScannerAdapter != null) {
+            mCategoryTrueScannerAdapter.clear();
+        }
+        mCategoryTrueScannerAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : trueScannerRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategoryTrueScannerAdapter.add(new Action(this, representation));
+        }
+    }
+
+    private void fillHazeBuster() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> hazeBusterRepresentations = filtersManager.getHazeBuster();
+        if (mCategoryHazeBusterAdapter != null) {
+            mCategoryHazeBusterAdapter.clear();
+        }
+        mCategoryHazeBusterAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : hazeBusterRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategoryHazeBusterAdapter.add(new Action(this, representation));
+        }
+    }
+
+    private void fillSeeStraight() {
+        FiltersManager filtersManager = FiltersManager.getManager();
+        ArrayList<FilterRepresentation> hazeBusterRepresentations = filtersManager.getSeeStraight();
+        if (mCategorySeeStraightAdapter != null) {
+            mCategorySeeStraightAdapter.clear();
+        }
+        mCategorySeeStraightAdapter = new CategoryAdapter(this);
+        for (FilterRepresentation representation : hazeBusterRepresentations) {
+            if (representation.getTextId() != 0) {
+                representation.setName(getString(representation.getTextId()));
+            }
+            mCategorySeeStraightAdapter.add(new Action(this, representation));
         }
     }
 
@@ -832,6 +885,18 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public CategoryAdapter getCategoryFiltersAdapter() {
         return mCategoryFiltersAdapter;
+    }
+
+    public CategoryAdapter getCategoryTrueScannerAdapter() {
+        return mCategoryTrueScannerAdapter;
+    }
+
+    public CategoryAdapter getCategoryHazeBusterAdapter() {
+        return mCategoryHazeBusterAdapter;
+    }
+
+    public CategoryAdapter getCategorySeeStraightAdapter() {
+        return mCategorySeeStraightAdapter;
     }
 
     public CategoryAdapter getCategoryVersionsAdapter() {
@@ -1646,10 +1711,14 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void showDefaultImageView() {
-        mEditorPlaceHolder.hide();
-        mImageShow.setVisibility(View.VISIBLE);
-        MasterImage.getImage().setCurrentFilter(null);
-        MasterImage.getImage().setCurrentFilterRepresentation(null);
+        if(mEditorPlaceHolder != null)
+            mEditorPlaceHolder.hide();
+        if(mImageShow != null)
+            mImageShow.setVisibility(View.VISIBLE);
+        if(MasterImage.getImage() != null) {
+            MasterImage.getImage().setCurrentFilter(null);
+            MasterImage.getImage().setCurrentFilterRepresentation(null);
+        }
     }
 
     public void backToMain() {
