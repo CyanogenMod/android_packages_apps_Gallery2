@@ -25,9 +25,9 @@
         android:drawablePadding="24dp"
         android:drawableStart="@drawable/done"
         android:gravity="center_vertical"
-        android:paddingBottom="14dp"
+        android:paddingBottom="15dp"
         android:text="@string/save"
         android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>
