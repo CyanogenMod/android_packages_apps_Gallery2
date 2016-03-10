@@ -62,7 +62,6 @@ public class ExtensionHelper {
         }
         if (playlist == true) {
             group.addHooker(new MovieListHooker()); // add it for common feature.
-            group.addHooker(new StepOptionSettingsHooker());
         }
         if (speaker == true) {
             group.addHooker(new SpeakerHooker());
