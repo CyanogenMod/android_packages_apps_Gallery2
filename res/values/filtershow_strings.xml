@@ -73,15 +73,17 @@
     <!--  Exit Dialog -->
 
     <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
-    <string name="unsaved">There are unsaved changes to this image.</string>
+    <string name="unsaved">Discrad the changes you\'ve made to this image?</string>
     <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
-    <string name="save_before_exit">Do you want to save before exiting?</string>
+    <string name="save_before_exit">Discard changes?</string>
     <!--  String displayed when saving and exiting editor [CHAR LIMIT=NONE] -->
     <string name="save_and_exit">Save and Exit</string>
+    <!--  String displayed when discard editor [CHAR LIMIT=NONE] -->
+    <string name="discard">Discard</string>
     <!--  String displayed when saving and exiting editor [CHAR LIMIT=NONE] -->
     <string name="save_and_processing">Processing full resolution image...</string>
     <!--  String displayed when exiting editor[CHAR LIMIT=NONE] -->
-    <string name="exit">Exit</string>
+    <string name="exit">Cancel</string>
 
     <!--  History Panel -->
 
