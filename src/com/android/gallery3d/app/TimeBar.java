@@ -48,7 +48,7 @@ public class TimeBar extends View {
     }
 
     // Padding around the scrubber to increase its touch target
-    private static final int SCRUBBER_PADDING_IN_DP = 10;
+    private static final int SCRUBBER_PADDING_IN_DP = 3;
 
     // The total padding, top plus bottom
     private static final int V_PADDING_IN_DP = 30;
@@ -106,7 +106,7 @@ public class TimeBar extends View {
         mProgressPaint = new Paint();
         mProgressPaint.setColor(0xFF808080);
         mPlayedPaint = new Paint();
-        mPlayedPaint.setColor(0xFFFFFFFF);
+        mPlayedPaint.setColor(0xFF4F92E9);
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float textSizeInPx = metrics.density * TEXT_SIZE_IN_DP;
