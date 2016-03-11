@@ -48,7 +48,7 @@
     <!-- no translation found for history_original (150973253194312841) -->
     <skip />
     <string name="imageState" msgid="8632586742752891968">"Efecte aplicate"</string>
-    <string name="compare_original" msgid="8140838959007796977">"Comparați"</string>
+    <string name="compare_original" msgid="8140838959007796977">"Comparaţi"</string>
     <string name="apply_effect" msgid="1218288221200568947">"Aplicaţi"</string>
     <string name="reset_effect" msgid="7712605581024929564">"Resetaţi"</string>
     <string name="aspect" msgid="4025244950820813059">"Aspect"</string>
@@ -67,8 +67,8 @@
     <string name="exposure" msgid="6526397045949374905">"Expunere"</string>
     <string name="sharpness" msgid="6463103068318055412">"Claritate"</string>
     <string name="contrast" msgid="2310908487756769019">"Contrast"</string>
-    <string name="vibrance" msgid="3326744578577835915">"Vibranță"</string>
-    <string name="saturation" msgid="7026791551032438585">"Saturație"</string>
+    <string name="vibrance" msgid="3326744578577835915">"Vibranţă"</string>
+    <string name="saturation" msgid="7026791551032438585">"Saturaţie"</string>
     <string name="bwfilter" msgid="8927492494576933793">"Filtru A/N"</string>
     <string name="wbalance" msgid="6346581563387083613">"Culoare auto."</string>
     <string name="hue" msgid="6231252147971086030">"Tonalitate"</string>
@@ -81,7 +81,7 @@
     <string name="vignette_saturation" msgid="1617055207565719771">"Saturație"</string>
     <string name="vignette_contrast" msgid="955732121756799897">"Contrast"</string>
     <string name="vignette_falloff" msgid="690918055030064199">"Atenuare"</string>
-    <string name="redeye" msgid="4508883127049472069">"Ochi roșii"</string>
+    <string name="redeye" msgid="4508883127049472069">"Ochi roşii"</string>
     <string name="imageDraw" msgid="6918552177844486656">"Desenați"</string>
     <string name="straighten" msgid="26025591664983528">"Îndreptare"</string>
     <string name="crop" msgid="5781263790107850771">"Decupare"</string>
@@ -106,7 +106,7 @@
     <string name="editor_grad_style" msgid="2168414479007745179">"Stil"</string>
     <string name="editor_grad_new" msgid="4857265951369377379">"nou"</string>
     <string name="curves_channel_rgb" msgid="7909209509638333690">"RGB"</string>
-    <string name="curves_channel_red" msgid="4199710104162111357">"Roșu"</string>
+    <string name="curves_channel_red" msgid="4199710104162111357">"Roşu"</string>
     <string name="curves_channel_green" msgid="3733003466905031016">"Verde"</string>
     <string name="curves_channel_blue" msgid="9129211507395079371">"Albastru"</string>
     <string name="draw_style" msgid="2036125061987325389">"Stil"</string>

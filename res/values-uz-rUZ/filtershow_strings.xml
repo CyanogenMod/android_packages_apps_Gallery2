@@ -25,8 +25,8 @@
     <string name="download_failure" msgid="5923323939788582895">"Rasmni ko‘chirib olishda xatolik yuz berdi. Tarmoq uzilib qoldi."</string>
     <string name="original" msgid="3524493791230430897">"Asl"</string>
     <string name="borders" msgid="2067345080568684614">"Chegaralar"</string>
-    <string name="custom_border" msgid="8679893731790931871">"Maxsus"</string>
-    <string name="filtershow_undo" msgid="6781743189243585101">"Bekor qilish"</string>
+    <string name="custom_border" msgid="8679893731790931871">"Boshqa"</string>
+    <string name="filtershow_undo" msgid="6781743189243585101">"Qaytarish"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Oldinga o‘tkazish"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Foydalanilgan effektlarni ko‘rsatish"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Bajarilgan effeklarni yashirish"</string>
@@ -59,7 +59,7 @@
     <string name="aspect5to7_effect" msgid="5122395569059384741">"5:7"</string>
     <string name="aspect7to5_effect" msgid="5780001758108328143">"7:5"</string>
     <string name="aspect9to16_effect" msgid="7740468012919660728">"16:9"</string>
-    <string name="aspectNone_effect" msgid="6263330561046574134">"Qo‘lda"</string>
+    <string name="aspectNone_effect" msgid="6263330561046574134">"Hech qaysi"</string>
     <!-- no translation found for aspectOriginal_effect (5678516555493036594) -->
     <skip />
     <string name="Fixed" msgid="8017376448916924565">"Tuzatilgan"</string>
@@ -88,7 +88,7 @@
     <string name="rotate" msgid="2796802553793795371">"Burish"</string>
     <string name="mirror" msgid="5482518108154883096">"Oyna"</string>
     <string name="negative" msgid="6998313764388022201">"Negativ"</string>
-    <string name="none" msgid="6633966646410296520">"Asl"</string>
+    <string name="none" msgid="6633966646410296520">"Hech qaysi"</string>
     <string name="edge" msgid="7036064886242147551">"Qirralari"</string>
     <string name="kmeans" msgid="2080952022674981541">"Posterlash"</string>
     <string name="downsample" msgid="3552938534146980104">"Maydalashtirish"</string>
@@ -141,7 +141,7 @@
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"Gistogramma"</string>
     <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"EXIF ma’lumotlar"</string>
     <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Tayyor namuna"</string>
-    <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Qo‘shish"</string>
+    <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Versiyasi"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"Asl nuxsasi"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"Joriy"</string>
     <string name="filtershow_exif_model" msgid="3543206476046267466">"Modeli"</string>

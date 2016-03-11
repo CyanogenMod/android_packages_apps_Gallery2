@@ -28,7 +28,7 @@
     <string name="custom_border" msgid="8679893731790931871">"કસ્ટમ"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"પૂર્વવત્ કરો"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"ફરી કરો"</string>
-    <string name="show_imagestate_panel" msgid="281932769701043015">"લાગુ પ્રભાવો બતાવો"</string>
+    <string name="show_imagestate_panel" msgid="281932769701043015">"લાગુ પ્રભાવો દર્શાવો"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"લાગુ પ્રભાવો છુપાવો"</string>
     <string name="export_image" msgid="3202835713172222134">"નિકાસ કરો"</string>
     <string name="print_image" msgid="1942989216591621413">"છાપો"</string>

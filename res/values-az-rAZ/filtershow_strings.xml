@@ -24,8 +24,8 @@
     <string name="setting_wallpaper" msgid="4679087092300036632">"Divar kağızı ayarlanır"</string>
     <string name="download_failure" msgid="5923323939788582895">"Şəkil endirilə bilmədi. Şəbəkə əlçatmazdır."</string>
     <string name="original" msgid="3524493791230430897">"Original"</string>
+    <string name="saved" msgid="6678827180814174711">"Yadda saxlanılmış"</string>
     <string name="borders" msgid="2067345080568684614">"Sərhədlər"</string>
-    <string name="custom_border" msgid="8679893731790931871">"Fərdi"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Ləğv edin"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"Yenidən edin"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Tətbiq Olunmuş Effektləri Göstər"</string>
@@ -119,7 +119,7 @@
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"Marker"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Sıçratma"</string>
     <string name="draw_clear" msgid="6728155515454921052">"Sil"</string>
-    <string name="color_border_size" msgid="1086895807615869290">"Qalınlıq"</string>
+    <string name="color_border_size" msgid="8745307483517793073">"qalınlıq"</string>
     <string name="color_border_corner_size" msgid="7637235159438869979">"Künc Ölçüsü"</string>
     <string name="color_border_color" msgid="8765458414425980711">"Rəng"</string>
     <string name="color_border_clear" msgid="4418261191091091722">"Təmizlə"</string>

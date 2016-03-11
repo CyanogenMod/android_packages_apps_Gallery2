@@ -21,12 +21,12 @@
     <string name="cannot_edit_original" msgid="5890293845882609388">"نسخه اصلی را نمی‌توان ویرایش کرد"</string>
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
-    <string name="setting_wallpaper" msgid="4679087092300036632">"تنظیم کاغذدیواری"</string>
+    <string name="setting_wallpaper" msgid="4679087092300036632">"تنظیم تصویر زمینه"</string>
     <string name="download_failure" msgid="5923323939788582895">"دانلود عکس انجام نشد. شبکه در دسترس نیست."</string>
     <string name="original" msgid="3524493791230430897">"اصلی"</string>
     <string name="borders" msgid="2067345080568684614">"حاشیه‌ها"</string>
     <string name="custom_border" msgid="8679893731790931871">"سفارشی"</string>
-    <string name="filtershow_undo" msgid="6781743189243585101">"واگرد"</string>
+    <string name="filtershow_undo" msgid="6781743189243585101">"لغو عمل"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"انجام مجدد"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"نمایش جلوه‌های اعمال شده"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"پنهان کردن جلوه‌های اعمال شده"</string>
@@ -59,7 +59,7 @@
     <string name="aspect5to7_effect" msgid="5122395569059384741">"۵:۷"</string>
     <string name="aspect7to5_effect" msgid="5780001758108328143">"۷:۵"</string>
     <string name="aspect9to16_effect" msgid="7740468012919660728">"۱۶:۹"</string>
-    <string name="aspectNone_effect" msgid="6263330561046574134">"هیچ‌کدام"</string>
+    <string name="aspectNone_effect" msgid="6263330561046574134">"هیچکدام"</string>
     <!-- no translation found for aspectOriginal_effect (5678516555493036594) -->
     <skip />
     <string name="Fixed" msgid="8017376448916924565">"ثابت"</string>
@@ -75,7 +75,7 @@
     <string name="shadow_recovery" msgid="3928572915300287152">"سایه‌ها"</string>
     <string name="highlight_recovery" msgid="8262208470735204243">"هایلایت"</string>
     <string name="curvesRGB" msgid="915010781090477550">"نمودارها"</string>
-    <string name="vignette" msgid="934721068851885390">"حاشیه تاریک"</string>
+    <string name="vignette" msgid="934721068851885390">"محو لبه‌ها"</string>
     <string name="vignette_main" msgid="6046495605390665423">"حاشیه تاریک"</string>
     <string name="vignette_exposure" msgid="6862058227309534094">"نوردهی"</string>
     <string name="vignette_saturation" msgid="1617055207565719771">"اشباع رنگ"</string>
@@ -88,7 +88,7 @@
     <string name="rotate" msgid="2796802553793795371">"چرخش"</string>
     <string name="mirror" msgid="5482518108154883096">"معکوس کردن"</string>
     <string name="negative" msgid="6998313764388022201">"نگاتیو"</string>
-    <string name="none" msgid="6633966646410296520">"هیچ‌کدام"</string>
+    <string name="none" msgid="6633966646410296520">"هیچکدام"</string>
     <string name="edge" msgid="7036064886242147551">"لبه‌ها"</string>
     <string name="kmeans" msgid="2080952022674981541">"چندرنگی‌"</string>
     <string name="downsample" msgid="3552938534146980104">"کاهش وضوح"</string>
