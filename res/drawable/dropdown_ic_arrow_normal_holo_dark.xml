@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+  Copyright (c) 2016, The Linux Foundation. All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are
@@ -30,10 +31,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="72.0"
-    android:viewportHeight="72.0">
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0">
     <path
+        android:fillAlpha="0.54"
         android:fillColor="#FF000000"
-        android:pathData="M54,48c-2.4,0 -4.5,0.9 -6.1,2.4L26.7,38.3c0.2,-0.8 0.3,-1.5 0.3,-2.4c0,-0.8 -0.1,-1.6 -0.3,-2.4l21.2,-12.1c1.6,1.7 3.7,2.6 6.1,2.6c5,0 9,-4 9,-9s-4,-9 -9,-9s-9,4 -9,9c0,0.8 0.1,1.6 0.3,2.3L24.1,29.4C22.5,27.9 20.4,27 18,27c-5,0 -9,4 -9,9s4,9 9,9c2.4,0 4.5,-0.9 6.1,-2.4l21.2,12.1C45.1,55.4 45,56.2 45,57c0,5 4,9 9,9s9,-4 9,-9S59,48 54,48z"
-        android:fillAlpha="0.54"/>
+        android:pathData="M0,5h24l-12,14L0,5z" />
 </vector>

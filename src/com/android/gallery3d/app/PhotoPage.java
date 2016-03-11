@@ -914,7 +914,7 @@ public abstract class PhotoPage extends ActivityState implements
         mShowBars = true;
         mOrientationManager.unlockOrientation();
         mActionBar.show();
-        mActivity.getGLRoot().setLightsOutMode(false);
+        mActivity.getGLRoot().setLightsOutMode(true);
         refreshHidingMessage();
         refreshBottomControlsWhenReady();
     }
