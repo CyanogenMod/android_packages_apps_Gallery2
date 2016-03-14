@@ -19,7 +19,7 @@
     android:id="@+id/mainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212121" >
+    android:background="@color/background_screen" >
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 xmlns:custom="http://schemas.android.com/apk/res/com.android.gallery3d"
                 android:id="@+id/mainPanel"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:orientation="vertical"
                 custom:max_width="650dip" >
