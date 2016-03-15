@@ -69,7 +69,7 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity android:name="com.android.gallery3d.app.MovieActivity"
                 android:label="@string/movie_view_label"
-                android:configChanges="orientation|keyboardHidden|screenSize">
+                android:configChanges="orientation|keyboardHidden|screenSize|keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
