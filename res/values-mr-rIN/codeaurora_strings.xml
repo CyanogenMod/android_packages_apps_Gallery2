@@ -31,13 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">पायरी</string>
+  <string name="step_option_desc">फास्ट फॉरवर्ड/रिवाईंड पायरी सानुकूल करा</string>
+  <string name="setp_option_three_second">3 सेकंद</string>
+  <string name="setp_option_six_second">6 सेकंद</string>
+  <string name="loop">"&quot;लूप&quot;"</string>
+  <string name="single">"&quot;एकल&quot;"</string>
+  <string name="stereo">"&quot;स्टिरिओ&quot;"</string>
+  <string name="speaker_on">स्पीकर चालू</string>
+  <string name="speaker_off">स्पीकर बंद</string>
+  <string name="speaker_need_headset">हे वैशिष्ट्य वापरण्यासाठी हेडफोन्स प्लग इन करा.</string>
+  <string name="single_track">"&quot;एक ट्रॅक&quot;"</string>
+  <string name="input_url">"&quot;URL लिहा&quot;"</string>
+  <string name="streaming_settings">"&quot;स्ट्रीमिंग सेटिंग्ज&quot;"</string>
+  <string name="next">"&quot;पुढील&quot;"</string>
+  <string name="previous">"&quot;मागील&quot;"</string>
+  <string name="buffer_size">बफर आकारमान</string>
+  <string name="apn">प्राधान्यीकृत APN</string>
+  <string name="rtp_min_port">किमान पोर्ट</string>
+  <string name="rtp_max_port">कमाल पोर्ट</string>
+  <string name="set_rtp_min_port">किमान पोर्ट सेट करा</string>
+  <string name="set_rtp_max_port">कमाल पोर्ट सेट करा</string>
+  <string name="set_buffer_size">बफर आकारमान सेट करा</string>
+  <string name="set_apn">प्राधान्यीकृत APN निवडा</string>
+  <string name="setting">सेटिंग्ज</string>
+  <string name="server_timeout_title">"&quot;सर्व्हरचा वेळ संपला&quot;"</string>
+  <string name="server_timeout_message">"&quot;व्हिडिओ प्ले करण्यासाठी सर्व्हरला रिकनेक्ट करायचा?&quot;"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"&quot;कनेक्शन अपयशी झाले, सह कनेक्ट करण्याचा प्रयत्न करत आहे %1$d\u2026&quot;"</string>
+  <string name="media_controller_live">लाईव</string>
+  <string name="media_controller_playing">प्ले करत आहे</string>
+  <string name="media_controller_connecting">कनेक्ट करीत आहे...</string>
+  <string name="bookmark_add">"&quot;बुकमार्क जोडा&quot;"</string>
+  <string name="bookmark_display">"&quot;वाचनखुणा दर्शवा&quot;"</string>
+  <string name="bookmark_empty">"&quot;वाचनखुणा नाहीत&quot;"</string>
+  <string name="bookmark_exist">"&quot;वाचनखुण आधीच अस्तित्वात आहे&quot;"</string>
+  <string name="bookmark_add_success">"&quot;वाचनखुण जोडली&quot;"</string>
+  <string name="bookmark_list">"&quot;वाचनखुणा&quot;"</string>
+  <string name="bookmark_title">"&quot;शीर्षक&quot;"</string>
+  <string name="bookmark_location">"&quot;स्थान&quot;"</string>
+  <string name="delete_all">"&quot;सर्व हटवा&quot;"</string>
+  <string name="default_title">"&quot;डिफॉल्ट शीर्षक&quot;"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">अधिक प्रतिमा</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">निःशब्द करू शकत नाही : व्हिडिओ समर्थित नाही</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">स्थान दाखवण्यासाठी नकाशे स्थापित केलेले नाहीत.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">बास बूस्ट</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">3D प्रभाव</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">ऑडिओ प्रभाव</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <string name="headset_plug">ह्या प्रभावांसाठी हेडफोन्स प्लग इन करा.</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">Snapdragon ऑडिओ+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">क्षमस्व, ही व्हिडिओ फाइल ट्रिम करता येत नाही</string>
+  <string name="no_permission_for_drm">क्षमस्व, DRM संरक्षित फाइल्स शेअर करता येत नाहीत</string>
+  <string name="drm_license_info">DRM लायसन्स माहिती</string>
 </resources>
