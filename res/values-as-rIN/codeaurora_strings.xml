@@ -31,13 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">পৰ্যায়</string>
+  <string name="step_option_desc">ফাষ্ট ফৰৱাৰ্ড/ ৰিৱাইণ্ড পদক্ষেপ অনুকূলিত কৰক</string>
+  <string name="setp_option_three_second">3 চেকেণ্ড</string>
+  <string name="setp_option_six_second">6 চেকেণ্ড</string>
+  <string name="loop">"&quot;লুপ&quot;"</string>
+  <string name="single">"&quot;একক&quot;"</string>
+  <string name="stereo">"&quot;ষ্টেৰীঅ&quot;"</string>
+  <string name="speaker_on">স্পিকাৰ অন</string>
+  <string name="speaker_off">স্পিকাৰ অফ</string>
+  <string name="speaker_need_headset">এই বৈশিষ্ট্যটো ব্যৱহাৰ কৰিবলৈ হেডফোন প্লাগ ইন কৰক</string>
+  <string name="single_track">"&quot;একক ট্ৰেক&quot;"</string>
+  <string name="input_url">"“URL প্ৰৱিষ্ট কৰক”"</string>
+  <string name="streaming_settings">"&quot;ষ্ট্ৰিমিং ছেটিংছ&quot;"</string>
+  <string name="next">"&quot;পৰৱৰ্তী&quot;"</string>
+  <string name="previous">"&quot;পূৰ্বৱৰ্তী&quot;"</string>
+  <string name="buffer_size">বাফাৰৰ আকাৰ</string>
+  <string name="apn">অগ্ৰাধিকাৰপ্ৰাপ্ত APN</string>
+  <string name="rtp_min_port">মিন পোৰ্ট</string>
+  <string name="rtp_max_port">মেক্স পোৰ্ট</string>
+  <string name="set_rtp_min_port">মিন পোৰ্ট ছেট কৰক</string>
+  <string name="set_rtp_max_port">মেক্স পোৰ্ট ছেট কৰক</string>
+  <string name="set_buffer_size">বাফাৰৰ আকাৰ ছেট কৰক</string>
+  <string name="set_apn">অগ্ৰাধিকাৰপ্ৰাপ্ত APN ছেট কৰক</string>
+  <string name="setting">ছেটিংছ</string>
+  <string name="server_timeout_title">"&quot;ছাৰ্ভাৰ টাইম আউট&quot;"</string>
+  <string name="server_timeout_message">"“ভিডিঅ' প্লে কৰিবলৈ ছাৰ্ভাৰলৈ পুনৰ সংযোগ কৰিব”?"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"“সংযোগ ব্যৰ্থ হৈছে, %1$d\u2026 লৈ পুনৰ সংযোগ কৰিবলৈ চেষ্টা কৰি আছে&quot;"</string>
+  <string name="media_controller_live">লাইভ</string>
+  <string name="media_controller_playing">প্লে কৰি আছে</string>
+  <string name="media_controller_connecting">সংযোগ কৰি আছে\u2026</string>
+  <string name="bookmark_add">"&quot;বুকমাৰ্ক যোগ দিয়ক&quot;"</string>
+  <string name="bookmark_display">"&quot;বুকমাৰ্কসমূহ প্ৰদৰ্শন কৰক&quot;"</string>
+  <string name="bookmark_empty">"&quot;কোনো বুকমাৰ্কসমূহ নাই&quot;"</string>
+  <string name="bookmark_exist">"“বুকমাৰ্ক ইতিমধ্যে বিদ্যমান”"</string>
+  <string name="bookmark_add_success">"“বুকমাৰ্ক যোগ কৰা হৈছে”"</string>
+  <string name="bookmark_list">"&quot;বুকমাৰ্কসমূহ&quot;"</string>
+  <string name="bookmark_title">"&quot;শিৰোনামা&quot;"</string>
+  <string name="bookmark_location">"&quot;অৱস্থান&quot;"</string>
+  <string name="delete_all">"&quot;সকলোবোৰ মচি পেলাওঁক&quot;"</string>
+  <string name="default_title">"&quot;ডিফল্ট শিৰোনামা&quot;"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">অধিক প্ৰতিচ্ছবি</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">মিউট কৰিব নোৱাৰি : ভিডিঅ\' সমৰ্থিত নহয়</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">অৱস্থান দেখুৱাবলৈ মেপ এপ্প্ ইনষ্টল কৰা নাই।</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">বেছ বুষ্ট</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">3D প্ৰভাৱ</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">অডিঅ\' প্ৰভাৱসমূহ</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <string name="headset_plug">এইসমূহ এফেক্টৰ বাবে হেডফোন এডাল প্লাগ ইন কৰক৷</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">Snapdragon অডিঅ\'+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">দুঃখিত, এই ভিডিঅ\' চুটি কৰিব নোৱাৰি</string>
+  <string name="no_permission_for_drm">দুঃখিত, DRM প্ৰতিৰোধী ফাইল ভাগ-বতৰা কৰিব নোৱাৰি</string>
+  <string name="drm_license_info">DRM অনুজ্ঞাপত্ৰৰ তথ্য</string>
 </resources>

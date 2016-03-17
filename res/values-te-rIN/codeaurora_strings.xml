@@ -31,13 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">దశ</string>
+  <string name="step_option_desc">వేగంగా ముందుకెళ్లు/వెనక్కి వెళ్లు దశను అనుకూలీకరించుము</string>
+  <string name="setp_option_three_second">3 సెకనులు</string>
+  <string name="setp_option_six_second">6 సెకనులు</string>
+  <string name="loop">"&quot;లూప్&quot;"</string>
+  <string name="single">"&quot;సింగిల్&quot;"</string>
+  <string name="stereo">"&quot;స్టీరియో&quot;"</string>
+  <string name="speaker_on">స్పీకర్ ఆన్</string>
+  <string name="speaker_off">స్పీకర్ ఆఫ్</string>
+  <string name="speaker_need_headset">ఈ లక్షణాన్ని ఉపయోగించేందుకు హెడ్‌ఫోన్లను ప్లగ్-ఇన్ చేయండి.</string>
+  <string name="single_track">"&quot;సింగిల్ ట్రాక్&quot;"</string>
+  <string name="input_url">"“URLను ఎంటర్ చేయండి”"</string>
+  <string name="streaming_settings">"“ప్రసార సెట్టింగులు”"</string>
+  <string name="next">"&quot;తదుపరి&quot;"</string>
+  <string name="previous">"&quot;మునుపటి&quot;"</string>
+  <string name="buffer_size">బఫర్ పరిమాణం</string>
+  <string name="apn">కావలసిన APN</string>
+  <string name="rtp_min_port">కనిష్ఠ పోర్ట్</string>
+  <string name="rtp_max_port">గరిష్ఠ పోర్ట్</string>
+  <string name="set_rtp_min_port">కనిష్ఠ పోర్టును సెట్ చేయండి</string>
+  <string name="set_rtp_max_port">గరిష్ఠ పోర్టును సెట్ చేయండి</string>
+  <string name="set_buffer_size">బఫర్ పరిమాణాన్ని సెట్ చేయండి</string>
+  <string name="set_apn">కావలసిన APNను ఎంచుకొనుము</string>
+  <string name="setting">సెట్టింగ్‌లు</string>
+  <string name="server_timeout_title">"“సర్వర్ టైమవుట్&quot;"</string>
+  <string name="server_timeout_message">"&quot;వీడియోను ప్లే చేసేందుకు సర్వరుకు తిరిగి అనుసంధానం చేయాలా?”"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"&quot;అనుసంధానం విఫలమయింది, %1$dకి మరలా అనుసంధానించడానికి ప్రయత్నిస్తోంది\u2026&quot;"</string>
+  <string name="media_controller_live">ప్రత్యక్ష</string>
+  <string name="media_controller_playing">ప్లే ఔతోంది</string>
+  <string name="media_controller_connecting">కనెక్ట్ చేస్తోంది...</string>
+  <string name="bookmark_add">"&quot;బుక్‌మార్క్ చేర్చు&quot;"</string>
+  <string name="bookmark_display">"&quot;బుక్‌మార్క్‌లను చూపించు&quot;"</string>
+  <string name="bookmark_empty">"&quot;బుక్ మార్కులు లేవు&quot;"</string>
+  <string name="bookmark_exist">"“పుటసూచి ఇప్పటికే ఉంది”"</string>
+  <string name="bookmark_add_success">"&quot;పుటసూచి జోడించబడింది”"</string>
+  <string name="bookmark_list">"&quot;బుక్‌మార్కులు&quot;"</string>
+  <string name="bookmark_title">"&quot;శీర్షిక&quot;"</string>
+  <string name="bookmark_location">"&quot;స్థానం&quot;"</string>
+  <string name="delete_all">"&quot;అన్నీ తొలగించు&quot;"</string>
+  <string name="default_title">"&quot;డిఫాల్ట్ శీర్షిక&quot;"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">మరిన్ని చిత్రాలు</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">నిశ్శబ్దం చేయడం సాధ్యపడదు: వీడియోకు మద్దతు లేదు</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">స్థానాన్ని చూపించేందుకు మ్యాప్స్ అనువర్తనం వ్యవస్థాపించబడిలేదు.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">బేస్ బూస్ట్</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">3D ప్రభావం</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">ఆడియో ప్రభావాలు</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <string name="headset_plug">ఈ ప్రభావాలకోసం హెడ్‌ఫోన్‌లను ప్లగ్ ఇన్ చేయండి.</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">స్నాప్ డ్రాగన్ ఆడియో+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">క్షమించండి, ఈ వీడియో ఫైలును కత్తిరించడం కుదరదు</string>
+  <string name="no_permission_for_drm">క్షమించండి, DRMచే రక్షించబడిన ఫైళ్ళను పంచుకోవడం కుదరదు</string>
+  <string name="drm_license_info">DRM లైసెన్స్ సమాచారం</string>
 </resources>

@@ -31,13 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">પગલાં</string>
+  <string name="step_option_desc">ફાસ્ટ ફોરવર્ડ/રિવાઇન્ડ પગલાંને કસ્ટમાઇઝ કરો</string>
+  <string name="setp_option_three_second">3 સેકન્ડ્સ</string>
+  <string name="setp_option_six_second">6 સેકન્ડ્સ</string>
+  <string name="loop">"&quot;લુપ&quot;"</string>
+  <string name="single">"&quot;એકલ&quot;"</string>
+  <string name="stereo">"&quot;સ્ટીરીયો&quot;"</string>
+  <string name="speaker_on">સ્પિકર ON</string>
+  <string name="speaker_off">સ્પિકર OFF</string>
+  <string name="speaker_need_headset">આ ફીચરનો ઉપયોગ કરવા હેડફોન પ્લગ ઇન કરો.</string>
+  <string name="single_track">"&quot;એકલ ટ્રેક&quot;"</string>
+  <string name="input_url">"&quot;Enter URL&quot;"</string>
+  <string name="streaming_settings">"&quot;Streaming settings&quot;"</string>
+  <string name="next">"&quot;આગામી&quot;"</string>
+  <string name="previous">"&quot;પાછળ&quot;"</string>
+  <string name="buffer_size">બફર સાઇઝ</string>
+  <string name="apn">પસંદગીનું APN</string>
+  <string name="rtp_min_port">મીન પોર્ટ</string>
+  <string name="rtp_max_port">મેક્સ પોર્ટ</string>
+  <string name="set_rtp_min_port">મીન પોર્ટ સેટ કરો</string>
+  <string name="set_rtp_max_port">મેક્સ પોર્ટ સેટ કરો</string>
+  <string name="set_buffer_size">સેટ બફર માપ</string>
+  <string name="set_apn">APN પસંદ કરો</string>
+  <string name="setting">સેટિંગ્સ</string>
+  <string name="server_timeout_title">"&quot;સર્વર ટાઇમઆઉટ&quot;"</string>
+  <string name="server_timeout_message">"&quot;શું વીડિયો પ્લે કરવા સર્વર સાથે રિકનેક્ટ કરવું છે?&quot;"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"&quot;કનેકશન નિષ્ફળ, %1$d\u2026 સાથે રિકનેક્ટ કરવાનો પ્રયાસ કરીએ છીએ&quot;"</string>
+  <string name="media_controller_live">જીવંત</string>
+  <string name="media_controller_playing">રમી</string>
+  <string name="media_controller_connecting">કનેક્ટ થઈ રહ્યું છે…</string>
+  <string name="bookmark_add">"&quot;બુકમાર્ક ઉમેરો&quot;"</string>
+  <string name="bookmark_display">"&quot;બુકમાર્ક્સ દર્શાવો&quot;"</string>
+  <string name="bookmark_empty">"&quot;કોઇ બુકમાર્ક્સ નથી&quot;"</string>
+  <string name="bookmark_exist">"&quot;બુકમાર્ક અગાઉથી હાજર છે&quot;"</string>
+  <string name="bookmark_add_success">"&quot;બુકમાર્ક ઉમેરવામાં આવ્યું&quot;"</string>
+  <string name="bookmark_list">"&quot;બુકમાર્ક્સ&quot;"</string>
+  <string name="bookmark_title">"&quot;શીર્ષક&quot;"</string>
+  <string name="bookmark_location">"&quot;સ્થાન&quot;"</string>
+  <string name="delete_all">"&quot;તમામ હટાવો&quot;"</string>
+  <string name="default_title">"&quot;મૂળભૂત શીર્ષક&quot;"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">વધુ ચિત્રો</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">મ્યૂટ ન થઈ શકે : વિડિયોને સમર્થન નથી</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">સ્થાન દર્શાવવા માટે કોઇ મૅપ્સ એપ્લિકેશન ઇન્સ્ટૉલ થયેલ નથી.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">બાસ બુસ્ટ</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">3D અસરકારક</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">ઓડિયો અસર</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <string name="headset_plug">આ અસરો માટે હેડફોન્સમાં પ્લગ ઇન કરો.</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">માફ કરશો, આ વિડિયો ફાઇલ ટ્રિમ નહીં થઈ શકે</string>
+  <string name="no_permission_for_drm">માફ કરશો, DRM સુરક્ષિત ફાઇલો સહિયારું કરી શકાશે નહીં</string>
+  <string name="drm_license_info">DRM લાયસન્સ ઇન્ફો</string>
 </resources>

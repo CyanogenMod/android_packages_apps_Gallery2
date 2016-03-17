@@ -90,6 +90,10 @@
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <string name="delete">Desaniciar</string>
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->
+  <plurals name="delete_selection">
+    <item quantity="one">¿Desaniciar elementu esbilláu?</item>
+    <item quantity="other">¿Desaniciar elementos esbillaos?</item>
+  </plurals>
   <string name="confirm">Confirmar</string>
   <string name="cancel">Encaboxar</string>
   <string name="share">Compartir</string>
@@ -110,10 +114,22 @@
   <string name="switch_to_camera">Cambiar a la cámara</string>
   <!-- String indicating how many media item(s) is(are) selected
             eg. 1 selected [CHAR LIMIT=30] -->
+  <plurals name="number_of_items_selected">
+    <item quantity="one">%1$d esbilláu</item>
+    <item quantity="other">%1$d esbillaos</item>
+  </plurals>
   <!-- String indicating how many media album(s) is(are) selected
             eg. 1 selected [CHAR LIMIT=30] -->
+  <plurals name="number_of_albums_selected">
+    <item quantity="one">%1$d esbilláu</item>
+    <item quantity="other">%1$d esbillaos</item>
+  </plurals>
   <!-- String indicating how many media group(s) is(are) selected
             eg. 1 selected [CHAR LIMIT=30] -->
+  <plurals name="number_of_groups_selected">
+    <item quantity="one">%1$d esbilláu</item>
+    <item quantity="other">%1$d esbillaos</item>
+  </plurals>
   <!-- String indicating timestamp of photo or video -->
   <string name="show_on_map">Amosar nel mapa</string>
   <string name="rotate_left">Xirar a la esquierda</string>
@@ -286,6 +302,10 @@
          (filtershow_fx_0008_washout_color) [CHAR LIMIT=10] -->
   <string name="ffx_washout_color">Litho</string>
   <!-- Toast message shown after we make some album(s) available offline [CHAR LIMIT=50] -->
+  <plurals name="make_albums_available_offline">
+    <item quantity="one">Faciendo que l\'álbum pueda vese ensin conexón</item>
+    <item quantity="other">Faciendo que los álbumes puedan vese ensin conexón...</item>
+  </plurals>
   <!-- Toast message shown after we try to make a local album available offline
          [CHAR LIMIT=150] -->
   <string name="try_to_set_local_album_available_offline">L\'elementu almacenóse de forma llocal y ta disponible ensin conexón.</string>
@@ -407,7 +427,15 @@
   <!--  Text of notification message which is shown when user attaches camera -->
   <string name="ingest_scanning" msgid="2048262851775139720">Analizando conteníu...</string>
   <!-- String indicating how many media items from the camera have been scanned -->
+  <plurals name="ingest_number_of_items_scanned">
+    <item quantity="one">%1$d elementu analizáu</item>
+    <item quantity="other">%1$d elementos analizaos</item>
+  </plurals>
   <!-- String indicating how many media items from the camera have been selected -->
+  <plurals name="ingest_number_of_items_selected">
+    <item quantity="one">%1$d elementu esbilláu</item>
+    <item quantity="other">%1$d elementos esbillaos</item>
+  </plurals>
   <!--  Status message shown when content from the camera is being sorted -->
   <string name="ingest_sorting" msgid="624687230903648118">Ordenando...</string>
   <!--  Status message shown when scanning the content from the camera has completed -->
@@ -463,6 +491,10 @@
   <!-- Title for countdown timer on camera settings screen [CHAR LIMIT=30]-->
   <string name="pref_camera_timer_title">Temporizador de cuenta atrás</string>
   <!-- Entry for countdown timer setting. e.g. 1 second, 10 seconds, etc. [CHAR LIMIT=30]-->
+  <plurals name="pref_camera_timer_entry">
+    <item quantity="one">1 segundu</item>
+    <item quantity="other">%d segundos</item>
+  </plurals>
   <string name="pref_camera_timer_sound_default">@string/setting_on_value</string>
   <!-- Text followed by a checkbox to turn on/off sound effects during the countdown. [CHAR LIMIT = 16]-->
   <string name="pref_camera_timer_sound_title">Usar pitíu</string>
@@ -846,5 +878,9 @@ CHAR LIMIT = NONE] -->
   <!-- settings label [CHAR LIMIT=50] -->
   <string name="camera_menu_settings_label">AXUSTES</string>
   <!-- String indicating how many photos are in an album [CHAR LIMIT=15] -->
+  <plurals name="number_of_photos">
+    <item quantity="one">%1$d semeya</item>
+    <item quantity="other">%1$d semeyes</item>
+  </plurals>
   <!-- The tips of trimming video -->
 </resources>
