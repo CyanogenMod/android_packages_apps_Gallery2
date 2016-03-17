@@ -40,10 +40,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="stereo">"סטריאו"</string>
   <string name="speaker_on">רמקול פעיל</string>
   <string name="speaker_off">רמקול כבוי</string>
-  <string name="speaker_need_headset">חבר אוזניות כדי להשתמש בתכונה זו.</string>
-  <string name="single_track">"מסלול יחיד"</string>
+  <string name="speaker_need_headset">חבר אזניות כדי להשתמש בתכונה זו.</string>
+  <string name="single_track">"רצועה יחידה"</string>
   <string name="input_url">"הזן כתובת URL"</string>
-  <string name="streaming_settings">"הגדרות שידור"</string>
+  <string name="streaming_settings">"הגדרות הזרמה"</string>
   <string name="next">"הבא"</string>
   <string name="previous">"הקודם"</string>
   <string name="buffer_size">גודל המאגר</string>
@@ -51,11 +51,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="rtp_min_port">פורט מינימאלי</string>
   <string name="rtp_max_port">פורט מקסימלי</string>
   <string name="set_rtp_min_port">הגדר פורט מינימלי</string>
-  <string name="set_rtp_max_port">נגדר פורט מקסימלי</string>
-  <string name="set_buffer_size">הגדר גודל המאגר</string>
+  <string name="set_rtp_max_port">הגדר פורט מקסימלי</string>
+  <string name="set_buffer_size">הגדר גודל מאגר</string>
   <string name="set_apn">בחר APN מועדף</string>
   <string name="setting">הגדרות</string>
-  <string name="server_timeout_title">"זמן חכייה לשרת"</string>
+  <string name="server_timeout_title">"זמן קצוב לשרת"</string>
   <string name="server_timeout_message">"להתחבר מחדש לשרת כדי להפעיל את הווידאו?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"החיבור נכשל, מנסה להתחבר מחדש ל- %1$d\u2026"</string>
   <string name="media_controller_live">חי</string>
@@ -64,31 +64,31 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_add">"הוסף סימניה"</string>
   <string name="bookmark_display">"הצג סימניות"</string>
   <string name="bookmark_empty">"אין סימניות"</string>
-  <string name="bookmark_exist">"סימניה כבר קיימת"</string>
-  <string name="bookmark_add_success">"סימניה נוספה"</string>
+  <string name="bookmark_exist">"הסימניה כבר קיימת"</string>
+  <string name="bookmark_add_success">"הסימניה נוספה"</string>
   <string name="bookmark_list">"סימניות"</string>
   <string name="bookmark_title">"כותרת"</string>
   <string name="bookmark_location">"מיקום"</string>
-  <string name="delete_all">"מחק הכל"</string>
-  <string name="default_title">"כותרת ברירת המחדל"</string>
+  <string name="delete_all">"מחק הכול"</string>
+  <string name="default_title">"כותרת ברירת מחדל"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">תמונות נוספות</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">לא ניתן להשתיק: וידאו לא נתמך</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
-  <string name="map_activity_not_found_err">אין אף יישום \"מפות\" כדי להראות את המיקום בעזרתו.</string>
+  <string name="map_activity_not_found_err">אין יישומי מפות מותקנים להצגת המיקום.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">הגברת בס</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">אפקט 3D</string>
   <!-- The label for the audio effects menu. -->
-  <string name="audio_effects">אפקטי שמע</string>
+  <string name="audio_effects">אפקטים לשמע</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
-  <string name="headset_plug">חבר אוזניות לאפקטים אלה.</string>
+  <string name="headset_plug">חבר אזניות לאפקטים אלה.</string>
   <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
-  <string name="fail_trim">סליחה, קובץ וידאו זה לא יכול להיגזר</string>
+  <string name="fail_trim">סליחה, קובץ וידאו זה אינו ניתן לחיתוך</string>
   <string name="no_permission_for_drm">סליחה, לא ניתן לשתף קבצי DRM מוגנים</string>
   <string name="drm_license_info">פרטי רישיון DRM</string>
 </resources>

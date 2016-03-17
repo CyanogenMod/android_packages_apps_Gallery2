@@ -31,20 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">Salto</string>
+  <string name="step_option_desc">Personalizar el salto del avance o retroceso rápidos</string>
+  <string name="setp_option_three_second">3 segundos</string>
+  <string name="setp_option_six_second">6 segundos</string>
+  <string name="loop">"Bucle"</string>
+  <string name="single">"Sencillo"</string>
+  <string name="stereo">"Estéreo"</string>
+  <string name="speaker_on">Altavoz encendido</string>
+  <string name="speaker_off">Altavoz apagado</string>
   <string name="speaker_need_headset">Conecta los auriculares para usar esta función.</string>
+  <string name="single_track">"Pista sencilla"</string>
   <string name="input_url">"Ingresar URL"</string>
+  <string name="streaming_settings">"Opciones de transmisión"</string>
   <string name="next">"Siguiente"</string>
+  <string name="previous">"Anterior"</string>
+  <string name="buffer_size">Tamaño de búfer</string>
+  <string name="apn">APN preferido</string>
+  <string name="rtp_min_port">Puerto inferior</string>
+  <string name="rtp_max_port">Puerto superior</string>
+  <string name="set_rtp_min_port">Establecer puerto inferior</string>
+  <string name="set_rtp_max_port">Establecer puerto superior</string>
+  <string name="set_buffer_size">Establecer tamaño de búfer</string>
+  <string name="set_apn">Seleccionar APN preferido</string>
+  <string name="setting">Opciones</string>
+  <string name="server_timeout_title">"Tiempo de espera del servidor"</string>
+  <string name="server_timeout_message">"¿Volver a conectar al servidor para reproducir el video?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Error de conexión, intentando volver a conectar con %1$d\u2026"</string>
+  <string name="media_controller_live">En vivo</string>
+  <string name="media_controller_playing">Reproduciendo</string>
+  <string name="media_controller_connecting">Conectando\u2026</string>
+  <string name="bookmark_add">"Agregar marcador"</string>
+  <string name="bookmark_display">"Mostrar marcadores"</string>
+  <string name="bookmark_empty">"No hay marcadores"</string>
+  <string name="bookmark_exist">"El marcador ya existe"</string>
   <string name="bookmark_add_success">"Marcador añadido"</string>
+  <string name="bookmark_list">"Marcadores"</string>
+  <string name="bookmark_title">"Título"</string>
+  <string name="bookmark_location">"Ubicación"</string>
+  <string name="delete_all">"Eliminar todos"</string>
+  <string name="default_title">"Título predeterminado"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">Más imágenes</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">No se puede silenciar: video no compatible</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">No hay ninguna aplicación de mapas instalada para mostrar la ubicación.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">Refuerzo de graves</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">Efecto 3D</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">Efectos de audio</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Conectar los auriculares para estos efectos.</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">Lo sentimos, no se puede recortar este video</string>
+  <string name="no_permission_for_drm">Lo sentimos, pero no se pueden compartir los archivos protegidos por DRM</string>
+  <string name="drm_license_info">Información de la licencia DRM</string>
 </resources>

@@ -78,7 +78,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">位置情報を表示するマップアプリがインストールされていません。</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
-  <string name="bass_boost_strength">バス\nブースト</string>
+  <string name="bass_boost_strength">バスブースト</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D効果</string>
   <!-- The label for the audio effects menu. -->
