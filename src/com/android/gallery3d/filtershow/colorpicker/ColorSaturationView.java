@@ -170,7 +170,7 @@ public class ColorSaturationView extends View implements ColorListener {
         canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mBarPaint1);
         canvas.drawLine(mDotX, mDotY, mWidth - mBorder, mDotY, mLinePaint1);
         canvas.drawLine(mBorder, mDotY, mDotX, mDotY, mLinePaint2);
-        if (mDotX != Float.NaN) {
+        if (!Float.isNaN(mDotX)) {
             canvas.drawCircle(mDotX, mDotY, mDotRadius, mDotPaint);
         }
     }

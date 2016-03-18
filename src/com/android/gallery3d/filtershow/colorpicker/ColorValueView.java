@@ -148,7 +148,7 @@ public class ColorValueView extends View implements ColorListener {
         canvas.drawRect(mBorder, mBorder, mWidth - mBorder, mHeight - mBorder, mBarPaint1);
         canvas.drawLine(mDotX, mDotY, mDotX, mHeight - mBorder, mLinePaint2);
         canvas.drawLine(mDotX, mBorder, mDotX, mDotY, mLinePaint1);
-        if (mDotX != Float.NaN) {
+        if (!Float.isNaN(mDotX)) {
             canvas.drawCircle(mDotX, mDotY, dotRadus, mDotPaint);
         }
     }
