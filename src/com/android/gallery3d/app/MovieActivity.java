@@ -368,13 +368,13 @@ public class MovieActivity extends Activity {
 
             mSwitch = (ToggleButton) title.findViewById(R.id.audio_effects_switch);
             mSwitch.setChecked(enabled);
-            mSwitch.setBackgroundResource(enabled ?
+            mSwitch.setButtonDrawable(enabled ?
                     R.drawable.switch_thumb_activated : R.drawable.switch_thumb_off);
 
             mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mSwitch.setBackgroundResource(isChecked ?
+                    mSwitch.setButtonDrawable(isChecked ?
                             R.drawable.switch_thumb_activated : R.drawable.switch_thumb_off);
                     if(mBassBoostEffect != null) {
                         mBassBoostEffect.setEnabled(isChecked);
@@ -424,7 +424,7 @@ public class MovieActivity extends Activity {
             });
 
             mEffectDialog = new AlertDialog.Builder(MovieActivity.this,
-                    AlertDialog.THEME_HOLO_DARK)
+                    AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setCustomTitle(title)
                 .setView(content)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -457,8 +457,6 @@ public class MovieActivity extends Activity {
                 .setCancelable(false)
                 .create();
             mEffectDialog.show();
-            mEffectDialog.findViewById(com.android.internal.R.id.titleDivider)
-                .setBackgroundResource(R.color.highlight);
         }
     }
 
