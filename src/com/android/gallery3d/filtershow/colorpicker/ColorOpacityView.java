@@ -171,7 +171,7 @@ public class ColorOpacityView extends View implements ColorListener {
         canvas.drawRect(mBorder, 0, mWidth - mBorder, mHeight, mBarPaint1);
         canvas.drawLine(mDotX, mDotY, mWidth - mBorder, mDotY, mLinePaint1);
         canvas.drawLine(mBorder, mDotY, mDotX, mDotY, mLinePaint2);
-        if (mDotX != Float.NaN) {
+        if (!Float.isNaN(mDotX)) {
             canvas.drawCircle(mDotX, mDotY, mDotRadius, mDotPaint);
         }
     }
