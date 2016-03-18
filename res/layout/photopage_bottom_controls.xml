@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/photopage_bottom_controls"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
     android:background="#42000000"
+    android:gravity="bottom"
     android:orientation="horizontal"
     android:visibility="gone" >
 
@@ -12,12 +14,9 @@
         android:id="@+id/photopage_bottom_control_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:background="@null"
-        android:paddingStart="20dp"
-        android:layout_marginBottom="20dp"
         android:src="@drawable/edit"
         android:visibility="gone" />
 
@@ -25,10 +24,8 @@
         android:id="@+id/photopage_bottom_control_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:background="@null"
         android:src="@drawable/share"
         android:visibility="gone" />
@@ -37,13 +34,10 @@
         android:id="@+id/photopage_bottom_control_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:background="@null"
-        android:paddingEnd="20dp"
         android:src="@drawable/delete"
         android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>
