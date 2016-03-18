@@ -187,27 +187,16 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             int paddingRight;
             int paddingTop;
 
-            if (right - left > bottom - top) {
-                if (mViewType) {
-                    paddingTop = mConfig.paddingLeft;
-                } else {
-                    paddingTop = mConfigList.paddingLeft;
-                }
-                paddingBottom = mConfig.paddingBottomLand;
-                paddingRight = mConfig.paddingRightLand;
-                paddingLeft = mConfig.paddingLeftLand;
+            if (mViewType) {
+                paddingTop = mConfig.paddingLeft;
+                paddingLeft = mConfig.paddingLeft;
+            } else {
+                paddingTop = mConfigList.paddingLeft;
+                paddingLeft = mConfigList.paddingLeft;
             }
-            else {
-                if (mViewType) {
-                    paddingTop = mConfig.paddingLeft;
-                    paddingLeft = mConfig.paddingLeft;
-                } else {
-                    paddingTop = mConfigList.paddingLeft;
-                    paddingLeft = mConfigList.paddingLeft;
-                }
-                paddingBottom = mConfig.paddingBottom;
-                paddingRight = mConfig.paddingRight;
-            }
+            paddingBottom = mConfig.paddingBottom;
+            paddingRight = mConfig.paddingRight;
+
             int slotViewTop = mActivity.getGalleryActionBar().getHeight()
                     + paddingTop;
             int slotViewBottom = bottom - top - paddingBottom;
