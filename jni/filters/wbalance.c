@@ -99,10 +99,10 @@ void estmateWhite(unsigned char *src, int len, int *wr, int *wb, int *wg){
 }
 
 void estmateWhiteBox(unsigned char *src, int iw, int ih, int x,int y, int *wr, int *wb, int *wg){
-    int r;
-    int g;
-    int b;
-    int sum;
+    int r = 0;
+    int g = 0;
+    int b = 0;
+    int sum = 0;
     int xp,yp;
     int bounds = 5;
     if (x<0) x = bounds;
