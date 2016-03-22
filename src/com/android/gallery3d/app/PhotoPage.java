@@ -207,7 +207,6 @@ public abstract class PhotoPage extends ActivityState implements
 
     private ShareActionProvider mShareActionProvider;
     private Intent mShareIntent;
-    private boolean mIsPhotoChanged = true;
 
     private final PanoramaSupportCallback mUpdatePanoramaMenuItemsCallback = new PanoramaSupportCallback() {
         @Override
@@ -516,7 +515,6 @@ public abstract class PhotoPage extends ActivityState implements
                 public void onPhotoChanged(int index, Path item) {
                     int oldIndex = mCurrentIndex;
                     mCurrentIndex = index;
-                    mIsPhotoChanged = true;
 
                     if (mHasCameraScreennailOrPlaceholder) {
                         if (mCurrentIndex > 0) {
@@ -627,14 +625,6 @@ public abstract class PhotoPage extends ActivityState implements
     public boolean canDisplayBottomControl(int control) {
         if (mCurrentPhoto == null) {
             return false;
-        }
-        if (mIsPhotoChanged) {
-            if (mCurrentPhoto.getMediaType() == MediaObject.MEDIA_TYPE_VIDEO) {
-                mBottomControls.setSharePositionForVideo(mActivity);
-            } else {
-                mBottomControls.setSharePositionForImage();
-            }
-            mIsPhotoChanged = false;
         }
         switch (control) {
         case R.id.photopage_bottom_controls:

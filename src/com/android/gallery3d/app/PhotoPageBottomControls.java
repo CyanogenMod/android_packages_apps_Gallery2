@@ -53,8 +53,6 @@ public class PhotoPageBottomControls implements OnClickListener {
     private static final int CONTAINER_ANIM_DURATION_MS = 200;
 
     private static final int CONTROL_ANIM_DURATION_MS = 150;
-    private ImageButton imgShare;
-    private  RelativeLayout.LayoutParams defaultParams;
 
     private static Animation getControlAnimForVisibility(boolean visible) {
         Animation anim = visible ? new AlphaAnimation(0f, 1f)
@@ -72,10 +70,6 @@ public class PhotoPageBottomControls implements OnClickListener {
         mContainer = (ViewGroup) inflater
                 .inflate(R.layout.photopage_bottom_controls, mParentLayout, false);
         mParentLayout.addView(mContainer);
-        imgShare = (ImageButton) mContainer
-                .findViewById(R.id.photopage_bottom_control_share);
-        defaultParams = (RelativeLayout.LayoutParams) imgShare
-                .getLayoutParams();
         for (int i = mContainer.getChildCount() - 1; i >= 0; i--) {
             View child = mContainer.getChildAt(i);
             child.setOnClickListener(this);
@@ -88,30 +82,6 @@ public class PhotoPageBottomControls implements OnClickListener {
         mContainerAnimOut.setDuration(CONTAINER_ANIM_DURATION_MS);
 
         mDelegate.refreshBottomControlsWhenReady();
-    }
-
-    public void setSharePositionForImage() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imgShare
-                .getLayoutParams();
-        params.removeRule(RelativeLayout.ALIGN_PARENT_START);
-        params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        params.leftMargin = 0;
-        params.addRule(RelativeLayout.CENTER_IN_PARENT,-1);
-        imgShare.setLayoutParams(params);
-    }
-
-    public void setSharePositionForVideo(Context context) {
-            imgShare = (ImageButton) mContainer
-                    .findViewById(R.id.photopage_bottom_control_share);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imgShare
-                    .getLayoutParams();
-            params.addRule(RelativeLayout.ALIGN_PARENT_START,-1);
-            Resources r = context.getResources();
-            int margin = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 20, r.getDisplayMetrics());
-            params.leftMargin = margin;
-            imgShare.setLayoutParams(params);
-
     }
 
     private void hide() {
@@ -150,7 +120,7 @@ public class PhotoPageBottomControls implements OnClickListener {
                     control.clearAnimation();
                     control.startAnimation(getControlAnimForVisibility(curVisibility));
                 }
-                control.setVisibility(curVisibility ? View.VISIBLE : View.INVISIBLE);
+                control.setVisibility(curVisibility ? View.VISIBLE : View.GONE);
                 mControlsVisible.put(control, curVisibility);
             }
         }
