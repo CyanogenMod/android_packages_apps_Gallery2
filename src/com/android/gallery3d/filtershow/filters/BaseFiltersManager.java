@@ -334,24 +334,11 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
     }
 
     public void addEffects() {
-        mEffects.add(getRepresentation(ImageFilterTinyPlanet.class));
         mEffects.add(getRepresentation(ImageFilterWBalance.class));
         mEffects.add(getRepresentation(ImageFilterExposure.class));
-        mEffects.add(getRepresentation(ImageFilterVignette.class));
-        mEffects.add(getRepresentation(ImageFilterGrad.class));
         mEffects.add(getRepresentation(ImageFilterContrast.class));
-        mEffects.add(getRepresentation(ImageFilterShadows.class));
-        mEffects.add(getRepresentation(ImageFilterHighlights.class));
         mEffects.add(getRepresentation(ImageFilterVibrance.class));
         mEffects.add(getRepresentation(ImageFilterSharpen.class));
-        mEffects.add(getRepresentation(ImageFilterCurves.class));
-        mEffects.add(getRepresentation(ImageFilterHue.class));
-        mEffects.add(getRepresentation(ImageFilterChanSat.class));
-        mEffects.add(getRepresentation(ImageFilterBwFilter.class));
-        mEffects.add(getRepresentation(ImageFilterNegative.class));
-        mEffects.add(getRepresentation(ImageFilterEdge.class));
-        mEffects.add(getRepresentation(ImageFilterKMeans.class));
-        mEffects.add(getRepresentation(ImageFilterRedEye.class));
     }
 
     public void addMakeups(Context context) {
