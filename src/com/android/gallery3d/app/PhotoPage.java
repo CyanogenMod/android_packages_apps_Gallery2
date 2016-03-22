@@ -1326,7 +1326,8 @@ public abstract class PhotoPage extends ActivityState implements
             if (albumPath == null) {
                 return;
             }
-            if (!albumPath.equalsIgnoreCase(mOriginalSetPathString)) {
+            boolean isClusterType = FilterUtils.isClusterPath(mOriginalSetPathString);
+            if (!albumPath.equalsIgnoreCase(mOriginalSetPathString) && !isClusterType) {
                 // If the edited image is stored in a different album, we need
                 // to start a new activity state to show the new image
                 Bundle data = new Bundle(getData());

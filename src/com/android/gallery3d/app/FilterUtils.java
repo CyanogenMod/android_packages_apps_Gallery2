@@ -215,6 +215,10 @@ public class FilterUtils {
         return "/cluster/{" + base + "}/" + kind;
     }
 
+    public static boolean isClusterPath(String path) {
+        return path != null && path.startsWith("/cluster/{");
+    }
+
     // Change the topmost clustering to the specified type.
     public static String switchClusterPath(String base, int clusterType) {
         return newClusterPath(removeOneClusterFromPath(base), clusterType);
