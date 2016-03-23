@@ -46,13 +46,13 @@
 
         <LinearLayout
             android:id="@+id/effectsContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp" >
 
             <ImageButton
                 android:id="@+id/fxButton"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -67,11 +67,12 @@
                 android:background="@android:color/transparent"
                 android:padding="2dip"
                 android:scaleType="centerInside"
+                android:visibility="gone"
                 android:src="@drawable/frames" />
 
             <ImageButton
                 android:id="@+id/geometryButton"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -81,7 +82,7 @@
 
             <ImageButton
                 android:id="@+id/colorsButton"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -144,13 +145,13 @@
 
         <LinearLayout
             android:id="@+id/effectsText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="5dp" >
 
             <TextView
                 android:id="@+id/tvColor"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/color"
@@ -166,11 +167,12 @@
                 android:text="@string/frames"
                 android:textColor="#ffffff"
                 android:gravity="center"
+                android:visibility="gone"
                 android:textSize="@dimen/edit_main_font" />
 
             <TextView
                 android:id="@+id/tvCrop"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/crop"
@@ -180,7 +182,7 @@
 
             <TextView
                 android:id="@+id/tvExposure"
-                android:layout_width="@dimen/thumbnail_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/exposure"

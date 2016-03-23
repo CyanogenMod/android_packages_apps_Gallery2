@@ -197,7 +197,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             paddingBottom = mConfig.paddingBottom;
             paddingRight = mConfig.paddingRight;
 
-            int slotViewTop = mActivity.getGalleryActionBar().getHeight()
+            int slotViewTop = mActivity.getToolbar().getLayoutParams().height
                     + paddingTop;
             int slotViewBottom = bottom - top - paddingBottom;
             int slotViewRight = right - left - paddingRight;

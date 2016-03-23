@@ -543,7 +543,7 @@
     <string name="pano_progress_text">Rendering panorama</string>
 
     <!-- The label on the button that will save an edited image -->
-    <string name="save" msgid="8140440041190264400">Done</string>
+    <string name="save" msgid="8140440041190264400">Save</string>
 
     <!-- A label representing the action of importing media item(s) [CHAR LIMIT=20] -->
     <string name="ingest_import">@string/Import</string>

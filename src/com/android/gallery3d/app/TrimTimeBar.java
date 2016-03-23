@@ -181,7 +181,7 @@ public class TrimTimeBar extends TimeBar {
             mTrimEndScrubberTop = progressY;
             mProgressBar.set(
                     getPaddingLeft() + margin, progressY,
-                    w - getPaddingRight() - margin, progressY + 4);
+                    w - getPaddingRight() - margin, progressY + 6);
         }
         update();
     }

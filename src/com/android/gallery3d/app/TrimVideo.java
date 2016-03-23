@@ -29,6 +29,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -47,6 +48,7 @@ public class TrimVideo extends Activity implements
 
     private VideoView mVideoView;
     private TextView mSaveVideoTextView;
+    private ImageView mExitImageView;
     private TrimControllerOverlay mController;
     private Context mContext;
     private Uri mUri;
@@ -82,6 +84,14 @@ public class TrimVideo extends Activity implements
         displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM;
         actionBar.setDisplayOptions(displayOptions, displayOptions);
         actionBar.setCustomView(R.layout.trim_menu);
+
+        mExitImageView = (ImageView) findViewById(R.id.exit_trim);
+        mExitImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mSaveVideoTextView = (TextView) findViewById(R.id.start_trim);
         mSaveVideoTextView.setOnClickListener(new View.OnClickListener() {
