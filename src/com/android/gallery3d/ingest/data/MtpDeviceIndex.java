@@ -3,10 +3,15 @@ package com.android.gallery3d.ingest.data;
 import android.annotation.TargetApi;
 import android.mtp.MtpConstants;
 import android.mtp.MtpDevice;
+import android.mtp.MtpObjectInfo;
 import android.os.Build;
+import android.webkit.MimeTypeMap;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -84,12 +89,18 @@ public class MtpDeviceIndex {
     supportedImageFormats.add(MtpConstants.FORMAT_PNG);
     supportedImageFormats.add(MtpConstants.FORMAT_GIF);
     supportedImageFormats.add(MtpConstants.FORMAT_BMP);
+    supportedImageFormats.add(MtpConstants.FORMAT_TIFF);
+    supportedImageFormats.add(MtpConstants.FORMAT_TIFF_EP);
+    if (Build.VERSION.SDK_INT >= 24) {
+      supportedImageFormats.add(MtpConstants.FORMAT_DNG);
+    }
     SUPPORTED_IMAGE_FORMATS = Collections.unmodifiableSet(supportedImageFormats);
 
     Set<Integer> supportedVideoFormats = new HashSet<Integer>();
     supportedVideoFormats.add(MtpConstants.FORMAT_3GP_CONTAINER);
     supportedVideoFormats.add(MtpConstants.FORMAT_AVI);
     supportedVideoFormats.add(MtpConstants.FORMAT_MP4_CONTAINER);
+    supportedVideoFormats.add(MtpConstants.FORMAT_MP2);
     supportedVideoFormats.add(MtpConstants.FORMAT_MPEG);
     // TODO(georgescu): add FORMAT_MOV once Android Media Scanner supports .mov files
     SUPPORTED_VIDEO_FORMATS = Collections.unmodifiableSet(supportedVideoFormats);
@@ -103,6 +114,8 @@ public class MtpDeviceIndex {
 
   private static final MtpDeviceIndex sInstance = new MtpDeviceIndex(
       MtpDeviceIndexRunnable.getFactory());
+
+  private static final Map<String, Boolean> sCachedSupportedExtenstions = new HashMap<>();
 
   public static MtpDeviceIndex getInstance() {
     return sInstance;
@@ -121,12 +134,41 @@ public class MtpDeviceIndex {
   }
 
   /**
-   * @param format Media format from {@link MtpConstants}
+   * @param mtpObjectInfo MTP object info
    * @return Whether the format is supported by this index.
    */
-  public boolean isFormatSupported(int format) {
-    return SUPPORTED_IMAGE_FORMATS.contains(format)
-        || SUPPORTED_VIDEO_FORMATS.contains(format);
+  public boolean isFormatSupported(MtpObjectInfo mtpObjectInfo) {
+    // Checks whether the format is supported or not.
+    final int format = mtpObjectInfo.getFormat();
+    if (SUPPORTED_IMAGE_FORMATS.contains(format)
+        || SUPPORTED_VIDEO_FORMATS.contains(format)) {
+      return true;
+    }
+
+    // Checks whether the extension is supported or not.
+    final String name = mtpObjectInfo.getName();
+    if (name == null) {
+      return false;
+    }
+    final int lastDot = name.lastIndexOf('.');
+    if (lastDot >= 0) {
+      final String extension = name.substring(lastDot + 1);
+
+      Boolean result = sCachedSupportedExtenstions.get(extension);
+      if (result != null) {
+        return result;
+      }
+      final String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+          extension.toLowerCase(Locale.US));
+      if (mime != null) {
+        // This will also accept the newly added mimetypes for images and videos.
+        result = mime.startsWith("image/") || mime.startsWith("video/");
+        sCachedSupportedExtenstions.put(extension, result);
+        return result;
+      }
+    }
+
+    return false;
   }
 
   /**
