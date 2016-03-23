@@ -148,7 +148,14 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
             entry.content = content;
         }
-        drawContent(canvas, content, width, height, entry.rotation);
+        if (mIsGridViewShown) {
+            drawContent(canvas, content, width, height, entry.rotation);
+        } else {
+            // In List View, the content is always rendered in to the largest square that fits
+            // inside the slot, aligned to the top of the slot.
+            int minSize = Math.min(width, height);
+            drawContent(canvas, content, minSize, minSize, entry.rotation);
+        }
         if ((content instanceof FadeInTexture)
                 && ((FadeInTexture) content).isAnimating()) {
             renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
