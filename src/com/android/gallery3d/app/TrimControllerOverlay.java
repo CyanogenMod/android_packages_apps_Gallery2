@@ -23,6 +23,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
 
 /**
@@ -32,6 +33,7 @@ public class TrimControllerOverlay extends CommonControllerOverlay  {
 
     public TrimControllerOverlay(Context context) {
         super(context);
+        mPlayPauseReplayView.setBackgroundResource(R.drawable.bg_vidcontrol);
     }
 
     @Override

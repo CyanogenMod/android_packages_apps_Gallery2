@@ -244,7 +244,7 @@ public class TimeBar extends View {
             mScrubberTop = progressY - mScrubber.getHeight() / 2 + 1;
             mProgressBar.set(
                     getPaddingLeft() + margin, progressY,
-                    w - getPaddingRight() - margin, progressY + 4);
+                    w - getPaddingRight() - margin, progressY + 6);
         }
         update();
     }
