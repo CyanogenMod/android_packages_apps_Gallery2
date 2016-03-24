@@ -671,15 +671,21 @@ public abstract class PhotoPage extends ActivityState implements
     private void setupNfcBeamPush() {
         if (!ApiHelper.HAS_SET_BEAM_PUSH_URIS) return;
 
-        NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mActivity);
-        if (adapter != null) {
-            adapter.setBeamPushUris(null, mActivity);
-            adapter.setBeamPushUrisCallback(new CreateBeamUrisCallback() {
-                @Override
-                public Uri[] createBeamUris(NfcEvent event) {
-                    return mNfcPushUris;
-                }
-            }, mActivity);
+        try {
+            NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mActivity);
+            if (adapter != null) {
+                adapter.setBeamPushUris(null, mActivity);
+                adapter.setBeamPushUrisCallback(new CreateBeamUrisCallback() {
+                    @Override
+                    public Uri[] createBeamUris(NfcEvent event) {
+                        return mNfcPushUris;
+                    }
+                }, mActivity);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
