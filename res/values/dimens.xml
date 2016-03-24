@@ -207,4 +207,6 @@
     <dimen name="timeline_port_margin">3dp</dimen>
     <dimen name="timeline_title_height">48dp</dimen>
     <dimen name="timeline_title_font_size">14sp</dimen>
+
+    <dimen name="timebar_height">60dp</dimen>
 </resources>
