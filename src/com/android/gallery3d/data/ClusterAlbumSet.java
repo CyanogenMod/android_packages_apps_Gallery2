@@ -232,15 +232,18 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
       int endAlbum = findTimelineAlbumIndex(start + count - 1);
       int s;
       int lCount;
-      s =  mAlbums.get(startAlbum).getTotalMediaItemCount() - (mAlbumItemCountList.get(startAlbum) - start);
-      for (int i = startAlbum; i <= endAlbum && i < mAlbums.size(); ++i) {
-          int albumCount = mAlbums.get(i).getTotalMediaItemCount();
-          lCount = Math.min(albumCount - s, count);
-          ArrayList<MediaItem> items = mAlbums.get(i).getMediaItem(s, lCount);
-          if (items != null)
-              mediaItems.addAll(items);
-          count -= lCount;
-          s = 0;
+      if (mAlbums.size() > 0 && mAlbumItemCountList.size() > 0) {
+          s = mAlbums.get(startAlbum).getTotalMediaItemCount() - 
+                  (mAlbumItemCountList.get(startAlbum) - start);
+          for (int i = startAlbum; i <= endAlbum && i < mAlbums.size(); ++i) {
+              int albumCount = mAlbums.get(i).getTotalMediaItemCount();
+              lCount = Math.min(albumCount - s, count);
+              ArrayList<MediaItem> items = mAlbums.get(i).getMediaItem(s, lCount);
+              if (items != null)
+                  mediaItems.addAll(items);
+              count -= lCount;
+              s = 0;
+          }
       }
       return mediaItems;
   }

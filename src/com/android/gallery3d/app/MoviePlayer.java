@@ -262,7 +262,7 @@ public class MoviePlayer implements
         mVideoView = (CodeauroraVideoView) rootView.findViewById(R.id.surface_view);
         mBookmarker = new Bookmarker(movieActivity);
 
-        mController = new MovieControllerOverlay(movieActivity);
+        mController = new MovieControllerOverlayNew(movieActivity);
         ((ViewGroup)rootView).addView(mController.getView());
         mController.setListener(this);
         mController.setCanReplay(canReplay);

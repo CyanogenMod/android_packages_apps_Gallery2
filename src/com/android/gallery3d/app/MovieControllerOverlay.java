@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -63,7 +64,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
     private static final boolean LOG = true;
 
     private ScreenModeManager mScreenModeManager;
-    private ScreenModeExt mScreenModeExt = new ScreenModeExt();
+    protected ScreenModeExt mScreenModeExt = new ScreenModeExt();
     private ControllerRewindAndForwardExt mControllerRewindAndForwardExt = new ControllerRewindAndForwardExt();
     private OverlayExtension mOverlayExt = new OverlayExtension();
     private boolean hidden;
@@ -73,7 +74,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
     private final Animation hideAnimation;
 
     private boolean enableRewindAndForward = false;
-    private Context mContext;
+    protected Context mContext;
 
     public MovieControllerOverlay(Context context) {
         super(context);
@@ -89,8 +90,6 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         hideAnimation = AnimationUtils.loadAnimation(context, R.anim.player_out);
         hideAnimation.setAnimationListener(this);
 
-        enableRewindAndForward = true;
-        Log.v(TAG, "enableRewindAndForward is " + enableRewindAndForward);
         mControllerRewindAndForwardExt.init(context);
         mScreenModeExt.init(context, mTimeBar);
         mBackground.setClickable(true);
@@ -200,7 +199,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
 
     public void maybeStartHiding() {
         cancelHiding();
-        if (mState == State.PLAYING) {
+        if (mState == State.PLAYING || mState == State.PAUSED) {
             handler.postDelayed(startHidingRunnable, 2500);
         }
     }
@@ -706,11 +705,10 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             }
 
             // for screen layout
-            Bitmap screenButton = BitmapFactory.decodeResource(context.getResources(),
+            VectorDrawable screenButton = VectorDrawable.create(context.getResources(),
                     R.drawable.ic_media_bigscreen);
-            mScreenWidth = screenButton.getWidth();
+            mScreenWidth = screenButton.getIntrinsicWidth();
             mScreenPadding = (int) (metrics.density * MARGIN);
-            screenButton.recycle();
         }
 
         private void updateScreenModeDrawable() {
@@ -769,7 +767,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         }
 
         public int getAddedRightPadding() {
-            return mScreenPadding * 2 + mScreenWidth;
+            return mScreenWidth;
         }
 
         @Override

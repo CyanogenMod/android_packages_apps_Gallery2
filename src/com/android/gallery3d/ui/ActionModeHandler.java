@@ -41,6 +41,7 @@ import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaObject.PanoramaSupportCallback;
+import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.ui.MenuExecutor.ProgressListener;
 import com.android.gallery3d.util.Future;
@@ -219,6 +220,9 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         String format = mActivity.getResources().getQuantityString(
                 R.plurals.number_of_items_selected, count);
         setTitle(String.format(format, count));
+        if (count == 0) {
+            mShareMaxDialog = false;
+        }
 
         // For clients who call SelectionManager.selectAll() directly, we need to ensure the
         // menu status is consistent with selection manager.
@@ -317,6 +321,26 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         }
 
         return operation;
+    }
+
+    private boolean computeCanShare(ArrayList<MediaObject> selected, int max) {
+        int numSelected = selected.size();
+        if (numSelected > max) {
+            return false;
+        }
+
+        numSelected = 0;
+        for (MediaObject mediaObject : selected) {
+            if (mediaObject instanceof MediaSet) {
+                numSelected = numSelected + ((MediaSet) mediaObject).getTotalMediaItemCount();
+            } else {
+                numSelected = numSelected + 1;
+            }
+            if (numSelected > max) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)
@@ -442,11 +466,10 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 if (jc.isCancelled()) {
                     return null;
                 }
-                int numSelected = selected.size();
-                final boolean canSharePanoramas =
-                        numSelected <= MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT;
-                final boolean canShare =
-                        numSelected <= MAX_SELECTED_ITEMS_FOR_SHARE_INTENT;
+                final boolean canSharePanoramas = computeCanShare(selected,
+                        MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT);
+                final boolean canShare = computeCanShare(selected,
+                        MAX_SELECTED_ITEMS_FOR_SHARE_INTENT);
 
                 final GetAllPanoramaSupports supportCallback = canSharePanoramas ?
                         new GetAllPanoramaSupports(selected, jc)

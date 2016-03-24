@@ -380,7 +380,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         setContentView(R.layout.filtershow_activity);
         Resources r = getResources();
         setActionBar(false);
-        mPopUpText = r.getString(R.string.save_and_exit).toUpperCase(
+        mPopUpText = r.getString(R.string.discard).toUpperCase(
                 Locale.getDefault());
         mExit = r.getString(R.string.exit).toUpperCase(Locale.getDefault());
         int marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
@@ -1756,10 +1756,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                         int id) {
-                                    // saveImage();
-                                    HistoryManager adapter = mMasterImage
-                                            .getHistory();
-                                    adapter.resetActiveFilter();
+                                    done();
                                 }
                             });
                     builder.setNegativeButton(mExit,
