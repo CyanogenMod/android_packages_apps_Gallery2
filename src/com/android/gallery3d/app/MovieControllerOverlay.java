@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.VectorDrawable;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -442,6 +443,18 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         mScreenModeManager.setScreenMode(ScreenModeManager.SCREENMODE_BIGSCREEN);
     }
 
+    private void updateBackgroundColor() {
+        switch (mState) {
+            case PAUSED:
+            case PLAYING:
+            case BUFFERING:
+                setBackgroundColor(Color.TRANSPARENT);
+                break;
+            default:
+                setBackgroundColor(Color.BLACK);
+        }
+    }
+
     public IContrllerOverlayExt getOverlayExt() {
         return mOverlayExt;
     }
@@ -463,31 +476,16 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         private boolean mAlwaysShowBottom;
 
         @Override
-        public void showBuffering(boolean fullBuffer, int percent) {
-            if (LOG) {
-                Log.v(TAG, "showBuffering(" + fullBuffer + ", " + percent
-                        + ") " + "lastState=" + mLastState + ", state=" + mState);
-            }
-            if (fullBuffer) {
-                // do not show text and loading
-                mTimeBar.setSecondaryProgress(percent);
-                return;
-            }
+        public void showBuffering(int what) {
             if (mState == State.PAUSED || mState == State.PLAYING) {
                 mLastState = mState;
             }
-            if (percent >= 0 && percent < 100) { // valid value
+            if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
                 mState = State.BUFFERING;
-                String text = "media controller buffering";
-                mTimeBar.setInfo(text);
                 showMainView(mLoadingView);
-            } else if (percent == 100) {
+            } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END || what == TimeBar.UNKNOWN) {
                 mState = mLastState;
-                mTimeBar.setInfo(null);
-                showMainView(mPlayPauseReplayView);// restore play pause state
-            } else { // here to restore old state
-                mState = mLastState;
-                mTimeBar.setInfo(null);
+                showMainView(mPlayPauseReplayView);
             }
         }
 
@@ -497,7 +495,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
                 Log.v(TAG, "clearBuffering()");
             }
             mTimeBar.setSecondaryProgress(TimeBar.UNKNOWN);
-            showBuffering(false, TimeBar.UNKNOWN);
+            showBuffering(TimeBar.UNKNOWN);
         }
 
         public void showReconnecting(int times) {
@@ -558,11 +556,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
             mAlwaysShowBottom = alwaysShow;
             if (!alwaysShow) { // clear background
                 setBackgroundDrawable(null);
-                if (mState == State.PAUSED || mState == State.PLAYING) {
-                    setBackgroundColor(Color.TRANSPARENT);
-                }else {
-                    setBackgroundColor(Color.BLACK);
-                }
+                updateBackgroundColor();
             } else {
                 setBackgroundResource(R.drawable.media_default_bkg);
                 if (foreShow) {
@@ -879,11 +873,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
         public void onShow() {
             Log.v(TAG, "ControllerRewindAndForwardExt onShow: "+mState);
             mContollerButtons.setVisibility(View.VISIBLE);
-            if (mState == State.PAUSED || mState == State.PLAYING) {
-                setBackgroundColor(Color.TRANSPARENT);
-            } else {
-                setBackgroundColor(Color.BLACK);
-            }
+            updateBackgroundColor();
         }
 
         public void onLayout(int l, int r, int b) {

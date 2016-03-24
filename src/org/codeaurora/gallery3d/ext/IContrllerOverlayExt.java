@@ -5,10 +5,9 @@ package org.codeaurora.gallery3d.ext;
 public interface IContrllerOverlayExt {
     /**
      * Show buffering state.
-     * @param fullBuffer
-     * @param percent
+     * @param what
      */
-    void showBuffering(boolean fullBuffer, int percent);
+    void showBuffering(int what);
     /**
      * Clear buffering state.
      */
