@@ -316,17 +316,23 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 }
                 break;
             default:
-                operation &= SUPPORT_MULTIPLE_MASK;
+                operation = computeMenuOptionsMultiple(operation, selected.size());
         }
+        return operation;
+    }
 
+    private int computeMenuOptionsMultiple(int operationBefore, int selectedSize) {
+        int operation = operationBefore;
+        if (selectedSize > 1) {
+            operation &= SUPPORT_MULTIPLE_MASK;
+        }
         return operation;
     }
 
     private boolean computeCanShare(ArrayList<MediaObject> selected, int max) {
         int numSelected = selected.size();
-        if (numSelected > max) {
-            return false;
-        }
+        boolean ret = computeCanShare(numSelected, max);
+        if (!ret) return false;
 
         numSelected = 0;
         for (MediaObject mediaObject : selected) {
@@ -335,11 +341,14 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
             } else {
                 numSelected = numSelected + 1;
             }
-            if (numSelected > max) {
-                return false;
-            }
+            ret = computeCanShare(numSelected, max);
+            if (!ret) return false;
         }
         return true;
+    }
+
+    private boolean computeCanShare(int size, int max) {
+        return size <= max;
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)
@@ -447,6 +456,28 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
         mMenuTask = mActivity.getThreadPool().submit(new Job<Void>() {
             @Override
             public Void run(final JobContext jc) {
+                // use selected count to disable menu options and share items if need
+                // to enhance performance.
+                int multipleOperation = SUPPORT_MULTIPLE_MASK;
+                int count = mSelectionManager.getSelectedCount();
+                final int operationPre = computeMenuOptionsMultiple(multipleOperation, count);
+                final boolean canSharePanoramasPre = computeCanShare(count,
+                        MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT);
+                final boolean canSharePre = computeCanShare(count,
+                        MAX_SELECTED_ITEMS_FOR_SHARE_INTENT);
+
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (jc.isCancelled()) return;
+                        MenuExecutor.updateMenuOperation(mMenu, operationPre);
+                        if (mShareMenuItem != null && !canSharePre) {
+                            mShareMenuItem.setEnabled(false);
+                            showShareMaxDialogIfNeed(false);
+                        }
+                    }
+                });
+
                 // Pass1: Deal with unexpanded media object list for menu operation.
                 ArrayList<MediaObject> selected = getSelectedMediaObjects(jc);
                 if (selected == null) {
@@ -465,10 +496,12 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 if (jc.isCancelled()) {
                     return null;
                 }
-                final boolean canSharePanoramas = computeCanShare(selected,
-                        MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT);
-                final boolean canShare = computeCanShare(selected,
-                        MAX_SELECTED_ITEMS_FOR_SHARE_INTENT);
+
+                // use selected items to compute menu options and share items again.
+                final boolean canShare = canSharePre
+                        && computeCanShare(selected, MAX_SELECTED_ITEMS_FOR_SHARE_INTENT);
+                final boolean canSharePanoramas = canSharePanoramasPre
+                        && computeCanShare(selected, MAX_SELECTED_ITEMS_FOR_PANORAMA_SHARE_INTENT);
 
                 final GetAllPanoramaSupports supportCallback = canSharePanoramas ?
                         new GetAllPanoramaSupports(selected, jc)
@@ -512,18 +545,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             mSharePanoramaActionProvider.setShareIntent(share_panorama_intent);
                         }
                         if (mShareMenuItem != null) {
-                            if (!canShare && !mShareMaxDialog) {
-                                AlertDialog.Builder shareMaxDialog = new AlertDialog.Builder(mActivity);
-                                shareMaxDialog
-                                    .setMessage(R.string.cannot_share_items)
-                                    .setPositiveButton(R.string.ok, null)
-                                    .create();
-                                shareMaxDialog.show();
-                                mShareMaxDialog = true;
-                            }
-                            if (canShare && mShareMaxDialog) {
-                                mShareMaxDialog = false;
-                            }
+                            showShareMaxDialogIfNeed(canShare);
 
                             mShareMenuItem.setEnabled(canShare);
                             shareIntent = share_intent;
@@ -533,6 +555,21 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                 return null;
             }
         });
+    }
+
+    private void showShareMaxDialogIfNeed(boolean canShare) {
+        if (!canShare && !mShareMaxDialog) {
+            AlertDialog.Builder shareMaxDialog = new AlertDialog.Builder(mActivity);
+            shareMaxDialog
+                    .setMessage(R.string.cannot_share_items)
+                    .setPositiveButton(R.string.ok, null)
+                    .create();
+            shareMaxDialog.show();
+            mShareMaxDialog = true;
+        }
+        if (canShare && mShareMaxDialog) {
+            mShareMaxDialog = false;
+        }
     }
 
     public void pause() {
