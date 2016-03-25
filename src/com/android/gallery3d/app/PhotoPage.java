@@ -999,6 +999,9 @@ public abstract class PhotoPage extends ActivityState implements
                             "drawer");
                     mActivity.getToolbar().setNavigationIcon(R.drawable.drawer);
                     ((GalleryActivity)mActivity).toggleNavDrawer(true);
+                    if (mModel instanceof PhotoDataAdapter) {
+                        ((PhotoDataAdapter) mModel).setDataListener(null);
+                    }
                 }
             }
         }
