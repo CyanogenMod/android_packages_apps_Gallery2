@@ -107,7 +107,11 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
 
     @Override
     public long reload() {
-        if (mClusterAlbumSet.reload() > mDataVersion) {
+        long version = mClusterAlbumSet.reload();
+        if (version == INVALID_DATA_VERSION) {
+            return INVALID_DATA_VERSION;
+        }
+        if (version > mDataVersion) {
             mDataVersion = nextVersionNumber();
         }
         return mDataVersion;

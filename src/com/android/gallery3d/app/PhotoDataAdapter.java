@@ -1069,18 +1069,23 @@ public class PhotoDataAdapter implements PhotoPage.Model {
 
         @Override
         public void run() {
+            long version = MediaObject.INVALID_DATA_VERSION;
             while (mActive) {
                 synchronized (this) {
-                    if (!mDirty && mActive) {
+                    if (!mDirty && mActive && version != MediaObject.INVALID_DATA_VERSION) {
                         updateLoading(false);
                         Utils.waitWithoutInterrupt(this);
                         continue;
                     }
                 }
                 mDirty = false;
+                version = mSource.reload();
+                //if data is not ready, continue to reload
+                if (version == MediaObject.INVALID_DATA_VERSION) {
+                    continue;
+                }
                 UpdateInfo info = executeAndWait(new GetUpdateInfo());
                 updateLoading(true);
-                long version = mSource.reload();
 
                 // Used for delete photo, RTL need to re-decide the slide range.
                 if (View.LAYOUT_DIRECTION_RTL == TextUtils
