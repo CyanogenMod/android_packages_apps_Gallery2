@@ -224,6 +224,14 @@ public class ClusterAlbum extends MediaSet implements ContentListener {
     }
 
     public void setClusterKind(int kind) {
+        if (mKind == kind) {
+            return;
+        }
         mKind = kind;
+        refreshImageItemCount();
+    }
+
+    private void refreshImageItemCount() {
+        setImageItemCount(mImageCount);
     }
 }
