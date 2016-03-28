@@ -31,6 +31,7 @@ package com.android.gallery3d.filtershow.filters;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.filtershow.editors.SeeStraightEditor;
@@ -39,6 +40,7 @@ public class SeeStraightActs extends SimpleImageFilter {
     public static final String SERIALIZATION_NAME = "SeeStraightActs";
     private static final int MIN_WIDTH = 512;
     private static final int MIN_HEIGHT = 512;
+    private static final int MIN_INPUT_REQUIREMENT = 640;
     private static final boolean DEBUG = true;
     private static boolean isSeeStraightEnabled = true;
 
@@ -83,11 +85,24 @@ public class SeeStraightActs extends SimpleImageFilter {
         if(width <= MIN_WIDTH && height <= MIN_HEIGHT)
             return bitmap;
 
+        if(width <= MIN_INPUT_REQUIREMENT || height <= MIN_INPUT_REQUIREMENT) {
+            sActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(sActivity, sActivity.getResources().getString(R.string.seestraight_input_image_is_small), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return bitmap;
+        }
+
         Bitmap dstBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         int[] outputRoi = processImage(width, height, bitmap, dstBitmap);
         if(outputRoi == null) {
-            printDebug("See Straight filter is not effective");
-            return dstBitmap;
+            sActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(sActivity, sActivity.getResources().getString(R.string.seestraight_process_fail), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return bitmap;
         }
         dstBitmap = Bitmap.createBitmap(dstBitmap, outputRoi[0], outputRoi[1], outputRoi[2], outputRoi[3]);
         return dstBitmap;

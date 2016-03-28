@@ -1191,4 +1191,6 @@ CHAR LIMIT = NONE] -->
     <string name="truescanner_white">WhiteBoard</string>
     <string name="hazebuster_acts">Haze Buster</string>
     <string name="seestraight_acts">See Straight</string>
+    <string name="seestraight_input_image_is_small">Input image is too small to process.</string>
+    <string name="seestraight_process_fail">Couldn\'t process the image.</string>
 </resources>
