@@ -74,8 +74,8 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     private Menu mMenu;
     private MenuItem mSharePanoramaMenuItem;
     private MenuItem mShareMenuItem;
+    private Intent shareIntent;
     private ShareActionProvider mSharePanoramaActionProvider;
-    private ShareActionProvider mShareActionProvider;
     private SelectionMenu mSelectionMenu;
     private ActionModeListener mListener;
     private Future<?> mMenuTask;
@@ -191,6 +191,12 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             "Gallery Delete Progress Listener");
                 }
                 listener = mDeleteProgressListener;
+            } else if (action == R.id.action_share) {
+                String shareTitle = mActivity.getResources().
+                        getString(R.string.share_dialogue_title);
+                mActivity.startActivity(Intent.createChooser(
+                        shareIntent, shareTitle));
+                return true;
             }
             mMenuExecutor.onMenuClicked(item, confirmMsg, listener);
         } finally {
@@ -258,13 +264,6 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
             mSharePanoramaActionProvider.setShareHistoryFileName("panorama_share_history.xml");
         }
         mShareMenuItem = menu.findItem(R.id.action_share);
-        if (mShareMenuItem != null) {
-            mShareActionProvider = (ShareActionProvider) mShareMenuItem
-                .getActionProvider();
-            mShareActionProvider.setOnShareTargetSelectedListener(
-                    mShareTargetSelectedListener);
-            mShareActionProvider.setShareHistoryFileName("share_history.xml");
-        }
         return true;
     }
 
@@ -527,7 +526,7 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
                             }
 
                             mShareMenuItem.setEnabled(canShare);
-                            mShareActionProvider.setShareIntent(share_intent);
+                            shareIntent = share_intent;
                         }
                     }
                 });
