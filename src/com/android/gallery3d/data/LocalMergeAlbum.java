@@ -36,7 +36,7 @@ import java.util.TreeMap;
 public class LocalMergeAlbum extends MediaSet implements ContentListener {
     @SuppressWarnings("unused")
     private static final String TAG = "LocalMergeAlbum";
-    private static final int PAGE_SIZE = 64;
+    private static final int PAGE_SIZE = 1024;
 
     private final Comparator<MediaItem> mComparator;
     private final MediaSet[] mSources;
