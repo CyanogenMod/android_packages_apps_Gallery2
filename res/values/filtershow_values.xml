@@ -28,7 +28,7 @@
     <dimen name="category_panel_icon_size">64dip</dimen>
 
     <!-- Category Panel Text Size -->
-    <dimen name="category_panel_text_size">13sp</dimen>
+    <dimen name="category_panel_text_size">11dip</dimen>
 
     <!-- Category Panel Text Size -->
     <dimen name="category_panel_margin">4dip</dimen>
