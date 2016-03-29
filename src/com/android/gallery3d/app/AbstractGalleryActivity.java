@@ -38,7 +38,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toolbar;
-import android.os.Handler;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.ApiHelper;
@@ -62,7 +61,6 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     private TransitionStore mTransitionStore = new TransitionStore();
     private boolean mDisableToggleStatusBar;
     private PanoramaViewHelper mPanoramaViewHelper;
-    private static final int ONRESUME_DELAY = 50;
     private Toolbar mToolbar;
 
     private AlertDialog mAlertDialog = null;
@@ -216,31 +214,15 @@ public class AbstractGalleryActivity extends Activity implements GalleryContext 
     @Override
     protected void onResume() {
         super.onResume();
-        delayedOnResume(ONRESUME_DELAY);
-    }
-
-    private void delayedOnResume(final int delay){
-        final Handler handler = new Handler();
-           Runnable delayTask = new Runnable() {
-              @Override
-              public void run() {
-                   handler.postDelayed(new Runnable() {
-                       @Override
-                       public void run() {
-                           mGLRootView.lockRenderThread();
-                           try {
-                                getStateManager().resume();
-                                getDataManager().resume();
-                            } finally {
-                                mGLRootView.unlockRenderThread();
-                            }
-                    mGLRootView.onResume();
-                    mOrientationManager.resume();
-                   }}, delay);
-             }
-          };
-        Thread delayThread = new Thread(delayTask);
-        delayThread.start();
+        mGLRootView.lockRenderThread();
+        try {
+            getStateManager().resume();
+            getDataManager().resume();
+        } finally {
+            mGLRootView.unlockRenderThread();
+        }
+        mGLRootView.onResume();
+        mOrientationManager.resume();
     }
 
     @Override
