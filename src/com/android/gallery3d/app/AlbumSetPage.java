@@ -160,7 +160,13 @@ public class AlbumSetPage extends ActivityState implements
                 paddingLeft = mConfig.paddingLeft;
             }
 
-            int slotViewTop = mActivity.getToolbar().getLayoutParams().height + paddingTop;
+            int slotViewTop;
+            android.widget.Toolbar toolbar = mActivity.getToolbar();
+            if (toolbar != null) {
+                slotViewTop = toolbar.getLayoutParams().height + paddingTop;
+            } else {
+                slotViewTop = mActivity.getGalleryActionBar().getHeight() + paddingTop;
+            }
             int slotViewBottom = bottom - top - paddingBottom;
             int slotViewRight = right - left - paddingRight;
             int slotViewLeft = paddingLeft ;

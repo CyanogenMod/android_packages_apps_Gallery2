@@ -139,6 +139,11 @@ public class MainPanel extends Fragment {
             makeupButton.setVisibility(View.VISIBLE);
         }
 
+        boolean showPanel = false;
+        if (getArguments() != null) {
+            showPanel = getArguments().getBoolean(EDITOR_TAG);
+        }
+
         if (makeupButton != null) {
             makeupButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -217,8 +222,10 @@ public class MainPanel extends Fragment {
         });
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
-        showImageStatePanel(activity.isShowingImageStatePanel());
-        showPanel(activity.getCurrentPanel());
+//        showImageStatePanel(activity.isShowingImageStatePanel());
+        if (showPanel) {
+            showPanel(activity.getCurrentPanel());
+        }
         return mMainView;
     }
 
