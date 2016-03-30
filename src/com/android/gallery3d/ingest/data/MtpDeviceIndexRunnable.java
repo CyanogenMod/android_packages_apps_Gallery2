@@ -171,10 +171,9 @@ public class MtpDeviceIndexRunnable implements Runnable {
           if (mtpObjectInfo == null) {
             throw new IndexingException();
           }
-          int format = mtpObjectInfo.getFormat();
-          if (format == MtpConstants.FORMAT_ASSOCIATION) {
+          if (mtpObjectInfo.getFormat() == MtpConstants.FORMAT_ASSOCIATION) {
             pendingDirectories.add(objectHandle);
-          } else if (mIndex.isFormatSupported(format)) {
+          } else if (mIndex.isFormatSupported(mtpObjectInfo)) {
             numObjects++;
             addObject(new IngestObjectInfo(mtpObjectInfo), bucketsTemp, numObjects);
           }
