@@ -499,19 +499,8 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
             mCategoryGeometryAdapter.clear();
         }
         mCategoryGeometryAdapter = new CategoryAdapter(this);
-        boolean found = false;
         for (FilterRepresentation representation : filtersRepresentations) {
             mCategoryGeometryAdapter.add(new Action(this, representation));
-            if (representation instanceof FilterDrawRepresentation) {
-                found = true;
-            }
-        }
-        if (!found) {
-            FilterRepresentation representation =
-                    new FilterDrawRepresentation(getString(R.string.imageDraw));
-            Action action = new Action(this, representation);
-            action.setIsDoubleAction(true);
-            mCategoryGeometryAdapter.add(action);
         }
     }
 

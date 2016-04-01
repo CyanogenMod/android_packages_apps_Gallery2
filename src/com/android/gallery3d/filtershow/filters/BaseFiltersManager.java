@@ -329,22 +329,19 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         int[] textId = {
                 R.string.crop,
                 R.string.straighten,
-                R.string.rotate,
-                R.string.mirror
+                R.string.rotate
         };
 
         int[] overlayId = {
                 R.drawable.filtershow_button_geometry_crop,
                 R.drawable.filtershow_button_geometry_straighten,
-                R.drawable.filtershow_button_geometry_rotate,
-                R.drawable.filtershow_button_geometry_flip
+                R.drawable.filtershow_button_geometry_rotate
         };
 
         FilterRepresentation[] geometryFilters = {
                 new FilterCropRepresentation(),
                 new FilterStraightenRepresentation(),
-                new FilterRotateRepresentation(),
-                new FilterMirrorRepresentation()
+                new FilterRotateRepresentation()
         };
 
         for (int i = 0; i < textId.length; i++) {
@@ -359,7 +356,6 @@ public abstract class BaseFiltersManager implements FiltersManagerInterface {
         }
 
         //mTools.add(getRepresentation(ImageFilterRedEye.class));
-        mTools.add(getRepresentation(ImageFilterDraw.class));
     }
 
     public void removeRepresentation(ArrayList<FilterRepresentation> list,
