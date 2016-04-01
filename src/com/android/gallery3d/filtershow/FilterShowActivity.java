@@ -73,7 +73,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
@@ -207,7 +206,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     private PopupMenu mCurrentMenu = null;
     private boolean mReleaseDualCamOnDestory = true;
     private ImageButton imgComparison;
-    private String mPopUpText, mExit;
+    private String mPopUpText, mCancel;
     RelativeLayout rlImageContainer;
     boolean isOrientationChanged;
     private boolean isComingFromEditorScreen;
@@ -377,7 +376,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         setActionBar(false);
         mPopUpText = r.getString(R.string.discard).toUpperCase(
                 Locale.getDefault());
-        mExit = r.getString(R.string.exit).toUpperCase(Locale.getDefault());
+        mCancel = r.getString(R.string.cancel).toUpperCase(Locale.getDefault());
         int marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
         int marginRight = r.getDimensionPixelSize(R.dimen.compare_margin_right);
         imgComparison = (ImageButton) findViewById(R.id.imgComparison);
@@ -533,18 +532,13 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     }
 
     public void adjustCompareButton(boolean scaled) {
+        if (imgComparison == null) {
+            return;
+        }
         Resources r = getResources();
         int marginTop, marginRight;
-        if (scaled) {
-            marginTop = r
-                    .getDimensionPixelSize(R.dimen.compare_margin_top_scaled);
-            marginRight = r
-                    .getDimensionPixelSize(R.dimen.compare_margin_right_scaled);
-        } else {
-            marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
-            marginRight = r.getDimensionPixelSize(R.dimen.compare_margin_right);
-
-        }
+        marginTop = r.getDimensionPixelSize(R.dimen.compare_margin_top);
+        marginRight = r.getDimensionPixelSize(R.dimen.compare_margin_right);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imgComparison
                 .getLayoutParams();
         params.setMargins(0, marginTop, marginRight, 0);
@@ -774,27 +768,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private void setupEditors() {
         FrameLayout editorContainer = (FrameLayout) findViewById(R.id.editorContainer);
-        LayoutParams layoutParams = (LayoutParams) editorContainer.getLayoutParams();
-        // if topMargin is not set in xml, set a default value here.
-        if (layoutParams.topMargin == 0) {
-            layoutParams.topMargin = getActionBarHeight() + getStatusBarHeight();
-            editorContainer.setLayoutParams(layoutParams);
-        }
-
         mEditorPlaceHolder.setContainer(editorContainer);
         EditorManager.addEditors(mEditorPlaceHolder);
         mEditorPlaceHolder.setOldViews(mImageViews);
-    }
-
-    private int getActionBarHeight() {
-        ActionBar actionBar = getActionBar();
-        return actionBar == null ? 0 : actionBar.getHeight();
-    }
-
-    private int getStatusBarHeight() {
-        Rect frame = new Rect();
-        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-        return frame.top;
     }
 
     private void setDefaultValues() {
@@ -985,6 +961,9 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     public void setCurrentPanel(int currentPanel) {
         mCurrentPanel = currentPanel;
+        if (mMasterImage == null) {
+            return;
+        }
         HistoryManager adapter = mMasterImage.getHistory();
         adapter.setActiveFilter(currentPanel);
     }
@@ -1731,16 +1710,11 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                                 done();
                             }
                         });
-                builder.setNegativeButton(mExit,
+                builder.setNegativeButton(mCancel,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                HistoryManager adapter = mMasterImage.getHistory();
-                                int position = adapter.undoCurrentFilter();
-                                mMasterImage.onHistoryItemClick(position);
-                                adapter.resetActiveFilter();
-                                backToMain();
-                                invalidateViews();
+                                dialog.dismiss();
                             }
                         });
                 builder.show();

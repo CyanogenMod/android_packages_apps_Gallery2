@@ -79,7 +79,7 @@
     <color name="toolbar_theme">#e53935</color>
     <color name="multiselect_background">#ffffff</color>
     <color name="edit_background">#212121</color>
-    <color name="edit_actionbar_background">#8A000000</color>
+    <color name="edit_actionbar_background">#000000</color>
     <color name="dialog_button_color">#009688</color>
     <color name="timeline_title_text_color">#26000000</color>
     <color name="timeline_title_number_text_color">#1a000000</color>

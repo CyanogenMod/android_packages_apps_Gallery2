@@ -43,7 +43,7 @@
     <string name="save_and_exit" msgid="3628425023766687419">"保存并退出"</string>
     <string name="discard">"放弃"</string>
     <string name="save_and_processing" msgid="6371565035837463194">"正在处理完整分辨率图片…"</string>
-    <string name="exit" msgid="242642957038770113">"取消"</string>
+    <string name="exit" msgid="242642957038770113">"退出"</string>
     <string name="history" msgid="455767361472692409">"历史记录"</string>
     <string name="reset" msgid="9013181350779592937">"重置"</string>
     <!-- no translation found for history_original (150973253194312841) -->
