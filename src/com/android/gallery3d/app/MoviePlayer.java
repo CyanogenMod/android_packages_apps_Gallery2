@@ -810,6 +810,9 @@ public class MoviePlayer implements
         } else if (what == MediaPlayer.MEDIA_INFO_METADATA_UPDATE && mServerTimeoutExt != null) {
             Log.e(TAG, "setServerTimeout " + extra);
             mServerTimeoutExt.setTimeout(extra * 1000);
+        } else if ((what == MediaPlayer.MEDIA_INFO_BUFFERING_START
+                || what == MediaPlayer.MEDIA_INFO_BUFFERING_END) && mOverlayExt != null) {
+            mOverlayExt.showBuffering(what);
         }
         if (mRetryExt.onInfo(mp, what, extra)) {
             return true;
@@ -819,8 +822,6 @@ public class MoviePlayer implements
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        boolean fullBuffer = isFullBuffer();
-        mOverlayExt.showBuffering(fullBuffer, percent);
     }
 
     @Override
