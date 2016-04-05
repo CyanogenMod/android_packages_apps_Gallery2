@@ -41,8 +41,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="speaker_on">Alto-falante ligado</string>
   <string name="speaker_off">Alto-falante desligado</string>
   <string name="speaker_need_headset">Conecte fones de ouvido para usar este recurso.</string>
-  <string name="single_track">"Única faixa"</string>
-  <string name="input_url">"Insira a URL"</string>
+  <string name="single_track">"Faixa única"</string>
+  <string name="input_url">"Digite a URL"</string>
   <string name="streaming_settings">"Configurações de streaming"</string>
   <string name="next">"Próximo"</string>
   <string name="previous">"Anterior"</string>
@@ -56,10 +56,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_apn">Selecione a APN preferida</string>
   <string name="setting">Configurações</string>
   <string name="server_timeout_title">"Tempo de espera do servidor"</string>
-  <string name="server_timeout_message">"Reconectar ao servidor para reproduzir o vídeo?"</string>
+  <string name="server_timeout_message">"Reconectar ao servidor para tocar o vídeo?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Falha na conexão, tentando reconectar ao %1$d\u2026"</string>
   <string name="media_controller_live">Ao vivo</string>
-  <string name="media_controller_playing">Reproduzindo</string>
+  <string name="media_controller_playing">Tocando</string>
   <string name="media_controller_connecting">Conectando\u2026</string>
   <string name="bookmark_add">"Adicionar favorito"</string>
   <string name="bookmark_display">"Visualizar favoritos"</string>
@@ -74,7 +74,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Mais imagens</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
-  <string name="mute_nosupport">Impossivel silenciar: vídeo não suportado</string>
+  <string name="mute_nosupport">Impossivel silenciar: vídeo não compatível</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Não há aplicativo de mapas instalado para mostrar o local.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
