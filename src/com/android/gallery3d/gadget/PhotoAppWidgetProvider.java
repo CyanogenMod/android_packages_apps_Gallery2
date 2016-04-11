@@ -22,10 +22,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.gallery3d.R;
@@ -33,9 +37,14 @@ import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.gadget.WidgetDatabaseHelper.Entry;
 import com.android.gallery3d.onetimeinitializer.GalleryWidgetMigrator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PhotoAppWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = "WidgetProvider";
+    private static List<PhotoUriContentObserver> mPhotoUriObservers = new ArrayList<>();
+    private static Handler mContentObserverHandler = new Handler();
 
     static RemoteViews buildWidget(Context context, int id, Entry entry) {
 
@@ -44,6 +53,12 @@ public class PhotoAppWidgetProvider extends AppWidgetProvider {
             case WidgetDatabaseHelper.TYPE_SHUFFLE:
                 return buildStackWidget(context, id, entry);
             case WidgetDatabaseHelper.TYPE_SINGLE_PHOTO:
+                PhotoUriContentObserver photoUriObserver =
+                        new PhotoUriContentObserver(context, mContentObserverHandler, entry, id);
+                photoUriObserver.setTag(id);
+                mPhotoUriObservers.add(photoUriObserver);
+                context.getContentResolver().registerContentObserver(Uri.parse(entry.imageUri),
+                        false, photoUriObserver);
                 return buildFrameWidget(context, id, entry);
         }
         throw new RuntimeException("invalid type - " + entry.type);
@@ -132,8 +147,60 @@ public class PhotoAppWidgetProvider extends AppWidgetProvider {
         // Clean deleted photos out of our database
         WidgetDatabaseHelper helper = new WidgetDatabaseHelper(context);
         for (int appWidgetId : appWidgetIds) {
+            PhotoUriContentObserver contentObserver = getContentObserver(appWidgetId);
+            if (contentObserver != null) {
+                context.getContentResolver().unregisterContentObserver(contentObserver);
+                mPhotoUriObservers.remove(contentObserver);
+            }
             helper.deleteEntry(appWidgetId);
         }
         helper.close();
+    }
+
+    private PhotoUriContentObserver getContentObserver(int appWidgetId) {
+        for (PhotoUriContentObserver contentObserver : mPhotoUriObservers) {
+            if (appWidgetId == contentObserver.getTag()) {
+                return contentObserver;
+            }
+        }
+        return null;
+    }
+
+    private static class PhotoUriContentObserver extends ContentObserver {
+        private int mId;
+        private int mTag;
+        private Context mContext;
+        private Entry mEntry;
+
+        public void setTag(int tag) {
+            this.mTag = tag;
+        }
+
+        public int getTag() {
+            return mTag;
+        }
+
+        public PhotoUriContentObserver(Context context, Handler handler, Entry entry, int id) {
+            super(handler);
+            mContext = context;
+            mEntry = entry;
+            mId = id;
+        }
+
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            Uri uri = Uri.parse(mEntry.imageUri);
+            Cursor cursor = mContext.getContentResolver().query(uri, null, null,
+                    null, "_id ASC LIMIT 1");
+            if (cursor != null) {
+                if (cursor.getCount() == 0) {
+                    RemoteViews views = buildFrameWidget(mContext, mId, mEntry);
+                    views.setViewVisibility(R.id.appwidget_empty_photo, View.VISIBLE);
+                    views.setViewVisibility(R.id.photo, View.GONE);
+                    AppWidgetManager.getInstance(mContext).updateAppWidget(mId, views);
+                }
+                cursor.close();
+            }
+        }
     }
 }
