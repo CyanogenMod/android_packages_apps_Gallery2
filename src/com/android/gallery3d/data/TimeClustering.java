@@ -98,30 +98,21 @@ public class TimeClustering extends Clustering {
 
     @Override
     public void run(MediaSet baseSet) {
-        final int total = baseSet.getTotalMediaItemCount();
-        final SmallItem[] buf = new SmallItem[total];
         final double[] latLng = new double[2];
 
+        final ArrayList<SmallItem> items = new ArrayList<>();
         baseSet.enumerateTotalMediaItems(new MediaSet.ItemConsumer() {
             @Override
             public void consume(int index, MediaItem item) {
-                if (index < 0 || index >= total) return;
                 SmallItem s = new SmallItem();
                 s.path = item.getPath();
                 s.dateInMs = item.getDateInMs();
                 item.getLatLong(latLng);
                 s.lat = latLng[0];
                 s.lng = latLng[1];
-                buf[index] = s;
+                items.add(s);
             }
         });
-
-        ArrayList<SmallItem> items = new ArrayList<SmallItem>(total);
-        for (int i = 0; i < total; i++) {
-            if (buf[i] != null) {
-                items.add(buf[i]);
-            }
-        }
 
         Collections.sort(items, sDateComparator);
 
