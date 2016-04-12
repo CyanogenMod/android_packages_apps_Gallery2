@@ -217,7 +217,7 @@ public class MainPanel extends Fragment {
         });
 
         FilterShowActivity activity = (FilterShowActivity) getActivity();
-        showImageStatePanel(activity.isShowingImageStatePanel());
+//        showImageStatePanel(activity.isShowingImageStatePanel());
         showPanel(activity.getCurrentPanel());
         return mMainView;
     }
@@ -425,10 +425,8 @@ public class MainPanel extends Fragment {
             }
         }
         if (currentPanel > 0) {
-            activity.setScaleImage(true);
             activity.adjustCompareButton(true);
         } else {
-            activity.setScaleImage(false);
             activity.adjustCompareButton(false);
         }
     }

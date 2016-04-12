@@ -83,7 +83,7 @@
     <!--  String displayed when saving and exiting editor [CHAR LIMIT=NONE] -->
     <string name="save_and_processing">Processing full resolution image...</string>
     <!--  String displayed when exiting editor[CHAR LIMIT=NONE] -->
-    <string name="exit">Cancel</string>
+    <string name="exit">Exit</string>
 
     <!--  History Panel -->
 

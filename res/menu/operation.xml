@@ -33,7 +33,7 @@
             android:icon="@drawable/multiselect_share"
             android:title="@string/share"
             android:visible="false"
-            android:showAsAction="never">
+            android:showAsAction="ifRoom">
     </item>
     <item android:id="@+id/action_delete"
             android:icon="@drawable/multiselect_delete"

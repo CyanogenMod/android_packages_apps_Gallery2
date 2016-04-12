@@ -123,12 +123,8 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         initView();
 
         mSavedInstanceState = savedInstanceState;
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }, PERMISSION_REQUEST_STORAGE);
-        } else {
+
+        if (!needRequestStoragePermission()) {
             init();
         }
     }
@@ -152,14 +148,51 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
             int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_STORAGE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (checkPermissionGrantResults(grantResults)) {
                     init();
                 } else {
                     finish();
                 }
             }
         }
+    }
+
+    private boolean needRequestStoragePermission() {
+        boolean needRequest = false;
+        String[] permissions = {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        };
+        ArrayList<String> permissionList = new ArrayList<String>();
+        for (String permission : permissions) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(permission);
+                needRequest = true;
+            }
+        }
+
+        if (needRequest) {
+            int count = permissionList.size();
+            if (count > 0) {
+                String[] permissionArray = new String[count];
+                for (int i = 0; i < count; i++) {
+                    permissionArray[i] = permissionList.get(i);
+                }
+
+                requestPermissions(permissionArray, PERMISSION_REQUEST_STORAGE);
+            }
+        }
+
+        return needRequest;
+    }
+
+    private boolean checkPermissionGrantResults(int[] grantResults) {
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static class ActionItem {

@@ -168,7 +168,13 @@ public class TimeLinePage extends ActivityState implements
         protected void onLayout(
                 boolean changed, int left, int top, int right, int bottom) {
 
-            int slotViewTop = mActivity.getToolbar().getLayoutParams().height;
+            int slotViewTop;
+            android.widget.Toolbar toolbar = mActivity.getToolbar();
+            if (toolbar != null) {
+                slotViewTop = toolbar.getLayoutParams().height;
+            } else {
+                slotViewTop = mActivity.getGalleryActionBar().getHeight();
+            }
             int padding =0 ;
             if((right - left) > (bottom - top)) {
                 padding =  (int) mActivity.getResources().getDimension(R.dimen.timeline_land_margin);
