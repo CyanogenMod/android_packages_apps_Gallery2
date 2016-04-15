@@ -189,7 +189,6 @@ public class SlideshowDataAdapter implements SlideshowPage.Model {
         }
         mSource.removeContentListener(mSourceListener);
         mReloadTask.cancel();
-        mReloadTask.waitDone();
         mReloadTask = null;
     }
 
