@@ -585,7 +585,10 @@ public class ActionModeHandler implements Callback, PopupList.OnPopupItemClickLi
     }
 
     public void resume() {
-        if (mSelectionManager.inSelectionMode()) updateSupportedOperation();
+        if (mSelectionManager.inSelectionMode()) {
+            mActivity.getToolbar().setVisibility(View.INVISIBLE);
+            updateSupportedOperation();
+        }
         mMenuExecutor.resume();
     }
 }
