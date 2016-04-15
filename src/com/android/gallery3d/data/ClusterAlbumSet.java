@@ -69,7 +69,7 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     @Override
     public long reload() {
         synchronized(this){
-            if (mBaseSet.reload() > mDataVersion) {
+            if (mBaseSet.reload() > mDataVersion && !mBaseSet.isLoading()) {
                 if (mFirstReloadDone) {
                     updateClustersContents();
                 } else {
