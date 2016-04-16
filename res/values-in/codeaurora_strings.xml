@@ -31,13 +31,64 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
+  <string name="setp_option_name">Langkah</string>
+  <string name="step_option_desc">Ubahsuaikan tahap maju cepat/mundur</string>
+  <string name="setp_option_three_second">3 detik</string>
+  <string name="setp_option_six_second">6 detik</string>
+  <string name="loop">"Ulang"</string>
+  <string name="single">"Tunggal"</string>
+  <string name="stereo">"Stereo"</string>
+  <string name="speaker_on">Speaker MENYALA</string>
+  <string name="speaker_off">Speaker MATI</string>
+  <string name="speaker_need_headset">Colokkan peranti dengar kepala untuk menggunakan fitur ini.</string>
+  <string name="single_track">"Trek tunggal"</string>
+  <string name="input_url">"Masukkan URL"</string>
+  <string name="streaming_settings">"Pengaturan streaming"</string>
+  <string name="next">"Berikutnya"</string>
+  <string name="previous">"Sebelumnya"</string>
+  <string name="buffer_size">Ukuran buffer</string>
+  <string name="apn">Pilihan APN</string>
+  <string name="rtp_min_port">Porta min.</string>
+  <string name="rtp_max_port">Porta maks.</string>
+  <string name="set_rtp_min_port">Atur porta min.</string>
+  <string name="set_rtp_max_port">Atur porta maks.</string>
+  <string name="set_buffer_size">Atur ukuran buffer</string>
+  <string name="set_apn">Pilih pilihan APN</string>
+  <string name="setting">Pengaturan</string>
+  <string name="server_timeout_title">"Batas waktu server"</string>
+  <string name="server_timeout_message">"Menyambung ulang ke server untuk memutar video?"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"Koneksi gagal, mencoba untuk menyambung ulang ke %1$d\u2026"</string>
+  <string name="media_controller_live">Langsung</string>
+  <string name="media_controller_playing">Memutar</string>
+  <string name="media_controller_connecting">Menyambungkan\u2026</string>
+  <string name="bookmark_add">"Tambah ke bookmark"</string>
+  <string name="bookmark_display">"Tampilkan bookmark"</string>
+  <string name="bookmark_empty">"Tidak ada bookmark"</string>
+  <string name="bookmark_exist">"Bookmark sudah ada"</string>
+  <string name="bookmark_add_success">"Bookmark ditambahkan"</string>
+  <string name="bookmark_list">"Bookmark"</string>
+  <string name="bookmark_title">"Judul"</string>
+  <string name="bookmark_location">"Lokasi"</string>
+  <string name="delete_all">"Hapus semua"</string>
+  <string name="default_title">"Judul baku"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <string name="more_image">Lebih banyak gambar</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">Tidak dapat membungkam: video tidak didukung</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">Tidak ada aplikasi peta yang diinstal untuk menunjukkan lokasi.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <string name="bass_boost_strength">Peningkatan bass</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <string name="virtualizer_strength">Efek 3D</string>
   <!-- The label for the audio effects menu. -->
+  <string name="audio_effects">Efek audio</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <string name="headset_plug">Colokkan peranti dengar kepala untuk efek ini.</string>
   <!-- The title of the audio effects dialog. -->
+  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
+  <string name="fail_trim">Maaf, berkas video ini tidak dapat dipotong</string>
+  <string name="no_permission_for_drm">Maaf, berkas yang dilindungi DRM tidak dapat dibagi</string>
+  <string name="drm_license_info">Info lisensi DRM</string>
 </resources>
