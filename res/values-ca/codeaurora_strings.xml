@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Pas</string>
   <string name="step_option_desc">Personalitza el salt ràpid endavant/rebobina ràpid</string>
   <string name="setp_option_three_second">3 segons</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Ubicació"</string>
   <string name="delete_all">"Esborrar-ho tot"</string>
   <string name="default_title">"Títol predefinit"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Més imatges</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">No s\'ha pogut silenciar: vídeo no suportat</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">No hi ha cap aplicació de mapes instal·lada per mostrar la ubicació.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Amplificació de greus</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">Efecte 3D</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Efectes de so</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Endolla els auriculars per aquests efectes.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">So Snapdragon+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Ho sento, aquest fitxer de vídeo no es pot retallar</string>
   <string name="no_permission_for_drm">Ho sento, no es poden compartir arxius DRM protegits</string>
   <string name="drm_license_info">Informació de llicència DRM</string>

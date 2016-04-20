@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">ئارىلىق</string>
   <string name="step_option_desc">ئىختىيارىي تېز ئالدىغا/كەينىگە ئارىلىقى</string>
   <string name="setp_option_three_second">3 سېكۇنت</string>
@@ -55,11 +56,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="set_apn">ئالدىن بەلگىلەنگەن APN نى تاللاڭ</string>
   <string name="setting">تەڭشەكلەر</string>
   <string name="server_timeout_title">"مۇلازىمىتىر ۋاقىت ھالقىدى"</string>
-  <string name="server_timeout_message">"سىن قويۇشنى داۋاملاشتۇرۇش ئۈچۈن مۇلازىمېتىرغا قايتا باغلىنامدۇ؟"</string>
-  <string name="videoview_error_text_cannot_connect_retry">"باغلىنالمىدى، %1$d غا قايتا باغلاشنى سىناۋاتىدۇ\u2026"</string>
+  <string name="server_timeout_message">"سىن قويۇشنى داۋاملاشتۇرۇش ئۈچۈن مۇلازىمېتىرغا قايتا ئۇلىنامدۇ؟"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"باغلىنالمىدى، %1$d غا قايتا ئۇلىنىشنى سىناۋاتىدۇ\u2026"</string>
   <string name="media_controller_live">بىۋاستە</string>
   <string name="media_controller_playing">چېلىۋاتىدۇ</string>
-  <string name="media_controller_connecting">باغلىنىۋاتىدۇ\u2026</string>
+  <string name="media_controller_connecting">ئۇلىنىۋاتىدۇ\u2026</string>
   <string name="bookmark_add">"خەتكۈچ قوش"</string>
   <string name="bookmark_display">"خەتكۈچ كۆرسەت"</string>
   <string name="bookmark_empty">"خەتكۈچ يوق"</string>
@@ -70,13 +71,24 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"ئورنى"</string>
   <string name="delete_all">"ھەممىنى ئۆچۈر"</string>
   <string name="default_title">"كۆڭۈلدىكى ماۋزۇ"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">تېخىمۇ كۆپ سۈرەت</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">ئۈنسىز قىلغىلى بولمايدۇ: سىننى قوللىمايدۇ</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">ئورنىنى كۆرسىتىشكە ئىشلىتىدىغان خەرىتە ئەپنى تاپالمىدى.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">تۆۋەن ئاۋازنى يۇقىرىلىتىش</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D ئۈنۈم</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">ئاۋاز ئۈنۈملىرى</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">بۇ ئۈنۈمدىن ھۇزۇرلىنىش ئۈچۈن تىڭشىغۇچنى قىستۇرۇڭ.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">كەچۈرۈڭ، بۇ سىن ھۆججىتىنى كەسكىلى بولمايدۇ</string>
+  <string name="no_permission_for_drm">كەچۈرۈڭ، DRM تەرپىدىن قوغدالغان ھۆججەتنى ھەمبەھىرلىگى بولمايدۇ</string>
+  <string name="drm_license_info">DRM ئىجازەتنامە ئۇچۇرى</string>
 </resources>

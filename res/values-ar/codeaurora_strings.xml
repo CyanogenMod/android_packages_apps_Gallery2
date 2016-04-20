@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">خطوة</string>
   <string name="step_option_desc">تخصيص خطوة التقديم/الترجيع السريع</string>
   <string name="setp_option_three_second">3 ثوان
@@ -71,14 +72,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"الموقع"</string>
   <string name="delete_all">"حذف الكل"</string>
   <string name="default_title">"العنوان الافتراضي"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">مزيد من الصور</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">لا يمكن كتم الصوت : الفيديو غير مدعوم</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">لا يوجد تطبيق خرائط مثبت لإظهار الموقع.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">التقوية</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">تأثير ثلاثي الأبعاد</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">التأثيرات الصوتية</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">قم بتوصيل سماعات الرأس لاستخدام هذه الآثار.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">صوت سناب دراغون+ </string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">عذراً، لا يمكن الاقتطاع من ملف الفيديو هذا</string>
   <string name="no_permission_for_drm">معذرة، يتعذر مشاركة الملفات المحمية لإدارة الحقوق الرقمية</string>
   <string name="drm_license_info">معلومات ترخيص إدارة الحقوق الرقمية</string>

@@ -16,5 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Text indicating the time a media item was recorded in details window [CHAR LIMIT=14] -->
   <string name="record_time">เวลาบันทึก</string>
 </resources>
