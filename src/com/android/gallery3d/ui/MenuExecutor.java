@@ -216,13 +216,16 @@ public class MenuExecutor {
 
     private Path getSingleSelectedPath() {
         ArrayList<Path> ids = mSelectionManager.getSelected(true);
-        Utils.assertTrue(ids.size() == 1);
-        return ids.get(0);
+        if (ids.size() != 1)
+            return null;
+         return ids.get(0);
     }
 
     private Intent getIntentBySingleSelectedPath(String action) {
         DataManager manager = mActivity.getDataManager();
         Path path = getSingleSelectedPath();
+        if (path == null)
+            return null;
         String mimeType = getMimeType(manager.getMediaType(path));
         return new Intent(action).setDataAndType(manager.getContentUri(path), mimeType);
     }
@@ -248,26 +251,30 @@ public class MenuExecutor {
                 return;
             }*/
             case R.id.action_edit: {
-                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_EDIT)
-                        .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                ((Activity) mActivity).startActivity(Intent.createChooser(intent, null));
+                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_EDIT);
+                if (intent != null) {
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    ((Activity) mActivity).startActivity(Intent.createChooser(intent, null));
+                }
                 return;
             }
             case R.id.action_setas: {
-                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_ATTACH_DATA)
-                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.putExtra("mimeType", intent.getType());
+                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_ATTACH_DATA);
+                if (intent != null) {
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra("mimeType", intent.getType());
 
-                // DRM files can be set as wallpaper only. Don't show other options
-                // to set as.
-                Uri uri = intent.getData();
+                    // DRM files can be set as wallpaper only. Don't show other options
+                    // to set as.
+                    Uri uri = intent.getData();
 //                if (DrmHelper.isDrmFile(DrmHelper.getFilePath(mActivity, uri))) {
 //                    intent.setPackage("com.android.gallery3d");
 //                }
 
-                Activity activity = mActivity;
-                activity.startActivity(Intent.createChooser(
-                        intent, activity.getString(R.string.set_as)));
+                    Activity activity = mActivity;
+                    activity.startActivity(Intent.createChooser(
+                            intent, activity.getString(R.string.set_as)));
+                }
                 return;
             }
             case R.id.action_delete:
