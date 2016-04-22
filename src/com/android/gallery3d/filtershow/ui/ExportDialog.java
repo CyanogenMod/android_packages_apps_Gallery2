@@ -216,7 +216,11 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             if (mWidthText.getText() != null) {
                 String value = String.valueOf(mWidthText.getText());
                 if (value.length() > 0) {
-                    width = Integer.parseInt(value);
+                    try {
+                        width = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        width = Integer.MAX_VALUE;
+                    }
                     if (width > mOriginalBounds.width()) {
                         width = mOriginalBounds.width();
                         mWidthText.setText("" + width);
@@ -233,7 +237,11 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             if (mHeightText.getText() != null) {
                 String value = String.valueOf(mHeightText.getText());
                 if (value.length() > 0) {
-                    height = Integer.parseInt(value);
+                    try {
+                        height = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        height = Integer.MAX_VALUE;
+                    }
                     if (height > mOriginalBounds.height()) {
                         height = mOriginalBounds.height();
                         mHeightText.setText("" + height);
