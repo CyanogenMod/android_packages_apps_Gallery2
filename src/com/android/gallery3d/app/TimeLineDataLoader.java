@@ -370,12 +370,13 @@ public class TimeLineDataLoader {
 
         @Override
         public void run() {
-
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
             boolean updateComplete = false;
+            long version = MediaObject.INVALID_DATA_VERSION;
             while (mActive) {
                 synchronized (this) {
-                    if (mActive && !mDirty && updateComplete) {
+                    if (mActive && !mDirty && updateComplete
+                            && version != MediaObject.INVALID_DATA_VERSION) {
                         updateLoading(false);
                         if (mFailedVersion != MediaObject.INVALID_DATA_VERSION) {
                         }
@@ -387,7 +388,7 @@ public class TimeLineDataLoader {
                     mDirty = false;
                 }
                 updateLoading(true);
-                long version = mSource.reload();
+                version = mSource.reload();
                 UpdateInfo info = executeAndWait(new GetUpdateInfo(version));
                 updateComplete = info == null;
                 if (updateComplete) {
