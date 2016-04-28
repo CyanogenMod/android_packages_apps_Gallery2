@@ -99,10 +99,6 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
                 : texture;
     }
 
-    public ArrayList<MediaItem> getAllMediaItems() {
-        return mDataWindow.getAllMediaItems();
-    }
-
     protected int renderOverlay(GLCanvas canvas, int index,
             TimeLineSlidingWindow.AlbumEntry entry, int width, int height) {
         int renderRequestFlags = 0;
@@ -133,14 +129,9 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
         }
 
         @Override
-        public void onSizeChanged(int size) {
+        public void onSizeChanged(int[] size) {
             mSlotView.setSlotCount(size);
             mSlotView.invalidate();
-        }
-
-        @Override
-        public void onVersionChanged() {
-            mSlotView.onVersionChanged();
         }
 
         @Override
@@ -184,14 +175,12 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
     public void setModel(TimeLineDataLoader model) {
         if (mDataWindow != null) {
             mDataWindow.setListener(null);
-            mSlotView.setSlotCount(0);
             mDataWindow = null;
         }
         if (model != null) {
             mDataWindow = new TimeLineSlidingWindow(mActivity, model, CACHE_SIZE, mLabelSpec,
                     mSelectionManager, mSlotView);
             mDataWindow.setListener(new MyDataModelListener());
-            mSlotView.setSlotCount(model.size());
         }
     }
 

@@ -70,12 +70,7 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     public long reload() {
         synchronized(this){
             if (mBaseSet.reload() > mDataVersion && !mBaseSet.isLoading()) {
-                if (mFirstReloadDone) {
-                    updateClustersContents();
-                } else {
-                    updateClusters();
-                    mFirstReloadDone = true;
-                }
+                updateClusters();
                 mDataVersion = nextVersionNumber();
             }
             if (mKind == ClusterSource.CLUSTER_ALBUMSET_TIME) {
@@ -92,6 +87,12 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
     }
 
     private void updateClusters() {
+        //save last paths to find the empty albums
+        ArrayList<Path> oldPaths = new ArrayList<Path>();
+        for (ClusterAlbum album : mAlbums) {
+            oldPaths.add(album.getPath());
+        }
+
         mAlbums.clear();
         Clustering clustering;
         Context context = mApplication.getAndroidContext();
@@ -112,7 +113,6 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
                 clustering = new SizeClustering(context);
                 break;
         }
-
         clustering.run(mBaseSet);
         int n = clustering.getNumberOfClusters();
         DataManager dataManager = mApplication.getDataManager();
@@ -141,6 +141,21 @@ public class ClusterAlbumSet extends MediaSet implements ContentListener {
             album.setImageItemCount(clustering.getClusterImageCount(i));
             album.setVideoItemCount(clustering.getClusterVideoCount(i));
             mAlbums.add(album);
+
+            int size = oldPaths.size();
+            for (int j = size - 1; j >= 0; j--) {
+                if (oldPaths.get(j) == childPath) {
+                    oldPaths.remove(j);
+                    break;
+                }
+            }
+        }
+        //set the empty path to the albums which don't exist from dataManger
+        for (Path path : oldPaths) {
+            ClusterAlbum album = (ClusterAlbum) dataManager.peekMediaObject(path);
+            if (album != null) {
+                album.setMediaItems(new ArrayList<Path>());
+            }
         }
     }
 
