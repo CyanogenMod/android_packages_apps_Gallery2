@@ -407,7 +407,13 @@ public abstract class PhotoPage extends ActivityState implements
         mIsFromWidget = data.getBoolean(KEY_IS_FROM_WIDGET, false);
         mStartInFilmstrip = data.getBoolean(KEY_START_IN_FILMSTRIP, false);
         boolean inCameraRoll = data.getBoolean(KEY_IN_CAMERA_ROLL, false);
-        mCurrentIndex = data.getInt(KEY_INDEX_HINT, 0);
+        if (restoreState == null || mSetPathString == null) {
+            mCurrentIndex = data.getInt(KEY_INDEX_HINT, 0);
+        } else {
+            mCurrentIndex = restoreState.getInt(KEY_INDEX_HINT, 0);
+            //we only save index in onSaveState, set itemPath to null to get the right path later
+            itemPath = null;
+        }
         if (mSetPathString != null) {
             mShowSpinner = true;
             mAppBridge = (AppBridge) data.getParcelable(KEY_APP_BRIDGE);
@@ -612,6 +618,12 @@ public abstract class PhotoPage extends ActivityState implements
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onSaveState(Bundle outState) {
+        outState.putInt(KEY_INDEX_HINT,mCurrentIndex);
+        super.onSaveState(outState);
     }
 
     @Override
