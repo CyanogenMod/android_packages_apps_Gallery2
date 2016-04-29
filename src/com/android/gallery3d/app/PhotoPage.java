@@ -485,8 +485,8 @@ public abstract class PhotoPage extends ActivityState implements
             mSetPathString = "/filter/delete/{" + mSetPathString + "}";
             mMediaSet = (FilterDeleteSet) mActivity.getDataManager()
                     .getMediaSet(mSetPathString);
-            if(mMediaSet != null && mIsFromTimelineScreen) {
-                mMediaSet.setClusterKind(-1);
+            if (mMediaSet != null && mIsFromTimelineScreen) {
+                mMediaSet.setClusterKind(GalleryActivity.CLUSTER_ALBUMSET_NO_TITLE);
             }
             if (mMediaSet == null) {
                 Log.w(TAG, "failed to restore " + mSetPathString);
@@ -571,8 +571,7 @@ public abstract class PhotoPage extends ActivityState implements
                         // We only want to finish the PhotoPage if there is no
                         // deletion that the user can undo.
                         if (mMediaSet.getNumberOfDeletions() == 0) {
-                            mActivity.getStateManager().finishState(
-                                    PhotoPage.this);
+                            onBackPressed();
                         }
                     }
                 }
@@ -988,12 +987,13 @@ public abstract class PhotoPage extends ActivityState implements
             } else if (mTreatBackAsUp) {
                 onUpPressed();
             } else {
+                if (mMediaSet != null && mIsFromTimelineScreen) {
+                    //if back to TimeLinePage, need show timeline title
+                    mMediaSet.setClusterKind(GalleryActivity.CLUSTER_ALBUMSET_TIME_TITLE);
+                }
                 super.onBackPressed();
                 mActionBar.setBackGroundDefault();
                 int count = mActivity.getStateManager().getStateCount();
-                if(mIsFromTimelineScreen) {
-                    mMediaSet.setClusterKind(0);
-                }
                 if (mIsFromVideoScreen || count == 1 || mIsFromTimelineScreen) {
                     mActivity.getToolbar().setNavigationContentDescription(
                             "drawer");
@@ -1610,6 +1610,10 @@ public abstract class PhotoPage extends ActivityState implements
         mIsActive = true;
         setContentPane(mRootPane);
 
+        //if from TimeLinePage, don't show the timeline title
+        if (mMediaSet != null && mIsFromTimelineScreen) {
+            mMediaSet.setClusterKind(GalleryActivity.CLUSTER_ALBUMSET_NO_TITLE);
+        }
         mModel.resume();
         mPhotoView.resume();
         mActionBar.setDisplayOptions(

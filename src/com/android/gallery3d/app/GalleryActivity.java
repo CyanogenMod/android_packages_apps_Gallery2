@@ -94,6 +94,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public static final String KEY_FROM_SNAPCAM = "from-snapcam";
     public static final String KEY_TOTAL_NUMBER = "total-number";
 
+    //add for TimelinePage and PhotoPage: -1 don't show timeline title, 0 show timeline title
+    public static final int CLUSTER_ALBUMSET_NO_TITLE = -1;
+    public static final int CLUSTER_ALBUMSET_TIME_TITLE = 0;
+
     private static final String TAG = "GalleryActivity";
     private Dialog mVersionCheckDialog;
     private ListView mDrawerListView;
