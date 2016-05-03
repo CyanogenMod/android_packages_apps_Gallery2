@@ -448,6 +448,10 @@ public class TimeLinePage extends ActivityState implements
 
         // Set the reload bit here to prevent it exit this page in clearLoadingBit().
         setLoadingBit(BIT_LOADING_RELOAD);
+        if (null != mMediaSet) {
+            //set to show timeline title
+            mMediaSet.setClusterKind(GalleryActivity.CLUSTER_ALBUMSET_TIME_TITLE);
+        }
         mLoadingFailed = false;
         mAlbumDataAdapter.resume();
 

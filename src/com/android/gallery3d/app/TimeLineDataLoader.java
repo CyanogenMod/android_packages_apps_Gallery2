@@ -39,7 +39,6 @@ public class TimeLineDataLoader {
     @SuppressWarnings("unused")
     private static final String TAG = "TimeLineDataLoader";
     private static final int DATA_CACHE_SIZE = 1000;
-    private boolean mNewVersion = false;
 
     private static final int MSG_LOAD_START = 1;
     private static final int MSG_LOAD_FINISH = 2;
@@ -54,10 +53,8 @@ public class TimeLineDataLoader {
 
     public static interface DataListener {
         public void onContentChanged(int index);
-        public void onSizeChanged(int size);
-        public void onVersionChanged();
+        public void onSizeChanged();
     }
-
 
     private int mActiveStart = 0;
     private int mActiveEnd = 0;
@@ -65,7 +62,6 @@ public class TimeLineDataLoader {
     private int mContentStart = 0;
     private int mContentEnd = 0;
 
-    private ArrayList<MediaItem> mTotalMediaItems;
     private final MediaSet mSource;
     private long mSourceVersion = MediaObject.INVALID_DATA_VERSION;
 
@@ -122,9 +118,8 @@ public class TimeLineDataLoader {
         mSource.removeContentListener(mSourceListener);
     }
 
-
     public MediaSet getMediaSet(int index) {
-    	MediaSet mediaSet = ((ClusterAlbumSet)mSource).getAlbumFromindex(index);
+        MediaSet mediaSet = ((ClusterAlbumSet)mSource).getAlbumFromindex(index);
         return mediaSet;
     }
 
@@ -139,10 +134,6 @@ public class TimeLineDataLoader {
         return ((ClusterAlbumSet) mSource).getSubMediaSetCount();
     }
 
-    public ArrayList<MediaItem> getAllMediaItems() {
-        return mTotalMediaItems;
-    }
-
     public int getActiveStart() {
         return mActiveStart;
     }
@@ -153,6 +144,16 @@ public class TimeLineDataLoader {
 
     public int size() {
         return mSize;
+    }
+
+    public int[] getSubMediaSetCount() {
+        ClusterAlbumSet set = (ClusterAlbumSet) mSource;
+        int albumCount = set.getSubMediaSetCount();
+        int[] counts = new int[albumCount];
+        for (int i = albumCount - 1; i >= 0; --i) {
+            counts[i] = set.getSubMediaSet(i).getSelectableItemCount();
+        }
+        return counts;
     }
 
     // Returns the index of the MediaItem with the given path or
@@ -298,13 +299,10 @@ public class TimeLineDataLoader {
         @Override
         public Void call() throws Exception {
             UpdateInfo info = mUpdateInfo;
-            if ( info.version != mSourceVersion) {
-                mNewVersion = true;
-            }
             mSourceVersion = info.version;
             if (mSize != info.size) {
                 mSize = info.size;
-                if (mDataListener != null) mDataListener.onSizeChanged(mSize);
+                if (mDataListener != null) mDataListener.onSizeChanged();
                 if (mContentEnd > mSize) mContentEnd = mSize;
                 if (mActiveEnd > mSize) mActiveEnd = mSize;
             }
@@ -403,11 +401,6 @@ public class TimeLineDataLoader {
                 }
 
                 executeAndWait(new UpdateContent(info));
-                if (mNewVersion) {
-                    mNewVersion = false;
-                    mTotalMediaItems = mSource.getMediaItem(0, mSource.getMediaItemCount());
-                    mDataListener.onVersionChanged();
-                }
             }
             updateLoading(false);
         }

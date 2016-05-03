@@ -42,9 +42,8 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
     private static final int JOB_LIMIT = 2;
 
     public static interface Listener {
-        public void onSizeChanged(int size);
+        public void onSizeChanged(int[] size);
         public void onContentChanged();
-        public void onVersionChanged();
         public int getTitleWidth();
     }
 
@@ -183,10 +182,6 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
                 mTileUploader.addTexture(entry.bitmapTexture);
             }
         }
-    }
-
-    public ArrayList<MediaItem> getAllMediaItems() {
-        return mSource.getAllMediaItems();
     }
 
     private void updateTextureUploadQueue() {
@@ -355,10 +350,11 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
     }
 
     @Override
-    public void onSizeChanged(int size) {
+    public void onSizeChanged() {
+        int size = mSource.size();
         if (mSize != size) {
             mSize = size;
-            if (mListener != null) mListener.onSizeChanged(mSize);
+            if (mListener != null) mListener.onSizeChanged(mSource.getSubMediaSetCount());
             if (mContentEnd > mSize) mContentEnd = mSize;
             if (mActiveEnd > mSize) mActiveEnd = mSize;
         }
@@ -375,11 +371,6 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
                 mListener.onContentChanged();
             }
         }
-    }
-
-    @Override
-    public void onVersionChanged() {
-        mListener.onVersionChanged();
     }
 
     public void resume() {
