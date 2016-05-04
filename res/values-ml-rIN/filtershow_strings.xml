@@ -152,5 +152,5 @@
     <string name="filtershow_exif_date" msgid="8882402253732028544">"എടുത്ത തീയതി"</string>
     <string name="filtershow_exif_f_stop" msgid="6081797865604483139">"F നിർത്തുക"</string>
     <string name="filtershow_exif_exposure_time" msgid="4099067062781294115">"എക്‌സ്പോഷർ സമയം"</string>
-    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"പകര്‍പ്പവകാശം"</string>
+    <string name="filtershow_exif_copyright" msgid="8801875918803737581">"പകർപ്പവകാശം"</string>
 </resources>
