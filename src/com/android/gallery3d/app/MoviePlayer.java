@@ -691,12 +691,14 @@ public class MoviePlayer implements
         }
         if (mMovieItem.getError()) {
             Log.w(TAG, "error occured, exit the video player!");
+            mHandler.removeCallbacksAndMessages(null);
             mActivityContext.finish();
             return;
         }
         if (mPlayerExt.getLoop()) {
             onReplay();
         } else { //original logic
+            mHandler.removeCallbacksAndMessages(null);
             mTState = TState.COMPELTED;
             if (mCanReplay) {
                 mController.showEnded();
