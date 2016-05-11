@@ -1175,7 +1175,12 @@ public abstract class PhotoPage extends ActivityState implements
                 return true;
             }
             case R.id.print: {
-                mActivity.printSelectedImage(manager.getContentUri(path));
+                try {
+                    mActivity.printSelectedImage(manager.getContentUri(path));
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                    mActivity.finish();
+                }
                 return true;
             }
             case R.id.action_delete:
