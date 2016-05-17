@@ -17,16 +17,43 @@ package com.android.gallery3d.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+
+import java.util.List;
 
 public class IntentHelper {
 
+    private static final String[][] KNOWN_CAMERA_ACTIVITIES = {
+            { "org.codeaurora.snapcam", "com.android.camera.CameraLauncher" },
+            { "com.android.camera2", "com.android.camera.CameraLauncher" }
+    };
+
+    private static Intent sResolvedCameraActivity = null;
+
     public static Intent getCameraIntent(Context context) {
-        return new Intent(Intent.ACTION_MAIN)
-            .setClassName("com.android.camera2", "com.android.camera.CameraLauncher");
+        if (sResolvedCameraActivity == null) {
+            for (String[] activity : KNOWN_CAMERA_ACTIVITIES) {
+                Intent intent = new Intent(Intent.ACTION_MAIN)
+                        .setClassName(activity[0], activity[1]);
+                if (isActivityAvailable(context, intent)) {
+                    sResolvedCameraActivity = intent;
+                    break;
+                }
+            }
+        }
+        return sResolvedCameraActivity;
     }
 
     public static Intent getGalleryIntent(Context context) {
         return new Intent(Intent.ACTION_MAIN)
             .setClassName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity");
+    }
+
+    public static boolean isActivityAvailable(Context context, Intent intent) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return !list.isEmpty();
     }
 }
