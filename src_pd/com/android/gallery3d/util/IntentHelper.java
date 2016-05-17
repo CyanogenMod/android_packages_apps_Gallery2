@@ -17,16 +17,36 @@ package com.android.gallery3d.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+
+import java.util.List;
 
 public class IntentHelper {
 
     public static Intent getCameraIntent(Context context) {
-        return new Intent(Intent.ACTION_MAIN)
-            .setClassName("com.android.camera2", "com.android.camera.CameraLauncher");
+        Intent intentCamera2 = new Intent(Intent.ACTION_MAIN)
+                .setClassName("com.android.camera2", "com.android.camera.CameraLauncher");
+        Intent intentSnap = new Intent(Intent.ACTION_MAIN)
+                .setClassName("org.codeaurora.snapcam", "com.android.camera.CameraLauncher");
+        if (isIntentAvailable(context, intentCamera2)) {
+            return intentCamera2;
+        } else if (isIntentAvailable(context, intentCamera2)) {
+            return intentSnap;
+        }
+
+        return null;
     }
 
     public static Intent getGalleryIntent(Context context) {
         return new Intent(Intent.ACTION_MAIN)
             .setClassName("com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity");
+    }
+
+    public static boolean isIntentAvailable(Context context, Intent intent) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return !list.isEmpty();
     }
 }
