@@ -15,10 +15,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">Галерэя</string>
   <!-- Title for picture frame gadget to show in list of all available gadgets -->
   <!-- Used to format short video duration in Details dialog. minutes:seconds e.g. 00:30 -->
   <!-- Used to format video duration in Details dialog. hours:minutes:seconds e.g. 0:21:30 -->
   <!-- Activity label. This might show up in the activity-picker -->
+  <string name="movie_view_label">Відэапрайгравальнік</string>
   <!-- shown in the video player view while the video is being loaded, before it starts playing -->
   <!-- Message shown on the progress dialog to indicate we're loading the
             account info [CHAR LIMIT=30] -->
@@ -123,6 +125,7 @@
   <!-- A label describing that the current screen is for the user to pick
          some albums to be viewable offline [CHAR LIMIT=30] -->
   <!-- A label of a menu item for user to sync the content [CHAR LIMIT=30] -->
+  <string name="sync_picasa_albums">Абнавіць</string>
   <!-- A label on a button. The user clicks this button after he has
          finished selection. [CHAR LIMIT=15] -->
   <!-- String indicating the sequence of currently selected item in the

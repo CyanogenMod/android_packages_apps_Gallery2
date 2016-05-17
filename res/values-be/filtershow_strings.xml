@@ -20,6 +20,7 @@
   <!--  String shown when cannot load the original image. We will edit selected image [CHAR LIMIT=NONE] -->
   <!--  String displayed when showing the original image [CHAR LIMIT=NONE] -->
   <!--  String displayed when setting the homepage wallpaper in the background [CHAR LIMIT=NONE] -->
+  <string name="setting_wallpaper">Налады</string>
   <!--  generic strings -->
   <!--  Text for to display on a download failure [CHAR LIMIT=NONE] -->
   <!--  Text to label an image as "original" [CHAR LIMIT=20] -->
@@ -27,7 +28,9 @@
   <!-- Text for the custom border filter [CHAR LIMIT=20] -->
   <!--  actionbar menu -->
   <!--  Text for the undo menu item [CHAR LIMIT=20] -->
+  <string name="filtershow_undo">Вярнуцца</string>
   <!--  Text for redo menu item [CHAR LIMIT=20] -->
+  <string name="filtershow_redo">Працягнуць</string>
   <!--  Text for the image menu item showing the filters that have been applied [CHAR LIMIT=30] -->
   <!--  Text for the image state panel menu item [CHAR LIMIT=30] -->
   <!--  Text for the menu item to export a flattened photo[CHAR LIMIT=30] -->
@@ -39,6 +42,7 @@
   <!--  Text for size value tag [CHAR LIMIT=30] -->
   <!--  Text for size x [CHAR LIMIT=1] -->
   <!--  Name for the overflow menu item for settings [CHAR LIMIT=20] -->
+  <string name="menu_settings">Налады</string>
   <!--  Exit Dialog -->
   <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
   <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
