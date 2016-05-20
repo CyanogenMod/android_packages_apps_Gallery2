@@ -17,12 +17,20 @@ package com.android.gallery3d.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 
 public class IntentHelper {
 
+    private static Intent sResolvedCameraActivity = null;
+
     public static Intent getCameraIntent(Context context) {
-        return new Intent(Intent.ACTION_MAIN)
-            .setClassName("com.android.camera2", "com.android.camera.CameraLauncher");
+        if (sResolvedCameraActivity == null) {
+            sResolvedCameraActivity = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        return sResolvedCameraActivity;
     }
 
     public static Intent getGalleryIntent(Context context) {
