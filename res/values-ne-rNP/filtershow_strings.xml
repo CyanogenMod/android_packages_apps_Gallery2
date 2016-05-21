@@ -126,7 +126,7 @@
     <string name="color_pick_select" msgid="734312818059057394">"कस्टम रङ्ग छान्नुहोस्"</string>
     <string name="color_pick_title" msgid="6195567431995308876">"रङ्ग छान्नुहोस्"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"साइज चयन गर्नुहोस्"</string>
-    <string name="draw_size_accept" msgid="6781529716526190028">"ठिक छ"</string>
+    <string name="draw_size_accept" msgid="6781529716526190028">"ठीक छ"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"मूल"</string>
     <string name="state_panel_result" msgid="318640531123298676">"परिणाम"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"चित्र सुरक्षित गर्दै"</string>
