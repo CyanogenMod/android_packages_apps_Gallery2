@@ -238,7 +238,7 @@ public class GalleryUtils {
     public static boolean isCameraAvailable(Context context) {
         if (sCameraAvailableInitialized) return sCameraAvailable;
         PackageManager pm = context.getPackageManager();
-        Intent cameraIntent = IntentHelper.getCameraIntent(context);
+        Intent cameraIntent = IntentHelper.getCameraIntent();
         List<ResolveInfo> apps = pm.queryIntentActivities(cameraIntent, 0);
         sCameraAvailableInitialized = true;
         sCameraAvailable = !apps.isEmpty();
