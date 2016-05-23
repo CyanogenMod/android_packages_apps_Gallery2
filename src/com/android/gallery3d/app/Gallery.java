@@ -26,7 +26,7 @@ public class Gallery extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = IntentHelper.getGalleryIntent(Gallery.this);
+        Intent intent = IntentHelper.getGalleryIntent();
         // Since this is being launched from a homescreen shortcut,
         // it's already in a new task. Start Gallery activity and
         // reset the task to its initial state if needed.
