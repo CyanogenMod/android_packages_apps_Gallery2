@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Passo</string>
   <string name="step_option_desc">Personalizza l\'avanzamento/riavvolgimento rapido</string>
   <string name="setp_option_three_second">3 secondi</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Posizione"</string>
   <string name="delete_all">"Elimina tutto"</string>
   <string name="default_title">"Titolo predefinito"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Altre immagini</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Impossibile disattivare l\'audio: video non supportato</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Non non c\'è nessuna app mappe installata per mostrare la posizione.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Amplificazione bassi</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">Effetto 3D</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Effetti audio</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Collega le cuffie per questi effetti.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Questo file video non può essere tagliato</string>
   <string name="no_permission_for_drm">Spiacente, i file protetti da DRM non possono essere condivisi</string>
   <string name="drm_license_info">Info licenza DRM</string>

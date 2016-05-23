@@ -30,6 +30,16 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setting">Ynstellingen</string>
   <string name="bookmark_location">"Lokaasje"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
+  <!-- The label for the audio effects menu. -->
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+  <!-- The title of the audio effects dialog. -->
+  <!-- The tips of trimming video -->
 </resources>

@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Korak</string>
   <string name="step_option_desc">Prilagodite korak ubrzanja/premotavanja</string>
   <string name="setp_option_three_second">3 sekunde</string>
@@ -70,14 +71,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Lokacija"</string>
   <string name="delete_all">"Izbriši sve"</string>
   <string name="default_title">"Zadani naslov"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Više slika</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
   <string name="mute_nosupport">Nije moguće isključiti zvuk: videozapis nije podržan</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Nema instaliranih aplikacija karata za prikaz lokacije.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Bass ubrzanje</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D efekt</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Zvučni efekti</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Priključite slušalice za ove efekte.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+  <!-- The tips of trimming video -->
   <string name="fail_trim">Oprostite, ovaj video ne može biti izrezan</string>
   <string name="no_permission_for_drm">Žao nam je, datoteke zaštićene DRM-om se nemogu dijeliti</string>
   <string name="drm_license_info">Informacije DRM licence</string>
