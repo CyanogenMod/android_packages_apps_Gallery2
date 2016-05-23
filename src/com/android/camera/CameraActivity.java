@@ -15,6 +15,7 @@
  */
 package com.android.camera;
 
+import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.IntentHelper;
 
 import android.app.Activity;
@@ -26,13 +27,16 @@ public class CameraActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Intent intent = IntentHelper.getCameraIntent(CameraActivity.this);
-        // Since this is being launched from a homescreen shorcut,
-        // it's already in a new task. Start Camera activity and
-        // reset the task to its initial state if needed.
-        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+
+        if (GalleryUtils.isCameraAvailable(CameraActivity.this)) {
+            Intent intent = IntentHelper.getCameraIntent();
+            // Since this is being launched from a homescreen shorcut,
+            // it's already in a new task. Start Camera activity and
+            // reset the task to its initial state if needed.
+            intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
         finish();
     }
 }
