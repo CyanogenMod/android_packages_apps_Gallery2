@@ -18,6 +18,7 @@ package com.android.gallery3d.filtershow.imageshow;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -319,6 +320,7 @@ public final class GeometryMathUtils {
         BitmapCache bitmapCache = MasterImage.getImage().getBitmapCache();
         Bitmap temp = bitmapCache.getBitmap(frame.width(),
                 frame.height(), BitmapCache.UTIL_GEOMETRY);
+        temp.eraseColor(Color.TRANSPARENT);
         Canvas canvas = new Canvas(temp);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
