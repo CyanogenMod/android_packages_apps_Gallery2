@@ -33,7 +33,7 @@
     android:viewportWidth="72.0"
     android:viewportHeight="72.0">
     <path
-        android:fillColor="#FF000000"
+        android:fillColor="@color/black"
         android:pathData="M59,10L46.92,10l-2.16,-4L27,6l-2.16,4L13,10a1,1 0,0 0,-1 1v4a1,1 0,0 0,1 1h46a1,1 0,0 0,1 -1L60,11A1,1 0,0 0,59 10ZM16,60a6,6 0,0 0,6 6h28a6,6 0,0 0,6 -6L56,20L16,20v40Z"
         android:fillAlpha="0.54"/>
 </vector>
