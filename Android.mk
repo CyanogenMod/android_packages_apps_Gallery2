@@ -6,9 +6,9 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_JAVA_LIBRARIES := telephony-common
 
-LOCAL_STATIC_JAVA_LIBRARIES += ahbottomnavigation
-LOCAL_STATIC_JAVA_LIBRARIES := android-support-v7-appcompat
-LOCAL_STATIC_JAVA_LIBRARIES := android-support-v13
+LOCAL_STATIC_JAVA_LIBRARIES := ahbottomnavigation
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-appcompat
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v13
 LOCAL_STATIC_JAVA_LIBRARIES += com.android.gallery3d.common2
 LOCAL_STATIC_JAVA_LIBRARIES += mp4parser
 LOCAL_STATIC_JAVA_LIBRARIES += xmp_toolkit
