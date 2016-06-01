@@ -14,16 +14,11 @@
      limitations under the License.
 -->
 <resources>
-    <declare-styleable name="Theme.GalleryBase">
-        <attr name="listPreferredItemHeightSmall" format="dimension" />
-        <attr name="switchStyle" format="reference" />
-    </declare-styleable>
+    <declare-styleable name="Theme.GalleryBase"/>
 
     <!-- Camera resources below -->
 
-    <declare-styleable name="CameraPreference">
-        <attr name="title" format="string" />
-    </declare-styleable>
+    <declare-styleable name="CameraPreference"/>
     <declare-styleable name="ListPreference">
         <attr name="key" format="string" />
         <attr name="defaultValue" format="string|reference" />
@@ -44,7 +39,6 @@
     </declare-styleable>
     <declare-styleable name="Knob">
         <attr name="label" format="string" />
-        <attr name="background" format="integer" />
         <attr name="foreground" format="integer" />
     </declare-styleable>
 </resources>
