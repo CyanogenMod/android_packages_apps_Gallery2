@@ -6,10 +6,12 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_JAVA_LIBRARIES := telephony-common
 
+LOCAL_STATIC_JAVA_LIBRARIES += ahbottomnavigation
+LOCAL_STATIC_JAVA_LIBRARIES := android-support-v7-appcompat
 LOCAL_STATIC_JAVA_LIBRARIES := android-support-v13
 LOCAL_STATIC_JAVA_LIBRARIES += com.android.gallery3d.common2
-LOCAL_STATIC_JAVA_LIBRARIES += xmp_toolkit
 LOCAL_STATIC_JAVA_LIBRARIES += mp4parser
+LOCAL_STATIC_JAVA_LIBRARIES += xmp_toolkit
 #LOCAL_STATIC_JAVA_LIBRARIES += android-support-v8-renderscript
 
 #LOCAL_RENDERSCRIPT_TARGET_API := 18
@@ -31,9 +33,15 @@ LOCAL_SRC_FILES += $(call all-java-files-under, src_pd)
 
 LOCAL_PROGUARD_ENABLED := disabled
 
-LOCAL_RESOURCE_DIR += $(LOCAL_PATH)/res
+LOCAL_RESOURCE_DIR += \
+    $(LOCAL_PATH)/res \
+    $(TOP)/external/ahbottomnavigation/ahbottomnavigation/src/main/res \
+    $(TOP)/frameworks/support/v7/appcompat/res
 
-LOCAL_AAPT_FLAGS := --auto-add-overlay
+LOCAL_AAPT_FLAGS := \
+    --auto-add-overlay \
+    --extra-packages com.aurelhubert.ahbottomnavigation \
+    --extra-packages android.support.v7.appcompat
 
 LOCAL_PACKAGE_NAME := Gallery2
 
