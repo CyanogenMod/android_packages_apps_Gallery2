@@ -703,12 +703,12 @@ public class AlbumSetPage extends ActivityState implements
                 //mActionBar.disableClusterMenu(true);
                 mActionModeHandler.startActionMode();
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                ((GalleryActivity)mActivity).toggleNavDrawer(false);
+                ((GalleryActivity)mActivity).toggleNavBar(false);
                 break;
             }
             case SelectionManager.LEAVE_SELECTION_MODE: {
                 mActionModeHandler.finishActionMode();
-                ((GalleryActivity)mActivity).toggleNavDrawer(true);
+                ((GalleryActivity)mActivity).toggleNavBar(true);
                 /*if (mShowClusterMenu) {
                     mActionBar.enableClusterMenu(mSelectedAction, this);
                 }*/
