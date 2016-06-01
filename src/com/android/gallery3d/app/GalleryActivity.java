@@ -80,6 +80,9 @@ import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.ThreadPool.Job;
 import com.android.gallery3d.util.ThreadPool.JobContext;
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+
 public final class GalleryActivity extends AbstractGalleryActivity implements OnCancelListener {
     public static final String EXTRA_SLIDESHOW = "slideshow";
     public static final String EXTRA_DREAM = "dream";
@@ -103,8 +106,12 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     private ListView mDrawerListView;
     private DrawerLayout mDrawerLayout;
     public static boolean mIsparentActivityFInishing;
-    NavigationDrawerListAdapter mNavigationAdapter;
     public Toolbar mToolbar;
+
+    private ArrayList<AHBottomNavigationItem> bottomNavigationItems =
+        new ArrayList<>();
+    private AHBottomNavigation botttomNavigation;
+
     /** DrawerLayout is not supported in some entrances.
      * such as Intent.ACTION_VIEW, Intent.ACTION_GET_CONTENT, Intent.PICK. */
     private boolean mDrawerLayoutSupported = true;
@@ -220,73 +227,42 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                     R.string.videos_title, R.drawable.videos) };
 
     public void initView() {
-        mDrawerListView = (ListView) findViewById(R.id.navList);
-        mNavigationAdapter = new NavigationDrawerListAdapter(this);
-        mDrawerListView.setAdapter(mNavigationAdapter);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        bottomNavigation = (AHBottomNavigation)
+                findViewById(R.id.bottom_navigation);
         setActionBar(mToolbar);
+        setToolbar(mToolbar);
 
-        mDrawerListView
-                .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        getGLRoot().lockRenderThread();
-                        showScreen(position);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(
+                R.string.timeline_title, R.drawable.ic_timeline, R.color.tab_1);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(
+                R.string.albums_title, R.drawable.ic_album, R.color.tab_2);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(
+                R.string.videos_title, R.drawable.ic_video, R.color.tab_3);
 
-                        mNavigationAdapter.setClickPosition(position);
-                        mDrawerListView.invalidateViews();
-                        mDrawerLayout.closeDrawer(Gravity.START);
-                        getGLRoot().unlockRenderThread();
-                    }
-                });
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mDrawerLayout.setDrawerListener(new DrawerListener() {
-                @Override
-                public void onDrawerStateChanged(int arg0) {
-                    toggleNavDrawer(getStateManager().getStateCount() == 1);
-                }
+        bottomNavigation.addItem(item1);
+        bottomNavigation.addItem(item2);
+        bottomNavigation.addItem(item3);
+        bottomNavigation.setBehaviorTranslationEnabled(false);
+        bottomNavigation.setForceTint(true);
+        bottomNavigation.setColored(true);
 
-                @Override
-                public void onDrawerSlide(View arg0, float arg1) {
-
-                }
-
-                @Override
-                public void onDrawerOpened(View arg0) {
-
-                }
-
-                @Override
-                public void onDrawerClosed(View arg0) {
-
-                }
-            });
-        mToolbar.setNavigationContentDescription("drawer");
-        mToolbar.setNavigationOnClickListener(new OnClickListener() {
-
+        bottomNavigation.setOnTabSelectedListener(
+                new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                if (mToolbar.getNavigationContentDescription().equals("drawer")) {
-                    mDrawerLayout.openDrawer(Gravity.START);
-
-                } else {
-                    mToolbar.setNavigationContentDescription("drawer");
-                    mToolbar.setNavigationIcon(R.drawable.drawer);
-                    onBackPressed();
-                }
+            public void onTabSelected(int position, boolean wasSelected) {
+                getGLRoot().lockRenderThread();
+                showScreen(position);
+                getGLRoot().unlockRenderThread();
             }
         });
-        setToolbar(mToolbar);
     }
 
-    public void toggleNavDrawer(boolean setDrawerVisibility) {
-        if (mDrawerLayout != null) {
-            if (setDrawerVisibility && mDrawerLayoutSupported) {
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            } else {
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
+    public void toggleNavBar(boolean show) {
+        if (show) {
+            bottomNavigation.restoreBottomNavigation(true);
+        } else {
+            bottomNavigation.hideBottomNavigation(true);
         }
     }
 
@@ -313,75 +289,6 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         default:
             break;
         }
-
-        mNavigationAdapter.setClickPosition(position);
-
-        mDrawerListView.invalidateViews();
-        mToolbar.setTitle(getResources().getStringArray(
-                R.array.title_array_nav_items)[position]);
-
-        mDrawerListView.setItemChecked(position, true);
-        mDrawerListView.setSelection(position);
-        mToolbar.setNavigationContentDescription("drawer");
-        mToolbar.setNavigationIcon(R.drawable.drawer);
-    }
-
-    private class NavigationDrawerListAdapter extends BaseAdapter {
-
-        private int curTab = 0;
-        Context mContext;
-
-        public NavigationDrawerListAdapter(Context context) {
-            mContext = context;
-
-        }
-
-        @Override
-        public int getCount() {
-            return sActionItems.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return sActionItems[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) mContext
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(
-                        com.android.gallery3d.R.layout.drawer_list_item, null);
-            } else {
-                view = convertView;
-            }
-
-            TextView titleView = (TextView) view.findViewById(R.id.itemTitle);
-            ImageView iconView = (ImageView) view.findViewById(R.id.ivItem);
-
-            titleView.setText(sActionItems[position].title);
-            iconView.setImageResource(sActionItems[position].icon);
-
-            if (curTab == position) {
-                view.setBackgroundResource(R.drawable.drawer_item_selected_bg);
-            } else {
-                view.setBackgroundColor(android.R.color.transparent);
-            }
-
-            return view;
-        }
-
-        public void setClickPosition(int position) {
-            curTab = position;
-        }
     }
 
     public static int getActionTitle(Context context, int type) {
@@ -400,6 +307,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         if (Intent.ACTION_GET_CONTENT.equalsIgnoreCase(action)) {
             mDrawerLayoutSupported = false;
             startGetContent(intent);
+            toggleNavBar(false);
         } else if (Intent.ACTION_PICK.equalsIgnoreCase(action)) {
             mDrawerLayoutSupported = false;
             // We do NOT really support the PICK intent. Handle it as
@@ -412,10 +320,12 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
                 if (type.endsWith("/video")) intent.setType("video/*");
             }
             startGetContent(intent);
+            toggleNavBar(false);
         } else if (Intent.ACTION_VIEW.equalsIgnoreCase(action)
                 || ACTION_REVIEW.equalsIgnoreCase(action)){
             mDrawerLayoutSupported = false;
             startViewAction(intent);
+            toggleNavBar(false);
         } else {
             mDrawerLayoutSupported = true;
             startTimelinePage();
