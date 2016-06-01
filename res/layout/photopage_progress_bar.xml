@@ -9,7 +9,7 @@
         android:visibility="invisible">
         <View
                 android:id="@+id/photopage_progress_background"
-                android:background="#ff000000"
+                android:background="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:layout_alignParentBottom="true"
@@ -25,9 +25,9 @@
         <TextView
                 android:id="@+id/photopage_progress_bar_text"
                 android:text="@string/pano_progress_text"
-                android:textColor="#ffffffff"
+                android:textColor="@color/white"
                 android:textSize="14dp"
-                android:shadowColor="#ff000000"
+                android:shadowColor="@color/black"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="2"

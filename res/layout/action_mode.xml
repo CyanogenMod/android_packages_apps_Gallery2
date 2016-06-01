@@ -32,7 +32,7 @@
                 style="?android:attr/actionButtonStyle"
                 android:divider="?android:attr/listDividerAlertDialog"
                 android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-                android:textColor="#8A000000"
+                android:textColor="@color/black_transparent_4"
                 android:textSize="20sp"
                 android:singleLine="true"
                 android:gravity="left|center_vertical"

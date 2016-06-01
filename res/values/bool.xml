@@ -20,4 +20,5 @@
     <bool name="stereo">true</bool>
     <bool name="streaming">true</bool>
     <bool name="speaker">true</bool>
+    <bool name="picker_is_dialog">false</bool>
 </resources>
