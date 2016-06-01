@@ -282,13 +282,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
         if (mInCameraApp) {
             GalleryUtils.startGalleryActivity(mActivity);
         } else if (mActivity.getStateManager().getStateCount() > 1) {
-            Toolbar toolbar = mActivity.getToolbar();
-            if (toolbar != null) {
-                toolbar.setNavigationContentDescription(
-                        mActivity.getResources().getString(R.string.drawer_desc));
-                toolbar.setNavigationIcon(R.drawable.drawer);
-                ((GalleryActivity) mActivity).toggleNavDrawer(true);
-            }
+            ((GalleryActivity) mActivity).toggleNavBar(true);
             super.onBackPressed();
         } else if (mParentMediaSetString != null) {
             Bundle data = new Bundle(getData());
@@ -495,16 +489,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
         setContentPane(mRootPane);
 
-        boolean enableHomeButton = (mActivity.getStateManager().getStateCount() > 1) |
-                mParentMediaSetString != null;
-        //GalleryActionBar actionBar = mActivity.getGalleryActionBar();
-        mActionBar.setDisplayOptions(enableHomeButton, true);
-
-        Toolbar toolBar = mActivity.getToolbar();
-        if (enableHomeButton && toolBar != null) {
-            toolBar.setNavigationContentDescription("back");
-            toolBar.setNavigationIcon(R.drawable.back);
-        }
         // Set the reload bit here to prevent it exit this page in clearLoadingBit().
         setLoadingBit(BIT_LOADING_RELOAD);
         mLoadingFailed = false;
