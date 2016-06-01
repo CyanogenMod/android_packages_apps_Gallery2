@@ -122,19 +122,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <string name="drm_license_info">DRM license info</string>
 
-    <string-array name="title_array_nav_items">
-        <item>Timeline</item>
-        <item>Albums</item>
-        <item>Videos</item>
-    </string-array>
-
-    <string name="navigation_drawer_title" translatable="false">@string/app_name</string>
     <!-- Timeline screen title -->
     <string name="timeline_title">Timeline</string>
     <!-- Albums screen title -->
-    <string name="albums_title" translatable="false">@string/tab_albums</string>
+    <string name="albums_title">Albums</string>
     <!-- Videos screen title -->
     <string name="videos_title">Videos</string>
+
     <string name="action_viewtype_list">List view</string>
     <string name="action_viewtype_grid" translatable="false">@string/switch_photo_grid</string>
     <string name="tvEmptyAlbum">No photos found</string>
@@ -144,7 +138,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="text_makeup_Soften">Soften</string>
     <string name="text_makeup_trimface">Trimface</string>
     <string name="text_makeup_bigeye">Bigeye</string>
-    <string name="drawer_desc" translatable="false">drawer</string>
+
     <string name="truescanner_normal">Normal</string>
     <string name="truescanner_white">Whiteboard</string>
     <string name="hazebuster_acts">Haze Buster</string>
