@@ -24,6 +24,13 @@
 
     <color name="light_black">#424242</color>
 
+    <color name="tab_1">@color/primary</color>
+    <color name="tab_2">@color/primary</color>
+    <color name="tab_3">@color/primary</color>
+    <color name="tab_icon_1">@color/white</color>
+    <color name="tab_icon_2">@color/white</color>
+    <color name="tab_icon_3">@color/white</color>
+
     <color name="black_transparent_1">#1a000000</color>
     <color name="black_transparent_2">#26000000</color>
     <color name="black_transparent_3">#75000000</color>
