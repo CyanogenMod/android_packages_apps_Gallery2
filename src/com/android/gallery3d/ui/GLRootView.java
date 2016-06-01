@@ -78,6 +78,8 @@ public class GLRootView extends GLSurfaceView
     private static final int FLAG_INITIALIZED = 1;
     private static final int FLAG_NEED_LAYOUT = 2;
 
+    private static final long FRAME_INTERVAL = 16000000;
+
     private GL11 mGL;
     private GLCanvas mCanvas;
     private GLView mContentView;
@@ -110,6 +112,8 @@ public class GLRootView extends GLSurfaceView
     private long mLastDrawFinishTime;
     private boolean mInDownState = false;
     private boolean mFirstDraw = true;
+
+    private long mDueTime;
 
     public GLRootView(Context context) {
         this(context, null);
@@ -339,6 +343,7 @@ public class GLRootView extends GLSurfaceView
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        mDueTime = System.nanoTime() + FRAME_INTERVAL;
         AnimationTime.update();
         long t0;
         if (DEBUG_PROFILE_SLOW_ONLY) {
@@ -499,9 +504,15 @@ public class GLRootView extends GLSurfaceView
                 listener = mIdleListeners.removeFirst();
             }
             mRenderLock.lock();
-            boolean keepInQueue;
+            boolean keepInQueue = false;
             try {
-                keepInQueue = listener.onGLIdle(mCanvas, mRenderRequested);
+                if (mCanvas != null) {
+                    long t = System.nanoTime();
+                    if (mDueTime < t) {
+                        mDueTime = t + FRAME_INTERVAL / 2;
+                    }
+                    keepInQueue = listener.onGLIdle(mCanvas, mRenderRequested, mDueTime);
+                }
             } finally {
                 mRenderLock.unlock();
             }

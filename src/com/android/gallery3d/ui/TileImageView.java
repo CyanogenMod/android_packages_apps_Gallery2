@@ -559,7 +559,7 @@ public class TileImageView extends GLView {
         AtomicBoolean mActive = new AtomicBoolean(false);
 
         @Override
-        public boolean onGLIdle(GLCanvas canvas, boolean renderRequested) {
+        public boolean onGLIdle(GLCanvas canvas, boolean renderRequested, long dueTime) {
             // Skips uploading if there is a pending rendering request.
             // Returns true to keep uploading in next rendering loop.
             if (renderRequested) return true;

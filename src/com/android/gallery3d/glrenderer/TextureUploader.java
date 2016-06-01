@@ -92,7 +92,7 @@ public class TextureUploader implements OnGLIdleListener {
     }
 
     @Override
-    public boolean onGLIdle(GLCanvas canvas, boolean renderRequested) {
+    public boolean onGLIdle(GLCanvas canvas, boolean renderRequested, long dueTime) {
         int uploadQuota = QUOTA_PER_FRAME;
         uploadQuota = upload(canvas, mFgTextures, uploadQuota, false);
         if (uploadQuota < QUOTA_PER_FRAME) mGLRoot.requestRender();

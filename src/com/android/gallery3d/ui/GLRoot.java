@@ -28,7 +28,7 @@ public interface GLRoot {
     // Mainly used for uploading textures.
     public static interface OnGLIdleListener {
         public boolean onGLIdle(
-                GLCanvas canvas, boolean renderRequested);
+                GLCanvas canvas, boolean renderRequested, long dueTime);
     }
 
     public void addOnGLIdleListener(OnGLIdleListener listener);

@@ -47,7 +47,7 @@ public class PreparePageFadeoutTexture implements OnGLIdleListener {
     }
 
     @Override
-    public boolean onGLIdle(GLCanvas canvas, boolean renderRequested) {
+    public boolean onGLIdle(GLCanvas canvas, boolean renderRequested, long dueTime) {
         if (!mCancelled) {
             try {
                 canvas.beginRenderTarget(mTexture);

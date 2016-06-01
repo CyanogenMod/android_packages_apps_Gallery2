@@ -24,7 +24,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.os.SystemClock;
 
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLRoot.OnGLIdleListener;
@@ -41,10 +40,6 @@ public class TiledTexture implements Texture {
     private static final int BORDER_SIZE = 1;
     private static final int TILE_SIZE = CONTENT_SIZE + 2 * BORDER_SIZE;
     private static final int INIT_CAPACITY = 8;
-
-    // We are targeting at 60fps, so we have 16ms for each frame.
-    // In this 16ms, we use about 4~8 ms to upload tiles.
-    private static final long UPLOAD_TILE_LIMIT = 4; // ms
 
     private static Tile sFreeTileHead = null;
     private static final Object sFreeTileLock = new Object();
@@ -88,18 +83,20 @@ public class TiledTexture implements Texture {
         }
 
         @Override
-        public boolean onGLIdle(GLCanvas canvas, boolean renderRequested) {
+        public boolean onGLIdle(GLCanvas canvas, boolean renderRequested, long dueTime) {
             ArrayDeque<TiledTexture> deque = mTextures;
             synchronized (this) {
-                long now = SystemClock.uptimeMillis();
-                long dueTime = now + UPLOAD_TILE_LIMIT;
-                while (now < dueTime && !deque.isEmpty()) {
+                long now = System.nanoTime();
+                long uploadTime = 0;
+                while (now + uploadTime < dueTime && !deque.isEmpty()) {
                     TiledTexture t = deque.peekFirst();
                     if (t.uploadNextTile(canvas)) {
                         deque.removeFirst();
                         mGlRoot.requestRender();
                     }
-                    now = SystemClock.uptimeMillis();
+                    long t1 = System.nanoTime();
+                    uploadTime = t1 - now;
+                    now = t1;
                 }
                 mIsQueued = !mTextures.isEmpty();
 
