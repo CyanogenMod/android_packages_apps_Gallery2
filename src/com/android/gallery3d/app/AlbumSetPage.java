@@ -699,12 +699,13 @@ public class AlbumSetPage extends ActivityState implements
                 //mActionBar.disableClusterMenu(true);
                 mActionModeHandler.startActionMode();
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                ((GalleryActivity)mActivity).toggleNavDrawer(false);
+                Log.d("OHAI", "AlbumSetPage:702 - toggle false");
+                ((GalleryActivity)mActivity).toggleNavBar(false);
                 break;
             }
             case SelectionManager.LEAVE_SELECTION_MODE: {
                 mActionModeHandler.finishActionMode();
-                ((GalleryActivity)mActivity).toggleNavDrawer(true);
+                ((GalleryActivity)mActivity).toggleNavBar(true);
                 /*if (mShowClusterMenu) {
                     mActionBar.enableClusterMenu(mSelectedAction, this);
                 }*/
@@ -730,11 +731,14 @@ public class AlbumSetPage extends ActivityState implements
         mDetailsHelper.hide();
         mAlbumSetView.setHighlightItemPath(null);
         mSlotView.invalidate();
+        ((GalleryActivity)mActivity).toggleNavBar(true);
     }
 
     private void showDetails() {
         mShowDetails = true;
         if (mDetailsHelper == null) {
+            Log.d("OHAI", "AlbumSetPage:740 - toggle false");
+            ((GalleryActivity)mActivity).toggleNavBar(false);
             mDetailsHelper = new DetailsHelper(mActivity, mRootPane, mDetailsSource);
             mDetailsHelper.setCloseListener(new CloseListener() {
                 @Override

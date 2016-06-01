@@ -49,7 +49,6 @@ public class VideoSettingsActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(getResources().getString(R.string.settings));
         setContentView(R.layout.setting_list);
         ArrayList<HashMap<String, Object>> arrlist = new ArrayList<HashMap<String, Object>>(1);
