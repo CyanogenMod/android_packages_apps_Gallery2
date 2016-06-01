@@ -13,18 +13,20 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<resources>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-    android:textSize="20sp"
-    android:textColor="@color/black_transparent_4"
-    android:singleLine="true"
-    android:gravity="center_vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:minWidth="196dp"
-/>
+    <color name="primary">#333333</color>
+    <color name="primaryDark">#000000</color>
+    <color name="accent">#33b5e5</color>
+
+    <color name="white">#fafafa</color>
+    <color name="black">#212121</color>
+
+    <color name="light_black">#424242</color>
+
+    <color name="black_transparent_1">#1a000000</color>
+    <color name="black_transparent_2">#26000000</color>
+    <color name="black_transparent_3">#75000000</color>
+    <color name="black_transparent_4">#8A000000</color>
+    <color name="black_transparent_5">#C1000000</color>
+</resources>

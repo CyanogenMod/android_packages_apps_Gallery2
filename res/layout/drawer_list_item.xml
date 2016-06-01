@@ -48,7 +48,7 @@
         android:textSize="12sp"
         android:layout_centerVertical="true"
         android:fontFamily="sans-serif-medium"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:alpha="0.87"
         android:layout_marginStart="64dp"
        />
