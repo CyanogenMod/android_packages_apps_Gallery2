@@ -58,7 +58,7 @@
         android:layout_width="270dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#fafafa"
+        android:background="@color/white"
         android:clickable="true" >
 
         <!-- Header -->
@@ -78,7 +78,7 @@
                 android:layout_marginStart="16dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/navigation_drawer_title"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:textSize="24sp" />
         </RelativeLayout>
 

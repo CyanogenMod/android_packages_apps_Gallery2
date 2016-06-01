@@ -57,7 +57,7 @@
         <item name="android:layout_marginTop">13dp</item>
     </style>
         <style name="PanoViewHorizontalBar">
-        <item name="android:background">#000000</item>
+        <item name="android:background">@color/black</item>
         <item name="android:alpha">1.0</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
