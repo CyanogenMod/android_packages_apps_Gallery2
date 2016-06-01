@@ -15,13 +15,19 @@
 -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.android.gallery3d.ui.GLRootView
+
+    <RelativeLayout
+        android:id="@+id/gl_parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="56dp">
+        <com.android.gallery3d.ui.GLRootView
             android:id="@+id/gl_root_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+    </RelativeLayout>
     <View android:id="@+id/gl_root_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fafafa"
-           />
+            android:background="#fafafa"/>
 </merge>
