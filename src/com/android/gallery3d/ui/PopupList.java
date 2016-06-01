@@ -156,7 +156,7 @@ public class PopupList {
     private PopupWindow createPopupWindow() {
         PopupWindow popup = new PopupWindow(mContext);
         popup.setOnDismissListener(mOnDismissListener);
-        popup.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
+        popup.setBackgroundDrawable(new ColorDrawable(Color.parseColor("@color/white")));
 
 //        popup.setBackgroundDrawable(mContext.getResources().getDrawable(
 //                R.drawable.menu_dropdown_panel_holo_dark));
