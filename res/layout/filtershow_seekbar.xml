@@ -36,7 +36,7 @@
             android:layout_gravity="left|center_vertical"
             android:paddingLeft="23dp"
             android:paddingTop="20dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:visibility="gone" />
 
@@ -50,7 +50,7 @@
             android:paddingLeft="12dp"
             android:paddingTop="14dp"
             android:text="@string/apply_effect"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="gone" />
     </LinearLayout>

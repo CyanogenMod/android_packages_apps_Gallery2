@@ -53,7 +53,7 @@
             android:drawableEnd="@drawable/spinner_triangle"
             android:gravity="center"
             android:text="@string/apply_effect"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
 
