@@ -126,7 +126,7 @@
     <string name="color_pick_select" msgid="734312818059057394">"Өнгө тохируулж сонгох"</string>
     <string name="color_pick_title" msgid="6195567431995308876">"Өнгө сонгох"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"Хэмжээ сонгох"</string>
-    <string name="draw_size_accept" msgid="6781529716526190028">"Тийм"</string>
+    <string name="draw_size_accept" msgid="6781529716526190028">"OK"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"Эх хувь"</string>
     <string name="state_panel_result" msgid="318640531123298676">"Үр дүн"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"Зургийг хадгалж байна"</string>
