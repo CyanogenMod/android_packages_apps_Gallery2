@@ -15,24 +15,20 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_camera"
-            android:icon="@drawable/camera"
-            android:title="@string/switch_to_camera"
-            android:showAsAction="ifRoom" />
+        android:icon="@drawable/camera"
+        android:title="@string/switch_to_camera"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_slideshow"
-            android:icon="@drawable/slideshow"
-            android:title="@string/slideshow"
-            android:showAsAction="never" />
+        android:icon="@drawable/slideshow"
+        android:title="@string/slideshow"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_select"
-            android:title="@string/select_item"
-            android:showAsAction="never" />
+        android:icon="@drawable/ic_selection"
+        android:title="@string/select_item"
+        android:showAsAction="ifRoom" />
 <!--     <item android:id="@+id/action_group_by" -->
 <!--             android:title="@string/group_by" -->
 <!--             android:showAsAction="never"/> -->
      <item android:id="@+id/action_view_type"
-           android:showAsAction="never"
-          />
-     <item android:id="@+id/action_sync_picasa_albums"
-            android:title="@string/sync_picasa_albums"
-            android:showAsAction="never"
-            android:visible="false" />
+       android:showAsAction="never" />
 </menu>
