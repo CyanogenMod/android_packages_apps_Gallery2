@@ -586,7 +586,6 @@ public class TimeLinePage extends ActivityState implements
             FilterUtils.setupMenuItems(actionBar, mMediaSetPath, true);
             //menu.findItem(R.id.action_group_by).setVisible(mShowClusterMenu);
             menu.findItem(R.id.action_camera).setVisible(GalleryUtils.isAnyCameraAvailable(mActivity));
-            menu.findItem(R.id.action_sync_picasa_albums).setVisible(true);
             menu.findItem(R.id.action_view_type).setVisible(false);
         }
 

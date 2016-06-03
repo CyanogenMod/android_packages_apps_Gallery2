@@ -634,7 +634,6 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             menu.findItem(R.id.action_camera).setVisible(
                    GalleryUtils.isAnyCameraAvailable(mActivity));
             menu.findItem(R.id.action_slideshow).setVisible(!mIsVideoScreen);
-            menu.findItem(R.id.action_sync_picasa_albums).setVisible(mIsVideoScreen);
             MenuItem item = menu.findItem(R.id.action_view_type);
             updateMenuTitle(item);
 
