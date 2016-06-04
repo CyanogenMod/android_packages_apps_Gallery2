@@ -27,7 +27,7 @@ public abstract class SimpleMakeupImageFilter extends SimpleImageFilter {
     private static final String LOGTAG = "SimpleMakeupImageFilter";
     protected static final int MAKEUP_INTENSITY = 50;
 
-    public static final boolean HAS_TS_MAKEUP = android.os.SystemProperties.getBoolean("persist.ts.postmakeup", true);
+    public static final boolean HAS_TS_MAKEUP = android.os.SystemProperties.getBoolean("persist.ts.postmakeup", false);
 
     public SimpleMakeupImageFilter() {
     }
