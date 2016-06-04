@@ -42,7 +42,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -84,8 +83,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public abstract class PhotoPage extends ActivityState implements
-        PhotoView.Listener, AppBridge.Server, ShareActionProvider.OnShareTargetSelectedListener,
-        PhotoPageBottomControls.Delegate {
+        PhotoView.Listener, AppBridge.Server, PhotoPageBottomControls.Delegate {
     private static final String TAG = "PhotoPage";
 
     private static final int MSG_HIDE_BARS = 1;
@@ -208,7 +206,6 @@ public abstract class PhotoPage extends ActivityState implements
 
     private int mLastSystemUiVis = 0;
 
-    private ShareActionProvider mShareActionProvider;
     private Intent mShareIntent;
 
     //use for saving the original height and padding of toolbar
@@ -395,7 +392,7 @@ public abstract class PhotoPage extends ActivityState implements
                             }
                             Intent shareIntent = createShareIntent(mCurrentPhoto);
                             if (shareIntent != null) {
-                                mActionBar.setShareIntents(panoramaIntent, shareIntent, PhotoPage.this);
+                                mActionBar.setShareIntents(panoramaIntent, shareIntent);
                             }
                             setNfcBeamPushUri(contentUri);
                         }
@@ -1727,19 +1724,6 @@ public abstract class PhotoPage extends ActivityState implements
     @Override
     public void onUndoBarVisibilityChanged(boolean visible) {
         refreshBottomControlsWhenReady();
-    }
-
-    @Override
-    public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-        final long timestampMillis = mCurrentPhoto.getDateInMs();
-        final String mediaType = getMediaTypeString(mCurrentPhoto);
-        UsageStatistics.onEvent(UsageStatistics.COMPONENT_GALLERY,
-                UsageStatistics.ACTION_SHARE,
-                mediaType,
-                        timestampMillis > 0
-                        ? System.currentTimeMillis() - timestampMillis
-                        : -1);
-        return false;
     }
 
     private static String getMediaTypeString(MediaItem item) {

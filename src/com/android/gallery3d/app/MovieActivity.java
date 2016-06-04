@@ -61,7 +61,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
-import android.widget.ShareActionProvider;
 import android.widget.ToggleButton;
 import android.widget.Toast;
 
@@ -120,13 +119,14 @@ public class MovieActivity extends Activity {
     private Knob        mVirtualizerKnob;
 
     private SharedPreferences   mPrefs;
-    private ShareActionProvider mShareProvider;
     private IMovieItem          mMovieItem;
     private IActivityHooker     mMovieHooker;
     private KeyguardManager     mKeyguardManager;
 
     private boolean mResumed        = false;
     private boolean mControlResumed = false;
+
+    private Intent mShareIntent;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -322,11 +322,18 @@ public class MovieActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.movie, menu);
         MenuItem shareMenu = menu.findItem(R.id.action_share);
-        ShareActionProvider provider = (ShareActionProvider) shareMenu.getActionProvider();
-        mShareProvider = provider;
-        if (mShareProvider != null) {
-            // share provider is singleton, we should refresh our history file.
-            mShareProvider.setShareHistoryFileName(SHARE_HISTORY_FILE);
+        if (shareMenu != null) {
+            shareMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (mShareIntent != null) {
+                        Intent intent = Intent.createChooser(mShareIntent, null);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(mShareIntent);
+                    }
+                    return true;
+                }
+            });
         }
         refreshShareProvider(mMovieItem);
 
@@ -739,16 +746,13 @@ public class MovieActivity extends Activity {
 
     private void refreshShareProvider(IMovieItem info) {
         // we only share the video if it's "content:".
-        if (mShareProvider != null) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            if (MovieUtils.isLocalFile(info.getUri(), info.getMimeType())) {
-                intent.setType("video/*");
-                intent.putExtra(Intent.EXTRA_STREAM, info.getUri());
-            } else {
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(info.getUri()));
-            }
-            mShareProvider.setShareIntent(intent);
+        mShareIntent = new Intent(Intent.ACTION_SEND);
+        if (MovieUtils.isLocalFile(info.getUri(), info.getMimeType())) {
+            mShareIntent.setType("video/*");
+            mShareIntent.putExtra(Intent.EXTRA_STREAM, info.getUri());
+        } else {
+            mShareIntent.setType("text/plain");
+            mShareIntent.putExtra(Intent.EXTRA_TEXT, String.valueOf(info.getUri()));
         }
     }
 
