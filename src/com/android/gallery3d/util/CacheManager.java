@@ -46,13 +46,15 @@ public class CacheManager {
             BlobCache cache = sCacheMap.get(filename);
             if (cache == null) {
                 File cacheDir = context.getExternalCacheDir();
-                String path = cacheDir.getAbsolutePath() + "/" + filename;
-                try {
-                    cache = new BlobCache(path, maxEntries, maxBytes, false,
-                            version);
-                    sCacheMap.put(filename, cache);
-                } catch (IOException e) {
-                    Log.e(TAG, "Cannot instantiate cache!", e);
+                if (cacheDir != null) {
+                    String path = cacheDir.getAbsolutePath() + "/" + filename;
+                    try {
+                        cache = new BlobCache(path, maxEntries, maxBytes, false,
+                                version);
+                        sCacheMap.put(filename, cache);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Cannot instantiate cache!", e);
+                    }
                 }
             }
             return cache;
@@ -73,10 +75,12 @@ public class CacheManager {
         pref.edit().putInt(KEY_CACHE_UP_TO_DATE, 1).commit();
 
         File cacheDir = context.getExternalCacheDir();
-        String prefix = cacheDir.getAbsolutePath() + "/";
+        if (cacheDir != null) {
+            String prefix = cacheDir.getAbsolutePath() + "/";
 
-        BlobCache.deleteFiles(prefix + "imgcache");
-        BlobCache.deleteFiles(prefix + "rev_geocoding");
-        BlobCache.deleteFiles(prefix + "bookmark");
+            BlobCache.deleteFiles(prefix + "imgcache");
+            BlobCache.deleteFiles(prefix + "rev_geocoding");
+            BlobCache.deleteFiles(prefix + "bookmark");
+        }
     }
 }
