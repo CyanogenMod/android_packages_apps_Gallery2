@@ -23,7 +23,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcAdapter.CreateBeamUrisCallback;
 import android.nfc.NfcEvent;
 import android.provider.MediaStore.Files.FileColumns;
-import android.widget.ShareActionProvider;
 
 import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.data.MediaObject;
@@ -74,8 +73,7 @@ public class SelectionManager {
 
     private ArrayList<Uri> mCachedShareableUris = null;
 
-    public void onItemSelectedStateChanged(ShareActionProvider share,
-            int itemType, int itemSupportedOperations, boolean selected) {
+    public void onItemSelectedStateChanged(int itemType, int itemSupportedOperations, boolean selected) {
         int increment = selected ? 1 : -1;
 
         mSelectedTotalCount += increment;
@@ -132,7 +130,6 @@ public class SelectionManager {
                 }
             }
         }
-        share.setShareIntent(mShareIntent);
     }
 
     public int getSupportedOperations() {
@@ -180,5 +177,9 @@ public class SelectionManager {
         mCachedShareableUris = null;
         mShareIntent.removeExtra(Intent.EXTRA_STREAM);
         mShareIntent.setAction(null).setType(null);
+    }
+
+    public Intent getShareIntent() {
+        return mShareIntent;
     }
 }

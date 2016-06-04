@@ -73,8 +73,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
-import android.widget.ShareActionProvider;
-import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
 
 import com.android.gallery3d.R;
@@ -129,7 +127,7 @@ import com.android.photos.data.GalleryBitmapPool;
 import com.thundersoft.hz.selfportrait.makeup.engine.MakeupEngine;
 
 public class FilterShowActivity extends FragmentActivity implements OnItemClickListener,
-        OnShareTargetSelectedListener, DialogInterface.OnShowListener,
+        DialogInterface.OnShowListener,
         DialogInterface.OnDismissListener, PopupMenu.OnDismissListener{
 
     private String mAction = "";
@@ -158,7 +156,6 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
 
     private final Vector<ImageShow> mImageViews = new Vector<ImageShow>();
 
-    private ShareActionProvider mShareActionProvider;
     private File mSharedOutputFile = null;
 
     private boolean mSharingImage = false;
@@ -1317,8 +1314,7 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         finish();
     }
 
-    @Override
-    public boolean onShareTargetSelected(ShareActionProvider arg0, Intent arg1) {
+    private boolean onShareTargetSelected() {
         // First, let's tell the SharedImageProvider that it will need to wait
         // for the image
         Uri uri = Uri.withAppendedPath(SharedImageProvider.CONTENT_URI,
@@ -1350,10 +1346,21 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
         getMenuInflater().inflate(R.menu.filtershow_activity_menu, menu);
-        mShareActionProvider = (ShareActionProvider) menu.findItem(
-                                R.id.menu_share).getActionProvider();
-        mShareActionProvider.setShareIntent(getDefaultShareIntent());
-        mShareActionProvider.setOnShareTargetSelectedListener(this);
+        MenuItem item = menu.findItem(R.id.menu_share);
+        if (item != null) {
+            item.setOnMenuItemClickListener(new
+                    MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    final Intent shareIntent = getDefaultShareIntent();
+                    onShareTargetSelected();
+                    Intent intent = Intent.createChooser(shareIntent, null);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    FilterShowActivity.this.startActivity(intent);
+                    return true;
+                }
+            });
+        }
         mMenu = menu;
         setupMenu();
         return true;
@@ -1370,23 +1377,18 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
         if (!PrintHelper.systemSupportsPrint()) {
             printItem.setVisible(false);
         }
+        MenuItem shareItem = mMenu.findItem(R.id.menu_share);
         //mMasterImage.getHistory().setMenuItems(undoItem, redoItem, resetItem);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setOnShareTargetSelectedListener(null);
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setOnShareTargetSelectedListener(this);
-        }
         if (SimpleMakeupImageFilter.HAS_TS_MAKEUP) {
             MakeupEngine.getMakeupObj();
         }

@@ -12,8 +12,7 @@
     <item android:id="@+id/menu_share"
           android:title="@string/share"
           android:showAsAction="ifRoom"
-          android:visible="false"
-          android:actionProviderClass="android.widget.ShareActionProvider" />
+          android:visible="false"  />
     <item android:id="@+id/menu_crop"
             android:title="@string/crop_action"
             android:visible="false"
