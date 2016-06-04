@@ -28,8 +28,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.ShareActionProvider;
-import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.app.TrimVideo;
@@ -42,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiChoiceManager implements MultiChoiceModeListener,
-    OnShareTargetSelectedListener, SelectionManager.SelectedUriSource {
+    SelectionManager.SelectedUriSource {
 
     public interface Provider {
         public MultiChoiceManager getMultiChoiceManager();
@@ -61,7 +59,6 @@ public class MultiChoiceManager implements MultiChoiceModeListener,
     }
 
     private SelectionManager mSelectionManager;
-    private ShareActionProvider mShareActionProvider;
     private ActionMode mActionMode;
     private Context mContext;
     private Delegate mDelegate;
@@ -122,7 +119,7 @@ public class MultiChoiceManager implements MultiChoiceModeListener,
             }
         }
 
-        mSelectionManager.onItemSelectedStateChanged(mShareActionProvider,
+        mSelectionManager.onItemSelectedStateChanged(
                 mDelegate.getItemMediaType(item),
                 supported,
                 checked);
@@ -155,8 +152,21 @@ public class MultiChoiceManager implements MultiChoiceModeListener,
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.gallery_multiselect, menu);
         MenuItem menuItem = menu.findItem(R.id.menu_share);
-        mShareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
-        mShareActionProvider.setOnShareTargetSelectedListener(this);
+        if (menuItem != null) {
+            menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    mActionMode.finish();
+                    Intent shareIntent = mSelectionManager.getShareIntent();
+                    if (shareIntent != null) {
+                        Intent intent = Intent.createChooser(shareIntent, null);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intent);
+                    }
+                    return true;
+                }
+            });
+        }
         updateSelectedTitle(mode);
         return true;
     }
@@ -169,19 +179,12 @@ public class MultiChoiceManager implements MultiChoiceModeListener,
         mSelectedShareableUrisArray = new ArrayList<Uri>();
         mSelectionManager.onClearSelection();
         mSelectionManager.setSelectedUriSource(null);
-        mShareActionProvider = null;
         mActionMode = null;
     }
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
         updateSelectedTitle(mode);
-        return false;
-    }
-
-    @Override
-    public boolean onShareTargetSelected(ShareActionProvider provider, Intent intent) {
-        mActionMode.finish();
         return false;
     }
 
