@@ -16,13 +16,13 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="title_activity_filter_show" msgid="2036539130684382763">"फोटो सम्पादक"</string>
+    <string name="title_activity_filter_show" msgid="2036539130684382763">"तस्बिर सम्पादक"</string>
     <string name="cannot_load_image" msgid="5023634941212959976">"तस्बिर लोड गर्न सकेन!"</string>
     <string name="cannot_edit_original" msgid="5890293845882609388">"मूल सम्पादन गर्न सक्दैन"</string>
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"सेटिङ वालपेपर"</string>
-    <string name="download_failure" msgid="5923323939788582895">"फोटो डाउनलोड गर्न सकेन। नेटवर्क उपलब्ध छैन।"</string>
+    <string name="download_failure" msgid="5923323939788582895">"तस्बिर डाउनलोड गर्न सकेन। नेटवर्क उपलब्ध छैन।"</string>
     <string name="original" msgid="3524493791230430897">"मूल"</string>
     <string name="borders" msgid="2067345080568684614">"किनाराहरू"</string>
     <string name="custom_border" msgid="8679893731790931871">"अनुकूलन"</string>
@@ -126,7 +126,7 @@
     <string name="color_pick_select" msgid="734312818059057394">"कस्टम रङ्ग छान्नुहोस्"</string>
     <string name="color_pick_title" msgid="6195567431995308876">"रङ्ग छान्नुहोस्"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"साइज चयन गर्नुहोस्"</string>
-    <string name="draw_size_accept" msgid="6781529716526190028">"ठिक छ"</string>
+    <string name="draw_size_accept" msgid="6781529716526190028">"ठीक छ"</string>
     <string name="state_panel_original" msgid="9069584409934164419">"मूल"</string>
     <string name="state_panel_result" msgid="318640531123298676">"परिणाम"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"चित्र सुरक्षित गर्दै"</string>
