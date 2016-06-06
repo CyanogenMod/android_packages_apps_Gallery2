@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+Copyright (C) 2014-2015 The CyanogenMod Project
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -31,7 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for step option settins -->
     <string name="setp_option_name">Step</string>
-    <string name="step_option_desc">Customize fast forward/backward step</string>
+    <string name="step_option_desc">Customize fast forward/rewind step</string>
     <string name="setp_option_three_second">3 seconds</string>
     <string name="setp_option_six_second">6 seconds</string>
 
@@ -40,42 +41,115 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="stereo">"Stereo"</string>
     <string name="speaker_on">Speaker ON</string>
     <string name="speaker_off">Speaker OFF</string>
-    <string name="speaker_need_headset">Please plug in headset first!</string>
+    <string name="speaker_need_headset">Plug in headphones to use this feature.</string>
     <string name="single_track">"Single track"</string>
-    <string name="media_detail">"Media details"</string>
-    <string name="input_url">"Input URL"</string>
-    <string name="streaming_settings">"Streaming Settings"</string>
+    <string name="input_url">"Enter URL"</string>
+    <string name="streaming_settings">"Streaming settings"</string>
     <string name="next">"Next"</string>
     <string name="previous">"Previous"</string>
 
-    <string name="rtp_rtcp">RTP/RTCP</string>
-    <string name="min_port">min port:</string>
-    <string name="max_port">max port:</string>
-    <string name="buffer_size">Buffer Size</string>
-    <string name="apn">Prefered APN</string>
+    <string name="rtp_rtcp" translatable="false">RTP/RTCP</string>
+    <string name="buffer_size">Buffer size</string>
+    <string name="apn">Preferred APN</string>
     <string name="rtp_min_port">Min port</string>
     <string name="rtp_max_port">Max port</string>
     <string name="set_rtp_min_port">Set min port</string>
     <string name="set_rtp_max_port">Set max port</string>
     <string name="set_buffer_size">Set buffer size</string>
-    <string name="set_apn">Select prefered apn</string>
+    <string name="set_apn">Select preferred APN</string>
     <string name="setting">Settings</string>
 
-    <string name="server_timeout_title">"Server Timeout"</string>
-    <string name="server_timeout_message">"Reconnect the server to play the video or not?"</string>
-    <string name="videoview_error_text_cannot_connect_retry">"Connection failed, try to reconnect %1$d..."</string>
+    <string name="server_timeout_title">"Server timeout"</string>
+    <string name="server_timeout_message">"Reconnect to the server to play the video?"</string>
+    <string name="videoview_error_text_cannot_connect_retry">"Connection failed, trying to reconnect to %1$d\u2026"</string>
     <string name="media_controller_live">Live</string>
     <string name="media_controller_playing">Playing</string>
-    <string name="media_controller_connecting">Connecting...</string>
+    <string name="media_controller_connecting">Connecting\u2026</string>
 
     <string name="bookmark_add">"Add bookmark"</string>
     <string name="bookmark_display">"Show bookmarks"</string>
     <string name="bookmark_empty">"No bookmarks"</string>
-    <string name="bookmark_exist">"Same bookmark in history"</string>
-    <string name="bookmark_add_success">"Add bookmark success"</string>
+    <string name="bookmark_exist">"Bookmark already exists"</string>
+    <string name="bookmark_add_success">"Bookmark added"</string>
     <string name="bookmark_list">"Bookmarks"</string>
     <string name="bookmark_title">"Title"</string>
     <string name="bookmark_location">"Location"</string>
     <string name="delete_all">"Delete all"</string>
     <string name="default_title">"Default title"</string>
+
+    <!-- A label describing to link website [CHAR LIMIT=30] -->
+    <string name="more_image">More images</string>
+    <string name="website_for_more_image" translatable="false"></string>
+
+    <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+    <string name="mute_nosupport">Can not mute : video not supported</string>
+
+    <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+    <string name="map_activity_not_found_err">There is no maps app installed to show the location.</string>
+
+    <plurals name="number_of_videos">
+        <item quantity="one">%1$d video</item>
+        <item quantity="other">%1$d videos</item>
+    </plurals>
+
+    <!-- The label for the bass boost knob of the audio effects dialog. -->
+    <string name="bass_boost_strength">Bass boost</string>
+
+    <!-- The label for the 3d effect knob of the audio effects dialog. -->
+    <string name="virtualizer_strength">3D effect</string>
+
+    <!-- The label for the audio effects menu. -->
+    <string name="audio_effects">Audio effects</string>
+
+    <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
+    <string name="headset_plug">Plug in headphones for these effects.</string>
+
+    <!-- The title of the audio effects dialog. -->
+    <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
+
+    <!-- Toast message for share items -->
+    <string name="cannot_share_items">Max selected items for share is 300</string>
+
+    <string name="share_dialogue_title">Share via</string>
+
+    <!-- When grouping photos by peoples, the label used for photos that don't
+         have people information in them [CHAR LIMIT=20]-->
+    <string name="no_faces">No faces</string>
+
+    <!-- The tips of trimming video -->
+    <string name="fail_trim">Sorry, this video file can not be trimmed</string>
+    <string name="can_not_trim">Only mp4 and 3gp file can be trimmed</string>
+
+    <string name="no_permission_for_drm">Sorry, DRM protected files cannot be shared</string>
+    <string name="drm_license_info">DRM license info</string>
+
+    <string-array name="title_array_nav_items">
+        <item>Timeline</item>
+        <item>Albums</item>
+        <item>Videos</item>
+    </string-array>
+
+    <string name="navigation_drawer_title" translatable="false">@string/app_name</string>
+    <!-- Timeline screen title -->
+    <string name="timeline_title">Timeline</string>
+    <!-- Albums screen title -->
+    <string name="albums_title" translatable="false">@string/tab_albums</string>
+    <!-- Videos screen title -->
+    <string name="videos_title">Videos</string>
+    <string name="action_viewtype_list">List view</string>
+    <string name="action_viewtype_grid" translatable="false">@string/switch_photo_grid</string>
+    <string name="tvEmptyAlbum">No photos found</string>
+    <string name="tvEmptyVideos">No videos found</string>
+
+    <string name="text_makeup_whiten">Whiten</string>
+    <string name="text_makeup_Soften">Soften</string>
+    <string name="text_makeup_trimface">Trimface</string>
+    <string name="text_makeup_bigeye">Bigeye</string>
+    <string name="drawer_desc" translatable="false">drawer</string>
+    <string name="truescanner_normal">Normal</string>
+    <string name="truescanner_white">Whiteboard</string>
+    <string name="hazebuster_acts">Haze Buster</string>
+    <string name="seestraight_acts">See Straight</string>
+    <string name="seestraight_input_image_is_small">Input image is too small to process.</string>
+    <string name="seestraight_process_fail">Couldn\'t process the image.</string>
 </resources>
