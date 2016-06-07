@@ -1658,6 +1658,7 @@ class Bookmarker {
             BlobCache cache = CacheManager.getCache(mContext,
                     BOOKMARK_CACHE_FILE, BOOKMARK_CACHE_MAX_ENTRIES,
                     BOOKMARK_CACHE_MAX_BYTES, BOOKMARK_CACHE_VERSION);
+            if (cache == null) return null;
 
             byte[] data = cache.lookup(uri.hashCode());
             if (data == null) return null;

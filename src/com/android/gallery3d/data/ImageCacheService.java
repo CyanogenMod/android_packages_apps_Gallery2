@@ -63,7 +63,7 @@ public class ImageCacheService {
             request.key = cacheKey;
             request.buffer = buffer.data;
             synchronized (mCache) {
-                if (!mCache.lookup(request)) return false;
+                if (mCache == null || !mCache.lookup(request)) return false;
             }
             if (isSameKey(key, request.buffer)) {
                 buffer.data = request.buffer;
@@ -85,6 +85,10 @@ public class ImageCacheService {
         buffer.put(value);
         synchronized (mCache) {
             try {
+                if (mCache == null) {
+                    return;
+                }
+
                 mCache.insert(cacheKey, buffer.array());
             } catch (IOException ex) {
                 // ignore.
@@ -97,6 +101,10 @@ public class ImageCacheService {
         long cacheKey = Utils.crc64Long(key);
         synchronized (mCache) {
             try {
+                if (mCache == null) {
+                    return;
+                }
+
                 mCache.clearEntry(cacheKey);
             } catch (IOException ex) {
                 // ignore.
