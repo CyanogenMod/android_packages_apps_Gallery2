@@ -692,7 +692,6 @@ public class TimeLinePage extends ActivityState implements
             case SelectionManager.ENTER_SELECTION_MODE: {
                 mActionModeHandler.startActionMode();
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                Log.d("OHAI", "TimeLinePage:695 - toggle false");
                 ((GalleryActivity)mActivity).toggleNavBar(false);
                 break;
             }
