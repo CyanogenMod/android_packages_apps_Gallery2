@@ -77,13 +77,10 @@ public class TimeLineSlotView extends GLView {
 
     // whether the down action happened while the view is scrolling.
     private boolean mDownInScrolling;
-    private int mOverscrollEffect = OVERSCROLL_3D;
 
     private TimeLineSlotRenderer mRenderer;
 
     private int[] mRequestRenderSlots = new int[16];
-
-    public static final int OVERSCROLL_3D = 0;
 
     // Flag to check whether it is come from Photo Page.
     private boolean isFromPhotoPage = false;
@@ -143,7 +140,6 @@ public class TimeLineSlotView extends GLView {
         isFromPhotoPage = flag;
     }
 
-
     public void setScrollPosition(int position) {
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
@@ -166,8 +162,6 @@ public class TimeLineSlotView extends GLView {
                 (mLayout.getVisibleStart() + mLayout.getVisibleEnd()) / 2;
         mLayout.setSize(r - l, b - t);
         makeSlotVisible(visibleIndex);
-        if (mOverscrollEffect == OVERSCROLL_3D) {
-        }
     }
 
     public void startScatteringAnimation(RelativePosition position) {
@@ -236,24 +230,6 @@ public class TimeLineSlotView extends GLView {
         int oldX = mScrollX;
         updateScrollPosition(mScroller.getPosition(), false);
 
-        if (mOverscrollEffect == OVERSCROLL_3D) {
-            // Check if an edge is reached and notify mPaper if so
-            int newX = mScrollX;
-            int limit = mLayout.getScrollLimit();
-            if (oldX > 0 && newX == 0 || oldX < limit && newX == limit) {
-                float v = mScroller.getCurrVelocity();
-                if (newX == limit) v = -v;
-
-                // I don't know why, but getCurrVelocity() can return NaN.
-                if (!Float.isNaN(v)) {
-                    //mPaper.edgeReached(v);
-                }
-                //paperActive = mPaper.advanceAnimation();
-            }
-        }
-
-        //more |= paperActive;
-
         if (mAnimation != null) {
             more |= mAnimation.calculate(animTime);
         }
@@ -265,7 +241,7 @@ public class TimeLineSlotView extends GLView {
                 mLayout.getVisibleEnd() - mLayout.getVisibleStart());
 
         for (int i = mLayout.getVisibleEnd() - 1; i >= mLayout.getVisibleStart(); --i) {
-            int r = renderItem(canvas, i, 0, false);
+            int r = renderItem(canvas, i, 0);
             if ((r & RENDER_MORE_FRAME) != 0) more = true;
             if ((r & RENDER_MORE_PASS) != 0) requestedSlot[requestCount++] = i;
         }
@@ -273,8 +249,7 @@ public class TimeLineSlotView extends GLView {
         for (int pass = 1; requestCount != 0; ++pass) {
             int newCount = 0;
             for (int i = 0; i < requestCount; ++i) {
-                int r = renderItem(canvas,
-                        requestedSlot[i], pass, false);
+                int r = renderItem(canvas, requestedSlot[i], pass);
                 if ((r & RENDER_MORE_FRAME) != 0) more = false;
                 if ((r & RENDER_MORE_PASS) != 0) requestedSlot[newCount++] = i;
             }
@@ -287,8 +262,7 @@ public class TimeLineSlotView extends GLView {
 
     }
 
-    private int renderItem(
-            GLCanvas canvas, int index, int pass, boolean paperActive) {
+    private int renderItem(GLCanvas canvas, int index, int pass) {
         Rect rect = mLayout.getSlotRect(index);
         if (rect == null) return 0;
         canvas.save(GLCanvas.SAVE_FLAG_ALPHA | GLCanvas.SAVE_FLAG_MATRIX);
@@ -394,9 +368,6 @@ public class TimeLineSlotView extends GLView {
             cancelDown(false);
             int overDistance = mScroller.startScroll(
                     Math.round(distanceY), 0, mLayout.getScrollLimit());
-            if (mOverscrollEffect == OVERSCROLL_3D && overDistance != 0) {
-                //mPaper.overScroll(overDistance);
-            }
             invalidate();
             return true;
         }
