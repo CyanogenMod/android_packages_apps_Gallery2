@@ -68,7 +68,6 @@ public class SlotView extends GLView {
 
     private final GestureDetector mGestureDetector;
     private final ScrollerHelper mScroller;
-    private final Paper mPaper = new Paper();
 
     private Listener mListener;
     private UserInteractionListener mUIListener;
@@ -80,16 +79,11 @@ public class SlotView extends GLView {
 
     // whether the down action happened while the view is scrolling.
     private boolean mDownInScrolling;
-    private int mOverscrollEffect = OVERSCROLL_3D;
     private final Handler mHandler;
 
     private SlotRenderer mRenderer;
 
     private int[] mRequestRenderSlots = new int[16];
-
-    public static final int OVERSCROLL_3D = 0;
-    public static final int OVERSCROLL_SYSTEM = 1;
-    public static final int OVERSCROLL_NONE = 2;
 
     // to prevent allocating memory
     private final Rect mTempRect = new Rect();
@@ -179,9 +173,6 @@ public class SlotView extends GLView {
                 (mLayout.getVisibleStart() + mLayout.getVisibleEnd()) / 2;
         mLayout.setSize(r - l, b - t);
         makeSlotVisible(visibleIndex);
-        if (mOverscrollEffect == OVERSCROLL_3D) {
-            mPaper.setSize(r - l, b - t);
-        }
     }
 
     public void startScatteringAnimation(RelativePosition position) {
@@ -226,7 +217,6 @@ public class SlotView extends GLView {
                 mScroller.forceFinished();
                 break;
             case MotionEvent.ACTION_UP:
-                mPaper.onRelease();
                 invalidate();
                 break;
         }
@@ -239,11 +229,6 @@ public class SlotView extends GLView {
 
     public void setUserInteractionListener(UserInteractionListener listener) {
         mUIListener = listener;
-    }
-
-    public void setOverscrollEffect(int kind) {
-        mOverscrollEffect = kind;
-        mScroller.setOverfling(kind == OVERSCROLL_SYSTEM);
     }
 
     private static int[] expandIntArray(int array[], int capacity) {
@@ -266,25 +251,6 @@ public class SlotView extends GLView {
         int oldX = mScrollX;
         updateScrollPosition(mScroller.getPosition(), false);
 
-        boolean paperActive = false;
-        if (mOverscrollEffect == OVERSCROLL_3D) {
-            // Check if an edge is reached and notify mPaper if so.
-            int newX = mScrollX;
-            int limit = mLayout.getScrollLimit();
-            if (oldX > 0 && newX == 0 || oldX < limit && newX == limit) {
-                float v = mScroller.getCurrVelocity();
-                if (newX == limit) v = -v;
-
-                // I don't know why, but getCurrVelocity() can return NaN.
-                if (!Float.isNaN(v)) {
-                    mPaper.edgeReached(v);
-                }
-            }
-            paperActive = mPaper.advanceAnimation();
-        }
-
-        more |= paperActive;
-
         if (mAnimation != null) {
             more |= mAnimation.calculate(animTime);
         }
@@ -296,7 +262,7 @@ public class SlotView extends GLView {
                 mLayout.mVisibleEnd - mLayout.mVisibleStart);
 
         for (int i = mLayout.mVisibleEnd - 1; i >= mLayout.mVisibleStart; --i) {
-            int r = renderItem(canvas, i, 0, paperActive);
+            int r = renderItem(canvas, i, 0);
             if ((r & RENDER_MORE_FRAME) != 0) more = true;
             if ((r & RENDER_MORE_PASS) != 0) requestedSlot[requestCount++] = i;
         }
@@ -304,8 +270,7 @@ public class SlotView extends GLView {
         for (int pass = 1; requestCount != 0; ++pass) {
             int newCount = 0;
             for (int i = 0; i < requestCount; ++i) {
-                int r = renderItem(canvas,
-                        requestedSlot[i], pass, paperActive);
+                int r = renderItem(canvas, requestedSlot[i], pass);
                 if ((r & RENDER_MORE_FRAME) != 0) more = true;
                 if ((r & RENDER_MORE_PASS) != 0) requestedSlot[newCount++] = i;
             }
@@ -328,15 +293,10 @@ public class SlotView extends GLView {
         mMoreAnimation = more;
     }
 
-    private int renderItem(
-            GLCanvas canvas, int index, int pass, boolean paperActive) {
+    private int renderItem(GLCanvas canvas, int index, int pass) {
         canvas.save(GLCanvas.SAVE_FLAG_ALPHA | GLCanvas.SAVE_FLAG_MATRIX);
         Rect rect = mLayout.getSlotRect(index, mTempRect);
-        if (paperActive) {
-            canvas.multiplyMatrix(mPaper.getTransform(rect, mScrollX), 0);
-        } else {
-            canvas.translate(rect.left, rect.top, 0);
-        }
+        canvas.translate(rect.left, rect.top, 0);
         if (mAnimation != null && mAnimation.isActive()) {
             mAnimation.apply(canvas, index, rect);
         }
@@ -720,9 +680,6 @@ public class SlotView extends GLView {
             float distance = WIDE ? distanceX : distanceY;
             int overDistance = mScroller.startScroll(
                     Math.round(distance), 0, mLayout.getScrollLimit());
-            if (mOverscrollEffect == OVERSCROLL_3D && overDistance != 0) {
-                mPaper.overScroll(overDistance);
-            }
             invalidate();
             return true;
         }

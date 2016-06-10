@@ -25,16 +25,11 @@ import com.android.gallery3d.common.Utils;
 public class ScrollerHelper {
     private OverScroller mScroller;
     private int mOverflingDistance;
-    private boolean mOverflingEnabled;
 
     public ScrollerHelper(Context context) {
         mScroller = new OverScroller(context);
         ViewConfiguration configuration = ViewConfiguration.get(context);
         mOverflingDistance = configuration.getScaledOverflingDistance();
-    }
-
-    public void setOverfling(boolean enabled) {
-        mOverflingEnabled = enabled;
     }
 
     /**
@@ -78,7 +73,7 @@ public class ScrollerHelper {
                 velocity, 0,   // velocityX, velocityY
                 min, max,      // minX, maxX
                 0, 0,          // minY, maxY
-                mOverflingEnabled ? mOverflingDistance : 0, 0);
+                mOverflingDistance, 0);
     }
 
     // Returns the distance that over the scroll limit.
