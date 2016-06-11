@@ -24,15 +24,19 @@
 
     <LinearLayout
         android:id="@+id/listColors"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:elevation="8dp"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/draw_color_button01"
             android:layout_width="@dimen/color_button_width"
             android:layout_height="@dimen/color_button_height"
+            android:layout_marginStart="22dp"
             android:layout_marginEnd="22dp"
             android:background="@drawable/filtershow_color_picker_circle" />
 
@@ -63,20 +67,12 @@
             android:layout_height="@dimen/color_button_height"
             android:layout_marginEnd="22dp"
             android:background="@drawable/filtershow_color_picker_circle" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginRight="16dp" >
 
         <Button
             android:id="@+id/draw_color_popupbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="@dimen/color_button_width"
+            android:layout_height="@dimen/color_button_height"
+            android:layout_marginEnd="22dp"
             android:background="@drawable/more2" />
-    </FrameLayout>
-
+    </LinearLayout>
 </LinearLayout>

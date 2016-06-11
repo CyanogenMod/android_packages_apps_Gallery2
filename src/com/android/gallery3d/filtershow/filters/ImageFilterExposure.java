@@ -33,6 +33,7 @@ public class ImageFilterExposure extends SimpleImageFilter {
         representation.setSerializationName(SERIALIZATION_NAME);
         representation.setFilterClass(ImageFilterExposure.class);
         representation.setTextId(R.string.exposure);
+        representation.setOverlayId(R.drawable.filtershow_button_exposure);
         representation.setMinimum(-100);
         representation.setMaximum(100);
         representation.setDefaultValue(0);

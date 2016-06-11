@@ -54,8 +54,6 @@
 
     <style name="FilterShowSlider">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/filtershow_slider</item>
-        <item name="android:indeterminateDrawable">@drawable/filtershow_slider</item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
         <item name="android:thumb">@drawable/adjust</item>

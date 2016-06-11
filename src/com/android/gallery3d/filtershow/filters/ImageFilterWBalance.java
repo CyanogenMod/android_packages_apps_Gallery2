@@ -37,6 +37,7 @@ public class ImageFilterWBalance extends ImageFilter {
         representation.setTextId(R.string.wbalance);
         representation.setShowParameterValue(false);
         representation.setEditorId(ImageOnlyEditor.ID);
+        representation.setOverlayId(R.drawable.filtershow_button_wbalance);
         representation.setSupportsPartialRendering(true);
         representation.setIsBooleanFilter(true);
         return representation;

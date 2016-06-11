@@ -33,6 +33,7 @@ public class ImageFilterVibrance extends SimpleImageFilter {
         representation.setSerializationName(SERIALIZATION_NAME);
         representation.setFilterClass(ImageFilterVibrance.class);
         representation.setTextId(R.string.vibrance);
+        representation.setOverlayId(R.drawable.filtershow_button_vibrance);
         representation.setMinimum(-100);
         representation.setMaximum(100);
         representation.setDefaultValue(0);

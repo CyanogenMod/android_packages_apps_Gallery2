@@ -159,87 +159,62 @@
     </FrameLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
+        android:id="@+id/listColors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="6"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp">
+
+        <Button
+            android:id="@+id/draw_color_button01"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp">
+            android:background="@drawable/filtershow_color_picker_circle"
+            android:layout_marginEnd="4dp"/>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="1dp"
-                android:layout_marginEnd="1dp">
+        <Button
+            android:id="@+id/draw_color_button02"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/filtershow_color_picker_circle"
+            android:layout_marginEnd="4dp"/>
 
-            <LinearLayout
-                    android:id="@+id/listColors"
-                    android:layout_weight="5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+        <Button
+            android:id="@+id/draw_color_button03"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/filtershow_color_picker_circle"
+            android:layout_marginEnd="4dp"/>
 
-                <Button
-                        android:id="@+id/draw_color_button01"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginEnd="4dp"/>
+        <Button
+            android:id="@+id/draw_color_button04"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/filtershow_color_picker_circle"
+            android:layout_marginEnd="4dp"/>
 
-                <Button
-                        android:id="@+id/draw_color_button02"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginEnd="4dp"/>
+        <Button
+            android:id="@+id/draw_color_button05"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/filtershow_color_picker_circle"
+            android:layout_marginEnd="4dp"/>
 
-                <Button
-                        android:id="@+id/draw_color_button03"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginEnd="4dp"/>
-
-                <Button
-                        android:id="@+id/draw_color_button04"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginEnd="4dp"/>
-
-                <Button
-                        android:id="@+id/draw_color_button05"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/filtershow_color_picker_circle"
-                        android:layout_marginEnd="4dp"/>
-
-            </LinearLayout>
-            <FrameLayout
-                    android:background="@color/background_main_toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-                <Button
-                        android:id="@+id/draw_color_popupbutton"
-                        android:layout_width="48dp"
-                        android:layout_gravity="center"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_action_overflow"
-                        />
-            </FrameLayout>
-        </LinearLayout>
-
-
-
+        <Button
+            android:id="@+id/draw_color_popupbutton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_action_overflow"
+            android:layout_marginEnd="4dp"/>
     </LinearLayout>
 </LinearLayout>

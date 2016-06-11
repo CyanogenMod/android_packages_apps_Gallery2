@@ -35,6 +35,7 @@ public class ImageFilterContrast extends SimpleImageFilter {
 
         representation.setFilterClass(ImageFilterContrast.class);
         representation.setTextId(R.string.contrast);
+        representation.setOverlayId(R.drawable.filtershow_button_contrast);
         representation.setMinimum(-100);
         representation.setMaximum(100);
         representation.setDefaultValue(0);

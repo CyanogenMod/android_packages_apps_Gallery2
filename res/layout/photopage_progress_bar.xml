@@ -16,7 +16,7 @@
                 android:visibility="visible"/>
         <View
                 android:id="@+id/photopage_progress_foreground"
-                android:background="#ff33b5e5"
+                android:background="@color/accent"
                 android:layout_width="10dp"
                 android:layout_height="8dp"
                 android:layout_alignParentStart="true"

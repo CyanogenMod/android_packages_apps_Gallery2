@@ -161,13 +161,16 @@ public class Action implements RenderingRequestCaller {
     private void drawCenteredImage(Bitmap source, Bitmap destination, boolean scale) {
         int minSide = Math.min(destination.getWidth(), destination.getHeight());
         Matrix m = new Matrix();
-        float scaleFactor = minSide / (float) Math.min(source.getWidth(), source.getHeight());
+        float scaleFactor = minSide / (1.25f *
+                (float) Math.min(source.getWidth(), source.getHeight()));
 
-        float dx = (destination.getWidth() - source.getWidth() * scaleFactor) / 2.0f;
-        float dy = (destination.getHeight() - source.getHeight() * scaleFactor) / 2.0f;
+        float dx = (destination.getWidth() - source.getWidth()
+                * scaleFactor) / 3.0f;
+        float dy = (destination.getHeight() - source.getHeight()
+                * scaleFactor) / 3.0f;
         if (mImageFrame.height() > mImageFrame.width()) {
             // if portrait
-            dy -= mTextSize;
+            dy -= mTextSize * 0.75;
         }
         m.setScale(scaleFactor, scaleFactor);
         m.postTranslate(dx, dy);
