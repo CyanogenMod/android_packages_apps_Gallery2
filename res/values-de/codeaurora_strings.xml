@@ -30,6 +30,7 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Strings for step option settins -->
   <string name="setp_option_name">Schritt</string>
   <string name="step_option_desc">Vor- und Zurückspul-Schritt anpassen</string>
   <string name="setp_option_three_second">3 Sekunden</string>
@@ -37,29 +38,29 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="loop">"Endlosschleife"</string>
   <string name="single">"Einzeln"</string>
   <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Lautsprecher an</string>
-  <string name="speaker_off">Lautsprecher aus</string>
+  <string name="speaker_on">Lautsprecher AN</string>
+  <string name="speaker_off">Lautsprecher AUS</string>
   <string name="speaker_need_headset">Für diese Funktionen müssen Sie Kopfhörer verwenden.</string>
   <string name="single_track">"Einzelner Titel"</string>
-  <string name="input_url">"Geben Sie eine URL ein"</string>
+  <string name="input_url">"Geben Sie eine URL ein."</string>
   <string name="streaming_settings">"Streaming-Einstellungen"</string>
   <string name="next">"Weiter"</string>
   <string name="previous">"Zurück"</string>
   <string name="buffer_size">Puffergröße</string>
   <string name="apn">Bevorzugter APN</string>
-  <string name="rtp_min_port">Min. Port</string>
-  <string name="rtp_max_port">Max. Port</string>
-  <string name="set_rtp_min_port">Min. Port festlegen</string>
-  <string name="set_rtp_max_port">Max. Port festlegen</string>
+  <string name="rtp_min_port">Min. Wert für Port</string>
+  <string name="rtp_max_port">Max. Wert für Port</string>
+  <string name="set_rtp_min_port">Min. Wert für Port festlegen</string>
+  <string name="set_rtp_max_port">Max. Wert für Port festlegen</string>
   <string name="set_buffer_size">Puffergröße einstellen</string>
-  <string name="set_apn">Bevorzugten APN wählen</string>
+  <string name="set_apn">Bevorzugten APN auswählen</string>
   <string name="setting">Einstellungen</string>
   <string name="server_timeout_title">"Zeitüberschreitung beim Server"</string>
   <string name="server_timeout_message">"Erneut zum Server verbinden, um das Video abzuspielen?"</string>
   <string name="videoview_error_text_cannot_connect_retry">"Verbindung fehlgeschlagen, neuer Verbindungsversuch zu %1$d\u2026"</string>
   <string name="media_controller_live">Live</string>
   <string name="media_controller_playing">Derzeit läuft</string>
-  <string name="media_controller_connecting">Verbinde\u2026</string>
+  <string name="media_controller_connecting">Verbindung wird hergestellt\u2026</string>
   <string name="bookmark_add">"Lesezeichen hinzufügen"</string>
   <string name="bookmark_display">"Lesezeichen anzeigen"</string>
   <string name="bookmark_empty">"Keine Lesezeichen"</string>
@@ -70,13 +71,22 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_location">"Ort"</string>
   <string name="delete_all">"Alle löschen"</string>
   <string name="default_title">"Standardtitel"</string>
+  <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Weitere Bilder</string>
-  <string name="mute_nosupport">Stummschalten nicht möglich – das Video wird nicht unterstützt</string>
-  <string name="map_activity_not_found_err">Es ist keine Karten-App installiert, um die Position anzuzeigen.</string>
+  <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
+  <string name="mute_nosupport">Stummschalten nicht möglich – das Video wird nicht unterstützt.</string>
+  <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
+  <string name="map_activity_not_found_err">Es ist keine Karten-App zum Anzeigen des Standorts installiert.</string>
+  <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">Bassverstärkung</string>
+  <!-- The label for the 3d effect knob of the audio effects dialog. -->
   <string name="virtualizer_strength">3D-Effekt</string>
+  <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Audioeffekte</string>
+  <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
   <string name="headset_plug">Schließen Sie Kopfhörer für diese Effekte an.</string>
+  <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon-Audio+</string>
-  <string name="fail_trim">Diese Videodatei kann nicht gekürzt werden</string>
+  <!-- The tips of trimming video -->
+  <string name="fail_trim">Diese Videodatei kann nicht gekürzt werden.</string>
 </resources>
