@@ -22,11 +22,11 @@
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"ਵਾਲਪੇਪਰ ਸੈਟ ਕਰ ਰਿਹਾ ਹੈ"</string>
-    <string name="download_failure" msgid="5923323939788582895">"ਫੋਟੋ ਡਾਊਨਲੋਡ ਨਹੀਂ ਕਰ ਸਕਿਆ। ਨੈਟਵਰਕ ਅਣਉਪਲਬਧ।"</string>
+    <string name="download_failure" msgid="5923323939788582895">"ਫੋਟੋ ਡਾਊਨਲੋਡ ਨਹੀਂ ਕਰ ਸਕਿਆ। ਨੈੱਟਵਰਕ ਅਣਉਪਲਬਧ।"</string>
     <string name="original" msgid="3524493791230430897">"ਮੂਲ"</string>
     <string name="borders" msgid="2067345080568684614">"ਬੌਰਡਰਸ"</string>
     <string name="custom_border" msgid="8679893731790931871">"ਕਸਟਮ"</string>
-    <string name="filtershow_undo" msgid="6781743189243585101">"ਪਹਿਲਾਂ ਵਰਗਾ ਕਰੋ"</string>
+    <string name="filtershow_undo" msgid="6781743189243585101">"ਅਣਕੀਤਾ ਕਰੋ"</string>
     <string name="filtershow_redo" msgid="4219489910543059747">"ਰੀਡੂ ਕਰੋ"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"ਲਾਗੂ ਕੀਤੇ ਇਫੈਕਟ ਦਿਖਾਓ"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"ਲਾਗੂ ਕੀਤੇ ਇਫੈਕਟਸ ਲੁਕਾਓ"</string>
@@ -40,17 +40,17 @@
     <string name="menu_settings" msgid="6428291655769260831">"ਸੈਟਿੰਗਾਂ"</string>
     <string name="unsaved" msgid="8704442449002374375">"ਇਸ ਚਿੱਤਰ ਵਿੱਚ ਬਿਨਾਂ ਸੁਰੱਖਿਅਤ ਕੀਤੇ ਬਦਲਾਵ ਹਨ।"</string>
     <string name="save_before_exit" msgid="2680660633675916712">"ਕੀ ਤੁਸੀਂ ਬਾਹਰ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਸੁਰੱਖਿਅਤ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"</string>
-    <string name="save_and_exit" msgid="3628425023766687419">"ਸੁਰੱਖਿਅਤ ਕਰੋ ਅਤੇ ਬਾਹਰ ਜਾਓ"</string>
-    <string name="save_and_processing" msgid="6371565035837463194">"ਪੂਰੇ ਰਿਜ਼ੋਲੂਸ਼ਨ ਚਿੱਤਰ ਦੀ ਪ੍ਰਕਿਰਿਆ ਕਰ ਰਿਹਾ ਹੈ..."</string>
+    <string name="save_and_exit" msgid="3628425023766687419">"ਰੱਖਿਅਤ ਕਰੋ ਅਤੇ ਬਾਹਰ ਜਾਓ"</string>
+    <string name="save_and_processing" msgid="6371565035837463194">"ਪੂਰੇ ਰੈਜ਼ੋਲਿਊਸ਼ਨ ਚਿੱਤਰ ਦੀ ਪ੍ਰਕਿਰਿਆ ਕਰ ਰਿਹਾ ਹੈ..."</string>
     <string name="exit" msgid="242642957038770113">"ਬਾਹਰ ਜਾਓ"</string>
     <string name="history" msgid="455767361472692409">"ਇਤਿਹਾਸ"</string>
-    <string name="reset" msgid="9013181350779592937">"ਰੀਸੈਟ ਕਰੋ"</string>
+    <string name="reset" msgid="9013181350779592937">"ਰੀਸੈੱਟ ਕਰੋ"</string>
     <!-- no translation found for history_original (150973253194312841) -->
     <skip />
     <string name="imageState" msgid="8632586742752891968">"ਲਾਗੂ ਕੀਤੇ ਇਫੈਕਟ"</string>
     <string name="compare_original" msgid="8140838959007796977">"ਤੁਲਨਾ ਕਰੋ"</string>
     <string name="apply_effect" msgid="1218288221200568947">"ਲਾਗੂ ਕਰੋ"</string>
-    <string name="reset_effect" msgid="7712605581024929564">"ਰੀਸੈਟ ਕਰੋ"</string>
+    <string name="reset_effect" msgid="7712605581024929564">"ਰੀਸੈੱਟ ਕਰੋ"</string>
     <string name="aspect" msgid="4025244950820813059">"ਅਸਪੈਕਟ"</string>
     <string name="aspect1to1_effect" msgid="1159104543795779123">"1:1"</string>
     <string name="aspect4to3_effect" msgid="7968067847241223578">"4:3"</string>
@@ -131,7 +131,7 @@
     <string name="state_panel_result" msgid="318640531123298676">"ਨਤੀਜਾ"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"ਚਿੱਤਰ ਸੁਰੱਖਿਅਤ ਕਰ ਰਿਹਾ ਹੈ"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"ਪ੍ਰਕਿਰਿਆ ਕਰ ਰਿਹਾ ਹੈ..."</string>
-    <string name="filtershow_save_preset" msgid="3933550455577927439">"ਮੌਜੂਦਾ ਪ੍ਰੀਸੈਟ ਸੁਰੱਖਿਅਤ ਕਰੋ"</string>
+    <string name="filtershow_save_preset" msgid="3933550455577927439">"ਮੌਜੂਦਾ ਪ੍ਰੀਸੈਟ ਰੱਖਿਅਤ ਕਰੋ"</string>
     <string name="filtershow_manage_preset" msgid="3872896753708921286">"ਉਪਭੋਗਤਾ ਪ੍ਰੀਸੈਟਸ ਵਿਵਸਥਿਤ ਕਰੋੇ"</string>
     <string name="filtershow_new_preset" msgid="8923930134923416617">"ਨਵਾਂ ਪ੍ਰੀਸੈਟ"</string>
     <string name="filtershow_preset_name" msgid="7015939727047649866">"ਨਾਮ ਪ੍ਰੀਸੈਟ ਕਰੋ"</string>
@@ -139,7 +139,7 @@
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"ਚਿੱਤਰ ਨਾਮ"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"ਚਿੱਤਰ ਆਕਾਰ"</string>
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"ਹਿਸਟੋਗ੍ਰਾਮ"</string>
-    <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"EXIF ਡਾਟਾ"</string>
+    <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"EXIF ਡੈਟਾ"</string>
     <string name="filtershow_add_button_looks" msgid="8630823661416925426">"ਪ੍ਰੀਸੈਟ"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"ਵਰਜਨ"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"ਮੂਲ"</string>
