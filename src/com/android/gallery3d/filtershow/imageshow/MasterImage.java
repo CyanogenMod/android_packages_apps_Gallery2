@@ -196,6 +196,24 @@ public class MasterImage implements RenderingRequestCaller {
         }
     };
 
+    public static Bitmap convertToEvenNumberWidthImage(Bitmap bmp) {
+        Bitmap retBmp = null;
+        if (bmp != null) {
+            int w = bmp.getWidth();
+            int h = bmp.getHeight();
+            boolean bWidthIsEven = (w & 0x01) == 0;
+            boolean bHeightIsEven = (h & 0x01) == 0;
+            Log.v(LOGTAG, "ori bitmap w="+w+" h="+h);
+            if( !bWidthIsEven || !bHeightIsEven){
+                w = w - (w & 0x01);
+                h = h - (h & 0x01);
+                retBmp = Bitmap.createBitmap(bmp, 0, 0, w, h);
+                Log.v(LOGTAG, "new bitmap w="+retBmp.getWidth()+" h="+retBmp.getHeight());
+            }
+        }
+        return retBmp;
+    }
+
     public boolean loadBitmap(Uri uri, int size) {
         setUri(uri);
         mEXIF = ImageLoader.getExif(getActivity(), uri);
@@ -204,6 +222,14 @@ public class MasterImage implements RenderingRequestCaller {
         mOriginalBitmapLarge = ImageLoader.loadOrientedConstrainedBitmap(uri, mActivity,
                 Math.min(MAX_BITMAP_DIM, size),
                 mOrientation, originalBounds);
+        // Force bitmap width and height to even number for beautification algo.
+        Bitmap tempBmp = convertToEvenNumberWidthImage(mOriginalBitmapLarge);
+        if(tempBmp != null && mOriginalBitmapLarge != null) {
+            if(!mOriginalBitmapLarge.isRecycled() && mOriginalBitmapLarge != tempBmp) {
+                mOriginalBitmapLarge.recycle();
+            }
+            mOriginalBitmapLarge = tempBmp;
+        }
         setOriginalBounds(originalBounds);
         if (mOriginalBitmapLarge == null) {
             return false;

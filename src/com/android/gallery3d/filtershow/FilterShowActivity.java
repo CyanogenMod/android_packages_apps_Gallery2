@@ -760,6 +760,16 @@ public class FilterShowActivity extends FragmentActivity implements OnItemClickL
                 Bitmap originalHires = ImageLoader.loadOrientedConstrainedBitmap(master.getUri(),
                         master.getActivity(), highresPreviewSize,
                         master.getOrientation(), bounds);
+
+                // Force the bitmap to even width and height which is required by beautification algo
+                Bitmap tempBmp = MasterImage.convertToEvenNumberWidthImage(originalHires);
+                if(tempBmp != null && originalHires != null) {
+                    if(!originalHires.isRecycled() && originalHires != tempBmp) {
+                        originalHires.recycle();
+                    }
+                    originalHires = tempBmp;
+                }
+
                 master.setOriginalBounds(bounds);
                 master.setOriginalBitmapHighres(originalHires);
                 Log.d(LOGTAG, "FilterShowActivity.LoadHighresBitmapTask.doInBackground(): originalHires.WH is (" + originalHires.getWidth()
