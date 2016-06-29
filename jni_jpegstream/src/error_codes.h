@@ -17,10 +17,10 @@
 #ifndef JPEG_ERROR_CODES_H_
 #define JPEG_ERROR_CODES_H_
 
-#define J_DONE                    -4
-#define J_EXCEPTION               -3
-#define J_ERROR_BAD_ARGS          -2
-#define J_ERROR_FATAL             -1
+#define J_DONE                    (-4)
+#define J_EXCEPTION               (-3)
+#define J_ERROR_BAD_ARGS          (-2)
+#define J_ERROR_FATAL             (-1)
 #define J_SUCCESS                 0
 
 #endif // JPEG_ERROR_CODES_H_
