@@ -24,23 +24,23 @@
 
 typedef unsigned int Color;
 
-#define SetColor(a, r, g, b) ((a << 24) | (b << 16) | (g << 8) | (r << 0));
+#define SetColor(a, r, g, b) (((a) << 24) | ((b) << 16) | ((g) << 8) | ((r) << 0));
 #define GetA(color) (((color) >> 24) & 0xFF)
 #define GetB(color) (((color) >> 16) & 0xFF)
 #define GetG(color) (((color) >> 8) & 0xFF)
 #define GetR(color) (((color) >> 0) & 0xFF)
 
-#define MIN(a, b) (a < b ? a : b)
-#define MAX(a, b) (a > b ? a : b)
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #define LOG(msg...) __android_log_print(ANDROID_LOG_VERBOSE, "NativeFilters", msg)
 
 #define JNIFUNCF(cls, name, vars...) Java_com_android_gallery3d_filtershow_filters_ ## cls ## _ ## name(JNIEnv* env, jobject obj, vars)
 
 #define RED i
-#define GREEN i+1
-#define BLUE i+2
-#define ALPHA i+3
+#define GREEN (i+1)
+#define BLUE (i+2)
+#define ALPHA (i+3)
 #define CLAMP(c) (MAX(0, MIN(255, c)))
 
 __inline__ unsigned char  clamp(int c);
