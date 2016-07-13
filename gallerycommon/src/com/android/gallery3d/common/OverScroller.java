@@ -855,7 +855,7 @@ public class OverScroller {
             float distance = mVelocity * mVelocity / (2.0f * Math.abs(mDeceleration));
             final float sign = Math.signum(mVelocity);
 
-            if (distance > mOver) {
+            if (Math.abs(distance) > mOver) {
                 // Default deceleration is not sufficient to slow us down before boundary
                  mDeceleration = - sign * mVelocity * mVelocity / (2.0f * mOver);
                  distance = mOver;
