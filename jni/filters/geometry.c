@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-#include "filters.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "filters.h"
 
 static __inline__ void flipVertical(char * source, int srcWidth, int srcHeight, char * destination, int dstWidth, int dstHeight){
     //Vertical

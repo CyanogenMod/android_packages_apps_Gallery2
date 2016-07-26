@@ -15,6 +15,8 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
+
 #include "filters.h"
 
 int value(int r, int g, int b) {
