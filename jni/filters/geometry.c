@@ -75,10 +75,8 @@ static __inline__ void rotate90(char * source, int srcWidth, int srcHeight, char
     int width = cpy_bytes * srcWidth;
     int length = srcHeight;
     int total = length * width;
-    int i = 0;
-    int j = 0;
-    for (j = 0; j < length * cpy_bytes; j+= cpy_bytes){
-        for (i = 0; i < width; i+=cpy_bytes){
+    for (size_t j = 0; j < length * cpy_bytes; j+= cpy_bytes){
+        for (int i = 0; i < width; i+=cpy_bytes){
             int column_disp = (width - cpy_bytes - i) * length;
             int row_disp = j;
             memcpy(destination + column_disp + row_disp , source + j * srcWidth + i, cpy_bytes);
