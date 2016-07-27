@@ -15,6 +15,8 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
+
 #include "filters.h"
 
 void JNIFUNCF(ImageFilterShadows, nativeApplyFilter, jobject bitmap, jint width, jint height, float scale){

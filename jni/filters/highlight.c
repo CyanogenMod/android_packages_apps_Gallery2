@@ -15,6 +15,8 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
+
 #include "filters.h"
 
 void JNIFUNCF(ImageFilterHighlights, nativeApplyFilter, jobject bitmap,
