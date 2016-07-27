@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <stdlib.h>
+
 #include "filters.h"
 
 void estmateWhite(unsigned char *src, int len, int *wr, int *wb, int *wg){
