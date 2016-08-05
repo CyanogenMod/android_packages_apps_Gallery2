@@ -27,7 +27,7 @@
     <string name="borders" msgid="2067345080568684614">"Chenar"</string>
     <string name="custom_border" msgid="8679893731790931871">"Personalizat"</string>
     <string name="filtershow_undo" msgid="6781743189243585101">"Anulați"</string>
-    <string name="filtershow_redo" msgid="4219489910543059747">"Repetaţi"</string>
+    <string name="filtershow_redo" msgid="4219489910543059747">"Repetați"</string>
     <string name="show_imagestate_panel" msgid="281932769701043015">"Afișați efectele aplicate"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"Ascundeți efectele aplicate"</string>
     <string name="export_image" msgid="3202835713172222134">"Exportați"</string>
@@ -44,13 +44,13 @@
     <string name="save_and_processing" msgid="6371565035837463194">"Se procesează imaginea la rezoluție maximă..."</string>
     <string name="exit" msgid="242642957038770113">"Ieșiți"</string>
     <string name="history" msgid="455767361472692409">"Istoric"</string>
-    <string name="reset" msgid="9013181350779592937">"Resetaţi"</string>
+    <string name="reset" msgid="9013181350779592937">"Resetați"</string>
     <!-- no translation found for history_original (150973253194312841) -->
     <skip />
     <string name="imageState" msgid="8632586742752891968">"Efecte aplicate"</string>
     <string name="compare_original" msgid="8140838959007796977">"Comparați"</string>
-    <string name="apply_effect" msgid="1218288221200568947">"Aplicaţi"</string>
-    <string name="reset_effect" msgid="7712605581024929564">"Resetaţi"</string>
+    <string name="apply_effect" msgid="1218288221200568947">"Aplicați"</string>
+    <string name="reset_effect" msgid="7712605581024929564">"Resetați"</string>
     <string name="aspect" msgid="4025244950820813059">"Aspect"</string>
     <string name="aspect1to1_effect" msgid="1159104543795779123">"1:1"</string>
     <string name="aspect4to3_effect" msgid="7968067847241223578">"4:3"</string>

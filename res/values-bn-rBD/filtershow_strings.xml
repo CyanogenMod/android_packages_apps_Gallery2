@@ -31,7 +31,7 @@
     <string name="show_imagestate_panel" msgid="281932769701043015">"প্রয়োগ করা প্রভাবগুলি দেখান"</string>
     <string name="hide_imagestate_panel" msgid="7207643485811695257">"প্রয়োগ করা প্রভাবগুলি লুকান"</string>
     <string name="export_image" msgid="3202835713172222134">"রপ্তানি"</string>
-    <string name="print_image" msgid="1942989216591621413">"মুদ্রণ করুন"</string>
+    <string name="print_image" msgid="1942989216591621413">"প্রিন্ট করুন"</string>
     <string name="export_flattened" msgid="9046192331465915411">"চ্যাপ্টা চিত্র রপ্তানি করুন"</string>
     <string name="select_output_settings" msgid="1268532018080310748">"রপ্তানি করা চিত্রটি ইতিহাস ছাড়া, একটি অনুলিপি হবে।"</string>
     <string name="quality" msgid="179292110309050529">"গুণমান"</string>
