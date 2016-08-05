@@ -44,13 +44,13 @@
     <string name="save_and_processing" msgid="6371565035837463194">"ကြည်လင်မှုအပြည့်ပုံအား လုပ်ဆောင်နေစဉ်..."</string>
     <string name="exit" msgid="242642957038770113">"ထွက်ပေါက်"</string>
     <string name="history" msgid="455767361472692409">"မှတ်တမ်း"</string>
-    <string name="reset" msgid="9013181350779592937">"ပြန်လည်စတင်စေရန်"</string>
+    <string name="reset" msgid="9013181350779592937">"ပြန်လည်သတ်မှတ်ရန်"</string>
     <!-- no translation found for history_original (150973253194312841) -->
     <skip />
     <string name="imageState" msgid="8632586742752891968">"လုပ်ထားသော အထူးပြုလုပ်ချက်များ"</string>
     <string name="compare_original" msgid="8140838959007796977">"နှိုင်းယှဉ်ရန်"</string>
     <string name="apply_effect" msgid="1218288221200568947">"လုပ်ဆောင်ရန်"</string>
-    <string name="reset_effect" msgid="7712605581024929564">"ပြန်လည်စတင်စေရန်"</string>
+    <string name="reset_effect" msgid="7712605581024929564">"ပြန်လည်သတ်မှတ်ရန်"</string>
     <string name="aspect" msgid="4025244950820813059">"အလိုက်သင့်"</string>
     <string name="aspect1to1_effect" msgid="1159104543795779123">"၁:၁"</string>
     <string name="aspect4to3_effect" msgid="7968067847241223578">"၄:၃"</string>
@@ -118,11 +118,11 @@
     <string name="draw_style_line" msgid="9216476853904429628">"စာကြောင်းများ"</string>
     <string name="draw_style_brush_spatter" msgid="7612691122932981554">"မှတ်သားမှု"</string>
     <string name="draw_style_brush_marker" msgid="8468302322165644292">"Spatter"</string>
-    <string name="draw_clear" msgid="6728155515454921052">"ရှင်းလင်းရန်"</string>
+    <string name="draw_clear" msgid="6728155515454921052">"ဖယ်ရှားရန်"</string>
     <string name="color_border_size" msgid="1086895807615869290">"အထူ"</string>
     <string name="color_border_corner_size" msgid="7637235159438869979">"ထောင့်အရွယ်"</string>
     <string name="color_border_color" msgid="8765458414425980711">"ရောင်စုံ"</string>
-    <string name="color_border_clear" msgid="4418261191091091722">"ရှင်းလင်းရန်"</string>
+    <string name="color_border_clear" msgid="4418261191091091722">"ဖယ်ရှားရန်"</string>
     <string name="color_pick_select" msgid="734312818059057394">"မိမိစိတ်ကြိုက်အရောင်းရွေးရန်"</string>
     <string name="color_pick_title" msgid="6195567431995308876">"အရောင်ရွေးရန်"</string>
     <string name="draw_size_title" msgid="3121649039610273977">"အရွယ်အစားရွေးရန်"</string>
