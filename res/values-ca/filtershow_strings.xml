@@ -131,16 +131,16 @@
     <string name="state_panel_result" msgid="318640531123298676">"Resultat"</string>
     <string name="filtershow_notification_label" msgid="1653168445525855247">"S\'està desant la imatge"</string>
     <string name="filtershow_notification_message" msgid="2661871765484036286">"S\'està processant..."</string>
-    <string name="filtershow_save_preset" msgid="3933550455577927439">"Desa config. predet. actual"</string>
-    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gestiona config. pred. usuari"</string>
-    <string name="filtershow_new_preset" msgid="8923930134923416617">"Configuració predet. nova"</string>
-    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nom de la configuració pred."</string>
+    <string name="filtershow_save_preset" msgid="3933550455577927439">"Desa valor predefinit"</string>
+    <string name="filtershow_manage_preset" msgid="3872896753708921286">"Gestiona els valors predefinits de l\'usuari"</string>
+    <string name="filtershow_new_preset" msgid="8923930134923416617">"Nou valor predefinit"</string>
+    <string name="filtershow_preset_name" msgid="7015939727047649866">"Nom de valors predefinits"</string>
     <string name="filtershow_show_info_panel" msgid="5773036746043711115">"Informació"</string>
     <string name="filtershow_show_info_panel_name" msgid="5908258517140549439">"Nom de la imatge"</string>
     <string name="filtershow_show_info_panel_size" msgid="1714666849204493017">"Mida de la imatge"</string>
     <string name="filtershow_show_info_panel_histogram" msgid="2669188469897955809">"Histograma"</string>
     <string name="filtershow_show_info_panel_exif" msgid="4965486882625125154">"Dades EXIF"</string>
-    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Configuració predeterminada"</string>
+    <string name="filtershow_add_button_looks" msgid="8630823661416925426">"Valors predefinits"</string>
     <string name="filtershow_add_button_versions" msgid="7620107266685809612">"Versió"</string>
     <string name="filtershow_version_original" msgid="1413894292200912828">"Original"</string>
     <string name="filtershow_version_current" msgid="6609334422797468952">"Actual"</string>
