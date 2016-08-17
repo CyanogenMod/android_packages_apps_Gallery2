@@ -344,7 +344,9 @@
                 android:authorities="com.android.gallery3d.photoprovider"
                 android:syncable="false"
                 android:exported="false"/>
-        <activity android:name="com.android.gallery3d.gadget.WidgetClickHandler" />
+        <activity
+                android:name="com.android.gallery3d.gadget.WidgetClickHandler"
+                android:theme="@android:style/Theme.NoDisplay" />
         <activity android:name="com.android.gallery3d.app.DialogPicker"
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:theme="@style/DialogPickerTheme"/>
