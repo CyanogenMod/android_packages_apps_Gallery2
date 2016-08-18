@@ -13,7 +13,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 
 LOCAL_STATIC_LIBRARIES := libjpeg_static_ndk
 
-LOCAL_SDK_VERSION   := 9
+LOCAL_SDK_VERSION   := 17
 LOCAL_ARM_MODE := arm
 
 LOCAL_CFLAGS    += -ffast-math -O3 -funroll-loops
