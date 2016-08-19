@@ -136,7 +136,9 @@ public class FilterDeleteSet extends MediaSet implements ContentListener {
         for (int m = j - 1; m >= i; m--) {
             Deletion d = mCurrent.get(m);
             int k = d.index - (start + i);
-            base.remove(k);
+            if (k >= 0 && k < base.size()) {
+                base.remove(k);
+            }
         }
         return base;
     }
