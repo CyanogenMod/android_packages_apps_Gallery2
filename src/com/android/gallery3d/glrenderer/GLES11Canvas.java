@@ -24,6 +24,7 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.android.gallery3d.common.ApiHelper;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.IntArray;
 
@@ -617,7 +618,11 @@ public class GLES11Canvas implements GLCanvas {
             gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
             // We use 565 or 8888 format, so set the alignment to 2 bytes/pixel.
-            gl.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 2);
+            if (ApiHelper.USE_888_PIXEL_FORMAT) {
+                gl.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 2);
+            } else {
+                gl.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+            }
         }
 
         public void setTexEnvMode(int mode) {
