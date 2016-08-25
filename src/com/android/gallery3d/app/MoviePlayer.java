@@ -624,7 +624,6 @@ public class MoviePlayer implements
         }
         if (start) {
             mVideoView.start();
-            mVideoView.setVisibility(View.VISIBLE);
             mActivityContext.initEffects(mVideoView.getAudioSessionId());
         }
         //we may start video from stopVideo,
