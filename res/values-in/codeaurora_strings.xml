@@ -32,15 +32,15 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
   <string name="setp_option_name">Langkah</string>
-  <string name="step_option_desc">Ubahsuaikan tahap maju cepat/mundur</string>
+  <string name="step_option_desc">Sesuaikan tahap maju cepat/mundur</string>
   <string name="setp_option_three_second">3 detik</string>
   <string name="setp_option_six_second">6 detik</string>
   <string name="loop">"Ulang"</string>
   <string name="single">"Tunggal"</string>
   <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Speaker MENYALA</string>
+  <string name="speaker_on">Speaker HIDUP</string>
   <string name="speaker_off">Speaker MATI</string>
-  <string name="speaker_need_headset">Colokkan peranti dengar kepala untuk menggunakan fitur ini.</string>
+  <string name="speaker_need_headset">Pasang headphone untuk menggunakan fitur ini.</string>
   <string name="single_track">"Trek tunggal"</string>
   <string name="input_url">"Masukkan URL"</string>
   <string name="streaming_settings">"Pengaturan streaming"</string>
@@ -48,10 +48,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="previous">"Sebelumnya"</string>
   <string name="buffer_size">Ukuran buffer</string>
   <string name="apn">Pilihan APN</string>
-  <string name="rtp_min_port">Porta min.</string>
-  <string name="rtp_max_port">Porta maks.</string>
-  <string name="set_rtp_min_port">Atur porta min.</string>
-  <string name="set_rtp_max_port">Atur porta maks.</string>
+  <string name="rtp_min_port">Port min</string>
+  <string name="rtp_max_port">Port maks</string>
+  <string name="set_rtp_min_port">Atur porta min</string>
+  <string name="set_rtp_max_port">Atur porta maks</string>
   <string name="set_buffer_size">Atur ukuran buffer</string>
   <string name="set_apn">Pilih pilihan APN</string>
   <string name="setting">Pengaturan</string>
@@ -70,11 +70,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="bookmark_title">"Judul"</string>
   <string name="bookmark_location">"Lokasi"</string>
   <string name="delete_all">"Hapus semua"</string>
-  <string name="default_title">"Judul baku"</string>
+  <string name="default_title">"Judul standar"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
   <string name="more_image">Lebih banyak gambar</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
-  <string name="mute_nosupport">Tidak dapat membungkam: video tidak didukung</string>
+  <string name="mute_nosupport">Tidak dapat mendiamkan : video tidak didukung</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
   <string name="map_activity_not_found_err">Tidak ada aplikasi peta yang diinstal untuk menunjukkan lokasi.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
@@ -84,7 +84,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- The label for the audio effects menu. -->
   <string name="audio_effects">Efek audio</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
-  <string name="headset_plug">Colokkan peranti dengar kepala untuk efek ini.</string>
+  <string name="headset_plug">Pasang headphone untuk efek ini.</string>
   <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
