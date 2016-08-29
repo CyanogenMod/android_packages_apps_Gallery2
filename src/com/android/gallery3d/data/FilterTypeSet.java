@@ -64,6 +64,10 @@ public class FilterTypeSet extends MediaSet implements ContentListener {
                 mPaths, start, count, mDataManager);
     }
 
+    public ArrayList<Path> getPaths() {
+        return mPaths;
+    }
+
     @Override
     public long reload() {
         if (mBaseSet.reload() > mDataVersion) {
@@ -88,12 +92,18 @@ public class FilterTypeSet extends MediaSet implements ContentListener {
             String filteredPath = basePath + "/{" + set.getPath().toString() + "}";
             MediaSet filteredSet = mDataManager.getMediaSet(filteredPath);
             filteredSet.reload();
+            if (filteredSet instanceof FilterTypeSet && ((FilterTypeSet)filteredSet).getPaths() != null) {
+                mPaths.addAll(((FilterTypeSet)filteredSet).getPaths());
+            }
             if (filteredSet.getMediaItemCount() > 0
                     || filteredSet.getSubMediaSetCount() > 0) {
                 mAlbums.add(filteredSet);
             }
         }
 
+        if (mPaths.size() > 0) {
+            return;
+        }
         // Items
         mPaths.clear();
         final int total = mBaseSet.getMediaItemCount();
