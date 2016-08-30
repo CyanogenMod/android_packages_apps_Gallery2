@@ -459,7 +459,7 @@ public class MovieControllerOverlay extends CommonControllerOverlay implements
     }
 
     private class OverlayExtension implements IContrllerOverlayExt {
-        private State mLastState;
+        private State mLastState = State.LOADING;
         private String mPlayingInfo;
         // for pause feature
         private boolean mCanPause = true;
