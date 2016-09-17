@@ -56,9 +56,12 @@
   <!-- Toast/alert after saving wallpaper -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->
+  <string name="cancel">Nuligi</string>
   <!-- The label shown after an image is deleted [CHAR LIMIT=16] -->
+  <string name="deleted">Forigita</string>
   <!-- The label on the button which when clicked will undo a deletion of image [CHAR LIMIT=16]-->
   <!-- String indicating more actions are available -->
+  <string name="close">Fermi</string>
   <!-- Title of a menu item to switch from Gallery to Camera app [CHAR LIMIT=30] -->
   <!-- String indicating how many media item(s) is(are) selected
             eg. 1 selected [CHAR LIMIT=30] -->
@@ -70,6 +73,7 @@
   <!-- Toast message prompted when the specified item is not found [CHAR LIMIT=40]-->
   <!-- String used as a menu label. The user can choose to edit the image
          [CHAR_LIMIT=20]-->
+  <string name="edit">Redakti</string>
   <!-- String used as a menu label. The user can choose to edit the image
          [CHAR_LIMIT=20]-->
   <!-- String used as a title of a progress dialog. The user can
@@ -129,8 +133,10 @@
             media set eg. 3 of 5 items [CHAR LIMIT=30] -->
   <!-- Text indicating the title of a media item in details window [CHAR LIMIT=14] -->
   <!-- Text indicating the description of a media item in details window [CHAR LIMIT=14] -->
+  <string name="description">Priskribo</string>
   <!-- Text indicating the creation time of a media item in details window [CHAR LIMIT=14] -->
   <!-- Text indicating the location of a media item in details window [CHAR LIMIT=14] -->
+  <string name="location">Loko</string>
   <!-- Text indicating the path of a media item in details window [CHAR LIMIT=14] -->
   <!-- Text indicating the width of a media item in details window [CHAR LIMIT=14] -->
   <!-- Text indicating the height of a media item in details window [CHAR LIMIT=14] -->
@@ -153,6 +159,7 @@
   <!-- String indicating camera flash is fired. [CHAR LIMIT=14] -->
   <!-- String indicating camera flash is not used. [CHAR LIMIT=14] -->
   <!-- String indicating image width or height is unknown. [CHAR LIMIT=14] -->
+  <string name="unknown">Nekonata</string>
   <!-- String for the empty not filtered image [CHAR LIMIT=10] -->
   <!-- String for brown-colored old-fashion looking filter (filtershow_fx_0000_vintage) [CHAR LIMIT=10] -->
   <!-- String for filter that brightens colors like instant cameras(filtershow_fx_0001_instant) [CHAR LIMIT=10] -->
@@ -212,17 +219,21 @@
   <!-- Group by Albums tab on Action Bar. [CHAR LIMIT=12] -->
   <!-- Group by Times tab on Action Bar. [CHAR LIMIT=12] -->
   <!-- Group by Locations tab on Action Bar. [CHAR LIMIT=12] -->
+  <string name="locations">Lokoj</string>
   <!-- Group by People tab on Action Bar. [CHAR LIMIT=12] -->
   <!-- Group by Tags tab on Action Bar. [CHAR LIMIT=12] -->
   <!-- Group by menu item. [CHAR LIMIT=20] -->
   <!-- The title of the menu item which enable the settings [CHAR LIMIT=20] -->
+  <string name="settings">Agordoj</string>
   <!-- The title of menu item where user can add a new account -->
   <!-- The label for the folder contains pictures taken by the camera. [CHAR LIMIT=20]-->
   <!-- The label for the folder contains downloaded pictures. [CHAR LIMIT=20]-->
+  <string name="folder_download">Elŝuti</string>
   <!-- The label for the folder contains edited online pictures. [CHAR LIMIT=40]-->
   <!-- The label for the folder contains pictures that was imported from an
          external camera. [CHAR LIMIT=20]-->
   <!-- The label for the folder contains screenshot images. [CHAR LIMIT=20]-->
+  <string name="folder_screenshot">Ekrankopio</string>
   <!-- The title of the menu item which display online help in browser. [CHAR LIMIT=20]-->
   <!-- The tilte of a dialog showing there is no external storage. [CHAR LIMIT=20] -->
   <!-- The message of a dialog showing there is no external storage. [CHAR LIMIT=none] -->
@@ -236,6 +247,7 @@
   <!-- Toast if the trimmed video is too short to trim. [CHAR LIMIT=80] -->
   <!-- Text to show with progress bar while stitching in Gallery -->
   <!-- The label on the button that will save an edited image -->
+  <string name="save" msgid="8140440041190264400">Konservi</string>
   <!-- A label representing the action of importing media item(s) [CHAR LIMIT=20] -->
   <!-- A label that indicates the media import operation completed [CHAR LIMIT=20] -->
   <!--  Text of notification message which is shown when user attaches camera -->
@@ -269,6 +281,7 @@
   <!-- In select camera setting, front-facing camera. [CHAR LIMIT=14] -->
   <!-- Settings screen, setting title text -->
   <!--  Label for record location preference [CHAR LIMIT=50] -->
+  <string name="pref_camera_location_label">LOKO</string>
   <!-- Title for countdown timer on camera settings screen [CHAR LIMIT=30]-->
   <!-- Entry for countdown timer setting. e.g. 1 second, 10 seconds, etc. [CHAR LIMIT=30]-->
   <!-- Text followed by a checkbox to turn on/off sound effects during the countdown. [CHAR LIMIT = 16]-->
@@ -456,6 +469,7 @@ CHAR LIMIT = NONE] -->
   <!-- Message for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = None] -->
   <!-- Negative answer for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = 20] -->
   <!-- Positive answer for first run dialog asking if the user wants to remember photo locations [CHAR LIMIT = 20] -->
+  <string name="remember_location_yes">Jes</string>
   <!-- Menu item to launch the camera app [CHAR LIMIT=25] -->
   <!-- Menu item to search for photos [CHAR LIMIT=25] -->
   <!-- Title for the all photos tab [CHAR LIMIT=25] -->
@@ -463,6 +477,7 @@ CHAR LIMIT = NONE] -->
   <!-- Camera menu labels -->
   <!-- more options label [CHAR LIMIT=50] -->
   <!-- settings label [CHAR LIMIT=50] -->
+  <string name="camera_menu_settings_label">AGORDOJ</string>
   <!-- String indicating how many photos are in an album [CHAR LIMIT=15] -->
   <!-- The tips of trimming video -->
 </resources>
