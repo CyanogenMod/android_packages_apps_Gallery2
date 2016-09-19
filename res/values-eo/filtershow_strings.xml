@@ -25,13 +25,16 @@
   <!--  Text to label an image as "original" [CHAR LIMIT=20] -->
   <!--  Text for filters that apply a border to a picture [CHAR LIMIT=20] -->
   <!-- Text for the custom border filter [CHAR LIMIT=20] -->
+  <string name="custom_border">Propra</string>
   <!--  actionbar menu -->
   <!--  Text for the undo menu item [CHAR LIMIT=20] -->
   <!--  Text for redo menu item [CHAR LIMIT=20] -->
   <!--  Text for the image menu item showing the filters that have been applied [CHAR LIMIT=30] -->
   <!--  Text for the image state panel menu item [CHAR LIMIT=30] -->
   <!--  Text for the menu item to export a flattened photo[CHAR LIMIT=30] -->
+  <string name="export_image">Elporti</string>
   <!-- Text for the print menu item [CHAR LIMIT=20] -->
+  <string name="print_image">Presi</string>
   <!-- Export Dialog-->
   <!--  Text for the dialog title to export a flattened photo[CHAR LIMIT=25] -->
   <!--  Text for selecting export image quality [CHAR LIMIT=100] -->
@@ -39,6 +42,7 @@
   <!--  Text for size value tag [CHAR LIMIT=30] -->
   <!--  Text for size x [CHAR LIMIT=1] -->
   <!--  Name for the overflow menu item for settings [CHAR LIMIT=20] -->
+  <string name="menu_settings">Agordoj</string>
   <!--  Exit Dialog -->
   <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
   <!--  String displayed when exiting with unsaved changes [CHAR LIMIT=NONE] -->
@@ -47,6 +51,7 @@
   <!--  String displayed when exiting editor[CHAR LIMIT=NONE] -->
   <!--  History Panel -->
   <!--  Text for the history panel title [CHAR LIMIT=50] -->
+  <string name="history">Historio</string>
   <!--  Text for the history panel reset button [CHAR LIMIT=20]-->
   <!--  Text for the original image[CHAR LIMIT=20]-->
   <!--  Image state panel -->
@@ -109,7 +114,9 @@
   <!--  Label for the blue control for per channel saturation effect [CHAR LIMIT=20] -->
   <!--  Label for the Magenta control for per channel saturation effect [CHAR LIMIT=20] -->
   <!--  Label for the image graduated filter effect  [CHAR LIMIT=20] -->
+  <string name="editor_grad_style">Stilo</string>
   <!-- new virtual graduated neutral density filter  [CHAR LIMIT=20] -->
+  <string name="editor_grad_new">nova</string>
   <!--  Labels for the curves tool -->
   <!--  Label for the curves tool, all channels (RGB) [CHAR LIMIT=3] -->
   <!--  Label for the curves tool, Red color channel [CHAR LIMIT=14] -->
@@ -148,6 +155,7 @@
   <!-- Label for the information panel [CHAR LIMIT=30] -->
   <!-- Label for the add button in the category panel [CHAR LIMIT=30] -->
   <!-- Label for the add button in the versions panel [CHAR LIMIT=30] -->
+  <string name="filtershow_add_button_versions">Versio</string>
   <!-- Label for the Original version in the versions panel [CHAR LIMIT=30] -->
   <!-- Label for the Current version in the versions panel [CHAR LIMIT=30] -->
   <!-- Label for exif tags in the information panel [CHAR LIMIT=50] -->
