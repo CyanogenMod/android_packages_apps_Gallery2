@@ -16,9 +16,9 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="title_activity_filter_show" msgid="2036539130684382763">"ಫೋಟೋ ಸಂಪಾದಕ"</string>
+    <string name="title_activity_filter_show" msgid="2036539130684382763">"ಫೋಟೋ ಎಡಿಟರ್"</string>
     <string name="cannot_load_image" msgid="5023634941212959976">"ಚಿತ್ರವನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ!"</string>
-    <string name="cannot_edit_original" msgid="5890293845882609388">"ಮೂಲ ಚಿತ್ರವನ್ನು ಸಂಪಾದಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ"</string>
+    <string name="cannot_edit_original" msgid="5890293845882609388">"ಮೂಲ ಚಿತ್ರವನ್ನು ಎಡಿಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ"</string>
     <!-- no translation found for original_picture_text (3076213290079909698) -->
     <skip />
     <string name="setting_wallpaper" msgid="4679087092300036632">"ವಾಲ್‌ಪೇಪರ್ ಹೊಂದಿಸಲಾಗುತ್ತಿದೆ"</string>
