@@ -80,11 +80,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- The label for the bass boost knob of the audio effects dialog. -->
   <string name="bass_boost_strength">バスブースト</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
-  <string name="virtualizer_strength">3D効果</string>
+  <string name="virtualizer_strength">3Dエフェクト</string>
   <!-- The label for the audio effects menu. -->
-  <string name="audio_effects">オーディオ効果</string>
+  <string name="audio_effects">オーディオエフェクト</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
-  <string name="headset_plug">これらの効果を使用するにはヘッドホンを接続してください。</string>
+  <string name="headset_plug">これらのエフェクトを使用するにはヘッドホンを接続してください。</string>
   <!-- The title of the audio effects dialog. -->
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
