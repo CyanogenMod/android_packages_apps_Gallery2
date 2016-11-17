@@ -87,6 +87,7 @@
   <!-- Toast/alert after saving wallpaper -->
   <string name="wallpaper">Afitando fondu de pantalla...</string>
   <string name="camera_setas_wallpaper">Fondu de pantalla</string>
+  <!-- Toast message for share items -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <string name="delete">Desaniciar</string>
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->
