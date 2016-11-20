@@ -85,6 +85,7 @@
   <!-- Toast/alert after saving wallpaper -->
   <string name="wallpaper">تام قەغەز تەڭشەۋاتىدۇ\u2026</string>
   <string name="camera_setas_wallpaper">تام قەغىزى</string>
+  <!-- Toast message for share items -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <string name="delete">ئۆچۈر</string>
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->

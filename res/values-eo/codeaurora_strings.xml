@@ -31,62 +31,18 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Strings for step option settins -->
-  <string name="setp_option_name">Paŝo</string>
-  <string name="step_option_desc">Agordi rapidan aantaŭ-/re-iron</string>
   <string name="setp_option_three_second">3 sekundoj</string>
   <string name="setp_option_six_second">6 sekundoj</string>
-  <string name="loop">"Buklo"</string>
-  <string name="single">"Unuopaĵo"</string>
-  <string name="stereo">"Stereo"</string>
-  <string name="speaker_on">Laŭtilo ŝaltita</string>
-  <string name="speaker_off">Laŭtilo malŝaltita</string>
-  <string name="speaker_need_headset">Konektu kapaŭskultilojn por uzi tiun eblecon.</string>
-  <string name="single_track">"Unuopaĵa muziko"</string>
-  <string name="input_url">"Tajpu URL"</string>
-  <string name="streaming_settings">"Elsendflua agordo"</string>
-  <string name="next">"Sekvonta"</string>
-  <string name="previous">"Antaŭa"</string>
-  <string name="buffer_size">Bufra grandeco</string>
-  <string name="apn">Plej ŝatata APN</string>
-  <string name="rtp_min_port">Minimuma konektejo</string>
-  <string name="rtp_max_port">Maksimuma konektejo</string>
-  <string name="set_rtp_min_port">Agordi minimuman konektejon</string>
-  <string name="set_rtp_max_port">Agordi maksimuman konektejon</string>
-  <string name="set_buffer_size">Agordi bufran grandecon</string>
-  <string name="set_apn">Elekti plej ŝatatan APN</string>
-  <string name="setting">Agordoj</string>
-  <string name="server_timeout_title">"Servila tempolimo"</string>
-  <string name="server_timeout_message">"Ĉu rekonekti al la servilo por ludi filmon?"</string>
-  <string name="videoview_error_text_cannot_connect_retry">"Konektado fiaskis, provante denove konekti al %1$d\u2026"</string>
-  <string name="media_controller_live">Rekta</string>
-  <string name="media_controller_playing">Ludado</string>
-  <string name="media_controller_connecting">Konektiĝas\u2026</string>
   <string name="bookmark_add">"Aldoni legosignon"</string>
-  <string name="bookmark_display">"Montri legosignojn"</string>
-  <string name="bookmark_empty">"Neniu legosigno"</string>
-  <string name="bookmark_exist">"Legosigno jam ekzistas"</string>
-  <string name="bookmark_add_success">"Legosigno aldonita"</string>
   <string name="bookmark_list">"Legosignoj"</string>
-  <string name="bookmark_title">"Titolo"</string>
   <string name="bookmark_location">"Loko"</string>
-  <string name="delete_all">"Forigi ĉion"</string>
-  <string name="default_title">"Defaŭlta titolo"</string>
   <!-- A label describing to link website [CHAR LIMIT=30] -->
-  <string name="more_image">Pli da bildoj</string>
   <!-- Toast if the muted video is not supported. [CHAR LIMIT=80] -->
-  <string name="mute_nosupport">Ne eblas silentigi : filmo ne subtenata</string>
   <!-- The message is shown in toast when click showOnMap Menu and there is no map app -->
-  <string name="map_activity_not_found_err">Neniu mapa aplikaĵo por montri lokon.</string>
   <!-- The label for the bass boost knob of the audio effects dialog. -->
-  <string name="bass_boost_strength">Basa amplifikilo</string>
   <!-- The label for the 3d effect knob of the audio effects dialog. -->
-  <string name="virtualizer_strength">3D efekto</string>
   <!-- The label for the audio effects menu. -->
-  <string name="audio_effects">Aŭdaj efektoj</string>
   <!-- Toast if user attempts to control audio effects without headphones plugged in. -->
-  <string name="headset_plug">Konektu kapaŭskultilojn por tiuj efektoj.</string>
   <!-- The title of the audio effects dialog. -->
-  <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
-  <string name="fail_trim">Bedaŭrinde, tiu filmo ne tondeteblas</string>
 </resources>
