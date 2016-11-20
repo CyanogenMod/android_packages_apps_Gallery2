@@ -87,6 +87,7 @@
   <!-- Toast/alert after saving wallpaper -->
   <string name="wallpaper">Hannergrondbild gëtt gesat\u2026</string>
   <string name="camera_setas_wallpaper">Hannergrondbild</string>
+  <!-- Toast message for share items -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <string name="delete">Läschen</string>
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->

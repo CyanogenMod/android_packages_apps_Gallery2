@@ -87,6 +87,7 @@
   <!-- Toast/alert after saving wallpaper -->
   <string name="wallpaper">دانانی دیوارپۆش\u2026</string>
   <string name="camera_setas_wallpaper">دیوارپۆش</string>
+  <!-- Toast message for share items -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <string name="delete">سڕینه‌وه‌</string>
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->
