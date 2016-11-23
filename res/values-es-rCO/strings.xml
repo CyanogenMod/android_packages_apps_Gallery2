@@ -54,6 +54,7 @@
              that is to be "set as" (e.g. set as contact photo or set as wallpaper) -->
   <!-- Activity title for cropping picture and setting it as wallpaper [CHAR LIMIT=20] -->
   <!-- Toast/alert after saving wallpaper -->
+  <!-- Toast message for share items -->
   <!-- Details dialog "OK" button. Dismisses dialog. -->
   <!-- String Delete the selected media item(s) [CHAR LIMIT=50] -->
   <!-- The label shown after an image is deleted [CHAR LIMIT=16] -->
