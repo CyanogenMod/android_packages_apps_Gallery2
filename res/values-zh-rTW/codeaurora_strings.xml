@@ -52,15 +52,15 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="rtp_max_port">最大埠</string>
   <string name="set_rtp_min_port">設定最小埠</string>
   <string name="set_rtp_max_port">設定最大埠</string>
-  <string name="set_buffer_size">設置緩衝區大小</string>
+  <string name="set_buffer_size">設定緩衝區大小</string>
   <string name="set_apn">選取首選的 APN</string>
   <string name="setting">設定</string>
   <string name="server_timeout_title">"伺服器逾時"</string>
-  <string name="server_timeout_message">"重新連接至伺服器並繼續播放影片嗎？"</string>
-  <string name="videoview_error_text_cannot_connect_retry">"連接失敗，嘗試重新連接至「%1$d」\u2026"</string>
+  <string name="server_timeout_message">"重新連線至伺服器並繼續播放影片嗎？"</string>
+  <string name="videoview_error_text_cannot_connect_retry">"連線失敗，嘗試重新連線至「%1$d」\u2026"</string>
   <string name="media_controller_live">直播</string>
   <string name="media_controller_playing">正在播放</string>
-  <string name="media_controller_connecting">正在連接\u2026</string>
+  <string name="media_controller_connecting">正在連線\u2026</string>
   <string name="bookmark_add">"新增書籤"</string>
   <string name="bookmark_display">"顯示書籤"</string>
   <string name="bookmark_empty">"沒有書籤"</string>
@@ -89,4 +89,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="audio_effects_dialog_title">Snapdragon Audio+</string>
   <!-- The tips of trimming video -->
   <string name="fail_trim">抱歉，此影片檔案無法被剪輯</string>
+  <string name="no_permission_for_drm">對不起，受 DRM 保護的檔不能分享</string>
+  <string name="drm_license_info">DRM 許可資訊</string>
 </resources>
